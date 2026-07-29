@@ -1180,3 +1180,85 @@ to move.
 
 A whole-file digest alone could not distinguish "the annex was added" from "the annex was added and
 §4 was quietly reworded". Two digests can.
+
+---
+
+## Annex S — the Stage 5S owned surface
+
+Amendable section, added 2026-07-29 during Task 2. **§§1–7 untouched**; the frozen-range digest of
+Annex M.5 is unchanged by this annex and is re-verified by Task 1.
+
+### S.1 Why an annex, and not §6.2
+
+§6.2 declares the **schema** of the write surface — path, operation, purpose, authorising section —
+and the five acceptance conditions. It never enumerates rows, so the surface it specifies has no
+members. A contract with no instances refuses everything, which is fail-closed and useless.
+
+Annex S instantiates it. §6.2 remains the authority on _shape_; this annex is the authority on
+_membership_, and the checker parses both rather than declaring either.
+
+### S.2 Two kinds of row, and why the distinction is principled
+
+**Prefix rows** cover the stage's own tree. Every path under them exists because 5S created it, so
+enumerating them one by one would be a list that grows with every task and disagrees with reality
+between commits — a pin that is always slightly wrong teaches reviewers to ignore it.
+
+**Exact rows** cover everything outside the stage's tree. Precision matters most where the blast
+radius reaches other stages, which is why Annex M's three ripple paths are exact and are not
+reachable from any prefix here.
+
+| kind   | path                                                                                 | op         | purpose                                                       | id      |
+| ------ | ------------------------------------------------------------------------------------ | ---------- | ------------------------------------------------------------- | ------- |
+| prefix | `tools/simurgh-attestation/stage5s/`                                                 | add-modify | the stage's implementation, mirrors and signer                | 5S-S001 |
+| prefix | `tests/unit/llmShield/stage5s/`                                                      | add-modify | unit tests                                                    | 5S-S002 |
+| prefix | `tests/e2e/llmShield/stage5s/`                                                       | add-modify | e2e nets                                                      | 5S-S003 |
+| prefix | `proofs/stage5s/`                                                                    | add-modify | Lean theorems                                                 | 5S-S004 |
+| prefix | `docs/research/llm-shield/evidence/stage-5s/`                                        | add-modify | this stage's evidence only                                    | 5S-S005 |
+| exact  | `docs/superpowers/specs/2026-07-28-stage-5s-vwq-verifiable-witness-quorum-design.md` | add-modify | amendable annexes; §§1-7 protected by the frozen-range digest | 5S-S006 |
+| exact  | `docs/superpowers/plans/2026-07-29-stage-5s-vwq-implementation-plan.md`              | add-modify | the plan and its pin block                                    | 5S-S007 |
+| exact  | `.github/workflows/stage-5s-checks.yml`                                              | add-modify | this stage's CI trigger                                       | 5S-S008 |
+| exact  | `scripts/reproduce-llm-shield-stage5s.sh`                                            | add-modify | this stage's reproduce script                                 | 5S-S009 |
+| exact  | `scripts/check-lean-proofs.mjs`                                                      | modify     | the proof-floor bump 38 to 39 required by §4.1                | 5S-S010 |
+| exact  | `.prettierignore`                                                                    | modify     | fixture and evidence directories                              | 5S-S011 |
+| exact  | `docs/research/llm-shield/STAGE_5S_CLOSEOUT.md`                                      | add        | closeout, inside the tag                                      | 5S-S012 |
+| exact  | `README.md`                                                                          | modify     | stage banner                                                  | 5S-S013 |
+| exact  | `CHANGELOG.md`                                                                       | modify     | release entry                                                 | 5S-S014 |
+| exact  | `AGENT.md`                                                                           | modify     | stage entry                                                   | 5S-S015 |
+
+`add-modify` means both operations are permitted on that row. A row carrying a single operation
+permits only that one — 5S-S010 may **modify** the proof gate and may never create a second one.
+
+5S-S006 and 5S-S007 were written `modify` in the first draft of this annex and the checker refused
+them on its first real run, because on the branch that introduces this stage the spec and plan are
+**added**, not modified. The declaration was wrong and the declaration was corrected; the checker was
+not loosened to accept it. That direction is the whole point of a surface — a gate that gets relaxed
+the first time it says no is a gate that will never say no again.
+
+### S.3 What Annex S does not authorise
+
+- not any path under another stage's tree, evidence or tests. The one exception in the whole stage is
+  Annex M's three ripple paths, and those are exact, `modify`-only and separately justified;
+- not `src/`, not the kernel, not `package.json` dependencies;
+- not any private key material, under any row. `tools/simurgh-attestation/stage5s/signer/` is inside
+  prefix 5S-S001, and the private-key refusal overrides every row — a prefix grant is not a licence to
+  commit a key. That refusal is checked before membership, so no row can outvote it;
+- not a second stage's reproduce script, and not the shared prior-reproduce runner if one is created
+  outside `scripts/reproduce-llm-shield-stage5s.sh`.
+
+### S.4 Lifecycle declaration
+
+```text
+active_phase                 Stage 5S implementation, Task 2 until the 5S tag
+protected_surface            the rows of S.2, plus Annex M's three exact paths
+next_phase_behaviour         inert for authorising writes; the checker remains runnable so a
+                             successor can re-verify what 5S was permitted to touch
+maintenance_behaviour        additive rows only, each carrying its own id and purpose; an existing
+                             row's operation set may never be widened
+sunset_or_migration_condition  when Stage 5S's tree is archived, at which point the prefixes match
+                             nothing and S.5's anti-vacuity condition fails loudly rather than
+                             passing silently
+anti_vacuity_condition       the checker must have evaluated a NON-EMPTY change set, or the working
+                             tree must be clean. An empty evaluated range over a dirty tree is a
+                             refusal (Q1-F004), and a run that matched zero rows against a non-empty
+                             change set is a refusal rather than an accepted no-op.
+```
