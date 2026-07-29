@@ -20,17 +20,23 @@ pre_task0_commit    76c469a0    §§1-7 frozen
 pre_task0_digest    3357a92529063d7c21d251c411bce41e1b1b84be11f1ddcbc0c91337391f025f
 pre_task0_bytes     65753
 
-post_task0_commit   ................................  written by commit 0b, naming commit 0a
-post_task0_digest   ................................  written by commit 0b
-post_task0_bytes    ......                            written by commit 0b
+post_task0_commit   a21103e7e3503d5c3b6b620bc70c4836060b122f   commit 0a
+post_task0_digest   da07957e27b7a7e4a9108193b87bc0e82963f75c45d475663177f49f27b7bf5f
+post_task0_bytes    70864
+frozen_range_digest e0d25ce115d0b945175ccff5fcadebcd017ea47af02a8f2a9b249364132b83ec
+frozen_range_bytes  64240                    §§1-7, UNMOVED from 76c469a0 — see Annex M.5
 spec_domain         simurgh.vwq.full-spec.v1
 
 recompute           shasum -a 256 docs/superpowers/specs/2026-07-28-stage-5s-vwq-verifiable-witness-quorum-design.md
 gate                node --test tests/unit/llmShield/stage5s/specPin.test.js     (built by Task 1)
 ```
 
-§§1–7 are untouched by Task 0. The amendment is confined to the unnumbered header table and a new
-Annex M, both outside the freeze — the same shape 5Q's Annex A5 used.
+§§1–7 are untouched by Task 0, and that is recorded as a digest rather than a promise: the frozen
+range hashes to `e0d25ce1…` over 64240 bytes at both `76c469a0` and commit 0a. Task 1 recomputes
+**both** digests, because a whole-file digest alone cannot distinguish "an annex was added" from "an
+annex was added and a frozen section was quietly reworded" (Annex M.5). The amendment is confined to
+the unnumbered header table and the new Annex M, both outside the freeze — the shape 5Q's Annex A5
+used.
 
 ### Predecessor pins, each verified at plan time rather than remembered
 
