@@ -247,6 +247,11 @@ test("raw literals 464-474 occur ONLY in the allocator, the registry, goldens an
     // codes its predecessor consumed without laundering the literal out of the sentence.
     "docs/superpowers/specs/2026-07-26-stage-5q-vsr-stage-wide-red-team-design.md",
     "docs/superpowers/plans/2026-07-26-stage-5q-vsr-q0-implementation-plan.md",
+    // 5S cites 473/474 for the same reason 5Q did: to state where 5P's band closed and where its
+    // own opens. The ruling this list encodes says to widen the approved list and never weaken the
+    // band regex, so the regex below is untouched.
+    "docs/superpowers/specs/2026-07-28-stage-5s-vwq-verifiable-witness-quorum-design.md",
+    "docs/superpowers/plans/2026-07-29-stage-5s-vwq-implementation-plan.md",
   ];
   const SKIP = new Set(["node_modules", ".git", "dist", "build", ".remember", "coverage"]);
   // The FULL allocated range, amendment band included. The first version stopped at 472 and left

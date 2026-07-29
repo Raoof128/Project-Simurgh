@@ -109,9 +109,17 @@ test("§10.2 the table is CLOSED at 463, and the 464 handoff went to Stage 5P in
   for (let c = 464; c <= 474; c++) {
     assert.equal(RUN_LEVEL_BY_RAW[c], 1, `${c} must be Stage 5P's band at run level 1`);
   }
+  // Stage 5S (VWQ) took the next handoff, exactly as 5P took 464. The assertion above already
+  // records why a "must stay unallocated" line is temporary: it states where the frontier WAS, and
+  // a successor moving the frontier does not violate a Stage 5O invariant. So the successor band is
+  // pinned exactly rather than asserted absent — strictly stronger, and it cannot silently expire.
+  for (let c = 475; c <= 511; c += 1) {
+    assert.equal(RUN_LEVEL_BY_RAW[c], 1, `${c} must be Stage 5S's band at run level 1`);
+  }
+  assert.equal(RUN_LEVEL_BY_RAW[512], 3, "512 VWQ_UNKNOWN is the fail-closed wrapper");
   assert.ok(
-    !Object.prototype.hasOwnProperty.call(RUN_LEVEL_BY_RAW, 475),
-    "475+ must stay unallocated; Stage 5P's closed band ends at 472 and A5 appended 473-474"
+    !Object.prototype.hasOwnProperty.call(RUN_LEVEL_BY_RAW, 513),
+    "513+ must stay unallocated; Stage 5S's closed band ends at 512"
   );
 });
 
