@@ -4,22 +4,31 @@
 > Every mechanism in this stage is safe for the provider (content and structural egress) and
 > recomputable by a reviewer, and both properties are designed in at SPEC time rather than retrofitted.
 
+Revision 2, after gauntlet round 2 (§13). Round 2 returned **FAIL WITH BLOCKERS** against revision 1
+and every blocker is applied below.
+
 ## §0 The contract this plan is written against
+
+Task 0 amends the spec header and adds Annex M, so the digest below is the **post-Task-0** value and
+Task 0 is the task that writes it. Until Task 0 lands, the recorded digest is the pre-amendment one
+and the pin test is expected to fail — that expected failure is Task 0's own first witness.
 
 ```text
 spec                docs/superpowers/specs/2026-07-28-stage-5s-vwq-verifiable-witness-quorum-design.md
-spec_commit         76c469a0            §§1-7 all frozen
-spec_digest         3357a92529063d7c21d251c411bce41e1b1b84be11f1ddcbc0c91337391f025f
-spec_bytes          65753
+pre_task0_commit    76c469a0    §§1-7 frozen
+pre_task0_digest    3357a92529063d7c21d251c411bce41e1b1b84be11f1ddcbc0c91337391f025f
+pre_task0_bytes     65753
+
+post_task0_commit   <written by Task 0>
+post_task0_digest   <written by Task 0>
 spec_domain         simurgh.vwq.full-spec.v1
 
 recompute           shasum -a 256 <spec>
 gate                node --test tests/unit/llmShield/stage5s/specPin.test.js     (built by Task 1)
 ```
 
-A test asserts this plan's recorded digest against the live spec, so amending the spec without
-re-pinning the plan turns CI red. 5S has no separate frozen-block receipt: §§1–7 are frozen in whole,
-and one digest over the whole file is the simpler honest instrument.
+§§1–7 are untouched by Task 0. The amendment is confined to the unnumbered header table and a new
+Annex M, both outside the freeze — the same shape 5Q's Annex A5 used.
 
 ### Predecessor pins, each verified at plan time rather than remembered
 
@@ -29,44 +38,50 @@ branch baseline       main 7a9bd5d4 — after Q1-F001, Annex A5, gate-lifecycle 
 C1 commitment source  tools/simurgh-attestation/stage5r/core/commitment.mjs
 raw band predecessor  tools/simurgh-attestation/stage5p/core/rawCodeAllocator.mjs
                       VSI_AMENDMENT_FROM = 473, VSI_ALLOCATED_HI = 474  → 475 is genuinely free
+lean floor            scripts/check-lean-proofs.mjs DEFAULT_FLOOR = 38 → becomes 39 at Task 26
+closeout precedent    git ls-tree v2.53.0-stage-5r-vpf shows STAGE_5R_CLOSEOUT.md INSIDE the tag;
+                      the tag follows closeout, and revision 1 had this backwards
+browser precedent     5O runs the portable module under Node 26 WebCrypto in CI and keeps a real
+                      headless-browser run in the browser/ HTML runner — two different claims
 Node                  /opt/homebrew/opt/node@26/bin   (4H digest builder is byte-stable ONLY here)
 prettier              repo-local, never a global install
 ```
-
-**Spec correction carried by this plan.** The spec's §0 table names the reservation constant
-`VSI_RESERVED_FROM`. No such symbol exists; the real constants are `VSI_AMENDMENT_FROM = 473` and
-`VSI_ALLOCATED_HI = 474`. The conclusion is unchanged — 475 is free — but Task 4 references the
-symbols that exist, and the spec table is corrected as an amendable-section edit outside §§1–7.
 
 ---
 
 ## §1 Scope and the rulings this plan makes
 
-The whole of 5S: the artifact algebra, the comparison relation, both lanes, all ten gates, four-runtime
-parity, five Lean theorems, the acceptance matrix, attestation, reproduce, closeout and release.
+The whole of 5S: the artifact algebra, the comparison relation, **all three lanes**, every declared
+gate, four-runtime parity, five Lean theorems, the acceptance matrix, attestation, reproduce,
+closeout and release.
 
 **Ruling 1 — the allocator is a table, never arithmetic.** 5P's allocator carries the reason in its
 own header: an offset map "silently re-numbers every later row the moment one is inserted, which is
 exactly the ripple that reddened CI on 4R and 4S." 5S has 38 codes, the largest band this repo has
-allocated at once, so the rule matters more here than where it was written. No `475 + index`.
+allocated at once. No `475 + index`.
 
-**Ruling 2 — the core is pure and read-only.** `core/` performs no I/O, spawns nothing, reads no
-clock and no environment. Every driver lives in `node/`. This is what makes the Python and browser
-mirrors possible at all.
+**Ruling 2 — the core is pure, and purity means no I/O at all.** `core/` reads no file, spawns
+nothing, reads no clock and no environment. Anything that must read bytes is a loader in `node/` that
+hands bytes to a pure validator. Revision 1 broke this in its own inheritance task (§13, B2).
 
-**Ruling 3 — statuses are computed by separate functions.** `quorum_status`, `comparison_status`,
-`witness_independence_status` and `external_corroboration_status` are four functions with four test
-files. A single `evaluate()` returning all four invites exactly the coupling §3.2 forbids.
+**Ruling 3 — one status, one function, one test file.** Five status functions therefore mean five
+test files, not one. Revision 1 wrote five functions into a single file while quoting the ruling that
+forbids it (§13, E2).
 
-**Ruling 4 — fixtures are generated by a committed builder, and the builder is tested.** A
-hand-written fixture that happens to pass proves the fixture, not the verifier.
+**Ruling 4 — the expected answers are oracle-free.** The fixture builder may not import `verify`,
+`status` or the finding derivation. A corpus whose expected column was computed by the verifier tests
+whether the verifier agrees with itself. An import-boundary test enforces this.
 
-**Ruling 5 — a gate ships only with a recorded RED state.** A gate that has never failed is a gate
-nobody has tested. Task 30 collects them, and it is placed **after every gate exists** — see §12
-finding P-002 for why this was not true of the first draft.
+**Ruling 5 — a gate ships only with a recorded RED state, over a declared gate universe.** §11 names
+every gate, including the ones that are gate-shaped but sat outside G1–G10. The RED sweep is the last
+gate-related task in the plan.
 
-**Ruling 6 — one obligation, one owning task.** An obligation may be _reinforced_ by later tasks, but
-exactly one task **owns** it. Matrix 2 records the owner; reinforcement is listed separately.
+**Ruling 6 — one obligation, one owning task**, reinforcement listed separately.
+
+**Ruling 7 — authority is read, never declared in the same commit it judges.** `core/writeSurface.mjs`
+parses the surface from the frozen spec and Annex M. It does not invent permissions. Two copies of a
+declaration are two chances to disagree, and the one that disagrees silently is the one nobody looks
+at.
 
 ---
 
@@ -80,508 +95,666 @@ check order         structural → checkpoint+producer → witness policy → wi
                     laundering → replay → quorum ⟂ comparison policy → receiver → comparison
                     → claim gate → wrapper                     (⟂ = the two lanes are independent)
 fork coordinate     (producer_identity, scope_id, epoch)
-digests             checkpoint_body_digest    excludes signature material  → compatibility
+digests             checkpoint_body_digest    excludes signature material  → COMPATIBILITY
                     checkpoint_envelope_digest includes it                 → witnesses, receipts
+same_checkpoint     BODY digests equal — never envelope equality (spec §2.4)
 compatibility       SAME CHECKPOINT | INCOMPATIBLE | COMPATIBLE | INDETERMINATE
+indeterminate       ancestry unprovable from committed inputs — ok:true, a fourth outcome
+509                 ancestry proof MALFORMED or falsely derived — a refusal, never indeterminate
 artifacts           9 (spec §2.1)
 anchors             ZERO witness weight; an anchor in the witness lane exits 489
 independence        never inferred; typed; same_operator_distinct_key ⇒ independence_unproven
 clean requires      distinct_committed_receivers >= 2, over authenticated receipt provenance
-theorem set         5, pinned as a SET (spec §6.4 G8)
+theorem set         5, pinned as a SET (spec §6.4 G8); lean floor 38 → 39
 pins                every pin is a SET, never a count (Q1-F002)
 anti-vacuity        an empty evaluated range with a dirty tree is a REFUSAL (Q1-F004)
 CI trigger          paths:-scoped to 5S-owned files, and the scoping is itself tested (Q1-F005)
-goldens ripple      tests/fixtures/llmShield/stage4h/expected-results/exit-map.json
-                    docs/research/llm-shield/evidence/stage-4h/exit-map.json
-                    tests/unit/llmShield/stage4h/exitWrapper.test.js
-                    rebuild under Node 26 ONLY
+goldens ripple      three Stage 4H paths, authorised ONLY by Annex M (Task 0), rebuilt under Node 26
 unknown probe       UNKNOWN_RAW_PROBE (999), never a hardcoded free value
-evidence dir        docs/research/llm-shield/evidence/stage-5s/ — and prior stages' reproduce
-                    scripts must stay green over it (the 5Q/5R path collision, Task 2)
+evidence dir        docs/research/llm-shield/evidence/stage-5s/ — prior stages' reproduce scripts
+                    must stay green over it (the 5Q/5R path collision, Task 3)
+release order       closeout INSIDE the tag, verified against 5R's tree; gh release create is named
 never               git add -A after check.sh; it commits the banking fixture and .pyc
 ```
 
 ---
 
-## §3 Plan-quality gates — run before Task 1 and after the last task
+## §3 Plan-quality gates — run before Task 0 and after the last task
 
-1. every spec obligation has exactly one **owning** task (Matrix 2, §11), reinforcement listed apart;
-2. every gate G1–G10 has a building task and a red-proving task, and the red-proving task number is
-   **greater than** the building task number (Matrix 1, §10);
+1. every spec obligation has exactly one **owning** task (Matrix 2, §12), reinforcement listed apart;
+2. every declared gate (§11) has a building task and a red-proving task, and the red-proving task
+   number is **greater than** every building task number;
 3. no task says "TBD", "similar to Task N", or "add appropriate error handling";
-4. every task names the exact command that proves it;
-5. no task consumes an artifact produced by a later task.
+4. **every task names an exact proving command** — no task may prove itself with prose;
+5. no task consumes an artifact, or an authority, produced by a later task.
 
-Gate 5 is new. It is the one the first draft failed twice.
+Gates 4 and 5 are the two revision 1 failed. Gate 5 now covers **authority**, not just artifacts:
+Task 5's golden ripple was forbidden by Task 2's own surface until Annex M existed (§13, B1).
 
 ---
 
-## §4 Wave 1 — pins, surface, allocator, algebra
+## §4 Wave 0 — authority
+
+### Task 0 — the spec amendment, Annex M, and the re-pin
+
+Three edits, all outside frozen §§1–7:
+
+1. header table: `VSI_RESERVED_FROM` → `VSI_AMENDMENT_FROM = 473` / `VSI_ALLOCATED_HI = 474`, the
+   symbols that exist;
+2. **Annex M — the additive-ripple surface.** Exactly three paths, operation `modify`, purpose
+   "additive raw-band ripple required by §2.10", authorising section §2.10:
+
+```text
+tests/fixtures/llmShield/stage4h/expected-results/exit-map.json
+docs/research/llm-shield/evidence/stage-4h/exit-map.json
+tests/unit/llmShield/stage4h/exitWrapper.test.js
+```
+
+3. write the resulting commit and digest into this plan's §0.
+
+Annex M exists because §2.10 already _creates_ the obligation to ripple those three files while §6.2
+refuses prior-stage evidence. Revision 1 shipped that contradiction unresolved. The annex authorises
+three named paths under one named operation for one named purpose — not a category.
+
+Proves: `shasum -a 256 docs/superpowers/specs/2026-07-28-stage-5s-vwq-verifiable-witness-quorum-design.md`
+matches the value written into §0, and `git log --oneline -1` is the Task 0 commit.
+
+---
+
+## §5 Wave 1 — pins, surface, algebra
 
 ### Task 1 — the spec pin
 
-`tests/unit/llmShield/stage5s/specPin.test.js` recomputes the spec digest and asserts it equals the
-value in §0. Test first: point it at a mutated copy, watch it fail, then point it at the real file.
+`tests/unit/llmShield/stage5s/specPin.test.js` recomputes the digest and asserts §0's post-Task-0
+value. Test first against a mutated copy, watch it fail, then against the real file.
 
 Proves: `node --test tests/unit/llmShield/stage5s/specPin.test.js`
 
-### Task 2 — write surface, evidence directory, and the `.prettierignore` line
+### Task 2 — the write surface, parsed from the spec
 
-`core/writeSurface.mjs` declares the 5S surface as `{path, allowed_operation, purpose,
-authorising_section}` rows (spec §6.2); `node/checkWriteSurface.mjs` is the driver.
+`core/writeSurface.mjs` **parses** the §6.2 surface and Annex M out of the spec text (Ruling 7) and
+judges changed paths purely. `node/checkWriteSurface.mjs` is the driver that asks git what changed.
 
-The surface must authorise **its own arrival**: this plan file, the spec, the 5S tree, the 5S
-evidence directory and the 5S workflow are all rows. A surface that cannot authorise the commit that
-introduces it is a deadlock, and 5Q spent a day in one.
+Failing tests first — `tests/unit/llmShield/stage5s/writeSurface.test.js`:
 
-Failing test first — `tests/unit/llmShield/stage5s/writeSurface.test.js`:
-
+- the surface is parsed, not re-declared: mutating the spec text changes the parsed surface;
+- parsing is bounded to Annex M's own section — a table elsewhere is not its authority;
 - a path outside the surface is refused;
 - a permitted path under an unpermitted operation is refused;
-- an empty changed set with a dirty tree is refused as `uncommitted_changes_not_evaluated`;
-- prior-stage evidence paths are refused;
-- a private-key path is refused by **regex on path**, not by digit-bearing filename (5P's lesson).
+- an empty changed set with a dirty tree → `uncommitted_changes_not_evaluated`;
+- a prior-stage evidence path **not** in Annex M is refused;
+- the three Annex M paths are permitted under `modify` and refused under `add`;
+- a private-key path is refused by **regex on path**, never by digit-bearing filename (5P).
 
-Then, in the same task, because both cost a red round when discovered late:
+Proves: `node --test tests/unit/llmShield/stage5s/writeSurface.test.js`
 
-- add `tools/simurgh-attestation/stage5s/fixtures/` and
-  `docs/research/llm-shield/evidence/stage-5s/` to `.prettierignore` (4K);
-- create the evidence directory and **run 5Q's and 5R's reproduce scripts** to prove the new path
-  does not disturb their `git status --porcelain` gates. Adding files under an evidence tree broke
-  5R once and forced the Q1 artifacts into a sibling directory.
+### Task 3 — evidence directory, `.prettierignore`, prior-reproduce sanity
 
-Proves: `node --test tests/unit/llmShield/stage5s/writeSurface.test.js` and both prior reproduce
-scripts exiting 0.
+Create `docs/research/llm-shield/evidence/stage-5s/`; add it and
+`tools/simurgh-attestation/stage5s/fixtures/` to `.prettierignore` (4K); then run 5Q's and 5R's
+reproduce scripts to prove the new path does not disturb their `git status --porcelain` gates —
+adding files under an evidence tree broke 5R once and forced Q1's artifacts into a sibling.
 
-### Task 3 — inheritance from 5R: C1, roots first, signature last
+Proves: `bash scripts/reproduce-stage-5q.sh; bash scripts/reproduce-stage-5r.sh` — both exit 0, and
+`npx prettier --check .` exits 0.
 
-`core/inherit.mjs` reads 5R's C1 commitment and exposes `c1Binding()`. Verify roots before
-signatures, as 5R itself does, so a signature check never masks a root mismatch.
+### Task 4 — inheritance: a loader in `node/`, a pure validator in `core/`
 
-Test: a C1 digest mismatch is refused **before** any signature verification is attempted, asserted by
-a spy that records call order.
+```text
+node/loadInheritedRoots.mjs   reads 5R's C1 artifact; binds source path, source commit, source digest
+core/inherit.mjs              accepts bytes and digests as arguments; validates purely
+```
+
+Roots before signatures, as 5R itself does, so a signature check never masks a root mismatch.
+
+Tests: `core/inherit.mjs` source contains no `node:fs` import; a C1 digest mismatch is refused
+**before** any signature verification, asserted by a spy recording call order.
 
 Proves: `node --test tests/unit/llmShield/stage5s/inherit.test.js`
 
-### Task 4 — the raw-code allocator, as a frozen table
+### Task 5 — the raw-code allocator, as a frozen table, plus the Annex M ripple
 
-`core/rawCodeAllocator.mjs` exporting `VWQ_CLOSED_BAND` — 38 frozen rows of
-`{check_id, policy_outcome, raw_code}` — plus `VWQ_BAND_LO = 475`, `VWQ_BAND_HI = 512`.
+`core/rawCodeAllocator.mjs`: `VWQ_CLOSED_BAND` (38 frozen `{check_id, policy_outcome, raw_code}`
+rows), `VWQ_BAND_LO = 475`, `VWQ_BAND_HI = 512`.
 
-Tests that must exist, because each denies a real failure:
+Tests: exactly 38 rows whose codes are the contiguous set 475…512, computed as a set difference with
+`added`/`removed` printed separately; the module source contains no `475 +` and no `BAND_LO +`; 512 is
+`VWQ_UNKNOWN` and last; `VWQ_EQUIVOCATION_DETECTED` is **absent** from the band; every code reachable
+from exactly one `check_id`; `VWQ_BAND_LO === VSI_ALLOCATED_HI + 1`, imported from 5P.
 
-- the table has exactly 38 rows and its raw codes are the contiguous set 475…512, computed as a
-  **set difference** against the expected set with `added` and `removed` printed separately;
-- no arithmetic: the module source contains no `475 +` and no `BAND_LO +`;
-- `512` is `VWQ_UNKNOWN` and is last in check order;
-- `VWQ_EQUIVOCATION_DETECTED` is **absent** from the band — it is a finding id;
-- every code is reachable from exactly one `check_id`;
-- `VWQ_BAND_LO === VSI_ALLOCATED_HI + 1`, imported from 5P rather than retyped.
-
-Then ripple the three goldens **in this same task**, rebuilding under Node 26, and run the 4H
-exit-wrapper suite. Deferring the ripple is how 4R and 4S went red.
+Then ripple the three Annex M goldens **in this task**, under Node 26, and run 4H's suite.
 
 Proves: `node --test tests/unit/llmShield/stage5s/rawCodeAllocator.test.js tests/unit/llmShield/stage4h/exitWrapper.test.js`
+and `node tools/simurgh-attestation/stage5s/node/checkWriteSurface.mjs --range <base>..HEAD` exits 0.
 
-### Task 5 — canonicalisation and the two digests
+### Task 6 — canonicalisation and the two digests
 
 `core/canonical.mjs`: `canonicalJson`, `checkpointBodyDigest`, `checkpointEnvelopeDigest`.
 
-The body digest **excludes** `producer_signature` and every signature-bearing field; the envelope
-digest includes them. Test the separation directly: two checkpoints differing only in signature bytes
-share a body digest and differ in envelope digest. Test the inverse too — differing bodies never share
-a body digest.
+Body excludes `producer_signature` and every signature-bearing field; envelope includes them. The
+load-bearing test: two checkpoints differing **only** in signature bytes share a body digest and
+differ in envelope digest.
 
-Numeric discipline: decimals are **strings**; `canonicalJson` throws on BigInt (4Z's gotcha).
+Not tested, because it is not testable: that differing bodies can never share a digest. That is
+collision resistance, and it is an **assumption** (spec §5.2 item 1), recorded as one rather than
+dressed as a passing test (§13, E7).
+
+Decimals are strings; `canonicalJson` throws on BigInt (4Z).
 
 Proves: `node --test tests/unit/llmShield/stage5s/canonical.test.js`
 
-### Task 6 — the nine artifact schemas
+### Task 7 — the nine artifact schemas
 
-`core/artifacts.mjs`: one validator per artifact of spec §2.1, each returning a typed refusal rather
-than throwing. Schema failures map to 475/476 only; nothing else is decidable at this layer.
+`core/artifacts.mjs`: one validator per artifact of §2.1, each returning a typed refusal rather than
+throwing. Schema failures map to 475/476 only.
 
 Test: each of the nine constructs, validates and rejects a mutated form; `receiver_unavailable_status`
-validates as an **authenticated statement of absence** and carries no view payload.
+validates as an authenticated statement of absence carrying no view payload.
 
 Proves: `node --test tests/unit/llmShield/stage5s/artifacts.test.js`
 
-### Task 7 — the two policy blocks and the two taxonomies
+### Task 8 — the two policy blocks and the two disjoint taxonomies
 
-`core/policy.mjs`: `witness_quorum_policy` (threshold, full-tuple roster, required class mix) and
-`external_corroboration_policy` (minimum distinct anchor mechanisms, permitted ecology classes,
-required envelope digest, freshness) as **separate** validated types (spec §3.3).
+`core/policy.mjs`: `witness_quorum_policy` and `external_corroboration_policy` as separate validated
+types (§3.3). `core/classes.mjs`: `WITNESS_OPERATOR_CLASS` and `EXTERNAL_ANCHOR_CLASS` as two frozen
+enumerations whose intersection is empty, asserted by a set-intersection test.
 
-`core/classes.mjs`: `WITNESS_OPERATOR_CLASS` and `EXTERNAL_ANCHOR_CLASS` as two frozen enumerations
-with an empty intersection — asserted by a set-intersection test, so the type separation of §3.4 is
-machine-checked rather than assumed.
-
-Also here: a malformed `external_corroboration_policy` yields
-`external_corroboration_status: "not_satisfied"` and **never** a verifier refusal, so a non-CI-gated
-lane cannot pull a raw code across the §2 freeze.
+Policy validation **returns validity only**. Deriving `external_corroboration_status` here would
+couple a status to a validator, which Ruling 3 forbids; the status is computed in Task 13 (§13, E6).
 
 Proves: `node --test tests/unit/llmShield/stage5s/policy.test.js tests/unit/llmShield/stage5s/classes.test.js`
 
 ---
 
-## §5 Wave 2 — the relation
+## §6 Wave 2 — the relation
 
-### Task 8 — the compatibility relation
+### Task 9 — the compatibility relation, over BODY digests
 
-`core/compatibility.mjs` exporting `compare(viewA, viewB)` → one of
+`core/compatibility.mjs`: `compare(viewA, viewB)` →
 `same_checkpoint | incompatible | compatible | indeterminate`.
 
-Tests, one per outcome plus the traps:
+The corrected load-bearing test (§13, B3):
 
-- identical envelope digests → `same_checkpoint`;
-- same fork coordinate, different body digests, no ancestry → `incompatible`;
-- valid transitive ancestry → `compatible`;
-- missing committed ancestry link → `indeterminate`, never `incompatible`;
-- a `policy_digest` or `protocol_version` change does **not** move the fork coordinate;
-- **§7.3:** one `history_root` under two document projections → `compatible`;
-- **§7.3:** a document projection submitted in a checkpoint slot → refused as malformed at 475,
-  never compared. A redaction is not a fork.
+```text
+body_digest_a == body_digest_b
+envelope_digest_a != envelope_digest_b     two valid but different signature envelopes
+result == same_checkpoint
+```
+
+The relation must never depend on signature determinism. Remaining tests: same coordinate with
+differing bodies → `incompatible`; valid transitive ancestry → `compatible`; ancestry unprovable from
+committed inputs → `indeterminate`; a `policy_digest` or `protocol_version` change does not move the
+fork coordinate; **§7.3** one `history_root` under two document projections → `compatible`; **§7.3** a
+document projection in a checkpoint slot → refused at 475, never compared.
 
 Proves: `node --test tests/unit/llmShield/stage5s/compatibility.test.js`
 
-### Task 9 — transitive ancestry
+### Task 10 — ancestry, with malformed and incomplete kept apart
 
-`core/ancestry.mjs`: chain walk with cycle rejection, missing-link rejection, `allow_epoch_gaps`, and
-authorised transition records. A cycle is `indeterminate`-with-refusal, never an infinite walk — test
-with a self-referencing predecessor and a two-node loop.
+`core/ancestry.mjs`. Two outcome classes, never blended (§13, B4):
+
+```text
+missing link, insufficient committed material   → ok:true,  comparison_indeterminate
+cycle, contradictory links, false derivation    → refusal,  509 ANCESTRY_PROOF_INVALID
+```
+
+Tests: a self-referencing predecessor and a two-node loop both take 509, not indeterminate; a chain
+short one committed link is indeterminate with `ok:true`; `allow_epoch_gaps` and authorised transition
+records behave as committed.
 
 Proves: `node --test tests/unit/llmShield/stage5s/ancestry.test.js`
 
-### Task 10 — quorum arithmetic and laundering collapse
+### Task 11 — quorum arithmetic and laundering collapse
 
-`core/quorum.mjs`: `quorumStatus(certificate, policy)`.
-
-Collapse order matters and is tested: identities are collapsed for aliasing and duplication **before**
-counting, and the producer is excluded **before** collapse, so a producer wearing two aliases cannot
-consume two collapse slots and survive as one witness.
+`core/quorum.mjs`. Producer exclusion happens **before** alias/duplicate collapse, so a producer
+wearing two aliases cannot consume two collapse slots and survive as one witness.
 
 Tests: self-witness → 491; alias → 492; duplicate → 493; cross-epoch replay → 494; cross-scope → 495;
 below threshold → 496; **an external anchor identity → 489**, the machine-checked form of §3.1.
 
 Proves: `node --test tests/unit/llmShield/stage5s/quorum.test.js`
 
-### Task 11 — the receiver lane and intake tiers
+### Task 12 — the receiver lane and intake tiers
 
-`core/receivers.mjs`: roster authority, receipt authentication, alias and duplicate collapse over
-**authenticated provenance rather than array position**, and `intake_complete` for the narrow and
-strong tiers.
+`core/receivers.mjs`: roster authority, receipt authentication, collapse over **authenticated
+provenance rather than array position**, `intake_complete` for both tiers.
 
-Tests: invented receiver → 501; aliased → 503; duplicate → 504; bad signature → 502; wrong comparison
-policy → 502 with the policy digest reported; all responded → `intake_complete: true`; one signed
-unavailable → still true; one silent → false. An unavailable status contributes no view, no quorum
-weight, no corroboration.
+Corrected mapping (§13, E5): a receipt whose signature is cryptographically valid but bound to the
+**wrong comparison policy** is not a signature failure — it takes **499
+`COMPARISON_POLICY_DIGEST_MISMATCH`**, with both digests printed. 502 is reserved for a signature that
+does not verify.
+
+Other tests: invented receiver → 501; aliased → 503; duplicate → 504; unverifiable signature → 502;
+all responded → `intake_complete: true`; one signed unavailable → still true; one silent → false. An
+unavailable status contributes no view, no quorum weight, no corroboration.
 
 Proves: `node --test tests/unit/llmShield/stage5s/receivers.test.js`
 
-### Task 12 — the four statuses, four functions
+### Task 13 — five status functions, five test files
 
 `core/status.mjs` exporting `quorumStatusOf`, `comparisonStatusOf`, `witnessIndependenceStatusOf`,
-`externalCorroborationStatusOf`, and `equivocationArtifactStatusOf` (the five typed absence variants).
+`externalCorroborationStatusOf`, `equivocationArtifactStatusOf` — with
+`tests/unit/llmShield/stage5s/status.{quorum,comparison,independence,corroboration,artifact}.test.js`.
+One status, one function, one file (Ruling 3).
 
-The load-bearing test: **all four quorum combinations yield `equivocation_detected`** — met/met,
-met/incomplete, incomplete/met, incomplete/incomplete. Four separate assertions with four case ids,
-not one parameterised loop satisfiable by a single execution. This task **owns** the property; Task 16
-reinforces it at the matrix layer with the same four case ids, imported from here rather than retyped.
+`status.comparison.test.js` **owns** the quorum cross-product: met/met, met/incomplete,
+incomplete/met, incomplete/incomplete all yield `equivocation_detected`, as four separate assertions
+with four case ids exported for reuse. Task 18 reinforces them at the matrix layer by importing those
+ids rather than retyping them (§13, E3).
 
-Second: a satisfied `external_corroboration_status` never changes `witness_independence_status`.
+`status.independence.test.js` asserts that a satisfied `external_corroboration_status` never changes
+`witness_independence_status`.
 
-Proves: `node --test tests/unit/llmShield/stage5s/status.test.js`
+Proves: `node --test "tests/unit/llmShield/stage5s/status.*.test.js"`
 
-### Task 13 — the equivocation artifact and its self-verification
+### Task 14 — the equivocation artifact and its self-verification
 
-`core/equivocation.mjs`: derive the artifact, and verify one supplied by a stranger without our keys.
-A falsely derived artifact exits 510; a falsely derived ancestry proof exits 509; a correctly derived
-finding exits **0**.
+`core/equivocation.mjs`: derive, and verify a stranger's artifact without our keys. Falsely derived
+artifact → 510; falsely derived ancestry proof → 509; correctly derived finding → exit **0**.
 
 Proves: `node --test tests/unit/llmShield/stage5s/equivocation.test.js`
 
-### Task 14 — the finding ledger
+### Task 15 — the finding ledger
 
-`core/findings.mjs` plus `node/buildFindingLedger.mjs`. `VWQ_EQUIVOCATION_DETECTED` lives here, not in
+`core/findings.mjs` and `node/buildFindingLedger.mjs`. `VWQ_EQUIVOCATION_DETECTED` lives here, not in
 the raw band, and the ledger is what makes exit 0 auditable: expected outcome, actual outcome, the
-compared roots, and the typed artifact status.
-
-Missing from the first draft entirely — §2.7 names the ledger and nothing built it (§12, P-004).
+compared roots, the typed artifact status.
 
 Proves: `node --test tests/unit/llmShield/stage5s/findings.test.js`
 
-### Task 15 — the frozen check order, as one ordered evaluator
+### Task 16 — the ordered evaluator, and the pinned check-order sequence
 
-`core/verify.mjs`: the single entry point running the §2.8 order, returning the first failure plus the
-four statuses. The lane split is real — comparison is evaluated even when quorum fails.
+`core/verify.mjs` runs the §2.8 order and returns the first failure plus the five statuses. The lane
+split is real: comparison is evaluated even when quorum fails.
 
-Test at this task with **hand-built minimal inputs**, not the fixture corpus: a bundle with two
-simultaneous defects reports the earlier check, for six representative pairs spanning the order. The
-all-38-codes sweep belongs to Task 17, after the builder exists (§12, P-001).
+Export `CHECK_ORDER` as a frozen ordered array of `check_id`, pinned by a test as a **sequence**, so
+reordering two checks is caught here even before the fixture net of Task 19.
+
+Tests here use hand-built minimal inputs, six representative double-defect pairs spanning the order.
+The exhaustive adjacent-pair net is Task 19, after the builder exists.
 
 Proves: `node --test tests/unit/llmShield/stage5s/verify.test.js`
 
 ---
 
-## §6 Wave 3 — fixtures, matrix, tamper
+## §7 Wave 3 — corpus, order net, matrix
 
-### Task 16 — the fixture builder
+### Task 17 — the fixture builder, oracle-free
 
-`node/buildFixtures.mjs` generates every Lane A fixture deterministically from seeds committed in the
-repo. No clock, no randomness. Build twice and `cmp` — the builder's own determinism is tested before
-any fixture is trusted.
+`node/buildFixtures.mjs` generates every Lane A fixture deterministically from committed seeds. No
+clock, no randomness.
 
-Proves: the task script builds twice and `cmp -s` exits 0.
+Ruling 4 is enforced mechanically: an import-boundary test asserts the builder's module graph
+contains none of `core/verify.mjs`, `core/status.mjs`, `core/findings.mjs`. Expected columns are
+authored, not computed.
 
-### Task 17 — Lane A families 1–8, and the all-codes sweep
+Proves:
+`node tools/simurgh-attestation/stage5s/node/buildFixtures.mjs --out /tmp/f1 && node tools/simurgh-attestation/stage5s/node/buildFixtures.mjs --out /tmp/f2 && diff -r /tmp/f1 /tmp/f2`
+exits 0, and `node --test tests/unit/llmShield/stage5s/fixtureOracle.test.js`
 
-Eight families of spec §5.5 plus the two additive §7.3 cases, each row carrying all eleven acceptance
-columns and the **named adversary win it denies**. A case denying no named win fails the matrix
-builder.
+### Task 18 — Lane A families 1–8, and the all-codes sweep
 
-Also here, now that the corpus exists: for each of the 38 codes, a fixture reaches exactly that code
-and no earlier one.
+Eight families of §5.5 plus the two additive §7.3 cases, each row carrying all eleven acceptance
+columns and the **named adversary win it denies**. A case denying no named win fails the builder.
+
+Then: for each of the 38 codes, a fixture reaches exactly that code and no earlier one.
 
 Proves: `node --test tests/e2e/llmShield/stage5s/laneA.test.js`
 
-### Task 18 — the acceptance matrix, pinned as a set
+### Task 19 — the adjacent-pair first-failure net
 
-`node/checkAcceptanceMatrix.mjs` compares live case ids against
-`docs/research/llm-shield/evidence/stage-5s/acceptance-matrix.json`, computing `added` and `removed`
-independently and printing both. Sorting is plain code-unit comparison, never `localeCompare` — the
-Q1 lesson where a pin generated one way and validated another disagreed on `::` and `-`.
+Reachability proves a code exists; it does not prove a **total order**. A verifier could swap two
+untested checks and pass everything in Task 18 (§13, B6).
+
+Generate the **37 adjacent double-defect cases**: for each `i`, a bundle defective at `check_i` and
+`check_i+1` must report `check_i`. Plus the six spanning pairs of Task 16, retained as regression.
+
+Proves: `node --test tests/e2e/llmShield/stage5s/checkOrderNet.test.js`
+
+### Task 20 — the acceptance matrix, pinned twice
+
+Identity pinning alone lets a row's meaning drift while its id holds (§13, B5). Two independent
+commitments:
+
+1. the exact `case_id` set — `added` and `removed` computed and printed separately;
+2. a canonical digest over every expected semantic row, with **field-level** drift reported: which
+   case, which column, from what to what.
+
+Sorting is plain code-unit comparison, never `localeCompare` (the Q1 `::`/`-` disagreement).
 
 Proves: `node --test tests/unit/llmShield/stage5s/acceptanceMatrix.test.js`
 
-### Task 19 — the tamper matrix
+### Task 21 — the tamper matrix, set-pinned with an explicit census
 
-Every artifact tampered in every field class: digest swap, signature swap, roster swap, coordinate
-swap, projection-in-checkpoint-slot. Each tamper has a required first-failure code.
+Every artifact × field class: digest swap, signature swap, roster swap, coordinate swap,
+projection-in-checkpoint-slot. The census is pinned as a **set of `{artifact, field_class}` pairs**
+with a required first-failure code each, so a silently dropped tamper case is a refusal (§13, E8).
 
 Proves: `node --test tests/e2e/llmShield/stage5s/tamper.test.js`
 
 ---
 
-## §7 Wave 4 — lanes
+## §8 Wave 4 — lanes
 
-### Task 20 — Lane B, the deterministic ceremony
+### Task 22 — Lane B, with deterministic keys
 
-`node/ceremony/` — producer, witness, receiver and comparator as separate processes, each with keys
-generated in its own directory. Every process emits an input manifest; the parent asserts each
-manifest equals that role's declared protocol inputs.
+Revision 1 called the ceremony deterministic while generating random keys, so no two runs could match
+(§13, B7). Keys are **derived from committed test seeds, domain-separated by role and case id**, and
+are marked fixture-only: a test asserts no ceremony key path is accepted by the attestation signer
+policy of Task 30.
 
-Asserted: distinct PIDs, non-co-resident keys, manifest equality, `independence_unproven: true`.
-**Not asserted:** covert-channel freedom (spec §3.8).
+`node/ceremony/` — producer, witness, receiver, comparator as separate processes, each emitting an
+input manifest the parent asserts against that role's declared protocol inputs.
 
-Ports, if any are bound, come from the reserved CI range (3V-A's `EADDRINUSE` lesson).
+Asserted: distinct PIDs; **each role is passed only its declared key path** — the narrowed claim,
+since separate directories do not prove a process could not read another's; manifest equality;
+`independence_unproven: true`; and two complete runs byte-identical.
+
+**Not asserted:** covert-channel freedom (spec §3.8). Ports, if bound, come from the reserved CI range
+(3V-A's `EADDRINUSE`).
 
 Proves: `node --test tests/e2e/llmShield/stage5s/laneB.test.js`
 
-### Task 21 — the positive and negative controls
+### Task 23 — the positive and negative controls
 
-Deliberate producer equivocation: two incompatible checkpoints at one fork coordinate, both reaching
-committed receivers, artifact required. Negative control: a normal epoch advance with valid ancestry,
-`compatible` required.
+Deliberate producer equivocation at one fork coordinate, both views reaching committed receivers,
+artifact required. Negative control: a normal epoch advance with valid ancestry → `compatible`.
 
 The signed non-claim ships in the lane output: a self-inflicted equivocation demonstrates the
 detector; it is not evidence about any provider and not an accusation.
 
 Proves: `node --test tests/e2e/llmShield/stage5s/controls.test.js`
 
-### Task 22 — Lane C capture verification
+### Task 24 — Lane C acquisition, live and never CI-gated
 
-`node/verifyCapture.mjs` verifies the **frozen** capture offline against its committed envelope
-digest. Two switches, separately (spec §6.4 G6):
+Revision 1 verified a capture nothing produced (§13, B8). This task produces it: submit the checkpoint
+envelope digest to the three ecology mechanisms, freeze each response under
+`docs/research/llm-shield/evidence/stage-5s/lane-c/`, and record failures as typed outcomes rather
+than retries. Both outcomes are sealed honestly — a refusal or an outage is recorded, never re-run
+until it looks good.
+
+Release semantics, frozen here: **no capture → typed `not_captured`, and no Lane C achievement is
+claimed anywhere.** A capture present makes Task 25's offline verification mandatory.
+
+Proves:
+`node tools/simurgh-attestation/stage5s/node/captureLaneC.mjs --emit docs/research/llm-shield/evidence/stage-5s/lane-c/`
+writes the capture or a typed `not_captured` record; the operator pastes the transcript into the
+evidence directory.
+
+### Task 25 — Lane C frozen-capture verification, offline
+
+`node/verifyCapture.mjs` verifies the frozen capture offline against its committed envelope digest.
 
 ```text
 capture_required                     = false
-frozen_capture_verification_required = true
+frozen_capture_verification_required = true      when a capture is present
 ```
 
-An unverifiable capture is a refusal, never a skip.
+An unverifiable capture is a refusal, never a skip; an absent capture is `not_captured`, never green.
 
 Proves: `node --test tests/unit/llmShield/stage5s/capture.test.js`
 
 ---
 
-## §8 Wave 5 — proofs, parity, attestation, gates
+## §9 Wave 5 — proofs, parity, claims, attestation, census
 
-### Task 23 — the five Lean theorems
+### Task 26 — the five Lean theorems, and the floor bump to 39
 
-`proofs/stage5s/Vwq.lean` — the five names of spec §6.4 G8, zero `sorry`. The theorem names are pinned
-as a **set** by a test, so a missing theorem is caught by set difference rather than by a reader.
+`proofs/stage5s/Vwq.lean` with the five names of §6.4 G8, zero `sorry`. Theorem names pinned as a
+**set**, so a missing theorem is a set difference rather than a reader's job.
 
-The gate is the repaired self-enumerating `scripts/check-lean-proofs.mjs`; the type-check is not the
-gate, because `lean` exits 0 on a `sorry`-closed theorem.
+**Raise `DEFAULT_FLOOR` in `scripts/check-lean-proofs.mjs` from 38 to 39 in this task** (§13, B12).
+Without the bump, deleting 5S's only proof later returns the repository to 38 and the count guard
+stays green while directory coverage loses the directory entirely.
 
 Proves: `node scripts/check-lean-proofs.mjs` and
 `node --test tests/unit/llmShield/stage5s/theoremSet.test.js`
 
-### Task 24 — the parity manifest, written before the mirrors
+### Task 27 — the parity manifest, written before the mirrors
 
-`core/parityManifest.mjs` listing the exact shared surface: canonicalisation, both digests, the
-compatibility relation, ancestry, quorum arithmetic, typed status rendering. Written first, so the
-mirrors implement a declared surface rather than the manifest describing whatever got written.
+`core/parityManifest.mjs` listing the shared surface: canonicalisation, both digests, the compatibility
+relation, ancestry, quorum arithmetic, typed status rendering.
 
 Proves: `node --test tests/unit/llmShield/stage5s/parityManifest.test.js`
 
-### Task 25 — the three mirrors
+### Task 28 — the three mirrors, with the browser claim split honestly
 
-`python/vwq_parity.py`, `browser/vwq-portable.mjs`, and the portable Node path. Exact result equality
-across four runtimes over the Task 24 surface. A runtime that fails to launch is a refusal, never a
-skip.
+Following 5O's precedent, which states the distinction in its own header:
 
-Proves: `node --test tests/e2e/llmShield/stage5s/parity.test.js`
+- **CI lane:** `browser/vwq-portable.mjs` under Node 26 WebCrypto — the identical WHATWG API a
+  browser exposes. This proves **API equivalence**, and is labelled as that, not as browser execution.
+- **Captured lane:** a real headless-browser run of the same module via the `browser/` HTML runner,
+  frozen as evidence under the Lane C-style capture rules — present or typed absent, never implied.
+- `python/vwq_parity.py` and the portable Node path complete the four runtimes.
 
-### Task 26 — attestation, two tiers
+A runtime that fails to launch is a refusal, never a skip.
 
-`signer/` with `~/.simurgh/5s-ed25519.pem`, never committed. The verifier **refuses** `--key`.
-Roots: both policy digests, the quorum certificate, the four statuses, the class mix, the typed
-artifact status and the three always-bound comparison fields, the Lane B environment sentence, and
-the C1 binding.
+Proves: `node --test tests/e2e/llmShield/stage5s/parity.test.js` and
+`node tools/simurgh-attestation/stage5s/browser/runHeadless.mjs --emit docs/research/llm-shield/evidence/stage-5s/browser/`
 
-Proves: `node --test tests/e2e/llmShield/stage5s/attestation.test.js`
+### Task 29 — the claim and non-claim set (G9), before anything binds it
 
-### Task 27 — the claim gate, G9
+Code 511 over the set-pinned 5S claim surfaces of §2.9, and the **signed non-claim id set** as a
+frozen list. Every banned phrase has a positive fixture proving the gate goes red, including
+**"expensive"** and global non-equivocation language. The surface set is proved non-empty — an empty
+scan is a refusal.
 
-Code 511 over the set-pinned 5S claim surfaces. Every banned phrase has a positive fixture proving the
-gate goes **red**, including **"expensive"** and global non-equivocation language. The surface set is
-proved non-empty — an empty scan is a refusal.
+Placed before attestation because attestation binds this set; revision 1 had them reversed and still
+claimed the reinforcement (§13, B9).
 
 Proves: `node --test tests/unit/llmShield/stage5s/claimGate.test.js`
 
-### Task 28 — CI workflow and its trigger self-test
+### Task 30 — attestation, two tiers, binding a map rather than a certificate
 
-`.github/workflows/stage-5s-checks.yml`, `paths:`-scoped, with the four self-test assertions of spec
-§6.5 — including that the workflow file itself triggers, so a trigger repair can never be
-unverifiable.
+A singular `quorum_certificate` root cannot represent two compared checkpoints or the four
+met/incomplete combinations (§13, B9). The root binds:
+
+```text
+compared checkpoint envelope digest SET
+per-view quorum_status MAP, keyed by checkpoint envelope digest
+witness policy digest, comparison policy digest
+comparison manifest digest
+receipt / unavailable-status root
+comparison_status
+intake_complete
+witness_independence_status
+external_corroboration_status  + Lane C capture state
+finding-ledger digest
+typed equivocation_artifact_status
+exact signed non-claim ID set              (from Task 29)
+declared witness class mix
+Lane B environment sentence
+C1 binding                                 (from Task 4)
+```
+
+Signer: `~/.simurgh/5s-ed25519.pem`, never committed. Named explicitly in the task: the public key
+artifact path, the key fingerprint, the verifier command, and the tamper command. The verifier
+**refuses** `--key`.
+
+Proves: `node --test tests/e2e/llmShield/stage5s/attestation.test.js` and
+`node tools/simurgh-attestation/verify-stage5s-attestation.mjs --bundle <path>` exits 0 while the same
+command against a tampered bundle exits non-zero.
+
+### Task 31 — CI workflow and its trigger self-test
+
+`.github/workflows/stage-5s-checks.yml`, `paths:`-scoped, with the four self-test assertions of §6.5,
+including that the workflow file itself triggers.
 
 Proves: `node --test tests/unit/llmShield/stage5s/triggerScope.test.js`
 
-### Task 29 — the gate census, with lifecycle fields adjacent
+### Task 32 — the gate census, comparing lifecycle VALUES
 
-Each gate module carries its six lifecycle fields **in its own file** (spec §4.6), exported as a
-frozen `LIFECYCLE` object. `node/checkGateCensus.mjs` builds the set-pinned index of §6.1 —
-`declared` vs `implemented`, `added` and `removed` printed separately, exact set equality required.
-
-A gate whose module exports no `LIFECYCLE`, or whose object is missing any of the six fields, fails
-the census. That is what stops the fields living only in the spec.
+Each gate module exports a frozen `LIFECYCLE` object in its own file (§4.6).
+`node/checkGateCensus.mjs` builds the set-pinned index of §6.1 and — the correction — compares each
+complete object **field by field against a frozen authority**, reporting field-level drift. Six
+present-but-meaningless strings passed revision 1's presence check (§13, B11).
 
 Proves: `node --test tests/unit/llmShield/stage5s/gateCensus.test.js`
 
-### Task 30 — recorded RED state for every gate
+### Task 33 — K7-A all-functions net
 
-Each of G1–G10 is driven to failure once and the failure output recorded as evidence. Placed here
-because every gate now exists; in the first draft this task preceded four of the gates it claimed to
-red-prove (§12, P-002).
-
-Proves: `node --test tests/e2e/llmShield/stage5s/gateRedStates.test.js`
-
-### Task 31 — K7-A all-functions net
-
-Obligations enumerate **symbols**, not files, with the eight columns of spec §6.3. Every discovered
+Obligations enumerate **symbols**, not files, with the eight columns of §6.3. Every discovered
 in-scope symbol carries exactly one of `covered`, `excluded_with_signed_reason`,
-`not_applicable_with_signed_reason`. No missing status, no "covered by suite".
+`not_applicable_with_signed_reason`. No missing status, no "covered by suite". Adapters must genuinely
+invoke — an import must not satisfy the census.
 
-Adapters must genuinely invoke — the census must not be satisfiable by an import.
+Placed before the RED sweep because K7-A is a declared gate in §11 and Ruling 5 applies to it
+(§13, B10).
 
 Proves: `node --test tests/e2e/llmShield/stage5s/k7AllFunctions.test.js`
 
----
+### Task 34 — the RED sweep, over the declared gate universe
 
-## §9 Wave 6 — reproduce, ship
+Every gate in §11 — G1–G10 plus the four gate-shaped checks revision 1 left outside the universe — is
+driven to failure once by a **live seeded defect**, and the failure output recorded as evidence. Last
+gate-related task in the plan, by construction.
 
-### Task 32 — the reproduce script
-
-`scripts/reproduce-stage-5s.sh`, running every gate in order and printing a per-gate verdict. Under
-`set -e`, **never** write `cmd && echo` — it fails OPEN. Split the lines (5E's droplet lesson, which
-caught two fail-opens).
-
-Proves: `bash scripts/reproduce-stage-5s.sh` exits 0 with every gate reporting.
-
-### Task 33 — prior-stage reproduce sweep and `check.sh`
-
-Every prior stage's reproduce script re-run — additive changes must not disturb sealed history — then
-`check.sh` locally before push. It takes ~9–10 minutes: background one wait loop, never repeated
-foreground sleeps.
-
-Proves: all prior reproduce scripts exit 0; `bash scripts/check.sh` exits 0.
-
-### Task 34 — closeout and release
-
-Closeout doc with the honestly re-scored scorecard, README banner, north-star update, memory write and
-Zurvan ingest (search for duplicates first).
-
-Release order from the ledger: PR → CI green → rebase-merge → **reset local main to origin/main** →
-tag `v2.54.0-stage-5s-vwq` → reproduce **on main** → closeout. Check `gh release list` against
-`git tag`: a tag is not a release (5C's lesson).
-
-Proves: reproduce green **on main**, and the closeout's own machine checker exits 0.
+Proves: `node --test tests/e2e/llmShield/stage5s/gateRedStates.test.js`
 
 ---
 
-## §10 Matrix 1 — gate → built by → red-proved by
+## §10 Wave 6 — reproduce, closeout, release
 
-Every red-proving number exceeds its building number, per plan-quality gate 2.
+### Task 35 — the reproduce script
 
-| gate | built by     | red-proved by |
-| ---- | ------------ | ------------- |
-| G1   | Task 4       | Task 30       |
-| G2   | Task 18      | Task 30       |
-| G3   | Task 6       | Task 19       |
-| G4   | Tasks 16, 17 | Task 30       |
-| G5   | Task 20      | Task 30       |
-| G6   | Task 22      | Task 30       |
-| G7   | Tasks 24, 25 | Task 30       |
-| G8   | Task 23      | Task 30       |
-| G9   | Task 27      | Task 30       |
-| G10  | Task 26      | Task 30       |
+`scripts/reproduce-stage-5s.sh`, every gate in order with a per-gate verdict. Under `set -e`, **never**
+`cmd && echo` — it fails OPEN. Split the lines (5E's droplet lesson, which caught two fail-opens).
 
-## §11 Matrix 2 — spec obligation → owning task → reinforced by
+Proves: `bash scripts/reproduce-stage-5s.sh` exits 0 with every declared gate reporting.
 
-| spec | obligation                              | owner | reinforced by |
-| ---- | --------------------------------------- | ----- | ------------- |
-| §2.1 | nine artifacts                          | 6     | 19            |
-| §2.4 | compatibility relation                  | 8     | 17            |
-| §2.5 | ancestry                                | 9     | 17            |
-| §2.7 | 38 raw codes + goldens ripple           | 4     | 17            |
-| §2.8 | frozen first-failure order              | 15    | 17            |
-| §3.1 | anchors carry zero witness weight       | 10    | 17            |
-| §3.2 | four independent statuses               | 12    | 26            |
-| §3.3 | two policy blocks                       | 7     | 26            |
-| §3.4 | two disjoint taxonomies                 | 7     | 30            |
-| §3.6 | typed artifact absence                  | 12    | 26            |
-| §3.8 | Lane B tested vs design properties      | 20    | 30            |
-| §3.9 | Lane C capture                          | 22    | 30            |
-| §4.1 | five theorems                           | 23    | 30            |
-| §4.2 | non-claims present as an exact id set   | 27    | 26            |
-| §5.4 | acceptance matrix, set-pinned           | 18    | 30            |
-| §5.5 | eight case families                     | 17    | 18            |
-| §6.1 | gate census, set equality               | 29    | 30            |
-| §6.2 | write surface                           | 2     | 33            |
-| §6.3 | K7-A by symbol                          | 31    | 33            |
-| §6.5 | trigger self-test                       | 28    | 30            |
-| §4.6 | lifecycle fields adjacent to definition | 29    | 30            |
-| §7.3 | a redaction is not a fork               | 8     | 17            |
+### Task 36 — the prior-reproduce sweep, self-enumerating
 
-## §12 Gauntlet round 1 — findings against this plan, all applied
+"Every prior reproduce script" must not be a list someone maintains (§13, E10). The runner globs
+`scripts/reproduce-stage-*.sh`, pins the discovered set against a committed set, and refuses on
+`added` or `removed` — so a script that vanishes is a refusal, not a silence.
 
-Run against the first draft before any code existed. Seven structural, two editorial.
+Then `check.sh`, which takes ~9–10 minutes: background one wait loop, never repeated foreground
+sleeps.
 
-| id    | finding                                                                                                                                                                                                 | resolution                                                                        |
-| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| P-001 | the check-order task swept all 38 codes using a fixture corpus built by a **later** task — a plan that cannot execute in its own order                                                                  | split: minimal hand-built pairs at Task 15, the all-codes sweep at Task 17        |
-| P-002 | the red-states task preceded Tasks building G7, G9 and G10, so it claimed to red-prove gates that did not yet exist                                                                                     | moved to Task 30, after every gate; plan-quality gate 2 now enforces the ordering |
-| P-003 | plan-quality gate 1 demanded one task per obligation while Matrix 2 already listed two — the plan contradicted its own gate                                                                             | Ruling 6: one **owner**, reinforcement listed in its own column                   |
-| P-004 | §2.7 names a 5S finding ledger for `VWQ_EQUIVOCATION_DETECTED`; **no task built one**, so exit 0 would have been unauditable                                                                            | Task 14                                                                           |
-| P-005 | §3.3 (two policy blocks), §3.4 (two taxonomies) and §4.2 (non-claim id set) had no owning task at all                                                                                                   | Task 7 and Task 27; Matrix 2 extended                                             |
-| P-006 | nothing created the 5S evidence directory, and the 5Q/5R path collision that once forced Q1's artifacts into a sibling was not re-checked                                                               | Task 2 creates it and runs both prior reproduce scripts                           |
-| P-007 | the write surface did not authorise the commit introducing the write surface — the Q0/Q1 deadlock, rebuilt from scratch                                                                                 | Task 2 authorises its own arrival                                                 |
-| P-008 | §0 named `VSI_RESERVED_FROM`, which does not exist; the real symbols are `VSI_AMENDMENT_FROM`/`VSI_ALLOCATED_HI`                                                                                        | §0 correction note; Task 4 imports the real symbol                                |
-| P-010 | this revision's own cross-references drifted: Ruling 5 still said "Task 27" after the red-states task moved to 30, and the plan-quality gates cited §9/§10 after Wave 6 shifted the matrices to §10/§11 | corrected; found by re-reading the revision rather than trusting it               |
-| P-009 | one task bundled census, reproduce, closeout and release — four independently testable deliverables in one unit                                                                                         | split into Tasks 29, 32, 33, 34                                                   |
+Proves: `node --test tests/e2e/llmShield/stage5s/priorReproduceSet.test.js`, then
+`bash scripts/runAllPriorReproduce.sh` exits 0, then `bash scripts/check.sh` exits 0.
 
-## §13 Definition of done
+### Task 37 — closeout, inside the tag
+
+Closeout doc with the honestly re-scored scorecard, README banner, north-star update — all committed
+**before** the tag exists, matching what `git ls-tree v2.53.0-stage-5r-vpf` shows for 5R.
+
+Proves: `node tools/simurgh-attestation/stage5s/node/checkCloseout.mjs` exits 0.
+
+### Task 38 — merge, tag, release, verify
+
+```text
+PR → CI green → rebase-merge → reset local main to origin/main → reproduce ON MAIN
+→ git tag v2.54.0-stage-5s-vwq → gh release create v2.54.0-stage-5s-vwq
+→ verify tag, release and artifact digests
+```
+
+A tag is not a release (5C), so `gh release create` is named rather than implied, and
+`gh release list` is diffed against `git tag`. Any fact that only exists after tagging goes into a
+separately scoped release-receipt commit — the tagged stage is never silently mutated.
+
+Memory write and Zurvan ingest close the task; search Zurvan for duplicates before ingesting.
+
+Proves: `bash scripts/reproduce-stage-5s.sh` on main exits 0;
+`gh release view v2.54.0-stage-5s-vwq` succeeds; `git tag | grep 5s` and `gh release list | grep 5s`
+agree.
+
+---
+
+## §11 The declared gate universe
+
+Revision 1 applied Ruling 5 to G1–G10 while four other checks behaved as gates (§13, B10). The
+universe is declared here and is what Task 34 sweeps.
+
+| gate | what it protects                 | built by | red-proved by |
+| ---- | -------------------------------- | -------- | ------------- |
+| G1   | schema and raw band              | 5        | 34            |
+| G2   | acceptance-matrix completeness   | 20       | 34            |
+| G3   | artifact and binding integrity   | 7        | 21, 34        |
+| G4   | Lane A deterministic net         | 17, 18   | 34            |
+| G5   | Lane B ceremony                  | 22       | 34            |
+| G6   | Lane C capture verification      | 24, 25   | 34            |
+| G7   | runtime parity                   | 27, 28   | 34            |
+| G8   | Lean proofs                      | 26       | 34            |
+| G9   | claim and non-claim              | 29       | 34            |
+| G10  | attestation and reproduction     | 30, 35   | 34            |
+| G11  | spec pin                         | 1        | 34            |
+| G12  | write surface                    | 2        | 34            |
+| G13  | gate census and lifecycle values | 32       | 34            |
+| G14  | K7-A all-functions net           | 33       | 34            |
+
+Every red-proving number exceeds every building number, satisfying plan-quality gate 2.
+
+## §12 Matrix 2 — spec obligation → owning task → reinforced by
+
+| spec  | obligation                            | owner | reinforced by |
+| ----- | ------------------------------------- | ----- | ------------- |
+| §2.1  | nine artifacts                        | 7     | 21            |
+| §2.4  | compatibility over BODY digests       | 9     | 18            |
+| §2.5  | ancestry, malformed ≠ incomplete      | 10    | 19            |
+| §2.7  | 38 raw codes + Annex M ripple         | 5     | 18            |
+| §2.8  | frozen first-failure order            | 16    | 19            |
+| §2.9  | claim-gate surface scope              | 29    | 34            |
+| §2.10 | goldens ripple authority              | 0     | 5             |
+| §3.1  | anchors carry zero witness weight     | 11    | 18            |
+| §3.2  | four independent statuses             | 13    | 30            |
+| §3.3  | two policy blocks                     | 8     | 30            |
+| §3.4  | two disjoint taxonomies               | 8     | 34            |
+| §3.6  | typed artifact absence                | 13    | 30            |
+| §3.8  | Lane B tested vs design properties    | 22    | 34            |
+| §3.9  | Lane C capture and verification       | 24    | 25            |
+| §4.1  | five theorems, floor 39               | 26    | 34            |
+| §4.2  | non-claims as an exact id set         | 29    | 30            |
+| §4.6  | lifecycle fields adjacent, values     | 32    | 34            |
+| §5.2  | collision resistance as an assumption | 6     | —             |
+| §5.4  | acceptance matrix, pinned twice       | 20    | 34            |
+| §5.5  | eight case families                   | 18    | 20            |
+| §6.1  | gate census, set equality             | 32    | 34            |
+| §6.2  | write surface, parsed from the spec   | 2     | 36            |
+| §6.3  | K7-A by symbol                        | 33    | 36            |
+| §6.5  | trigger self-test                     | 31    | 34            |
+| §7.3  | a redaction is not a fork             | 9     | 18            |
+
+## §13 Gauntlet round 2 — 13 blockers and 12 execution defects, all applied
+
+Four claims were verified against the repository before adoption rather than accepted on assertion:
+B3 against the frozen §2.4 text; B12 against `scripts/check-lean-proofs.mjs:20`; B13 against
+`git ls-tree v2.53.0-stage-5r-vpf`, which shows `STAGE_5R_CLOSEOUT.md` inside the tag; and E9 against
+5O's parity test header, which already distinguishes Node-WebCrypto API equivalence from a real
+headless-browser run.
+
+| id  | blocker                                                               | resolution                                                        |
+| --- | --------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| B1  | the golden ripple was forbidden by the plan's own write surface       | Task 0 Annex M: three exact paths, `modify`, purpose, authority   |
+| B2  | `core/inherit.mjs` performed file I/O against Ruling 2                | loader in `node/`, pure validator in `core/` (Task 4)             |
+| B3  | `same_checkpoint` tested on envelope, frozen relation says **body**   | corrected, with the two-envelope/one-body case as the anchor test |
+| B4  | cycles typed as "indeterminate-with-refusal", blending two classes    | incomplete → `indeterminate` ok:true; malformed → 509 (Task 10)   |
+| B5  | matrix pinned ids only, so a row's meaning could drift silently       | dual commitment + field-level drift; oracle-free builder (17, 20) |
+| B6  | six sample pairs cannot prove a 38-entry total order                  | 37 adjacent double-defect cases + pinned `CHECK_ORDER` (16, 19)   |
+| B7  | a "deterministic" ceremony generating random keys                     | seed-derived, role/case domain-separated keys; two runs identical |
+| B8  | Lane C verified a capture that no task produced                       | Task 24 acquisition + Task 25 verification; typed `not_captured`  |
+| B9  | attestation bound one certificate and preceded the claim set it cited | binds a map; Task 29 moved before Task 30                         |
+| B10 | K7-A built after the sweep that claimed to red-prove every gate       | §11 gate universe declared; K7-A at 33, sweep at 34               |
+| B11 | lifecycle fields checked for presence, not agreement                  | field-by-field comparison against a frozen authority (Task 32)    |
+| B12 | the Lean floor stayed 38 after adding a 39th proof                    | Task 26 raises `DEFAULT_FLOOR` to 39                              |
+| B13 | the tag preceded closeout, contrary to the repo's own tagged trees    | closeout at 37, tag + `gh release create` at 38                   |
+
+| id  | execution defect                                             | resolution                                          |
+| --- | ------------------------------------------------------------ | --------------------------------------------------- |
+| E1  | "both lanes" where there are three                           | §1 corrected                                        |
+| E2  | five status functions in one test file against Ruling 3      | five files (Task 13)                                |
+| E3  | cross-product reinforcement attributed to the builder task   | attributed to Task 18, ids imported not retyped     |
+| E4  | four tasks had no exact proving command                      | every task now names one; gate 4 restated           |
+| E5  | wrong-policy receipt mapped to signature-invalid             | → 499 `COMPARISON_POLICY_DIGEST_MISMATCH` (Task 12) |
+| E6  | corroboration status derived inside policy validation        | moved to Task 13                                    |
+| E7  | "differing bodies never share a digest" claimed as testable  | recorded as assumption §5.2, not a test             |
+| E8  | tamper corpus neither set-pinned nor censused                | `{artifact, field_class}` set pin (Task 21)         |
+| E9  | Node import presented as browser parity                      | CI = API equivalence; real headless run captured    |
+| E10 | "every prior reproduce script" was an unpinned phrase        | self-enumerating glob + set pin (Task 36)           |
+| E11 | the spec correction would move the digest mid-implementation | Task 0, before the pin test exists                  |
+| E12 | §12 said "seven structural, two editorial" over ten rows     | counts removed; the table is the census             |
+
+## §14 Definition of done
 
 The §5.6 acceptance law, unmodified:
 
