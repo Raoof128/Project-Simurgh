@@ -306,3 +306,218 @@ both `exit-map.json` goldens and `tests/unit/llmShield/stage4h/exitWrapper.test.
 code; the unknown-code probe uses `UNKNOWN_RAW_PROBE` (999) rather than a hardcoded free value; and
 the full Node-26 e2e plus every prior stage's reproduce script runs before push, because additive
 changes must not disturb sealed history.
+
+---
+
+## §3 Evidence lanes, independence, attestation, and parity
+
+Frozen 2026-07-28. §3's whole subject is one seam: the difference between machinery that works and
+witnesses that are independent. 5P already paid for blurring it — distinct keys, a shared operator
+login, outcome `identity_unresolved`, party independence undischarged and no score moved. §3 makes
+that outcome structurally unreachable by refusing to let independence be inferred from anything.
+
+### 3.1 Ruling: external anchors carry zero witness weight
+
+A witness statement attests:
+
+> I verified and signed this producer-authenticated checkpoint tuple under the committed witness
+> policy.
+
+An RFC-3161 token, a Rekor entry or a Bitcoin/OTS attestation attests something strictly narrower:
+
+> This digest was externally anchored or observed under this service's mechanism.
+
+Those are different propositions, and letting the narrower one satisfy a threshold defined over the
+wider one is evidence-type laundering. **External anchors contribute zero witness weight and may
+never count toward `threshold_q`.** They are reported beside the quorum, never inside it.
+
+Enforcement needs no new code: an anchor is not a roster identity, so any attempt to feed one into
+the quorum lane exits **489 `WITNESS_NOT_IN_ROSTER`** inside the frozen order. The band does not move.
+
+### 3.2 Four independent statuses
+
+```json
+{
+  "quorum_status": "witnessed_quorum",
+  "witness_independence_status": "unproven",
+  "external_corroboration_status": "satisfied",
+  "comparison_status": "no_conflict_in_committed_comparison_set"
+}
+```
+
+No status is derivable from another. A satisfied corroboration status never upgrades
+`witness_independence_status`; a met quorum never implies a clean comparison; a clean comparison
+never implies no fork occurred outside the committed set (§1.4).
+
+### 3.3 Two policy blocks, deliberately not one
+
+```text
+witness_quorum_policy
+  threshold_q
+  full-tuple witness roster
+  required witness-class mix
+
+external_corroboration_policy
+  minimum distinct anchor mechanisms
+  permitted ecology classes
+  required envelope digest
+  freshness / inclusion requirements
+```
+
+Lane C may satisfy `external_corroboration_policy` and nothing else. A malformed or unmet
+corroboration policy yields `external_corroboration_status: "not_satisfied"` — a status carried in
+the attestation, **not** a core-verifier refusal, so no raw code crosses the §2 freeze for a lane
+that is never CI-gated.
+
+The claim this makes available is:
+
+> **Externally corroborated checkpoint digest.**
+
+It is not, and 511 forbids writing:
+
+> ~~Independently witnessed quorum.~~
+
+A genuinely independent quorum remains future work until an external operator signs the full witness
+tuple. That is stated as a debt, not deferred silently.
+
+### 3.4 Two taxonomies, so accidental counting is structurally impossible
+
+```text
+witness_operator_class            external_anchor_class
+  same_operator_distinct_key        rfc3161
+  distinct_operator_self_asserted   rekor
+  unresolved                        bitcoin_ots
+```
+
+They are separate enumerations over separate roster structures. There is no value an anchor can take
+that is also a witness-operator class, so the two can never be summed by accident — the type system
+refuses before any policy check runs.
+
+| class                             | what it structurally establishes                         | what it does not                                     |
+| --------------------------------- | -------------------------------------------------------- | ---------------------------------------------------- |
+| `same_operator_distinct_key`      | separate keys, separate processes, no shared key custody | nothing about independence — we hold every key       |
+| `distinct_operator_self_asserted` | a third party ran it and asserts independence            | their assertion is our input, not our evidence       |
+| `unresolved`                      | nothing                                                  | the honest default, and 5P's actual recorded outcome |
+
+**The rule.** `witness_quorum_policy` declares the required class mix. A quorum met entirely by
+`same_operator_distinct_key` reports `witness_independence_status: "unproven"`, and the phrase
+"independently witnessed" is structurally unavailable to that run — enforced by the 511 claim gate
+over the declared surfaces of §2.9, not by author discipline.
+
+### 3.5 What an external anchor establishes, worded to be checkable
+
+The wording avoids any claim about who operates the anchor or what they know:
+
+> The anchor is operated outside the project's key custody and execution environment, and verifies
+> against an independently established public trust mechanism.
+
+That sentence is true of a decentralised anchor with no operator at all, which is why it replaces the
+unverifiable "the operators do not know us".
+
+> Signed non-claims: external anchoring is not proof of non-collusion; not proof of organisational
+> independence; not an endorsement of Simurgh's semantics by any anchor operator; and not proof that
+> the submitted digest represented truthful content. An anchor observes a digest. It reads nothing.
+
+### 3.6 The artifact's absence is typed, never null
+
+The attestation root binds a typed status, never a nullable artifact slot:
+
+```text
+equivocation_artifact_status:
+  present
+  absent_same_checkpoint
+  absent_compatible
+  absent_comparison_unavailable
+  absent_comparison_indeterminate
+```
+
+and **always** binds, in every outcome including `present`:
+
+```text
+comparison_manifest_digest
+comparison_status
+intake_complete
+```
+
+A reader who sees `absent_comparison_unavailable` learns that nothing was compared. A reader who sees
+a null field learns nothing and assumes the best. **An absent artifact is never shorthand for "no
+fork existed"** — the five variants exist precisely so that sentence cannot be written by omission.
+
+### 3.7 Lane A — byte-stable committed pack, CI-gated
+
+Fixtures cover all **38** frozen codes plus the tamper matrix, offline and deterministic, `cmp`-stable
+under Node 26. Six fixture families are mandatory because each encodes a ruling rather than a code:
+
+1. a finding emitted **despite** a quorum shortfall on one view — equivocation detection does not
+   depend on quorum success;
+2. the same checkpoint **body** under differing envelope signatures — corroboration, stays clean;
+3. a policy/protocol-version dodge at one `(producer_identity, scope_id, epoch)` — still one fork
+   coordinate;
+4. invented receiver identities absent from the comparison roster;
+5. incomplete ancestry returning `indeterminate` rather than a fork;
+6. an external anchor inserted into the quorum lane, which **must fail** at 489.
+
+Family 6 is the machine-checked form of §3.1. Without it the ruling is prose.
+
+### 3.8 Lane B — multi-process, not multi-party
+
+The lane's own output carries this sentence, and the attestation binds it:
+
+> Separate OS processes with separately generated keys and protocol-only communication under one
+> operator-controlled environment.
+
+Every witness in Lane B is therefore `same_operator_distinct_key` and
+`witness_independence_status` is `unproven` **by construction**, not by measurement.
+
+What is mechanically tested: each role runs as a distinct process with keys generated in its own
+directory and never co-resident; each process's input set is captured as a per-process input manifest
+and asserted equal to its declared protocol inputs, so no role reads another's key path or internal
+state.
+
+What is a design property and is **not** claimed as tested: freedom from covert channels. One
+operator, one filesystem, one kernel — "blind to each other's state" in the strong sense is not
+something this lane can establish, so it is not asserted.
+
+### 3.9 Lane C — real external anchoring, captured, never CI-gated
+
+Digest-only submission of the checkpoint envelope digest to the ecology classes 5M already pinned,
+then frozen as captured evidence.
+
+It demonstrates external digest anchoring; verification against independent public mechanisms; and
+5R's C1 commitment bound indirectly through the checkpoint envelope digest.
+
+It does not demonstrate full-tuple witness semantics, quorum participation, policy interpretation, or
+any independent review of the checkpoint's contents.
+
+### 3.10 The blade must be shown going red
+
+5R's tranche discharged zero cells because its probe could not execute, and a stage that can only
+report green measures nothing. So 5S runs a **deliberate producer equivocation**: our own producer
+signs two incompatible checkpoints at one fork coordinate, both reach committed receivers, and the
+comparator must emit a self-verifying artifact. The negative control is equally load-bearing: a
+normal epoch advance with valid transitive ancestry must return compatible, never a fork. Both are
+pinned fixtures.
+
+> Signed non-claim: a self-inflicted equivocation demonstrates the detector. It is not evidence that
+> any provider equivocated, and it is not an accusation against anyone.
+
+### 3.11 Attestation and parity
+
+Two-tier as always — public structural bundle, audit rerun — signed offline with a stage key at
+`~/.simurgh/5s-ed25519.pem`, never committed; verification requires no private key and refuses `--key`.
+
+The attestation root binds: both policy digests, the quorum certificate, the four statuses of §3.2,
+the declared class mix, the typed artifact status and the three always-bound comparison fields of
+§3.6, the Lane B environment sentence of §3.8, and the C1 binding into 5R.
+
+Parity across Node core, Node portable, Python and browser on the deterministic surface:
+canonicalisation, the body/envelope digest split, the compatibility relation, ancestry validation,
+and quorum arithmetic. Crypto verification remains a separate contract, as 5R scoped it.
+
+### 3.12 What §3 does not claim
+
+- not that our witnesses are independent, unless the class mix says so and the operators are external;
+- not that any anchor operator endorses our semantics — an anchor observes a digest;
+- not that an absent artifact means no fork occurred;
+- not that a self-inflicted equivocation says anything about any real provider;
+- not that Lane B's processes are free of covert channels.
