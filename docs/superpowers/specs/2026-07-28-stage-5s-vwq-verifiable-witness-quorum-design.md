@@ -1002,3 +1002,101 @@ repair's own workflow had not been in scope.
 > gate evaluates a non-vacuous surface, every in-scope function carries a K7-A status, every Stage
 > 5S-owned change is authorised by the frozen write surface, and successor-stage behaviour is declared
 > before release.**
+
+---
+
+## §7 Gap hunt — four fronts swept 2026-07-29
+
+Source-precision rule applies throughout: every figure or quotation below is taken from the primary
+document, and anything reached only through a secondary source is marked **reported**.
+
+### 7.1 Prior-art seam — witnesses authenticate, they do not interpret
+
+The transparency.dev witness-network write-up concedes the seam in its own words:
+
+> "Witnesses are not concerned with the contents of the log's leaves. For example for a firmware
+> transparency log, a witness would not be able to validate legit firmware was logged."
+
+That is the exact boundary §4.2 non-claim 9 already draws — a witness signs a tuple, it does not
+understand containment semantics. 5S therefore claims nothing the witness literature has not already
+built, and its contribution sits one layer up: what a **conflict between two witnessed views** turns
+into. The mechanism concession of §1.6 stands and is now sourced rather than asserted.
+
+### 7.2 Regulatory front — the second evaluator is arriving
+
+From the Commission's own AI Act page: the Act "entered into force on 1 August 2024, and will be
+fully applicable 2 years later on **2 August 2026**, with some exceptions"; GPAI obligations became
+applicable 2 August 2025; and the Commission's evaluation capacity is "expected to be operational by
+**2027**".
+
+The relevance is structural, not rhetorical. 5S's blade only bites when **two parties hold
+authenticated views of the same history** — and the regulatory architecture that creates a second
+institutional evaluator is being stood up on exactly that timeline. A stage that makes two views
+mutually accountable is early rather than speculative.
+
+### 7.3 Lab surface — the two-version problem, conceded in primary text
+
+Anthropic's Responsible Scaling Policy v3.0 §§3.5–3.6 describes precisely the two-audience structure
+5S is shaped for, verbatim:
+
+> "We will publish a public version of our Risk Report. We will aim to minimize redactions to the
+> public version of the report."
+
+> "This means working with one or more third-party organizations that will receive private versions
+> of our Risk Reports (unredacted or with minimal redactions…) and publish comprehensive commentary
+> on them… and whether the redactions we've made for the public version are reasonable and
+> appropriate."
+
+> "there are no well-established organizations or procedures for this sort of practice, and we are
+> approaching it as an experiment."
+
+> "'Significantly redacted' means that the redactions omit information a reasonable external safety
+> researcher would consider important in evaluating the overall level of risk, such that a reader of
+> only the public version could not meaningfully assess whether they agree with our conclusions."
+
+Today the reviewer judges redaction reasonableness **by reading**. Nothing machine-checks that the
+public version and the private version are views of one committed history rather than two.
+
+**This is a composition, not a redirect, and it does not reopen §2.** A redaction is a projection at
+the _document_ layer — 4M's monotone merge lattice — while a checkpoint commits to a `history_root`.
+Both the public and private versions should bind the **same** checkpoint. Then:
+
+- same `history_root` under two document projections → `compatible`, correctly clean;
+- different `history_root` at one `(producer_identity, scope_id, epoch)` → the finding, correctly.
+
+**New non-claim, signed: a redaction is not a fork.** 5S compares checkpoints, never documents.
+Feeding a redacted _document_ into the comparator as though it were a second checkpoint is a misuse
+that manufactures `false_equivocation` — the §5.3 win the stage is obliged to deny. Two additive
+cases enter the matrix under G2's additive-maintenance rule, reopening nothing:
+
+1. one `history_root`, two distinct document projections → `compatible`;
+2. a document projection submitted in a checkpoint slot → refused as malformed, not compared.
+
+### 7.4 Incident front — an honest negative
+
+No publicly documented incident was found in which an AI provider gave one signed safety history to a
+regulator and a different one to another auditor. The adjacent real enforcement activity is
+"AI-washing" misrepresentation in investor materials, which is a different failure (a false claim to
+one audience, not two inconsistent claims to two).
+
+Recorded as a negative because it changes the honest framing: **5S is pre-incident infrastructure.**
+It has no Brigandi-style wound to point at, unlike 4W. Building the detector before the incident is
+the right order, and claiming a wound that has not been documented would be the exact dishonesty this
+repo exists to make expensive — sorry, **detectable**.
+
+### 7.5 Novelty hypothesis — verdict
+
+Two primary sources bound the space from opposite sides. The witness literature does not look at what
+is being witnessed (§7.1). The nearest safety-claim work — Vishwarupe, Shadbolt, Jirotka and Flechais,
+_NeurIPS Should Require Reproducibility Standards for Frontier AI Safety Claims_, arXiv 2605.08192,
+submitted 5 May 2026, whose "evidential inversion" already names 5H's code 312 — addresses the
+reproducibility of an **individual** claim and explicitly not cross-party consistency.
+
+The hypothesis of §1.6 therefore survives its first real test, still as a hypothesis: conflict-as-typed-evidence
+over witnessed containment checkpoints is not occupied by either neighbour.
+
+**Scorecard effect, deliberately small.** Novelty target **8.6 → 8.9**: the compositional claim is
+better bounded than when it was scored, but the mechanism is still prior art and the composition is
+still unbuilt. **Frontier stays 9.4** — §7.4's negative is a reason not to raise it, and the
+regulatory timeline was already priced in. No other axis moves. An axis that moves on a literature
+sweep alone is an axis measuring reading, not building.
