@@ -21,8 +21,8 @@ pre_task0_digest    3357a92529063d7c21d251c411bce41e1b1b84be11f1ddcbc0c91337391f
 pre_task0_bytes     65753
 
 post_task0_commit   a21103e7e3503d5c3b6b620bc70c4836060b122f   commit 0a; Annex S added at Task 2
-post_task0_digest   99a35e1149494fbf472386c023e0ceb196178af8eeb3bbae23f6e95569fb8e26
-post_task0_bytes    77887
+post_task0_digest   8e53a7e1d844c2edbfb727dcf0a550f6703950142608c984dc29bf83a94fdd6d
+post_task0_bytes    79361
 frozen_range_digest e0d25ce115d0b945175ccff5fcadebcd017ea47af02a8f2a9b249364132b83ec
 frozen_range_bytes  64240                    §§1-7, UNMOVED from 76c469a0 — see Annex M.5
 spec_domain         simurgh.vwq.full-spec.v1
@@ -856,7 +856,7 @@ headless-browser run.
 | 5S-F003 | Annex S first declared the spec and plan `modify`; on the branch that introduces them they are `add`, and the checker refused them on its first real run                                     | declaration corrected, checker not loosened — recorded in Annex S.2 |
 
 | 5S-F004 | both committed Stage 4H exit-map goldens are **11 codes stale**: `RUN_LEVEL_BY_RAW` carries 456 entries up to 474, the goldens carry 445 up to 463, and the gap is exactly 5P's band 464-474. No gate caught it across 5P, 5Q or 5R | recorded; the repair is larger than 5S's own ripple and needs a ruling |
-| 5S-F005 | Annex M authorises the three goldens but **not** `tools/simurgh-attestation/stage4h/exitCodes.mjs`, the source that generates them. The ripple cannot be performed under the authority written for it | recorded; Annex M needs a fourth row, or the ripple is out of scope |
+| 5S-F005 | Annex M authorised the three goldens but **not** `tools/simurgh-attestation/stage4h/exitCodes.mjs`, the source that generates them. The ripple could not be performed under the authority written for it | RESOLVED by Annex M row 5S-M004, landed in its own authority commit before the file was touched |
 
 5S-F001 is the fourth member of a species this repository already made a standing rule about: _every
 stage-installed gate must declare its successor-stage behaviour before the stage freezes_

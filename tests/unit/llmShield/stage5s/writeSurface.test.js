@@ -6,8 +6,10 @@
 // the spec (§6.2 for the stage's own paths, Annex M for the three ripple paths) so there is exactly
 // one copy of the declaration and it lives where a reviewer looks.
 //
-// Annex M is deliberately narrow: three paths, `modify` only. `add` on a Stage 4H path is a
-// different act — creating a golden is not rippling one — and is refused.
+// Annex M is deliberately narrow: four paths, `modify` only. `add` on a Stage 4H path is a
+// different act — creating a golden is not rippling one — and is refused. The fourth row is the
+// LEDGER SOURCE, added by its own authority commit once Task 5 found that the annex authorised the
+// three projections while forbidding the file that generates them (finding 5S-F005).
 
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -31,7 +33,7 @@ const reasons = (v) => v.refusals.map((r) => r.reason);
 
 test("[5s-t2] Annex M is PARSED from the spec, not re-declared in code", () => {
   const rows = parseAnnexM(specText);
-  assert.equal(rows.length, 3, `expected 3 ripple paths, parsed ${rows.length}`);
+  assert.equal(rows.length, 4, `expected 4 ripple paths, parsed ${rows.length}`);
   for (const r of rows) {
     assert.equal(r.allowed_operation, "modify", `${r.path} is not modify-only`);
     assert.match(r.id, /^5S-M\d{3}$/);
@@ -48,7 +50,7 @@ test("[5s-t2] mutating the spec text changes the parsed surface", () => {
   // first draft of this test passed against a hardcoded list for exactly that reason.
   const mutated = specText.replaceAll(RIPPLE, "tests/unit/llmShield/stage4h/somethingElse.test.js");
   assert.ok(!parseAnnexM(mutated).some((r) => r.path === RIPPLE));
-  assert.equal(parseAnnexM(mutated).length, 3, "the row should be rewritten, not removed");
+  assert.equal(parseAnnexM(mutated).length, 4, "the row should be rewritten, not removed");
 });
 
 test("[5s-t2] parsing is bounded to Annex M's own section", () => {
