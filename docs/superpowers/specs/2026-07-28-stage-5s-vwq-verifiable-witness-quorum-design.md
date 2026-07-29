@@ -824,3 +824,181 @@ and typed. _Denies:_ `claim_laundering`.
 
 Five conjuncts, each independently falsifiable, none satisfiable by a passing test count. This is the
 matrix's spine, and it is the sentence the closeout must defend rather than paraphrase.
+
+---
+
+## §6 Gates, write surface, and K7-A obligations
+
+Frozen 2026-07-28. Three authorities, deliberately not merged: a mega-gate that answers "did
+everything pass?" cannot answer "what exactly was evaluated?", and the second question is the one
+that caught Q1-F001.
+
+### 6.1 Authority 1 — the gate census
+
+Every gate declares its six lifecycle fields **adjacent to its own definition**, in the file where the
+gate lives (§4.6). This section carries the set-pinned index:
+
+```text
+declared_gate_ids
+implemented_gate_ids
+added      = implemented − declared
+removed    = declared − implemented
+```
+
+Acceptance requires exact set equality; `added` and `removed` are computed and printed independently,
+and either being non-empty is a refusal. The count is telemetry.
+
+### 6.2 Authority 2 — the write surface
+
+Pinned by path **and operation and purpose**, because a path allowlist alone lets an unrelated edit
+hide inside a permitted file — the exact hole Annex A5 closed for maintenance:
+
+```text
+path
+allowed_operation      add | modify
+purpose
+authorising_section
+```
+
+Five acceptance conditions, all required:
+
+1. `changed_paths` is non-empty — an empty evaluated range with a dirty tree is a refusal, not a pass
+   (Q1-F004);
+2. `changed_paths ⊆ declared surface`;
+3. no frozen prior-stage evidence modified;
+4. no private key material, checked by path regex rather than by digit-bearing filename (5P);
+5. no undeclared workflow-trigger expansion.
+
+### 6.3 Authority 3 — K7-A obligations, enumerated by symbol
+
+Obligations enumerate **functions and exported behaviours**, never files. A file-level row can be
+satisfied by a suite that never invokes the export — which is how a census passes while a symbol goes
+untested.
+
+```text
+obligation_id
+implementation_symbol
+runtime
+required_case_ids
+required_first_failure_codes
+parity_requirement
+status
+evidence_digest
+```
+
+Every discovered in-scope symbol carries exactly one status: `covered`,
+`excluded_with_signed_reason`, or `not_applicable_with_signed_reason`. No missing status, and no
+generic "covered by suite" — a reason that names no mechanism is not a reason.
+
+### 6.4 Gate families
+
+**G1 — schema and raw-band lock.** Protects raw codes **475–512** (the frozen band of §2.7, not the
+round-two draft), the exact first-failure order, the outcome schema, and the separation of finding ids
+from verifier failures.
+_active_ during 5S · _next phase_ stays active read-only, refusing any reallocation inside the band ·
+_maintenance_ additive codes above 512 only, never renumbering · _sunset_ never, while the band is
+referenced by a shipped verifier · _anti-vacuity_ at least one fixture reaches **every** raw code and
+**every** typed outcome.
+
+**G2 — acceptance-matrix completeness.** Protects the pinned case set of §5.4.
+_active_ during 5S · _next phase_ active, set-pinned · _maintenance_ cases may be added, never
+silently removed · _sunset_ never while §5.6 stands · _anti-vacuity_ added and removed case ids
+proved separately; each case denies at least one named win; all four quorum-status combinations yield
+`equivocation_detected`; `indeterminate` yields neither clean nor accusation.
+
+**G3 — artifact and binding integrity.** Exercises all nine artifact forms of §2.1, including the
+signed unavailable status, typed equivocation absence, body/envelope digest separation, external
+producer-key commitment, and comparison-roster authority.
+_active_ during 5S · _next phase_ active · _maintenance_ new artifact forms extend the set · _sunset_
+never · _anti-vacuity_ every artifact form is constructed and tampered at least once.
+
+**G4 — Lane A deterministic net.** Every frozen fixture and tamper case.
+_active_ during 5S · _next phase_ active · _maintenance_ fixtures regenerate byte-identically ·
+_sunset_ never · _anti-vacuity_ **byte stability across repeated generation** — one run is not
+determinism evidence, so the gate builds twice and `cmp`s.
+
+**G5 — Lane B ceremony.** Asserts mechanically: separate OS processes; separately generated,
+never-co-resident keys; per-process input-manifest equality against declared protocol inputs; and
+`independence_unproven: true` in the output.
+_active_ during 5S · _next phase_ active · _maintenance_ additional roles extend the manifest ·
+_sunset_ when an external operator signs the full tuple, at which point the class mix changes and this
+gate's independence assertion is superseded rather than deleted · _anti-vacuity_ the ceremony must
+produce a fresh certificate each run. **Does not gate on covert-channel claims** — §3.8 does not make
+them.
+
+**G6 — Lane C capture verification.** Split explicitly so network availability never becomes a release
+dependency, while a stale or malformed capture still cannot ship:
+
+```text
+capture_required                     = false
+frozen_capture_verification_required = true
+```
+
+_active_ during 5S · _next phase_ verification stays required · _maintenance_ re-capture replaces, and
+supersedes rather than edits · _sunset_ never while the capture is cited · _anti-vacuity_ the frozen
+capture is verified offline against its committed envelope digest, and an unverifiable capture is a
+refusal rather than a skip.
+
+**G7 — runtime parity.** Pins the shared deterministic surface: canonical serialisation, body and
+envelope digests, the compatibility relation, ancestry, quorum arithmetic, and typed status rendering.
+Exact result equality across Node core, portable Node, Python and browser.
+_active_ during 5S · _next phase_ active · _maintenance_ new surface members must be added to all four
+runtimes together · _sunset_ never · _anti-vacuity_ each runtime is executed and its results compared;
+a runtime that fails to launch is a refusal, never a silent skip.
+
+**G8 — Lean proof gate.** Uses the repaired self-enumerating repository-wide gate (Q1-F001); no
+by-name file list, ever. Additionally pins the Stage 5S theorem names **as a set**, all five present
+and type-checked:
+
+```text
+ProducerCannotSelfWitness
+QuorumRequiresDistinctEligibleWitnesses
+ComparedSameCoordinateConflictYieldsEvidence
+QuorumShortfallCannotSuppressEquivocation
+CompatibleAncestryCannotYieldEquivocation
+```
+
+_active_ during 5S · _next phase_ active repository-wide · _maintenance_ the theorem set is additive ·
+_sunset_ never · _anti-vacuity_ the escape scan runs over every discovered proof, a seeded `sorry`
+must fail the gate, and directory coverage is cross-checked by a mechanism distinct from enumeration.
+The type-check alone is not the gate: `lean` exits 0 on a `sorry`-closed theorem.
+
+**G9 — claim and non-claim gate.** Scans only the declared Stage 5S claim surfaces of §2.9.
+Requires: code 511 red on every banned-phrase fixture; the signed non-claims present as an exact id
+set; typed clean wording used; **"expensive" rejected**; global non-equivocation language rejected.
+_active_ during 5S · _next phase_ active over 5S surfaces · _maintenance_ the denylist and the
+non-claim id set are both additive · _sunset_ never · _anti-vacuity_ every banned phrase has a
+positive fixture proving the gate goes red, and the surface set is proved non-empty.
+
+**G10 — attestation and reproduction.** Two-tier: public structural verification and full audit rerun.
+Requires the verifier to refuse private-key arguments; offline execution; byte-identical regeneration;
+tamper rejection; a typed equivocation finding still exiting **0**; and an invalid equivocation
+artifact exiting at its frozen raw code (510).
+_active_ during 5S · _next phase_ active · _maintenance_ re-attestation regenerates byte-identically ·
+_sunset_ never · _anti-vacuity_ both tiers execute, and a tier that verifies zero roots is a refusal.
+
+### 6.5 CI trigger scoping and its self-test
+
+The workflow is `paths:`-scoped to Stage 5S implementation, fixtures, the 5S proof file, 5S spec and
+evidence, and any shared library 5S actually changes — nothing wider (Q1-F005).
+
+The scoping is itself tested, because a trigger that silently stops firing is indistinguishable from a
+gate that always passes:
+
+```text
+every owned path triggers
+every unrelated prior-stage path does not trigger
+the workflow file itself triggers
+the trigger repair runs its own job
+```
+
+The last line is Q1-F005 carved into a test rather than remembered: 5R's gate fired on every pull
+request to `main` and blocked the entire repository, and the fix would have been unverifiable if the
+repair's own workflow had not been in scope.
+
+### 6.6 Closeout law for §6
+
+> **Stage 5S gates are accepted only when the declared gate set equals the implemented gate set, every
+> gate evaluates a non-vacuous surface, every in-scope function carries a K7-A status, every Stage
+> 5S-owned change is authorised by the frozen write surface, and successor-stage behaviour is declared
+> before release.**
