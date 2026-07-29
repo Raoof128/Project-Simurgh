@@ -223,12 +223,21 @@ files that do not exist.
 Chaining with `;` returns only the last status, so 5Q could fail while 5R passes and the task would
 report success.
 
+**Corrected during execution — see finding 5S-F001 (§15).** Running a prior stage's reproduce script
+from a successor branch does not test what it appears to test. 5Q's gate 2 diffs `MERGE_BASE..HEAD`
+against a surface that knows nothing about Stage 5S, so it refuses every 5S file — and it refuses
+them on any successor branch, forever. That is the gate-lifecycle species again, fourth occurrence.
+
+A prior stage's reproduce script verifies **that stage's sealed evidence**, and its subject is main,
+not this branch. It is therefore run on main at Task 38. What a feature branch can honestly check is
+the narrower property Task 3 actually needs: that 5S's added paths lie outside every prior stage's
+evidence tree, which is the collision that forced Q1's artifacts into a sibling directory.
+
 Proves:
 
 ```bash
 bash -euo pipefail -c '
-  bash scripts/reproduce-llm-shield-stage5q.sh
-  bash scripts/reproduce-llm-shield-stage5r.sh
+  node --test tests/unit/llmShield/stage5s/evidencePathIsolation.test.js
   npm run format:check
 '
 ```
@@ -837,6 +846,19 @@ headless-browser run.
 | E10 | "every prior reproduce script" was an unpinned phrase        | self-enumerating glob + set pin (Task 36)           |
 | E11 | the spec correction would move the digest mid-implementation | Task 0, before the pin test exists                  |
 | E12 | §12 said "seven structural, two editorial" over ten rows     | counts removed; the table is the census             |
+
+## §15 Findings raised by Stage 5S against the repository
+
+| id      | finding                                                                                                                                                                                      | status                                                              |
+| ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| 5S-F001 | 5Q's §6.1 write-surface gate has no successor-stage behaviour: its range is `MERGE_BASE..HEAD` and its surface knows only 5Q, so it refuses every file of every later stage, on every branch | recorded; Task 3 rescoped, prior reproduce runs on main at Task 38  |
+| 5S-F002 | §6.2 of the 5S spec declares the write-surface **schema** and its five conditions but enumerates no rows, so the surface it specifies has no members and refuses everything                  | fixed in-stage by Annex S, which instantiates what §6.2 specifies   |
+| 5S-F003 | Annex S first declared the spec and plan `modify`; on the branch that introduces them they are `add`, and the checker refused them on its first real run                                     | declaration corrected, checker not loosened — recorded in Annex S.2 |
+
+5S-F001 is the fourth member of a species this repository already made a standing rule about: _every
+stage-installed gate must declare its successor-stage behaviour before the stage freezes_
+(Q1-F002/F004/F005). The rule was written on 2026-07-28. 5Q predates it, which is exactly why 5S
+declares all six lifecycle fields for every gate and annex it installs, including Annex M and Annex S.
 
 ## §14 Gauntlet round 3 — four blockers, one correction, one found here
 
