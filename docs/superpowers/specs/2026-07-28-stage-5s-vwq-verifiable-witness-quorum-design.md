@@ -4,16 +4,16 @@
 > Every mechanism in this stage is safe for the provider (content and structural egress) and
 > recomputable by a reviewer, and both properties are designed in at SPEC time rather than retrofitted.
 
-|               |                                                                                                      |
-| ------------- | ---------------------------------------------------------------------------------------------------- |
-| Stage id      | `5S`                                                                                                 |
-| Name          | **VWQ — Verifiable Witness Quorum**                                                                  |
-| Branch        | `stage-5s-vwq-verifiable-witness-quorum`                                                             |
-| Target tag    | `v2.54.0-stage-5s-vwq`                                                                               |
-| Predecessor   | 5R (VPF), `v2.53.0-stage-5r-vpf`, main `c82613f3`                                                    |
-| Baseline      | main `7a9bd5d4` — after the Q1-F001 gate repair, Annex A5, the gate-lifecycle invariant and its fix  |
-| Design ruling | 2026-07-28, §1 approved with four mandatory edits, all applied below                                 |
-| Raw codes     | Band opens at **475** (`VSI_RESERVED_FROM`; 5Q and 5R allocated none). Exact allocation lands in §2. |
+|               |                                                                                                                                                 |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Stage id      | `5S`                                                                                                                                            |
+| Name          | **VWQ — Verifiable Witness Quorum**                                                                                                             |
+| Branch        | `stage-5s-vwq-verifiable-witness-quorum`                                                                                                        |
+| Target tag    | `v2.54.0-stage-5s-vwq`                                                                                                                          |
+| Predecessor   | 5R (VPF), `v2.53.0-stage-5r-vpf`, main `c82613f3`                                                                                               |
+| Baseline      | main `7a9bd5d4` — after the Q1-F001 gate repair, Annex A5, the gate-lifecycle invariant and its fix                                             |
+| Design ruling | 2026-07-28, §1 approved with four mandatory edits, all applied below                                                                            |
+| Raw codes     | Band opens at **475** — 5P's `VSI_ALLOCATED_HI` is 474 and `VSI_AMENDMENT_FROM` is 473; 5Q and 5R allocated none. Allocation is frozen in §2.7. |
 
 ---
 
@@ -1100,3 +1100,83 @@ better bounded than when it was scored, but the mechanism is still prior art and
 still unbuilt. **Frontier stays 9.4** — §7.4's negative is a reason not to raise it, and the
 regulatory timeline was already priced in. No other axis moves. An axis that moves on a literature
 sweep alone is an axis measuring reading, not building.
+
+---
+
+## Annex M — the additive-ripple surface
+
+Amendable section, added 2026-07-29 alongside the header correction. **§§1–7 are untouched.**
+
+### M.1 The contradiction this resolves
+
+§2.10 creates an obligation: an additive raw band ripples three Stage 4H goldens, and the stage is
+required to move them. §6.2 creates a refusal: no prior-stage evidence may be modified. Both are
+correct, and together they forbid the stage from doing what its own spec requires — the same shape as
+5Q's Q0/Q1 deadlock, which Annex A5 resolved by naming exact paths rather than widening a category.
+
+The resolution is the same: **three paths, one operation, one purpose.** Not "Stage 4H", not
+"goldens", not "evidence needed by the ripple" — three literal paths.
+
+### M.2 The surface
+
+| path                                                              | op     | purpose                                    | id      |
+| ----------------------------------------------------------------- | ------ | ------------------------------------------ | ------- |
+| `tests/fixtures/llmShield/stage4h/expected-results/exit-map.json` | modify | additive raw-band ripple required by §2.10 | 5S-M001 |
+| `docs/research/llm-shield/evidence/stage-4h/exit-map.json`        | modify | additive raw-band ripple required by §2.10 | 5S-M002 |
+| `tests/unit/llmShield/stage4h/exitWrapper.test.js`                | modify | additive raw-band ripple required by §2.10 | 5S-M003 |
+
+The table is the authority. The write-surface checker **parses this annex** and never re-declares it,
+because two copies of a declaration are two chances to disagree and the silent one is the copy nobody
+reads.
+
+### M.3 What this annex does not authorise
+
+- not `add` on any of the three paths — a ripple modifies existing goldens; creating a new one under
+  a Stage 4H path is a different act and is refused;
+- not any other Stage 4H file, and no file of any other prior stage;
+- not a renumbering of an existing code. §2.7's band is frozen; this annex moves goldens **because**
+  475–512 are additive, and an edit that changed an allocated code below 475 is outside it;
+- not the deletion of any row. A ripple that removes a mapping is not additive.
+
+### M.4 Lifecycle declaration
+
+Annex M is a surface, and the gate-lifecycle invariant applies to surfaces as it does to gates.
+
+```text
+active_phase                 Stage 5S implementation, from Task 0 until the 5S tag
+protected_surface            the three paths of M.2, under `modify` only
+next_phase_behaviour         inert — a successor stage inherits no ripple authority from 5S and
+                             declares its own annex if its band is additive
+maintenance_behaviour        additive only: a successor may add a row for a path its own band
+                             genuinely ripples, and may never broaden an existing row's operation
+sunset_or_migration_condition  when the Stage 4H exit map moves behind a generated, non-committed
+                             artifact, at which point no stage needs write authority over it
+anti_vacuity_condition       the annex is only satisfied if the ripple actually occurred: the three
+                             paths must differ from their pre-ripple bytes, and 4H's own suite must
+                             pass over the new bytes. An unchanged golden is a refusal, not a pass.
+```
+
+The anti-vacuity condition is the one that matters. An authority to change three files, exercised by
+changing nothing, is an authority that recorded a permission and proved no work — and this repository
+has already shipped one gate that passed by evaluating an empty set.
+
+### M.5 The frozen range, as a number rather than a promise
+
+This annex asserts that §§1–7 are untouched. An assertion of that kind is worth exactly as much as
+its recomputation, so the range is defined precisely and its digest is recorded:
+
+```text
+frozen_range        from the line `## §1 Identity, laws, and the blade`
+                    up to the annex separator that precedes `## Annex M`,
+                    trailing whitespace and the separator rule removed
+frozen_range_digest e0d25ce115d0b945175ccff5fcadebcd017ea47af02a8f2a9b249364132b83ec
+frozen_range_bytes  64240
+```
+
+The digest is identical at `76c469a0` (the freeze) and at the commit carrying this annex. Task 1's
+pin test recomputes **both** the whole-file digest and this range digest, so an amendment that
+accidentally reflows a frozen section is caught by the range even though the file digest was expected
+to move.
+
+A whole-file digest alone could not distinguish "the annex was added" from "the annex was added and
+§4 was quietly reworded". Two digests can.
