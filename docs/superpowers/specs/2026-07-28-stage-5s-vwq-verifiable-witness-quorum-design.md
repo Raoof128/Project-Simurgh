@@ -1119,15 +1119,28 @@ The resolution is the same: **three paths, one operation, one purpose.** Not "St
 
 ### M.2 The surface
 
-| path                                                              | op     | purpose                                    | id      |
-| ----------------------------------------------------------------- | ------ | ------------------------------------------ | ------- |
-| `tests/fixtures/llmShield/stage4h/expected-results/exit-map.json` | modify | additive raw-band ripple required by §2.10 | 5S-M001 |
-| `docs/research/llm-shield/evidence/stage-4h/exit-map.json`        | modify | additive raw-band ripple required by §2.10 | 5S-M002 |
-| `tests/unit/llmShield/stage4h/exitWrapper.test.js`                | modify | additive raw-band ripple required by §2.10 | 5S-M003 |
+| path                                                              | op     | purpose                                                                                                                | id      |
+| ----------------------------------------------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------- | ------- |
+| `tests/fixtures/llmShield/stage4h/expected-results/exit-map.json` | modify | additive raw-band ripple required by §2.10                                                                             | 5S-M001 |
+| `docs/research/llm-shield/evidence/stage-4h/exit-map.json`        | modify | additive raw-band ripple required by §2.10                                                                             | 5S-M002 |
+| `tests/unit/llmShield/stage4h/exitWrapper.test.js`                | modify | additive raw-band ripple required by §2.10                                                                             | 5S-M003 |
+| `tools/simurgh-attestation/stage4h/exitCodes.mjs`                 | modify | extend the shared run-level raw-code ledger through the frozen Stage 5S band and regenerate its authorised projections | 5S-M004 |
 
 The table is the authority. The write-surface checker **parses this annex** and never re-declares it,
 because two copies of a declaration are two chances to disagree and the silent one is the copy nobody
 reads.
+
+**The fourth row was added on 2026-07-29, after Task 5 found that the annex authorised the three
+projections but not the source that generates them (finding 5S-F005).** An authority to change an
+output while its input stays forbidden is not an authority to do the work; it is a permission slip
+for the half of the job that cannot be done alone.
+
+Before the row was added, the binding of the evidence projection was checked rather than assumed: no
+signed manifest covers `evidence/stage-4h/exit-map.json` by digest or by path, and Stage 4H's own
+reproduce script regenerates it three times through `build-stage4h-digest-fixtures.mjs`. It is a
+regenerated projection, not an immutable historical artifact, and that is why modifying it is
+legitimate here. Had it been covered by a historical signature, the correct move was an additive
+successor projection and this annex would say so.
 
 ### M.3 What this annex does not authorise
 
