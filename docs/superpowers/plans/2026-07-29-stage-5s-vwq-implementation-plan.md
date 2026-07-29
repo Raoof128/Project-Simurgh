@@ -855,6 +855,9 @@ headless-browser run.
 | 5S-F002 | §6.2 of the 5S spec declares the write-surface **schema** and its five conditions but enumerates no rows, so the surface it specifies has no members and refuses everything                  | fixed in-stage by Annex S, which instantiates what §6.2 specifies   |
 | 5S-F003 | Annex S first declared the spec and plan `modify`; on the branch that introduces them they are `add`, and the checker refused them on its first real run                                     | declaration corrected, checker not loosened — recorded in Annex S.2 |
 
+| 5S-F004 | both committed Stage 4H exit-map goldens are **11 codes stale**: `RUN_LEVEL_BY_RAW` carries 456 entries up to 474, the goldens carry 445 up to 463, and the gap is exactly 5P's band 464-474. No gate caught it across 5P, 5Q or 5R | recorded; the repair is larger than 5S's own ripple and needs a ruling |
+| 5S-F005 | Annex M authorises the three goldens but **not** `tools/simurgh-attestation/stage4h/exitCodes.mjs`, the source that generates them. The ripple cannot be performed under the authority written for it | recorded; Annex M needs a fourth row, or the ripple is out of scope |
+
 5S-F001 is the fourth member of a species this repository already made a standing rule about: _every
 stage-installed gate must declare its successor-stage behaviour before the stage freezes_
 (Q1-F002/F004/F005). The rule was written on 2026-07-28. 5Q predates it, which is exactly why 5S
