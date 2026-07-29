@@ -46,7 +46,9 @@ closeout precedent    git ls-tree v2.53.0-stage-5r-vpf shows STAGE_5R_CLOSEOUT.m
 browser precedent     5O runs the portable module under Node 26 WebCrypto in CI and keeps a real
                       headless-browser run in the browser/ HTML runner — two different claims
 Node                  /opt/homebrew/opt/node@26/bin   (4H digest builder is byte-stable ONLY here)
-prettier              repo-local, never a global install
+prettier              repo-local; validate with `npm run format:check`, NEVER a hand-picked
+                      `npx prettier --check <glob>` — a subset missed a browser HTML file and
+                      reddened 4V round 1 (gotcha ledger, Formatting)
 ```
 
 ---
@@ -221,7 +223,7 @@ Proves:
 bash -euo pipefail -c '
   bash scripts/reproduce-llm-shield-stage5q.sh
   bash scripts/reproduce-llm-shield-stage5r.sh
-  npx prettier --check .
+  npm run format:check
 '
 ```
 
