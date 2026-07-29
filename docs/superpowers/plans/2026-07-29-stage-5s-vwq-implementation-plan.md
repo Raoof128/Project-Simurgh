@@ -4,14 +4,15 @@
 > Every mechanism in this stage is safe for the provider (content and structural egress) and
 > recomputable by a reviewer, and both properties are designed in at SPEC time rather than retrofitted.
 
-Revision 2, after gauntlet round 2 (§13). Round 2 returned **FAIL WITH BLOCKERS** against revision 1
-and every blocker is applied below.
+Revision 2.1, after gauntlet rounds 2 (§13) and 3 (§14). Both rounds returned **FAIL WITH BLOCKERS**;
+every blocker from both is applied below.
 
 ## §0 The contract this plan is written against
 
-Task 0 amends the spec header and adds Annex M, so the digest below is the **post-Task-0** value and
-Task 0 is the task that writes it. Until Task 0 lands, the recorded digest is the pre-amendment one
-and the pin test is expected to fail — that expected failure is Task 0's own first witness.
+Task 0 lands as **two commits**, because one cannot work: recording a commit's own hash inside that
+commit changes the hash again. Commit 0a carries the authority; commit 0b records what 0a produced.
+Until 0b lands, the digest below is the pre-amendment one and the pin test is expected to fail —
+that expected failure is Task 0's own first witness.
 
 ```text
 spec                docs/superpowers/specs/2026-07-28-stage-5s-vwq-verifiable-witness-quorum-design.md
@@ -19,11 +20,12 @@ pre_task0_commit    76c469a0    §§1-7 frozen
 pre_task0_digest    3357a92529063d7c21d251c411bce41e1b1b84be11f1ddcbc0c91337391f025f
 pre_task0_bytes     65753
 
-post_task0_commit   <written by Task 0>
-post_task0_digest   <written by Task 0>
+post_task0_commit   ................................  written by commit 0b, naming commit 0a
+post_task0_digest   ................................  written by commit 0b
+post_task0_bytes    ......                            written by commit 0b
 spec_domain         simurgh.vwq.full-spec.v1
 
-recompute           shasum -a 256 <spec>
+recompute           shasum -a 256 docs/superpowers/specs/2026-07-28-stage-5s-vwq-verifiable-witness-quorum-design.md
 gate                node --test tests/unit/llmShield/stage5s/specPin.test.js     (built by Task 1)
 ```
 
@@ -150,14 +152,25 @@ docs/research/llm-shield/evidence/stage-4h/exit-map.json
 tests/unit/llmShield/stage4h/exitWrapper.test.js
 ```
 
-3. write the resulting commit and digest into this plan's §0.
+3. then, as a **separate commit 0b**, write commit 0a's hash, the resulting digest and the byte
+   count into this plan's §0.
 
 Annex M exists because §2.10 already _creates_ the obligation to ripple those three files while §6.2
 refuses prior-stage evidence. Revision 1 shipped that contradiction unresolved. The annex authorises
 three named paths under one named operation for one named purpose — not a category.
 
-Proves: `shasum -a 256 docs/superpowers/specs/2026-07-28-stage-5s-vwq-verifiable-witness-quorum-design.md`
-matches the value written into §0, and `git log --oneline -1` is the Task 0 commit.
+Proves:
+
+```bash
+bash -euo pipefail -c '
+  AUTH="$(git log --format=%H -1 -- docs/superpowers/specs/2026-07-28-stage-5s-vwq-verifiable-witness-quorum-design.md)"
+  grep -q "$AUTH" docs/superpowers/plans/2026-07-29-stage-5s-vwq-implementation-plan.md
+  D="$(shasum -a 256 docs/superpowers/specs/2026-07-28-stage-5s-vwq-verifiable-witness-quorum-design.md | cut -d" " -f1)"
+  grep -q "$D" docs/superpowers/plans/2026-07-29-stage-5s-vwq-implementation-plan.md
+'
+```
+
+exits 0, and `git log --oneline -2` shows 0b on top of 0a.
 
 ---
 
@@ -195,8 +208,22 @@ Create `docs/research/llm-shield/evidence/stage-5s/`; add it and
 reproduce scripts to prove the new path does not disturb their `git status --porcelain` gates —
 adding files under an evidence tree broke 5R once and forced Q1's artifacts into a sibling.
 
-Proves: `bash scripts/reproduce-stage-5q.sh; bash scripts/reproduce-stage-5r.sh` — both exit 0, and
-`npx prettier --check .` exits 0.
+The script names are the repo's, verified rather than guessed: the family is
+`scripts/reproduce-llm-shield-stage<id>.sh`, **not** `reproduce-stage-<id>.sh`. Revision 2 named four
+files that do not exist.
+
+Chaining with `;` returns only the last status, so 5Q could fail while 5R passes and the task would
+report success.
+
+Proves:
+
+```bash
+bash -euo pipefail -c '
+  bash scripts/reproduce-llm-shield-stage5q.sh
+  bash scripts/reproduce-llm-shield-stage5r.sh
+  npx prettier --check .
+'
+```
 
 ### Task 4 — inheritance: a loader in `node/`, a pure validator in `core/`
 
@@ -224,8 +251,15 @@ from exactly one `check_id`; `VWQ_BAND_LO === VSI_ALLOCATED_HI + 1`, imported fr
 
 Then ripple the three Annex M goldens **in this task**, under Node 26, and run 4H's suite.
 
-Proves: `node --test tests/unit/llmShield/stage5s/rawCodeAllocator.test.js tests/unit/llmShield/stage4h/exitWrapper.test.js`
-and `node tools/simurgh-attestation/stage5s/node/checkWriteSurface.mjs --range <base>..HEAD` exits 0.
+Proves:
+
+```bash
+bash -euo pipefail -c '
+  node --test tests/unit/llmShield/stage5s/rawCodeAllocator.test.js tests/unit/llmShield/stage4h/exitWrapper.test.js
+  BASE="$(git merge-base origin/main HEAD)"
+  node tools/simurgh-attestation/stage5s/node/checkWriteSurface.mjs --range "${BASE}..HEAD"
+'
+```
 
 ### Task 6 — canonicalisation and the two digests
 
@@ -567,13 +601,31 @@ Lane B environment sentence
 C1 binding                                 (from Task 4)
 ```
 
-Signer: `~/.simurgh/5s-ed25519.pem`, never committed. Named explicitly in the task: the public key
-artifact path, the key fingerprint, the verifier command, and the tamper command. The verifier
-**refuses** `--key`.
+Signer: `~/.simurgh/5s-ed25519.pem`, never committed. The artifacts, named rather than gestured at:
 
-Proves: `node --test tests/e2e/llmShield/stage5s/attestation.test.js` and
-`node tools/simurgh-attestation/verify-stage5s-attestation.mjs --bundle <path>` exits 0 while the same
-command against a tampered bundle exits non-zero.
+```text
+docs/research/llm-shield/evidence/stage-5s/attestation/vwq-attestation.json
+docs/research/llm-shield/evidence/stage-5s/attestation/vwq-attestation-envelope.json
+docs/research/llm-shield/evidence/stage-5s/attestation/vwq-public-key.pem
+docs/research/llm-shield/evidence/stage-5s/attestation/vwq-key-fingerprint.txt
+tools/simurgh-attestation/verify-stage5s-attestation.mjs
+```
+
+The verifier **refuses** `--key`.
+
+Proves:
+
+```bash
+bash -euo pipefail -c '
+  node --test tests/e2e/llmShield/stage5s/attestation.test.js
+  B=docs/research/llm-shield/evidence/stage-5s/attestation/vwq-attestation-envelope.json
+  node tools/simurgh-attestation/verify-stage5s-attestation.mjs --bundle "$B"
+  node tools/simurgh-attestation/verify-stage5s-attestation.mjs --bundle "$B" --key ~/.simurgh/5s-ed25519.pem && exit 1
+  sed "s/witnessed_quorum/witnessed_quoruM/" "$B" > /tmp/tampered.json
+  node tools/simurgh-attestation/verify-stage5s-attestation.mjs --bundle /tmp/tampered.json && exit 1
+  exit 0
+'
+```
 
 ### Task 31 — CI workflow and its trigger self-test
 
@@ -598,41 +650,65 @@ in-scope symbol carries exactly one of `covered`, `excluded_with_signed_reason`,
 `not_applicable_with_signed_reason`. No missing status, no "covered by suite". Adapters must genuinely
 invoke — an import must not satisfy the census.
 
-Placed before the RED sweep because K7-A is a declared gate in §11 and Ruling 5 applies to it
-(§13, B10).
+Placed before the RED sweep (Task 35) because K7-A is a declared gate in §11 and Ruling 5 applies
+to it (§13, B10).
 
 Proves: `node --test tests/e2e/llmShield/stage5s/k7AllFunctions.test.js`
 
-### Task 34 — the RED sweep, over the declared gate universe
+### Task 34 — the reproduce script
 
-Every gate in §11 — G1–G10 plus the four gate-shaped checks revision 1 left outside the universe — is
-driven to failure once by a **live seeded defect**, and the failure output recorded as evidence. Last
-gate-related task in the plan, by construction.
+`scripts/reproduce-llm-shield-stage5s.sh` — the repo's naming family, verified against the other 43 —
+running every declared gate in order with a per-gate verdict. Under `set -e`, **never** `cmd && echo`:
+it fails OPEN. Split the lines (5E's droplet lesson, which caught two fail-opens).
 
-Proves: `node --test tests/e2e/llmShield/stage5s/gateRedStates.test.js`
+Built here, before the RED sweep, because the sweep red-proves G10 and G10 is not fully built until
+this script exists. Revision 2 had the sweep at 34 and this at 35, breaking its own plan-quality
+gate 2 (§14, R2).
+
+Proves: `bash scripts/reproduce-llm-shield-stage5s.sh` exits 0 with every declared gate reporting.
 
 ---
 
-## §10 Wave 6 — reproduce, closeout, release
+## §10 Wave 6 — the sweep, closeout, release
 
-### Task 35 — the reproduce script
+### Task 35 — the RED sweep, over the declared gate universe
 
-`scripts/reproduce-stage-5s.sh`, every gate in order with a per-gate verdict. Under `set -e`, **never**
-`cmd && echo` — it fails OPEN. Split the lines (5E's droplet lesson, which caught two fail-opens).
+Every gate in §11 — G1–G10 plus the four gate-shaped checks revision 1 left outside the universe — is
+driven to failure once by a **live seeded defect**, and the failure output recorded as evidence. Last
+gate-related task in the plan, by construction, and now genuinely so.
 
-Proves: `bash scripts/reproduce-stage-5s.sh` exits 0 with every declared gate reporting.
+Proves: `node --test tests/e2e/llmShield/stage5s/gateRedStates.test.js`
 
-### Task 36 — the prior-reproduce sweep, self-enumerating
+### Task 36 — the prior-reproduce sweep, self-enumerating and self-excluding
 
-"Every prior reproduce script" must not be a list someone maintains (§13, E10). The runner globs
-`scripts/reproduce-stage-*.sh`, pins the discovered set against a committed set, and refuses on
-`added` or `removed` — so a script that vanishes is a refusal, not a silence.
+"Every prior reproduce script" must not be a list someone maintains (§13, E10). Three corrections
+revision 2 needed here, all from checking the directory rather than assuming it:
+
+1. the glob is `scripts/reproduce-llm-shield-stage*.sh` — revision 2's `reproduce-stage-*.sh` would
+   have matched 4 scripts and missed 43;
+2. seven scripts sit outside that family (`reproduce-stage4d.sh`, `reproduce-stage4d-to-4f.sh`,
+   `reproduce-stage4e.sh`, `reproduce-stage4f.sh`, `reproduce-stage4g.sh`, `reproduce-vca-chain.sh`,
+   `reproduce-on-droplet.sh`), so a glob alone is not a census — the **set pin is authority** and the
+   glob is only how candidates are discovered;
+3. `reproduce-llm-shield-stage5s.sh` is **excluded by name**: this stage's own script is not a prior
+   script, and including it would make Task 36 re-run Task 34 under the label "prior" (§14, R5).
+
+The runner pins the discovered set against a committed set and refuses on `added` or `removed`, so a
+script that vanishes is a refusal rather than a silence. At plan time the prior set has 50 members:
+43 in the `llm-shield` family plus the 7 outside it.
 
 Then `check.sh`, which takes ~9–10 minutes: background one wait loop, never repeated foreground
 sleeps.
 
-Proves: `node --test tests/e2e/llmShield/stage5s/priorReproduceSet.test.js`, then
-`bash scripts/runAllPriorReproduce.sh` exits 0, then `bash scripts/check.sh` exits 0.
+Proves:
+
+```bash
+bash -euo pipefail -c '
+  node --test tests/e2e/llmShield/stage5s/priorReproduceSet.test.js
+  bash scripts/runAllPriorReproduce.sh
+  bash scripts/check.sh
+'
+```
 
 ### Task 37 — closeout, inside the tag
 
@@ -655,7 +731,7 @@ separately scoped release-receipt commit — the tagged stage is never silently 
 
 Memory write and Zurvan ingest close the task; search Zurvan for duplicates before ingesting.
 
-Proves: `bash scripts/reproduce-stage-5s.sh` on main exits 0;
+Proves: `bash scripts/reproduce-llm-shield-stage5s.sh` on main exits 0;
 `gh release view v2.54.0-stage-5s-vwq` succeeds; `git tag | grep 5s` and `gh release list | grep 5s`
 agree.
 
@@ -664,24 +740,24 @@ agree.
 ## §11 The declared gate universe
 
 Revision 1 applied Ruling 5 to G1–G10 while four other checks behaved as gates (§13, B10). The
-universe is declared here and is what Task 34 sweeps.
+universe is declared here and is what Task 35 sweeps.
 
 | gate | what it protects                 | built by | red-proved by |
 | ---- | -------------------------------- | -------- | ------------- |
-| G1   | schema and raw band              | 5        | 34            |
-| G2   | acceptance-matrix completeness   | 20       | 34            |
-| G3   | artifact and binding integrity   | 7        | 21, 34        |
-| G4   | Lane A deterministic net         | 17, 18   | 34            |
-| G5   | Lane B ceremony                  | 22       | 34            |
-| G6   | Lane C capture verification      | 24, 25   | 34            |
-| G7   | runtime parity                   | 27, 28   | 34            |
-| G8   | Lean proofs                      | 26       | 34            |
-| G9   | claim and non-claim              | 29       | 34            |
-| G10  | attestation and reproduction     | 30, 35   | 34            |
-| G11  | spec pin                         | 1        | 34            |
-| G12  | write surface                    | 2        | 34            |
-| G13  | gate census and lifecycle values | 32       | 34            |
-| G14  | K7-A all-functions net           | 33       | 34            |
+| G1   | schema and raw band              | 5        | 35            |
+| G2   | acceptance-matrix completeness   | 20       | 35            |
+| G3   | artifact and binding integrity   | 7        | 21, 35        |
+| G4   | Lane A deterministic net         | 17, 18   | 35            |
+| G5   | Lane B ceremony                  | 22       | 35            |
+| G6   | Lane C capture verification      | 24, 25   | 35            |
+| G7   | runtime parity                   | 27, 28   | 35            |
+| G8   | Lean proofs                      | 26       | 35            |
+| G9   | claim and non-claim              | 29       | 35            |
+| G10  | attestation and reproduction     | 30, 34   | 35            |
+| G11  | spec pin                         | 1        | 35            |
+| G12  | write surface                    | 2        | 35            |
+| G13  | gate census and lifecycle values | 32       | 35            |
+| G14  | K7-A all-functions net           | 33       | 35            |
 
 Every red-proving number exceeds every building number, satisfying plan-quality gate 2.
 
@@ -694,25 +770,25 @@ Every red-proving number exceeds every building number, satisfying plan-quality 
 | §2.5  | ancestry, malformed ≠ incomplete      | 10    | 19            |
 | §2.7  | 38 raw codes + Annex M ripple         | 5     | 18            |
 | §2.8  | frozen first-failure order            | 16    | 19            |
-| §2.9  | claim-gate surface scope              | 29    | 34            |
+| §2.9  | claim-gate surface scope              | 29    | 35            |
 | §2.10 | goldens ripple authority              | 0     | 5             |
 | §3.1  | anchors carry zero witness weight     | 11    | 18            |
 | §3.2  | four independent statuses             | 13    | 30            |
 | §3.3  | two policy blocks                     | 8     | 30            |
-| §3.4  | two disjoint taxonomies               | 8     | 34            |
+| §3.4  | two disjoint taxonomies               | 8     | 35            |
 | §3.6  | typed artifact absence                | 13    | 30            |
-| §3.8  | Lane B tested vs design properties    | 22    | 34            |
+| §3.8  | Lane B tested vs design properties    | 22    | 35            |
 | §3.9  | Lane C capture and verification       | 24    | 25            |
-| §4.1  | five theorems, floor 39               | 26    | 34            |
+| §4.1  | five theorems, floor 39               | 26    | 35            |
 | §4.2  | non-claims as an exact id set         | 29    | 30            |
-| §4.6  | lifecycle fields adjacent, values     | 32    | 34            |
+| §4.6  | lifecycle fields adjacent, values     | 32    | 35            |
 | §5.2  | collision resistance as an assumption | 6     | —             |
-| §5.4  | acceptance matrix, pinned twice       | 20    | 34            |
+| §5.4  | acceptance matrix, pinned twice       | 20    | 35            |
 | §5.5  | eight case families                   | 18    | 20            |
-| §6.1  | gate census, set equality             | 32    | 34            |
+| §6.1  | gate census, set equality             | 32    | 35            |
 | §6.2  | write surface, parsed from the spec   | 2     | 36            |
 | §6.3  | K7-A by symbol                        | 33    | 36            |
-| §6.5  | trigger self-test                     | 31    | 34            |
+| §6.5  | trigger self-test                     | 31    | 35            |
 | §7.3  | a redaction is not a fork             | 9     | 18            |
 
 ## §13 Gauntlet round 2 — 13 blockers and 12 execution defects, all applied
@@ -754,7 +830,24 @@ headless-browser run.
 | E11 | the spec correction would move the digest mid-implementation | Task 0, before the pin test exists                  |
 | E12 | §12 said "seven structural, two editorial" over ten rows     | counts removed; the table is the census             |
 
-## §14 Definition of done
+## §14 Gauntlet round 3 — four blockers, one correction, one found here
+
+| id  | blocker                                                                                      | resolution                                                                       |
+| --- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| R1  | Task 0 recorded its own commit hash inside that commit — recording the hash changes the hash | two commits: 0a authority, 0b pin. Task 1 pins what 0a produced                  |
+| R2  | G10 was built by Tasks 30 and 35 but red-proved by 34, so `34 > every builder` was false     | reproduce script moved to 34, RED sweep to 35; G10 built by 30, 34, proved by 35 |
+| R3  | angle-bracket placeholders `<spec>` `<base>` `<path>` survived the "zero placeholder" claim  | concrete commands and five named attestation artifact paths                      |
+| R4  | `bash a.sh; bash b.sh` returns only the second status — 5Q could fail while the task passed  | every multi-command proof is one `bash -euo pipefail -c` block                   |
+| R5  | Task 36's glob would have swept this stage's own reproduce script as a "prior" script        | excluded by name, and the set pin is authority rather than the glob              |
+| R6  | **found here:** every reproduce script name in revision 2 was wrong                          | the family is `reproduce-llm-shield-stage<id>.sh`; 43 in family, 7 outside       |
+
+R6 is the one the reviewer could not have seen without the directory listing, and it is the worst of
+the six: revision 2's Task 3 invoked two files that do not exist, and Task 36's glob would have
+matched 4 scripts while missing 43 — a completeness gate reporting green over 8% of its subject. The
+mechanical checker missed R3 and R4 too, because it scanned for `TBD` and `TODO` rather than for
+angle brackets and `;`-chained shell. Both patterns are now in the scan.
+
+## §15 Definition of done
 
 The §5.6 acceptance law, unmodified:
 
