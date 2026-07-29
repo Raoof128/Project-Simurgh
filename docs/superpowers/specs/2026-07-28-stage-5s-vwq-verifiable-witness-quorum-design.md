@@ -521,3 +521,163 @@ and quorum arithmetic. Crypto verification remains a separate contract, as 5R sc
 - not that an absent artifact means no fork occurred;
 - not that a self-inflicted equivocation says anything about any real provider;
 - not that Lane B's processes are free of covert channels.
+
+---
+
+## §4 Lean theorems, non-claims, limitations, wedge, and scorecard
+
+Frozen 2026-07-28.
+
+### 4.1 Five theorems, each narrow enough to match the executable relation
+
+Every theorem below is a statement about the same relation the verifier evaluates, over the same
+frozen artifact algebra of §2. Zero `sorry`, and the escape scan of the repaired Q1-F001 gate is what
+enforces that — not the type-check, which exits 0 on a `sorry`-closed theorem.
+
+| theorem                                        | statement                                                                                                                                                       |
+| ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ProducerCannotSelfWitness`                    | no accepted quorum contains a statement whose witness key digest equals the committed `producer_key_digest`                                                     |
+| `QuorumRequiresDistinctEligibleWitnesses`      | an accepted quorum has at least `threshold_q` pairwise-distinct roster-eligible witness identities, after alias and duplicate collapse                          |
+| `ComparedSameCoordinateConflictYieldsEvidence` | two valid views incompatible at one `(producer_identity, scope_id, epoch)` inside a compliant comparison set derive an equivocation artifact that self-verifies |
+| `QuorumShortfallCannotSuppressEquivocation`    | the derivation above is independent of either view's quorum status — a shortfall changes `quorum_status` and cannot change `comparison_status`                  |
+| `CompatibleAncestryCannotYieldEquivocation`    | a valid transitive ancestry chain between two views yields `compatible`, never a fork — the negative control, proved                                            |
+
+The fourth is the stage's sharpest. It closes the trapdoor found in round two of the §2 review, where
+a producer could publish a second, deliberately under-witnessed view and have the comparator report a
+shortfall instead of a fork — equivocation laundered as an incomplete quorum. It is proved rather
+than tested because the property is about the _shape_ of the derivation, and a test can only sample
+the shortfalls it thought to construct.
+
+**What the theorems deliberately do not touch:** actual receiver delivery, operator independence,
+external-anchor semantics, cryptographic unforgeability, and real-world honesty. Those are assumptions
+or executable checks. A theorem over an assumed-honest witness proves the assumption, not the system,
+and this repo does not ship Lean theatre.
+
+**One demotion, recorded rather than quietly dropped.** The brainstorm list carried
+`WitnessReplayCannotChangeCheckpointScope`. It is not in the five. Replay retains full executable
+coverage at **494 `CROSS_EPOCH_REPLAY`** and **495 `CROSS_SCOPE_REPLAY`** with Lane A fixtures, and it
+is the one candidate whose content is a field-equality check already inside the frozen check order.
+The cost is real and stated: replay resistance is tested, not proved, in 5S.
+
+### 4.2 The full non-claim set
+
+The six locked at ruling time:
+
+1. not physical time or trusted timestamping, except where a real TSA is used and only within that
+   mechanism's own guarantees;
+2. not witness honesty;
+3. not network availability or liveness;
+4. not prevention of equivocation;
+5. not global transparency outside the participating witness set;
+6. not that quorum agreement makes the checkpoint truthful.
+
+Added here, and signed with the same weight:
+
+7. not proof that all views were received, unless `intake_complete: true`;
+8. not proof that witnesses are organisationally independent;
+9. not proof that witnesses inspected or understood checkpoint semantics — a witness signs a tuple;
+10. not proof that any external anchor signed the witness tuple;
+11. not proof that a clean comparison excludes a partitioned fork;
+12. not proof of physical time ordering, except within an external mechanism's own guarantees;
+13. not proof that the producer's underlying containment evidence is truthful merely because its
+    checkpoint was witnessed;
+14. not prevention of equivocation — restated deliberately, because it is the non-claim most likely
+    to erode under summary.
+
+**Stated concretely for 3L-class containment failures** — the reference capture where a real model's
+output had to be contained after the input filter missed:
+
+> 5S can expose inconsistent signed containment histories once they are compared. It does not stop
+> the model, the gateway, or the operator from producing the first bad history. It makes the second,
+> contradictory story expensive — not the first one impossible.
+
+### 4.3 Limitations, separated by layer
+
+Layering them keeps the partition bound from being buried among engineering caveats, which is exactly
+how a hard limit becomes a footnote.
+
+**Protocol limitations.** The fork coordinate is `(producer_identity, scope_id, epoch)`; a producer
+operating under a genuinely different committed identity is a different producer, not a fork.
+Ancestry is verified transitively with `allow_epoch_gaps` and authorised transition records, so an
+unauthorised history rewrite that forges no signature still requires a valid chain — but a chain the
+comparator never sees is not evaluated.
+
+**Comparison and gossip limitations.** The bound of §1.4. A perfect partition — two audiences that
+never share a view — produces no artifact, and 5S reports that honestly as
+`absent_comparison_unavailable` or an insufficient set, never as a clean verdict. This is not
+closable by more signatures; it is closable only by making views meet.
+
+**Identity and independence limitations.** Every Lane B witness is `same_operator_distinct_key`, so
+`witness_independence_status` is `unproven` by construction. `distinct_operator_self_asserted` is an
+input, not evidence. 5P's undischarged party independence is inherited here, not solved.
+
+**External-anchor limitations.** An anchor observes a digest and reads nothing. Anchors carry zero
+witness weight, satisfy only `external_corroboration_policy`, and their time guarantees are exactly
+their own mechanism's — no more.
+
+**Implementation and evaluation limitations.** Lane C is captured and never CI-gated, so it is
+evidence of one execution rather than a continuously verified property. Byte-stability of the 4H
+digest builder holds only under Node 26. Code 511 is lexical, not semantic, inheriting 4X's bound.
+Covert channels between Lane B processes are unclaimed and untested.
+
+### 4.4 The wedge — containment evidence becomes fork-accountable
+
+The wedge is not that we invented witness co-signing; §1.6 already concedes the mechanism to prior
+art. It is this:
+
+> **A deployment can no longer safely show one signed containment history to one auditor and a
+> different signed containment history to another, once those authenticated views enter the same
+> committed comparison set.**
+
+Which composes with the post-guardrail thesis the repo has been building since 3E:
+
+```text
+guardrail may miss
+containment boundary may act
+checkpoint records the consequence
+witness quorum authenticates the checkpoint
+comparison converts conflicting histories into recomputable evidence
+```
+
+Every rung before this one made a single history recomputable. 5S is the first that makes **two
+histories mutually accountable** — the first place in the ladder where telling two stories is itself
+a detectable, typed, offline-verifiable event rather than a matter of whose copy you happened to read.
+
+**The founder's ledger entry.** The concrete external actor who could run this verifier tomorrow is a
+second auditor of the same deployment — a regulator's technical reviewer holding one signed
+containment history while a customer's assurance team holds another. The single blocker is that no
+external operator yet signs the full witness tuple, which is precisely what §3.3 records as a debt
+and what 5T is scheduled to attack.
+
+### 4.5 Scorecard — pre-freeze targets
+
+These are targets. Closeout re-scores independently, and a downgrade there is a feature.
+
+| axis                   | target  | reasoning                                                                                                                                  |
+| ---------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Novelty**            | **8.6** | mechanism novelty is moderate and conceded; compositional novelty is stronger — conflict-as-typed-evidence inside the Completeness lattice |
+| **Frontier relevance** | **9.4** | multi-party assurance of AI containment claims is live, unsolved, and being legislated into existence                                      |
+| **Good for Anthropic** | **9.5** | third-party assurance without trusting the producer, and honest uncertainty reported as typed status rather than absence                   |
+| **Constitution**       | **9.2** | infrastructure alignment only — machine-checkable honesty about what was and was not established                                           |
+
+Novelty sits below 9 deliberately. Consecutive 9s stop discriminating, and this stage's core mechanism
+is genuinely prior art.
+
+**What moves each higher — buildable artifacts, tracked as debts, not aspirations:**
+
+- **Novelty → 9.2:** a real fork detected between two views the project did not author.
+- **Frontier → 9.7:** a second party running the verifier against a deployment we do not operate.
+- **Anthropic → 9.8:** one external operator signing the full witness tuple, retiring §3.3's debt.
+- **Constitution → 9.5:** a published contest path for a producer disputing an equivocation artifact,
+  composing 4V's due-process machinery onto this stage's finding.
+
+**The external anchor does not move the independence score.** Lane C is corroboration of a digest.
+The semantic quorum remains same-operator until an external operator signs the complete tuple, and no
+axis above is credited for anchoring as though it were independence.
+
+### 4.6 Forward requirement on §6
+
+Each gate 5S installs carries its six lifecycle declaration fields **adjacent to the gate's own
+definition**, in the file where the gate lives. §6 provides the census and the set-pinned index; it is
+not the only place the fields appear. A reviewer must never perform document archaeology to learn a
+gate's successor behaviour — that failure mode is exactly what produced Q1-F002, F004 and F005.
