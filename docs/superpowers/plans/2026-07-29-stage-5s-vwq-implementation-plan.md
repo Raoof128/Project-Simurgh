@@ -857,6 +857,7 @@ headless-browser run.
 
 | 5S-F004 | both committed Stage 4H exit-map goldens are **11 codes stale**: `RUN_LEVEL_BY_RAW` carries 456 entries up to 474, the goldens carry 445 up to 463, and the gap is exactly 5P's band 464-474. No gate caught it across 5P, 5Q or 5R | recorded; the repair is larger than 5S's own ripple and needs a ruling |
 | 5S-F005 | Annex M authorised the three goldens but **not** `tools/simurgh-attestation/stage4h/exitCodes.mjs`, the source that generates them. The ripple could not be performed under the authority written for it | RESOLVED by Annex M row 5S-M004, landed in its own authority commit before the file was touched |
+| 5S-F006 | The Stage 5S write-surface driver had two fail-opens of the vacuous-green species: an unrecognised flag was ignored (so `--base origin/main` silently became `--staged`, examined zero paths, and printed OK), and every git call was wrapped in a swallow-and-return-`""` helper (so a bogus revision range produced zero changed paths, which violate nothing) | RESOLVED in Task 11: `parseArgs` refuses unknown arguments, git runs strict, and a third exit code separates **operator error (2)** from **refusal (1)** — nine driver tests, each seeded from one of the two failures |
 
 5S-F001 is the fourth member of a species this repository already made a standing rule about: _every
 stage-installed gate must declare its successor-stage behaviour before the stage freezes_
