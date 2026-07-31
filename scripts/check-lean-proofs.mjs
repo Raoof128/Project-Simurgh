@@ -17,7 +17,10 @@ import { pathToFileURL } from "node:url";
 
 import { GATE_REASONS, auditCorpus } from "./lib/leanProofGate.mjs";
 
-const DEFAULT_FLOOR = 38;
+// Raised from 38 to 39 in Stage 5S, in the task that ADDS the proof (§13, B12). Without the bump,
+// deleting 5S's only proof later returns the repository to 38, the count guard stays green, and
+// directory coverage silently loses a whole directory.
+const DEFAULT_FLOOR = 39;
 
 function typecheckFile(path) {
   try {
