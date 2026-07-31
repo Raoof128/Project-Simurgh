@@ -20,6 +20,7 @@ import { checkpointBodyDigest } from "../core/canonical.mjs";
 import {
   COMPARISON_POLICY_DIGEST,
   RECEIVER_KEYS,
+  WITNESS_KEYS,
   baseBundle,
   checkpoint,
   cleanBundle,
@@ -510,10 +511,6 @@ export const CASE_IDS = Object.freeze(CASES.map((c) => c.case_id));
 // Two probes are declared unreachable rather than faked, because a fixture that pretended otherwise
 // would be a test agreeing with a bug:
 //
-//   492 WITNESS_KEY_ALIASED — see 5S-F010. Reaching the alias check requires every statement to have
-//       cleared the (identity, key) roster pair at 489, which forces distinct keys per identity, and
-//       the only roster that shares a key is refused at 485 six codes earlier. Three deliberate
-//       decisions, each defensible alone, that together make the code dead.
 //   510 EQUIVOCATION_ARTIFACT_INVALID — reachable from `verifyEquivocationArtifact`, where a
 //       stranger's forged artifact takes it (Task 14 proves this with twelve attacks). It is not
 //       reachable from the ordered evaluator, which builds artifacts rather than judging submitted
@@ -521,7 +518,6 @@ export const CASE_IDS = Object.freeze(CASES.map((c) => c.case_id));
 
 /** Codes with no first-failure probe, each with the reason recorded rather than a fixture faked. */
 export const UNREACHABLE_FROM_EVALUATOR = Object.freeze({
-  492: "shadowed by 485 (roster key sharing) and 489 (roster pair) — 5S-F010, needs a ruling",
   510: "reached through verifyEquivocationArtifact, not through the evaluator — Task 14 covers it",
 });
 
@@ -549,6 +545,7 @@ export const CODE_PROBES = Object.freeze([
   [489, "a witness holding no roster seat", (b) => { b.views[0].witness_statements[0].witness_identity = "w-stranger"; return b; }],
   [490, "an unverified witness signature", (b) => { b.views[0].witness_statements[0].signature_verified = false; return b; }],
   [491, "the producer witnessing itself", (b) => seatProducer(b, 0)],
+  [492, "a roster identity wearing another roster identity's key", (b) => { b.views[0].witness_statements = [witnessStatement("w-a", b.views[0].checkpoint, { key_digest: WITNESS_KEYS["w-b"] }), witnessStatement("w-c", b.views[0].checkpoint)]; return b; }],
   [493, "one witness voting twice", (b) => { b.views[0].witness_statements = [witnessStatement("w-a", b.views[0].checkpoint), witnessStatement("w-a", b.views[0].checkpoint)]; return b; }],
   [494, "a statement replayed from another epoch", (b) => { b.views[0].witness_statements[0].epoch = 6; return b; }],
   [495, "a statement replayed from another scope", (b) => { b.views[0].witness_statements[0].scope_id = "scope-2"; return b; }],

@@ -12,8 +12,23 @@
 // identity, and then walks past self-witness looking like a single ordinary witness. Excluding the
 // producer first deletes its seats before anything is merged. The tests state the attack.
 //
-// ROSTER MEMBERSHIP IS THE (IDENTITY, KEY) PAIR. Matching the name alone would let any key sign as
-// anybody, which turns a roster into a list of nicknames.
+// ROSTER MEMBERSHIP IS IDENTITY ELIGIBILITY, THEN KEY OWNERSHIP (5S-F010):
+//
+//   identity malformed                                        → 488
+//   identity absent from the roster                           → 489
+//   identity present, key is that identity's committed key     → continue
+//   identity present, key belongs to ANOTHER roster identity   → 492
+//   identity present, key belongs to no roster identity        → 489
+//
+//   489 = no authorised roster binding exists for this submission
+//   492 = an authorised roster key is being worn by the wrong authorised identity
+//
+// The first version asked one question — is `(identity, key)` a committed pair — and answered 489 to
+// every no. Sound, and the wrong diagnosis: it collapsed two events into one code, and made 492
+// unreachable, because the only other route to an alias is a roster sharing a key across two seats,
+// which the policy validator refuses at 485 six codes earlier. Nothing is weakened by the split. A
+// stranger identity still takes 489 and a key nobody owns still takes 489; matching the name alone
+// would still let any key sign as anybody, and it does not.
 //
 // FAIL-CLOSED ON AN UNSEEN SIGNATURE. A statement that never passed a signature check is
 // indistinguishable here from one that failed it, so `signature_verified !== true` — including
@@ -90,13 +105,35 @@ export function tally(input) {
     }));
   if (unverified.length) return stop(unverified);
 
-  // ---- roster membership on the (identity, key) pair (489) ----------------------------------
+  // ---- roster membership: identity eligibility, then KEY OWNERSHIP (489 / 492) ---------------
+  //
+  // The first version of this block asked one question — is `(identity, key)` a committed pair — and
+  // answered 489 to every no. That is sound and it is the wrong diagnosis, because it collapses two
+  // different events into one code and makes the second unreportable:
+  //
+  //   489  no authorised roster binding exists for this submission
+  //   492  an authorised roster key is being worn by the WRONG authorised identity
+  //
+  // Collapsing them also made 492 unreachable as a first failure, because the only other route to it
+  // is a roster sharing one key across two seats, which the policy validator refuses at 485 six codes
+  // earlier (5S-F010). Nothing here is weakened: a key no roster identity owns still takes 489, and
+  // a stranger identity still takes 489. Only the sentence changes, and it changes to the true one.
+  //
+  // The alias is recorded and carried past producer exclusion rather than raised here, because 492
+  // lives in the laundering group and 491 precedes it — a producer holding two seats must be caught
+  // as a producer before it is described as an alias.
   const seatOf = new Map(
     roster
       .filter((e) => e && isNonEmptyString(e.witness_identity))
       .map((e) => [e.witness_identity, e])
   );
+  const identityOwningKey = new Map(
+    roster
+      .filter((e) => e && isNonEmptyString(e.witness_identity) && isNonEmptyString(e.key_digest))
+      .map((e) => [e.key_digest, e.witness_identity])
+  );
   const strangers = [];
+  const wornByWrongIdentity = [];
   for (const s of list) {
     const seat = seatOf.get(s.witness_identity);
     if (!seat) {
@@ -104,12 +141,23 @@ export function tally(input) {
         reason: R.WITNESS_NOT_IN_ROSTER,
         detail: `${s.witness_identity} holds no roster seat`,
       });
-    } else if (seat.key_digest !== s.key_digest) {
+      continue;
+    }
+    if (seat.key_digest === s.key_digest) continue;
+
+    const owner = identityOwningKey.get(s.key_digest);
+    if (owner === undefined) {
       strangers.push({
         reason: R.WITNESS_NOT_IN_ROSTER,
         detail:
-          `${s.witness_identity} signed under ${s.key_digest}, ` +
-          `and the roster commits ${seat.key_digest}`,
+          `${s.witness_identity} signed under ${s.key_digest}, ` + `which no roster identity owns`,
+      });
+    } else {
+      wornByWrongIdentity.push({
+        reason: R.WITNESS_KEY_ALIASED,
+        detail:
+          `${s.witness_identity} signed under the key the roster commits to ${owner} ` +
+          `(its own seat commits ${seat.key_digest})`,
       });
     }
   }
@@ -134,12 +182,19 @@ export function tally(input) {
     if (!identitiesByKey.has(s.key_digest)) identitiesByKey.set(s.key_digest, new Set());
     identitiesByKey.get(s.key_digest).add(s.witness_identity);
   }
-  const aliased = [...identitiesByKey]
-    .filter(([, ids]) => ids.size > 1)
-    .map(([key, ids]) => ({
-      reason: R.WITNESS_KEY_ALIASED,
-      detail: `key ${key} carries ${ids.size} identities: ${[...ids].join(", ")}`,
-    }));
+  const aliased = [
+    // Submission-level: one identity wearing another authorised identity's key, carried down from
+    // the membership decision above.
+    ...wornByWrongIdentity,
+    // Set-level: two identities arriving on one key at once. Kept as defence in depth — the policy
+    // validator refuses such a roster at 485, and this catches it again if one arrives anyway.
+    ...[...identitiesByKey]
+      .filter(([, ids]) => ids.size > 1)
+      .map(([key, ids]) => ({
+        reason: R.WITNESS_KEY_ALIASED,
+        detail: `key ${key} carries ${ids.size} identities: ${[...ids].join(", ")}`,
+      })),
+  ];
   if (aliased.length) return stop(aliased);
 
   const counts = new Map();

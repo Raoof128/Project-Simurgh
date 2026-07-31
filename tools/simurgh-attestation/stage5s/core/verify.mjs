@@ -362,6 +362,7 @@ function checkComparisonLane(bundle, { attributionFailed = false } = {}) {
       comparison_policy: bundle.comparison_policy,
       comparison_manifest: bundle.comparison_manifest,
       producer_key_digest: bundle.committed?.producer_key_digest,
+      witness_policy: bundle.witness_policy,
       committed_chain: bundle.committed?.chain,
       committed_transition_policy: bundle.committed?.transition_policy,
     });

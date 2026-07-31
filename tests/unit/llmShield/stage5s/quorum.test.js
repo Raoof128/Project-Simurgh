@@ -24,6 +24,7 @@ import {
   QUORUM_REFUSALS,
   tally,
 } from "../../../../tools/simurgh-attestation/stage5s/core/quorum.mjs";
+import { validateWitnessQuorumPolicy } from "../../../../tools/simurgh-attestation/stage5s/core/policy.mjs";
 import { codeFor } from "../../../../tools/simurgh-attestation/stage5s/core/rawCodeAllocator.mjs";
 
 const SRC = "tools/simurgh-attestation/stage5s/core/quorum.mjs";
@@ -37,6 +38,9 @@ const checkpoint = (over = {}) => ({
   epoch: 7,
   ...over,
 });
+
+/** A key digest no roster seat owns. */
+const KEY_X = "sha256:key-owned-by-nobody";
 
 const policy = (over = {}) => ({
   threshold_q: 2,
@@ -140,14 +144,50 @@ test("[5s-t11] a producer witnessing itself is 491, by identity OR by key", () =
   assert.deepEqual(reasons(byKey), ["PRODUCER_SELF_WITNESS"]);
 });
 
-test("[5s-t11] roster membership is checked on the (identity, key) PAIR, not the name alone", () => {
-  // A statement wearing a roster name over a key the roster never committed is not a roster witness.
-  // Matching on the name alone would let any key sign as anybody.
-  const r = run({
-    statements: [statement("w-a"), statement("w-b", { key_digest: "sha256:key-elsewhere" })],
-  });
+// ---------------------------------------------------------- roster binding, the 5S-F010 decision
+//
+// One question used to answer this: is `(identity, key)` a committed pair? Sound, and the wrong
+// DIAGNOSIS — it collapsed two different events into 489 and made 492 unreportable, because the only
+// other route to an alias is a roster sharing a key, which the policy validator refuses at 485 six
+// codes earlier. The tree below splits them:
+//
+//   489 = no authorised roster binding exists for this submission
+//   492 = an authorised roster key is being worn by the wrong authorised identity
+//
+// Nothing is weakened. A stranger identity still takes 489, and a key no roster identity owns still
+// takes 489. Only the sentence changes, and it changes to the true one.
+
+test("[5s-t11] an identity absent from the roster is 489, whatever key it brings", () => {
+  const r = run({ statements: [statement("w-a"), statement("mallory", { key_digest: KEY_X })] });
   assert.equal(r.ok, false);
   assert.deepEqual(reasons(r), ["WITNESS_NOT_IN_ROSTER"]);
+});
+
+test("[5s-t11] a roster identity under a key NO roster identity owns is 489", () => {
+  // The name is eligible and the key is nobody's. There is no authorised binding to speak of, so
+  // this is not an alias — nothing authorised is being worn.
+  const r = run({ statements: [statement("w-a", { key_digest: KEY_X }), statement("w-b")] });
+  assert.equal(r.ok, false);
+  assert.deepEqual(reasons(r), ["WITNESS_NOT_IN_ROSTER"]);
+  assert.match(r.refusals[0].detail, /no roster identity owns/);
+});
+
+test("[5s-t11] a roster identity wearing ANOTHER roster identity's key is 492, not 489", () => {
+  // The submission-level alias, and the reachability witness §5.6 needs: both the identity and the
+  // key are authorised, and they are not authorised TOGETHER.
+  const r = run({
+    statements: [statement("w-a", { key_digest: "sha256:key-b" }), statement("w-c")],
+  });
+  assert.equal(r.ok, false);
+  assert.deepEqual(reasons(r), ["WITNESS_KEY_ALIASED"]);
+  assert.equal(codeFor("WITNESS_KEY_ALIASED"), 492);
+  assert.match(r.refusals[0].detail, /commits to w-b/);
+});
+
+test("[5s-t11] the same identity twice on its OWN key is 493, never 492", () => {
+  const r = run({ statements: [statement("w-a"), statement("w-a")] });
+  assert.equal(r.ok, false);
+  assert.deepEqual(reasons(r), ["WITNESS_DUPLICATE"]);
 });
 
 test("[5s-t11] PRODUCER EXCLUSION PRECEDES COLLAPSE — two aliases cannot spend the alias check", () => {
@@ -181,6 +221,20 @@ test("[5s-t11] PRODUCER EXCLUSION PRECEDES COLLAPSE — two aliases cannot spend
     "collapse ran before producer exclusion"
   );
   assert.equal(r.refusals.length, 2, "one seat was silently merged away before exclusion");
+});
+
+test("[5s-t11] a ROSTER sharing one key across two seats is a POLICY defect, 485", () => {
+  // The fifth reachability witness of the ruling, and the line it keeps: policy-level duplicate-key
+  // rejection is a different event from submission-level aliasing, and they keep different codes.
+  const shared = policy();
+  shared.witness_roster[1].key_digest = "sha256:key-a";
+  const v = validateWitnessQuorumPolicy(shared);
+  assert.equal(v.ok, false);
+  assert.deepEqual(
+    [...new Set(v.refusals.map((x) => x.reason))],
+    ["POLICY_MALFORMED_OR_ROSTER_INVALID"]
+  );
+  assert.equal(codeFor("POLICY_MALFORMED_OR_ROSTER_INVALID"), 485);
 });
 
 test("[5s-t11] two roster seats sharing one key are aliased, 492", () => {
