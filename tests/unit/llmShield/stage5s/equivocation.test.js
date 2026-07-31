@@ -38,6 +38,7 @@ import {
   ARTIFACT_SCHEMA,
   EQUIVOCATION_REFUSALS,
   REQUIRED_ARTIFACT_BINDINGS,
+  RESOURCE_BOUNDS,
   artifactDigestOf,
   comparisonManifestDigest,
   deriveEquivocationArtifact,
@@ -180,11 +181,17 @@ function forgeAccusation(viewA, viewB, manifest) {
   const artifact = {
     schema: ARTIFACT_SCHEMA,
     protocol_version: viewA.checkpoint.protocol_version,
-    fork_coordinate: {
-      producer_identity: viewA.checkpoint.producer_identity,
-      scope_id: viewA.checkpoint.scope_id,
-      epoch_a: viewA.checkpoint.epoch,
-      epoch_b: viewB.checkpoint.epoch,
+    comparison_coordinate_pair: {
+      coordinate_a: {
+        producer_identity: viewA.checkpoint.producer_identity,
+        scope_id: viewA.checkpoint.scope_id,
+        epoch: viewA.checkpoint.epoch,
+      },
+      coordinate_b: {
+        producer_identity: viewB.checkpoint.producer_identity,
+        scope_id: viewB.checkpoint.scope_id,
+        epoch: viewB.checkpoint.epoch,
+      },
     },
     view_a: {
       checkpoint: clone(viewA.checkpoint),
@@ -578,7 +585,7 @@ test("[5s-t14] the artifact digest covers every binding — one flipped byte any
   for (const path of [
     ["comparison_manifest_digest"],
     ["receiver_provenance_root"],
-    ["fork_coordinate", "epoch_a"],
+    ["comparison_coordinate_pair", "coordinate_a", "epoch"],
     ["view_a", "checkpoint_envelope_digest"],
     ["derivation", "compatibility_verdict"],
     ["finding_id"],
@@ -639,4 +646,81 @@ test("[5s-t14] a malformed artifact is refused rather than thrown — 512 never 
     assert.equal(v.ok, false);
     assert.equal(v.exit_code, 510);
   }
+});
+
+// ------------------------------------------------------------------ the frozen algebra, and bounds
+
+test("[5s-t14] the artifact carries a COORDINATE PAIR, never a widened fork_coordinate", () => {
+  // `fork_coordinate` is frozen at (producer_identity, scope_id, epoch). Bolting a second epoch onto
+  // it would redefine the frozen algebra in passing — functionally harmless, and exactly the kind of
+  // splinter a reviewer is right to refuse.
+  const { artifact } = build();
+  assert.ok(!("fork_coordinate" in artifact), "the frozen term was reused for a different shape");
+  const pair = artifact.comparison_coordinate_pair;
+  for (const member of [pair.coordinate_a, pair.coordinate_b]) {
+    assert.deepEqual(Object.keys(member).sort(), ["epoch", "producer_identity", "scope_id"]);
+  }
+  assert.equal(pair.coordinate_a.epoch, 7);
+  assert.equal(pair.coordinate_b.epoch, 7);
+});
+
+test("[5s-t14] a mutated member of the coordinate pair is refused, naming that member", () => {
+  for (const member of ["coordinate_a", "coordinate_b"]) {
+    const { artifact } = build();
+    const forged = clone(artifact);
+    forged.comparison_coordinate_pair[member].epoch = 99;
+    const v = verifyEquivocationArtifact(forged, publicInputs());
+    assert.equal(v.ok, false);
+    assert.equal(v.exit_code, 510);
+    assert.equal(v.refusal.check, `comparison_coordinate_pair.${member}`);
+  }
+});
+
+test("[5s-t14] resource bounds are enforced BEFORE any recomputation", () => {
+  // An oversized counterfeit must not buy an algorithmic-cost lever by making the verifier work hard
+  // on the way to refusing it. The ceiling is about the SIZE of the question, not its content.
+  const { artifact } = build();
+
+  const huge = clone(artifact);
+  huge.view_a.checkpoint.history_root = "x".repeat(RESOURCE_BOUNDS.MAX_ARTIFACT_BYTES + 1);
+  const v1 = verifyEquivocationArtifact(huge, publicInputs());
+  assert.equal(v1.ok, false);
+  assert.equal(v1.refusal.check, "resource_bounds");
+
+  const manyReceipts = clone(artifact);
+  manyReceipts.view_a.carried_by = Array.from(
+    { length: RESOURCE_BOUNDS.MAX_RECEIPTS_PER_VIEW + 1 },
+    (_, i) => ({ ...clone(artifact.view_a.carried_by[0]), receiver_sequence: i })
+  );
+  const v2 = verifyEquivocationArtifact(manyReceipts, publicInputs());
+  assert.equal(v2.ok, false);
+  assert.equal(v2.refusal.check, "resource_bounds");
+
+  const longChain = Array.from({ length: RESOURCE_BOUNDS.MAX_ANCESTRY_CHAIN + 1 }, (_, i) => ({
+    body_digest: `b-${i}`,
+    predecessor: `b-${i - 1}`,
+    epoch: i,
+  }));
+  const v3 = verifyEquivocationArtifact(artifact, publicInputs({ committed_chain: longChain }));
+  assert.equal(v3.ok, false);
+  assert.equal(v3.refusal.check, "resource_bounds");
+});
+
+test("[5s-t14] the bound refuses BEFORE the semantic checks, not after them", () => {
+  // Proved by construction: an artifact that is BOTH oversized and semantically false must report the
+  // bound, because the bound is what ran. If the order slipped, the report would name the semantics.
+  const { artifact } = build();
+  const both = clone(artifact);
+  both.derivation.compatibility_verdict = "compatible";
+  both.view_a.checkpoint.history_root = "x".repeat(RESOURCE_BOUNDS.MAX_ARTIFACT_BYTES + 1);
+  const v = verifyEquivocationArtifact(both, publicInputs());
+  assert.equal(v.refusal.check, "resource_bounds");
+});
+
+test("[5s-t14] a normal artifact sits far under every ceiling", () => {
+  // Anti-vacuity: a ceiling nothing approaches is a ceiling nobody has tested.
+  const { artifact } = build();
+  const bytes = Buffer.byteLength(JSON.stringify(artifact), "utf8");
+  assert.ok(bytes < RESOURCE_BOUNDS.MAX_ARTIFACT_BYTES / 4, `a plain artifact is ${bytes} bytes`);
+  assert.ok(artifact.view_a.carried_by.length < RESOURCE_BOUNDS.MAX_RECEIPTS_PER_VIEW);
 });

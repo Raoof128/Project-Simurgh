@@ -49,11 +49,23 @@ export const EQUIVOCATION_REFUSALS = Object.freeze({
 
 const EXIT = Object.freeze({ FINDING: 0, ANCESTRY: 509, ARTIFACT: 510 });
 
+/**
+ * Ceilings enforced BEFORE any recomputation. Semantic-before-seal is the right diagnostic order, but
+ * only once the input is known to be bounded — otherwise an oversized counterfeit buys an
+ * algorithmic-cost lever by making the verifier do expensive work on the way to refusing it. Nothing
+ * here is a security claim about the content; they are refusals about the SIZE of the question.
+ */
+export const RESOURCE_BOUNDS = Object.freeze({
+  MAX_ARTIFACT_BYTES: 1_048_576,
+  MAX_RECEIPTS_PER_VIEW: 1024,
+  MAX_ANCESTRY_CHAIN: 4096,
+});
+
 /** Top-level bindings the ruling requires. Each is checked present, then checked TRUE. */
 export const REQUIRED_ARTIFACT_BINDINGS = Object.freeze([
   "schema",
   "protocol_version",
-  "fork_coordinate",
+  "comparison_coordinate_pair",
   "view_a",
   "view_b",
   "producer_key_digest",
@@ -207,13 +219,22 @@ export function deriveEquivocationArtifact(input) {
   const artifact = {
     schema: ARTIFACT_SCHEMA,
     protocol_version: cpA?.protocol_version,
-    fork_coordinate: {
-      producer_identity: cpA?.producer_identity,
-      scope_id: cpA?.scope_id,
-      // Both epochs travel: §2.4 reaches `incompatible` by two routes, and the cross-epoch route has
-      // no single epoch to name. `same_epoch` in the derivation says which route this artifact took.
-      epoch_a: cpA?.epoch,
-      epoch_b: cpB?.epoch,
+    // TWO COORDINATES, NOT ONE WIDENED ONE. `fork_coordinate` is frozen at
+    // (producer_identity, scope_id, epoch); bolting a second epoch onto it would quietly redefine the
+    // frozen algebra. §2.4 reaches `incompatible` by two routes and the cross-epoch route has no
+    // single epoch to name, so the artifact carries the PAIR and each member stays a real coordinate.
+    // `same_producer` / `same_scope` / `same_epoch` in the derivation say how the two relate.
+    comparison_coordinate_pair: {
+      coordinate_a: {
+        producer_identity: cpA?.producer_identity,
+        scope_id: cpA?.scope_id,
+        epoch: cpA?.epoch,
+      },
+      coordinate_b: {
+        producer_identity: cpB?.producer_identity,
+        scope_id: cpB?.scope_id,
+        epoch: cpB?.epoch,
+      },
     },
     view_a: {
       checkpoint: cpA,
@@ -280,9 +301,44 @@ export function verifyEquivocationArtifact(artifact, publicInputs) {
     }
   }
   if (artifact.schema !== ARTIFACT_SCHEMA) return bad("schema", String(artifact.schema));
+
+  // ---- resource bounds, before a single digest is recomputed --------------------------------
+  let canonicalBytes;
+  try {
+    canonicalBytes = Buffer.byteLength(canonicalJson(artifact), "utf8");
+  } catch (error) {
+    return bad("resource_bounds", `the artifact is not canonicalisable: ${error.message}`);
+  }
+  if (canonicalBytes > RESOURCE_BOUNDS.MAX_ARTIFACT_BYTES) {
+    return bad(
+      "resource_bounds",
+      `${canonicalBytes} canonical bytes exceeds ${RESOURCE_BOUNDS.MAX_ARTIFACT_BYTES}`
+    );
+  }
+  for (const name of ["view_a", "view_b"]) {
+    const carried = artifact[name]?.carried_by;
+    if (Array.isArray(carried) && carried.length > RESOURCE_BOUNDS.MAX_RECEIPTS_PER_VIEW) {
+      return bad(
+        "resource_bounds",
+        `${name} carries ${carried.length} receipts, ceiling is ${RESOURCE_BOUNDS.MAX_RECEIPTS_PER_VIEW}`
+      );
+    }
+  }
+  const suppliedChain = publicInputs?.committed_chain;
+  if (Array.isArray(suppliedChain) && suppliedChain.length > RESOURCE_BOUNDS.MAX_ANCESTRY_CHAIN) {
+    return bad(
+      "resource_bounds",
+      `ancestry chain of ${suppliedChain.length} exceeds ${RESOURCE_BOUNDS.MAX_ANCESTRY_CHAIN}`
+    );
+  }
+
   if (!isPlainObject(artifact.derivation)) return bad("structure", "derivation is not an object");
-  if (!isPlainObject(artifact.fork_coordinate)) {
-    return bad("structure", "fork_coordinate is not an object");
+  if (
+    !isPlainObject(artifact.comparison_coordinate_pair) ||
+    !isPlainObject(artifact.comparison_coordinate_pair.coordinate_a) ||
+    !isPlainObject(artifact.comparison_coordinate_pair.coordinate_b)
+  ) {
+    return bad("structure", "comparison_coordinate_pair is not a pair of coordinates");
   }
 
   const inputs = publicInputs ?? {};
@@ -347,20 +403,30 @@ export function verifyEquivocationArtifact(artifact, publicInputs) {
   // ---- the fork coordinate ------------------------------------------------------------------
   const cpA = artifact.view_a.checkpoint;
   const cpB = artifact.view_b.checkpoint;
-  const fc = artifact.fork_coordinate;
+  const pair = artifact.comparison_coordinate_pair;
   if (cpA.producer_identity !== cpB.producer_identity) {
-    return bad("fork_coordinate.producer_identity", "the two views name different producers");
+    return bad(
+      "comparison_coordinate_pair.producer_identity",
+      "the two views name different producers"
+    );
   }
   if (cpA.scope_id !== cpB.scope_id) {
-    return bad("fork_coordinate.scope_id", "the two views name different scopes");
+    return bad("comparison_coordinate_pair.scope_id", "the two views name different scopes");
   }
-  if (
-    fc.producer_identity !== cpA.producer_identity ||
-    fc.scope_id !== cpA.scope_id ||
-    fc.epoch_a !== cpA.epoch ||
-    fc.epoch_b !== cpB.epoch
-  ) {
-    return bad("fork_coordinate", "the stored coordinate is not the coordinate of the two views");
+  for (const [name, stored, cp] of [
+    ["coordinate_a", pair.coordinate_a, cpA],
+    ["coordinate_b", pair.coordinate_b, cpB],
+  ]) {
+    if (
+      stored.producer_identity !== cp.producer_identity ||
+      stored.scope_id !== cp.scope_id ||
+      stored.epoch !== cp.epoch
+    ) {
+      return bad(
+        `comparison_coordinate_pair.${name}`,
+        "the stored coordinate is not the coordinate of its view"
+      );
+    }
   }
 
   // ---- body-digest inequality ----------------------------------------------------------------
