@@ -312,7 +312,7 @@ function checkWitnessLane(bundle) {
 }
 
 /** The comparison lane — 497-510. Evaluated on every run, whatever the witness lane counted. */
-function checkComparisonLane(bundle) {
+function checkComparisonLane(bundle, { attributionFailed = false } = {}) {
   const failures = [];
   const views = viewsOf(bundle);
   const intakeResult = intake({
@@ -331,7 +331,7 @@ function checkComparisonLane(bundle) {
   let artifact = null;
   let comparisonStatus = "comparison_unavailable";
 
-  if (views.length >= 2) {
+  if (views.length >= 2 && !attributionFailed) {
     const oracle = ancestryOracle({
       chain: bundle.committed?.chain ?? [],
       policy: bundle.committed?.transition_policy ?? {},
@@ -429,8 +429,33 @@ function evaluateInner(bundle, deps) {
   // ⟂ — the comparison lane runs regardless of anything above it. A structurally invalid bundle
   // still stops the run, but a short or laundered WITNESS SET never silences the producer's own
   // two signatures.
-  const comparison = checkComparisonLane(bundle);
+  // Whether the two checkpoints were ever established as attributable. Computed BEFORE the
+  // comparison lane runs, because the relation must not be asked about views nobody authenticated:
+  // `compare` answers a malformed view with its own SCHEMA_UNSUPPORTED, which is allocated to the
+  // structural position and would shadow the precise diagnosis this check already produced. A
+  // negative epoch reported as "schema unsupported" instead of EPOCH_INVALID is a worse answer to
+  // the same question, and it made 482 unreachable until this line existed.
+  const attributionFailed = failures.some(
+    (f) => f.check_id === "structural" || f.check_id === "checkpoint+produ."
+  );
+
+  const comparison = checkComparisonLane(bundle, { attributionFailed });
   record(["comparison policy", "receiver", "comparison"], comparison.failures);
+
+  // THE LINE THE ⟂ DOES NOT CROSS. An accusation requires two PRODUCER-AUTHENTICATED checkpoints —
+  // that is the artifact's whole narrow sentence. A witness-lane refusal leaves that sentence
+  // untouched and the finding stands. A structural or checkpoint+producer refusal does not: an
+  // unsigned checkpoint, a stranger's signature, an unbound C1 root or a foreign protocol version
+  // all mean we never established what we would be accusing anybody of, and minting an artifact over
+  // them would be a false accusation dressed as a lane split.
+  //
+  // The first draft of this file did exactly that, and the AUTHORED acceptance columns caught it —
+  // eleven cases where a refused bundle still carried a finding. A computed matrix would have agreed
+  // with the bug.
+  if (comparison.comparisonStatus !== "equivocation_detected") {
+    // No fork, or nothing comparable. Either way there is nothing to mint.
+    comparison.artifact = null;
+  }
 
   // The claim gate is Task 29's. Unevaluated is reported as unevaluated, never as clean.
   let claimGateEvaluated = false;
@@ -443,10 +468,15 @@ function evaluateInner(bundle, deps) {
   if (claimGateEvaluated) evaluated.add("claim gate");
 
   const first = firstFailure(failures);
+  // A threshold committed by an INVALID policy is not a threshold anybody met. `tally` answers the
+  // arithmetic it was asked and cannot know its policy was refused two checks earlier, so the join
+  // happens here — fail-closed, the same direction as a refused tally never reading as witnessed.
+  const policyValid = !failures.some((f) => f.check_id === "witness policy");
+  const quorumOf = (t) => (policyValid ? quorumStatusOf(t) : "quorum_incomplete");
   const statuses = {
     quorum_status: {
-      a: quorumStatusOf(witness.tallies.view_a),
-      b: quorumStatusOf(witness.tallies.view_b),
+      a: quorumOf(witness.tallies.view_a),
+      b: quorumOf(witness.tallies.view_b),
     },
     comparison_status: comparison.comparisonStatus,
     witness_independence_status: witnessIndependenceStatusOf(bundle),
