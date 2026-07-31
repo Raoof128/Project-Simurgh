@@ -38,6 +38,7 @@ import { createHash, createPublicKey, verify as edVerify } from "node:crypto";
 import { ancestryOracle } from "./ancestry.mjs";
 import { canonicalJson, checkpointBodyDigest, checkpointEnvelopeDigest } from "./canonical.mjs";
 import { COMPATIBILITY_REFUSALS, compare } from "./compatibility.mjs";
+import { tally } from "./quorum.mjs";
 
 export const ARTIFACT_SCHEMA = "simurgh.vwq.equivocation-artifact.v1";
 export const FINDING_ID = "VWQ_EQUIVOCATION_DETECTED";
@@ -72,6 +73,14 @@ export const REQUIRED_ARTIFACT_BINDINGS = Object.freeze([
   "comparison_policy_digest",
   "comparison_manifest_digest",
   "receiver_provenance_root",
+  // §2.1 names "both statement sets" among what this artifact binds, and the first implementation
+  // omitted them because the Task 14 list was read as exhaustive rather than as a minimum (5S-F011).
+  // They are CONTEXT, never premises: what witness evidence accompanied each view, not whether the
+  // fork exists. The independence rule below is machine-checked in four combinations.
+  "witness_statement_set_digest_a",
+  "witness_statement_set_digest_b",
+  "witness_statement_set_status_a",
+  "witness_statement_set_status_b",
   "derivation",
   "comparison_status",
   "finding_id",
@@ -93,6 +102,68 @@ const ARTIFACT_DOMAIN = "simurgh.vwq.equivocation-artifact.v1";
 
 const sha256 = (text) => createHash("sha256").update(text, "utf8").digest("hex");
 const isPlainObject = (v) => v !== null && typeof v === "object" && !Array.isArray(v);
+
+/**
+ * What a view's witness statement set amounted to. Recomputed by the verifier, never believed.
+ *
+ *   validated  every statement cleared the committed policy's structural and roster checks
+ *   refused    at least one did not — an alias, a stranger, a replay
+ *   empty      the view arrived with no witness evidence at all
+ *
+ * `refused` and `empty` are NOT defects of the artifact. A producer whose fork was badly witnessed
+ * has still forked; the witness lane's trouble belongs to `quorum_status` and stops there.
+ */
+export const WITNESS_SET_STATUS = Object.freeze(["validated", "refused", "empty"]);
+
+/** Fields of a witness statement that travel into the set digest. Signatures included: they are the
+ * evidence. Diagnostics are not — a digest is not a log. */
+const WITNESS_SET_FIELDS = Object.freeze([
+  "witness_identity",
+  "key_digest",
+  "checkpoint_envelope_digest",
+  "scope_id",
+  "epoch",
+  "policy_digest",
+  "signature_profile",
+  "signature",
+  // The submitter's assertion that the witness signature checked out. It travels because the status
+  // must be recomputable from what the artifact CARRIES: drop it and every recomputed set classifies
+  // as `refused`, which is a status that agrees with nothing and means nothing.
+  "signature_verified",
+]);
+
+const WITNESS_SET_DOMAIN = "simurgh.vwq.witness-statement-set.v1";
+
+/** Set-canonical projection of one view's statements, sorted by canonical bytes rather than arrival. */
+export function canonicalWitnessSet(statements) {
+  return [...(Array.isArray(statements) ? statements : [])]
+    .map((st) => {
+      const entry = {};
+      for (const f of WITNESS_SET_FIELDS) entry[f] = st?.[f];
+      return entry;
+    })
+    .sort((x, y) => (canonicalJson(x) < canonicalJson(y) ? -1 : 1));
+}
+
+/** The root a verifier recomputes from the canonical set. */
+export function witnessStatementSetDigest(statements) {
+  return sha256(`${WITNESS_SET_DOMAIN}\n${canonicalJson(canonicalWitnessSet(statements))}`);
+}
+
+/**
+ * Classify a statement set under the committed witness policy. Reads the tally's REFUSALS only —
+ * never its threshold — so a set that is valid but short is `validated`, exactly as it should be:
+ * being outvoted is not being wrong.
+ */
+export function witnessStatementSetStatus(statements, policy, checkpoint) {
+  const list = Array.isArray(statements) ? statements : [];
+  if (list.length === 0) return "empty";
+  // Classified over the CANONICAL set, which is what the artifact carries and what a stranger will
+  // recompute. Classifying the raw input here and the canonical set there is how the two sides
+  // disagree about a set neither of them changed.
+  const result = tally({ checkpoint, policy, statements: canonicalWitnessSet(list) });
+  return result.refusals.length === 0 ? "validated" : "refused";
+}
 
 /** `keyDigest(pem)` = `sha256:` + sha256 of the raw PEM string — the repo's settled convention. */
 export function keyDigestOf(pem) {
@@ -168,6 +239,7 @@ export function deriveEquivocationArtifact(input) {
     producer_key_digest,
     committed_chain,
     committed_transition_policy,
+    witness_policy,
   } = input ?? {};
 
   const cpA = view_a?.checkpoint;
@@ -241,13 +313,29 @@ export function deriveEquivocationArtifact(input) {
       checkpoint_body_digest: checkpointBodyDigest(cpA),
       checkpoint_envelope_digest: checkpointEnvelopeDigest(cpA),
       carried_by: provenanceOf(view_a?.carried_by),
+      // Embedded canonically so self-verification can recompute the root without the bundle. A root
+      // nobody can recompute is a number, not evidence.
+      witness_statements: canonicalWitnessSet(view_a?.witness_statements),
     },
     view_b: {
       checkpoint: cpB,
       checkpoint_body_digest: checkpointBodyDigest(cpB),
       checkpoint_envelope_digest: checkpointEnvelopeDigest(cpB),
       carried_by: provenanceOf(view_b?.carried_by),
+      witness_statements: canonicalWitnessSet(view_b?.witness_statements),
     },
+    witness_statement_set_digest_a: witnessStatementSetDigest(view_a?.witness_statements),
+    witness_statement_set_digest_b: witnessStatementSetDigest(view_b?.witness_statements),
+    witness_statement_set_status_a: witnessStatementSetStatus(
+      view_a?.witness_statements,
+      witness_policy,
+      cpA
+    ),
+    witness_statement_set_status_b: witnessStatementSetStatus(
+      view_b?.witness_statements,
+      witness_policy,
+      cpB
+    ),
     producer_key_digest,
     comparison_policy_digest: comparison_policy?.comparison_policy_digest,
     comparison_manifest_digest: comparisonManifestDigest(comparison_manifest),
@@ -499,6 +587,44 @@ export function verifyEquivocationArtifact(artifact, publicInputs) {
       "receiver_provenance_root",
       "the stored root is not the root of the stored receipts"
     );
+  }
+
+  // ---- the witness statement sets, recomputed — and DELIBERATELY not load-bearing --------------
+  //
+  // The roots are checked because a stored root nobody recomputes is decoration. The STATUSES are
+  // checked for the same reason. Neither can refuse the artifact for being `refused` or `empty`:
+  // what makes this a fork is two producer signatures over incompatible bodies, and how well each
+  // view happened to be witnessed is context a reader may want and an accusation may not rest on.
+  for (const [suffix, view] of [
+    ["a", artifact.view_a],
+    ["b", artifact.view_b],
+  ]) {
+    if (
+      witnessStatementSetDigest(view.witness_statements) !==
+      artifact[`witness_statement_set_digest_${suffix}`]
+    ) {
+      return bad(
+        `witness_statement_set_digest_${suffix}`,
+        "the stored root is not the root of the stored statements"
+      );
+    }
+    const storedStatus = artifact[`witness_statement_set_status_${suffix}`];
+    if (!WITNESS_SET_STATUS.includes(storedStatus)) {
+      return bad(`witness_statement_set_status_${suffix}`, String(storedStatus));
+    }
+    if (isPlainObject(inputs.witness_policy)) {
+      const recomputedStatus = witnessStatementSetStatus(
+        view.witness_statements,
+        inputs.witness_policy,
+        view.checkpoint
+      );
+      if (recomputedStatus !== storedStatus) {
+        return bad(
+          `witness_statement_set_status_${suffix}`,
+          `the artifact claims ${storedStatus}, the committed policy gives ${recomputedStatus}`
+        );
+      }
+    }
   }
 
   // ---- the relation, recomputed from the checkpoints ------------------------------------------

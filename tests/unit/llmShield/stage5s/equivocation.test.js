@@ -40,11 +40,14 @@ import {
   REQUIRED_ARTIFACT_BINDINGS,
   RESOURCE_BOUNDS,
   artifactDigestOf,
+  canonicalWitnessSet,
   comparisonManifestDigest,
   deriveEquivocationArtifact,
   keyDigestOf,
   receiverProvenanceRoot,
+  WITNESS_SET_STATUS,
   verifyEquivocationArtifact,
+  witnessStatementSetDigest,
 } from "../../../../tools/simurgh-attestation/stage5s/core/equivocation.mjs";
 
 const SRC = "tools/simurgh-attestation/stage5s/core/equivocation.mjs";
@@ -171,6 +174,58 @@ const publicInputs = (over = {}) => ({
 /** Deep clone so an attack mutates a copy, never the shared fixture. */
 const clone = (v) => JSON.parse(JSON.stringify(v));
 
+// ---- 5S-F011 fixture material: witness statement sets -----------------------------------------
+
+const WITNESS_POLICY = {
+  threshold_q: 2,
+  witness_roster: [
+    { witness_identity: "w-a", key_digest: "sha256:wk-a", witness_operator_class: "unresolved" },
+    { witness_identity: "w-b", key_digest: "sha256:wk-b", witness_operator_class: "unresolved" },
+  ],
+  required_class_mix: {},
+};
+
+const wStatement = (id, over = {}) => ({
+  witness_identity: id,
+  key_digest: `sha256:wk-${id.slice(-1)}`,
+  checkpoint_envelope_digest: "sha256:bound-elsewhere",
+  scope_id: "scope-1",
+  epoch: 7,
+  policy_digest: "pol-1",
+  signature_profile: "ed25519",
+  signature: `sig-${id}`,
+  signature_verified: true,
+  ...over,
+});
+
+/** A real fork, with a witness statement set on each view and the inputs to verify it. */
+function honestFork({ witnessesA, witnessesB } = {}) {
+  const a = {
+    ...FORK_A(),
+    witness_statements: witnessesA ?? [wStatement("w-a"), wStatement("w-b")],
+  };
+  const b = {
+    ...FORK_B(),
+    witness_statements: witnessesB ?? [wStatement("w-a"), wStatement("w-b")],
+  };
+  const derived = deriveEquivocationArtifact({
+    view_a: a,
+    view_b: b,
+    comparison_policy: comparisonPolicy(),
+    comparison_manifest: manifestFor(a, b),
+    producer_key_digest: PRODUCER_KEY_DIGEST,
+    witness_policy: WITNESS_POLICY,
+  });
+  assert.equal(derived.ok, true);
+  return {
+    artifact: derived.artifact,
+    inputs: {
+      ...publicInputs({ comparison_manifest: manifestFor(a, b) }),
+      witness_policy: WITNESS_POLICY,
+    },
+  };
+}
+
 /**
  * A COMPETENT forgery: every mechanical check is made to pass — real signatures, real receipts,
  * correctly recomputed digests, a correctly recomputed provenance root, a correctly recomputed seal.
@@ -198,13 +253,22 @@ function forgeAccusation(viewA, viewB, manifest) {
       checkpoint_body_digest: checkpointBodyDigest(viewA.checkpoint),
       checkpoint_envelope_digest: checkpointEnvelopeDigest(viewA.checkpoint),
       carried_by: clone(viewA.carried_by),
+      witness_statements: canonicalWitnessSet(viewA.witness_statements),
     },
     view_b: {
       checkpoint: clone(viewB.checkpoint),
       checkpoint_body_digest: checkpointBodyDigest(viewB.checkpoint),
       checkpoint_envelope_digest: checkpointEnvelopeDigest(viewB.checkpoint),
       carried_by: clone(viewB.carried_by),
+      witness_statements: canonicalWitnessSet(viewB.witness_statements),
     },
+    // The forgery recomputes the witness-set bindings honestly too. A forgery that fluffs an
+    // arithmetic detail tests the arithmetic; this one has to be perfect everywhere except in the
+    // one place that matters, or it proves nothing about whether the ACCUSATION is checked.
+    witness_statement_set_digest_a: witnessStatementSetDigest(viewA.witness_statements),
+    witness_statement_set_digest_b: witnessStatementSetDigest(viewB.witness_statements),
+    witness_statement_set_status_a: viewA.witness_statements?.length ? "validated" : "empty",
+    witness_statement_set_status_b: viewB.witness_statements?.length ? "validated" : "empty",
     producer_key_digest: PRODUCER_KEY_DIGEST,
     comparison_policy_digest: "cpd-1",
     comparison_manifest_digest: comparisonManifestDigest(manifest),
@@ -723,4 +787,101 @@ test("[5s-t14] a normal artifact sits far under every ceiling", () => {
   const bytes = Buffer.byteLength(JSON.stringify(artifact), "utf8");
   assert.ok(bytes < RESOURCE_BOUNDS.MAX_ARTIFACT_BYTES / 4, `a plain artifact is ${bytes} bytes`);
   assert.ok(artifact.view_a.carried_by.length < RESOURCE_BOUNDS.MAX_RECEIPTS_PER_VIEW);
+});
+
+// ------------------------------------------------------------------ 5S-F011 — statement sets as CONTEXT
+//
+// §2.1 names "both statement sets" among what this artifact binds, and the first implementation
+// omitted them: the Task 14 list was a MINIMUM binding list, read as an exhaustive one.
+//
+// They are restored as context and never as premises. The division is the whole point:
+//
+//   producer authentication + compatibility relation  →  whether equivocation EXISTS
+//   witness statement sets                            →  what evidence accompanied each view
+//
+// So a producer whose fork was badly witnessed has still forked. An invalid statement set moves
+// `quorum_status`; it must never make the artifact itself invalid.
+
+test("[5s-t14] the artifact binds both statement sets — root and status, per view", () => {
+  const { artifact } = honestFork();
+  for (const suffix of ["a", "b"]) {
+    assert.ok(artifact[`witness_statement_set_digest_${suffix}`], `digest ${suffix} absent`);
+    assert.ok(
+      WITNESS_SET_STATUS.includes(artifact[`witness_statement_set_status_${suffix}`]),
+      `status ${suffix} is ${artifact[`witness_statement_set_status_${suffix}`]}`
+    );
+  }
+  // The root must be RECOMPUTABLE by a stranger from what the artifact carries. A root nobody can
+  // recompute is a number, not evidence.
+  assert.equal(
+    witnessStatementSetDigest(artifact.view_a.witness_statements),
+    artifact.witness_statement_set_digest_a
+  );
+});
+
+test("[5s-t14] the set root is order-independent — arrival order is not evidence", () => {
+  const forward = witnessStatementSetDigest([wStatement("w-a"), wStatement("w-b")]);
+  const reversed = witnessStatementSetDigest([wStatement("w-b"), wStatement("w-a")]);
+  assert.equal(forward, reversed);
+  assert.notEqual(forward, witnessStatementSetDigest([wStatement("w-a")]));
+});
+
+test("[5s-t14] a substituted statement moves the root — the binding is real", () => {
+  const honest = witnessStatementSetDigest([wStatement("w-a"), wStatement("w-b")]);
+  const swapped = witnessStatementSetDigest([
+    wStatement("w-a"),
+    wStatement("w-b", { signature: "somebody-elses" }),
+  ]);
+  assert.notEqual(honest, swapped, "the signature does not travel into the root");
+});
+
+test("[5s-t14] all four statement-set combinations still find the SAME fork", () => {
+  // The independence rule, executable. validated/validated, validated/empty, refused/validated,
+  // refused/refused — every one of them is an equivocation, because none of them is what makes it
+  // one. This is the witness-lane twin of the quorum cross-product.
+  const combinations = [
+    [
+      "validated",
+      "validated",
+      [wStatement("w-a"), wStatement("w-b")],
+      [wStatement("w-a"), wStatement("w-b")],
+    ],
+    ["validated", "empty", [wStatement("w-a"), wStatement("w-b")], []],
+    ["refused", "validated", [wStatement("w-stranger")], [wStatement("w-a"), wStatement("w-b")]],
+    ["refused", "refused", [wStatement("w-stranger")], [wStatement("w-stranger")]],
+  ];
+  const seen = new Set();
+  for (const [statusA, statusB, setA, setB] of combinations) {
+    const built = honestFork({ witnessesA: setA, witnessesB: setB });
+    assert.ok(built.artifact, `${statusA}/${statusB} produced no artifact`);
+    assert.equal(built.artifact.witness_statement_set_status_a, statusA, `${statusA}/${statusB}`);
+    assert.equal(built.artifact.witness_statement_set_status_b, statusB, `${statusA}/${statusB}`);
+
+    const verdict = verifyEquivocationArtifact(built.artifact, built.inputs);
+    assert.equal(verdict.ok, true, `${statusA}/${statusB}: ${JSON.stringify(verdict.refusal)}`);
+    assert.equal(verdict.comparison_status, "equivocation_detected");
+    seen.add(`${statusA}/${statusB}`);
+  }
+  assert.equal(seen.size, 4, "four combinations did not actually occur");
+});
+
+test("[5s-t14] a FALSIFIED set status is refused — stored fields are claims, not inputs", () => {
+  const built = honestFork({ witnessesA: [wStatement("w-stranger")] });
+  assert.equal(built.artifact.witness_statement_set_status_a, "refused");
+  // Dressing a refused set up as a validated one gains nothing and is caught, even though the
+  // status could not have changed the finding either way.
+  const dressed = { ...built.artifact, witness_statement_set_status_a: "validated" };
+  dressed.artifact_digest = artifactDigestOf(dressed);
+  const verdict = verifyEquivocationArtifact(dressed, built.inputs);
+  assert.equal(verdict.ok, false);
+  assert.equal(verdict.refusal.check, "witness_statement_set_status_a");
+});
+
+test("[5s-t14] a substituted set root is refused before the seal is consulted", () => {
+  const built = honestFork();
+  const swapped = { ...built.artifact, witness_statement_set_digest_a: "sha256:invented" };
+  swapped.artifact_digest = artifactDigestOf(swapped);
+  const verdict = verifyEquivocationArtifact(swapped, built.inputs);
+  assert.equal(verdict.ok, false);
+  assert.equal(verdict.refusal.check, "witness_statement_set_digest_a");
 });

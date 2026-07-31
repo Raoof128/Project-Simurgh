@@ -20,12 +20,24 @@
 // way Lane C's corroboration statuses are. A ledger refusal is an evidence-pack failure and exits
 // through the driver, not through the verifier's code space.
 //
-// THE IDENTITY IS DERIVED, NEVER POSITIONAL:
+// THE IDENTITY IS THE FACT, NOT THE FILE:
 //
-//   finding_entry_id = H(domain ‖ comparison_manifest_digest ‖ artifact_digest ‖ finding_id)
+//   finding_identity = H(domain ‖ producer_identity ‖ scope_id
+//                          ‖ canonical body-digest pair ‖ canonical envelope-digest pair
+//                          ‖ finding_id)
 //
 // so shuffling ledger rows cannot move their meaning, and two orderings of one ledger are the same
 // ledger. Row order is presentation; the id is the fact.
+//
+// The first version keyed on the ARTIFACT DIGEST, and 5S-F011 made that wrong: once witness statement
+// set roots enter the seal, the same fork produces a different artifact every time another witness
+// statement arrives. Keyed on bytes, one producer equivocation would become an unbounded stream of
+// "new" findings — an accusation inflating itself on evidence about how well it was observed.
+//
+// So the identity is the producer-equivocation FACT: who, in what scope, over which two checkpoints.
+// The pairs are canonical (sorted), so which view was called A carries no meaning either. The
+// artifact digest stays bound as a separate column — it is the evidence-package version, and versions
+// are exactly the thing that should change when more evidence arrives.
 //
 // EIGHT CONTRADICTIONS, EACH ITS OWN REASON. They are the ways a ledger can be internally tidy and
 // still lie, and they earned their places by being the shapes a motivated producer would actually
@@ -76,6 +88,10 @@ export const LEDGER_REFUSALS = Object.freeze({
 export const REQUIRED_ENTRY_FIELDS = Object.freeze([
   "finding_id",
   "comparison_status",
+  // Added with 5S-F011: the identity is the producer-equivocation fact, and these two are half of
+  // what that fact is. A row that could not name the producer could not be identified at all.
+  "producer_identity",
+  "scope_id",
   "checkpoint_body_digest_a",
   "checkpoint_body_digest_b",
   "checkpoint_envelope_digest_a",
@@ -107,19 +123,24 @@ const refusal = (reason, detail, entry_id) => ({
 });
 
 /**
- * The canonical identity of a finding. Three facts and a domain, in a fixed order: which comparison,
- * which artifact, which finding. Not the row's position, not its authoring time, and not a counter —
- * each of which would let one ledger disagree with a re-ordering of itself.
+ * The canonical identity of a finding: the producer-equivocation fact, and nothing about the file it
+ * arrived in. Who equivocated, in what scope, over which two checkpoints — by body digest, which
+ * establishes the incompatibility, and by envelope digest, which establishes the attribution.
  *
- * @param {{comparison_manifest_digest: string, equivocation_artifact_digest: string,
- *          finding_id: string}} entry
+ * NOT the artifact digest (5S-F011: more witness evidence would mint a second finding), not the row's
+ * position, not its authoring time, and not a counter.
+ *
+ * @param {object} entry
  * @returns {string} hex digest
  */
 export function findingEntryId(entry) {
+  const pair = (x, y) => [String(x ?? ""), String(y ?? "")].sort().join("|");
   const parts = [
     ENTRY_DOMAIN,
-    String(entry?.comparison_manifest_digest ?? ""),
-    String(entry?.equivocation_artifact_digest ?? ""),
+    String(entry?.producer_identity ?? ""),
+    String(entry?.scope_id ?? ""),
+    pair(entry?.checkpoint_body_digest_a, entry?.checkpoint_body_digest_b),
+    pair(entry?.checkpoint_envelope_digest_a, entry?.checkpoint_envelope_digest_b),
     String(entry?.finding_id ?? ""),
   ];
   // Length-prefixed, so no concatenation of two fields can impersonate a third.
@@ -163,9 +184,12 @@ export function deriveFindingEntry(input) {
 
   const a = equivocation_artifact.view_a;
   const b = equivocation_artifact.view_b;
+  const coordinate = equivocation_artifact.comparison_coordinate_pair?.coordinate_a ?? {};
   const entry = {
     finding_id: equivocation_artifact.finding_id,
     comparison_status,
+    producer_identity: coordinate.producer_identity,
+    scope_id: coordinate.scope_id,
     checkpoint_body_digest_a: a?.checkpoint_body_digest,
     checkpoint_body_digest_b: b?.checkpoint_body_digest,
     checkpoint_envelope_digest_a: a?.checkpoint_envelope_digest,
@@ -186,8 +210,15 @@ export function deriveFindingEntry(input) {
   return { ok: true, entry };
 }
 
-/** Every ledger row, keyed by the comparison it belongs to. */
+/** Which comparison a row answers — used to match rows against observed runs. */
 const comparisonKeyOf = (entry) => String(entry?.comparison_manifest_digest ?? "");
+
+/**
+ * Which FINDING a row records. C7's duplicate rule keys on this rather than on the comparison, so
+ * two artifacts for one fork — the same equivocation carrying different witness evidence — collide
+ * instead of both being admitted as separate accusations (5S-F011).
+ */
+const findingKeyOf = (entry) => String(entry?.finding_entry_id ?? "");
 
 function checkEntryShape(entry, refusals) {
   const id = entry?.finding_entry_id;
@@ -265,6 +296,7 @@ export function verifyFindingLedger(ledger, publicInputs) {
   }
 
   const seenComparisons = new Map();
+  const seenFindings = new Map();
   const entryIds = [];
 
   for (const entry of ledger.entries) {
@@ -272,18 +304,22 @@ export function verifyFindingLedger(ledger, publicInputs) {
     const id = entry.finding_entry_id;
     entryIds.push(id);
 
-    // C7 — one canonical comparison, one row.
+    // C7 — one canonical FINDING, one row. Keyed on the equivocation fact, not on the comparison
+    // and not on the artifact bytes, so a second evidence package for the same fork is a duplicate
+    // rather than a second accusation.
     const key = comparisonKeyOf(entry);
-    if (seenComparisons.has(key)) {
+    const finding = findingKeyOf(entry);
+    if (seenFindings.has(finding)) {
       refusals.push(
         refusal(
           LEDGER_REFUSALS.DUPLICATE_ENTRY,
-          `a second row for comparison ${key}, first was ${seenComparisons.get(key)}`,
+          `a second row for the same equivocation, first was ${seenFindings.get(finding)}`,
           id
         )
       );
       continue;
     }
+    seenFindings.set(finding, id);
     seenComparisons.set(key, id);
 
     // C6 — the exhibit must be in evidence.

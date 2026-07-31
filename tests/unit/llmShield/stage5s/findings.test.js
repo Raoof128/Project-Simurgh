@@ -171,8 +171,14 @@ const reasons = (r) => r.refusals.map((x) => x.reason);
 
 // ------------------------------------------------------------------ the bindings
 
-test("[5s-t15] a row binds exactly the fourteen fields, both digests for both views", () => {
-  assert.equal(REQUIRED_ENTRY_FIELDS.length, 14);
+test("[5s-t15] a row binds sixteen fields, both digests for both views", () => {
+  // Fourteen from the original ruling, plus `producer_identity` and `scope_id`, which 5S-F011 made
+  // load-bearing: the identity is the producer-equivocation fact, and a row that cannot name the
+  // producer cannot be identified at all.
+  assert.equal(REQUIRED_ENTRY_FIELDS.length, 16);
+  for (const f of ["producer_identity", "scope_id"]) {
+    assert.ok(REQUIRED_ENTRY_FIELDS.includes(f), `${f} is not bound`);
+  }
   // Both, and not either: the body establishes incompatibility, the envelope establishes attribution
   // and receipt binding. A ledger carrying one reads as evidence for a claim it cannot support.
   for (const f of [
@@ -198,13 +204,17 @@ test("[5s-t15] an honest run verifies, and reports the row it verified", () => {
 
 // ------------------------------------------------------------------ the identity
 
-test("[5s-t15] the id is H(domain ‖ manifest ‖ artifact ‖ finding), and nothing positional", () => {
+test("[5s-t15] the identity is the EQUIVOCATION FACT, not the evidence package", () => {
   const { entry } = honestRun();
   assert.equal(entry.finding_entry_id, findingEntryId(entry));
-  // Each of the three facts moves the id. If one did not, two different findings could share an id.
+  // Every part of the fact moves the id. If one did not, two different findings could share one.
   for (const field of [
-    "comparison_manifest_digest",
-    "equivocation_artifact_digest",
+    "producer_identity",
+    "scope_id",
+    "checkpoint_body_digest_a",
+    "checkpoint_body_digest_b",
+    "checkpoint_envelope_digest_a",
+    "checkpoint_envelope_digest_b",
     "finding_id",
   ]) {
     assert.notEqual(
@@ -215,18 +225,40 @@ test("[5s-t15] the id is H(domain ‖ manifest ‖ artifact ‖ finding), and no
   }
 });
 
+test("[5s-t15] more witness evidence does NOT manufacture a second finding (5S-F011)", () => {
+  // The reason the identity moved off the artifact digest. Once witness statement set roots enter
+  // the seal, every additional witness statement changes the artifact bytes — and an identity keyed
+  // on bytes would turn one producer equivocation into an unbounded stream of "new" accusations,
+  // each of them about how well the fork was observed rather than about the fork.
+  const { entry } = honestRun();
+  const laterPackage = {
+    ...entry,
+    equivocation_artifact_digest: "sha256:same-fork-more-witness-statements",
+    comparison_manifest_digest: "sha256:a-later-comparison-run",
+  };
+  assert.equal(
+    findingEntryId(laterPackage),
+    entry.finding_entry_id,
+    "a second evidence package became a second finding"
+  );
+});
+
+test("[5s-t15] view order carries no meaning — the digest pairs are canonical", () => {
+  const { entry } = honestRun();
+  const swapped = {
+    ...entry,
+    checkpoint_body_digest_a: entry.checkpoint_body_digest_b,
+    checkpoint_body_digest_b: entry.checkpoint_body_digest_a,
+    checkpoint_envelope_digest_a: entry.checkpoint_envelope_digest_b,
+    checkpoint_envelope_digest_b: entry.checkpoint_envelope_digest_a,
+  };
+  assert.equal(findingEntryId(swapped), entry.finding_entry_id, "which view is A changed the fact");
+});
+
 test("[5s-t15] field concatenation cannot impersonate another field", () => {
   // Unprefixed concatenation would make ("ab","c") and ("a","bc") the same id — the classic seam.
-  const left = findingEntryId({
-    comparison_manifest_digest: "ab",
-    equivocation_artifact_digest: "c",
-    finding_id: FINDING_ID,
-  });
-  const right = findingEntryId({
-    comparison_manifest_digest: "a",
-    equivocation_artifact_digest: "bc",
-    finding_id: FINDING_ID,
-  });
+  const left = findingEntryId({ producer_identity: "ab", scope_id: "c", finding_id: FINDING_ID });
+  const right = findingEntryId({ producer_identity: "a", scope_id: "bc", finding_id: FINDING_ID });
   assert.notEqual(left, right);
 });
 
@@ -235,7 +267,7 @@ test("[5s-t15] shuffling rows cannot move their meaning", () => {
   const two = honestRun();
   // Distinct comparisons — and the id is RECOMPUTED, or the two rows would share an identity and the
   // property would hold for the wrong reason.
-  const second = { ...two.entry, comparison_manifest_digest: "other" };
+  const second = { ...two.entry, scope_id: "another-scope" };
   second.finding_entry_id = findingEntryId(second);
   assert.notEqual(second.finding_entry_id, one.entry.finding_entry_id);
 
@@ -419,7 +451,7 @@ test("[5s-t15] C7 — two rows for one canonical comparison are refused", () => 
 test("[5s-t15] C8 — a successor ledger may add and may never subtract", () => {
   const one = honestRun();
   const two = honestRun();
-  const second = { ...two.entry, comparison_manifest_digest: "other-comparison" };
+  const second = { ...two.entry, scope_id: "another-scope" };
   second.finding_entry_id = findingEntryId(second);
 
   const grew = verifyLedgerSuccession(ledgerOf(one.entry), ledgerOf(one.entry, second));
@@ -438,7 +470,7 @@ test("[5s-t15] C8 — a swap that keeps the COUNT identical is still a subtracti
   // exactly the shape a laundered ledger takes.
   const one = honestRun();
   const two = honestRun();
-  const replacement = { ...two.entry, comparison_manifest_digest: "other-comparison" };
+  const replacement = { ...two.entry, scope_id: "another-scope" };
   replacement.finding_entry_id = findingEntryId(replacement);
 
   const v = verifyLedgerSuccession(ledgerOf(one.entry), ledgerOf(replacement));
