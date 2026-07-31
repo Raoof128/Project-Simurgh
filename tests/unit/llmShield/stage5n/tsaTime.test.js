@@ -1,16 +1,25 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// Stage 5N — TSA parse against the REAL banked capture (start.tsr/end.tsr). Skips if the capture is absent.
+// Stage 5N — TSA parse against the REAL banked capture (start.tsr/end.tsr).
+//
+// NO SKIPS (5S-F007). See `realEvidence.mjs`: committed evidence resolves from the module, and its
+// absence is a refusal rather than a skip.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { parseTsaReply } from "../../../../tools/simurgh-attestation/stage5n/node/tsaTime.mjs";
 
-const CAP = "/Users/raoof.r12/Desktop/Raouf/test/stage5n-gate-capture";
-const have = existsSync(`${CAP}/start.tsr`) && existsSync(`${CAP}/D_start.hex`);
+import {
+  REAL_EVIDENCE_DIR,
+  realEvidencePath,
+  requireRealEvidence,
+} from "../../../../tools/simurgh-attestation/stage5n/node/realEvidence.mjs";
+import { join } from "node:path";
 
-test("start.tsr imprint == D_start, genTime parses to ms", { skip: !have }, () => {
-  const D_start = readFileSync(`${CAP}/D_start.hex`, "utf8").trim();
-  const r = parseTsaReply(`${CAP}/start.tsr`);
+requireRealEvidence();
+
+test("start.tsr imprint == D_start, genTime parses to ms", () => {
+  const D_start = readFileSync(realEvidencePath("D_start_hex"), "utf8").trim();
+  const r = parseTsaReply(realEvidencePath("start_tsr"));
   assert.equal(r.subject_extractable, true);
   assert.equal(r.imprintHex, D_start, "TSA imprint binds the start subject");
   assert.ok(
@@ -19,15 +28,15 @@ test("start.tsr imprint == D_start, genTime parses to ms", { skip: !have }, () =
   );
 });
 
-test("end.tsr imprint == D_end, later genTime than start", { skip: !have }, () => {
-  const D_end = readFileSync(`${CAP}/D_end.hex`, "utf8").trim();
-  const s = parseTsaReply(`${CAP}/start.tsr`);
-  const e = parseTsaReply(`${CAP}/end.tsr`);
+test("end.tsr imprint == D_end, later genTime than start", () => {
+  const D_end = readFileSync(realEvidencePath("D_end_hex"), "utf8").trim();
+  const s = parseTsaReply(realEvidencePath("start_tsr"));
+  const e = parseTsaReply(realEvidencePath("end_tsr"));
   assert.equal(e.imprintHex, D_end);
   assert.ok(e.genTime_ms >= s.genTime_ms, "end token not before start token");
 });
 
 test("parse failure on a missing file is a typed fact, not a throw", () => {
-  const r = parseTsaReply(`${CAP}/does-not-exist.tsr`);
+  const r = parseTsaReply(join(REAL_EVIDENCE_DIR, "does-not-exist.tsr"));
   assert.equal(r.subject_extractable, false);
 });
