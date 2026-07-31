@@ -29,7 +29,12 @@ export const ARTIFACT_SCHEMAS = Object.freeze({
     "scope_id",
     "policy_id",
     "threshold_q",
-    "roster",
+    // `witness_roster`, which is what every module that READS this artifact calls it — the validator
+    // in `core/policy.mjs`, the tally in `core/quorum.mjs`, and both their test suites. This row said
+    // `roster`, so a policy block that satisfied its own validator was refused as SCHEMA_UNSUPPORTED
+    // the moment the ordered evaluator handed one object to both. §2.1 writes "roster" as prose,
+    // unquoted, beside backticked field names — it names the concept, not the key (5S-F009).
+    "witness_roster",
     "producer_identity",
     "producer_key_digest",
     "producer_signature_profile",
