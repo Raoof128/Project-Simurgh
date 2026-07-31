@@ -406,6 +406,9 @@ export function evaluate(bundle, deps = {}) {
         equivocation_artifact_status: "absent_comparison_unavailable",
       },
       checks: CHECK_ORDER.map((check_id) => ({ check_id, evaluated: false })),
+      // A crashed run knows of exactly one failure: that it crashed. Reporting the partial list it
+      // had collected would invite a reader to believe a survey that never finished.
+      failures: [unknown],
       relations: [],
       equivocation_artifact: null,
     };
@@ -491,10 +494,21 @@ function evaluateInner(bundle, deps) {
     }),
   };
 
+  // Every failure, in frozen order. The adjacent-pair net of Task 19 needs this: a double-defect
+  // bundle that reports the earlier code proves nothing unless the LATER defect is also known to be
+  // present, and a composition where the second damage silently failed to apply would otherwise pass
+  // for the best-looking wrong reason.
+  const ordered = [...failures].sort((x, y) => {
+    const px = POSITION.get(x.check_id) ?? Number.MAX_SAFE_INTEGER;
+    const py = POSITION.get(y.check_id) ?? Number.MAX_SAFE_INTEGER;
+    return px === py ? x.raw_code - y.raw_code : px - py;
+  });
+
   return {
     ok: first === null,
     exit_code: first === null ? 0 : first.raw_code,
     first_failure: first,
+    failures: ordered,
     statuses,
     checks: CHECK_ORDER.map((check_id) => ({
       check_id,

@@ -564,3 +564,254 @@ export const CODE_PROBES = Object.freeze([
   [508, "two views that are not the same object of comparison", (b) => rebuild(b, 1, checkpoint({ history_root: "root-b", scope_id: "scope-elsewhere" }))],
   [509, "an ancestry chain that contradicts itself", (b) => { const cpA = checkpoint({ epoch: 7, history_root: "root-7", predecessor: "body-6" }); const cpB = checkpoint({ epoch: 8, history_root: "root-8", predecessor: "body-x" }); b.views = [view(cpA, ["w-a", "w-b"], ["r-a"]), view(cpB, ["w-a", "w-b"], ["r-b"])]; b.comparison_manifest = comparisonManifest([cpA, cpB]); b.committed.chain = [ { body_digest: bodyDigestOf(cpB), predecessor: "body-x", epoch: 8 }, { body_digest: "body-x", predecessor: "body-y", epoch: 7 }, { body_digest: "body-y", predecessor: "body-x", epoch: 6 } ]; return b; }],
 ]);
+
+// ------------------------------------------------------------------ Task 19 — adjacent double defects
+//
+// REACHABILITY IS NOT AN ORDER. Task 18 proves every code means something; it passes unchanged if two
+// untested checks swap places, because each code is still reachable from somewhere. The order is a
+// separate claim, and this is its evidence: for each adjacent pair in the frozen band, a bundle
+// defective at BOTH must report the earlier one.
+//
+// TWO THINGS MADE THE OBVIOUS CONSTRUCTION WRONG, and both were found by running it.
+//
+//   COLLISION. Composing two probe damages usually destroys one of them — most target `view_a`, and
+//   the second rebuild overwrites the first. The composed bundle then has ONE defect and reports it
+//   correctly, which looks like a pass and proves nothing. So the damages below are view-targeted:
+//   the earlier defect goes on view A, the later on view B, and both survive.
+//
+//   SHADOWING. Where both codes live in one short-circuiting module, the later defect is real but
+//   never evaluated — `tally` stops at the first group that refuses. The pair is still a valid
+//   ordering witness, but "both codes appear in the failure list" is the wrong way to show it. Each
+//   pair therefore carries a SOLO check on the later damage: applied alone it must reach the later
+//   code. That is what makes the composed bundle's silence about it meaningful.
+
+/** Rebuild one view around a new checkpoint, keeping the manifest honest about what is compared. */
+const rebuildAt = (b, i, cp) => {
+  b.views[i] = view(cp, ["w-a", "w-b"], [i === 0 ? "r-a" : "r-b"]);
+  b.comparison_manifest = comparisonManifest(b.views.map((v) => v.checkpoint));
+  return b;
+};
+
+/** Distinct history roots, so damaging a view never accidentally dissolves the fork. */
+const rootAt = (i) => (i === 0 ? "root-a" : "root-b");
+
+/**
+ * Damage targeting ONE view. Every entry leaves the other view untouched, which is what lets two
+ * same-module defects coexist without one overwriting the other.
+ */
+const VIEW_DAMAGE = Object.freeze({
+  477: (b, i) => {
+    b.views[i].witness_statements[0].checkpoint_envelope_digest = "sha256:elsewhere";
+    return b;
+  },
+  478: (b, i) => rebuildAt(b, i, checkpoint({ history_root: rootAt(i), producer_identity: "" })),
+  479: (b, i) => rebuildAt(b, i, checkpoint({ history_root: rootAt(i) }, "stranger")),
+  480: (b, i) =>
+    rebuildAt(b, i, checkpoint({ history_root: rootAt(i), c1_commitment: "sha256:not-committed" })),
+  481: (b, i) =>
+    rebuildAt(b, i, checkpoint({ history_root: rootAt(i), protocol_version: "vwq.2" })),
+  482: (b, i) => rebuildAt(b, i, checkpoint({ history_root: rootAt(i), epoch: -1 })),
+  483: (b, i) => rebuildAt(b, i, checkpoint({ history_root: "", epoch: 7 + i })),
+  486: (b, i) =>
+    rebuildAt(b, i, checkpoint({ history_root: rootAt(i), policy_digest: "sha256:another-policy" })),
+  488: (b, i) => {
+    b.views[i].witness_statements[0].witness_identity = "";
+    return b;
+  },
+  489: (b, i) => {
+    b.views[i].witness_statements[0].witness_identity = "w-stranger";
+    return b;
+  },
+  490: (b, i) => {
+    b.views[i].witness_statements[0].signature_verified = false;
+    return b;
+  },
+  491: (b, i) => seatProducer(b, i),
+  492: (b, i) => {
+    b.views[i].witness_statements = [
+      witnessStatement("w-a", b.views[i].checkpoint, { key_digest: WITNESS_KEYS["w-b"] }),
+      witnessStatement("w-c", b.views[i].checkpoint),
+    ];
+    return b;
+  },
+  493: (b, i) => {
+    const cp = b.views[i].checkpoint;
+    b.views[i].witness_statements = [witnessStatement("w-a", cp), witnessStatement("w-a", cp)];
+    return b;
+  },
+  494: (b, i) => {
+    b.views[i].witness_statements[0].epoch = 6;
+    return b;
+  },
+  495: (b, i) => {
+    b.views[i].witness_statements[0].scope_id = "scope-2";
+    return b;
+  },
+  496: (b, i) => {
+    const s = shortWitness(b, i);
+    s.views[i].quorum_certificate = { claims_threshold_met: true };
+    return s;
+  },
+  499: (b, i) => {
+    b.views[i].carried_by[0].comparison_policy_digest = "sha256:another-comparison-policy";
+    return b;
+  },
+  500: (b, i) => {
+    b.views[i].carried_by[0].receiver_identity = "";
+    return b;
+  },
+  501: (b, i) => {
+    b.views[i].carried_by = [
+      viewReceipt("r-invented", b.views[i].checkpoint, {
+        receiver_key_digest: "sha256:invented",
+      }),
+    ];
+    return b;
+  },
+  502: (b, i) => {
+    b.views[i].carried_by[0].signature_verified = false;
+    return b;
+  },
+  504: (b, i) => {
+    const cp = b.views[i].checkpoint;
+    const id = i === 0 ? "r-a" : "r-b";
+    b.views[i].carried_by = [viewReceipt(id, cp), viewReceipt(id, cp)];
+    return b;
+  },
+});
+
+/** Bundle-level damage, for codes that are properties of the run rather than of a view. */
+const BUNDLE_DAMAGE = Object.freeze({
+  475: (b) => {
+    delete b.witness_policy.policy_id;
+    return b;
+  },
+  476: (b) => {
+    b.witness_policy.canonicalisation = "made-up";
+    return b;
+  },
+  // The three "absent artifact" damages. An absent binding is a different event from a malformed
+  // one, which is exactly why 484/485 and 497/498 are declared non-co-instantiable below.
+  484: (b) => {
+    b.witness_policy = undefined;
+    return b;
+  },
+  497: (b) => {
+    b.comparison_policy = undefined;
+    return b;
+  },
+  507: (b) => {
+    b.comparison_manifest = undefined;
+    return b;
+  },
+  485: (b) => {
+    b.witness_policy = witnessPolicy({
+      witness_roster: witnessPolicy().witness_roster.concat({
+        witness_identity: "tsa-1",
+        key_digest: "sha256:anchor",
+        witness_operator_class: "rfc3161",
+      }),
+    });
+    return b;
+  },
+  487: (b) => {
+    b.witness_policy = witnessPolicy({ producer_key_digest: "sha256:some-other-producer" });
+    return b;
+  },
+  498: (b) => {
+    b.comparison_policy.comparison_roster = [];
+    return b;
+  },
+  503: (b) => {
+    b.comparison_policy = comparisonPolicy({
+      comparison_roster: [
+        { receiver_identity: "r-a", key_digest: "sha256:shared" },
+        { receiver_identity: "r-b", key_digest: "sha256:shared" },
+      ],
+    });
+    b.views[0].carried_by = [
+      viewReceipt("r-a", b.views[0].checkpoint, { receiver_key_digest: "sha256:shared" }),
+    ];
+    b.views[1].carried_by = [
+      viewReceipt("r-b", b.views[1].checkpoint, { receiver_key_digest: "sha256:shared" }),
+    ];
+    return b;
+  },
+  505: (b) => {
+    b.views[1].carried_by = [];
+    b.receiver_statuses = [
+      {
+        receiver_identity: "r-b",
+        receiver_key_digest: RECEIVER_KEYS["r-b"],
+        comparison_policy_digest: COMPARISON_POLICY_DIGEST,
+        signature_verified: true,
+      },
+    ];
+    return b;
+  },
+  506: (b) => {
+    b.views[1].carried_by = [];
+    b.receiver_statuses = [
+      {
+        receiver_identity: "r-b",
+        receiver_key_digest: RECEIVER_KEYS["r-b"],
+        expected_coordinate: { scope_id: "scope-1", epoch: 7 },
+        receiver_sequence: 1,
+        reason_code: "no_view_received",
+        comparison_policy_digest: COMPARISON_POLICY_DIGEST,
+        signature_profile: "ed25519",
+        signature: "s",
+        signature_verified: false,
+      },
+    ];
+    return b;
+  },
+  508: (b) => rebuildAt(b, 1, checkpoint({ history_root: "root-b", scope_id: "scope-elsewhere" })),
+  509: (b) => {
+    const cpA = checkpoint({ epoch: 7, history_root: "root-7", predecessor: "body-6" });
+    const cpB = checkpoint({ epoch: 8, history_root: "root-8", predecessor: "body-x" });
+    b.views = [view(cpA, ["w-a", "w-b"], ["r-a"]), view(cpB, ["w-a", "w-b"], ["r-b"])];
+    b.comparison_manifest = comparisonManifest([cpA, cpB]);
+    b.committed.chain = [
+      { body_digest: bodyDigestOf(cpB), predecessor: "body-x", epoch: 8 },
+      { body_digest: "body-x", predecessor: "body-y", epoch: 7 },
+      { body_digest: "body-y", predecessor: "body-x", epoch: 6 },
+    ];
+    return b;
+  },
+});
+
+/** One damage for a code, placed on a given view where the code is a property of a view. */
+export function damageFor(code, viewIndex) {
+  const perView = VIEW_DAMAGE[code];
+  if (perView) return (b) => perView(b, viewIndex);
+  const perBundle = BUNDLE_DAMAGE[code];
+  if (perBundle) return perBundle;
+  return null;
+}
+
+/**
+ * Pairs that cannot be co-instantiated, with the reason. Each is a real property of the system, not
+ * a gap in the fixtures — and every one of them is a place where a faked bundle would have been
+ * easier to write than this sentence.
+ */
+export const NON_COINSTANTIABLE_PAIRS = Object.freeze({
+  "484/485":
+    "mutually exclusive by construction: 484 is a witness policy that is ABSENT and 485 is one that " +
+    "is present and malformed. A bundle cannot be both, and a fixture claiming to be would be lying " +
+    "about which one it was",
+  "497/498":
+    "mutually exclusive by construction, the same exclusion one lane over: 497 is a comparison " +
+    "policy that is ABSENT and 498 is one that is present and malformed",
+  "509/510":
+    "510 is not reachable from the ordered evaluator, which builds artifacts rather than judging " +
+    "submitted ones; Task 14 covers it with twelve attacks against verifyEquivocationArtifact",
+  "510/511":
+    "510 is not reachable from the ordered evaluator, so there is no evaluator-side instance of it " +
+    "to pair with anything",
+  "511/512":
+    "the wrapper is not an ordered check, it is the absence of one. A bundle that throws preempts " +
+    "every check including the claim gate, so 512 is correctly reported even though a 511 defect " +
+    "also exists. Ordering does not apply to the catch-all, and pretending it did would be the one " +
+    "place in this net where the order claim is false",
+});
