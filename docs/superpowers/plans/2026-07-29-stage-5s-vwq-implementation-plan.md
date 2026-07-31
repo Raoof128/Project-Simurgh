@@ -93,6 +93,27 @@ parses the surface from the frozen spec and Annex M. It does not invent permissi
 declaration are two chances to disagree, and the one that disagrees silently is the one nobody looks
 at.
 
+**Ruling 8 — a quorum shortfall is a STATUS; 496 is for a quorum that was CLAIMED.** Raised during
+Task 16, because the ordered evaluator is the first code that has to decide it. §2.5's own worked
+example returns `"ok": true` with `quorum_status: {a: witnessed_quorum, b: quorum_incomplete}` over a
+detected fork, and says that "reaching `QUORUM_BELOW_POLICY` first would have violated No Two Compared
+Histories inside the stage that declares it" — so a short witness set cannot be a refusal. But §2.7
+allocates 496 and §5.6 requires every code reachable at its frozen position, so it has to fire
+somewhere real. It fires on a **claim**: a bundle presenting a quorum certificate that asserts the
+committed threshold is met, over a tally that does not meet it, is family 5's counterfeit quorum and
+takes 496. A bundle that is simply short, and says so, carries `quorum_incomplete` and continues.
+Claims are checked, never believed; silence is not a claim. This also keeps the lanes genuinely
+independent — the exit code never depends on what the comparison lane found.
+
+**Ruling 9 — an accusation requires two producer-authenticated checkpoints.** The `⟂` lane split means
+a WITNESS-lane refusal never suppresses a finding. It does not mean an unauthenticated checkpoint
+still produces one. A structural or `checkpoint+producer` refusal — an unsigned checkpoint, a
+stranger's signature, an unbound C1 root, a foreign protocol version — means the stage never
+established what it would be accusing anybody of, so the comparison is `comparison_unavailable`, no
+artifact is minted, and no finding is recorded. The first draft of `core/verify.mjs` minted artifacts
+over all of these; the **authored** acceptance columns of Task 18 caught it in eleven cases. A
+computed matrix would have agreed with the bug.
+
 ---
 
 ## §2 Global constraints — binding on every task, copied from the spec
@@ -859,6 +880,11 @@ headless-browser run.
 | 5S-F005 | Annex M authorised the three goldens but **not** `tools/simurgh-attestation/stage4h/exitCodes.mjs`, the source that generates them. The ripple could not be performed under the authority written for it | RESOLVED by Annex M row 5S-M004, landed in its own authority commit before the file was touched |
 | 5S-F006 | The Stage 5S write-surface driver had two fail-opens of the vacuous-green species: an unrecognised flag was ignored (so `--base origin/main` silently became `--staged`, examined zero paths, and printed OK), and every git call was wrapped in a swallow-and-return-`""` helper (so a bogus revision range produced zero changed paths, which violate nothing) | RESOLVED in Task 11: `parseArgs` refuses unknown arguments, git runs strict, and a third exit code separates **operator error (2)** from **refusal (1)** — nine driver tests, each seeded from one of the two failures |
 | 5S-F007 | The suite reports `4850 tests / 4842 pass / 0 fail`, and the residue is **8 skipped, 0 todo, 0 cancelled**. All eight are Stage 5N tests over the REAL banked TSA/OTS ceremony proofs, guarded on `existsSync` against the absolute path `/Users/raoof.r12/Desktop/Raouf/test/stage5n-gate-capture` — a scratch directory outside the repository, absent both in CI and on the authoring machine today. The artifacts they would verify ARE committed, at `docs/research/llm-shield/evidence/stage-5n/real-laneb/` (`start.confirmed.ots`, `start.tsr`, `D_start.hex`…), under different filenames. So eight verifications of real Bitcoin and TSA evidence have been silently inert since the 5N ceremony, while the evidence sits committed a few directories away | RECORDED against Stage 5N, not 5S. Repair is a rewire to repo-relative paths plus the ceremony filename mapping, and it belongs to whoever owns 5N's gate — 5S must not edit 5N's tests under its own write surface. Until then the residue is declared here so "all tests pass" cannot hide it |
+
+| 5S-F008 | `ARTIFACT_SCHEMAS.equivocation_artifact` still required `fork_coordinate` after Task 14 renamed the field to `comparison_coordinate_pair`, so `validateArtifact` refused every **valid** equivocation artifact as `SCHEMA_UNSUPPORTED` — a suppressed finding wearing a refusal's clothes. Each side was internally consistent and its own tests passed, so nothing saw it: no test had ever handed a REAL derived artifact to the validator | RESOLVED in Task 15: schema aligned, plus a **seam test** that derives a real artifact and validates it, and a subset assertion between the schema and `REQUIRED_ARTIFACT_BINDINGS`. Seeded red — both tests fail when the name drifts back |
+| 5S-F009 | The same species again, found the moment the ordered evaluator first handed one object to two definitions: the `witness_policy` schema required `roster` while `core/policy.mjs`, `core/quorum.mjs` and both their suites read `witness_roster`. A policy block that satisfied its own validator was refused as `SCHEMA_UNSUPPORTED`. §2.1 writes "roster" as unquoted prose beside backticked field names, so it names the concept and not the key | RESOLVED in Task 16: the schema row now says `witness_roster`. The general lesson is that a schema nobody feeds a real instance to is a schema nobody has tested — Task 16's clean-bundle case is now that instance for four artifacts at once |
+| 5S-F010 | **Raw code 492 `WITNESS_KEY_ALIASED` is unreachable as a first failure.** Reaching the alias check requires every statement to have cleared the `(identity, key)` roster pair at 489, which forces distinct keys per identity; the only roster that shares a key is refused at 485, six codes earlier, by `validateWitnessQuorumPolicy`. Three decisions, each defensible alone, that together make the code dead. §5.6's closeout law requires every raw code reached **at its frozen first-failure position**, so this blocks that conjunct | RECORDED, not papered over. Task 18 declares it in `UNREACHABLE_FROM_EVALUATOR` with its reason and a test asserts the declaration is exactly as large as the gap. **Needs a ruling**: either 489 falls through to 492 when the key belongs to another roster seat (strictly better diagnosis, no weakening — a stranger key still fails 489), or §5.6 admits documented shadowed codes with a signed reason |
+| 5S-F011 | §2.1 says the `equivocation_artifact` binds "both checkpoints, **both statement sets**, the receipts that carried them, and the deterministic compatibility derivation". The implemented artifact binds the checkpoints, the receipts and the derivation — but **not** the witness statement sets, because the Task 14 ruling enumerated fourteen bindings that omit them and the artifact's narrow sentence is deliberately quorum-free | RECORDED as a divergence between frozen spec prose and the implementation. No mechanical conflict: the §2.1 pin test checks the nine artifact **names**, not their fields. **Needs a ruling**: amend by annex to match the implementation, or add the statement sets as carried context that the finding does not rest on |
 
 5S-F001 is the fourth member of a species this repository already made a standing rule about: _every
 stage-installed gate must declare its successor-stage behaviour before the stage freezes_
