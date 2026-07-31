@@ -84,8 +84,14 @@ export const ARTIFACT_SCHEMAS = Object.freeze({
     "intake_complete",
     "comparison_roster_digest",
   ]),
+  // The coordinate PAIR, not a widened `fork_coordinate` — §2.3's triple is frozen, and the
+  // cross-epoch route to `incompatible` has no single epoch to name. This row drifted once: Task 14
+  // renamed the field in the artifact and this schema kept the old name, so `validateArtifact`
+  // refused every genuine artifact as SCHEMA_UNSUPPORTED — a suppressed finding wearing a refusal's
+  // clothes. Each side was internally consistent, which is why no test saw it; the seam test in
+  // `artifacts.test.js` now derives a REAL artifact and validates it (5S-F008).
   equivocation_artifact: Object.freeze([
-    "fork_coordinate",
+    "comparison_coordinate_pair",
     "view_a",
     "view_b",
     "derivation",
