@@ -13,6 +13,12 @@
 // package.json" must not cover swapping a crypto library.
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import * as childProcess from "node:child_process";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
+const requireChildProcess = () => childProcess;
 import {
   Q0_WRITE_ALLOWLIST,
   DECLARED_VIOLATIONS,
@@ -184,5 +190,53 @@ test("every declared violation is a path the surface actually refuses", () => {
   // report and would train a reader to skim it.
   for (const path of DECLARED_VIOLATIONS) {
     assert.equal(checkPaths([path]).ok, false, `${path} is already permitted; the entry is dead`);
+  }
+});
+
+test("[5s-f016] the anti-vacuity guard covers EVERY mode, including the default", () => {
+  // 5S-F016. The guard read `mode === "range" && checked === 0`, and `staged` is the DEFAULT — so
+  // the bare invocation, the one a human actually types, was the only mode not covered. It was
+  // found by walking into it: a repair's surface gate was run before staging and printed
+  //   paths examined: 0
+  //   OK — every change is inside the spec §6.1 write surface
+  // while five files sat modified.
+  //
+  // Driven through the REAL driver in a throwaway git repository, because the defect lived in the
+  // CLI's mode handling and a unit call on the core would have missed it entirely.
+  const { execFileSync, spawnSync } = requireChildProcess();
+  const dir = mkdtempSync(join(tmpdir(), "5q-vac-"));
+  const git = (...a) => execFileSync("git", a, { cwd: dir, stdio: "ignore" });
+  try {
+    git("init", "-q");
+    git("config", "user.email", "t@example.invalid");
+    git("config", "user.name", "t");
+    writeFileSync(join(dir, "seed.txt"), "seed\n");
+    git("add", "-A");
+    git("commit", "-qm", "seed");
+
+    const driver = join(
+      process.cwd(),
+      "tools/simurgh-attestation/stage5q/node/checkWriteSurface.mjs"
+    );
+    const run = (...args) =>
+      spawnSync(process.execPath, [driver, ...args], { cwd: dir, encoding: "utf8" });
+
+    // A genuinely clean tree with nothing staged is NOT a refusal: nothing changed, and "nothing
+    // changed" is not "nothing checked".
+    assert.equal(run().status, 0, "a clean tree was refused");
+
+    // Dirty tree, nothing staged: the default mode must refuse rather than report a green zero.
+    writeFileSync(join(dir, "seed.txt"), "modified\n");
+    const staged = run();
+    assert.equal(staged.status, 1, "the DEFAULT mode passed while the tree was dirty");
+    assert.match(staged.stdout, /uncommitted_changes_not_evaluated/);
+    assert.match(staged.stdout, /the staged change set is empty/);
+
+    // And the mode that already had the guard still has it.
+    const ranged = run("--range", "HEAD..HEAD");
+    assert.equal(ranged.status, 1, "range mode lost its guard");
+    assert.match(ranged.stdout, /uncommitted_changes_not_evaluated/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
   }
 });
