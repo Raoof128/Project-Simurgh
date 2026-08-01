@@ -53,14 +53,14 @@ as though it were.
 Measured on the final tree, in one `scripts/check.sh` run, not carried forward from an earlier one:
 
 ```text
-unit  (npm test)  5053 tests · 5053 pass · 0 fail · 0 skipped · 0 todo
+unit  (npm test)  5067 tests · 5067 pass · 0 fail · 0 skipped · 0 todo
 e2e   (e2e nets)   358 tests ·  357 pass · 0 fail · 1 skipped · 0 todo
                   ─────────────────────────────────────────────────────
-repository-wide   5411 tests · 5410 pass · 0 fail · 1 skipped · 0 todo
+repository-wide   5425 tests · 5424 pass · 0 fail · 1 skipped · 0 todo
 
 check.sh          151 steps · 151 pass · 0 fail
 reproduce          30 gates ·  30 pass
-5S surface        612 tests · 612 pass · 0 fail · 0 skipped
+5S surface        613 tests · 613 pass · 0 fail · 0 skipped
 prior sweep        50 prior reproduce scripts, 5S excluded by name
 ```
 
