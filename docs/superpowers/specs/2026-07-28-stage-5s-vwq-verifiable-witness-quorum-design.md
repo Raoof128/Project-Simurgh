@@ -1119,14 +1119,15 @@ The resolution is the same: **three paths, one operation, one purpose.** Not "St
 
 ### M.2 The surface
 
-| path                                                              | op     | purpose                                                                                                                | id      |
-| ----------------------------------------------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------- | ------- |
-| `tests/fixtures/llmShield/stage4h/expected-results/exit-map.json` | modify | additive raw-band ripple required by §2.10                                                                             | 5S-M001 |
-| `docs/research/llm-shield/evidence/stage-4h/exit-map.json`        | modify | additive raw-band ripple required by §2.10                                                                             | 5S-M002 |
-| `tests/unit/llmShield/stage4h/exitWrapper.test.js`                | modify | additive raw-band ripple required by §2.10                                                                             | 5S-M003 |
-| `tools/simurgh-attestation/stage4h/exitCodes.mjs`                 | modify | extend the shared run-level raw-code ledger through the frozen Stage 5S band and regenerate its authorised projections | 5S-M004 |
-| `tests/unit/llmShield/stage5o/exitCodes.test.js`                  | modify | move Stage 5O's successor-handoff assertion, which pins where the next band begins                                     | 5S-M005 |
-| `tests/unit/llmShield/stage5p/rawCodeCensus.test.js`              | modify | widen Stage 5P's approved-documentation list, never its band regex                                                     | 5S-M006 |
+| path                                                                  | op     | purpose                                                                                                                | id      |
+| --------------------------------------------------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------- | ------- |
+| `tests/fixtures/llmShield/stage4h/expected-results/exit-map.json`     | modify | additive raw-band ripple required by §2.10                                                                             | 5S-M001 |
+| `docs/research/llm-shield/evidence/stage-4h/exit-map.json`            | modify | additive raw-band ripple required by §2.10                                                                             | 5S-M002 |
+| `tests/unit/llmShield/stage4h/exitWrapper.test.js`                    | modify | additive raw-band ripple required by §2.10                                                                             | 5S-M003 |
+| `tools/simurgh-attestation/stage4h/exitCodes.mjs`                     | modify | extend the shared run-level raw-code ledger through the frozen Stage 5S band and regenerate its authorised projections | 5S-M004 |
+| `tests/unit/llmShield/stage5o/exitCodes.test.js`                      | modify | move Stage 5O's successor-handoff assertion, which pins where the next band begins                                     | 5S-M005 |
+| `tests/unit/llmShield/stage5p/rawCodeCensus.test.js`                  | modify | widen Stage 5P's approved-documentation list, never its band regex                                                     | 5S-M006 |
+| `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json` | modify | re-pin the LIVE census (`current`) with this stage's four workflow steps; `baseline` is immutable and is not touched   | 5S-M007 |
 
 The table is the authority. The write-surface checker **parses this annex** and never re-declares it,
 because two copies of a declaration are two chances to disagree and the silent one is the copy nobody
@@ -1140,6 +1141,16 @@ header says the pin went stale when 5R added seven such steps. But 5Q's finding 
 `entry_count` to a measurement taken **at tag v2.53.0**, so the pin is anchored to a historical
 observation rather than floating with the working tree. Re-pinning it would have rewritten a prior
 stage's recorded evidence to make a later stage's suite green. Recorded as 5S-F015 instead.
+
+**The row returns on 2026-08-01 as 5S-M007, because the obstacle was removed at its source rather
+than worked around here.** 5Q's census was repaired on its own branch under its own authority
+(Q1-F006, merged as `26e7b529`/`df535c3a`): the pin now separates an immutable `baseline` — the
+v2.53.0 measurement the Q1-F002 finding cites — from a re-pinnable `current` that each stage adding
+workflow steps is expected to move. What was refused in July and what is authorised now are not the
+same act. The withdrawn row would have edited one list that a prior finding depended on; 5S-M007
+edits `current` only, and `baseline` keeps the number the finding cites. The account above is left
+standing rather than deleted, because a spec that quietly rewrites its own refusals into permissions
+teaches the next stage nothing.
 
 **The fourth row was added on 2026-07-29, after Task 5 found that the annex authorised the three
 projections but not the source that generates them (finding 5S-F005).** An authority to change an

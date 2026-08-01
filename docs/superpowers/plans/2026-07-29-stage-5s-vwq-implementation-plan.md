@@ -21,8 +21,8 @@ pre_task0_digest    3357a92529063d7c21d251c411bce41e1b1b84be11f1ddcbc0c91337391f
 pre_task0_bytes     65753
 
 post_task0_commit   a21103e7e3503d5c3b6b620bc70c4836060b122f   commit 0a; Annex S added at Task 2
-post_task0_digest   17844fff6ecc88a5e9a6ee34c7240da60a1e050b8c82c9eab2972bfd24383b9e
-post_task0_bytes    81952                    re-pinned at Task 36: Annex S rows 5S-S016/S017, Annex M withdrawal note
+post_task0_digest   1725489f8b6fe809f67b01ef40a8e389aaa19b120d3c4745cf5b9e5ad81bf1fa
+post_task0_bytes    83020                    re-pinned at Task 38: Annex M row 5S-M007, the census re-pin authority
 frozen_range_digest e0d25ce115d0b945175ccff5fcadebcd017ea47af02a8f2a9b249364132b83ec
 frozen_range_bytes  64240                    §§1-7, UNMOVED from 76c469a0 — see Annex M.5
 spec_domain         simurgh.vwq.full-spec.v1
