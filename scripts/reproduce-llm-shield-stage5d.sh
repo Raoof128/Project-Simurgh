@@ -26,12 +26,19 @@ echo "-- 4/5 JS<->Python<->browser-realm parity + K7 all-functions net"
 node --test tests/e2e/llmShield/stage5d/parity.test.js tests/e2e/llmShield/stage5d/k7AllFunctions.test.js >/dev/null
 echo "   parity + K7 OK"
 
-echo "-- 5/5 Lean proofs (if lean present; else the CI lean workflow gates them)"
+echo "-- 5/5 Lean proofs (escape-hatch scan ALWAYS; type-check when lean is present)"
+# `lean` exits 0 on a `sorry` — it is a warning, not an error — so a type-check alone can NEVER
+# establish "zero sorry", which this script nevertheless claimed. The SOURCE scan is the
+# load-bearing check, it needs no toolchain, and it therefore runs UNCONDITIONALLY: an absent
+# `lean` downgrades the type-check to a NAMED SKIP and must never downgrade the scan. Delegated to
+# the repo-wide gate so one definition of "escape hatch" (sorry/admit/native_decide/axiom/unsafe/
+# implemented_by/partial def) is shared with CI rather than a narrower per-script copy that drifts.
 if command -v lean >/dev/null 2>&1; then
-  (cd proofs/stage5d && lean AdaptiveRedTeam.lean)
-  echo "   lean OK (zero sorry)"
+  node scripts/check-lean-proofs.mjs --root proofs/stage5d --floor 1
+  echo "   lean: type-check + escape-hatch scan OK"
 else
-  echo "   lean not installed locally — gated by stage-4-lean-proofs.yml"
+  node scripts/check-lean-proofs.mjs --root proofs/stage5d --floor 1 --no-typecheck
+  echo "   lean absent: escape-hatch scan OK, TYPE-CHECK SKIPPED (stage-4-lean-proofs.yml gates it)"
 fi
 
 echo "== Stage 5D VARL reproduce: ALL PASS =="

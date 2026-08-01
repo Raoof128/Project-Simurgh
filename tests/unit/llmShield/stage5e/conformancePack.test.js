@@ -52,6 +52,34 @@ test("the Stage 5E conformance pack includes every dependency used by its tests"
       listing.stdout,
       /simurgh-vda-conformance\/tools\/simurgh-attestation\/stage4h\/exitCodes\.mjs/
     );
+
+    // DISCOVERED, not enumerated (the Q1-F001 lesson). A hand-kept list of expected files is right
+    // the day it is written; this reads the packed reproduce script and demands that every repo
+    // file it invokes is actually IN the zip. Adding a `node scripts/…` call to that script without
+    // adding the file to the builder is exactly how the kit ships broken to a third party — it
+    // works in the repo, where the file happens to be on disk, and dies on their machine.
+    const packedScript = spawnSync(
+      "unzip",
+      ["-p", zipPath, "simurgh-vda-conformance/scripts/reproduce-llm-shield-stage5e.sh"],
+      { encoding: "utf8" }
+    );
+    assert.equal(packedScript.status, 0, "the reproduce script is not in the pack");
+
+    const referenced = [
+      ...new Set(
+        packedScript.stdout.match(/\b(?:scripts|tools|tests)\/[\w./-]+\.(?:mjs|sh|py)\b/g) ?? []
+      ),
+    ];
+    assert.ok(referenced.length > 0, "found no referenced files — this guard examined nothing");
+
+    const missing = referenced.filter(
+      (f) => !listing.stdout.includes(`simurgh-vda-conformance/${f}`)
+    );
+    assert.deepEqual(
+      missing,
+      [],
+      `the packed reproduce script invokes files the pack does not ship:\n  ${missing.join("\n  ")}`
+    );
   } finally {
     rmSync(tempDir, { recursive: true, force: true });
   }
