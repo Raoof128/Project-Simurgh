@@ -115,6 +115,16 @@ run_step() {
       pass "$name"
     else
       fail "$name"
+      # WHAT failed, before WHERE it stopped. A test runner's last 40 lines are its summary
+      # counters, so a step reporting "fail 2" showed two failures and named neither — which is
+      # exactly how a Stage 5S CI failure had to be diagnosed by reading workflow step order
+      # instead of the log (5S-F018). Failure lines are cheap and are what a reader needs first.
+      local failures
+      failures="$(grep -aE '^(not ok [0-9]+|✖|FAIL:|Error:)' "$log_file" 2>/dev/null | head -25 || true)"
+      if [[ -n "$failures" ]]; then
+        echo -e "${YELLOW}Failure lines from $log_file:${NC}"
+        echo "$failures"
+      fi
       echo -e "${YELLOW}Last 40 log lines from $log_file:${NC}"
       tail -40 "$log_file" || true
     fi
