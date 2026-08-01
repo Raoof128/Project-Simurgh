@@ -334,6 +334,33 @@ test("double temp build: deterministic artifacts byte-identical, fresh-key manif
 
 // ---- Group 6: verifier CLI end-to-end (exit codes + --out reports) ----
 
+/**
+ * Everything a failed CLI run knows about itself (finding 5S-F013).
+ *
+ * `assert.equal(r.status, 0, r.stderr)` discards the evidence the run just produced. When the
+ * verifier REFUSES rather than crashes it sets `process.exitCode` and prints nothing, so `stderr`
+ * is empty, the assertion falls back to its default `3 !== 0`, and the raw code — written to the
+ * `--out` report a line later, and never read because the assertion already threw — is lost.
+ *
+ * That is why this failure was carried as "cause unknown": the diagnostic existed on disk every
+ * time and was thrown away. Exit 3 is not the catch-all; raw codes 1-18, 29 and 39 all map to
+ * typed 3 through `stage4CodeForRawCode`, and every one of those paths is silent.
+ */
+function cliDiagnostic(r, outPath) {
+  const parts = [`status=${r.status}`, `signal=${r.signal ?? "none"}`];
+  if (r.error) parts.push(`spawnError=${r.error.message}`);
+  const stderr = (r.stderr ?? "").trim();
+  parts.push(stderr ? `stderr=${stderr}` : "stderr=<empty> (a refusal, not a crash)");
+  try {
+    const report = JSON.parse(readFileSync(outPath, "utf8"));
+    parts.push(`report.rawCode=${report.rawCode}`, `report.typed=${report.typed}`);
+    if (report.reason) parts.push(`report.reason=${report.reason}`);
+  } catch (e) {
+    parts.push(`report unreadable: ${e.message}`);
+  }
+  return parts.join(" | ");
+}
+
 test("CLI matches the programmatic API: under -> exit 0 / raw 0 / typed 0, over -> exit 1 / raw 30 / typed 1", (t) => {
   const tmp = tempDir(t, "eba-cli-");
   const under = spawnSync(
@@ -349,7 +376,7 @@ test("CLI matches the programmatic API: under -> exit 0 / raw 0 / typed 0, over 
     ],
     { encoding: "utf8" }
   );
-  assert.equal(under.status, 0, under.stderr);
+  assert.equal(under.status, 0, cliDiagnostic(under, `${tmp}/under.json`));
   const ur = readJson(`${tmp}/under.json`);
   assert.equal(ur.rawCode, 0);
   assert.equal(ur.typed, 0);
@@ -368,7 +395,7 @@ test("CLI matches the programmatic API: under -> exit 0 / raw 0 / typed 0, over 
     ],
     { encoding: "utf8" }
   );
-  assert.equal(over.status, 1, over.stderr);
+  assert.equal(over.status, 1, cliDiagnostic(over, `${tmp}/over.json`));
   const or = readJson(`${tmp}/over.json`);
   assert.equal(or.rawCode, 30);
   assert.equal(or.typed, 1);
@@ -481,4 +508,34 @@ test("Q0-Q7 substrate still verifies directly and src/llmShield is untouched", (
     encoding: "utf8",
   });
   assert.equal(gitDiff.status, 0, "policy-drift guard: src/llmShield must have zero diffs");
+});
+
+test("[5s-f013] a SILENT refusal is reported with its raw code, not as an empty string", (t) => {
+  // The repair, exercised. A refusal sets process.exitCode and prints nothing, so `stderr` alone
+  // says nothing at all — which is exactly how this failure survived as "cause unknown" across two
+  // stages: the raw code was written to the report and never read.
+  const dir = tempDir(t, "eba-diag-");
+  cpSync(`${FIX}/bundles/under-budget`, `${dir}/bundle`, { recursive: true });
+
+  // A value-dependent flip, so the tamper always tampers (5S-F014).
+  const man = readJson(`${dir}/bundle/eba-manifest.json`);
+  const sig = man.signature.slice("ed25519:".length);
+  man.signature = `ed25519:${sig[0] === "A" ? "B" : "A"}${sig.slice(1)}`;
+  writeFileSync(`${dir}/bundle/eba-manifest.json`, `${JSON.stringify(man, null, 2)}\n`);
+
+  const out = `${dir}/report.json`;
+  const r = spawnSync(
+    "node",
+    [CLI, "--bundle", `${dir}/bundle`, "--pinned-pubkey", PIN, "--out", out],
+    { encoding: "utf8" }
+  );
+
+  // The precondition that makes the finding real: the process says nothing on stderr.
+  assert.equal((r.stderr ?? "").trim(), "", "this refusal is no longer silent — rewrite this test");
+  assert.notEqual(r.status, 0, "the tampered bundle was accepted");
+
+  const message = cliDiagnostic(r, out);
+  assert.match(message, /report\.rawCode=25/, `diagnostic omitted the raw code: ${message}`);
+  assert.match(message, /a refusal, not a crash/, "an empty stderr was not labelled as a refusal");
+  assert.match(message, /status=/, "the diagnostic omits the exit status");
 });
