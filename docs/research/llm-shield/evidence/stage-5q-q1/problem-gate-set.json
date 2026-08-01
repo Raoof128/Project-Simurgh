@@ -1,84 +1,179 @@
 {
-  "schema": "simurgh.stage5q.problem_gate_set.v1",
-  "note": "Q1-F002. The SET is the authority; entry_count is telemetry. Added and removed are reported independently, so a repaired problem can never mask a new one.",
-  "baseline_tag": "v2.53.0-stage-5r-vpf",
-  "entry_count": 19,
-  "gate_problems": [
-    {
-      "gate_id": "stage-1-checks.yml::Install Lean (elan) so the Stage 4R reproduce builds its proof",
-      "reason_code": "unclassifiable_step"
-    },
-    {
-      "gate_id": "stage-1-checks.yml::Run E2E gate (scripts/check-e2e.sh)",
-      "reason_code": "missing_committed_universe_query"
-    },
-    {
-      "gate_id": "stage-3w-witness.yml::Re-run 3V-B offline gates and regenerate the witness verdict from REAL exit codes",
-      "reason_code": "missing_committed_universe_query"
-    },
-    {
-      "gate_id": "stage-4-lean-proofs.yml::Install elan (pinned toolchain from proofs/stage4m/lean-toolchain)",
-      "reason_code": "unclassifiable_step"
-    },
-    {
-      "gate_id": "stage-5o-reproduce.yml::Assert the K7 export census reported 100%",
-      "reason_code": "missing_committed_universe_query"
-    },
-    {
-      "gate_id": "stage-5o-reproduce.yml::Install elan (pinned toolchain from proofs/stage5o/lean-toolchain)",
-      "reason_code": "unclassifiable_step"
-    },
-    {
-      "gate_id": "stage-5o-reproduce.yml::Stage 5O reproduce (unit + K7 export census + Lean + parity + generators + ledger)",
-      "reason_code": "missing_committed_universe_query"
-    },
-    {
-      "gate_id": "stage-5q-checks.yml::Install Lean (elan)",
-      "reason_code": "missing_committed_universe_query"
-    },
-    {
-      "gate_id": "stage-5q-checks.yml::Stage 5Q Q0 transition",
-      "reason_code": "missing_committed_universe_query"
-    },
-    {
-      "gate_id": "stage-5q-checks.yml::Stage 5Q censuses",
-      "reason_code": "missing_committed_universe_query"
-    },
-    {
-      "gate_id": "stage-5q-checks.yml::Stage 5Q mutation self-proof",
-      "reason_code": "missing_committed_universe_query"
-    },
-    {
-      "gate_id": "stage-5q-checks.yml::Stage 5Q unit tests",
-      "reason_code": "unclassifiable_step"
-    },
-    {
-      "gate_id": "stage-5r-checks.yml::campaign commitment, and its ancestry over the results",
-      "reason_code": "missing_committed_universe_query"
-    },
-    {
-      "gate_id": "stage-5r-checks.yml::install elan, pinned to this stage's own toolchain file",
-      "reason_code": "unclassifiable_step"
-    },
-    {
-      "gate_id": "stage-5r-checks.yml::the attestation verifies WITHOUT any private key",
-      "reason_code": "missing_committed_universe_query"
-    },
-    {
-      "gate_id": "stage-5r-checks.yml::the commitment verifier REFUSES an altered corpus",
-      "reason_code": "missing_committed_universe_query"
-    },
-    {
-      "gate_id": "stage-5r-checks.yml::the control corpus",
-      "reason_code": "missing_committed_universe_query"
-    },
-    {
-      "gate_id": "stage-5r-checks.yml::the inherited commitment, roots first and signature last",
-      "reason_code": "missing_committed_universe_query"
-    },
-    {
-      "gate_id": "stage-5r-checks.yml::the instrument lock",
-      "reason_code": "missing_committed_universe_query"
-    }
-  ]
+  "schema": "simurgh.stage5q.problem_gate_set.v2",
+  "note": "Q1-F002. The SET is the authority; entry_count is telemetry. Added and removed are reported independently, so a repaired problem can never mask a new one. v2 SPLITS two things v1 conflated: the BASELINE measurement, which the Q1-F002 finding cites and which may never move, and the CURRENT census, which every later stage re-pins as it adds workflow steps. In v1 they were one field, so any stage that added a CI step could only go green by editing the number a prior finding had recorded \u2014 see Stage 5S finding 5S-F015.",
+  "baseline": {
+    "tag": "v2.53.0-stage-5r-vpf",
+    "entry_count": 19,
+    "immutable": true,
+    "why": "cited by the Q1-F002 finding ledger as the measurement taken at that tag; a later stage may never rewrite it",
+    "gate_problems": [
+      {
+        "gate_id": "stage-1-checks.yml::Install Lean (elan) so the Stage 4R reproduce builds its proof",
+        "reason_code": "unclassifiable_step"
+      },
+      {
+        "gate_id": "stage-1-checks.yml::Run E2E gate (scripts/check-e2e.sh)",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-3w-witness.yml::Re-run 3V-B offline gates and regenerate the witness verdict from REAL exit codes",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-4-lean-proofs.yml::Install elan (pinned toolchain from proofs/stage4m/lean-toolchain)",
+        "reason_code": "unclassifiable_step"
+      },
+      {
+        "gate_id": "stage-5o-reproduce.yml::Assert the K7 export census reported 100%",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5o-reproduce.yml::Install elan (pinned toolchain from proofs/stage5o/lean-toolchain)",
+        "reason_code": "unclassifiable_step"
+      },
+      {
+        "gate_id": "stage-5o-reproduce.yml::Stage 5O reproduce (unit + K7 export census + Lean + parity + generators + ledger)",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5q-checks.yml::Install Lean (elan)",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5q-checks.yml::Stage 5Q Q0 transition",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5q-checks.yml::Stage 5Q censuses",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5q-checks.yml::Stage 5Q mutation self-proof",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5q-checks.yml::Stage 5Q unit tests",
+        "reason_code": "unclassifiable_step"
+      },
+      {
+        "gate_id": "stage-5r-checks.yml::campaign commitment, and its ancestry over the results",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5r-checks.yml::install elan, pinned to this stage's own toolchain file",
+        "reason_code": "unclassifiable_step"
+      },
+      {
+        "gate_id": "stage-5r-checks.yml::the attestation verifies WITHOUT any private key",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5r-checks.yml::the commitment verifier REFUSES an altered corpus",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5r-checks.yml::the control corpus",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5r-checks.yml::the inherited commitment, roots first and signature last",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5r-checks.yml::the instrument lock",
+        "reason_code": "missing_committed_universe_query"
+      }
+    ]
+  },
+  "current": {
+    "as_of": "main @ 653f7b8c",
+    "entry_count": 19,
+    "why": "the live census, compared against the repository as it stands; re-pinned deliberately by each stage that adds workflow steps",
+    "gate_problems": [
+      {
+        "gate_id": "stage-1-checks.yml::Install Lean (elan) so the Stage 4R reproduce builds its proof",
+        "reason_code": "unclassifiable_step"
+      },
+      {
+        "gate_id": "stage-1-checks.yml::Run E2E gate (scripts/check-e2e.sh)",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-3w-witness.yml::Re-run 3V-B offline gates and regenerate the witness verdict from REAL exit codes",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-4-lean-proofs.yml::Install elan (pinned toolchain from proofs/stage4m/lean-toolchain)",
+        "reason_code": "unclassifiable_step"
+      },
+      {
+        "gate_id": "stage-5o-reproduce.yml::Assert the K7 export census reported 100%",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5o-reproduce.yml::Install elan (pinned toolchain from proofs/stage5o/lean-toolchain)",
+        "reason_code": "unclassifiable_step"
+      },
+      {
+        "gate_id": "stage-5o-reproduce.yml::Stage 5O reproduce (unit + K7 export census + Lean + parity + generators + ledger)",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5q-checks.yml::Install Lean (elan)",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5q-checks.yml::Stage 5Q Q0 transition",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5q-checks.yml::Stage 5Q censuses",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5q-checks.yml::Stage 5Q mutation self-proof",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5q-checks.yml::Stage 5Q unit tests",
+        "reason_code": "unclassifiable_step"
+      },
+      {
+        "gate_id": "stage-5r-checks.yml::campaign commitment, and its ancestry over the results",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5r-checks.yml::install elan, pinned to this stage's own toolchain file",
+        "reason_code": "unclassifiable_step"
+      },
+      {
+        "gate_id": "stage-5r-checks.yml::the attestation verifies WITHOUT any private key",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5r-checks.yml::the commitment verifier REFUSES an altered corpus",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5r-checks.yml::the control corpus",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5r-checks.yml::the inherited commitment, roots first and signature last",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5r-checks.yml::the instrument lock",
+        "reason_code": "missing_committed_universe_query"
+      }
+    ]
+  },
+  "lifecycle": {
+    "active_phase": "from Stage 5Q Q1 onward, repository-wide over every committed workflow",
+    "protected_surface": "the current census of manually enumerated workflow steps that carry no committed universe query",
+    "next_phase_behaviour": "every later stage that adds such a step RE-PINS `current` and leaves `baseline` untouched; a stage that cannot go green without editing `baseline` has found a defect in this gate rather than in itself",
+    "maintenance_behaviour": "`current.gate_problems` is additive-or-shrinking and always re-derived from the real workflows; `baseline` is immutable and any change to it is a rewrite of recorded evidence",
+    "sunset_or_migration_condition": "when every workflow step carries a committed universe query, at which point the census is empty and the anti-vacuity condition below fails loudly",
+    "anti_vacuity_condition": "an empty pin is refused rather than matched against an empty census, and the live comparison must have examined a non-empty set of workflows"
+  }
 }

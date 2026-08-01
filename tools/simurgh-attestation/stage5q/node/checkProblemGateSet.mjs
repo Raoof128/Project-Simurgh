@@ -71,10 +71,25 @@ export function readPinnedSet() {
   return JSON.parse(readFileSync(PIN_PATH, "utf8"));
 }
 
+/** The live census. v1 pins carried `gate_problems` at the top level; v2 splits it. */
+export function currentSet(pin) {
+  return pin?.current?.gate_problems ?? pin?.gate_problems ?? [];
+}
+
+/** The frozen measurement the Q1-F002 finding cites. Never compared against the live repository. */
+export function baselineSet(pin) {
+  return (
+    pin?.baseline ?? { entry_count: pin?.entry_count, gate_problems: pin?.gate_problems ?? [] }
+  );
+}
+
 function main() {
   const actual = computeProblemSet();
   const pin = readPinnedSet();
-  const result = compareProblemSets({ pinned: pin.gate_problems, actual });
+  // v2: the LIVE comparison reads `current`. `baseline` is the measurement the Q1-F002 finding
+  // cites and may never move — conflating the two is what let a later stage's only route to green
+  // run through a prior stage's recorded evidence (5S-F015).
+  const result = compareProblemSets({ pinned: currentSet(pin), actual });
 
   if (result.refusal) {
     console.log(`FAIL: the pinned problem set is unusable — ${result.refusal}`);

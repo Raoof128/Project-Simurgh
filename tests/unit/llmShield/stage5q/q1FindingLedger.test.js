@@ -87,10 +87,13 @@ test("[q1-f002] the pin the ledger cites exists and matches the recorded delta",
   const pin = JSON.parse(
     readFileSync("docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json", "utf8")
   );
-  assert.equal(pin.entry_count, f.observed_result["v2.53.0-stage-5r-vpf"].problems);
+  // The BASELINE, not the live census. v1 read one shared field, so any later stage that added a
+  // workflow step could only go green by editing the number this finding recorded (5S-F015).
+  assert.equal(pin.baseline.entry_count, f.observed_result["v2.53.0-stage-5r-vpf"].problems);
+  assert.equal(pin.baseline.immutable, true);
   for (const gateId of f.observed_result.delta) {
     assert.ok(
-      pin.gate_problems.some((e) => e.gate_id === gateId),
+      pin.baseline.gate_problems.some((e) => e.gate_id === gateId),
       `${gateId} is recorded as a delta entry but is absent from the pin`
     );
   }
