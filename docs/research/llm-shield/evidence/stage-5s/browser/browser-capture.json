@@ -1,0 +1,1 @@
+{"detail":"no playwright or puppeteer","lane":"captured_browser","non_claim":"No browser executed. API equivalence under Node's WHATWG WebCrypto is reported by the CI lane and is not browser execution; this capture is absent and nothing stands in for it.","results":null,"schema":"simurgh.vwq.browser-capture.v1","state":"not_captured_driver_absent"}
