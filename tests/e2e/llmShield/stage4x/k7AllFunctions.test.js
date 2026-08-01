@@ -43,7 +43,9 @@ test("full tamper matrix 173 → 180", () => {
   assert.equal(ev(b173), 173);
 
   const b174 = base();
-  b174.attestation.signature = "00" + b174.attestation.signature.slice(2);
+  b174.attestation.signature =
+    (b174.attestation.signature.startsWith("00") ? "11" : "00") +
+    b174.attestation.signature.slice(2);
   assert.equal(ev(b174), 174);
 
   const b175 = base();

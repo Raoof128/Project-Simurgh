@@ -61,7 +61,9 @@ test("NEG shard_leaf_index=tree_size → typed 387 log_index_out_of_range (no th
 test("NEG flipped inclusion hash → typed inclusion_root_mismatch", () => {
   const s = seat();
   s.inclusionProof.hashes = [...s.inclusionProof.hashes];
-  s.inclusionProof.hashes[0] = "00" + s.inclusionProof.hashes[0].slice(2);
+  s.inclusionProof.hashes[0] =
+    (s.inclusionProof.hashes[0].startsWith("00") ? "11" : "00") +
+    s.inclusionProof.hashes[0].slice(2);
   assert.equal(verifyInclusion(s).reason, "inclusion_root_mismatch");
 });
 

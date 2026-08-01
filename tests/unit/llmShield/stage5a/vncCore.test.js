@@ -41,7 +41,8 @@ test("200: wrong VNC public key (key digest mismatch)", () => {
 
 test("200: a tampered attestation signature", () => {
   const b = clone(buildGreenVncBundle());
-  b.attestation.signature = "00" + b.attestation.signature.slice(2);
+  b.attestation.signature =
+    (b.attestation.signature.startsWith("00") ? "11" : "00") + b.attestation.signature.slice(2);
   assert.equal(evaluateVnc(b, opts).raw, 200);
 });
 
