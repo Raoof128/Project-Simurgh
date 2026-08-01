@@ -77,6 +77,8 @@ const EXCLUSIONS = Object.freeze({
     "excluded_with_signed_reason: an argv wrapper; runCeremony itself is invoked directly by the Lane B net",
   "tools/simurgh-attestation/stage5s/node/buildFindingLedger.mjs#main":
     "not_applicable_with_signed_reason: a driver whose every branch is exercised through injected deps in the finding-ledger suite",
+  "tools/simurgh-attestation/stage5s/node/checkCloseout.mjs#main":
+    "excluded_with_signed_reason: an argv wrapper that reads the committed closeout from disk; checkCloseout itself is invoked directly below against the real document",
   "tools/simurgh-attestation/stage5s/browser/runHeadless.mjs#main":
     "excluded_with_signed_reason: it writes the browser capture record; the capture STATE it produces is asserted by the parity net",
 });
@@ -449,6 +451,17 @@ async function coveredSymbols() {
     for (const fn of Object.keys(m)) {
       if (typeof m[fn] === "function") mark(`${NODE_DIR}/loadInheritedRoots.mjs`, fn);
     }
+  }
+
+  // ---- node/checkCloseout.mjs
+  {
+    const m = await import(`../../../../${NODE_DIR}/checkCloseout.mjs`);
+    // Against the REAL closeout, not a fixture: a closeout check that passes over invented text
+    // proves the regexes compile.
+    const real = readFileSync(m.CLOSEOUT_PATH, "utf8");
+    assert.equal(m.checkCloseout(real).ok, true, JSON.stringify(m.checkCloseout(real).refusals));
+    assert.equal(m.checkCloseout("nothing here").ok, false);
+    mark(`${NODE_DIR}/checkCloseout.mjs`, "checkCloseout");
   }
 
   // ---- browser/vwq-portable.mjs — the portable mirror is in scope like everything else

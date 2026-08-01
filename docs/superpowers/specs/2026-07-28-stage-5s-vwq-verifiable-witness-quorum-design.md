@@ -1132,6 +1132,15 @@ The table is the authority. The write-surface checker **parses this annex** and 
 because two copies of a declaration are two chances to disagree and the silent one is the copy nobody
 reads.
 
+**A seventh row was drafted at Task 36 and then withdrawn**, which is recorded here because the
+reasoning is the useful part. The prior-reproduce sweep found Stage 5Q's unit suite red on the 5S
+branch: 5Q's problem-gate census flags manually enumerated workflow steps with no committed universe
+query, and 5S's workflow adds four. Re-pinning looked like the intended workflow — 5Q's own test
+header says the pin went stale when 5R added seven such steps. But 5Q's finding ledger ties
+`entry_count` to a measurement taken **at tag v2.53.0**, so the pin is anchored to a historical
+observation rather than floating with the working tree. Re-pinning it would have rewritten a prior
+stage's recorded evidence to make a later stage's suite green. Recorded as 5S-F015 instead.
+
 **The fourth row was added on 2026-07-29, after Task 5 found that the annex authorised the three
 projections but not the source that generates them (finding 5S-F005).** An authority to change an
 output while its input stays forbidden is not an authority to do the work; it is a permission slip
@@ -1252,6 +1261,7 @@ reachable from any prefix here.
 | exact  | `.prettierignore`                                                                    | modify     | fixture and evidence directories                              | 5S-S011 |
 | exact  | `docs/research/llm-shield/STAGE_5S_CLOSEOUT.md`                                      | add        | closeout, inside the tag                                      | 5S-S012 |
 | exact  | `tools/simurgh-attestation/verify-stage5s-attestation.mjs`                           | add        | the standalone attestation verifier named by Task 30          | 5S-S016 |
+| exact  | `scripts/runAllPriorReproduce.sh`                                                    | add        | the prior-reproduce sweep runner required by Task 36          | 5S-S017 |
 | exact  | `README.md`                                                                          | modify     | stage banner                                                  | 5S-S013 |
 | exact  | `CHANGELOG.md`                                                                       | modify     | release entry                                                 | 5S-S014 |
 | exact  | `AGENT.md`                                                                           | modify     | stage entry                                                   | 5S-S015 |
