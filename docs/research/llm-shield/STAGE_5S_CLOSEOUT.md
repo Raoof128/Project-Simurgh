@@ -80,8 +80,10 @@ installing a toolchain after the gate has already run is precisely the arrangeme
 this (5S-F018).
 
 **`0 fail` in this run does not mean the two intermittent failures are gone.** 5S-F012 (Stage 4J,
-roughly one run in six) and 5S-F013 (Stage 4K, once in seven) did not fire here, and neither cause is
-known. A green run of an intermittent failure is evidence of nothing except that particular run: the
+roughly one run in six) and 5S-F013 (Stage 4K, once in seven) did not fire here. F012's cause was
+subsequently found and repaired — a non-atomic fixture write, measured half-readable 90 times in 400
+and 0 in 1389 once atomic. **F013's cause remains unknown**; what was repaired there is the reason it
+stayed unknown, namely a test that discarded the raw code it had just written to disk. A green run of an intermittent failure is evidence of nothing except that particular run: the
 findings stand open, with their reproduction recipes, and the honest reading of the table above is
 "this run passed", never "the suite passes".
 
@@ -96,9 +98,11 @@ marks: a gate that exempts quoted text hands every future overclaim a pair of qu
 Eighteen findings, of which eight are against 5S's own work and were fixed here. The other ten are
 against stages 4J, 4K, 5N, 5Q and the repository at large; none was repaired inside this stage,
 because each sits outside Annex S and a stage that edits another stage's tests to go green has
-found a defect in itself. Three of them (F015, F016, F017) were repaired on Stage 5Q's own branches
-under 5Q's own authority, which is the shape this boundary is meant to produce: the obstacle removed
-at its source, not worked around where it was noticed.
+found a defect in itself. Seven of them — F012, F014, F015, F016, F017, F018 and F013's
+diagnostic-loss half — were repaired on their OWN branches under the authority that owns the file,
+which is the shape this boundary is meant to produce: the obstacle removed at its source, not worked
+around where it was noticed. Only F007 and F013's root cause remain open, and F013 is open honestly:
+its cause is unknown and is not claimed.
 
 | id      | finding                                                                                                                                                                           |
 | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -108,8 +112,8 @@ at its source, not worked around where it was noticed.
 | 5S-F009 | the same species one module over: the policy schema said `roster`, every consumer said `witness_roster`                                                                           |
 | 5S-F010 | raw code 492 was unreachable — three defensible decisions that together made it dead. Repaired by the key-ownership decision tree                                                 |
 | 5S-F011 | the artifact omitted the witness statement sets that frozen §2.1 requires. Restored as context, never as premises                                                                 |
-| 5S-F012 | an intermittent Stage 4J failure, cause unknown, recorded with its reproduction recipe                                                                                            |
-| 5S-F013 | a second intermittent failure, in Stage 4K, distinct from F012, cause unknown                                                                                                     |
+| 5S-F012 | an intermittent Stage 4J failure — **resolved**: a non-atomic fixture write, observable half-written 90 times in 400, repaired by write-then-rename                               |
+| 5S-F013 | a second intermittent failure in Stage 4K — **root cause still unknown**; the diagnostic-loss defect that hid it is repaired, so the next occurrence names its own raw code       |
 | 5S-F014 | `"00" + signature.slice(2)` is a no-op whenever the signature already begins `00` — measured at 75 in 20,001. Five sites share the pattern                                        |
 | 5S-F015 | Stage 5Q's problem-gate census tied a live check to a measurement frozen at another stage's tag, so 5S's four CI steps could only go green by rewriting prior evidence            |
 | 5S-F016 | Stage 5Q's write-surface anti-vacuity guard covers `range` mode but not the default `staged` mode, so a zero-path run over a dirty tree prints OK                                 |
