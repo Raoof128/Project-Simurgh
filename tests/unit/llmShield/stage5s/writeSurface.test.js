@@ -31,9 +31,28 @@ const judge = (changed, over = {}) =>
   judgeChanges({ entries: surface(), changed, rangeCommitCount: 2, dirty: [], ...over });
 const reasons = (v) => v.refusals.map((r) => r.reason);
 
+/**
+ * The Annex M rows, pinned BY ID SET. Q1-F002: a count is satisfied by one removal and one
+ * addition, so the identities are the pin and the length is telemetry.
+ */
+const ANNEX_M_IDS = Object.freeze([
+  "5S-M001",
+  "5S-M002",
+  "5S-M003",
+  "5S-M004",
+  "5S-M005",
+  "5S-M006",
+  "5S-M007",
+]);
+
 test("[5s-t2] Annex M is PARSED from the spec, not re-declared in code", () => {
   const rows = parseAnnexM(specText);
-  assert.equal(rows.length, 6, `expected 6 ripple paths, parsed ${rows.length}`);
+  assert.deepEqual(
+    rows.map((r) => r.id).sort(),
+    [...ANNEX_M_IDS].sort(),
+    "the Annex M row SET drifted from its pin"
+  );
+  assert.equal(rows.length, ANNEX_M_IDS.length, "a row id is duplicated");
   for (const r of rows) {
     assert.equal(r.allowed_operation, "modify", `${r.path} is not modify-only`);
     assert.match(r.id, /^5S-M\d{3}$/);
@@ -50,7 +69,13 @@ test("[5s-t2] mutating the spec text changes the parsed surface", () => {
   // first draft of this test passed against a hardcoded list for exactly that reason.
   const mutated = specText.replaceAll(RIPPLE, "tests/unit/llmShield/stage4h/somethingElse.test.js");
   assert.ok(!parseAnnexM(mutated).some((r) => r.path === RIPPLE));
-  assert.equal(parseAnnexM(mutated).length, 6, "the row should be rewritten, not removed");
+  assert.deepEqual(
+    parseAnnexM(mutated)
+      .map((r) => r.id)
+      .sort(),
+    [...ANNEX_M_IDS].sort(),
+    "the row should be rewritten, not removed"
+  );
 });
 
 test("[5s-t2] parsing is bounded to Annex M's own section", () => {
