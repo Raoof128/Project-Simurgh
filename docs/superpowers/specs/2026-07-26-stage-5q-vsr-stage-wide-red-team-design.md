@@ -1387,16 +1387,27 @@ Exhaustive. A path absent here is refused under `maintenance` however obviously 
 operation not listed is refused on a path that is listed — an allowlist of files alone would permit
 unrelated edits inside an authorised file.
 
-| path                                                                    | op     | purpose                                                         | id      |
-| ----------------------------------------------------------------------- | ------ | --------------------------------------------------------------- | ------- |
-| `.github/workflows/stage-4-lean-proofs.yml`                             | modify | retire the by-name proof list; delegate to the discovering gate | Q1-F001 |
-| `scripts/check-lean-proofs.mjs`                                         | add    | the repo-wide self-enumerating Lean gate                        | Q1-F001 |
-| `scripts/lib/leanProofGate.mjs`                                         | add    | its audit logic and Lean-aware comment state machine            | Q1-F001 |
-| `tests/unit/leanProofGate.test.js`                                      | add    | the guards, including the permanent seeded-omission witness     | Q1-F001 |
-| `proofs/README.md`                                                      | modify | docs accuracy: it named four files while thirty-eight existed   | Q1-F001 |
-| `docs/research/llm-shield/evidence/stage-5q-q1/f001-workflow-at-q0.yml` | add    | the Q0 workflow bytes, pinned by the frozen `claim_digest`      | Q1-F001 |
-| `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json`   | add    | the census pin, re-declared as a set                            | Q1-F002 |
-| `docs/research/llm-shield/evidence/stage-5q-q1/q1-finding-ledger.json`  | add    | Q1-F002, Q1-F003, Q1-F004 and Q1-F005, with reproductions       | Q1-F002 |
+| path                                                                    | op     | purpose                                                                                              | id      |
+| ----------------------------------------------------------------------- | ------ | ---------------------------------------------------------------------------------------------------- | ------- |
+| `.github/workflows/stage-4-lean-proofs.yml`                             | modify | retire the by-name proof list; delegate to the discovering gate                                      | Q1-F001 |
+| `scripts/check-lean-proofs.mjs`                                         | add    | the repo-wide self-enumerating Lean gate                                                             | Q1-F001 |
+| `scripts/lib/leanProofGate.mjs`                                         | add    | its audit logic and Lean-aware comment state machine                                                 | Q1-F001 |
+| `tests/unit/leanProofGate.test.js`                                      | add    | the guards, including the permanent seeded-omission witness                                          | Q1-F001 |
+| `proofs/README.md`                                                      | modify | docs accuracy: it named four files while thirty-eight existed                                        | Q1-F001 |
+| `docs/research/llm-shield/evidence/stage-5q-q1/f001-workflow-at-q0.yml` | add    | the Q0 workflow bytes, pinned by the frozen `claim_digest`                                           | Q1-F001 |
+| `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json`   | modify | the census pin: created at Q1-F002, and **modifiable** from Q1-F006 so it can be split and re-pinned | Q1-F006 |
+| `docs/research/llm-shield/evidence/stage-5q-q1/q1-finding-ledger.json`  | add    | Q1-F002, Q1-F003, Q1-F004 and Q1-F005, with reproductions                                            | Q1-F002 |
+
+**`add` became `modify` on 2026-08-01, under finding Q1-F006.** The row permitted creating the census
+pin and never changing it, while the census it holds is compared against the live repository on every
+run — so the file was, by construction, required to change and forbidden from changing. The gate said
+so itself when the split was attempted: _"annex permits add, change is modify"_. That is the same
+Q0/Q1 deadlock Annex A5 exists to resolve, one row further in, and it is resolved the same way: by
+naming the operation in the spec rather than by treating the need as a permission.
+
+The row carries one operation because this annex's parser takes one — `add|modify`, not 5S's
+`add-modify`. `add` is spent: the file exists on `main`, so every change from here is a modification,
+and a row claiming both would be describing a past that cannot recur.
 
 Q1 evidence lives in the **sibling** `stage-5q-q1/` rather than under `evidence/stage-5q/`, because
 Stage 5R's reproduce gates on `git status --porcelain` across that entire inherited tree; an
