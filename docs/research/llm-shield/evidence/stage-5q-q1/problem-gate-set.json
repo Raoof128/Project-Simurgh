@@ -1,6 +1,6 @@
 {
   "schema": "simurgh.stage5q.problem_gate_set.v2",
-  "note": "Q1-F002. The SET is the authority; entry_count is telemetry. Added and removed are reported independently, so a repaired problem can never mask a new one. v2 SPLITS two things v1 conflated: the BASELINE measurement, which the Q1-F002 finding cites and which may never move, and the CURRENT census, which every later stage re-pins as it adds workflow steps. In v1 they were one field, so any stage that added a CI step could only go green by editing the number a prior finding had recorded \u2014 see Stage 5S finding 5S-F015.",
+  "note": "Q1-F002. The SET is the authority; entry_count is telemetry. Added and removed are reported independently, so a repaired problem can never mask a new one. v2 SPLITS two things v1 conflated: the BASELINE measurement, which the Q1-F002 finding cites and which may never move, and the CURRENT census, which every later stage re-pins as it adds workflow steps. In v1 they were one field, so any stage that added a CI step could only go green by editing the number a prior finding had recorded — see Stage 5S finding 5S-F015.",
   "baseline": {
     "tag": "v2.53.0-stage-5r-vpf",
     "entry_count": 19,
@@ -86,9 +86,9 @@
     ]
   },
   "current": {
-    "as_of": "main @ 653f7b8c",
-    "entry_count": 19,
-    "why": "the live census, compared against the repository as it stands; re-pinned deliberately by each stage that adds workflow steps",
+    "as_of": "2026-08-01, Stage 5S — four stage-5s-checks.yml steps added under authority 5S-M007",
+    "entry_count": 23,
+    "why": "the LIVE census, re-pinned by each stage that adds workflow steps. `baseline` is NOT touched: it is the v2.53.0 measurement the Q1-F002 finding cites, and a later stage may never move it to go green (5S-F015).",
     "gate_problems": [
       {
         "gate_id": "stage-1-checks.yml::Install Lean (elan) so the Stage 4R reproduce builds its proof",
@@ -164,6 +164,22 @@
       },
       {
         "gate_id": "stage-5r-checks.yml::the instrument lock",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5s-checks.yml::Attestation verifies, and refuses a key",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5s-checks.yml::Lane C frozen capture, offline",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5s-checks.yml::Lean proofs (repo-wide gate, floor 39)",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5s-checks.yml::Reproduce",
         "reason_code": "missing_committed_universe_query"
       }
     ]

@@ -63,10 +63,12 @@ compressed into a single reassuring sentence.
 
 ## What this stage found, in itself and in the repository
 
-Sixteen findings, of which seven are against 5S's own work and were fixed here. The other nine are
+Seventeen findings, of which seven are against 5S's own work and were fixed here. The other ten are
 against stages 4J, 4K, 5N, 5Q and the repository at large; none was repaired inside this stage,
 because each sits outside Annex S and a stage that edits another stage's tests to go green has
-found a defect in itself.
+found a defect in itself. Three of them (F015, F016, F017) were repaired on Stage 5Q's own branches
+under 5Q's own authority, which is the shape this boundary is meant to produce: the obstacle removed
+at its source, not worked around where it was noticed.
 
 | id      | finding                                                                                                                                                                           |
 | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -81,6 +83,7 @@ found a defect in itself.
 | 5S-F014 | `"00" + signature.slice(2)` is a no-op whenever the signature already begins `00` — measured at 75 in 20,001. Five sites share the pattern                                        |
 | 5S-F015 | Stage 5Q's problem-gate census tied a live check to a measurement frozen at another stage's tag, so 5S's four CI steps could only go green by rewriting prior evidence            |
 | 5S-F016 | Stage 5Q's write-surface anti-vacuity guard covers `range` mode but not the default `staged` mode, so a zero-path run over a dirty tree prints OK                                 |
+| 5S-F017 | the Q1-F006 repair kept two v1 field readings below an early return, so no test could reach them until the first day the repair worked                                            |
 
 The others (F001–F005) are recorded in the plan's §15.
 
