@@ -96,8 +96,28 @@ const covers = (row, path) =>
  *          rangeCommitCount?: number, dirty?: string[]}} input
  * @returns {{ok: boolean, refusals: Array<{reason: string, path?: string, detail?: string}>, matched: number}}
  */
+/**
+ * The ONLY exemption from the private-key refusal, and it is decided by CONTENT.
+ *
+ * A public key is a `.pem` and every stage commits one, so a path rule alone refuses legitimate
+ * evidence. A filename exemption would be worse than the problem: `sneaky-public-key.pem` would
+ * carry anything at all. So the file must actually begin with a public-key PEM header, read from
+ * what is committed — the same "claims are checked, never believed" rule the rest of the stage runs
+ * on, applied to the checker itself.
+ */
+function isCommittedPublicKey(path, readFile) {
+  if (typeof readFile !== "function") return false;
+  let text;
+  try {
+    text = readFile(path);
+  } catch {
+    return false;
+  }
+  return typeof text === "string" && text.trimStart().startsWith("-----BEGIN PUBLIC KEY-----");
+}
+
 export function judgeChanges(input) {
-  const { entries, changed, rangeCommitCount = 0, dirty = [] } = input;
+  const { entries, changed, rangeCommitCount = 0, dirty = [], readFile } = input;
   const refusals = [];
   const R = SURFACE_REFUSALS;
   let matched = 0;
@@ -110,8 +130,9 @@ export function judgeChanges(input) {
   }
 
   for (const { path, op } of changed) {
-    // Key material is refused before membership: no row may outvote it.
-    if (PRIVATE_KEY_PATH.test(path)) {
+    // Key material is refused before membership: no row may outvote it. The single exemption is a
+    // file whose COMMITTED CONTENT is a public-key PEM — checked, never inferred from the name.
+    if (PRIVATE_KEY_PATH.test(path) && !isCommittedPublicKey(path, readFile)) {
       refusals.push({ reason: R.PRIVATE_KEY_MATERIAL, path });
       continue;
     }

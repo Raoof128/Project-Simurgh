@@ -1251,6 +1251,7 @@ reachable from any prefix here.
 | exact  | `scripts/check-lean-proofs.mjs`                                                      | modify     | the proof-floor bump 38 to 39 required by §4.1                | 5S-S010 |
 | exact  | `.prettierignore`                                                                    | modify     | fixture and evidence directories                              | 5S-S011 |
 | exact  | `docs/research/llm-shield/STAGE_5S_CLOSEOUT.md`                                      | add        | closeout, inside the tag                                      | 5S-S012 |
+| exact  | `tools/simurgh-attestation/verify-stage5s-attestation.mjs`                           | add        | the standalone attestation verifier named by Task 30          | 5S-S016 |
 | exact  | `README.md`                                                                          | modify     | stage banner                                                  | 5S-S013 |
 | exact  | `CHANGELOG.md`                                                                       | modify     | release entry                                                 | 5S-S014 |
 | exact  | `AGENT.md`                                                                           | modify     | stage entry                                                   | 5S-S015 |
