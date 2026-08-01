@@ -84,16 +84,22 @@ function main(argv) {
   console.log(`Q0 write surface — mode=${mode}${range ? ` range=${range}` : ""}`);
   console.log(`  paths examined: ${result.checked}`);
 
-  // ANTI-VACUITY (Annex A5.2). A range gate that examined nothing while the working tree carries
-  // changes has not passed — it has not run. This is exactly how the Q1-F001 repair was verified
-  // "21/21" with its work uncommitted: gates 2 and 3 diffed an empty range and printed green.
-  if (mode === "range" && result.checked === 0) {
+  // ANTI-VACUITY (Annex A5.2). A gate that examined nothing while the working tree carries changes
+  // has not passed — it has not run. This is exactly how the Q1-F001 repair was verified "21/21"
+  // with its work uncommitted: gates 2 and 3 diffed an empty range and printed green.
+  //
+  // 5S-F016: this guard was `mode === "range" && ...`, and `staged` is the DEFAULT mode — so the
+  // bare invocation, which is what a human types, was the one mode NOT covered. Demonstrated by
+  // control over one dirty tree: `--range HEAD..HEAD` refused and exited 1 while the bare call
+  // printed `paths examined: 0 / OK` and exited 0. Every mode is guarded now, because the property
+  // that matters is "nothing was examined while something had changed", and that is mode-agnostic.
+  if (result.checked === 0) {
     const dirty = gitText(["status", "--porcelain"]);
     if (dirty) {
       console.log("  REFUSING: uncommitted_changes_not_evaluated");
       console.log(
-        "    the range is empty and the working tree is not. Commit the work, or the gate is " +
-          "reporting on a change set that does not include it."
+        `    the ${mode} change set is empty and the working tree is not. Commit or stage the ` +
+          "work, or the gate is reporting on a change set that does not include it."
       );
       return 1;
     }
