@@ -21,8 +21,8 @@ pre_task0_digest    3357a92529063d7c21d251c411bce41e1b1b84be11f1ddcbc0c91337391f
 pre_task0_bytes     65753
 
 post_task0_commit   a21103e7e3503d5c3b6b620bc70c4836060b122f   commit 0a; Annex S added at Task 2
-post_task0_digest   23da5d3720bb1b330c5c5d4f0a20164484125275c5599d4de332c554e52d5750
-post_task0_bytes    80808
+post_task0_digest   c7cd16b954ede1cbd2fe39a38c59c2ca903dc4630c648dcf87a8f051072c0259
+post_task0_bytes    80993                    re-pinned at Task 30: Annex S row 5S-S016 added
 frozen_range_digest e0d25ce115d0b945175ccff5fcadebcd017ea47af02a8f2a9b249364132b83ec
 frozen_range_bytes  64240                    §§1-7, UNMOVED from 76c469a0 — see Annex M.5
 spec_domain         simurgh.vwq.full-spec.v1
