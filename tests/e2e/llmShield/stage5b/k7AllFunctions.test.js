@@ -51,7 +51,10 @@ test("K7.3 — tamper matrix: each bound field trips the correct FIRST-failure c
     ["schema (210)", (b) => delete b.charter.schema, 210],
     [
       "signature (211)",
-      (b) => (b.attestation.signature = "00" + b.attestation.signature.slice(2)),
+      (b) =>
+        (b.attestation.signature =
+          (b.attestation.signature.startsWith("00") ? "11" : "00") +
+          b.attestation.signature.slice(2)),
       211,
     ],
     [

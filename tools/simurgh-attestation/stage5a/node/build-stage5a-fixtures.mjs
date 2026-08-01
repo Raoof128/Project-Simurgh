@@ -136,7 +136,8 @@ export function buildFixtures() {
       vwa: std(),
       claims: [claim("c1", "2001", "asserts_unflagged", span)],
     });
-    b.attestation.signature = "00" + b.attestation.signature.slice(2);
+    b.attestation.signature =
+      (b.attestation.signature.startsWith("00") ? "11" : "00") + b.attestation.signature.slice(2);
     add("tamper_signature", "tamper", 200, 200, b);
   }
 

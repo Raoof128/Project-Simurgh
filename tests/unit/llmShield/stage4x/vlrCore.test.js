@@ -39,7 +39,8 @@ test("green bundle → raw 0 in both tiers", () => {
 test("174 on a tampered signature and on a wrong key digest", () => {
   const { bundle, publicKeyPem } = signedBundle();
   const t1 = clone(bundle);
-  t1.attestation.signature = "00" + t1.attestation.signature.slice(2);
+  t1.attestation.signature =
+    (t1.attestation.signature.startsWith("00") ? "11" : "00") + t1.attestation.signature.slice(2);
   assert.equal(evaluateVlr(t1, { publicKeyPem }).raw, 174);
   const t2 = clone(bundle);
   t2.attestation.signing_key_digest = "sha256:" + "0".repeat(64);
