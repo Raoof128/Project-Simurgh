@@ -86,8 +86,8 @@
     ]
   },
   "current": {
-    "as_of": "2026-08-01, Stage 5S — four stage-5s-checks.yml steps added under authority 5S-M007",
-    "entry_count": 23,
+    "as_of": "2026-08-01, Stage 5S — five stage-5s-checks.yml steps added under authority 5S-M007",
+    "entry_count": 24,
     "why": "the LIVE census, re-pinned by each stage that adds workflow steps. `baseline` is NOT touched: it is the v2.53.0 measurement the Q1-F002 finding cites, and a later stage may never move it to go green (5S-F015).",
     "gate_problems": [
       {
@@ -169,6 +169,10 @@
       {
         "gate_id": "stage-5s-checks.yml::Attestation verifies, and refuses a key",
         "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "stage-5s-checks.yml::Install Lean (elan)",
+        "reason_code": "unclassifiable_step"
       },
       {
         "gate_id": "stage-5s-checks.yml::Lane C frozen capture, offline",

@@ -47,6 +47,21 @@ jobs:
       - name: Install
         run: npm ci
 
+      - name: Install Lean (elan)
+        # Placed BEFORE the suites, not beside the proof step: two 5S unit tests shell out to the
+        # repo-wide Lean gate, which fails CLOSED when `lean` is absent. That is correct — a proof
+        # gate that skipped on a missing toolchain would be green forever on any runner without it —
+        # so the toolchain is installed rather than the gate softened. The version is read from the
+        # pin file, never inline, so it cannot drift from the proofs it builds.
+        #
+        # This comment sits INSIDE the step deliberately. The census parser attributes text between
+        # steps to the PRECEDING one, so the same words above this line made `npm ci` read as a
+        # completeness gate and silently added a census entry.
+        run: |
+          curl -sSfL https://github.com/leanprover/elan/releases/latest/download/elan-x86_64-unknown-linux-gnu.tar.gz | tar xz
+          ./elan-init -y --default-toolchain "$(cat proofs/stage5s/lean-toolchain)"
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
       - name: Format
         run: npm run format:check
 
