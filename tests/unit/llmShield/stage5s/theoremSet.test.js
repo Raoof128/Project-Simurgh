@@ -23,6 +23,33 @@ import test from "node:test";
 const PROOF = "proofs/stage5s/Vwq.lean";
 const GATE = "scripts/check-lean-proofs.mjs";
 const SPEC = "docs/superpowers/specs/2026-07-28-stage-5s-vwq-verifiable-witness-quorum-design.md";
+const WORKFLOW = ".github/workflows/stage-5s-checks.yml";
+
+/**
+ * Is a Lean toolchain on PATH?
+ *
+ * `scripts/check.sh` runs BEFORE the `Install Lean (elan)` step of stage-1-checks.yml, so the two
+ * assertions below that shell out to `lean` failed there while passing on any developer machine
+ * with a toolchain — two CI failures that no local run reproduced.
+ *
+ * They SKIP rather than pass when the binary is absent, and the skip is named and counted. The
+ * distinction that matters: a skip here is not a hole, because the escape-hatch scan above is
+ * source-based and unconditional (it is what actually catches `sorry` — `lean` exits 0 on a
+ * sorry-closed theorem), and the type-check itself is separately enforced by CI jobs that DO
+ * install the toolchain. The test below asserts that such a job exists, so this skip can never
+ * become the only path.
+ */
+const LEAN_ON_PATH = (() => {
+  try {
+    execFileSync("lean", ["--version"], { stdio: "ignore" });
+    return true;
+  } catch {
+    return false;
+  }
+})();
+const NO_LEAN = LEAN_ON_PATH
+  ? false
+  : "lean is not on PATH — enforced by the CI jobs that install elan";
 
 /** The five names of §4.1, pinned. */
 const REQUIRED_THEOREMS = Object.freeze([
@@ -83,7 +110,7 @@ test("[5s-t26] the proof carries ZERO escape hatches in code", () => {
   assert.ok(code.includes("theorem"), "the extracted code is not the proof");
 });
 
-test("[5s-t26] the proof TYPE-CHECKS", () => {
+test("[5s-t26] the proof TYPE-CHECKS", { skip: NO_LEAN }, () => {
   // Necessary and not sufficient — `lean` exits 0 on a sorry-closed theorem, which is exactly why
   // the escape scan above exists as a separate assertion rather than as a comment.
   const out = execFileSync("lean", [PROOF], {
@@ -100,11 +127,41 @@ test("[5s-t26] the repo floor was raised to 39 IN this task", () => {
   assert.equal(Number(floor[1]), 39, "the floor was not raised alongside the proof");
 });
 
-test("[5s-t26] the repo-wide gate passes, and counts this directory", () => {
+test("[5s-t26] the repo-wide gate passes, and counts this directory", { skip: NO_LEAN }, () => {
   const out = execFileSync(process.execPath, [GATE], { encoding: "utf8" });
   assert.match(out, /0 escape hatches/);
   assert.match(out, /all type-check/);
   assert.match(out, /39 Lean proof\(s\)/);
+});
+
+test("[5s-t26] the skip above is not a hole — a CI job installs the toolchain AND runs the gate", () => {
+  // The one assertion that makes the two skips safe, and it never skips itself. If the workflow
+  // stopped installing elan, or stopped running the gate, the type-check would be enforced
+  // NOWHERE and every environment would quietly report a skip instead of a failure.
+  const wf = readFileSync(WORKFLOW, "utf8");
+  assert.match(wf, /elan/, "the workflow installs no Lean toolchain");
+  assert.match(wf, /check-lean-proofs\.mjs/, "the workflow never runs the repo-wide proof gate");
+
+  // Order matters as much as presence: installing the toolchain after the gate has already run is
+  // exactly the stage-1-checks.yml arrangement that produced the two failures this skip answers.
+  //
+  // Compare the STEPS, not any mention. The first draft compared raw indexOf and went red on a
+  // correct workflow, because `check-lean-proofs.mjs` also appears in the `paths:` trigger near the
+  // top of the file — a path filter naming the script is not a step running it.
+  const install = wf.indexOf("./elan-init");
+  const runsGate = wf.indexOf("run: node scripts/check-lean-proofs.mjs");
+  assert.ok(install > 0, "no elan-init step");
+  assert.ok(runsGate > 0, "no step RUNS the repo-wide gate");
+  assert.ok(
+    install < runsGate,
+    "the toolchain is installed AFTER the gate runs, which is how this defect arose"
+  );
+
+  // And the toolchain is pinned rather than floating, so the gate cannot drift from the proofs.
+  assert.equal(
+    readFileSync("proofs/stage5s/lean-toolchain", "utf8").trim(),
+    "leanprover/lean4:v4.15.0"
+  );
 });
 
 test("[5s-t26] the proof exhibits BOTH a satisfying and a non-satisfying model", () => {

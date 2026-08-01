@@ -64,8 +64,20 @@ reproduce          30 gates ·  30 pass
 prior sweep        50 prior reproduce scripts, 5S excluded by name
 ```
 
-**The one environment-dependent skip is a Stage 4K test needing a second Node older than 26**,
-absent on this machine. It is a skip, it is counted as a skip, and it is not a pass.
+**The skip count varies with the environment, and the table above is one environment.** On this
+machine there is one environment-dependent skip: a Stage 4K test needing a second Node older than 26.
+On a runner without a Lean toolchain there are three, because two Stage 5S proof assertions skip
+rather than fail — `scripts/check.sh` runs before the `Install Lean (elan)` step of
+`stage-1-checks.yml`, so `lean` is genuinely absent there. Every one of them is a skip, is counted as
+a skip, and is not a pass.
+
+Those two proof skips are safe for a stated reason rather than by hope. The escape-hatch scan that
+actually catches `sorry` is source-based and never skips — `lean` exits 0 on a sorry-closed theorem,
+so the type-checker was never what enforced that. And the type-check itself runs in CI jobs that do
+install the toolchain, which a permanently-executing test asserts: it checks that the workflow
+installs elan, that a step runs the repo-wide gate, and that the install comes **first**, since
+installing a toolchain after the gate has already run is precisely the arrangement that produced
+this (5S-F018).
 
 **`0 fail` in this run does not mean the two intermittent failures are gone.** 5S-F012 (Stage 4J,
 roughly one run in six) and 5S-F013 (Stage 4K, once in seven) did not fire here, and neither cause is
@@ -81,7 +93,7 @@ marks: a gate that exempts quoted text hands every future overclaim a pair of qu
 
 ## What this stage found, in itself and in the repository
 
-Seventeen findings, of which seven are against 5S's own work and were fixed here. The other ten are
+Eighteen findings, of which eight are against 5S's own work and were fixed here. The other ten are
 against stages 4J, 4K, 5N, 5Q and the repository at large; none was repaired inside this stage,
 because each sits outside Annex S and a stage that edits another stage's tests to go green has
 found a defect in itself. Three of them (F015, F016, F017) were repaired on Stage 5Q's own branches
@@ -102,6 +114,7 @@ at its source, not worked around where it was noticed.
 | 5S-F015 | Stage 5Q's problem-gate census tied a live check to a measurement frozen at another stage's tag, so 5S's four CI steps could only go green by rewriting prior evidence            |
 | 5S-F016 | Stage 5Q's write-surface anti-vacuity guard covers `range` mode but not the default `staged` mode, so a zero-path run over a dirty tree prints OK                                 |
 | 5S-F017 | the Q1-F006 repair kept two v1 field readings below an early return, so no test could reach them until the first day the repair worked                                            |
+| 5S-F018 | two 5S proof assertions hard-required a Lean toolchain that `check.sh`'s own job installs only afterward — green on every developer machine, red in CI, reproduced by neither     |
 
 The others (F001–F005) are recorded in the plan's §15.
 
