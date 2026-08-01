@@ -1,0 +1,41 @@
+Stage 5E VDA conformance kit — which bytes each run in RAW_RESULTS.md actually exercised
+=========================================================================================
+
+Motto: AnthropicSafe First, then ReviewerSafe.
+
+Every run in RAW_RESULTS.md names the kit as "simurgh-vda-conformance.zip". That filename was reused
+across three different artifacts in one afternoon, so the name alone binds nothing. A filename is a
+claim (Stage 5N). These are the digests.
+
+  runs 1-2   92557 bytes   sha256 ac77c6cdba8608c40c1af1218bd65f84af7c846284046615eb19ad5fd5eed745
+             The pre-repair kit. Its step 6/6 printed "lean OK (zero sorry)" from a bare `lean`
+             invocation, and on the droplet skipped the step entirely while still printing ALL PASS.
+             Preserved as simurgh-vda-conformance-SUPERSEDED-2026-08-01-prelean.zip.
+
+  runs 3-4   99210 bytes   sha256 26f1bcbc1ec30d7c320db7ec6b33ac2754d112f32176113fa17496abf0a06479
+             *** NOT RETAINED. *** This artifact was overwritten in place by a later rebuild before
+             anyone thought to keep it, so the exact bytes Runs 3 and 4 exercised no longer exist.
+             The digest is recorded from the build that produced it. Runs 3-4 should be read as
+             evidence about a kit that cannot now be re-examined; Run 5 supersedes them on every
+             point they establish, and nothing in this directory depends on them alone.
+
+  run 5      99873 bytes   sha256 7aea743e84ddb0bedaf596aff9ae3adf4ff8bda3d8c957f9a47ac6aaec1e1f37
+             The kit carrying the operator's elan instructions. Preserved as
+             simurgh-vda-conformance-RUN5-2026-08-01.zip.
+
+  delivered  99873 bytes   sha256 833694a3bd66a4c824e4ad6a3662af0827ef0ddf74b71b0b7feef5c0a616c9b3
+             Rebuilt from merged main after the operator's DROPLET_SETUP.md findings were folded
+             back into the pack source. CONTENT-identical to the run-5 kit except for one prettier
+             normalisation (`*default*` -> `_default_`); verified by extracting both and diffing the
+             trees, which differ on that single line and nothing else.
+
+THE KIT IS NOT BYTE-REPRODUCIBLE, AND THAT IS A PACKAGING FACT, NOT AN EVIDENCE DEFECT
+---------------------------------------------------------------------------------------
+Two builds of identical content produce different zip digests, because a zip stores per-file mtimes
+and the builder does not normalise them. A digest here therefore pins WHICH ARTIFACT was run; it
+does not let a reader rebuild that digest from source. The reproducible claim is over the extracted
+CONTENT, not the archive. Anyone re-deriving these should extract and diff trees, as was done above,
+rather than comparing zip digests and concluding tampering.
+
+The Stage 5E evidence INSIDE the kit is byte-stable — that is what step 2/6 of every run checks, and
+all five runs confirmed it. The archive around it is not, and no run ever claimed otherwise.
