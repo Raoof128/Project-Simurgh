@@ -67,7 +67,31 @@ export async function checkpointEnvelopeDigest(checkpoint) {
 }
 
 /** The §2.4 relation, frozen. The ancestry oracle is injected exactly as in the Node core. */
+/** A view is malformed when the fields the relation reads are absent. The core refuses these at
+ * SCHEMA_UNSUPPORTED; the mirror did not, and accepted two empty objects as `same_checkpoint`. The
+ * K7-A adapter found it — the parity vectors had no malformed view to disagree about. */
+function malformedView(v) {
+  if (v === null || typeof v !== "object") return "not an object";
+  for (const field of ["producer_identity", "scope_id", "checkpoint_body_digest"]) {
+    if (typeof v[field] !== "string" || v[field].length === 0) return `${field} absent`;
+  }
+  if (!Number.isInteger(v.epoch)) return "epoch is not an integer";
+  return null;
+}
+
 export async function compare(a, b, opts = {}) {
+  for (const [label, v] of [
+    ["a", a],
+    ["b", b],
+  ]) {
+    const why = malformedView(v);
+    if (why)
+      return {
+        ok: false,
+        refusal: { reason: "SCHEMA_UNSUPPORTED", detail: `view ${label}: ${why}` },
+      };
+  }
+
   // The oracle returns an OBJECT carrying `verdict`, exactly as the Node core requires. The first
   // version of this mirror took a bare string; the core read `answer?.verdict`, saw undefined, and
   // correctly fell through to `indeterminate` — a genuine contract mismatch that the parity vectors

@@ -33,15 +33,31 @@ export const REQUIRED_C1_ROOTS = Object.freeze([
 const sha256Hex = (buf) => createHash("sha256").update(buf).digest("hex");
 
 /**
- * Validate an inherited C1 commitment. Pure.
+ * Validate an inherited C1 commitment. Pure, and NEVER THROWS.
+ *
+ * The never-throws half was missing until the K7-A net invoked this with `{}` and got a TypeError
+ * out of `createHash().update(undefined)`. `core/artifacts.mjs` states the cost in its own header:
+ * a thrown error inside the ordered evaluator reaches the fail-closed wrapper as 512 VWQ_UNKNOWN,
+ * which is the honest code for "something we did not model" and exactly the wrong code for "field
+ * absent". Absent bytes are now a typed refusal like every other absent field in this stage.
  *
  * @param {{bytes: Buffer|string, parsed: object, expectedDigest: string,
  *          verifySignature?: () => boolean}} input
  * @returns {{ok: boolean, refusals: Array<{reason: string, detail?: string}>}}
  */
 export function validateInheritance(input) {
-  const { bytes, parsed, expectedDigest, verifySignature } = input;
+  const { bytes, parsed, expectedDigest, verifySignature } = input ?? {};
   const refusals = [];
+
+  // Nothing to digest is a refusal, not an exception.
+  if (typeof bytes !== "string" && !Buffer.isBuffer(bytes)) {
+    return {
+      ok: false,
+      refusals: [
+        { reason: INHERIT_REFUSALS.ROOT_DIGEST_MISMATCH, detail: "no C1 bytes were supplied" },
+      ],
+    };
+  }
 
   // 1. ROOTS. The digest of the bytes we were handed, against the digest we were told to expect.
   const actual = sha256Hex(bytes);
