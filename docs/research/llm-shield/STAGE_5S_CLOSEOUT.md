@@ -50,16 +50,34 @@ as though it were.
 
 ## The final suite, stated without rounding
 
+Measured on the final tree, in one `scripts/check.sh` run, not carried forward from an earlier one:
+
 ```text
-5S surface     602 tests · 602 pass · 0 fail · 0 skipped · 0 todo
-reproduce      30 gates · 30 pass
-prior sweep    50 prior reproduce scripts, 5S excluded by name
+unit  (npm test)  5053 tests · 5053 pass · 0 fail · 0 skipped · 0 todo
+e2e   (e2e nets)   358 tests ·  357 pass · 0 fail · 1 skipped · 0 todo
+                  ─────────────────────────────────────────────────────
+repository-wide   5411 tests · 5410 pass · 0 fail · 1 skipped · 0 todo
+
+check.sh          151 steps · 151 pass · 0 fail
+reproduce          30 gates ·  30 pass
+5S surface        612 tests · 612 pass · 0 fail · 0 skipped
+prior sweep        50 prior reproduce scripts, 5S excluded by name
 ```
 
-The repository-wide suite carries **one environment-dependent skip** — a Stage 4K test needing a
-second Node older than 26 — and **two intermittent failures recorded as findings against the stages
-that own them** (5S-F012 in 4J, 5S-F013 in 4K). Those are reported as the counts above rather than
-compressed into a single reassuring sentence.
+**The one environment-dependent skip is a Stage 4K test needing a second Node older than 26**,
+absent on this machine. It is a skip, it is counted as a skip, and it is not a pass.
+
+**`0 fail` in this run does not mean the two intermittent failures are gone.** 5S-F012 (Stage 4J,
+roughly one run in six) and 5S-F013 (Stage 4K, once in seven) did not fire here, and neither cause is
+known. A green run of an intermittent failure is evidence of nothing except that particular run: the
+findings stand open, with their reproduction recipes, and the honest reading of the table above is
+"this run passed", never "the suite passes".
+
+That distinction is why the numbers are printed rather than summarised. The reassuring one-line
+summary would be true of this run and false about the repository, so it is not written here — and
+the closeout gate refuses it lexically, which it demonstrated by refusing an earlier draft of this
+very paragraph. The gate was left strict rather than taught to recognise the phrase in quotation
+marks: a gate that exempts quoted text hands every future overclaim a pair of quotes to hide behind.
 
 ## What this stage found, in itself and in the repository
 
