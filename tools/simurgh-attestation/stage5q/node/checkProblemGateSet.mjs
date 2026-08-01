@@ -107,16 +107,22 @@ function main() {
   }
 
   // The count is checked last and only as a sanity reading on the pin file's own declaration.
-  if (pin.entry_count !== result.pinned_count) {
+  //
+  // v2 moved this field into `current`, and these two readings were left pointing at the v1 top
+  // level — so a re-pinned v2 census read `undefined` and failed with a nonsense message. It never
+  // fired before because the set comparison above returns first on any drift, which is exactly the
+  // shape of a defect that hides until the day the thing it guards finally works.
+  const declaredCount = pin.current?.entry_count ?? pin.entry_count;
+  if (declaredCount !== result.pinned_count) {
     console.log(
-      `FAIL: the pin declares entry_count ${pin.entry_count} but carries ${result.pinned_count} entries`
+      `FAIL: the pin declares entry_count ${declaredCount} but carries ${result.pinned_count} entries`
     );
     return 1;
   }
 
   console.log(
     `gate census: ${result.actual_count} problem gate(s), set-identical to the pin ` +
-      `(baseline ${pin.baseline_tag}): OK`
+      `(baseline ${pin.baseline?.tag ?? pin.baseline_tag}): OK`
   );
   return 0;
 }

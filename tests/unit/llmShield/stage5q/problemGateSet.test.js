@@ -13,6 +13,10 @@
 // count is telemetry.
 
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import test from "node:test";
 
 import {
@@ -25,6 +29,8 @@ import {
   currentSet,
   readPinnedSet,
 } from "../../../../tools/simurgh-attestation/stage5q/node/checkProblemGateSet.mjs";
+
+const DRIVER = "tools/simurgh-attestation/stage5q/node/checkProblemGateSet.mjs";
 
 const UNCLASSIFIABLE = "no discovery token and no named artifact — a human must classify this step";
 const NO_QUERY =
@@ -212,4 +218,57 @@ test("[q1-f002] a v1-shaped pin still reads — the split is backward compatible
   };
   assert.equal(currentSet(v1).length, 1);
   assert.deepEqual(currentSet({}), []);
+});
+
+test("[q1-f006] a RE-PINNED v2 census passes the checker end to end", () => {
+  // THE TEST WHOSE ABSENCE LET A DEFECT SHIP. The v2 split moved `entry_count` into `current`, and
+  // the driver's final sanity reading was left pointing at the v1 top level. It could not fire
+  // while the set comparison above it was failing — which it always was, because a stale census is
+  // exactly when anyone runs this. The defect surfaced on the first day the repair actually worked.
+  //
+  // So this drives the REAL CLI over a synthetic repository whose census is correctly re-pinned,
+  // and demands exit 0. `REPO` is `process.cwd()` and the pin path is relative, so a temp directory
+  // is a whole repository as far as the checker is concerned.
+  const dir = mkdtempSync(join(tmpdir(), "5q-repin-"));
+  try {
+    mkdirSync(join(dir, ".github/workflows"), { recursive: true });
+    writeFileSync(
+      join(dir, ".github/workflows/synthetic.yml"),
+      // A completeness-asserting step that NAMES its artifact and carries no universe query:
+      // `manually_enumerated` with nothing to check its drift against, which is the F001 shape.
+      "jobs:\n  j:\n    steps:\n      - name: Handwritten step\n        run: node --test tests/unit/example.test.js\n"
+    );
+    const pinDir = join(dir, "docs/research/llm-shield/evidence/stage-5q-q1");
+    mkdirSync(pinDir, { recursive: true });
+
+    const problems = [
+      {
+        gate_id: "synthetic.yml::Handwritten step",
+        reason_code: REASON_CODES.MISSING_COMMITTED_UNIVERSE_QUERY,
+      },
+    ];
+    writeFileSync(
+      join(pinDir, "problem-gate-set.json"),
+      JSON.stringify({
+        schema: "simurgh.q1.problem-gate-set.v2",
+        baseline: {
+          tag: "v0.0.0-synthetic",
+          entry_count: 1,
+          immutable: true,
+          gate_problems: problems,
+        },
+        current: { as_of: "synthetic", entry_count: 1, gate_problems: problems },
+      })
+    );
+
+    const r = spawnSync(process.execPath, [join(process.cwd(), DRIVER)], {
+      cwd: dir,
+      encoding: "utf8",
+    });
+    assert.equal(r.status, 0, `re-pinned v2 census refused: ${r.stdout}${r.stderr}`);
+    // The success line must name the BASELINE tag — the other v1 reading beside the count.
+    assert.match(r.stdout, /baseline v0\.0\.0-synthetic/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
