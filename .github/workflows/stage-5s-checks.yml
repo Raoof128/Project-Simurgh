@@ -1,0 +1,81 @@
+name: Stage 5S — VWQ checks
+
+on:
+  push:
+    branches: ["stage-5s-vwq-verifiable-witness-quorum"]
+  pull_request:
+    # Q1-F005, carried forward deliberately. 5R's equivalent workflow was `branches: ["main"]` with
+    # NO paths filter, so it ran on every pull request to main and judged the whole diff against a
+    # surface declared exhaustive over 5R-owned paths — which failed every PR that touched anything
+    # else. A gate aimed at the whole repository was not measuring one stage's discipline; it was
+    # measuring whether anyone had done anything since.
+    #
+    # These paths are exactly what 5S owns, plus the shared library it actually changed. The LAST
+    # entry is this file: a trigger repair that could not run its own job would be unverifiable, and
+    # a trigger that silently stops firing is indistinguishable from a gate that always passes.
+    paths:
+      - "tools/simurgh-attestation/stage5s/**"
+      - "tools/simurgh-attestation/verify-stage5s-attestation.mjs"
+      - "tests/**/stage5s/**"
+      - "proofs/stage5s/**"
+      - "docs/research/llm-shield/evidence/stage-5s/**"
+      - "docs/research/llm-shield/STAGE_5S_CLOSEOUT.md"
+      - "docs/superpowers/specs/2026-07-28-stage-5s-vwq-verifiable-witness-quorum-design.md"
+      - "docs/superpowers/plans/2026-07-29-stage-5s-vwq-implementation-plan.md"
+      - "scripts/reproduce-llm-shield-stage5s.sh"
+      - "scripts/check-lean-proofs.mjs"
+      - ".github/workflows/stage-5s-checks.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  vwq:
+    name: VWQ gates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The reproduce and prior-stage sweeps walk history; a shallow clone makes them lie about
+          # what they verified (the 3S lesson).
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "26"
+
+      - name: Install
+        run: npm ci
+
+      - name: Format
+        run: npm run format:check
+
+      - name: Unit and e2e suites
+        run: node --test "tests/unit/llmShield/stage5s/*.test.js" "tests/e2e/llmShield/stage5s/*.test.js"
+
+      - name: Lean proofs (repo-wide gate, floor 39)
+        run: node scripts/check-lean-proofs.mjs
+
+      - name: Write surface
+        run: node tools/simurgh-attestation/stage5s/node/checkWriteSurface.mjs --range "origin/main...HEAD"
+
+      - name: Fixture determinism
+        run: |
+          node tools/simurgh-attestation/stage5s/node/buildFixtures.mjs --out /tmp/f1
+          node tools/simurgh-attestation/stage5s/node/buildFixtures.mjs --out /tmp/f2
+          diff -r /tmp/f1 /tmp/f2
+
+      - name: Attestation verifies, and refuses a key
+        run: |
+          B=docs/research/llm-shield/evidence/stage-5s/attestation/vwq-attestation-envelope.json
+          node tools/simurgh-attestation/verify-stage5s-attestation.mjs --bundle "$B"
+          if node tools/simurgh-attestation/verify-stage5s-attestation.mjs --bundle "$B" --key /dev/null; then
+            echo "the verifier accepted --key"
+            exit 1
+          fi
+
+      - name: Lane C frozen capture, offline
+        run: node tools/simurgh-attestation/stage5s/node/verifyCapture.mjs --capture docs/research/llm-shield/evidence/stage-5s/lane-c/
+
+      - name: Reproduce
+        run: bash scripts/reproduce-llm-shield-stage5s.sh

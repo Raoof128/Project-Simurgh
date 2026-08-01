@@ -83,8 +83,25 @@ def prove_ancestry(earlier, later, committed):
         current = nxt
 
 
+def malformed_view(v):
+    """The fields the relation reads. The core refuses their absence at SCHEMA_UNSUPPORTED."""
+    if not isinstance(v, dict):
+        return "not an object"
+    for field in ("producer_identity", "scope_id", "checkpoint_body_digest"):
+        if not isinstance(v.get(field), str) or not v.get(field):
+            return field + " absent"
+    if not isinstance(v.get("epoch"), int) or isinstance(v.get("epoch"), bool):
+        return "epoch is not an integer"
+    return None
+
+
 def compare(a, b, ancestry):
     """`ancestry` returns {"verdict": ...} — the Node core's contract, adopted verbatim."""
+    for label, v in (("a", a), ("b", b)):
+        why = malformed_view(v)
+        if why:
+            return "refused:SCHEMA_UNSUPPORTED"
+
     if a.get("producer_identity") != b.get("producer_identity") or a.get("scope_id") != b.get("scope_id"):
         return "refused:COMPARISON_SET_INSUFFICIENT"
     if a.get("checkpoint_body_digest") == b.get("checkpoint_body_digest"):
