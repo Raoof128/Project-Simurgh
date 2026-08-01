@@ -60,6 +60,11 @@ pack_inputs=(
   tests/unit/llmShield/stage5e/slip.test.js
   tests/unit/llmShield/stage5e/vdaCore.test.js
   scripts/reproduce-llm-shield-stage5e.sh
+  # The Lean escape-hatch gate the reproduce script delegates to. Without BOTH of these the packed
+  # kit calls a file that is not in the zip and dies on the third party's machine — the kit is the
+  # one artifact whose dependencies cannot be satisfied by "it works in the repo".
+  scripts/check-lean-proofs.mjs
+  scripts/lib/leanProofGate.mjs
 )
 
 for source in "${pack_inputs[@]}"; do
