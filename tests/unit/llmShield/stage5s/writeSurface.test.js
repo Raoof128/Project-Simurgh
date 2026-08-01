@@ -125,3 +125,73 @@ test("[5s-t2] every refusal is reported, not just the first", () => {
   assert.equal(v.ok, false);
   assert.equal(v.refusals.length, 2);
 });
+
+// ---------------------------------------------------------------- the public-key exemption
+//
+// A public key is a `.pem` and every stage commits one, so the path rule alone refused legitimate
+// evidence — it fired on Stage 5S's own `vwq-public-key.pem`. The exemption is decided by CONTENT,
+// never by name: a filename rule would be worse than the problem it solves, because
+// `sneaky-public-key.pem` would then carry anything at all.
+
+test("[5s-t6] a committed PUBLIC key is permitted, decided by its content", () => {
+  const path = "docs/research/llm-shield/evidence/stage-5s/attestation/vwq-public-key.pem";
+  const result = judgeChanges({
+    entries: [
+      {
+        kind: "prefix",
+        path: "docs/research/llm-shield/evidence/stage-5s/",
+        allowed_operation: "add-modify",
+        id: "5S-S005",
+      },
+    ],
+    changed: [{ path, op: "add" }],
+    dirty: [],
+    readFile: () => "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA\n-----END PUBLIC KEY-----\n",
+  });
+  assert.equal(result.ok, true, JSON.stringify(result.refusals));
+});
+
+test("[5s-t6] a PRIVATE key wearing a public key's NAME is still refused", () => {
+  // The reason the exemption reads content. A name-based rule would pass this without hesitating.
+  const path = "docs/research/llm-shield/evidence/stage-5s/attestation/vwq-public-key.pem";
+  const result = judgeChanges({
+    entries: [
+      {
+        kind: "prefix",
+        path: "docs/research/llm-shield/evidence/stage-5s/",
+        allowed_operation: "add-modify",
+        id: "5S-S005",
+      },
+    ],
+    changed: [{ path, op: "add" }],
+    dirty: [],
+    readFile: () =>
+      "-----BEGIN PRIVATE KEY-----\nMC4CAQAwBQYDK2VwBCIEIA\n-----END PRIVATE KEY-----\n",
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.refusals[0].reason, R.PRIVATE_KEY_MATERIAL);
+});
+
+test("[5s-t6] with NO content reader, every key path is refused — fail closed", () => {
+  // A checker that cannot read cannot exempt. The absence of a reader must not become a licence.
+  const result = judgeChanges({
+    entries: [{ kind: "prefix", path: "docs/", allowed_operation: "add-modify", id: "x" }],
+    changed: [{ path: "docs/anything.pem", op: "add" }],
+    dirty: [],
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.refusals[0].reason, R.PRIVATE_KEY_MATERIAL);
+});
+
+test("[5s-t6] an unreadable file is refused rather than exempted", () => {
+  const result = judgeChanges({
+    entries: [{ kind: "prefix", path: "docs/", allowed_operation: "add-modify", id: "x" }],
+    changed: [{ path: "docs/gone.pem", op: "add" }],
+    dirty: [],
+    readFile: () => {
+      throw new Error("ENOENT");
+    },
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.refusals[0].reason, R.PRIVATE_KEY_MATERIAL);
+});

@@ -101,7 +101,14 @@ export function main(argv, deps = {}) {
 
   const specText = readFileSync(SPEC, "utf8");
   const entries = [...parseStageSurface(specText), ...parseAnnexM(specText)];
-  const result = judgeChanges({ entries, changed, rangeCommitCount: changed.length, dirty });
+  const result = judgeChanges({
+    entries,
+    changed,
+    rangeCommitCount: changed.length,
+    dirty,
+    // Content, so the public-key exemption is decided by what the file IS rather than by its name.
+    readFile: (path) => readFileSync(path, "utf8"),
+  });
 
   console.log(`Stage 5S write surface — mode=${mode}${range ? ` range=${range}` : ""}`);
   console.log(`  surface rows: ${entries.length}  (Annex S + Annex M, parsed from the spec)`);
