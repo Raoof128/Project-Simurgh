@@ -95,7 +95,7 @@ marks: a gate that exempts quoted text hands every future overclaim a pair of qu
 
 ## What this stage found, in itself and in the repository
 
-Eighteen findings, of which eight are against 5S's own work and were fixed here. The other ten are
+Twenty findings, of which eight are against 5S's own work and were fixed here. The other twelve are
 against stages 4J, 4K, 5N, 5Q and the repository at large; none was repaired inside this stage,
 because each sits outside Annex S and a stage that edits another stage's tests to go green has
 found a defect in itself. Seven of them — F012, F014, F015, F016, F017, F018 and F013's
@@ -119,6 +119,8 @@ its cause is unknown and is not claimed.
 | 5S-F016 | Stage 5Q's write-surface anti-vacuity guard covers `range` mode but not the default `staged` mode, so a zero-path run over a dirty tree prints OK                                 |
 | 5S-F017 | the Q1-F006 repair kept two v1 field readings below an early return, so no test could reach them until the first day the repair worked                                            |
 | 5S-F018 | two 5S proof assertions hard-required a Lean toolchain that `check.sh`'s own job installs only afterward — green on every developer machine, red in CI, reproduced by neither     |
+| 5S-F019 | the committed 4H exit-map on `main` is stale by eleven codes — 5P shipped without rippling it, and nothing compares the committed map against what the builder produces           |
+| 5S-F020 | Stage 5Q's gate is scoped by trigger but unscoped in evaluation, so a PR touching a 5Q file plus anything else is refused — Q1-F005's sentence, one level in                      |
 
 The others (F001–F005) are recorded in the plan's §15.
 
