@@ -110,6 +110,20 @@ jobs:
       - name: Reserve smoke-server ports from the ephemeral range
         run: sudo sysctl -w net.ipv4.ip_local_reserved_ports=33000-33999
 
+      - name: Install Lean (elan) so the Stage 4R reproduce builds its proof
+        # BEFORE check.sh, not after it (5S-F018). Stage 5S's proof assertions shell out to `lean`
+        # and to the repo-wide proof gate, and check.sh ran seven lines before the toolchain
+        # existed — so they failed closed in CI and passed on every developer machine. The gate
+        # failing closed is correct; the ordering was not.
+        #
+        # The comment sits INSIDE the step: the census attributes text BETWEEN steps to the
+        # preceding one, and these words above the line made `sudo sysctl` read as a completeness
+        # gate and added a census entry.
+        run: |
+          curl -sSfL https://github.com/leanprover/elan/releases/latest/download/elan-x86_64-unknown-linux-gnu.tar.gz | tar xz
+          ./elan-init -y --default-toolchain "$(cat proofs/stage4m/lean-toolchain)"
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
       - name: Run Stage 1 check suite
         run: ./scripts/check.sh
 
@@ -117,12 +131,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 26
-
-      - name: Install Lean (elan) so the Stage 4R reproduce builds its proof
-        run: |
-          curl -sSfL https://github.com/leanprover/elan/releases/latest/download/elan-x86_64-unknown-linux-gnu.tar.gz | tar xz
-          ./elan-init -y --default-toolchain "$(cat proofs/stage4m/lean-toolchain)"
-          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
 
       - name: Run E2E gate (scripts/check-e2e.sh)
         run: ./scripts/check-e2e.sh
@@ -133,5 +141,13 @@ jobs:
         with:
           name: simurgh-check-logs
           path: .simurgh_check_logs/
+          # `.simurgh_check_logs` is a DOT directory, and upload-artifact@v4 drops hidden files
+          # unless told otherwise — so every failure upload reported "No files were found" and the
+          # logs a reader needed were never attached (5S-F018). Diagnosing a two-test CI failure
+          # then required reading workflow step order instead of a log.
+          include-hidden-files: true
+          # `ignore` stays: a green run legitimately has nothing to upload. It is the reason the
+          # broken upload looked like an empty run rather than an error, so the two settings are
+          # only safe together once hidden files are actually included.
           if-no-files-found: ignore
           retention-days: 7
