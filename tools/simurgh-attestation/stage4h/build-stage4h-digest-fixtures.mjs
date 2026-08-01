@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import { createPrivateKey, createPublicKey } from "node:crypto";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { buildEvidencePack, signPack } from "../stage4d/packBuilder.mjs";
@@ -37,9 +37,30 @@ async function stable(path, value) {
   }
 }
 
-async function writeJson(path, value) {
+/**
+ * Write a file so a concurrent READER never sees it half-written (finding 5S-F012).
+ *
+ * `writeFile` truncates and then fills. Between those two moments the file exists and is empty,
+ * and any process reading it gets `SyntaxError: Unexpected end of JSON input`. That is not
+ * hypothetical: this builder rewrites committed fixtures under
+ * `tests/fixtures/llmShield/stage4h/`, `tests/e2e/llmShield/stage4hFullSmoke.test.js` runs it, and
+ * `node --test` runs test FILES in parallel processes — so Stage 4J read the substrate while Stage
+ * 4H was rewriting it. Reproduced by looping this builder against repeated 4J runs: 1 failure in
+ * 43, with the exact reported error.
+ *
+ * `rename` within a directory is atomic on POSIX, so a reader sees either the whole previous file
+ * or the whole new one. The temp name carries the pid so two builders cannot collide either.
+ */
+let atomicSeq = 0;
+async function atomicWrite(path, data) {
   await mkdir(dirname(path), { recursive: true });
-  await writeFile(path, await stable(path, value));
+  const tmp = `${path}.tmp-${process.pid}-${atomicSeq++}`;
+  await writeFile(tmp, data);
+  await rename(tmp, path);
+}
+
+async function writeJson(path, value) {
+  await atomicWrite(path, await stable(path, value));
 }
 
 function stage4dRunRecord({ runId, sourceLabel }) {
@@ -612,14 +633,14 @@ export async function main({ root = process.cwd() } = {}) {
 
   await writeJson(join(fixtureRoot, "clean-base-pack.json"), q1Clean.pack);
   await writeJson(join(fixtureRoot, "tampered-base-pack.json"), tamperedBasePack);
-  await writeFile(join(fixtureRoot, "clean-base-pack.sig"), `${q1Clean.signature.trim()}\n`);
-  await writeFile(join(fixtureRoot, "wrong-base-pack.sig"), "base64:ZmFrZQ==\n");
-  await writeFile(join(fixtureRoot, "clean-signer.pub"), q1Clean.publicKeyPem);
-  await writeFile(join(fixtureRoot, "wrong-base-pack.pub"), WRONG_BASE_PACK_PUBLIC_KEY_PEM);
+  await atomicWrite(join(fixtureRoot, "clean-base-pack.sig"), `${q1Clean.signature.trim()}\n`);
+  await atomicWrite(join(fixtureRoot, "wrong-base-pack.sig"), "base64:ZmFrZQ==\n");
+  await atomicWrite(join(fixtureRoot, "clean-signer.pub"), q1Clean.publicKeyPem);
+  await atomicWrite(join(fixtureRoot, "wrong-base-pack.pub"), WRONG_BASE_PACK_PUBLIC_KEY_PEM);
   await writeJson(join(fixtureRoot, "clean-dfi-certificate.json"), q1CleanCertificate);
   await writeJson(join(fixtureRoot, "malformed-certificate.json"), malformedCertificate);
   await writeJson(join(fixtureRoot, "clean-signed-pack-manifest.json"), q1CleanManifest);
-  await writeFile(join(fixtureRoot, "manifest-verifier.pub"), manifestPublicKeyPem);
+  await atomicWrite(join(fixtureRoot, "manifest-verifier.pub"), manifestPublicKeyPem);
   await writeJson(
     join(fixtureRoot, "forged-premise-digest-certificate.json"),
     forgedPremiseDigestCertificate
@@ -631,17 +652,17 @@ export async function main({ root = process.cwd() } = {}) {
   await writeJson(join(fixtureRoot, "expected-results/q2-q5-results.json"), q2q5Results);
 
   await writeJson(join(fixtureRoot, "q1-clean-base-pack.json"), q1Clean.pack);
-  await writeFile(join(fixtureRoot, "q1-clean-base-pack.sig"), `${q1Clean.signature.trim()}\n`);
-  await writeFile(join(fixtureRoot, "q1-clean-signer.pub"), q1Clean.publicKeyPem);
+  await atomicWrite(join(fixtureRoot, "q1-clean-base-pack.sig"), `${q1Clean.signature.trim()}\n`);
+  await atomicWrite(join(fixtureRoot, "q1-clean-signer.pub"), q1Clean.publicKeyPem);
   await writeJson(join(fixtureRoot, "q1-clean-dfi-certificate.json"), q1CleanCertificate);
   await writeJson(join(fixtureRoot, "q1-clean-signed-pack-manifest.json"), q1CleanManifest);
 
   await writeJson(join(fixtureRoot, "q1-real-dirty-base-pack.json"), q1Dirty.pack);
-  await writeFile(
+  await atomicWrite(
     join(fixtureRoot, "q1-real-dirty-base-pack.sig"),
     `${q1Dirty.signature.trim()}\n`
   );
-  await writeFile(join(fixtureRoot, "q1-real-dirty-signer.pub"), q1Dirty.publicKeyPem);
+  await atomicWrite(join(fixtureRoot, "q1-real-dirty-signer.pub"), q1Dirty.publicKeyPem);
   await writeJson(join(fixtureRoot, "q1-real-dirty-dfi-certificate.json"), q1DirtyCertificate);
   await writeJson(join(fixtureRoot, "q1-real-dirty-signed-pack-manifest.json"), q1DirtyManifest);
 
@@ -687,11 +708,11 @@ export async function main({ root = process.cwd() } = {}) {
     join(fixtureRoot, "q0-clean-disconnected-untrusted-base-pack.json"),
     q0Clean.pack
   );
-  await writeFile(
+  await atomicWrite(
     join(fixtureRoot, "q0-clean-disconnected-untrusted-base-pack.sig"),
     `${q0Clean.signature.trim()}\n`
   );
-  await writeFile(
+  await atomicWrite(
     join(fixtureRoot, "q0-clean-disconnected-untrusted-signer.pub"),
     q0Clean.publicKeyPem
   );
@@ -705,11 +726,11 @@ export async function main({ root = process.cwd() } = {}) {
   );
 
   await writeJson(join(fixtureRoot, "q4-dirty-one-edge-delta-base-pack.json"), q4Dirty.pack);
-  await writeFile(
+  await atomicWrite(
     join(fixtureRoot, "q4-dirty-one-edge-delta-base-pack.sig"),
     `${q4Dirty.signature.trim()}\n`
   );
-  await writeFile(join(fixtureRoot, "q4-dirty-one-edge-delta-signer.pub"), q4Dirty.publicKeyPem);
+  await atomicWrite(join(fixtureRoot, "q4-dirty-one-edge-delta-signer.pub"), q4Dirty.publicKeyPem);
   await writeJson(
     join(fixtureRoot, "q4-dirty-one-edge-delta-dfi-certificate.json"),
     q4DirtyCertificate
@@ -1053,7 +1074,7 @@ export async function main({ root = process.cwd() } = {}) {
     hermeticityAttestation
   );
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "exit-map.json"), exitMap);
-  await writeFile(
+  await atomicWrite(
     join(root, STAGE4H_EVIDENCE_DIR, "README.md"),
     "# Stage 4H Evidence\n\nRun:\n\n```bash\nscripts/reproduce-llm-shield-stage4h.sh\n```\n\nExpected clean exit: `0`.\n\nThis evidence covers Q0-Q7 for Stage 4H.5. It proves deterministic offline checker reproduction over signed, bounded Stage 4H evidence.\n\nNon-claims: not kernel sandboxing, not model safety, not execution truth, not implicit-flow security, not multi-field collusion closure, not statistical robustness, and not future-run guarantee.\n"
   );
