@@ -274,7 +274,36 @@ const ADAPTERS = {
         m.computeProblemSet().every((x) => typeof x.gate_id === "string" && x.reason_code),
         "every problem carries an id and a classified code"
       ),
-    readPinnedSet: (m) => ok(m.readPinnedSet().gate_problems.length > 0, "the pin is not empty"),
+    // v2 (Q1-F006) splits the pin: `baseline` is the frozen v2.53.0 measurement the Q1-F002
+    // finding cites, `current` is the live census. The adapter reads the shape, not a field that
+    // moved out from under it.
+    readPinnedSet: (m) => {
+      const pin = m.readPinnedSet();
+      return ok(
+        m.currentSet(pin).length > 0 && m.baselineSet(pin).gate_problems.length > 0,
+        "the pin carries both a live census and a frozen baseline"
+      );
+    },
+    currentSet: (m) => {
+      const v2 = m.currentSet({ current: { gate_problems: [{ gate_id: "x" }] } });
+      // The v1 fallback is the backward-compatibility guarantee: a census that could not read its
+      // own history would make the Q1-F006 repair unverifiable.
+      const v1 = m.currentSet({ gate_problems: [{ gate_id: "y" }] });
+      return ok(
+        v2[0]?.gate_id === "x" && v1[0]?.gate_id === "y" && m.currentSet(undefined).length === 0,
+        "reads v2 current, falls back to a v1 top-level list, and refuses to invent one"
+      );
+    },
+    baselineSet: (m) => {
+      const frozen = m.baselineSet({
+        baseline: { entry_count: 19, gate_problems: [{ gate_id: "z" }] },
+        current: { gate_problems: [] },
+      });
+      return ok(
+        frozen.entry_count === 19 && frozen.gate_problems[0]?.gate_id === "z",
+        "returns the frozen measurement, never the live one"
+      );
+    },
   },
   "core/censusRuntime.mjs": {
     canonicalError: (m) => ok(!/\//.test(m.canonicalError({ message: "/abs/path" })), "no paths"),
