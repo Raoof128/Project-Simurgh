@@ -30,10 +30,18 @@ offline-falsifiable stance is the core difference from receipt-only logging.
 
 ## An example rung: Stage 4Q — verifiable friction receipts
 
-_The ladder now runs to **Stage 5L (`v2.47.0`)** — a machine-checkable proof that the evaluation scope was
-committed **before** review, anchored in a real Bitcoin block (957 689) and stress-tested by a live
-Claude Sonnet-5 adversary that could not break it. Stage 4Q below is one earlier rung, kept because it
-reproduces cleanly and shows the pattern._
+_The ladder now runs to **Stage 5S (`v2.54.0`, patched at `v2.54.1`)**. Since 4Q it has added: a
+machine-checkable proof that the evaluation scope was committed **before** review, anchored in a real
+Bitcoin block (957 689) and stress-tested by a live Claude Sonnet-5 adversary that could not break it
+(5L); an exact 3-of-3 TSA + Bitcoin + Rekor quorum banked `externally_anchored` at block 957 782 (5M)
+and a verifiable finalisation **delay** banked at block 957 983 (5N); a bounded audit of a universe the
+auditor never sees, under **No Unbudgeted Unzip** (5O); a real public **Rekor** entry whose RFC 6962
+inclusion proof is recomputed offline, separating **authenticated** from **accountable** (5P); a
+stage-wide red team that published **L1 coverage 6.2%** and blocked its own release rather than
+stretching the campaign (5Q); a positive-control tranche that discharged **zero** cells and said so
+(5R); and comparison-bounded **equivocation detection** whose witness independence is `unproven` by
+construction (5S). Stage 4Q below is one earlier rung, kept because it reproduces cleanly and shows the
+pattern._
 
 The same signed-evidence spine now attests **agent oversight**, not just containment. Stage 4Q
 (`v2.26.0-stage-4q-vfr`) produces a signed, epoch-bound, ordered proof that an **approval-gate
@@ -136,7 +144,8 @@ accusations and zero missed lies**.
 
 ## Reproduce it yourself: one offline command
 
-The release ladder is **12 signed rungs**, externally replayable by a reviewer with no prior
+The repository carries **51 one-command reproduce scripts** across the 3A → 5S arc — of which the
+public VCA timeline is **12 signed rungs** — each externally replayable by a reviewer with no prior
 context, fully offline after dependency install:
 
 ```bash
@@ -145,6 +154,7 @@ cd Project-Simurgh && npm ci
 scripts/reproduce-vca-chain.sh            # public VCA ladder
 scripts/reproduce-llm-shield-stage4h.sh   # proof-carrying containment checker
 scripts/reproduce-llm-shield-stage4q.sh   # verifiable friction receipts (Node >= 26)
+scripts/reproduce-llm-shield-stage5s.sh   # latest rung: 30 gates, equivocation detection
 ```
 
 The first command replays the public VCA ladder. The Stage 4H command replays the proof-carrying
@@ -170,6 +180,14 @@ not claim a uniform 12/12; the receipt records what each rung did and did not pr
   sandboxing, execution truth, implicit-flow security, deployment safety, or a future-run guarantee.
 - Stage 4Q proves _recorded-run_ oversight order, not physical time; a cryptographic key ceremony
   and process separation, not proof that a human deliberated or that friction prevented harm.
+- Stage 5S's equivocation detection is **comparison-bounded**: a green run means no conflict was
+  demonstrated _within the compared view set_, never that none occurred — and its witnesses are one
+  operator holding several keys, so independence is signed as `unproven` rather than asserted.
+- **The red team and the blue team are the same party**, and **no external party has yet run a
+  verifier under credential separation.** An independent operator has reproduced the Stage 5E
+  conformance kit on a second architecture — that discharges platform independence, not party
+  independence, and the operator attestation is published UNCOMPLETED rather than filled in
+  optimistically.
 - Live Claude Computer Use remains a documented next step, not a completed demo.
 
 ## Status & contact
