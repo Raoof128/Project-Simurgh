@@ -10,7 +10,7 @@ _Provider-agnostic Verifiable Containment Attestation (VCA): machine-checkable, 
 proof of what happened after a guardrail missed — not another jailbreak detector._
 
 [![Quality gate](https://github.com/Raoof128/Project-Simurgh/actions/workflows/stage-1-checks.yml/badge.svg?branch=main)](https://github.com/Raoof128/Project-Simurgh/actions/workflows/stage-1-checks.yml)
-[![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
+[![Node](https://img.shields.io/badge/node-%E2%89%A522%20%C2%B7%20reproduce%20%E2%89%A526-1a1a1a?style=flat-square)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
 [![Latest](https://img.shields.io/badge/release-v2.54.1-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.54.1)
@@ -75,7 +75,7 @@ vendor, model, or lab. Everything below is signed, non-interactive, and checkabl
 
 **Who built it:** [Mohammad Raouf Abedini](https://github.com/Raoof128) — sole author, full-loop:
 gap-hunt, spec, implementation, Lean proofs, signing ceremonies, and closeout, released in a public
-two-month sprint. Live adversarial lanes ran under an approved Cyber Verification Program
+sprint of under three months. Live adversarial lanes ran under an approved Cyber Verification Program
 organisation, and the independent ceremonies (foreign capture, split-review panel, two-machine
 byte-identical reproductions) were executed by unaffiliated third parties with their own keys.
 Methodology is LLM-assisted and disclosed in the research write-ups; every claim is bounded by
@@ -233,6 +233,81 @@ newest for the current frontier, or jump straight to
 > **audience-relative**; and the prior-art map declares itself **non-exhaustive**, recording that the Merkle
 > construction is RFC 6962's, the seed RFC 5869's and the detection probability the classical hypergeometric
 > identity. Stage 5O did not invent its ingredients.
+
+> **Stage 5N · VTC-Delay: finalisation you cannot rush (`v2.49.0-stage-5n-vtc-delay`).**
+> A decision's finalisation is bound to two things a producer cannot fake afterwards: a **dependent
+> SHA-256 chain of T = 20,000,000 steps** seeded from the real start token, and **two RFC-3161
+> endpoints** whose genTimes give a conservative elapsed lower bound. The verifier **re-runs the whole
+> chain** — deliberately **not a VDF**: no trusted setup, no fast verify, no hardware claim. Laws: _No
+> Instant Finalisation_, _No Pre-Input Final Commitment_. Codes **396–419**; banked at **Bitcoin block
+> 957 983**. The honest headline is the ceremony itself: **a real run against real anchors found a bug
+> that 61 unit tests and 13 Lean theorems did not** — an artifact created where none was earned,
+> because **a filename is a claim**.
+
+> **Stage 5M · VTC-Quorum: three ecologies or nothing (`v2.48.0-stage-5m-vtc-quorum`).**
+> The verifier independently validates an **exact three-of-three** external-anchor ecology — RFC-3161
+> TSA + Bitcoin-confirmed OpenTimestamps + Rekor inclusion — all binding **one** commitment, and only
+> then banks `externally_anchored`. Codes **384–395**, layered additively on 5L's frozen core. **11
+> Lean theorems**; Node ↔ Python ↔ browser parity; a live **Sonnet-5** adversary tasked to forge the
+> third ecology — **0 bypasses**; and a real **two-machine** reproduction reaching a byte-identical
+> decision digest under distinct keys on Node 22 and Node 26.
+
+> **Stage 5L · VTC-Core: commitment before access (`v2.47.0-stage-5l-vtcq`).**
+> Externally commit the whole ceremony contract — universe root, review-window, anchor, quorum,
+> trust-domain and release policies — through an RFC-3161 authority **and** a structurally distinct
+> Bitcoin/OTS root, then make reviewer access **cryptographically impossible** until that commitment
+> verifies, enforced by a gate-issued capability every declared release must consume. Codes
+> **364–383**. A missed quorum floor is `vtc_quorum_pending` (**372**) — an honest floor-miss that is
+> never reported as a success, and promoting it fails closed at **380**.
+
+> **Stage 5K · VUC: what "everything" meant, fixed in advance (`v2.46.0-stage-5k-vuc`).**
+> An authorship-bound, externally-ordered **canonical Merkle-set** universe commitment, chained to
+> exact reviewer/producer start obligations and checked by independent equality against each
+> downstream component — so the ceremony cannot **swap, shrink or reinterpret** its own scope after
+> commitment. Codes **348–363**.
+
+> **Stage 5J · VRC: disagreement that cannot be quietly resolved (`v2.45.0-stage-5j-vrc`).**
+> Derives an exact **rating-obligation set** from 5I's committed coverage relation and requires the
+> ledger's active ratings to **equal** it on both sides. Divergences are preserved as **append-only
+> contest events**; a silent favourable override, a missing or orphan rating, a forged supersession, a
+> replayed response or a phantom concurrence each fail closed. Codes **332–347**.
+
+> **Stage 5I · VPC: coverage equality, and a refusal to certify adequacy (`v2.44.0-stage-5i-vpc`).**
+> Turns RSP v3.4's split-external-review condition into an offline-recomputable relation: grant-bounded
+> coverage **equality** `⋃C(r) = S`, computed reviewer and host independence, and a **no-silent-filter
+> census** where every supplied panel member qualifies or the bundle fails closed. It is
+> **structurally unable to certify that a review was adequate** — full coverage plus an adequacy
+> assertion fails closed on a frozen vocabulary. Codes **316–331**.
+
+> **Stage 5H · VSD: a claim may not outrun its evidence (`v2.43.0-stage-5h-vsd`).**
+> Every safety claim carries a declared consequence and a verifier-**computed** reproducibility tier
+> (`restricted → controlled → public`), under the **Right-Scaling Law**:
+> `rank(declared_consequence) ≤ rank(max_consequence(proven_tier))`. A consequential claim resting only
+> on restricted evidence fails closed, and the evidential-inversion detector catches the reverse.
+> Codes **300–315**.
+
+> **Stage 5G · VFC: separation strength, computed not claimed (`v2.42.0-stage-5g-vfc`).**
+> Extends the Completeness Invariant to the **provenance of production**: every foreign capture carries
+> typed producer and verifier identities, and the verifier computes the strongest **Separation Strength
+> rung** the evidence supports on a monotonic lattice
+> (`distinct_key_only → challenge_bound → externally_anchored`), **rejecting unsupported upgrades**
+> (raw **296**). `claimed > proven` fails closed. Codes **283–299**.
+
+> **Stage 5F · VMP: a panel that cannot gerrymander its universe (`v2.41.0-stage-5f-vmp`).**
+> One signed attestation binds N precommitted **released** detectors — Prompt Guard 2 86M and Llama
+> Guard 4 12B — to one shared committed corpus, so every case discloses, for every member, either a
+> verdict or a **typed, policy-checkable non-result**. Selective omission across detectors becomes
+> impossible to hide. **No aggregate panel verdict is produced**: panel completeness is not detection
+> completeness. Codes **268–282**.
+
+> **Stage 5E · VDA: the first attestation over a real shipped detector (`v2.40.0-stage-5e-vda`).**
+> A signed, byte-reproducible attestation over Meta's **Llama Prompt Guard 2 (86M)** at a **pinned
+> open-weights revision, captured offline with zero vendor cooperation**; CI recomputes only the
+> arithmetic and geometry over a committed score table, never the model. All four flagged bases slipped
+> under invisible combining-mark obfuscation, recorded as two slip booleans rather than a taxonomy
+> (`threshold_crossing` **260**, `score_inversion` **261**) with explicit numerator/denominator curves.
+> Codes **255–267**. Signed scope: **a slip is a chosen-threshold miss on a pinned revision — not a
+> defeat, and not proof of downstream harm.**
 
 > **Stage 5D · Verifiable Adaptive Red-Team Ledger (`v2.39.0-stage-5d-varl`).**
 > The first Simurgh stage whose evidence is a **multi-round arms race**: an untrusted adversary
@@ -456,8 +531,8 @@ and [`docs/research/llm-shield/STAGE_5B_CLOSEOUT.md`](docs/research/llm-shield/S
 
 ## Flagship: Verifiable Containment Attestation (LLM Shield)
 
-The current work is a ladder of signed, independently reproducible research rungs (**Stage 3A → 5N**,
-releases `v1.6.0` → `v2.49.0`). The attestation rungs produce Ed25519-signed,
+The current work is a ladder of signed, independently reproducible research rungs (**Stage 3A → 5S**,
+releases `v1.6.0` → `v2.54.0`, patched at `v2.54.1`). The attestation rungs produce Ed25519-signed,
 metadata-only evidence bundles and offline checkers that re-derive their bounded claims byte-for-byte.
 
 ### The concrete result (Stage 3V-B)
@@ -638,6 +713,32 @@ documented non-claims.
   capsule proves record completeness, never harm causation; the seriousness classification is
   `requires_human_input` — the capsule refuses to invent a legal conclusion.
 
+### Federated review integrity, external anchoring & assurance of the assurance (4W → 5S)
+
+The most recent arc turns the evidence layer on the review process itself. Each rung is described in
+the ladder near the top of this file; the capability summary is:
+
+- **Narrative and leakage discipline** (4W–4Y) — span-typed defensive narrative with a fail-closed
+  lexical leakage gate, and leakage residue reported as a signed **number** over any submitted
+  document, not an adjective.
+- **Interpretability-side evidence contracts** (4Z–5B) — a signed workspace-attestation contract over
+  a J-lens-style readout, a conflict ledger that confronts narrative against workspace map, and an
+  adversarial readout red-teamed on a capture the attacker did not author.
+- **Detector-facing attestation** (5E–5F) — the first attestation over a **real shipped** third-party
+  detector, then multi-detector panel completeness with no aggregate verdict.
+- **Producer-independence and claim discipline** (5G–5J) — computed separation strength that rejects
+  unsupported upgrades, reproducibility tiers under the Right-Scaling Law, grant-bounded coverage
+  equality that cannot certify adequacy, and append-only rating contests.
+- **Temporal commitment, externally anchored** (5K–5N) — a committed universe, a ceremony contract
+  gated behind an RFC-3161 + Bitcoin commitment, an exact 3-of-3 TSA/Bitcoin/Rekor quorum, and a
+  re-runnable finalisation delay. Banked at real Bitcoin blocks, cross-checked against a public
+  explorer.
+- **Assurance of the assurance** (5O–5S) — a bounded audit of a universe the auditor never sees, an
+  identity lattice separating _authenticated_ from _accountable_, a stage-wide red team that published
+  **6.2 %** and blocked its own release, positive-control probe families that discharged **zero**
+  cells and said so, and comparison-bounded equivocation detection whose witness independence is
+  signed `unproven`.
+
 ### External-defence evaluation
 
 - **Provider-agnostic adapter contract** that treats any external guardrail as an untrusted advisory
@@ -694,6 +795,10 @@ documented non-claims.
 
 A reviewer with no prior context can replay the chain in three commands. Network is used only to
 clone and install dependencies; verification itself is fully offline.
+
+> **Node version matters.** The test suite runs on **Node ≥ 22**, but the per-stage reproduce scripts
+> require **Node ≥ 26** — byte-stability of the evidence builders is only claimed there, and the
+> scripts check the major version and refuse rather than producing a differing digest.
 
 ```bash
 git clone https://github.com/Raoof128/Project-Simurgh.git
@@ -801,7 +906,7 @@ claim. See [`PRIVACY.md`](PRIVACY.md), [`docs/ETHICS.md`](docs/ETHICS.md), and
 | `tools/simurgh-attestation/`         | Ed25519 signing, canonical-JSON, two-tier verifiers, public VCA timeline, Stage 4H checker tooling    |
 | `tools/external-defense-adapters/`   | Adapter contract + Llama Guard 4 adapter (Stage 3V)                                                   |
 | `tools/capture/`                     | Transport-only model-capture harness (run once, then frozen)                                          |
-| `docs/research/llm-shield/evidence/` | Per-stage signed evidence bundles and checker evidence (3M → 4H)                                      |
+| `docs/research/llm-shield/evidence/` | Per-stage signed evidence bundles and checker evidence (3M → 5S)                                      |
 | `scripts/`                           | Quality gates, per-stage smoke/audits, and `reproduce-vca-chain.sh`                                   |
 | `papers/`                            | Published research preprints                                                                          |
 
@@ -809,10 +914,11 @@ claim. See [`PRIVACY.md`](PRIVACY.md), [`docs/ETHICS.md`](docs/ETHICS.md), and
 
 ## Verification
 
-The full quality gate (`scripts/check.sh`) runs on every push. The current baseline (through Stage
-5N, `v2.49.0`) verifies with **3,057 automated unit tests** plus per-stage smoke gates,
-security/privacy/consistency audits, policy-drift guards, typed-exit checks, and checker/reproduce
-smokes. Every VCA rung is
+The full quality gate (`scripts/check.sh`) runs on every push. Measured on the Stage 5S tree
+(`v2.54.1`) in one run: **151 gate steps and 5 425 automated tests — 5 424 pass, 0 fail, 1
+environment-dependent skip** — plus per-stage smoke gates, security/privacy/consistency audits,
+policy-drift guards, typed-exit checks, and checker/reproduce smokes. That table records **a run, not
+the suite**: an intermittent failure that does not fire is not a failure that is fixed. Every VCA rung is
 signed with its own Ed25519 key (private keys are never committed), reproduces byte-identically
 including its signature where claimed, and ships a negative self-proof (tamper) suite that the
 verifiers reject while failing closed.
