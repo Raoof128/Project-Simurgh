@@ -300,8 +300,9 @@
           <h1>Recomputable evidence for AI safety and cybersecurity assurance</h1>
           <p class="sub">
             We do not claim a model is safe. We make one specific, verifiable claim recomputable by
-            an outsider: a declared boundary held, oversight preceded a consequential action, and
-            the record is complete — with no selective omission.
+            an outsider: a declared boundary held, oversight preceded a consequential action, no two
+            auditors were shown incompatible histories, and the record is complete — with no
+            selective omission.
           </p>
         </div>
       </header>
@@ -386,6 +387,24 @@
                 <td>Swap or shrink what &ldquo;everything evaluated&rdquo; means</td>
                 <td class="val">universe-commitment equality (5K)</td>
               </tr>
+              <tr>
+                <td>Open only the flattering cases of a held-out corpus</td>
+                <td class="val">
+                  <strong>No Unbudgeted Unzip</strong> + public-beacon challenge (5O)
+                </td>
+              </tr>
+              <tr>
+                <td>Let a signature stand in for a known submitter</td>
+                <td class="val">
+                  identity-resolution lattice &mdash; <em>bound</em> &ne; <em>resolved</em> (5P)
+                </td>
+              </tr>
+              <tr>
+                <td>Show two auditors incompatible histories</td>
+                <td class="val">
+                  <strong>comparison-bounded equivocation ledger (5S)</strong>
+                </td>
+              </tr>
             </tbody>
           </table>
         </section>
@@ -420,11 +439,115 @@
           </p>
           <p>
             <strong>4 · Multi-agent accountability the regulators lack — now shipped.</strong>
-            EU AI Act Article 73 guidance (binding August 2026) gives, in its critics&rsquo; words,
-            &ldquo;no tools to pin accountability of multi-agent incidents.&rdquo; Stage 4T
+            EU AI Act Article 73 guidance (binding since August 2026) gives, in its critics&rsquo;
+            words, &ldquo;no tools to pin accountability of multi-agent incidents.&rdquo; Stage 4T
             (Verifiable Incident Capsule, <code>v2.30.0</code>) is a first cut at a serious-incident
             report a regulator can <em>rerun</em> &mdash; and Stage 4S adds delegation-chain
             completeness with a &ldquo;No Ghost Hop&rdquo; law.
+          </p>
+        </section>
+
+        <section>
+          <h2>Where the arc is now &mdash; real captures, not slideware</h2>
+          <p>
+            The ladder has advanced 28 rungs past 4Q to
+            <strong>Stage 5S (<code>v2.54.0</code>, patched at <code>v2.54.1</code>)</strong>, and
+            the claims are backed by live evidence a reviewer can look up.
+          </p>
+          <div class="grid2">
+            <div class="card">
+              <h3>Live evidence, looked up</h3>
+              <ul>
+                <li>
+                  <strong>A shipped detector&rsquo;s blind spot, contained.</strong> A live
+                  <strong>Llama Guard 4 12B</strong>, run once over a frozen 180-case reference set,
+                  missed <strong>138</strong> downstream-injection attacks it structurally cannot
+                  see; the context/tool/output boundaries contained <strong>138/138</strong>, ASR
+                  <strong>0/150</strong>, byte-identical across three greedy runs (3V-B). A boundary
+                  claim &mdash; not &ldquo;Llama Guard is weak.&rdquo;
+                </li>
+                <li>
+                  <strong>A live model tried to break the verifier.</strong> A
+                  <strong>Claude Sonnet-5</strong> adversary forged a temporal-commitment ceremony
+                  <strong>8 ways across all 7 laws</strong>; the frozen verifier contained every
+                  one, <strong>0 bypasses</strong> &mdash; while <code>claude-fable-5</code> refused
+                  the attacker role outright (recorded, not retried).
+                </li>
+                <li>
+                  <strong>Commitments you can look up in the blockchain.</strong> DigiCert RFC-3161
+                  + Bitcoin-confirmed OpenTimestamps at block 957&#8239;689 (5L); the exact 3-of-3
+                  TSA+Bitcoin+Rekor quorum banked <code>externally_anchored</code>, raw 0, block
+                  957&#8239;782 (5M); a verifiable finalisation delay banked at block 957&#8239;983
+                  (5N) &mdash; each merkle root cross-checked against a public explorer.
+                </li>
+                <li>
+                  <strong
+                    >A real public transparency-log entry, and the overclaim it refuses.</strong
+                  >
+                  Stage 5P anchors a real <strong>Rekor</strong> entry
+                  (<code>logIndex&nbsp;2245421742</code>) and re-verifies it offline &mdash; the RFC
+                  6962 inclusion proof <em>recomputed</em>, not taken on the server&rsquo;s word.
+                  The ceremony is <strong>not keyless</strong> (<code>is_keyless: false</code>
+                  travels with every verdict): a log proves an artifact was signed by
+                  <em>something</em> at a time, never by <em>whom</em>.
+                </li>
+              </ul>
+            </div>
+            <div class="card warning">
+              <h3>Four numbers that do not flatter us</h3>
+              <ul>
+                <li>
+                  <strong>6.2&nbsp;%.</strong> Stage 5Q attacked sixteen Stage-5 releases as a set
+                  and discharged <strong>1&#8239;438 of 23&#8239;332</strong> obligation cells. Q0
+                  is frozen and signed;
+                  <strong>Q1 is not authorised and the release is BLOCKED</strong>
+                  by 5Q&rsquo;s own &sect;12.1.
+                </li>
+                <li>
+                  <strong>Zero.</strong> Stage 5R&rsquo;s positive-control tranche is complete and
+                  contributes <strong>0 discharged cells</strong> &mdash; a static probe cannot
+                  demonstrate an outcome it never executed, and that bound was written into the
+                  module before the run.
+                </li>
+                <li>
+                  <strong><code>unproven</code>.</strong> Stage 5S&rsquo;s witness-independence
+                  status has exactly one legal member: every witness is one operator with several
+                  keys. Good-for-Anthropic was <strong>re-scored down 9.5 &rarr; 9.3</strong> for
+                  it.
+                </li>
+                <li>
+                  <strong>Six scripts.</strong> An external run on a Lean-less host showed six
+                  reproduce scripts printing <code>lean OK (zero sorry)</code> from a check that
+                  cannot establish it &mdash; <code>lean</code> exits 0 on a <code>sorry</code>.
+                  Latent, not active; <code>v2.54.1</code> routes all six through one repo-wide
+                  <strong>source-based</strong> gate that runs with or without a toolchain.
+                </li>
+              </ul>
+            </div>
+          </div>
+          <p class="hint">
+            <strong>The kit ran on somebody else&rsquo;s machine.</strong> Five runs of the Stage 5E
+            conformance kit across two architectures by a second operator:
+            <strong>platform independence discharged</strong> (raw 0 at both tiers, evidence rebuilt
+            byte-identically); <strong>party independence not</strong> &mdash; the transcript shows
+            <code>scp</code>/<code>ssh</code> from the author&rsquo;s shell, so the operator
+            attestation is published <strong>UNCOMPLETED</strong> and no score moved on it. That run
+            is what exposed the sixth-script defect above.
+          </p>
+          <p class="hint">
+            Depth underneath: <strong>51 one-command reproduce scripts</strong> across the 3A &rarr;
+            5S arc, <strong>101 tags / 92 published releases</strong>, each a single falsifiable
+            blade; <strong>39 Lean proofs, 0 escape hatches</strong>, self-tested red on demand;
+            Node &harr; Python &harr; browser byte-parity; a public, Merkle-chained replay timeline.
+            One measured <code>check.sh</code> run on the 5S tree:
+            <strong
+              >5&#8239;425 tests, 5&#8239;424 pass, 0 fail, 1 environment-dependent skip</strong
+            >
+            &mdash; a table records a run, not the suite, and the two intermittent failures 5S
+            closed were closed by controlled measurement (666 truncated reads in
+            2&#8239;779&#8239;311 against the old writer,
+            <strong>0 in 2&#8239;773&#8239;312</strong> against write-then-rename), never by a green
+            run.
           </p>
         </section>
 
@@ -434,26 +557,16 @@
             <code>v2.26.0-stage-4q-vfr</code>)
           </h2>
           <p>
-            <em
-              >The arc has since advanced 23 rungs to Stage 5N (<code>v2.49.0</code>): a real Llama
-              Guard 4 blind spot contained 138/138, a live Sonnet-5 adversary contained 8/8 across
-              all 7 laws, an evaluation-scope commitment anchored in Bitcoin block 957&#8239;689,
-              and &mdash; now banked &mdash; the 3-of-3 TSA+Bitcoin+Rekor quorum
-              (<code>externally_anchored</code>, raw 0, block 957&#8239;782) plus a verifiable
-              finalisation delay banked at block 957&#8239;983. Stage 4Q remains a clean,
-              one-command reproducible example of the pattern.</em
-            >
-          </p>
-          <p>
             Stage 4Q is merged to <code>main</code> and tagged <code>v2.26.0-stage-4q-vfr</code>;
             everything below reproduces from that tag via the command that follows. It comprises a
             15-case normative corpus and a 10-arm live approval-gated capture over a
             <strong>genuinely separate approver process</strong> (with a human-at-terminal ceremony
             arm); <strong>JS&harr;Python byte-parity</strong>;
             <strong>five machine-checked Lean theorems</strong>; a signed offline attestation with a
-            two-tier verifier; and a one-command reproduce across ten gates. Repository baseline at
-            this branch: <strong>1559 automated tests</strong>, byte-stable reproduction, private
-            keys never committed.
+            two-tier verifier; and a one-command reproduce across ten gates. Repository baseline
+            <em>at the 4Q tag</em>: <strong>1559 automated tests</strong>, byte-stable reproduction,
+            private keys never committed &mdash; the tree has since grown to 835 JavaScript test
+            files across the 3A &rarr; 5S arc.
           </p>
           <pre><code>git clone https://github.com/Raoof128/Project-Simurgh.git
 cd Project-Simurgh
@@ -475,6 +588,15 @@ scripts/reproduce-llm-shield-stage4q.sh   # ten gates, offline, Node &gt;= 26</c
             order, not physical time; a key ceremony and process separation, not proof a human
             deliberated; enforcement evidence, not proof that friction prevented harm; a synthetic
             reference corpus, not production traffic; and no vendor is ranked or labelled unsafe.
+          </p>
+          <p>
+            Two ceilings are named rather than worked around, because no amount of internal rigour
+            removes either: <strong>the red team and the blue team are the same party</strong>, and
+            <strong>no external party has yet run a verifier under credential separation</strong>
+            &mdash; the conformance run above establishes an independent platform, not an
+            independent party. Both are the explicit &ldquo;what would move it higher&rdquo; on the
+            scorecards, and the second is the single thing an outside reviewer could settle in an
+            afternoon.
           </p>
         </section>
       </main>

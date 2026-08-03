@@ -4,8 +4,8 @@
 
 _We do not claim a model is safe. We make one specific, verifiable claim recomputable by an
 outsider: that a declared boundary held, that oversight preceded a consequential action, that the
-evaluated scope and its timing were fixed before review, and that the record is complete — with no
-selective omission._
+evaluated scope and its timing were fixed before review, that no two auditors were shown incompatible
+histories, and that the record is complete — with no selective omission._
 
 ---
 
@@ -44,14 +44,18 @@ recomputable evidence of boundary completeness** — proof that nothing was quie
 a dishonest or careless operator exploits. The spine is built around a Completeness Invariant, and
 each stage adds one anti-laundering blade so an operator cannot make a bad run _look_ clean:
 
-| Laundering move                                  | Simurgh blade                                                      |
-| ------------------------------------------------ | ------------------------------------------------------------------ |
-| Drop an inconvenient action / reorder events     | anti-laundering lattice (3Q), run-chain order + census (4Q raw 89) |
-| Backdate the audit clock                         | temporal-completeness heartbeat (4N)                               |
-| Hide the real model/route behind a proxy         | No-Ghost-Provider custody (4P)                                     |
-| Quietly skip approval on a consequential action  | **No Silent Exemption (4Q)**                                       |
-| Fix the evaluation scope _after_ seeing results  | **temporal commitment + externally-banked notary quorum (5L–5M)**  |
-| Swap or shrink what "everything evaluated" means | universe-commitment equality (5K)                                  |
+| Laundering move                                     | Simurgh blade                                                      |
+| --------------------------------------------------- | ------------------------------------------------------------------ |
+| Drop an inconvenient action / reorder events        | anti-laundering lattice (3Q), run-chain order + census (4Q raw 89) |
+| Backdate the audit clock                            | temporal-completeness heartbeat (4N)                               |
+| Hide the real model/route behind a proxy            | No-Ghost-Provider custody (4P)                                     |
+| Quietly skip approval on a consequential action     | **No Silent Exemption (4Q)**                                       |
+| Fix the evaluation scope _after_ seeing results     | **temporal commitment + externally-banked notary quorum (5L–5M)**  |
+| Finalise a decision the instant results appear      | verifiable finalisation delay (5N)                                 |
+| Swap or shrink what "everything evaluated" means    | universe-commitment equality (5K)                                  |
+| Open only the flattering cases of a held-out corpus | **No Unbudgeted Unzip** + public-beacon challenge (5O)             |
+| Let a signature stand in for a known submitter      | identity-resolution lattice — _bound_ ≠ _resolved_ (5P)            |
+| Show two auditors incompatible histories            | **comparison-bounded equivocation ledger (5S)**                    |
 
 ## Four problem → mechanism mappings
 
@@ -78,7 +82,7 @@ each stage adds one anti-laundering blade so an operator cannot make a bad run _
    evaluator trust the producer": they don't have to.
 
 4. **Multi-agent accountability the regulators lack — now shipped.** EU AI Act Article 73 guidance
-   (binding August 2026) gives, in its own critics' words, "no tools to pin accountability of
+   (binding since August 2026) gives, in its own critics' words, "no tools to pin accountability of
    multi-agent incidents." Stage 4T (**Verifiable Incident Capsule**, `v2.30.0`) is a first cut at a
    serious-incident report a regulator can _rerun_ — an Article-73-shaped capsule with a "No Hearsay"
    rule and suppression detection — and Stage 4S (VDCC) adds delegation-chain completeness with a "No
@@ -87,8 +91,8 @@ each stage adds one anti-laundering blade so an operator cannot make a bad run _
 
 ## Where the arc is now — real captures, not slideware
 
-The ladder has advanced 23 rungs past 4Q to **Stage 5N (`v2.49.0`)**, and the claims are backed by live
-evidence a reviewer can look up, not just fixtures:
+The ladder has advanced 28 rungs past 4Q to **Stage 5S (`v2.54.0`, patched at `v2.54.1`)**, and the
+claims are backed by live evidence a reviewer can look up, not just fixtures:
 
 - **A real shipped detector's blind spot, contained.** A live **Llama Guard 4 12B** was run once over a
   180-case reference set (frozen and signed; never re-run in CI). It missed **138** downstream-injection
@@ -108,10 +112,51 @@ evidence a reviewer can look up, not just fixtures:
   verifiable finalisation _delay_ (re-run SHA-256 chain over two RFC-3161 endpoints), banked at **block
   957 983** — each merkle root cross-checked against a public explorer, with independent multi-machine
   byte-identical reproduction.
+- **A real public transparency-log entry — and the overclaim it refuses.** Stage 5P anchors a real
+  **Rekor** entry (`logIndex 2245421742`, tree size 2 123 517 582) and re-verifies it **offline**: the
+  RFC 6962 inclusion proof is _recomputed_ rather than taken on the server's word, landing on the root
+  the log signed. It retires a debt open since 5G — and states the narrower claim in the same breath:
+  the ceremony is **not keyless** (`is_keyless: false` travels with every verdict), and a transparency
+  log proves an artifact was signed by _something_ at a time, never by _whom_. In the same stage a live
+  model's fabricated resolver verdict (`principal_resolved: true, role: accountable`) was **contained
+  3/3** at a named check with a named code.
+- **The kit ran on somebody else's machine, and the first thing it found was ours.** The Stage 5E
+  conformance kit was run five times across two architectures by a second operator (Linux x86_64 /
+  macOS arm64). **Platform independence is discharged**; the attestation verifies to raw 0 at both
+  tiers and the evidence rebuilds byte-identically. **Party independence is not** — the transcript
+  shows `scp`/`ssh` from the author's shell, so the operator-attestation block is published
+  **UNCOMPLETED** and no score moved on it. That run is what exposed the defect below.
 
-Depth underneath: **40+ signed rungs** across **94 tagged releases**, each a single falsifiable blade; machine-checked **Lean theorems**
-(zero `sorry`, no user axioms) on every recent stage; **Node ↔ Python ↔ browser byte-parity**; and a
-public, Merkle-chained replay timeline. The one worked example below still reproduces byte-for-byte.
+## Four numbers that do not flatter the project
+
+They are printed here for the same reason they are printed in the closeouts: a reviewer who only ever
+sees the good number cannot calibrate the rest.
+
+- **6.2 %.** Stage 5Q attacked sixteen Stage-5 releases as a set and discharged **1 438 of 23 332**
+  obligation cells; 2 522 of 2 531 closure members carry no coverage status. Q0 is frozen and signed,
+  **Q1 is not authorised and the stage release is BLOCKED** by its own §12.1. An incomplete campaign
+  froze honestly rather than being quietly extended until it looked complete.
+- **Zero.** Stage 5R's positive-control tranche is complete and its coverage contribution is **0
+  cells** — a static probe cannot demonstrate an outcome it never executed, so the bound was written
+  into the module before the run rather than explained afterwards.
+- **`unproven`.** Stage 5S's witness-independence status has exactly one legal member, because every
+  Lane B witness is one operator holding several keys. Good-for-Anthropic was **re-scored down 9.5 →
+  9.3** at closeout for exactly that reason.
+- **Six scripts.** An external run on a Lean-less host showed six reproduce scripts printing
+  `lean OK (zero sorry)` from a check that cannot establish it — `lean` exits 0 on a `sorry`. The
+  claim was true of every proof in the tree, so the defect was latent, not active; `v2.54.1` repaired
+  it by delegating all six to one repo-wide, **source-based** gate that runs whether or not a
+  toolchain is present, and downgrades an absent toolchain to a named skip instead of a silent pass.
+
+Depth underneath: **51 one-command reproduce scripts** across the 3A → 5S arc, **101 tags / 92
+published releases**, each a single falsifiable blade; machine-checked **Lean proofs** — the repo-wide
+gate reports **39 proofs, 0 escape hatches**, self-tested red on demand; **Node ↔ Python ↔ browser
+byte-parity**; and a public, Merkle-chained replay timeline. Measured in one `scripts/check.sh` run on
+the 5S tree: **5 425 repository-wide tests, 5 424 pass, 0 fail, 1 environment-dependent skip** — that
+table records a run, not the suite, and the two intermittent failures 5S closed were closed by a
+controlled measurement (666 truncated reads in 2 779 311 against the old writer, **0 in 2 773 312**
+against write-then-rename), never by a green run. The one worked example below still reproduces
+byte-for-byte.
 
 ## A worked, reproducible example — Stage 4Q (released as `v2.26.0-stage-4q-vfr`)
 
@@ -123,7 +168,7 @@ byte-parity**; **five machine-checked Lean theorems** (`frictionPrecedence`, `fa
 `sameKeyFails`, `frictionCoverage`, `noSilentExemption`); a signed offline attestation with a
 two-tier verifier; and a one-command reproduce across ten gates. Repository baseline **at the 4Q tag**:
 1559 automated tests, byte-stable reproduction, private keys never committed (the tree has since grown
-past 600 test files across the 3A → 5N arc).
+to 835 JavaScript test files across the 3A → 5S arc).
 
 ```bash
 git clone https://github.com/Raoof128/Project-Simurgh.git
@@ -140,6 +185,12 @@ safety claim. Limitations are **signed into the artifacts** as machine-readable 
 recorded-run order, not physical time; a cryptographic key ceremony and process separation, not
 proof a human deliberated; enforcement evidence, not proof that friction prevented harm; measured
 on a synthetic reference corpus, not production traffic; and no vendor is ranked or labelled unsafe.
+
+Two ceilings are named rather than worked around, because no amount of internal rigour removes
+either: **the red team and the blue team are the same party**, and **no external party has yet run a
+verifier under credential separation** — the conformance run above establishes an independent
+platform, not an independent party. Both are the explicit "what would move it higher" on the
+scorecards, and the second is the single thing an outside reviewer could settle in an afternoon.
 
 ---
 

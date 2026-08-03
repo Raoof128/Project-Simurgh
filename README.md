@@ -13,7 +13,7 @@ proof of what happened after a guardrail missed — not another jailbreak detect
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
-[![Latest](https://img.shields.io/badge/release-v2.53.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.53.0-stage-5r-vpf)
+[![Latest](https://img.shields.io/badge/release-v2.54.1-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.54.1)
 
 </div>
 
@@ -63,10 +63,12 @@ vendor, model, or lab. Everything below is signed, non-interactive, and checkabl
   tried to forge a temporal-commitment ceremony **8 ways across all 7 laws** — the frozen verifier
   contained **every one, 0 bypasses**, and the commitment is anchored in **Bitcoin block 957 689**
   (independently cross-checked).
-- **Depth, not a demo.** 40+ research stages across **94 tagged releases in two months**
-  (13 May → 13 July 2026), each stage adding **one falsifiable blade**; Lean proofs (zero `sorry`,
-  no user axioms); Node ↔ Python ↔ browser byte-parity; ~3,000 automated unit tests plus per-stage
-  tamper suites; a public Merkle-chained replay timeline.
+- **Depth, not a demo.** 50+ research stages across **101 tags / 92 published releases in under three
+  months** (13 May → 1 August 2026), each stage adding **one falsifiable blade**; **39 Lean proofs with
+  0 escape hatches**, enforced by a repo-wide source-based gate that runs with or without a toolchain;
+  Node ↔ Python ↔ browser byte-parity; **5 425 automated tests in one measured `check.sh` run**
+  (5 424 pass, 0 fail, 1 environment-dependent skip — a table records a run, not the suite) plus
+  per-stage tamper suites; a public Merkle-chained replay timeline.
 - **Calibrated by construction.** Every artifact carries machine-readable **non-claims**. The honesty
   guardrail is literal: **"boundary held, verifiably" — never "model safe."** No vendor is ranked, no
   immunity is claimed, and no live model is re-executed in CI.
@@ -102,7 +104,52 @@ newest for the current frontier, or jump straight to
 [Constitution alignment](#design-alignment-with-claudes-constitution), or the
 [concrete result](#the-concrete-result-stage-3v-b).
 
-> 🆕 **Latest — Stage 5R · VPF: a tranche that discharges nothing, and says so (`v2.53.0-stage-5r-vpf`).**
+> 🆕 **Latest — Stage 5S · VWQ: a fork you can prove, bounded by what was compared (`v2.54.0-stage-5s-vwq`).**
+> A producer publishes signed checkpoints; different auditors receive them independently. 5S compares
+> what they received and reports, in signed recomputable bytes, whether the producer showed **two
+> incompatible histories at one coordinate**. Not that the producer is dishonest, not that a fork
+> reached anybody, and **not that the witness quorum agreed** — quorum is irrelevant to the finding,
+> because two authenticated producer signatures over incompatible checkpoints prove the producer signed
+> both with no witness at all.
+> **The honest core, stated first: detection is comparison-bounded.** A green run means no equivocation
+> was demonstrated _within the compared view set_ — never that none occurred. The claim gate refuses the
+> shorter, wrong sentence lexically, and it was left strict rather than taught to recognise the phrase in
+> quotation marks: a gate that exempts quoted text hands every future overclaim a pair of quotes to hide
+> behind.
+> **Independence is `unproven` by construction, and that is the only legal value.** Every Lane B witness
+> is one operator holding several distinct keys; a stronger word would be an empty chair labelled
+> "independent". An external anchor observes a digest and **reads nothing**, so Lane C corroborates and
+> never upgrades independence. **Good-for-Anthropic was re-scored DOWN, 9.5 → 9.3**, for exactly that.
+> **12 checks · 38 raw codes (475–512) · four compatibility verdicts** · Lane A 21 authored cases × 11
+> independently pinned columns · Lane B four roles in four processes with byte-identical transcripts ·
+> Lane C a live RFC-3161 + OpenTimestamps capture verified offline · Node ≡ WebCrypto mirror ≡ Python ·
+> **5 Lean theorems, zero escape hatches** · 8 refused contradictions in the finding ledger.
+> **Twenty-one findings, nine against 5S itself.** Twelve are against other stages and **not one was
+> repaired inside this stage** — a stage that edits another stage's tests to go green has found a defect
+> in itself. Two intermittent failures (4J, 4K) turned out to be **one** non-atomic fixture write wearing
+> two faces, closed by measurement rather than by a green run: **666 truncated reads in 2 779 311**
+> against the old writer, **0 in 2 773 312** against write-then-rename. `5S-F014` is the one worth
+> carrying forward — `"00" + sig.slice(2)` is a no-op whenever the signature already starts `00`, so a
+> tamper test that never tampers is green forever; every mutation in 5S's matrix now proves it mutated
+> before its code is asserted.
+> **Honesty boundary:** the compared set is not proof of what the producer published elsewhere; the
+> witnesses are one party; the claim gate is **lexical**, so a paraphrase it does not know will pass;
+> separate directories do not show one process could not read another's key; the browser lane **did not
+> run in a browser** and the capture says so; and the self-inflicted control fork is **ours** — it is not
+> an accusation.
+>
+> **Patch `v2.54.1` — the "zero sorry" claim is now earned.** An external operator ran the Stage 5E
+> conformance kit on a Lean-less Linux host: step 6/6 skipped and `ALL PASS` printed over a check that
+> never ran. `lean` exits **0** on a file containing `sorry` — it is a warning — so six reproduce scripts
+> printed `lean OK (zero sorry)` from a check that cannot establish it. The claim was true of every proof
+> in the tree, so the defect was **latent, not active**; all six now delegate to one repo-wide gate whose
+> escape-hatch scan is **source-based and runs unconditionally**, and an absent toolchain downgrades only
+> the type-check, to a **named skip**.
+
+<details>
+<summary><b>Recent stages — 5R → 4W</b> (click to expand the prior rungs)</summary>
+
+> **Stage 5R · VPF: a tranche that discharges nothing, and says so (`v2.53.0-stage-5r-vpf`).**
 > A red-team attack class is not admissible because one seeded mutant was detected. It becomes
 > admissible only when a frozen **positive-control family** separates three cases: a **vulnerable**
 > control the detector must catch, a structurally comparable **safe** control it must clear, and an
@@ -132,9 +179,6 @@ newest for the current frontier, or jump straight to
 > because the producer controls both commits. Closing that needs an external witness over C1 and belongs
 > to a stage carrying it as its blade. `orchestration` is excluded by measurement, not preference; the
 > universe adapter is `unbuilt`; **I7 and I8 remain OPEN**.
-
-<details>
-<summary><b>Recent stages — 5Q → 4W</b> (click to expand the prior rungs)</summary>
 
 > **Stage 5Q · VSR: a stage-wide red team that published the number it did not like (`v2.52.0-stage-5q-vsr`).**
 > A frozen closure of 2 531 members, a 40 496-cell obligation matrix, and one green→red→green mutation
@@ -640,8 +684,9 @@ documented non-claims.
 
 - A single **quality gate** (`scripts/check.sh`): per-stage smoke, security/privacy/consistency
   audits, policy-drift guards (tooling stages never touch `src/llmShield`), and function-path
-  coverage on the pure attestation/checker libraries. The current baseline (through Stage 4Q)
-  verifies **1559 automated tests** passing.
+  coverage on the pure attestation/checker libraries. Measured on the Stage 5S tree in one run:
+  **151 `check.sh` steps, 5 425 tests, 5 424 pass, 0 fail, 1 environment-dependent skip** (the
+  baseline through Stage 4Q was 1559 tests).
 
 ---
 
@@ -690,8 +735,21 @@ node tools/simurgh-attestation/stage4q/node/verify-stage4q.mjs docs/research/llm
 # -> stage4q verify: byo_decision_equivalent (raw 0)
 ```
 
-Replay the latest rung — **Stage 5D Verifiable Adaptive Red-Team Ledger**, a signed multi-round
-attack↔harden arms race over the frozen 5C gate (offline, no private key):
+Replay the latest rung — **Stage 5S Verifiable Witness Quorum**, comparison-bounded equivocation
+detection over independently received checkpoints (offline, no private key):
+
+```bash
+scripts/reproduce-llm-shield-stage5s.sh
+```
+
+Expected: `OK — every declared gate reproduced` (30 gates). It runs the 12-check verifier and its
+38-code exit ledger, both fixture lanes, the attestation end-to-end from what is committed, a refusal
+gate proving the verifier **rejects a private key it does not need**, and two independent fixture
+builds diffed against each other — the diff _is_ the determinism gate. A run that executed no gate is
+refused rather than reported as a pass.
+
+Or replay **Stage 5D Verifiable Adaptive Red-Team Ledger**, a signed multi-round attack↔harden arms
+race over the frozen 5C gate:
 
 ```bash
 scripts/reproduce-llm-shield-stage5d.sh

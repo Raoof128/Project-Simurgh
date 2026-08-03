@@ -346,11 +346,23 @@
           <h2>An example rung: Stage 4Q &mdash; verifiable friction receipts</h2>
           <p>
             <em
-              >The ladder now runs to Stage 5L (<code>v2.47.0</code>) &mdash; a machine-checkable
-              proof that the evaluation scope was committed <strong>before</strong> review, anchored
-              in a real Bitcoin block (957&#8239;689) and stress-tested by a live Claude Sonnet-5
-              adversary that could not break it. Stage 4Q below is one earlier rung, kept because it
-              reproduces cleanly.</em
+              >The ladder now runs to Stage 5S (<code>v2.54.0</code>, patched at
+              <code>v2.54.1</code>). Since 4Q it has added: a machine-checkable proof that the
+              evaluation scope was committed <strong>before</strong> review, anchored in a real
+              Bitcoin block (957&#8239;689) and stress-tested by a live Claude Sonnet-5 adversary
+              that could not break it (5L); an exact 3-of-3 TSA + Bitcoin + Rekor quorum banked
+              <code>externally_anchored</code> at block 957&#8239;782 (5M) and a verifiable
+              finalisation <strong>delay</strong> banked at block 957&#8239;983 (5N); a bounded
+              audit of a universe the auditor never sees, under
+              <strong>No Unbudgeted Unzip</strong> (5O); a real public <strong>Rekor</strong> entry
+              whose RFC 6962 inclusion proof is recomputed offline, separating
+              <strong>authenticated</strong> from <strong>accountable</strong> (5P); a stage-wide
+              red team that published <strong>L1 coverage 6.2%</strong> and blocked its own release
+              rather than stretching the campaign (5Q); a positive-control tranche that discharged
+              <strong>zero</strong> cells and said so (5R); and comparison-bounded
+              <strong>equivocation detection</strong> whose witness independence is
+              <code>unproven</code> by construction (5S). Stage 4Q below is one earlier rung, kept
+              because it reproduces cleanly.</em
             >
           </p>
           <p>
@@ -505,14 +517,17 @@
         <section>
           <h2>Reproduce it yourself: one offline command</h2>
           <p>
-            The release ladder is <strong>12 signed rungs</strong>, externally replayable by a
-            reviewer with no prior context, fully offline after dependency install:
+            The repository carries <strong>51 one-command reproduce scripts</strong> across the 3A
+            &rarr; 5S arc &mdash; of which the public VCA timeline is
+            <strong>12 signed rungs</strong> &mdash; each externally replayable by a reviewer with
+            no prior context, fully offline after dependency install:
           </p>
           <pre><code>git clone https://github.com/Raoof128/Project-Simurgh.git
 cd Project-Simurgh &amp;&amp; npm ci
 scripts/reproduce-vca-chain.sh            # public VCA ladder
 scripts/reproduce-llm-shield-stage4h.sh   # proof-carrying containment checker
-scripts/reproduce-llm-shield-stage4q.sh   # verifiable friction receipts (Node &gt;= 26)</code></pre>
+scripts/reproduce-llm-shield-stage4q.sh   # verifiable friction receipts (Node &gt;= 26)
+scripts/reproduce-llm-shield-stage5s.sh   # latest rung: 30 gates, equivocation detection</code></pre>
           <p class="hint">
             The first command replays the public VCA ladder. The Stage 4H command replays the
             proof-carrying containment checker. The Stage 4Q command runs all ten friction gates
@@ -559,6 +574,20 @@ scripts/reproduce-llm-shield-stage4q.sh   # verifiable friction receipts (Node &
               Stage 4H is deterministic offline checker reproduction over signed evidence; it is not
               kernel sandboxing, execution truth, implicit-flow security, deployment safety, or a
               future-run guarantee.
+            </li>
+            <li>
+              Stage 5S&rsquo;s equivocation detection is <strong>comparison-bounded</strong>: a
+              green run means no conflict was demonstrated <em>within the compared view set</em>,
+              never that none occurred &mdash; and its witnesses are one operator holding several
+              keys, so independence is signed as <code>unproven</code> rather than asserted.
+            </li>
+            <li>
+              <strong>The red team and the blue team are the same party</strong>, and
+              <strong>no external party has yet run a verifier under credential separation.</strong>
+              An independent operator has reproduced the Stage 5E conformance kit on a second
+              architecture &mdash; that discharges platform independence, not party independence,
+              and the operator attestation is published UNCOMPLETED rather than filled in
+              optimistically.
             </li>
             <li>Live Claude Computer Use remains a documented next step, not a completed demo.</li>
           </ul>
