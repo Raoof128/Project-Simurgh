@@ -1,6 +1,6 @@
 # Project Simurgh — recomputable evidence for AI safety and cybersecurity assurance
 
-**One-page technical brief**
+**Technical brief**
 
 _We do not claim a model is safe. We make one specific, verifiable claim recomputable by an
 outsider: that a declared boundary held, that oversight preceded a consequential action, that the
@@ -18,8 +18,11 @@ governments able to block deployments that fail; and after the February 2026 mov
 universal pre-release verification, the stated bet is a **robust third-party evaluation ecosystem**.
 RSP v3.4 makes it sharper still — capability/safety evaluations must occur **before deployment** as a
 prerequisite gate, with Risk Reports published in advance and the Responsible Scaling Officer approving
-release. Each of those is an _ordering_ obligation stated in prose. That ecosystem is only as strong as
-its evidence format, and today that format is prose and trusted logs. Simurgh is the missing layer:
+release. The 12 September 2026 proposal for **embedded independent evaluators** with employee-like
+access and the right to publish without editorial control sharpens the same requirement: access is
+only as good as the evidence an evaluator can recompute without the lab's telemetry. Each of those is
+an _ordering_ obligation stated in prose. That ecosystem is only as strong as its evidence format,
+and today that format is prose and trusted logs. Simurgh is the missing layer:
 **an outsider with only a public key re-derives the verdict byte-for-byte, with no model, no network,
 and no producer access** — and, as of Stage 5M, that includes a machine-checkable proof that the
 evaluation scope was committed _before_ review, banked against an externally-confirmed Bitcoin quorum.
@@ -79,7 +82,8 @@ each stage adds one anti-laundering blade so an operator cannot make a bad run _
    producer-independent and fully offline. A reviewer runs one command; for 4Q they can **be their
    own approver** — mint a fresh key and confirm the evidence is decision-equivalent, proving the
    machinery has no hidden dependence on our key. This is the concrete answer to "why should an
-   evaluator trust the producer": they don't have to.
+   evaluator trust the producer": they don't have to. An embedded evaluator with a badge but only the
+   lab's logs is still trusting the producer; this is the layer that lets them stop.
 
 4. **Multi-agent accountability the regulators lack — now shipped.** EU AI Act Article 73 guidance
    (binding since August 2026) gives, in its own critics' words, "no tools to pin accountability of

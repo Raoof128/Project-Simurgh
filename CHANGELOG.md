@@ -1,5 +1,30 @@
 ## Change Log
 
+## [docs-pace-the-frontier] — 2026-09-14 — Brief and README reference the embedded-evaluator proposal
+
+**Raouf:**
+
+- **Scope:** Documentation only. No verifier semantics, evidence values, codes, scores, tests, tags
+  or runtime code changed. No version bump.
+- **Summary:** `ANTHROPIC_BRIEF.md` and `README.md` now name Dario Amodei's 12 September 2026
+  proposal for embedded independent evaluators (employee-like access, the right to publish findings
+  "without editorial control by Anthropic") as a fourth prose-stated obligation alongside RSP v3.4,
+  the June 2026 Advanced AI Framework and EU AI Act Art. 73. Framed as the same ordering/evidence
+  requirement the brief already addresses — access is only as good as the evidence an evaluator can
+  recompute without the producer's telemetry — not as a claim that Simurgh implements, satisfies, or
+  was designed for the proposal. Brief header corrected from "One-page technical brief" to
+  "Technical brief". HTML mirror updated. Two wordings were tightened against the primary source
+  before writing: the essay says "employee-**like** access" (not "employee-level", which appears only
+  in the announcing X post), and "access without evidence is not independence" is this project's own
+  formulation rather than the essay's, so the README bullet quotes the verified right-to-publish
+  clause instead of putting an unsourced phrase in quotation position.
+- **Files changed:** `docs/research/llm-shield/ANTHROPIC_BRIEF.md`,
+  `docs/research/llm-shield/anthropic-brief.html`, `README.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm run format:check` clean; `git diff --stat` limited to the five files above;
+  markdown and HTML briefs diffed for parity; no numeric value in the brief changed. Essay date and
+  quoted clause verified against `darioamodei.com/post/we-must-pace-the-frontier`.
+- **Follow-ups:** None. Outreach referencing the brief scheduled 14 Sep 08:30 Pacific.
+
 ## [gate-lifecycle] — 2026-07-28 — Gate lifecycle invariant published to tracked documentation
 
 **Raouf:**

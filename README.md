@@ -40,7 +40,9 @@ vendor, model, or lab. Everything below is signed, non-interactive, and checkabl
   containment measured _after_ a guardrail misses. The July-2026
   [global-workspace interpretability paper](#matching-anthropics-interpretability-research-july-2026)'s
   own "not sufficient" limit → a signed workspace-attestation contract. RSP v3.4's evaluate-**before**-deploy
-  → a machine-checkable temporal commitment anchored in Bitcoin.
+  → a machine-checkable temporal commitment anchored in Bitcoin. The 12-September-2026
+  embedded-independent-evaluator proposal's right to publish findings "without editorial control by
+  Anthropic" → a producer-independent verifier an evaluator runs offline with a public key.
 - **RSP v3.4's newest commitments already have a released evidence protocol here.** The policy
   (effective 8 July 2026) allows external review of a Risk Report to be split across reviewers —
   _"so long as all parts of the unredacted report are evaluated by at least one external
@@ -93,8 +95,9 @@ signed evidence and machine-readable non-claims.
 >
 > 🔎 **For reviewers from AI labs / assurance teams:**
 > [Simurgh — a recomputable evidence layer for Anthropic's assurance stack](docs/research/llm-shield/ANTHROPIC_BRIEF.md)
-> maps four named problems (third-party verification, verifiable oversight, completeness vs.
-> selective omission, multi-agent accountability) to concrete mechanisms — printable version at
+> maps four named problems (third-party verification — including the September 2026
+> embedded-evaluator proposal, verifiable oversight, completeness vs. selective omission,
+> multi-agent accountability) to concrete mechanisms — printable version at
 > [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
 
 **The ladder so far.** Each release below is one falsifiable rung — a single mechanism a hostile reviewer
