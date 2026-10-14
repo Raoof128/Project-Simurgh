@@ -1,0 +1,43 @@
+name: OpenAI readiness instrument
+
+on:
+  push:
+    paths:
+      - "tools/openai-readiness/**"
+      - "tests/unit/openaiReadiness/**"
+      - "src/llmShield/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/openai-readiness.yml"
+  pull_request:
+    paths:
+      - "tools/openai-readiness/**"
+      - "tests/unit/openaiReadiness/**"
+      - "src/llmShield/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/openai-readiness.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run test:openai
+      - run: npm run openai:offline -- --out /tmp/simurgh-openai/report.json
+      - run: npm run openai:verify -- /tmp/simurgh-openai/report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: offline-synthetic-report
+          path: /tmp/simurgh-openai/report.json
+          if-no-files-found: error

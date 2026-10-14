@@ -8,6 +8,7 @@
 // itself.
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 import { measureRawCodeCensus } from "../../../../tools/simurgh-attestation/stage5p/node/measureStage5pRawCodes.mjs";
@@ -225,6 +226,16 @@ test("the static and dynamic nets disagree in scope, and both are required", () 
 // ---- repo hygiene: the literals live in exactly the approved places -----------------------------
 
 test("raw literals 464-474 occur ONLY in the allocator, the registry, goldens and approved docs", () => {
+  // The reviewer entry point moved the old README verbatim to this archive. Keep
+  // the existing approved-documentation exception bound to those exact bytes;
+  // editing the archive must not create an unchecked documentation write surface.
+  assert.equal(
+    createHash("sha256")
+      .update(readFileSync(join(REPO, "RESEARCH_HISTORY.md")))
+      .digest("hex"),
+    "220c4e97d1b25e8505011bdce17355851fe6d895d2a3e5b0cd93efeda4f27baf",
+    "Historical README archive must retain the original approved bytes"
+  );
   const APPROVED = [
     "tools/simurgh-attestation/stage5p/core/rawCodeAllocator.mjs",
     "tools/simurgh-attestation/stage4h/exitCodes.mjs",
@@ -241,6 +252,7 @@ test("raw literals 464-474 occur ONLY in the allocator, the registry, goldens an
     "docs/research/llm-shield/STAGE_5P_CLOSEOUT.md",
     // The README banner states the stage's code band publicly — that is what a banner is for.
     "README.md",
+    "RESEARCH_HISTORY.md",
     // 5Q's spec and plan cite 474 to state where 5P's band closed and where the next free code
     // begins. That is exactly the "approved documentation" case the 5P ruling names: widen the
     // approved list, never weaken the band regex. A successor stage must be able to say which

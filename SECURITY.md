@@ -1,25 +1,41 @@
 # Security Policy
 
-## Supported Versions
+## Research scope and versions
 
-Project Simurgh is a research prototype. Security fixes are applied to the latest tagged release and the `main` branch.
+Project Simurgh is a research prototype. The active development branch is `main`; published
+research evidence through `v2.54.1` and the historical application package version `0.4.18`
+are separate version lines. A frozen tag is a reproducibility reference, not a promise that
+its runtime remains production-supported or has received every later fix. The historical
+Stage 1/2 architecture below describes those components rather than all VCA research tools.
 
-| Version                                                           | Supported              |
-| ----------------------------------------------------------------- | ---------------------- |
-| `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`                  | ✅ Active              |
-| `v0.4.13-stage-2-6-2-7-closeout` (Windows Device Shield closeout) | ✅ Active              |
-| `v0.4.13` (Stage 2.7 cross-platform unification)                  | ✅ Active              |
-| `v0.4.12` (Stage 2.6B Windows scanner validation)                 | ✅ Active              |
-| `v0.4.11` (Stage 2.6 Windows scanner branch)                      | ✅ Active              |
-| `v0.4.7` (Stage 2.5 macOS scanner)                                | ✅ Active              |
-| `v0.4.6` (Stage 2.4 SDK/lifecycle)                                | ✅ Active              |
-| `v0.4.5` (Stage 2.3 daemon foundation)                            | ✅ Active              |
-| `v0.4.3` (Stage 2 hardening)                                      | ✅ Active              |
-| `v0.4.2` (Stage 2.2 macOS node pairing)                           | ✅ Active              |
-| `v0.4.1` (Stage 2.1 macOS integrity)                              | ✅ Active              |
-| `v0.3.x` (Stage 1 / 1.5)                                          | ⚠️ Critical fixes only |
-| `main` (development)                                              | ✅ Active              |
-| Earlier tags                                                      | Not maintained         |
+The additive [OpenAI reviewer workflow](docs/openai/EVALUATION.md) is a local synthetic
+experiment. Its [scoped security review](docs/openai/SECURITY_REVIEW.md) records confirmed
+historical authorization and live-gateway quota defects. They remain open in the frozen
+implementations; the isolated demonstration does not repair or certify those paths.
+Do not expose the historical live gateway as a production service based on this package.
+
+## OpenAI demonstration trust boundaries
+
+- Model output and retrieved context cannot grant permissions. A trusted local registry
+  derives the tool class, and separate policy binds the exact resource, destination and
+  approval arguments. The existing Stage 3D gate is only one part of the new boundary.
+- Tools update an in-memory read log or mock outbox. They perform no real email, network,
+  filesystem or shell action. The separately computed consequence check is within the
+  same process and trust domain; it is not an independent external observer.
+- Offline mode needs no credentials. Live mode requires explicit `--live --allow-live`,
+  a model selection and `OPENAI_API_KEY`; it sends synthetic task/context text to the
+  fixed Responses API origin with a bounded response, timeout and no automatic retries.
+  `store:false` does not establish zero retention under provider policy.
+- Reports contain proposed arguments and response metadata, so keep live reports private
+  until reviewed. Credentials, raw provider error bodies and private signing keys are not
+  intentionally recorded. Keep any real sensitive data out of the synthetic corpus.
+- Signatures establish artifact consistency relative to a key. An embedded generated key
+  does not establish producer identity, model provenance, truth or completeness outside
+  the declared corpus. Externally pinned keys and independently observed effects are
+  separate requirements for stronger claims.
+- Approval fixtures are not authenticated human decisions, and replay checks are local
+  to a sandbox instance. Production connectors require durable authorization, replay
+  protection, identity, secret management, quotas and independent operational review.
 
 ## Reporting a Vulnerability
 
@@ -117,7 +133,7 @@ The server refuses to start in non-demo mode if any of these are unset.
 
 ### Privacy Guarantees
 
-Simurgh is designed around data minimisation. The following data is **never** collected, stored, logged, or transmitted to third parties:
+The historical academic/device telemetry pipeline is designed around data minimisation. Its collection policy excludes the following data (this is not a repository-wide guarantee about every research input or live-model experiment):
 
 - Screen pixels, screenshots, or screen recordings
 - Webcam frames or microphone audio
@@ -165,7 +181,7 @@ These limitations are documented openly. The system is **privacy-preserving, tam
 npm audit
 ```
 
-The repository currently reports **0 known vulnerabilities**. Report any new findings with high or critical severity via the vulnerability disclosure process above.
+Dependency findings are time-dependent. Run the command against the installed lockfile and record its date and result; a historical zero count is not a current assurance claim. Report high or critical findings via the vulnerability disclosure process above.
 
 ## Stage 2.8 Linux Device Shield Security Posture
 

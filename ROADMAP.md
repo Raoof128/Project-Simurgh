@@ -1,131 +1,47 @@
-# Roadmap
+# Research roadmap
 
-Project Simurgh is built in stages, each adding capability while preserving the privacy-first design contract.
+The active track is verifiable security controls and evidence for autonomous AI agents. The earlier
+device-integrity roadmap is preserved verbatim in [DEVICE_ROADMAP.md](DEVICE_ROADMAP.md); its old
+"current" and "next" labels describe that document's historical state.
 
----
+## Existing foundation
 
-## Stage 1 — Academic Shield (Current) ✅
+- Provider-agnostic containment boundaries and historical signed, offline-reproducible research
+  through `v2.54.1`; see [RESEARCH_HISTORY.md](RESEARCH_HISTORY.md).
+- Recorded approval-gate ordering and delegation completeness mechanisms in Stages 4Q and 4S.
+- Explicit coverage and independence limits: Stage 5Q **6.2%**, Stage 5R **zero new discharged
+  cells**, Stage 5S **comparison-bounded detection with unproven witness independence**.
+- A historical device-integrity application whose package version remains `0.4.18`.
 
-**Status: Complete**
+## OpenAI review track
 
-Privacy-first academic integrity prototype.
+The focused question is whether a host-controlled authorization gate prevents simulated unsafe tool
+consequences while preserving authorized work when agent input contains untrusted instructions.
 
-- [x] Metadata-only telemetry pipeline (no content collection)
-- [x] SHA-256 student identity hashing
-- [x] Local deterministic risk scoring (7-category weighted model)
-- [x] Claude narrative layer — Warning/Critical only, fail-open
-- [x] Academic event taxonomy (18 event types)
-- [x] Session lifecycle state machine (created → submitted)
-- [x] Exam registry API
-- [x] HMAC-SHA256 tamper-evident audit chain
-- [x] JSON report export with manual review recommendation
-- [x] Audit chain verification endpoint
-- [x] Instructor dashboard: risk cards, event timeline, filter bar
-- [x] Student page: privacy notice modal, helper status indicator
-- [x] macOS native helper (display-affinity scanner, Countermeasure A)
+| Deliverable               | Scope                                                                                                 | Acceptance evidence                                                                                                   |
+| ------------------------- | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Offline demonstration     | Deterministic local fixtures, explicit policy, simulated consequences, safe and vulnerable controls   | Run `npm run openai:offline`, then `npm run openai:verify -- /tmp/simurgh-openai/report.json`; inspect actual results |
+| Optional model adapter    | Explicitly opted-in Responses API transport; model proposes actions, host retains execution authority | Contract tests are separate from an authorized live capture; no current live result is claimed                        |
+| Claim and security review | Trace reviewer-facing assertions to code, artifacts and limitations                                   | [Claim audit](docs/openai/CLAIM_AUDIT.md) and the readiness report distinguish inspection from reproduction           |
+| Application package       | Focused proposal, problem statement, milestones, methodology, resources and public benefit            | [Owner checklist](docs/openai/APPLICATION_CHECKLIST.md); identity, budget and eligibility reviewed before submission  |
 
----
+These additions do not raise historical coverage figures or confer a release status on frozen
+incomplete work. New results must identify their own corpus, implementation revision, parameters
+and limitations.
 
-## Stage 1.5 — Validation Pack ✅
+## Proposed research after owner review
 
-**Status: Complete**
+1. **Authorized live capture:** select an available model, approve spending and data handling,
+   freeze the dataset and capture parameters, then publish measured results including failures.
+2. **Broader validity:** add independently authored cases and an external operator reproduction;
+   distinguish shared-code replay, separate implementation checks and operator independence.
+3. **Executable coverage:** build probe families capable of observing class-specific outcomes,
+   preserving 5Q and 5R's frozen records and reporting any new coverage under a new label.
+4. **Witness independence:** obtain an external operator's full witness-tuple evidence before
+   proposing any stronger claim; digest anchoring alone does not pay this debt.
+5. **Operational assurance:** evaluate deployment-specific isolation, approval identity, audit
+   custody and integration failure modes before any production-readiness claim.
 
-Reviewer-readiness, validation, evidence mapping, and Stage 2 planning. No major Stage 2 runtime code.
-
-- [x] Threat model
-- [x] Validation matrix
-- [x] Limitations document
-- [x] Stage 2 architecture plan
-- [x] Resource plan
-- [x] Demo script
-- [x] Risk register
-- [x] Reviewer checklist
-- [x] Evidence folder rules
-- [ ] Fresh remote CI evidence after branch push
-- [ ] Red-team validation
-- [ ] Privacy/legal review
-- [ ] Accessibility review
-- [ ] Institutional pilot evidence
-
----
-
-## Stage 2 — Device Shield / Integrity Node
-
-**Status: In progress** (Stage 2.8 Linux Display Integrity Research frozen — `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`)
-
-Transition toward signed local integrity proofs and device-aware validation.
-
-- [x] Simurgh SDK to Local Integrity Node pairing
-- [x] Signed integrity proof envelope
-- [x] macOS localhost daemon foundation with P-256 signed proofs
-- [x] Server challenge verification and telemetry `daemon_proof`
-- [x] Dashboard/report device-integrity state
-- [x] Reusable browser SDK for daemon discovery, pairing, proof fetch, and telemetry send
-- [x] Development daemon lifecycle commands and LaunchAgent install/uninstall helpers
-- [x] macOS metadata-only display-affinity scanner implementation
-- [ ] Tamper-aware local node logs
-- [x] Replay-resistant node/API challenge flow
-- [x] Privacy-preserving proof summaries
-- [x] Windows scanner proof contract and mock-first .NET daemon skeleton
-- [x] Real Windows laptop validation for `WDA_MONITOR` and `WDA_EXCLUDEFROMCAPTURE`
-- [x] Cross-platform Device Shield unification — Stage 2.7, `v0.4.13` (shared proof/scanner/risk/privacy contracts, cross-platform smoke + audit, Linux daemon proofs rejected with `unsupported_platform`)
-- [x] Stage 2 Windows Device Shield closeout — `v0.4.13-stage-2-6-2-7-closeout` (Windows technical brief, validation matrix, reviewer checklist, umbrella smoke + security audit gates, evidence folder, external review signal)
-- [x] Stage 2.8A/2.8B Linux X11 scanner + display-server lock + server-side Linux proof acceptance — `v0.4.15-stage-2-8A-8B-linux-x11-scanner` (X11 window-affinity enumeration, `display_server_lock` enforcement, Linux daemon lifecycle, Stage 2.8A/B smoke + cybersecurity audit)
-- [x] Stage 2.8C/2.8D Linux Wayland + XWayland + systemd `--user` lifecycle + Ubuntu CI — `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci` (live `display_server_mismatch` enforcement, Wayland portal advertised/active probe with no consent triggered, XWayland partial coverage, browser_package_hint UX-only, dev-only systemd user unit + lifecycle scripts, Ubuntu CI Rust + mandatory Xvfb + shellcheck, combined smoke + cybersecurity audit)
-- [ ] Production Windows Service packaging and deployment design
-- [x] Stage 2.8 Linux Display Integrity Research closeout — `v0.4.18-stage-2-8-linux-closeout` (Linux technical brief, validation matrix, reviewer checklist, closeout declaration, real-device validation plan, top-level doc updates)
-
-**Next: Stage 2.8 external review signal + Stage 3 Agent Shield planning.**
-
-- [ ] Agent integrity API — validates AI computer-use sessions
-- [ ] Webhook delivery for real-time risk alerts
-- [ ] Multi-exam support (concurrent sessions)
-- [ ] Rate-limit and burst protection hardening
-- [ ] Persistent storage (PostgreSQL / Supabase)
-
----
-
-## Stage 3 — Platform Expansion
-
-**Status: Proposed**
-
-Cross-platform delivery and LMS integration.
-
-- [ ] Browser PWA (no install required)
-- [ ] Production macOS daemon packaging, signing, notarisation, and managed deployment design
-- [ ] iOS and Android companion apps
-- [ ] ChromeOS support
-- [ ] LMS integration (Canvas, Moodle, Blackboard webhooks)
-- [ ] Institutional SSO (SAML / OAuth2)
-- [ ] Multi-tenant deployment support
-
----
-
-## Stage 4 — Privacy-Preserving Visuals (Research)
-
-**Status: Research**
-
-Countermeasure D — the "Code-Video" layer.
-
-- [ ] GPU-layer overlay detection (DirectX/Metal hook patterns)
-- [ ] Hardware-rooted attestation via TPM / Secure Enclave
-- [ ] Privacy-preserving visual verification without screen capture
-- [ ] On-device inference (no cloud dependency for scoring)
-
----
-
-## Known Limitations
-
-These limitations are documented in the research paper (§VI-C) and are not bugs:
-
-| Limitation                                                     | Class                       | Mitigation                                 |
-| -------------------------------------------------------------- | --------------------------- | ------------------------------------------ |
-| Click-through overlays (WS_EX_TRANSPARENT, ignoresMouseEvents) | Countermeasure C blind spot | Pair with native helper (Countermeasure A) |
-| Read-don't-paste workflows (silent transcription, human WPM)   | Structural detection gap    | Behavioural baseline analysis (Stage 2)    |
-| GPU-layer overlays (Cluely-class)                              | Advanced evasion            | Stage 4 research track                     |
-
----
-
-## Contributing
-
-Open an issue to discuss a proposal before submitting a PR. A dedicated contributor guide is not included in the Stage 1.5 validation pack.
+No delivery date or funding award is implied. Grant milestones and resource scenarios are proposals
+in [PROPOSAL.txt](docs/openai/PROPOSAL.txt). Deployment, publication, paid model use and submission
+remain owner decisions.

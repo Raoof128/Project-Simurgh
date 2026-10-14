@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-15",
+  "timezone": "Australia/Sydney",
+  "baseCommit": "61883d9e6cbea6c9dc9faccd50ed72bd0ec28ce1",
+  "branch": "openai-readiness",
+  "node": "v24.19.0",
+  "fullUnitSuite": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 npm test",
+    "exitCode": 0,
+    "tests": 5093,
+    "suites": 97,
+    "pass": 5090,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 3,
+    "todo": 0,
+    "skips": [
+      "\ufe63 PARITY \u2014 a REAL headless browser reproduces every value byte for byte (0.296757ms) # no Chrome present \u2014 the browser lane is SKIPPED, not assumed",
+      "\ufe63 [5s-t26] the proof TYPE-CHECKS (0.083677ms) # lean is not on PATH \u2014 enforced by the CI jobs that install elan",
+      "\ufe63 [5s-t26] the repo-wide gate passes, and counts this directory (0.091448ms) # lean is not on PATH \u2014 enforced by the CI jobs that install elan"
+    ]
+  },
+  "focusedSuite": {
+    "command": "npm run test:openai",
+    "exitCode": 0,
+    "tests": 26,
+    "suites": 0,
+    "pass": 26,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "dependencyAudit": {
+    "command": "npm audit --json",
+    "exitCode": 0,
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    }
+  },
+  "offlineRuns": {
+    "count": 2,
+    "equalCanonicalPayloads": true,
+    "canonicalPayloadSha256": "3adfe2227cb5faf93fbe4bea49c6fcb2c85fb56fd4d36b224747613ebd68dcd5",
+    "artifact": "offline-report.json"
+  },
+  "liveApiCallsPerformed": 0,
+  "limitations": [
+    "Local current-instance validation; GitHub Actions not executed",
+    "No live OpenAI interoperability result",
+    "No Chrome browser or Lean typechecking",
+    "No independently operated external reproduction"
+  ]
+}

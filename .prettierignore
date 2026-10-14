@@ -2,6 +2,9 @@ node_modules
 package-lock.json
 coverage
 
+# Exact generated OpenAI reviewer evidence; verify canonical signed payloads with openai:verify.
+docs/openai/results/*.json
+
 # build / runtime artifacts
 .simurgh_check_logs
 data/sessions

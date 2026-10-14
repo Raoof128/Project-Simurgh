@@ -1,5 +1,18 @@
 ## Change Log
 
+## [Unreleased] — 2026-10-15 — OpenAI reviewer workflow
+
+- Added an isolated synthetic tool-authorization experiment, explicit live Responses API
+  opt-in, signed offline reports, complete case replay, and adversarial regression tests.
+- Added a focused reviewer README, claim/security audits, official-source notes, grant
+  proposal and owner checklist. Preserved the previous README and device roadmap verbatim.
+- Updated package positioning while retaining the historical application version. Refreshed
+  compatible runtime dependencies to remediate the advisories found during this review.
+- Kept historical signed evidence and frozen specifications unchanged. The archive's
+  documentation-gate exception is bound to the original README hash.
+- No live OpenAI run, external submission, publication or new release is claimed. The
+  [readiness report](docs/openai/READINESS_REPORT.md) records measured checks and open limits.
+
 ## [docs-pace-the-frontier] — 2026-09-14 — Brief and README reference the embedded-evaluator proposal
 
 **Raouf:**
