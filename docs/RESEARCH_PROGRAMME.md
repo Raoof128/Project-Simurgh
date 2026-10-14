@@ -1,5 +1,10 @@
 # Simurgh Research Programme
 
+> **Historical device-track document.** This preserves the Stage 1/2 planning or review state
+> identified below. Statements such as “current,” “next,” or “not implemented” are historical,
+> not the status of today’s research tree. Start at the [current reviewer index](REVIEWER_INDEX.md)
+> and [research roadmap](../ROADMAP.md) for active work.
+
 > **Status:** v0.4.4 — 2026-05-15. Stage 2.2 macOS node pairing shipped, 10/10 security audit posture reached, Q9 audit-coverage gap closed, Q10 demo states (`stale`, `replayed`, `invalid_signature`) added to `scripts/check.sh`. 34/34 gates, 203/203 tests, 0 high/critical npm advisories.
 
 This document is the long-horizon research roadmap for Project Simurgh — a privacy-preserving academic integrity prototype. It frames the work as four nested research tracks rather than a single product backlog. Each track has explicit non-goals and an anti-overclaiming clause so progress claims stay honest.

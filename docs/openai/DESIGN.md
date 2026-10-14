@@ -82,6 +82,7 @@ remain unchanged. This is documentation relocation compatibility, not a repaired
 verifier or a changed research result. The initial full test run demonstrated the relocation
 failure before this bounded test-maintenance change.
 
-All changes remain local for owner review. No push, merge, publication, submission, license
-change, eligibility certification or resource expenditure is part of this change. The grant
-application uses proposed budget scenarios and milestones rather than invented commitments.
+The owner subsequently authorized committing and pushing this work to `openai-readiness`.
+No merge, grant submission, research publication, license change, eligibility certification
+or paid API call is part of that authorization. The grant application uses proposed budget
+scenarios and milestones rather than invented commitments.

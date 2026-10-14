@@ -173,3 +173,95 @@ During review, a non-regular input could block the verifier at FIFO open before 
 file-type check. The evaluator added nonblocking open and a regression test; the final
 26-test run confirms FIFO input is rejected without hanging. Artifact input also has a
 2 MiB cap, strict signature encoding, and sanitized parser/crypto error reporting.
+
+## Expanded static sweep of the repository
+
+An additional sweep used the **8,131 tracked paths at baseline `19960ce7`**. This is a
+file-by-file inventory and automated static check, with deeper reasoning on selected
+paths. It is not a claim that every file received a semantic security audit. The unavailable
+Codex Security preflight/tooling limitation still applies.
+
+| Coverage class                                   | Actual work                                                                                                                                                                     |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 8,090 UTF-8 text files                           | Secret-shaped private-key and provider-token patterns checked; values excluded from findings                                                                                    |
+| 41 binary files                                  | Size/hash inventory only; compressed files, documents and cryptographic blobs not decoded for secret scanning                                                                   |
+| 1,575 source/configuration/script/workflow files | Additional scans for disabled TLS verification, shell execution, stubs, failure masking, remote installers and machine-specific paths                                           |
+| 1,051 JavaScript, 133 Python and 157 shell files | Acorn parsing, Python AST parsing and `bash -n`, respectively; zero syntax failures                                                                                             |
+| 26 complete files and sections of 7 others       | Read and reasoned in this expanded pass, including all eight workflows, server authorization/affinity sections, helper serialization, selected replay scripts and configuration |
+
+UTF-8 source containing literal NUL characters was included in the text checks, rather
+than silently excluded as binary. The internal per-path review manifest records hashes,
+scope, syntax checks, pattern candidates, and the distinction between whole-file and
+section review. It describes bytes observed during ongoing branch work; it is not a
+single immutable post-fix snapshot. Pattern hits are candidates, not vulnerabilities.
+Some failure-masking candidates remain untriaged; no blanket clean result is asserted.
+
+### Additional findings and disposition
+
+**OAI-SEC-05 — forwarded-header rate-limit bypass: remediated in the current branch.**
+The baseline `src/security/rateLimit.js` accepted the first raw `X-Forwarded-For` value as
+the client key, including when no trusted proxy was configured. An in-memory probe
+admitted two requests from one socket against a limit of one by changing that header.
+The affected IP-keyed server route is exam joining; the other token/secret-keyed limiters
+have different key functions. The fix uses Express's trusted-proxy-aware `req.ip`, with
+the socket address as fallback. Independent validation of the two focused rate-limit
+test files passed **10/10**, including real local HTTP requests, configured trusted
+proxies, and rejection of attacker-controlled leftmost forwarding hops. This closes the
+demonstrated bypass; it does not provide shared quotas across server processes.
+
+**OAI-SEC-06 — legacy affinity privacy boundary: open at this review.**
+`tools/simurgh-helper/main.swift:304` serializes process IDs and process names. The
+legacy `server.js` affinity ingest stores these fields and includes them in audit/SSE
+data. Its `GET /api/affinity/:sessionId` returns the affinity record without requiring a
+session or instructor token. The sender requires the configured helper shared secret;
+the simulator requires demo mode. Reading a particular record requires knowledge of its
+session ID, but session-ID secrecy is not equivalent to authorization. This is a
+source-backed privacy exposure, not a demonstrated native-device capture in this
+environment. Modern signed daemon-proof routes enforce a different, count-only boundary.
+The legacy collection path contradicts an unqualified repository-wide claim that process
+names/PIDs are never transmitted. Qualify that claim and either remove raw legacy data
+at the sender/ingress or authorize and minimize the public status projection. Merely
+authenticating reads does not eliminate raw collection or audit retention.
+
+**OAI-SEC-07 — Stage 5L reproduce wrapper can report success after a failed gate: open.**
+`scripts/reproduce-llm-shield-stage5l.sh:27` uses `diff ... && echo ...`; line 40 uses
+`python3 ... && echo ...`, followed by the unconditional `ALL PASS` line. Under Bash
+`set -e`, failure of the left side of an `&&` list does not terminate the script. A
+minimal offline control-flow reproduction returned exit zero and printed `ALL PASS`
+after the failing left-hand command. The historical generators were not executed or
+modified. This establishes false-success wrapper behavior, not that the committed
+evidence is incorrect. Repair via a declared historical-script maintenance change:
+standalone gate commands or explicit nonzero exits, plus injected-failure regression
+tests. The superficially similar Stage 5K Lean expression is inside a standalone
+subshell whose nonzero status terminates the outer script; it was not classified as the
+same defect.
+
+**Saved OpenAI artifact CI coverage: remediated in the current branch.** The workflow
+previously ignored `docs/openai/**` changes and verified only a newly generated temporary
+report. Its triggers now include that directory, and an additional step verifies the
+saved reviewer artifact against the current source. These workflow changes were read
+locally; this review does not claim a new hosted Actions run.
+
+### Repository hygiene and bounded negative results
+
+The 91 private-key-shaped file matches were fixture/test/illustrative material, including
+explicitly named `INSECURE_FIXTURE_ONLY` keys. The five provider-token-shaped matches were
+mock leakage/privacy examples and matching tests/plans. **No live credential was
+confirmed by this scan.** This limited pattern check cannot rule out other credential
+formats, encoded values, binary-contained secrets, or secret reuse outside the repository.
+Public fixture keys must never become production signing identities.
+
+Two tracked CPython `.pyc` files under the AgentDojo adapter's `__pycache__` directory
+were identified as generated-file cleanup candidates. The remaining binary inventory
+includes deliberate research images, papers, anchor proofs and bundles; those files
+were not classified as disposable merely because they are binary.
+
+Placeholder searches mainly found UI hints, named mocks, fixture construction, and
+explicit historical modeling assumptions. The Stage 5L adapter expressly sets
+`facts.vucVerified = true` for its deterministic Lane-A model; it must not be promoted
+as real embedded-commitment verification. No undocumented live OpenAI adapter stub was
+found. Historical Lean bootstrap steps and setup instructions use mutable `latest` or
+`master` download locations, and workflows use action tags rather than full commit
+pins. These remain reproducibility/supply-chain hardening opportunities, not evidence
+of a compromised dependency. No disabled-TLS pattern was found in the scanned source
+surface; that is a bounded search result, not a complete TLS configuration audit.

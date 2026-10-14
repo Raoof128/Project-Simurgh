@@ -91,6 +91,19 @@ A fingerprint copied from the same untrusted artifact adds no identity assurance
 
 For live artifacts, verification replays the **supplied** proposals and recomputes effects and metrics; it cannot authenticate that OpenAI produced those proposals or metadata. It neither repeats nor pays for API requests. The file checks assume a trusted local filesystem; they are not a defense against a privileged attacker racing directory replacements or altering the process.
 
+## Optional Inspect AI instrument
+
+The additive [Inspect task](../../tools/openai-readiness/inspect/README.md) loads the existing
+synthetic dataset and sends model text proposals through the local enforced boundary. The
+exercised mock-provider smoke uses seven fixed completions: three authorized reads, three
+contained valid attacks and one explicit execution failure. It records zero forbidden effects.
+Five Python tests include a real Inspect evaluation with network connections forbidden.
+
+This tests framework/scorer wiring, not a frontier model or a held-out benchmark. Its structured
+text interface is distinct from the direct Responses function-calling adapter. The optional
+provider path has separate transport and authorization limits, documented in its README.
+These new bridge files are not in the earlier offline artifact's source manifest.
+
 ## Research limits retained
 
 This additive demonstration does not expand Stage 5Q's documented 6.2% coverage, discharge additional Stage 5R cells, or establish Stage 5S witness independence. It does not integrate authorization into every historical runtime, replace the existing Anthropic application, provide production sandbox isolation, or certify OpenAI Agents SDK compatibility. The optional integration is a small Responses API proposal adapter; no Agents SDK is required.

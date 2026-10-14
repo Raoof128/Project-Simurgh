@@ -50,7 +50,9 @@ Include:
 - Affected component (server, helper, audit chain, dashboard, etc.)
 - Potential impact assessment
 
-You will receive a response within **72 hours**. If the vulnerability is confirmed, a fix will be prioritised for the next release. You will be credited in the changelog unless you request anonymity.
+The maintainer aims to acknowledge reports within **72 hours**; this is a response target, not a
+service guarantee. Confirmed issues are prioritized by impact and affected scope. Coordinate
+disclosure timing with the maintainer; attribution is optional and can be anonymous.
 
 ## Security Architecture (v0.4.12)
 
@@ -120,7 +122,7 @@ The Windows Device Shield path is protected by:
 
 ### Secret Separation
 
-Four independent secrets in production. Reuse is not permitted.
+The historical server configuration uses four separate secrets outside demo mode. Reuse is not permitted.
 
 | Secret                           | Purpose                                             |
 | -------------------------------- | --------------------------------------------------- |
@@ -150,7 +152,9 @@ Enforcement points:
 - `src/privacy/hashIdentity.js` — one-way SHA-256 hashing at point of entry
 - `tools/privacy-audit.mjs` — CI-ready scanner that fails if forbidden fields appear in generated data
 
-These controls cannot be bypassed by configuration alone — modification requires a code change visible in the audit log.
+These controls are implemented in the named validation paths. They do not protect against a
+compromised server or a party able to change the code or its signing secrets; application audit
+logs are not a complete record of source-code changes.
 
 ### No Automatic Misconduct Finding
 
@@ -158,7 +162,8 @@ Simurgh produces **risk scores and event timelines**. It never automatically acc
 
 > "Manual review required. No automatic misconduct finding."
 
-This is the canonical wording emitted by `src/academic/riskScoring.js` for Warning and Critical verdicts. Institutions deploying Simurgh must apply human judgment and due process before any action is taken on the basis of a risk score.
+This is the Critical wording emitted by `src/academic/riskScoring.js`; Warning uses
+“Manual review recommended. No automatic misconduct finding.” Institutions deploying Simurgh must apply human judgment and due process before any action is taken on the basis of a risk score.
 
 ### Known Limitations (from research paper §VI-C)
 
@@ -171,7 +176,8 @@ The following attack classes are **not** detectable from telemetry alone:
 Mitigations:
 
 - The macOS `simurgh-helper` (Countermeasure A) enumerates display-affinity flags at the OS level and triggers a Critical override when a capture-excluded window is detected.
-- Stage 4 research will explore hardware-rooted attestation and on-device verification for GPU-layer overlays.
+- The historical device roadmap proposes hardware-rooted attestation and on-device verification
+  for GPU-layer overlays. These remain proposals; see [DEVICE_ROADMAP.md](DEVICE_ROADMAP.md).
 
 These limitations are documented openly. The system is **privacy-preserving, tamper-evident, hardened, and auditable against the Stage 1 threat model** — it is not unbreakable, and Simurgh's value proposition does not rely on the claim that it is.
 

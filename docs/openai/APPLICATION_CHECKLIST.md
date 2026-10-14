@@ -21,6 +21,7 @@
 
 ## Technical and research checks before applying
 
+- Read the [research fit and held-out validation plan](RESEARCH_FIT.md). General fellowship-selection guidance is not an individualized diagnosis or the OpenAI grant rubric; do not claim external validation or scholarly credentials that have not occurred.
 - Read the [research brief](OPENAI_BRIEF.md), [evaluation design](EVALUATION.md), [claim audit](CLAIM_AUDIT.md), and [readiness report](READINESS_REPORT.md). Resolve remaining failures or describe them explicitly.
 - Reproduce the key-free run from the repository root: `npm run openai:offline -- --out /tmp/simurgh-openai/report.json`, then `npm run openai:verify -- /tmp/simurgh-openai/report.json`. Use a fresh output path; the CLI refuses to overwrite an existing artifact. Follow the harness README for the exact current requirements. The report's payload is reproducible; a fresh self-generated signature need not be byte-identical across runs.
 - Report the actual fixture denominator, allowed-task completion, prohibited effects, positive/negative controls, and verifier outcomes. Do not replace a missing live-model result with an offline score.
@@ -31,7 +32,7 @@
 ## Owner decisions that prevent a final submission
 
 1. Confirm applicant identity, team, track record, relevant paper authorship, and work location.
-2. Choose the explicit live Responses API model ID(s), account/project, synthetic data transmission scope, repetitions, token budget, and maximum spend. The repository's optional live path is not itself authorization to incur charges. No live result was produced for this package.
+2. Confirm or replace the proposed `gpt-6.1-sol` / `gpt-6-luna` candidates and choose the explicit live Responses API model ID(s), account/project, synthetic data transmission scope, repetitions, token budget, and maximum spend. The repository's optional live path is not itself authorization to incur charges. No live result was produced for this package.
 3. Choose a resource scenario and calendar milestones. USD 500 credits and USD 25,000 combined support are illustrative proposals, not approvals, prices, or known grant offers. Explain how labor is supported if requesting credits only.
 4. Review current program terms and any eligibility/export-control representations presented during submission. Their exact applicability is not established by this package. The visible form's non-exclusivity notice also requires owner consideration.
 5. Review the final application text and authorize any external submission or publication separately. No application, email, upload to OpenAI, or public release has been sent by preparing these files.

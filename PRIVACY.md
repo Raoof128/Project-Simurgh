@@ -1,18 +1,47 @@
 # Privacy Policy
 
-**Last updated:** 2026-05-19 (Stage 2.8 Linux Display Integrity Research closeout docs)
+**Scope clarification:** 2026-10-15. The academic/device policy below records the Stage 2.8
+closeout of 2026-05-19. It applies to that telemetry pipeline, not every research tool in this
+repository.
+
+## Research evaluation data
+
+The [OpenAI demonstration](docs/openai/EVALUATION.md) uses synthetic task and context text.
+Offline mode makes no provider requests. An explicitly authorized live run sends those inputs to
+the OpenAI Responses API; local reports can contain proposed tool arguments, provider metadata
+and fixture text. Review reports before sharing and do not replace fixtures with private data.
+`store: false` is a request setting, not a claim of zero retention under provider policy.
+
+Other historical model-capture and attestation tools have their own declared data scopes. Read
+the relevant experiment protocol and [security boundaries](SECURITY.md) before enabling network
+access or publishing a capture. The academic telemetry exclusions below must not be generalized
+to those research inputs.
+
+## Legacy helper exception under review
+
+The legacy macOS helper path has a confirmed privacy mismatch: its payload includes raw process
+names and PIDs, and the historical server path retains those fields in affinity state and emits
+them through audit/SSE. This differs from the counts-only modern daemon-proof contract. The
+[security review](docs/openai/SECURITY_REVIEW.md) tracks the finding and any subsequent remediation.
+Do not interpret the intended exclusions in the historical policy below as proof that this legacy
+path never transmitted or retained identifiers.
+
+## Academic and device telemetry policy
 
 > **Stage 2.7 note:** The canonical list of forbidden raw-field names now lives in [`src/device/forbiddenLocalFields.js`](src/device/forbiddenLocalFields.js) and is enforced recursively by the daemon proof validator, the privacy audit CLI (`tools/privacy-audit.mjs`), and the Stage 2.7 security audit gate. Any new field added to that list automatically tightens the privacy contract across both macOS and Windows.
 
 > **Stage 2.8C/D note:** The Linux daemon counts-only contract is preserved in Stage 2.8C/D. The Wayland portal probe reads only the `AvailableSourceTypes` property (an integer bitmask); no session, stream, or PipeWire handle is ever opened. `browser_package_hint` is UX-only and client-side — it is not collected, stored, transmitted to the server, or referenced in any server module. No new field categories were introduced.
 
-Project Simurgh is a research prototype for privacy-preserving academic integrity verification. This document describes what data is collected, how it is used, and what is explicitly not collected.
+The sections below describe the academic/device collection policy and modern daemon contracts.
+They must be read with the legacy-helper exception above and the component-specific implementation
+evidence; policy intent alone does not establish enforcement.
 
 ---
 
 ## What We Collect
 
-Simurgh collects **behavioural metadata only**. No content is ever collected, stored, or transmitted.
+The academic/device telemetry policy permits **behavioural metadata only**. Typed answer
+and pasted text content are excluded from that pipeline.
 
 | Signal                                               | Collected              | Purpose                                                             |
 | ---------------------------------------------------- | ---------------------- | ------------------------------------------------------------------- |
@@ -40,26 +69,26 @@ Simurgh collects **behavioural metadata only**. No content is ever collected, st
 | Windows monitor-only / capture-excluded counts       | ✅                     | Stage 2.6B — signed `WDA_MONITOR` / `WDA_EXCLUDEFROMCAPTURE` counts |
 | Raw HWNDs, process/window names, PIDs, paths, pixels | ❌                     | Forbidden; rejected by daemon-proof validation and privacy audit    |
 
-## What We Never Collect
+## Excluded data in the academic/device policy
 
-| Data                                                 | Status                                                                    |
-| ---------------------------------------------------- | ------------------------------------------------------------------------- |
-| Screen pixels or screenshots                         | ❌ Never                                                                  |
-| Webcam frames                                        | ❌ Never                                                                  |
-| Microphone audio                                     | ❌ Never                                                                  |
-| Typed answer content                                 | ❌ Never                                                                  |
-| Pasted text content                                  | ❌ Never                                                                  |
-| Raw student name or email                            | ❌ Never                                                                  |
-| Biometric identifiers                                | ❌ Never                                                                  |
-| IP address (stored)                                  | ❌ Not persisted                                                          |
-| Location data                                        | ❌ Never                                                                  |
-| Raw Ed25519 signatures (Stage 2)                     | ❌ Never persisted to audit (verify-only)                                 |
-| Raw pairing challenge bytes (Stage 2.2)              | ❌ Never (only the SHA-256 hash enters audit)                             |
-| Raw process names, window titles, HWNDs, or PIDs     | ❌ Never (Stage 2.1+ only ships counts and capability flags)              |
-| macOS node private key                               | ❌ Never leaves the local machine (stored at `~/.simurgh/node-key`, 0600) |
-| Daemon private key                                   | ❌ Never leaves the local machine (stored in macOS Keychain)              |
-| Usernames, serial numbers, MAC addresses, file paths | ❌ Never                                                                  |
-| LaunchAgent system inventory or device identifiers   | ❌ Never                                                                  |
+| Data                                                 | Status                                                                                      |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Screen pixels or screenshots                         | ❌ Never                                                                                    |
+| Webcam frames                                        | ❌ Never                                                                                    |
+| Microphone audio                                     | ❌ Never                                                                                    |
+| Typed answer content                                 | ❌ Never                                                                                    |
+| Pasted text content                                  | ❌ Never                                                                                    |
+| Raw student name or email                            | ❌ Never                                                                                    |
+| Biometric identifiers                                | ❌ Never                                                                                    |
+| IP address (stored)                                  | ❌ Not persisted                                                                            |
+| Location data                                        | ❌ Never                                                                                    |
+| Raw Ed25519 signatures (Stage 2)                     | ❌ Never persisted to audit (verify-only)                                                   |
+| Raw pairing challenge bytes (Stage 2.2)              | ❌ Never (only the SHA-256 hash enters audit)                                               |
+| Raw process names, window titles, HWNDs, or PIDs     | Rejected in modern daemon proofs; legacy helper names/PIDs are a documented exception above |
+| macOS node private key                               | ❌ Never leaves the local machine (stored at `~/.simurgh/node-key`, 0600)                   |
+| Daemon private key                                   | ❌ Never leaves the local machine (stored in macOS Keychain)                                |
+| Usernames, serial numbers, MAC addresses, file paths | ❌ Never                                                                                    |
+| LaunchAgent system inventory or device identifiers   | ❌ Never                                                                                    |
 
 ---
 
@@ -95,7 +124,8 @@ This is a stateless prototype. No data is written to a database. Restarting the 
 | -------------------- | ---------------------------- | -------------------------------------- |
 | Anthropic Claude API | Sanitised telemetry metadata | Risk narrative (Warning/Critical only) |
 
-No other third-party services receive any data.
+This table describes the historical academic narrative integration. Optional research integrations
+are described in the research evaluation section above.
 
 ---
 
@@ -110,7 +140,8 @@ Simurgh enforces privacy constraints at the code level:
 - `tools/simurgh-daemon-macos/Sources/SimurghDaemon/AffinityScanner.swift` — CoreGraphics metadata scanner with aggregate output only
 - `tools/simurgh-daemon-windows/src/SimurghDaemon.Windows/DisplayAffinityScanner.cs` — Win32 `GetWindowDisplayAffinity` scanner with aggregate counts only; raw field transmission is unconditionally rejected
 
-These controls cannot be bypassed by configuration without code changes.
+These are named enforcement paths, not proof of repository-wide coverage. The legacy helper
+exception above illustrates why each ingestion and export route needs separate review.
 
 ---
 

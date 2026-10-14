@@ -53,10 +53,9 @@ export function createRateLimiter({ windowMs, max, keyFn, name = "rl" } = {}) {
 }
 
 // Convenience key extractors
-export const keyByIp = (req) =>
-  req.headers["x-forwarded-for"]?.toString().split(",")[0]?.trim() ||
-  req.socket?.remoteAddress ||
-  "unknown";
+// Express resolves req.ip using the app's explicit trust-proxy policy. Reading
+// X-Forwarded-For directly lets any client create fresh buckets with a new header.
+export const keyByIp = (req) => req.ip || req.socket?.remoteAddress || "unknown";
 
 export const keyByHelperSecret = (req) =>
   (req.headers["x-simurgh-helper-secret"] || "").toString().slice(0, 128) || null;

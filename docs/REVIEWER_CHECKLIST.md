@@ -1,5 +1,10 @@
 # Reviewer Checklist
 
+> **Historical device-track document.** This preserves the Stage 1/2 planning or review state
+> identified below. Statements such as “current,” “next,” or “not implemented” are historical,
+> not the status of today’s research tree. Start at the [current reviewer index](REVIEWER_INDEX.md)
+> and [research roadmap](../ROADMAP.md) for active work.
+
 > **Status (v0.4.3, 2026-05-15):** Stage 1.5 reviewer checklist. Stage 2.1 + 2.2 are merged on `main`; reviewers evaluating the current state should also read `CHANGELOG.md` entries `[0.4.1]` → `[0.4.3]` and [`STAGE_2_ARCHITECTURE.md`](stages/STAGE_2_ARCHITECTURE.md).
 
 ## Read First

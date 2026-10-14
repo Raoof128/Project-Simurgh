@@ -86,10 +86,14 @@
     ]
   },
   "current": {
-    "as_of": "2026-08-01, Stage 5S — five stage-5s-checks.yml steps added under authority 5S-M007",
-    "entry_count": 24,
+    "as_of": "2026-10-15, OpenAI reviewer workflow — saved-artifact verification step added under the existing next_phase_behaviour and maintenance_behaviour declarations",
+    "entry_count": 25,
     "why": "the LIVE census, re-pinned by each stage that adds workflow steps. `baseline` is NOT touched: it is the v2.53.0 measurement the Q1-F002 finding cites, and a later stage may never move it to go green (5S-F015).",
     "gate_problems": [
+      {
+        "gate_id": "openai-readiness.yml::Verify the saved reviewer artifact against this source tree",
+        "reason_code": "unclassifiable_step"
+      },
       {
         "gate_id": "stage-1-checks.yml::Install Lean (elan) so the Stage 4R reproduce builds its proof",
         "reason_code": "unclassifiable_step"

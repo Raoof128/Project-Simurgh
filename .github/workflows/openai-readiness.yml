@@ -5,6 +5,7 @@ on:
     paths:
       - "tools/openai-readiness/**"
       - "tests/unit/openaiReadiness/**"
+      - "docs/openai/**"
       - "src/llmShield/**"
       - "package.json"
       - "package-lock.json"
@@ -13,6 +14,7 @@ on:
     paths:
       - "tools/openai-readiness/**"
       - "tests/unit/openaiReadiness/**"
+      - "docs/openai/**"
       - "src/llmShield/**"
       - "package.json"
       - "package-lock.json"
@@ -36,6 +38,8 @@ jobs:
       - run: npm run test:openai
       - run: npm run openai:offline -- --out /tmp/simurgh-openai/report.json
       - run: npm run openai:verify -- /tmp/simurgh-openai/report.json
+      - name: Verify the saved reviewer artifact against this source tree
+        run: npm run openai:verify -- docs/openai/results/offline-report.json
       - uses: actions/upload-artifact@v4
         with:
           name: offline-synthetic-report

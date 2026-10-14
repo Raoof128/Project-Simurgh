@@ -12,6 +12,17 @@
   documentation-gate exception is bound to the original README hash.
 - No live OpenAI run, external submission, publication or new release is claimed. The
   [readiness report](docs/openai/READINESS_REPORT.md) records measured checks and open limits.
+- Follow-up review corrected privacy/HMAC assurance claims, dated device-track navigation,
+  contribution guidance and the AISec paper's unverified submission status. Added a file-by-file
+  inventory, a presentation audit and current official API/research references.
+- Fixed client-controlled forwarded headers bypassing IP rate limits; Express's configured
+  proxy policy now determines client identity, with direct and trusted-proxy HTTP regressions.
+- Added an optional pinned Inspect AI task and exercised mock-provider smoke, with explicit
+  separation from live model research. CI now verifies the saved reviewer artifact as well
+  as a freshly generated report. Further legacy security findings remain disclosed.
+- Re-derived only the live `current` workflow census under its pre-existing maintenance
+  contract after adding the saved-artifact CI step; the immutable baseline and gate logic
+  remain unchanged. The additional classification limitation is recorded, not suppressed.
 
 ## [docs-pace-the-frontier] — 2026-09-14 — Brief and README reference the embedded-evaluator proposal
 

@@ -16,6 +16,10 @@ It does not establish general model safety, production readiness, or endorsement
 
 ## Start here
 
+[Reviewer index](docs/REVIEWER_INDEX.md) identifies current instructions, historical records and
+the evidence needed to challenge each result. The [presentation audit](docs/openai/PRESENTATION_AUDIT.md)
+records the scope and limits of the documentation review.
+
 - [One-page OpenAI research brief](docs/openai/OPENAI_BRIEF.md)
 - [Claim audit and evidence map](docs/openai/CLAIM_AUDIT.md)
 - [Research proposal](docs/openai/PROPOSAL.txt) and [application checklist](docs/openai/APPLICATION_CHECKLIST.md)
@@ -117,5 +121,6 @@ is preserved in [DEVICE_ROADMAP.md](DEVICE_ROADMAP.md). The active research prio
 Research prototype. See [LICENSE](LICENSE), [SECURITY.md](SECURITY.md), [PRIVACY.md](PRIVACY.md) and
 [ethics guidance](docs/ETHICS.md). The package declares `AGPL-3.0-or-later`; this work does not relicense
 existing code. Contributions to differently licensed upstream repositories need a separate license
-review. OpenAI application materials are drafts for owner review; no submission or endorsement is
+review. See [contribution guidance](CONTRIBUTING.md) for reproducibility and disclosure expectations.
+OpenAI application materials are drafts for owner review; no submission or endorsement is
 implied.

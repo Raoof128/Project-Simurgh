@@ -4,6 +4,8 @@ coverage
 
 # Exact generated OpenAI reviewer evidence; verify canonical signed payloads with openai:verify.
 docs/openai/results/*.json
+# Generated file inventory records exact hashes; regenerate with audit-reviewer-files.py.
+docs/openai/evidence/*.json
 
 # build / runtime artifacts
 .simurgh_check_logs
