@@ -1,0 +1,42 @@
+[
+  {
+    "id": "openai-approval",
+    "url": "https://openai.github.io/openai-agents-python/human_in_the_loop/",
+    "effectiveUrl": "https://openai.github.io/openai-agents-python/human_in_the_loop/",
+    "httpStatus": 200,
+    "retrievedUtc": "2026-10-15T00:50:17.632456+00:00",
+    "sha256": "89dd49f6ecd1f8228652a59d75767a74b4fea553756166f20ab7926d64286a77"
+  },
+  {
+    "id": "openai-state",
+    "url": "https://openai.github.io/openai-agents-python/ref/run_state/",
+    "effectiveUrl": "https://openai.github.io/openai-agents-python/ref/run_state/",
+    "httpStatus": 200,
+    "retrievedUtc": "2026-10-15T00:50:17.764550+00:00",
+    "sha256": "b30ff4f68c184380cf008e809b329f5177d8b33e88fb90f72f8be1cd3dfadbcb"
+  },
+  {
+    "id": "langgraph-interrupts",
+    "url": "https://docs.langchain.com/oss/python/langgraph/interrupts",
+    "effectiveUrl": "https://docs.langchain.com/oss/python/langgraph/interrupts",
+    "httpStatus": 200,
+    "retrievedUtc": "2026-10-15T00:50:18.116430+00:00",
+    "sha256": "712afb62f64140828b052213583e73a22b30b44992b10be21686c536503e68f6"
+  },
+  {
+    "id": "openai-package",
+    "url": "https://pypi.org/pypi/openai-agents/0.23.1/json",
+    "effectiveUrl": "https://pypi.org/pypi/openai-agents/0.23.1/json",
+    "httpStatus": 200,
+    "retrievedUtc": "2026-10-15T00:50:17.596922+00:00",
+    "sha256": "14adfa28b8c6e85f5f84f6bfebb901b7febbb8a65b5a55cbc8cbcb9d7f4e48e1"
+  },
+  {
+    "id": "langgraph-package",
+    "url": "https://pypi.org/pypi/langgraph/1.2.15/json",
+    "effectiveUrl": "https://pypi.org/pypi/langgraph/1.2.15/json",
+    "httpStatus": 200,
+    "retrievedUtc": "2026-10-15T00:50:17.551841+00:00",
+    "sha256": "23702b461f71333917fd3018097f4ee0b036d7eeafbe2b09584dca144490a67a"
+  }
+]

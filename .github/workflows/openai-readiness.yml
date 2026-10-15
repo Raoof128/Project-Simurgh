@@ -3,6 +3,8 @@ name: OpenAI readiness instrument
 on:
   push:
     paths:
+      - "tools/assurance-sdk/**"
+      - "tests/unit/assuranceSdk/**"
       - "tools/assurance-lab/**"
       - "tests/unit/assuranceLab/**"
       - "docs/assurance/**"
@@ -15,6 +17,8 @@ on:
       - ".github/workflows/openai-readiness.yml"
   pull_request:
     paths:
+      - "tools/assurance-sdk/**"
+      - "tests/unit/assuranceSdk/**"
       - "tools/assurance-lab/**"
       - "tests/unit/assuranceLab/**"
       - "docs/assurance/**"
@@ -58,4 +62,35 @@ jobs:
           path: |
             /tmp/simurgh-openai/report.json
             /tmp/simurgh-assurance/report.json
+          if-no-files-found: error
+
+  sdk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: tools/assurance-sdk
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: tools/assurance-sdk/requirements.lock
+      - name: Validate pinned SDK approval and resume integrations
+        run: |
+          python -m pip install --require-hashes --only-binary=:all: -r tools/assurance-sdk/requirements.lock
+          python -m pip check
+          node --test tests/unit/assuranceSdk/*.test.js
+          python -m unittest discover -s tools/assurance-sdk/tests -v
+          python -m simurgh_sdk.study run --out /tmp/simurgh-sdk/report.json
+          python -m simurgh_sdk.study verify /tmp/simurgh-sdk/report.json
+          python -m simurgh_sdk.study verify docs/assurance/sdk/evidence/report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdk-compatibility-report
+          path: /tmp/simurgh-sdk/report.json
           if-no-files-found: error

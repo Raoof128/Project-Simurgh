@@ -24,7 +24,10 @@ For the next empirical milestone, read the [real-effects lab](assurance/README.m
 [source-backed industry gap map](assurance/INDUSTRY_GAPS.md). This separate experiment measures
 actual disposable disk writes and trace discrepancies. Its saved report is replayable with
 `npm run assurance:verify -- docs/assurance/evidence/report.json`. The original OpenAI report's
-simulated-effect limits above still apply to that original instrument.
+simulated-effect limits above still apply to that original instrument. The subsequent
+[SDK integration](assurance/sdk/README.md) exercises native OpenAI Agents SDK and LangGraph
+approval/resume flows against the unchanged lab; it includes reproducible setup, all 102 matrix
+rows, native lifecycle probes and explicit unsupported behavior.
 
 | Documents                                                                                                                                                                                                                                     | Read them as                                                                                                                                                    |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |

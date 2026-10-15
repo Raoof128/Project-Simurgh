@@ -97,7 +97,9 @@ within the experiment; a local hash supplies no external identity or operator in
 
 ## What remains open
 
-- Real OpenAI Agents SDK and LangGraph execution, including pause/edit/resume semantics.
+- The [SDK extension](sdk/README.md) now exercises pinned OpenAI Agents SDK and LangGraph
+  pause/resume/reject flows and LangGraph edits; OpenAI in-place editing is explicitly unsupported.
+  Realistic multi-turn connector workloads and durable framework recovery remain open.
 - Durable atomic replay state, retry/crash recovery, concurrent enforcers and revocation.
 - Verified enterprise principals, tenant credentials, human approvals and independent custody.
 - Held-out attacks, real connector workloads, external reproduction and measured overhead.

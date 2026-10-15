@@ -62,7 +62,9 @@ child process and compares reported actions with read-back disk effects. Its 17 
 under three controls are separate from the simulated OpenAI instrument. It includes ordinary
 checkpoint and policy baselines, ineffective mutations and explicit unknown outcomes. Run
 `npm run test:assurance` and `npm run assurance:verify -- docs/assurance/evidence/report.json`.
-The result remains local and synthetic; no SDK, live model or independent operator was tested.
+The [pinned SDK extension](docs/assurance/sdk/README.md) now reproduces all 102 case/control/runtime
+rows through OpenAI Agents SDK and LangGraph approval/resume flows. Proposals remain scripted;
+no live model or independent operator was tested.
 
 | Research result                                                                                              | Primary evidence                                                                                                                                         | Boundary                                                                                                                                                            |
 | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

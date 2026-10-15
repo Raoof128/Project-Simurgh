@@ -38,7 +38,12 @@ controls and trace/checkpoint/effect comparisons. Its 51 case/control runs inclu
 mutations and explicit observation failures. The checkpoint baseline matches full reconciliation
 on the four trace mutations; no incremental detection advantage is claimed.
 
-Next, connect two pinned agent runtimes to the same workload, then obtain held-out attacks and
+The [SDK extension](docs/assurance/sdk/README.md) now connects OpenAI Agents SDK 0.23.1 and
+LangGraph 1.2.15 to the unchanged workload: all 102 matrix rows match the original effects and
+verdicts. Native rejection and LangGraph edits are exercised; OpenAI in-place edit is explicitly
+unsupported. Same-process serialization and in-memory checkpoints do not establish crash recovery.
+
+Next, define and test durable atomic replay semantics, and obtain held-out attacks and
 external reproduction. Durable replay, authenticated approval identity, revocation, realistic
 connector effects and measured overhead remain open. These are evidence requirements, not
 claims that competitors lack these controls.

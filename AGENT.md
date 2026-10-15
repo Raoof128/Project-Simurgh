@@ -2000,3 +2000,36 @@ one machine's local agent configuration:
 - **Follow-ups:** Two actual SDK adapters, held-out attacks, external reproduction, durable atomic
   replay, authenticated identity/revocation and measured overhead remain open. No paid model call,
   submission, deployment, external operator independence or checkpoint superiority is claimed.
+
+## 2026-10-15 — Raouf: pinned SDK assurance integration (Australia/Sydney)
+
+- **Scope:** Continue the authorized next phase with actual OpenAI Agents SDK and LangGraph
+  approval/resume lifecycles against the unchanged real-effects lab; no live model or deployment.
+- **Summary:** Added a persistent bounded Node/Python bridge, scripted OpenAI Model with native
+  serialized RunState restoration, and LangGraph interrupt/checkpoint/resume adapter. Committed
+  authority and consumed grants persist across callbacks. All 102 case/control/runtime projections
+  match the original lab: per runtime, bypass has seven forbidden effects, exact policy has zero
+  observed forbidden effects and three benign completions, and deny-all loses all benign utility.
+  Two faults per control remain unknown. There are 156 main-matrix pauses (12 unavailable
+  observations), three exercised native reject/edit probes and one explicitly unsupported OpenAI
+  in-place edit. Checkpoint/full-effect results remain equal; no incremental advantage is claimed.
+- **Files changed:** `tools/assurance-sdk/` bridge, adapters, study, tests and 60-package hash lock;
+  `tests/unit/assuranceSdk/bridge.test.js`; `docs/assurance/sdk/` results, source notes, validation
+  and evidence; dated SDK spec/plan; scoped workflow and package script; README, roadmap,
+  reviewer index and assurance gap/status docs; both change logs. Original lab/OpenAI modules,
+  saved reports, frozen census baseline and historical archives remain unchanged.
+- **Verification:** Full npm suite: 5,122 tests, 5,119 passed, zero failed, three skipped
+  (Chrome/Lean unavailable). All 31 Python integration tests passed; fresh reviewer independently
+  reran them and the three Node bridge tests. Clean hash-locked pip installation and complete
+  saved-report replay passed; all 60 dependencies consistent. Original reports verify. CLI
+  overwrite/tamper negative checks pass. Ruff and changed-file formatting checks pass. A pipe
+  backpressure regression failed before nonblocking writes/shared deadline, then passed. Final
+  review found no Critical/Important issue. Current census problem set remains 26. Reusable SDK
+  install/start instructions saved to cloud configuration draft; publication remains separate.
+- **Follow-ups:** Deferred minor: LangGraph's standalone adapter accepts empty action lists and
+  trusts callback result/observation shapes; fixed-corpus study and bridge validation constrain
+  these inputs. Add parity validation before broader standalone reuse. Durable atomic replay,
+  restart/concurrency recovery, verified identity/revocation, held-out attacks, external
+  reproduction, realistic connectors and measured overhead remain open. No paid call, submission,
+  independent custody, hosted CI success, production readiness or historical coverage increase
+  is claimed. See `docs/assurance/sdk/VALIDATION.md` for the evidence and limits.
