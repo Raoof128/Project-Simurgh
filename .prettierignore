@@ -178,3 +178,7 @@ docs/assurance/meta-study/evidence/cases.json
 # Preserve raw Luna API observations.
 docs/assurance/openai-comparison/evidence/capture*.json
 docs/assurance/openai-comparison/evidence/capture*.jsonl
+
+# Preserve native-function response and journal bytes.
+docs/assurance/openai-native/evidence/capture*.json
+docs/assurance/openai-native/evidence/capture*.jsonl

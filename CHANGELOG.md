@@ -3101,3 +3101,18 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   interface experiment is needed before judging model capacity or using larger-model credits.
   Keep this negative result. No production, independent-operator, general robustness, incident
   prevention, useful-workflow overhead or zero-provider-retention claim. No cloud settings change.
+
+## 2026-10-15 — Raouf: native Luna protocol before inference (Australia/Sydney)
+
+- **Scope:** Owner-approved native function-call experiment, additive to twelve frozen families.
+- **Summary:** Same cases/model/budget; strict schemas, required single calls, text never executed.
+  Trusted host policy remains authoritative; unsafe argument choices stay representable.
+- **Files changed:** New native tool/tests, plan/protocol/guide, scoped replay CI, current census
+  35 to 36, raw-data formatting exclusions and both logs. Old evidence and baseline unchanged.
+- **Verification:** Twenty native tests and 21 inherited runtime tests pass. Fresh reviewer found
+  escaped-credential persistence and unchecked journals; four regressions failed before fixes,
+  then passed. Decoded envelopes/arguments/normalized results are screened, and replay requires
+  exact journal agreement. Full npm: 5,119 pass, zero failures, three prerequisite skips. Ruff clean.
+- **Follow-ups:** Freeze 71 input identities, execute one bounded capture, publish all results,
+  replay controls and eligible recovery, remove local key, verify and push. No paid inference yet;
+  no independent operator, second review, production or model-capability claim.
