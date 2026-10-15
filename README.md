@@ -90,6 +90,11 @@ The [local Meta pilot](docs/assurance/meta/README.md) now runs Llama 3.2 1B Inst
 A compact prompt produced 13 usable proposals from 15 cases; the initial prompt produced zero.
 Both captures are retained, with separate replay under enforced/bypass/deny-all mock controls.
 
+The [frozen repeated Meta workflow study](docs/assurance/meta-study/README.md) adds 24 separately authored cases,
+three sampling seeds and real SDK/Redis/isolation adapters. Its 144 attempts yielded only three
+valid writes and zero complete workflows; both unsafe bypass writes were blocked. Raw failures
+and descriptive uncertainty are published, with model-driven recovery explicitly unexercised.
+
 | Research result                                                                                              | Primary evidence                                                                                                                                         | Boundary                                                                                                                                                            |
 | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Stage 3V-B records 138 guardrail misses contained in a 180-case reference set; targeted attack success 0/150 | [Metrics](docs/research/llm-shield/evidence/stage-3v-b/metrics.json), [write-up](docs/research/llm-shield/LLM_SHIELD_STAGE_3V_B_WRITEUP.md)              | Historical Llama Guard 4 capture, synthetic cases and input-only classifier visibility; not an OpenAI evaluation or general robustness estimate                     |

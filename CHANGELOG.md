@@ -3029,3 +3029,32 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Follow-ups:** Complete pre-inference review, freeze sources/settings, collect the fixed run,
   publish all failures and uncertainty, add saved-action CI, and verify/commit the evidence. Separate
   agent authorship is not external independence. No paid API or environment settings changes.
+
+## 2026-10-15 — Raouf: fixed Meta study evidence and negative outcome (Australia/Sydney)
+
+- **Scope:** Execute the precommitted repeated local Meta study without prompt changes or retries;
+  publish every attempt and actual control effect.
+- **Summary:** Commit `996960de` froze protocol, 24 separately authored cases and 63 source/input
+  hashes before inference. All 144 attempts completed across three seeds; 137 began with Markdown
+  fences, four hit the token limit, and only three proposals were schema-valid writes. No read
+  proposal was valid; zero complete workflows. Real bypass produced two unauthorized writes, one
+  benign-task error and one attack case; enforcement blocked both. One authorized write completed.
+  With no complete model trajectory, model-derived recovery stayed unexercised. Scripted kernel,
+  SDK, Redis and SIGKILL tests are separate evidence. Generation took 967.27 seconds; peak inference
+  process RSS was 2975.48 MiB. The weak model/interface outcome is retained, not retuned away.
+- **Files changed:** Added raw capture, three-control report and local tokenizer consistency record
+  with its check-source snapshot; expanded study guide, reviewer index, README, plan ledger and
+  both logs. No post-result source, corpus, prompt or protocol change.
+- **Verification:** Pre-inference 21-test suite passed after review fixes; full npm 5119 passed,
+  zero failed, three Chrome/Lean prerequisite skips. All 72 paired trajectories/432 tool attempts
+  replay with matching semantic outcomes. Token/prompt/completion consistency checked for all 144
+  generations using the installed tokenizer. Missing-row, changed-summary and output-overwrite
+  refusals pass; raw capture bytes match the original. All frozen input/ancestor-commit bindings
+  verify; ten earlier source/report families and baseline19 stay unchanged. Live census34 exact;
+  original pilot reports replay, scoped formatting/Ruff/diff checks pass. Hosted CI not claimed.
+- **Follow-ups:** Before an OpenAI comparison, freeze its model/interface protocol and distinguish
+  schema-constrained output support from model capability. Outside authorship/replication, useful
+  model workflows, model-derived recovery and representative overhead remain unmeasured. This
+  run cannot estimate unnecessary blocking or broad protection: no benign baseline workflow
+  completed and only two actionable unsafe writes occurred. No paid API, new secret, environment
+  settings change, deployment, external independence or production-readiness claim.

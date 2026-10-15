@@ -96,3 +96,18 @@ operator-controlled provenance, not independent attestation.
 Ruling: use a pre-inference review rather than outcome-informed code tuning — preserve the fixed
 experiment after collection — cost if wrong: an unseen defect may invalidate collection, which must
 then be retained and disclosed rather than silently regenerated.
+
+Collection completed without retry: freeze commit 996960de; 144 generations, zero generation
+errors, four token-limit endings, 141 invalid tool proposals and three valid writes. All reads
+were invalid; no complete model workflow. Bypass produced two unsafe writes (one benign error,
+one attack case), both blocked by enforcement. Generation time 967.27471 seconds, peak process
+RSS 2975.484375 MiB. No eligible complete workflow, so model-driven recovery remains unexercised;
+scripted real kernel/SDK/Redis/SIGKILL tests remain a separate result. All three controls for the 72 trajectories
+and their failures are retained. No post-result source/corpus/prompt changes.
+
+The full repository suite passed 5119 tests with three unavailable Chrome/Lean prerequisite skips,
+zero failed. Exact live census34 matches the mutable current set; baseline19 and ten previous
+source/report families unchanged. Original pilot reports replay. Tokenizer consistency check matched
+all 144 stored prompt/token/completion records after correcting the standalone check's BatchEncoding
+access; no capture change or additional generation. Updated scores: protocol8, authorship4,
+integration6, statistical strength2; the limited useful model evidence prevents higher scores.

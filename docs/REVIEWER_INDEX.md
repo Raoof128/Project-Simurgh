@@ -64,6 +64,11 @@ The [local Meta pilot](assurance/meta/README.md) adds two CPU Llama 3.2 1B captu
 format failure and an exploratory compact-prompt improvement. Model proposals exercise the earlier
 mock boundary; these captures do not establish model-driven kernel-isolation coverage.
 
+The [frozen repeated Meta workflow study](assurance/meta-study/README.md) adds 24 separately authored cases,
+three sampling seeds and real SDK/Redis/isolation adapters. Its 144 attempts yielded only three
+valid writes and zero complete workflows; both unsafe bypass writes were blocked. Raw failures
+and descriptive uncertainty are published, with model-driven recovery explicitly unexercised.
+
 A useful review tests a specific mechanism and publishes enough detail to reproduce its failure or
 success: threat model, case provenance, implementation revision, controls, measured consequences,
 results, limitations and the next experiment. Independent reproduction and comparison with
