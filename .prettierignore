@@ -188,3 +188,7 @@ docs/assurance/safety-study/evidence/
 
 # Preserve source-bound incident simulation protocol and observations.
 docs/assurance/hf-incident/evidence/
+
+# Preserve frozen containment protocol, corpus and capture bytes.
+docs/assurance/hf-containment/evidence/
+docs/assurance/hf-containment/cases.json

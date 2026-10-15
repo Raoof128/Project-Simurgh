@@ -3204,3 +3204,21 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Follow-ups:** Compose approved-service containment with the incident chain, isolate shared
   writable state, add representative service identity/scorer controls and independent replay.
   These remaining gaps are published rather than counted as protection; commit and push branch.
+
+## 2026-10-15 — Raouf: composed containment protocol (Australia/Sydney)
+
+- **Scope:** Owner-authorized follow-through on the HF guide: compose approved-service
+  containment, run isolation, scoped credentials and scorer protection; bounded local Llama lane.
+- **Summary:** Five ablation controls over 14 scripted cases; eight frozen model prompts.
+  Host-owned task authority, preconnected gateway and descriptor kernel enforce distinct layers.
+  Synthetic random metadata credentials are excluded from worker bootstrap; no live target/API use.
+- **Files changed:** New hf-containment tools/tests/plan/corpus, scoped replay CI and mutable
+  census 38 to 39; raw-evidence exclusions and both logs. Earlier frozen experiments unchanged.
+- **Verification:** Thirteen new tests pass after initial missing-module failures and fixes for
+  a socket helper's post-filter lazy loading. A tokenizer-only probe caught BatchEncoding return
+  semantics before inference; reconstruction now uses explicit encoding. Full npm: 5,119 passed,
+  zero failed, three prerequisite skips. Source/control assumptions inspected locally.
+- **Follow-ups:** Freeze source/protocol, execute once, retain model refusals/failures, publish
+  replay instructions and results. CI's inherited scrubbed Redis child used an absent default
+  path; runner provisioning now installs the same pinned binary there. Hosted confirmation pending.
+  Independent operator reproduction and representative production IAM remain outside local evidence.
