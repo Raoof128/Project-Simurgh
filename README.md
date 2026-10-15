@@ -78,6 +78,9 @@ The [incident scope extension](docs/assurance/scope/README.md) adds 54 local HTT
 motivated by the 2026 Hugging Face and Australian statistics incidents. It tests exact request
 permissions and durable stopping, and retains a known failure: an approved service can relay beyond
 the broker's view. The [source review](docs/assurance/scope/INCIDENT_RESEARCH.md) maps further gaps.
+The [kernel egress extension](docs/assurance/egress/README.md) now tests an ingress-only Linux
+service profile against that onward-request gap. Its 36 rows block eight observed network channels
+while preserving two useful operations; a filesystem mailbox remains a documented failure.
 
 | Research result                                                                                              | Primary evidence                                                                                                                                         | Boundary                                                                                                                                                            |
 | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

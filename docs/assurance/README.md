@@ -12,6 +12,9 @@ The later [incident scope experiment](scope/README.md) tests exact HTTP request 
 durable stops in 54 local rows. Its [2026 incident review](scope/INCIDENT_RESEARCH.md) distinguishes
 the Hugging Face and Medicare accounts, maps additional OpenAI disclosures, and records the
 approved-service relay gap that remains outside the broker's enforcement boundary.
+The [kernel egress extension](egress/README.md) applies an additional Linux profile inside that
+service and measures eight blocked network channels across 36 case/control rows. The broker stays
+unchanged; filesystem communication remains outside the new profile's claim.
 
 ## Reproduce
 

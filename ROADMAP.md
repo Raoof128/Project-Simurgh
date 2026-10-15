@@ -67,6 +67,12 @@ an approved service's hidden onward request. The [2026 incident review](docs/ass
 prioritizes network-layer containment and independent observation of that path, followed by held-out
 cases, outside reproduction, multi-step memory/checkpoint tests and measured integration cost.
 
+The [kernel egress extension](docs/assurance/egress/README.md) now measures an ingress-only seccomp
+profile around the approved service: eight network channels blocked, two useful operations retained,
+36 case/control rows. It does not provide namespace isolation or selective egress, and it preserves
+a filesystem mailbox negative result. Next: reviewed native launch, destination-specific network
+policy on a suitable host, filesystem/IPC isolation and external reproduction.
+
 ## Further research requiring additional evidence or owner inputs
 
 1. **Authorized live capture:** select an available model, approve spending and data handling,

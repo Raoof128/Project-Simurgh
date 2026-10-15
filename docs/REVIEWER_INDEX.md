@@ -52,6 +52,9 @@ For the incident-driven follow-up, read the [2026 primary-source review](assuran
 and [task-scope experiment](assurance/scope/README.md). Its report retains an approved-service relay
 failure and 54 complete local rows; it does not claim to reproduce the actual incidents or supply
 OS-level network containment.
+The subsequent [kernel egress experiment](assurance/egress/README.md) adds an ingress-only Linux
+profile inside the approved service, with actual loopback/Unix observers. Its 36 rows retain useful
+work and a filesystem mailbox failure; this is a syscall boundary, not a complete sandbox.
 
 A useful review tests a specific mechanism and publishes enough detail to reproduce its failure or
 success: threat model, case provenance, implementation revision, controls, measured consequences,

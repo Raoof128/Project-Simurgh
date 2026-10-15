@@ -2920,3 +2920,34 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   utility and integration costs. Trusted host/mandatory broker mediation remain assumptions. No
   live target, real credential, model call, environment settings change, hosted CI, deployment,
   company endorsement, incident-prevention guarantee or production-readiness claim.
+
+## 2026-10-15 — Raouf: kernel enforcement around an approved service (Australia/Sydney)
+
+- **Scope:** Execute the authorized next step for the approved-service onward-request gap. Add
+  `tools/assurance-egress/**` and separate evidence; preserve all seven earlier source/report families.
+- **Summary:** Added a Linux x86_64 ingress-only seccomp profile, trusted listener/descriptor
+  sanitation, fail-closed readiness, fork/exec inheritance probes and parent-owned loopback/Unix
+  observers. The unchanged exact-scope broker calls the real approved HTTP service. Twelve named
+  cases under three controls yield 36 rows: eight network channels deliver in the baseline and are
+  blocked under the profile; both useful operations complete. Descriptor hygiene applies to both
+  running controls. A filesystem mailbox still works and is retained as a negative result. Four
+  primary kernel/manual sources are recorded with response hashes; no new security primitive claimed.
+- **Files changed:** New egress implementation/tests/docs/report/source register; dated spec/plan;
+  scoped CI, README, roadmap, reviewer index and assurance links; both logs. Only the standing
+  mutable census current set changes 30 to 31 (`unclassifiable_step`); frozen baseline19 unchanged.
+- **Verification:** 20 new Python tests pass, including real raw-syscall/x32/descriptor-import
+  checks, fork/exec, useful work, all live channel baselines, report tamper/refusal and observer
+  failure. The 36-row report replays after the review correction with identical outcomes. Previous
+  scope suite 24 tests and 54-row report pass unchanged. Full npm: 5,122 total, 5,119 passed, zero
+  failed, three unavailable Chrome/Lean prerequisite skips. Ruff, formatting, CLI overwrite/omission/
+  duplicate-key refusals, census, frozen-byte and diff checks pass. One fresh reviewer reproduced
+  the initial suite/report and checked source hashes; one Important observer timeout defect found.
+  A stalled-first/full-second connection regression failed before fixing the too-broad timeout
+  handler. Active I/O failures now invalidate observation; full suite/report rerun green. No second
+  independent review claim. The npm run preceded this Python-only correction.
+- **Follow-ups:** Namespace mapping was unavailable (`/proc/self/uid_map` read-only); chose the
+  unprivileged additive seccomp profile without changing platform policy. This costs selective
+  egress and namespace isolation. Native mandatory launch, selective destination policy, filesystem/
+  IPC isolation, held-out probes, workload overhead and outside reproduction remain open. Trusted
+  Python bootstrap, local file/process effects and ingress replies are explicit bounds. No key,
+  external target, live model, environment setting change, hosted CI, deployment or production claim.
