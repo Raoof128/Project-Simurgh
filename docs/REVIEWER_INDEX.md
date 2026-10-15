@@ -92,6 +92,13 @@ blocks three direct misuse scenarios while preserving approved work. It retains 
 relay failure and, in separate kernel probes, a shared-file mailbox failure. These scripted local
 results identify concrete containment gaps; they do not establish prevention of the real incident.
 
+The [composed containment study](assurance/hf-containment/README.md) then combines
+service descriptor isolation and scoped gateway credentials. It blocks all 12 scripted unsafe
+baselines while preserving both useful workflows, with separate ablations exposing each layer's
+gaps. Its [native Llama successor](assurance/hf-native/README.md) blocks one model-selected
+scorer mutation but completes only one of two benign prompts; all interface failures remain.
+External reproduction and representative production integration are still outstanding.
+
 A useful review tests a specific mechanism and publishes enough detail to reproduce its failure or
 success: threat model, case provenance, implementation revision, controls, measured consequences,
 results, limitations and the next experiment. Independent reproduction and comparison with

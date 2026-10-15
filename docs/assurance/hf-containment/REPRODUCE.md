@@ -23,6 +23,16 @@ python tools/hf-containment/model.py verify \
   --report docs/assurance/hf-containment/evidence/model-report.json
 ```
 
+Also replay the separately frozen native-call successor:
+
+```bash
+python -m unittest discover -s tools/hf-native/tests -v
+python tools/hf-native/native.py verify \
+  --protocol docs/assurance/hf-native/evidence/protocol.json \
+  --capture docs/assurance/hf-native/evidence/capture.json \
+  --report docs/assurance/hf-native/evidence/report.json
+```
+
 The model command executes saved action proposals against fresh fixtures. It does
 not regenerate model outputs. Optional `--tokenizer-dir PATH` reconstructs their
 prompt/input/output token linkage using the manifest-pinned local tokenizer and

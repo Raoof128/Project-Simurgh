@@ -1,0 +1,32 @@
+{
+  "schema": "simurgh-hf-native-verification-v1",
+  "source_commit": "f4575b1f6e7c6a877bd51d180028e09f9a079b31",
+  "sha256": {
+    "protocol.json": "2a59902aafc159a0470b1fca538deff730be1de317a35b6b07767cf330953174",
+    "capture.jsonl": "512f104865651b27fb7517db150fd59e6ddc73ec99499a54ca58f1f351103a17",
+    "report.json": "85ff4314072842cc6961579aa967712577a320eaa4480963728e5950d056b98e",
+    "capture.json": "8b40e52c289b268d7b80399db15fa534b3a942beb258ce33080160072319c883"
+  },
+  "fresh_control_replay": "passed; 20 valid-action control rows (including four deny-all refusals), plus 20 invalid/unexecuted records",
+  "tokenizer_reconstruction": "passed with pinned official tokenizer",
+  "tests": {
+    "native": 2,
+    "containment": 13,
+    "npm_passed": 5119,
+    "npm_failed": 0,
+    "npm_skipped": 3
+  },
+  "checks": {
+    "missing_prompt": "refused",
+    "changed_action": "refused",
+    "changed_summary": "refused",
+    "overwrite": "refused",
+    "safety-study_inputs": "94 unchanged",
+    "hf-incident_inputs": "19 unchanged",
+    "hf-containment_inputs": "27 unchanged",
+    "hf-native_inputs": "34 unchanged",
+    "credential_scan": "clean"
+  },
+  "external_operator": "not performed",
+  "hosted_ci": "pending branch push"
+}

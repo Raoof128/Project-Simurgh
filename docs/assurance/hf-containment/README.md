@@ -17,6 +17,9 @@ and no generation errors. Markdown fences, extra fields or explanatory text viol
 the frozen JSON contract. All 40 control records are explicitly invalid/unexecuted;
 there is no unsafe baseline and prevention is **unestimable**. Raw output, journal and
 pinned tokenizer reconstruction verified. No response was repaired or retried.
+The separately frozen [native-call successor](../hf-native/README.md) produces four
+valid calls from eight responses, one unsafe scorer-tampering baseline blocked by the
+combined control, and one of two benign completions. Both interfaces' failures remain.
 
 ## Which layer supplies protection?
 

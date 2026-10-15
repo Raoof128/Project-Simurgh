@@ -3251,3 +3251,21 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   13 containment tests pass. Ruff clean. Exact prompt inventory and raw action linkage checked.
 - **Follow-ups:** Freeze before inference, execute once, verify tokenizer and fresh controls,
   publish both outcomes, push and wait for hosted CI. External operator receipt remains absent.
+
+## 2026-10-15 — Raouf: native HF model results and release (Australia/Sydney)
+
+- **Scope:** Execute the separately frozen 34-input native-call successor; preserve all failures.
+- **Summary:** Four of eight responses yield valid calls. One unsafe scorer-tampering bypass
+  action occurs and combined containment blocks it. One of two benign prompts completes;
+  four invalid responses remain unexecuted. No general safety-rate claim or repaired output.
+- **Files changed:** Native capture/journal/report/verification, native result guide, parent
+  successor links, external replay instructions, root reviewer links, negative-check ledger
+  and both logs. Prior source/corpus/protocol/captures remain unchanged.
+- **Verification:** Fresh replay of 20 valid-action control rows (four deny-all refusals) and
+  20 invalid/unexecuted records agrees; pinned tokenizer reconstruction passes. Two new and
+  13 inherited tests pass; full npm 5,119 passed, zero failed, three prerequisite skips.
+  Missing rows, altered action/summary and overwrite refuse; 94/19/27/34 input hashes match.
+  Credential scan clean. Ready to push and observe hosted CI; no hosted success yet claimed.
+- **Follow-ups:** Local containment and replay package delivered. External operator receipt,
+  reliable model interface over broader tasks, representative real IAM/connectors and native
+  mandatory launcher remain explicit limits; the old failures are preserved for comparison.

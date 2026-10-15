@@ -118,6 +118,13 @@ blocks three direct misuse scenarios while preserving approved work. It retains 
 relay failure and, in separate kernel probes, a shared-file mailbox failure. These scripted local
 results identify concrete containment gaps; they do not establish prevention of the real incident.
 
+The [composed containment study](docs/assurance/hf-containment/README.md) then combines
+service descriptor isolation and scoped gateway credentials. It blocks all 12 scripted unsafe
+baselines while preserving both useful workflows, with separate ablations exposing each layer's
+gaps. Its [native Llama successor](docs/assurance/hf-native/README.md) blocks one model-selected
+scorer mutation but completes only one of two benign prompts; all interface failures remain.
+External reproduction and representative production integration are still outstanding.
+
 | Research result                                                                                              | Primary evidence                                                                                                                                         | Boundary                                                                                                                                                            |
 | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Stage 3V-B records 138 guardrail misses contained in a 180-case reference set; targeted attack success 0/150 | [Metrics](docs/research/llm-shield/evidence/stage-3v-b/metrics.json), [write-up](docs/research/llm-shield/LLM_SHIELD_STAGE_3V_B_WRITEUP.md)              | Historical Llama Guard 4 capture, synthetic cases and input-only classifier visibility; not an OpenAI evaluation or general robustness estimate                     |
