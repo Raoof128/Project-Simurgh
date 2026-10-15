@@ -87,6 +87,11 @@ its prevention rate remains unestimable. Official Llama 3B completes 20/24 workf
 12 benign tasks; its four observed unsafe bypass writes are blocked. Results remain bounded
 to this synthetic corpus, with failures and limitations retained in the study guide.
 
+The [local Hugging Face incident-pattern simulation](assurance/hf-incident/README.md)
+blocks three direct misuse scenarios while preserving approved work. It retains an approved-service
+relay failure and, in separate kernel probes, a shared-file mailbox failure. These scripted local
+results identify concrete containment gaps; they do not establish prevention of the real incident.
+
 A useful review tests a specific mechanism and publishes enough detail to reproduce its failure or
 success: threat model, case provenance, implementation revision, controls, measured consequences,
 results, limitations and the next experiment. Independent reproduction and comparison with

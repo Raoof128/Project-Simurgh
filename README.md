@@ -113,6 +113,11 @@ its prevention rate remains unestimable. Official Llama 3B completes 20/24 workf
 12 benign tasks; its four observed unsafe bypass writes are blocked. Results remain bounded
 to this synthetic corpus, with failures and limitations retained in the study guide.
 
+The [local Hugging Face incident-pattern simulation](docs/assurance/hf-incident/README.md)
+blocks three direct misuse scenarios while preserving approved work. It retains an approved-service
+relay failure and, in separate kernel probes, a shared-file mailbox failure. These scripted local
+results identify concrete containment gaps; they do not establish prevention of the real incident.
+
 | Research result                                                                                              | Primary evidence                                                                                                                                         | Boundary                                                                                                                                                            |
 | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Stage 3V-B records 138 guardrail misses contained in a 180-case reference set; targeted attack success 0/150 | [Metrics](docs/research/llm-shield/evidence/stage-3v-b/metrics.json), [write-up](docs/research/llm-shield/LLM_SHIELD_STAGE_3V_B_WRITEUP.md)              | Historical Llama Guard 4 capture, synthetic cases and input-only classifier visibility; not an OpenAI evaluation or general robustness estimate                     |

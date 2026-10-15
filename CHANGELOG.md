@@ -3186,3 +3186,21 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   source and control assumptions. No independent operator or production reconstruction claimed.
 - **Follow-ups:** Commit exact source/protocol before the published run; retain approved-service
   relay and mailbox failures, publish results, verify the complete branch and push.
+
+## 2026-10-15 — Raouf: local Hugging Face pattern results (Australia/Sydney)
+
+- **Scope:** Execute the frozen 19-input incident protocol; keep synthetic pathway evidence
+  distinct from model behavior and the real incident. No live target or API calls.
+- **Summary:** All 15 scenario/control rows and nine separate channel rows completed without
+  errors. Scoped admission blocks three of four unsafe origin-only scenario witnesses while
+  preserving the approved read/write workflow. Approved-service relay remains a scoped failure;
+  separate kernel probes block proxy/Unix relays but retain shared-file mailbox delivery.
+- **Files changed:** Published report, verification ledger and result guide; entry-point links
+  and both logs. Frozen source/protocol and fourteen earlier experiment families unchanged.
+- **Verification:** Fresh complete semantic replay passes; all nine persisted-stop probes pass.
+  Five new tests pass. CLI refuses missing scenario/channel rows, altered summary and overwrite.
+  npm: 5,119 passed, zero failed, three prerequisite skips. Earlier 94 safety input hashes match;
+  credential scan clean. No hosted-CI success or independent operator attestation claimed.
+- **Follow-ups:** Compose approved-service containment with the incident chain, isolate shared
+  writable state, add representative service identity/scorer controls and independent replay.
+  These remaining gaps are published rather than counted as protection; commit and push branch.
