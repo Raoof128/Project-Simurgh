@@ -3332,3 +3332,12 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   remain 5,122 npm passes with three prerequisite skips and 17 successor tests.
 - **Follow-ups:** Phase 1 complete within its declared local scope; later model/connector
   and external validation phases remain open.
+
+## 2026-10-15 — Raouf: declare connector phase 2 (Australia/Sydney)
+
+- **Scope:** Additive next-phase design before implementation.
+- **Summary:** Native SDK approval, mandatory isolated proposal worker, exact authority,
+  sandbox inbox and conservative recovery; scripted engineering evidence only.
+- **Files changed:** `docs/research/CONNECTOR_PHASE_2.md`, both logs.
+- **Verification:** Clean starting tree; existing components and lifecycle read.
+- **Follow-ups:** Execute tests first, preserve frozen history, fresh review, commit/push.
