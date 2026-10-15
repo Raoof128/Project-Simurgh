@@ -1,0 +1,34 @@
+[
+  {
+    "name": "model",
+    "url": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+    "final_url": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+    "status": 200,
+    "bytes": 447404,
+    "sha256": "f41b7a38be35780275c71d0f88617d976343cbaead8d6c460ccaa3b01a1cfa2f"
+  },
+  {
+    "name": "structured",
+    "url": "https://developers.openai.com/api/docs/guides/structured-outputs",
+    "final_url": "https://developers.openai.com/api/docs/guides/structured-outputs",
+    "status": 200,
+    "bytes": 3282155,
+    "sha256": "2796e0be718ec0469d968f24769849aaddd040c4a485c53a903654c850e032f8"
+  },
+  {
+    "name": "responses",
+    "url": "https://developers.openai.com/api/reference/resources/responses/methods/create",
+    "final_url": "https://developers.openai.com/api/reference/resources/responses/methods/create",
+    "status": 200,
+    "bytes": 11629549,
+    "sha256": "c2aaf1dc4bc79688f297ee268c6dc38f7dde611158ea5daf5af00971a4747cb0"
+  },
+  {
+    "name": "pricing",
+    "url": "https://developers.openai.com/api/docs/pricing",
+    "final_url": "https://developers.openai.com/api/docs/pricing",
+    "status": 200,
+    "bytes": 595747,
+    "sha256": "65709a7b93faaf6ccd885ae528181ca70d71c340df3c269c3d0792b60bb8a5f3"
+  }
+]

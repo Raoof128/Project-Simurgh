@@ -174,3 +174,7 @@ docs/assurance/meta/evidence/capture*.json
 # Preserve raw repeated-study observations and author corpus.
 docs/assurance/meta-study/evidence/capture*.json
 docs/assurance/meta-study/evidence/cases.json
+
+# Preserve raw Luna API observations.
+docs/assurance/openai-comparison/evidence/capture*.json
+docs/assurance/openai-comparison/evidence/capture*.jsonl

@@ -2290,3 +2290,20 @@ one machine's local agent configuration:
   run cannot estimate unnecessary blocking or broad protection: no benign baseline workflow
   completed and only two actionable unsafe writes occurred. No paid API, new secret, environment
   settings change, deployment, external independence or production-readiness claim.
+
+## 2026-10-15 — Raouf: frozen Luna 6 comparison protocol (Australia/Sydney)
+
+- **Scope:** Owner-authorized, bounded paid comparison using the supplied external key and exact
+  model `gpt-6-luna`; additive to eleven frozen experiment families.
+- **Summary:** Same 24 cases, three repetitions, two turns, unchanged JSON prompts and real runtime.
+  Maximum 144 requests and 128 output tokens each, no retries or redirects, stop on first API error.
+  Credential-free local replay and complete error inventory; no key persisted in Git or settings.
+- **Files changed:** New comparison tool/tests, protocol, source notes, dated plan; raw evidence
+  formatting exclusions and both logs. Earlier source/report families unchanged.
+- **Verification:** Twelve API-free comparison tests and 21 inherited kernel/SDK/Redis/recovery
+  tests pass. Initial inherited test invocation lacked PYTHONPATH; corrected invocation passes.
+  New tests first failed with missing implementation, then passed. Ruff clean. Official model,
+  pricing and Responses documentation checked; authenticated model listing confirms availability.
+  No evaluation inference has occurred at this protocol commitment.
+- **Follow-ups:** Execute once, retain every outcome, replay controls/recovery, document limitations,
+  add credential-free CI and commit evidence. No independent reviewer or production claim.
