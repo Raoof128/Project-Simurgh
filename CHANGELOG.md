@@ -3222,3 +3222,19 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   replay instructions and results. CI's inherited scrubbed Redis child used an absent default
   path; runner provisioning now installs the same pinned binary there. Hosted confirmation pending.
   Independent operator reproduction and representative production IAM remain outside local evidence.
+
+## 2026-10-15 — Raouf: composed containment results (Australia/Sydney)
+
+- **Scope:** Execute the precommitted 27-input protocol; preserve all old evidence.
+- **Summary:** All 70 scripted rows replayed; combined controls block 12/12 demonstrated
+  unsafe baselines and preserve both useful workflows. Kernel-only permits harmful gateway
+  operations; identity-only permits direct file access. Both layers are needed in this matrix.
+  Plain-JSON Llama lane: eight generated responses, zero valid actions, one truncation,
+  zero benign completions; no prevention denominator. All failures remain unmodified.
+- **Files changed:** Scripted/model capture, journal, reports and verification ledger; result
+  guide, external replay instructions and both logs. No source or protocol edits after freeze.
+- **Verification:** Thirteen tests and full npm pass (5,119 passed, zero failed, three skipped).
+  Fresh scripted replay and model raw/journal linkage pass; pinned tokenizer reconstruction
+  passes. Earlier 94 safety and 19 incident inputs unchanged. External operator remains absent.
+- **Follow-ups:** Separately freeze a native-tool interface successor to address the measured
+  interface failure; retain this failed lane. Confirm hosted CI after pushing final evidence.
