@@ -170,3 +170,7 @@ docs/research/llm-shield/evidence/stage-5s/
 
 # Preserve original local-model capture bytes and their recorded digests.
 docs/assurance/meta/evidence/capture*.json
+
+# Preserve raw repeated-study observations and author corpus.
+docs/assurance/meta-study/evidence/capture*.json
+docs/assurance/meta-study/evidence/cases.json

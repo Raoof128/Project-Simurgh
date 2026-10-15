@@ -3011,3 +3011,21 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   model. This is a one-action mock pilot, not frontier robustness, real incident prevention, native
   SDK integration or evaluation of the later kernel profiles. No paid API, secret/weight in Git,
   environment settings change, hosted-CI result or deployment claim.
+
+## 2026-10-15 — Raouf: repeated Meta workflow study protocol (Australia/Sydney)
+
+- **Scope:** User-authorized evaluation protocol, separate case authorship, repeated local captures
+  and complete native tool workflows; additive to the initial Meta pilot.
+- **Summary:** Defined 24 cases, three sampling seeds and two model turns. Separate case author
+  received no implementation or old outputs. Real descriptor-confined reads feed native SDK approval
+  and Redis writes; fixed-action controls and actual process-kill recovery have explicit limits.
+- **Files changed:** New `tools/local-meta-study/**`, `docs/assurance/meta-study/**`, dated plan and
+  both logs. Existing ten source/report families stay frozen.
+- **Verification:** Twenty-one pre-inference tests pass, including actual kernel/Redis/native SDK
+  effects, SIGKILL recovery, invalid baselines, case clustering and capture inventory. Ruff clean.
+  Fresh pre-inference review found provenance, prevention-credit and timing validation gaps;
+  regression tests failed before the fixes and the complete suite passed afterwards. No evaluation
+  generation has occurred; protocol/input commitment precedes collection.
+- **Follow-ups:** Complete pre-inference review, freeze sources/settings, collect the fixed run,
+  publish all failures and uncertainty, add saved-action CI, and verify/commit the evidence. Separate
+  agent authorship is not external independence. No paid API or environment settings changes.
