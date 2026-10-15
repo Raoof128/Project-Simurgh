@@ -1,0 +1,3 @@
+# Keep the earlier SDK dependency versions immutable.
+-c ../assurance-sdk/requirements.lock
+langgraph-checkpoint-sqlite==3.1.2

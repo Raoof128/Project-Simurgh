@@ -2860,3 +2860,34 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   remain open. No paid/model call, external witness, hosted CI result, deployment, submission,
   coverage discharge, distributed exactly-once or production-readiness claim. Reusable Redis
   install/start instructions saved as a cloud draft; publication remains separate.
+
+## 2026-10-15 — Raouf: persisted native workflow recovery (Australia/Sydney)
+
+- **Scope:** Extend executor-only recovery evidence to one persisted native approval/tool workflow
+  in each pinned SDK. The user authorized proceeding without environment or API-key work.
+- **Summary:** Added native OpenAI RunState and official LangGraph SQLite checkpoints, trusted
+  byte/digest/version validation before restoration, persisted decisions and locally serialized
+  revocation/revision checks. Actual application SIGKILL after checkpoint persistence is followed
+  by restoration in another process. A post-effect SIGKILL replays the callback against the existing
+  Redis record. Cached completions return no new tool result and check current effect availability.
+  The 24-case report also covers rejection, checkpoint tamper/substitution/loss, version mismatch,
+  four concurrent resumes, conflicting decisions and missing completed effects.
+- **Files changed:** `tools/assurance-workflow/` implementation, dependency extension and tests;
+  `docs/assurance/workflow/` report, source register, results and validation; dated design/plan;
+  scoped workflow CI; README, roadmap, reviewer index and assurance links; both logs. Current
+  workflow census moves 28 to 29 for one `missing_committed_universe_query` step; baseline stays 19.
+- **Verification:** Final 15 workflow tests passed, including complete matrix replay and tamper
+  refusal. Saved 24-case artifact replay and CLI overwrite/omission refusals pass. Full npm:
+  5,122 total, 5,119 passed, zero failed, three skipped (Chrome/Lean unavailable). Earlier suites:
+  31 SDK, 16 durability, 14 Redis tests passed; all five previous reports verify unchanged.
+  Fresh extension environment used hash-locked wheels and passed pip check; existing package
+  versions are identical, with three added dependencies. Ruff, formatting, census and diff checks
+  pass. Fresh reviewer found no Critical/Important issue and one Minor orphaned native scratch
+  directory on SIGKILL. Regression failed first, then passed after moving scratch under parent
+  ownership; final suite passed. Cached-result and transport-unknown regressions also pass.
+- **Follow-ups:** External workflow reproduction, a multi-step crash matrix, authenticated approval
+  identity, distributed revocation and measured overhead remain open. Recovery replays from the
+  immutable approval checkpoint, not every latest intermediate state. The earlier Redis
+  pending-intent crash/race fixture is still separate. No live/model call, hosted CI result,
+  environment configuration change, deployment, submission, new coverage discharge or production
+  readiness claim. The user's new Hugging Face/Medicare incident request is the following phase.

@@ -71,8 +71,9 @@ unmeasured. No distributed exactly-once, production-readiness or novelty claim f
 ## Next evidence
 
 Freeze an externally authored case set and obtain an outside reproduction record. For implementation,
-next specify a persisted end-to-end SDK workflow restart fixture, including authorization changes
-while paused; keep it separate from this immutable connector report. Remote connector semantics,
+the [persisted workflow extension](../workflow/README.md) now restores a bounded native approval
+workflow across application restart, including authorization changes while paused. It is separate
+from this immutable connector report. Remote connector semantics,
 authenticated approval identity and measured integration cost remain additional gaps.
 
 Subjective closeout scorecard: reproducibility **8/10** (external replay still needed), connector

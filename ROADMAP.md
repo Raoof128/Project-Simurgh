@@ -52,9 +52,13 @@ The [Redis connector extension](docs/assurance/redis/README.md) now tests condit
 and ambiguous-response recovery against Redis 8.10.2 in 19 named cases. It includes a real lost
 success reply, GET-only reconciliation, a non-idempotent retry control and AOF process restart.
 
-Next, obtain held-out attacks and external reproduction, and specify a persisted end-to-end SDK
-workflow restart fixture. Power-loss validation, end-to-end SDK workflow
-recovery, authenticated approval identity, revocation and measured overhead remain open.
+The [persisted workflow extension](docs/assurance/workflow/README.md) now restores native SDK
+approval checkpoints in new application processes across 24 named cases. Local revocation and
+revision changes are checked at dispatch; an effect followed by application crash is reconciled.
+
+Next, obtain held-out attacks and external reproduction, then broaden the single-approval fixture
+with a multi-step workflow crash matrix. Power-loss validation, arbitrary workflow
+recovery, authenticated approval identity, distributed revocation and measured overhead remain open.
 These are evidence requirements, not claims that competitors lack these controls.
 
 ## Further research requiring additional evidence or owner inputs

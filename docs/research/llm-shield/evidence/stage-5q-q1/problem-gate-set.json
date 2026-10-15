@@ -86,8 +86,8 @@
     ]
   },
   "current": {
-    "as_of": "2026-10-15 Redis connector CI extension",
-    "entry_count": 28,
+    "as_of": "2026-10-15 persisted workflow CI extension",
+    "entry_count": 29,
     "why": "the LIVE census, re-pinned by each stage that adds workflow steps. `baseline` is NOT touched: it is the v2.53.0 measurement the Q1-F002 finding cites, and a later stage may never move it to go green (5S-F015).",
     "gate_problems": [
       {
@@ -97,6 +97,10 @@
       {
         "gate_id": "openai-readiness.yml::Validate durable effects across process crashes and retries",
         "reason_code": "unclassifiable_step"
+      },
+      {
+        "gate_id": "openai-readiness.yml::Validate persisted native workflows across application restart",
+        "reason_code": "missing_committed_universe_query"
       },
       {
         "gate_id": "openai-readiness.yml::Validate real Redis connector recovery and ambiguous responses",

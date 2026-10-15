@@ -65,3 +65,11 @@ The [Redis study](assurance/redis/README.md) adds 19 real-service cases for lost
 writes, conservative reconciliation, eight-worker contention and AOF restart. Read the
 [validation record](assurance/redis/VALIDATION.md) and [saved report](assurance/redis/evidence/report.json)
 with their same-host, synthetic-effect and unknown-outcome limits. Older reports remain unchanged.
+
+## Persisted native workflow evidence
+
+The [workflow study](assurance/workflow/README.md) adds 24 named cases across OpenAI Agents SDK
+and LangGraph: application SIGKILL after native approval persistence, restored decisions, live local
+policy checks, concurrent resumes and recovery after a Redis effect. Read its
+[validation](assurance/workflow/VALIDATION.md) and [report](assurance/workflow/evidence/report.json).
+The boundary is one approval/tool workflow, not arbitrary durable orchestration.

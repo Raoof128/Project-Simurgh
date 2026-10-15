@@ -71,6 +71,9 @@ explicit limits on power loss and distributed execution.
 The [Redis connector extension](docs/assurance/redis/README.md) adds 19 real-service cases for
 conditional writes, lost replies, GET-only recovery, eight-process contention and AOF restart.
 An unresolved pre-send attempt remains unknown, making its retry-availability cost explicit.
+The [persisted workflow extension](docs/assurance/workflow/README.md) restores actual native SDK
+approval checkpoints after application SIGKILL. Its 24 cases include current-policy checks and
+replay after an effect; the scope is one approval/tool workflow on a trusted host.
 
 | Research result                                                                                              | Primary evidence                                                                                                                                         | Boundary                                                                                                                                                            |
 | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

@@ -1,0 +1,1849 @@
+{
+  "schema": "simurgh.assurance-workflow.v1",
+  "scope": "Single approval/tool workflow restored from a trusted native approval checkpoint after application SIGKILL; same-host Redis effect, scripted proposals, no arbitrary workflow or distributed exactly-once claim.",
+  "frameworkVersions": {
+    "openai-agents": "0.23.1",
+    "langgraph": "1.2.15",
+    "langgraph-checkpoint-sqlite": "3.1.2"
+  },
+  "redisVersion": "8.10.2",
+  "sourceManifest": {
+    "docs/assurance/durable/evidence/report.json": "6cb25b9b3fe6e83bd2a6efa2e60ec59634616775e90e16b90d6fa829818f50e9",
+    "docs/assurance/evidence/report.json": "a91603495fce3b817493aaa449c05151fd2805c6e880b5d1ff9ed100d42895dd",
+    "docs/assurance/redis/evidence/report.json": "2f51013c30f19bc7349e6bae41bf067e12e6901032aa2a9a5cd580474eb6e9a1",
+    "docs/assurance/sdk/evidence/report.json": "525dc60cb523a56a7351741e716487e141c34628e0527cdffa1c7daa538edb78",
+    "tools/assurance-durable/simurgh_durable/__init__.py": "e6164e1b4e1e5101f32d9b22c701ce47cf0ea43fc257b9283f9afcbf2018ba7b",
+    "tools/assurance-durable/simurgh_durable/process.py": "d2bf6101613155317a179db8c825b58615e45379342ce8e31df58b3a4167f49b",
+    "tools/assurance-durable/simurgh_durable/store.py": "ad8f88216e2de1ab1367605f04754f8927f16989925c34415889b20a61d3e7cd",
+    "tools/assurance-durable/simurgh_durable/study.py": "63b830d0de1856f2c67b2faeea074f072a133c07c92393d19be56233308412a2",
+    "tools/assurance-durable/simurgh_durable/volatile.py": "56fc31a345cb65ccd81b04c764a0d5ebfccd4cb051e4077d75d3f50e73deb5b3",
+    "tools/assurance-durable/simurgh_durable/worker.py": "670e488f08dd31a64c04d64ccd76d273ed9851f8660bbfa3d3d35003ea3eb2e9",
+    "tools/assurance-durable/tests/test_process.py": "0a7a2b072b8af1f900e734047e65cc577a4d59fa307fd0b1bf6de16e34167cae",
+    "tools/assurance-durable/tests/test_store.py": "6a543dfbd2118e10f8c35ef45eba9b59f637e6698c4680f7be0a047300c84639",
+    "tools/assurance-durable/tests/test_study.py": "3d4ba186ecd8e96dbc0b1050877978abde7a4e48724c4b93460b6b78102d0855",
+    "tools/assurance-lab/cli.mjs": "552e676cee5e605f13a20e6398fefcb33861742176e93176aed718006e7eafc2",
+    "tools/assurance-lab/core.mjs": "cef9dfd33b852901dd9e18b8454b869f7eb0b5fe4e648934eb5ac2bf8559cfbc",
+    "tools/assurance-lab/corpus.mjs": "944bf56056d88f39776d50ad37c6c0932f86729680a20c3a39addc15c55f9975",
+    "tools/assurance-lab/sink-worker.mjs": "6d8acd67e77bcf6e8953e73cb475f6e53dc19c7dd5dcb0aaf45855b90419fee5",
+    "tools/assurance-lab/sink.mjs": "e819d0458fb4ce47adf0d4f03e3a9079657e3e95aba8f6f13a76d9a1c7b875dd",
+    "tools/assurance-lab/study.mjs": "1116dcaa02f073780cf0f45f66dd3d91d1e2304dbacaffa041084479f7b4c5bc",
+    "tools/assurance-redis/install-redis.sh": "ba81bd05641a2e800967d87d620943bce6041dfeeb4df72cf29a15bee6311a79",
+    "tools/assurance-redis/simurgh_redis/__init__.py": "77b1bf0509f711ac9a26037f0daf9c76e92f51b9b28a5cfbefc362d67eba4e60",
+    "tools/assurance-redis/simurgh_redis/connector.py": "847149077b7ededfee7953e93bab38c0485c13fe0d89ce3f924fb6bd9529aa60",
+    "tools/assurance-redis/simurgh_redis/network.py": "21ee8af44532be392d8fcf480f38ed8e2f1130f157ca0c0c5131c34c829fee59",
+    "tools/assurance-redis/simurgh_redis/service.py": "d39477ccdf50a208152b483c24f48ca25dd3da99d01d8acdd716273b5ce4d5c8",
+    "tools/assurance-redis/simurgh_redis/study.py": "d12c647f1d8969fa9b3c6ec9cbc929efe661817a34b06b2dfe7ddadc52d1d27e",
+    "tools/assurance-redis/simurgh_redis/transport.py": "1967e986a1acb90b7cbcf42b5de7e8c7867da65dd8a364c065d68ca3c18d57ad",
+    "tools/assurance-redis/simurgh_redis/worker.py": "7c556528ee41ba29a75e19917026d1927c31abc6386c3a179b3b2eeb96a97f18",
+    "tools/assurance-redis/source-lock.json": "81506de9044557b3a8eec02022c85c2c718c78dbc9d47f7f7b54628ffb80fc8a",
+    "tools/assurance-redis/tests/test_connector.py": "6fbbde41ca5ef2172640c5550a6b306a2e178902136971e6708f0d0a2dcfe899",
+    "tools/assurance-redis/tests/test_process.py": "38483956c733f95702fa0ef3f1e8180ca37314ba72ff2b555f11d47249ff8646",
+    "tools/assurance-redis/tests/test_study.py": "2333553e08f5129e63385a28b76450fa4cfdc563e798359aaf116d36585c2a3d",
+    "tools/assurance-redis/tests/test_transport.py": "62f55f7e8dc7cc63cfbaaf814b82385344e80ea5b6694e3d8ab598d21ea27024",
+    "tools/assurance-sdk/bridge.mjs": "c4dec5a5aa20fa5c71a5a9bea747fe7ccdf02efdf8aa86de066d2816efc2a75c",
+    "tools/assurance-sdk/requirements.in": "1fb979398fbc639a761f4e119694500a06a3e2ecd74eed0b36e8d4a50cde526d",
+    "tools/assurance-sdk/requirements.lock": "40695ac2bd39bfaf4e5bddf4856b68caf6aa9bae7bc7b8b6a94ee4a8ceb70b49",
+    "tools/assurance-sdk/simurgh_sdk/__init__.py": "7d4de20045065944a1789f5b2451d285f2eccbc160cf7991e35d609bd9a36e55",
+    "tools/assurance-sdk/simurgh_sdk/bridge.py": "d759b095db2c1b6faf7857850bd52f0177186f24dcc57e94d242fc50f2799f49",
+    "tools/assurance-sdk/simurgh_sdk/langgraph_adapter.py": "824a07f7af9e5ade27ce738a55d0ad939dd618827f40fe669727e1703bf9a9aa",
+    "tools/assurance-sdk/simurgh_sdk/network.py": "56dc2105a7a5ce0106eee230fe9f4776c64e79fa8b621b74f88f9834f2aa11c7",
+    "tools/assurance-sdk/simurgh_sdk/openai_adapter.py": "31437e69d126e57469cde89adab99085b875b981324f533e58814518db2f92bb",
+    "tools/assurance-sdk/simurgh_sdk/study.py": "65a2e86db95da270c8f20420ef35b036efa586bc903ac92de6352206e19db476",
+    "tools/assurance-sdk/tests/test_bridge.py": "8853dcb774a6ca2545dabef7921734bb533fc7d6185c7bfa26974822f4e7b323",
+    "tools/assurance-sdk/tests/test_langgraph_adapter.py": "2583187b6ed3ab9adab7044f1c58598f174bebb2c2de6f0a61513b15cb002bed",
+    "tools/assurance-sdk/tests/test_openai_adapter.py": "c4a9428431808726e160e85a0862e798f3684e1b9a05148a775e45f4488af49b",
+    "tools/assurance-sdk/tests/test_study.py": "bb9ad2b1394d03a1c40733d2e3bd1ba6baa404237583ce3b13f1e1a93d45df4a",
+    "tools/assurance-workflow/requirements.in": "08f0106eb9dfcfc794b9c9f0dc6b5b3f4be8ffe0912fe02cf1d460b1d1f1a296",
+    "tools/assurance-workflow/requirements.lock": "bde41d1e1dd882ffea359a089d71345f76244d8dca061af6f0837c800cbcba2d",
+    "tools/assurance-workflow/simurgh_workflow/__init__.py": "557c931722ed7d251998447ddd6ca339e37bdd8976a4f8755c80fe2d26cd5fd5",
+    "tools/assurance-workflow/simurgh_workflow/native.py": "cb12f4bc229d51d4391a3566f9e7f91b3f9a3d49391f62f5c1b716c95cc4daed",
+    "tools/assurance-workflow/simurgh_workflow/process.py": "2c7eb58731dd2ef29c885074a2250b9afb874f1c177a20553b054af978e67045",
+    "tools/assurance-workflow/simurgh_workflow/study.py": "2159c86c6f0cd53c23bfe0f404eb0fb3e40348fbb3f9e057286519dfa6dd28b5",
+    "tools/assurance-workflow/simurgh_workflow/workflow.py": "3a21afba9e5dae52a6654272bf58d7b328a43e2d9f82af90a5bc1088ed574875",
+    "tools/assurance-workflow/tests/test_process.py": "a620f08dbda46d3e37130b5beb939417d0c7a6289af7cde8bd2281f040c2c57b",
+    "tools/assurance-workflow/tests/test_study.py": "1ec31d4ed8df60a9b9b7c7de10af4c692f94749ffe245ce304806ed2c1033468",
+    "tools/assurance-workflow/tests/test_workflow.py": "7e6ff3429fc9f5805437586b3ead46a691134288a264d2ad3868df5d4fd9909a"
+  },
+  "cases": [
+    {
+      "id": "openai-agents/approved_restart",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "cached": false,
+            "nativeResumptions": 1,
+            "status": "completed",
+            "toolResult": {
+              "disposition": "created",
+              "effectCreated": true,
+              "event": {
+                "action": {
+                  "content": "approved",
+                  "id": "a1",
+                  "operation": "write",
+                  "policyRevision": "v1",
+                  "principal": "alice",
+                  "resource": "patch",
+                  "run": "r1",
+                  "tenant": "team"
+                }
+              },
+              "outcome": "completed",
+              "status": "executed"
+            }
+          }
+        },
+        {
+          "exit": 0,
+          "result": {
+            "cached": true,
+            "nativeResumptions": 0,
+            "status": "completed",
+            "toolResult": null
+          }
+        }
+      ],
+      "after": {
+        "workflow": {
+          "phase": "completed",
+          "decision": "approve",
+          "callbacks": 1
+        },
+        "ledger": {
+          "intents": 1,
+          "receipts": 1
+        },
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "r1",
+                "tenant": "team"
+              }
+            }
+          ]
+        },
+        "keys": 1
+      }
+    },
+    {
+      "id": "openai-agents/rejected_restart",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "cached": false,
+            "nativeResumptions": 1,
+            "status": "rejected",
+            "toolResult": null
+          }
+        },
+        {
+          "exit": 0,
+          "result": {
+            "cached": true,
+            "nativeResumptions": 0,
+            "status": "rejected",
+            "toolResult": null
+          }
+        }
+      ],
+      "after": {
+        "workflow": {
+          "phase": "completed",
+          "decision": "reject",
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      }
+    },
+    {
+      "id": "openai-agents/revoked_while_paused",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "cached": false,
+            "nativeResumptions": 1,
+            "status": "denied",
+            "toolResult": {
+              "reason": "revoked",
+              "status": "denied"
+            }
+          }
+        }
+      ],
+      "after": {
+        "workflow": {
+          "phase": "completed",
+          "decision": "approve",
+          "callbacks": 1
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      }
+    },
+    {
+      "id": "openai-agents/revision_while_paused",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "cached": false,
+            "nativeResumptions": 1,
+            "status": "denied",
+            "toolResult": {
+              "reason": "revision_changed",
+              "status": "denied"
+            }
+          }
+        }
+      ],
+      "after": {
+        "workflow": {
+          "phase": "completed",
+          "decision": "approve",
+          "callbacks": 1
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      }
+    },
+    {
+      "id": "openai-agents/checkpoint_tamper",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "reason": "checkpoint_integrity",
+            "status": "refused"
+          }
+        }
+      ],
+      "after": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      }
+    },
+    {
+      "id": "openai-agents/checkpoint_missing",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "reason": "FileNotFoundError",
+            "status": "refused"
+          }
+        }
+      ],
+      "after": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      }
+    },
+    {
+      "id": "openai-agents/version_mismatch",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "reason": "version_mismatch",
+            "status": "refused"
+          }
+        }
+      ],
+      "after": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      }
+    },
+    {
+      "id": "openai-agents/post_effect_crash",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": -9,
+          "result": null
+        },
+        {
+          "exit": 0,
+          "result": {
+            "cached": false,
+            "nativeResumptions": 1,
+            "status": "completed",
+            "toolResult": {
+              "disposition": "replayed",
+              "effectCreated": false,
+              "event": {
+                "action": {
+                  "content": "approved",
+                  "id": "a1",
+                  "operation": "write",
+                  "policyRevision": "v1",
+                  "principal": "alice",
+                  "resource": "patch",
+                  "run": "r1",
+                  "tenant": "team"
+                }
+              },
+              "outcome": "completed",
+              "status": "executed"
+            }
+          }
+        }
+      ],
+      "afterCrash": {
+        "workflow": {
+          "phase": "paused",
+          "decision": "approve",
+          "callbacks": 1
+        },
+        "ledger": {
+          "intents": 1,
+          "receipts": 1
+        },
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "r1",
+                "tenant": "team"
+              }
+            }
+          ]
+        },
+        "keys": 1
+      },
+      "after": {
+        "workflow": {
+          "phase": "completed",
+          "decision": "approve",
+          "callbacks": 2
+        },
+        "ledger": {
+          "intents": 1,
+          "receipts": 1
+        },
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "r1",
+                "tenant": "team"
+              }
+            }
+          ]
+        },
+        "keys": 1
+      }
+    },
+    {
+      "id": "openai-agents/concurrent_resumes",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "cached": false,
+            "nativeResumptions": 1,
+            "status": "completed",
+            "toolResult": {
+              "disposition": "created",
+              "effectCreated": true,
+              "event": {
+                "action": {
+                  "content": "approved",
+                  "id": "a1",
+                  "operation": "write",
+                  "policyRevision": "v1",
+                  "principal": "alice",
+                  "resource": "patch",
+                  "run": "r1",
+                  "tenant": "team"
+                }
+              },
+              "outcome": "completed",
+              "status": "executed"
+            }
+          }
+        },
+        {
+          "exit": 0,
+          "result": {
+            "cached": true,
+            "nativeResumptions": 0,
+            "status": "completed",
+            "toolResult": null
+          }
+        },
+        {
+          "exit": 0,
+          "result": {
+            "cached": true,
+            "nativeResumptions": 0,
+            "status": "completed",
+            "toolResult": null
+          }
+        },
+        {
+          "exit": 0,
+          "result": {
+            "cached": true,
+            "nativeResumptions": 0,
+            "status": "completed",
+            "toolResult": null
+          }
+        }
+      ],
+      "after": {
+        "workflow": {
+          "phase": "completed",
+          "decision": "approve",
+          "callbacks": 1
+        },
+        "ledger": {
+          "intents": 1,
+          "receipts": 1
+        },
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "r1",
+                "tenant": "team"
+              }
+            }
+          ]
+        },
+        "keys": 1
+      }
+    },
+    {
+      "id": "openai-agents/completed_effect_loss",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "cached": false,
+            "nativeResumptions": 1,
+            "status": "completed",
+            "toolResult": {
+              "disposition": "created",
+              "effectCreated": true,
+              "event": {
+                "action": {
+                  "content": "approved",
+                  "id": "a1",
+                  "operation": "write",
+                  "policyRevision": "v1",
+                  "principal": "alice",
+                  "resource": "patch",
+                  "run": "r1",
+                  "tenant": "team"
+                }
+              },
+              "outcome": "completed",
+              "status": "executed"
+            }
+          }
+        },
+        {
+          "exit": 0,
+          "result": {
+            "cached": true,
+            "nativeResumptions": 0,
+            "reason": "completed_effect_unavailable",
+            "status": "unknown"
+          }
+        }
+      ],
+      "after": {
+        "workflow": {
+          "phase": "completed",
+          "decision": "approve",
+          "callbacks": 1
+        },
+        "ledger": {
+          "intents": 1,
+          "receipts": 1
+        },
+        "observation": {
+          "available": false,
+          "reason": "service_or_ledger_unavailable"
+        },
+        "keys": 0
+      }
+    },
+    {
+      "id": "openai-agents/conflicting_decision",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "cached": false,
+            "nativeResumptions": 1,
+            "status": "completed",
+            "toolResult": {
+              "disposition": "created",
+              "effectCreated": true,
+              "event": {
+                "action": {
+                  "content": "approved",
+                  "id": "a1",
+                  "operation": "write",
+                  "policyRevision": "v1",
+                  "principal": "alice",
+                  "resource": "patch",
+                  "run": "r1",
+                  "tenant": "team"
+                }
+              },
+              "outcome": "completed",
+              "status": "executed"
+            }
+          }
+        },
+        {
+          "exit": 0,
+          "result": {
+            "reason": "decision_conflict",
+            "status": "refused"
+          }
+        }
+      ],
+      "after": {
+        "workflow": {
+          "phase": "completed",
+          "decision": "approve",
+          "callbacks": 1
+        },
+        "ledger": {
+          "intents": 1,
+          "receipts": 1
+        },
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "r1",
+                "tenant": "team"
+              }
+            }
+          ]
+        },
+        "keys": 1
+      }
+    },
+    {
+      "id": "openai-agents/checkpoint_substitution",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "reason": "checkpoint_integrity",
+            "status": "refused"
+          }
+        }
+      ],
+      "differentNativeCheckpoint": true,
+      "after": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      }
+    },
+    {
+      "id": "langgraph/approved_restart",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "cached": false,
+            "nativeResumptions": 1,
+            "status": "completed",
+            "toolResult": {
+              "disposition": "created",
+              "effectCreated": true,
+              "event": {
+                "action": {
+                  "content": "approved",
+                  "id": "a1",
+                  "operation": "write",
+                  "policyRevision": "v1",
+                  "principal": "alice",
+                  "resource": "patch",
+                  "run": "r1",
+                  "tenant": "team"
+                }
+              },
+              "outcome": "completed",
+              "status": "executed"
+            }
+          }
+        },
+        {
+          "exit": 0,
+          "result": {
+            "cached": true,
+            "nativeResumptions": 0,
+            "status": "completed",
+            "toolResult": null
+          }
+        }
+      ],
+      "after": {
+        "workflow": {
+          "phase": "completed",
+          "decision": "approve",
+          "callbacks": 1
+        },
+        "ledger": {
+          "intents": 1,
+          "receipts": 1
+        },
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "r1",
+                "tenant": "team"
+              }
+            }
+          ]
+        },
+        "keys": 1
+      }
+    },
+    {
+      "id": "langgraph/rejected_restart",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "cached": false,
+            "nativeResumptions": 1,
+            "status": "rejected",
+            "toolResult": null
+          }
+        },
+        {
+          "exit": 0,
+          "result": {
+            "cached": true,
+            "nativeResumptions": 0,
+            "status": "rejected",
+            "toolResult": null
+          }
+        }
+      ],
+      "after": {
+        "workflow": {
+          "phase": "completed",
+          "decision": "reject",
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      }
+    },
+    {
+      "id": "langgraph/revoked_while_paused",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "cached": false,
+            "nativeResumptions": 1,
+            "status": "denied",
+            "toolResult": {
+              "reason": "revoked",
+              "status": "denied"
+            }
+          }
+        }
+      ],
+      "after": {
+        "workflow": {
+          "phase": "completed",
+          "decision": "approve",
+          "callbacks": 1
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      }
+    },
+    {
+      "id": "langgraph/revision_while_paused",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "cached": false,
+            "nativeResumptions": 1,
+            "status": "denied",
+            "toolResult": {
+              "reason": "revision_changed",
+              "status": "denied"
+            }
+          }
+        }
+      ],
+      "after": {
+        "workflow": {
+          "phase": "completed",
+          "decision": "approve",
+          "callbacks": 1
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      }
+    },
+    {
+      "id": "langgraph/checkpoint_tamper",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "reason": "checkpoint_integrity",
+            "status": "refused"
+          }
+        }
+      ],
+      "after": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      }
+    },
+    {
+      "id": "langgraph/checkpoint_missing",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "reason": "FileNotFoundError",
+            "status": "refused"
+          }
+        }
+      ],
+      "after": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      }
+    },
+    {
+      "id": "langgraph/version_mismatch",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "reason": "version_mismatch",
+            "status": "refused"
+          }
+        }
+      ],
+      "after": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      }
+    },
+    {
+      "id": "langgraph/post_effect_crash",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": -9,
+          "result": null
+        },
+        {
+          "exit": 0,
+          "result": {
+            "cached": false,
+            "nativeResumptions": 1,
+            "status": "completed",
+            "toolResult": {
+              "disposition": "replayed",
+              "effectCreated": false,
+              "event": {
+                "action": {
+                  "content": "approved",
+                  "id": "a1",
+                  "operation": "write",
+                  "policyRevision": "v1",
+                  "principal": "alice",
+                  "resource": "patch",
+                  "run": "r1",
+                  "tenant": "team"
+                }
+              },
+              "outcome": "completed",
+              "status": "executed"
+            }
+          }
+        }
+      ],
+      "afterCrash": {
+        "workflow": {
+          "phase": "paused",
+          "decision": "approve",
+          "callbacks": 1
+        },
+        "ledger": {
+          "intents": 1,
+          "receipts": 1
+        },
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "r1",
+                "tenant": "team"
+              }
+            }
+          ]
+        },
+        "keys": 1
+      },
+      "after": {
+        "workflow": {
+          "phase": "completed",
+          "decision": "approve",
+          "callbacks": 2
+        },
+        "ledger": {
+          "intents": 1,
+          "receipts": 1
+        },
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "r1",
+                "tenant": "team"
+              }
+            }
+          ]
+        },
+        "keys": 1
+      }
+    },
+    {
+      "id": "langgraph/concurrent_resumes",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "cached": false,
+            "nativeResumptions": 1,
+            "status": "completed",
+            "toolResult": {
+              "disposition": "created",
+              "effectCreated": true,
+              "event": {
+                "action": {
+                  "content": "approved",
+                  "id": "a1",
+                  "operation": "write",
+                  "policyRevision": "v1",
+                  "principal": "alice",
+                  "resource": "patch",
+                  "run": "r1",
+                  "tenant": "team"
+                }
+              },
+              "outcome": "completed",
+              "status": "executed"
+            }
+          }
+        },
+        {
+          "exit": 0,
+          "result": {
+            "cached": true,
+            "nativeResumptions": 0,
+            "status": "completed",
+            "toolResult": null
+          }
+        },
+        {
+          "exit": 0,
+          "result": {
+            "cached": true,
+            "nativeResumptions": 0,
+            "status": "completed",
+            "toolResult": null
+          }
+        },
+        {
+          "exit": 0,
+          "result": {
+            "cached": true,
+            "nativeResumptions": 0,
+            "status": "completed",
+            "toolResult": null
+          }
+        }
+      ],
+      "after": {
+        "workflow": {
+          "phase": "completed",
+          "decision": "approve",
+          "callbacks": 1
+        },
+        "ledger": {
+          "intents": 1,
+          "receipts": 1
+        },
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "r1",
+                "tenant": "team"
+              }
+            }
+          ]
+        },
+        "keys": 1
+      }
+    },
+    {
+      "id": "langgraph/completed_effect_loss",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "cached": false,
+            "nativeResumptions": 1,
+            "status": "completed",
+            "toolResult": {
+              "disposition": "created",
+              "effectCreated": true,
+              "event": {
+                "action": {
+                  "content": "approved",
+                  "id": "a1",
+                  "operation": "write",
+                  "policyRevision": "v1",
+                  "principal": "alice",
+                  "resource": "patch",
+                  "run": "r1",
+                  "tenant": "team"
+                }
+              },
+              "outcome": "completed",
+              "status": "executed"
+            }
+          }
+        },
+        {
+          "exit": 0,
+          "result": {
+            "cached": true,
+            "nativeResumptions": 0,
+            "reason": "completed_effect_unavailable",
+            "status": "unknown"
+          }
+        }
+      ],
+      "after": {
+        "workflow": {
+          "phase": "completed",
+          "decision": "approve",
+          "callbacks": 1
+        },
+        "ledger": {
+          "intents": 1,
+          "receipts": 1
+        },
+        "observation": {
+          "available": false,
+          "reason": "service_or_ledger_unavailable"
+        },
+        "keys": 0
+      }
+    },
+    {
+      "id": "langgraph/conflicting_decision",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "cached": false,
+            "nativeResumptions": 1,
+            "status": "completed",
+            "toolResult": {
+              "disposition": "created",
+              "effectCreated": true,
+              "event": {
+                "action": {
+                  "content": "approved",
+                  "id": "a1",
+                  "operation": "write",
+                  "policyRevision": "v1",
+                  "principal": "alice",
+                  "resource": "patch",
+                  "run": "r1",
+                  "tenant": "team"
+                }
+              },
+              "outcome": "completed",
+              "status": "executed"
+            }
+          }
+        },
+        {
+          "exit": 0,
+          "result": {
+            "reason": "decision_conflict",
+            "status": "refused"
+          }
+        }
+      ],
+      "after": {
+        "workflow": {
+          "phase": "completed",
+          "decision": "approve",
+          "callbacks": 1
+        },
+        "ledger": {
+          "intents": 1,
+          "receipts": 1
+        },
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "r1",
+                "tenant": "team"
+              }
+            }
+          ]
+        },
+        "keys": 1
+      }
+    },
+    {
+      "id": "langgraph/checkpoint_substitution",
+      "pause": {
+        "exit": -9,
+        "result": {
+          "callbacks": 0,
+          "interruptions": 1,
+          "status": "paused"
+        }
+      },
+      "before": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      },
+      "freshProcesses": true,
+      "attempts": [
+        {
+          "exit": 0,
+          "result": {
+            "reason": "checkpoint_integrity",
+            "status": "refused"
+          }
+        }
+      ],
+      "differentNativeCheckpoint": true,
+      "after": {
+        "workflow": {
+          "phase": "paused",
+          "decision": null,
+          "callbacks": 0
+        },
+        "ledger": {
+          "intents": 0,
+          "receipts": 0
+        },
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "keys": 0
+      }
+    }
+  ]
+}

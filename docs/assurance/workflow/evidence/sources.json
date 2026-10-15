@@ -1,0 +1,34 @@
+[
+  {
+    "id": "openai-hitl",
+    "url": "https://openai.github.io/openai-agents-python/human_in_the_loop/",
+    "effectiveUrl": "https://openai.github.io/openai-agents-python/human_in_the_loop/",
+    "status": 200,
+    "retrievedUtc": "2026-10-15T01:43:39.388970+00:00",
+    "sha256": "89dd49f6ecd1f8228652a59d75767a74b4fea553756166f20ab7926d64286a77"
+  },
+  {
+    "id": "langgraph-persistence",
+    "url": "https://docs.langchain.com/oss/python/langgraph/persistence",
+    "effectiveUrl": "https://docs.langchain.com/oss/python/langgraph/persistence",
+    "status": 200,
+    "retrievedUtc": "2026-10-15T01:43:39.149180+00:00",
+    "sha256": "3dd59172c46e5d405ce8483a5e624715702c9798fabb018a885e1957067f5090"
+  },
+  {
+    "id": "langgraph-durable",
+    "url": "https://docs.langchain.com/oss/python/langgraph/durable-execution",
+    "effectiveUrl": "https://docs.langchain.com/oss/python/langgraph/persistence",
+    "status": 200,
+    "retrievedUtc": "2026-10-15T01:43:39.536492+00:00",
+    "sha256": "3dd59172c46e5d405ce8483a5e624715702c9798fabb018a885e1957067f5090"
+  },
+  {
+    "id": "sqlite-package",
+    "url": "https://pypi.org/pypi/langgraph-checkpoint-sqlite/json",
+    "effectiveUrl": "https://pypi.org/pypi/langgraph-checkpoint-sqlite/json",
+    "status": 200,
+    "retrievedUtc": "2026-10-15T01:43:39.369197+00:00",
+    "sha256": "8eeb143873cc310fe758721df923a5f6d9bbf74c74575f8f182874692e22a8cc"
+  }
+]
