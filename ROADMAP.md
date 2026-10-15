@@ -1,5 +1,10 @@
 # Research roadmap
 
+The [first hardening implementation](docs/research/hardening-phase-1/README.md) now addresses
+G01–G09 through exact-authority/transaction/validation successors and legacy endpoint
+retirement. Read its disposition table: historical internals remain unchanged, and the
+held-out model/connector/external-validation phases remain ahead.
+
 The active track is verifiable security controls and evidence for autonomous AI agents. The earlier
 device-integrity roadmap is preserved verbatim in [DEVICE_ROADMAP.md](DEVICE_ROADMAP.md); its old
 "current" and "next" labels describe that document's historical state.

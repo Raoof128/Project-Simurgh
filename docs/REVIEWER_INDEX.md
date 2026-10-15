@@ -1,5 +1,10 @@
 # Reviewer index
 
+The [hardening phase 1 reviewer guide](research/hardening-phase-1/README.md) records the
+latest implemented successor checks and retired legacy endpoints. It includes reproducible
+commands and a [presentation script](research/hardening-phase-1/PRESENTATION.md); the gap
+map below remains the dated audit baseline, not a claim that all its items are closed.
+
 Start with one falsifiable question: does the local authorization boundary reject unauthorized tool
 consequences while allowing authorized work on the declared synthetic cases? The current package
 makes this experiment inspectable and records what has and has not been validated.

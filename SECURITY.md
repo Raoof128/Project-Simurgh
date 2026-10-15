@@ -14,6 +14,15 @@ historical authorization and live-gateway quota defects. They remain open in the
 implementations; the isolated demonstration does not repair or certify those paths.
 Do not expose the historical live gateway as a production service based on this package.
 
+The [hardening successor](docs/research/hardening-phase-1/README.md) now rejects mounted
+legacy live-provider requests with HTTP 410 before entering that router. It authenticates
+gateway session creation outside explicit demo mode and retires all legacy affinity
+ingestion/simulator/read routes. These are supported-entry-point restrictions; direct use
+of the historical modules, old server revisions and native helper is not remediated.
+The separate exact-authority and transactional gateway successor has synthetic local
+credentials/effects, not production IAM. Its SQLite revocation ordering does not extend
+to arbitrary remote services. Demo-mode mock access remains intentionally public.
+
 ## OpenAI demonstration trust boundaries
 
 - Model output and retrieved context cannot grant permissions. A trusted local registry

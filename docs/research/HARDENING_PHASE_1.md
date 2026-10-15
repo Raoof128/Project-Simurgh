@@ -68,6 +68,33 @@ The added checks extend the existing readiness job, not a new stage census ident
 
 ## Execution ledger
 
+- Task 4 local verification complete: 5,122 npm passes, zero failures, three prerequisite
+  skips; 17 successor, seven HTTP and 13+2 inherited focused checks pass. Fifteen saved
+  regression-demo checks replay exactly. Source hashes and historical census baseline
+  remain intact. Hosted CI will be checked against the pushed implementation revision.
+
+- Final review: a fresh read-only reviewer identified an Express repeated-slash auth
+  bypass and a mutable direct-call request authorization/effect mismatch. Both were
+  reproduced by failing regressions, then fixed in one pass: authorize at the normalized
+  mount-relative route; snapshot request strings before validating and executing.
+  The latter was an in-process caller issue, not demonstrated remote JSON escalation.
+- Task 3 complete: key-free demonstration, exact replay/tamper/overwrite checks, current
+  endpoint migration guidance and five-minute technical presentation script added.
+
+- Task 1 complete: scope committed at `f86f7723` before implementation. A fresh
+  read-only boundary investigation confirmed successor namespaces and server containment.
+- Task 2: three HTTP regressions failed against the original server, then passed with
+  the boundary changes and authorized mock/session-mismatch controls. Eleven successor
+  tests failed for missing modules before implementation; all passed after implementation.
+  Wrapper/demo tests likewise failed before their files existed, then passed.
+- Ruling: the existing workflow census parser groups unnamed steps with the preceding
+  named step. Adding the HTTP test changed one classification from `unclassifiable_step`
+  to `missing_committed_universe_query`, causing the first full suite's one failure.
+  Re-derive only `current` in `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json`
+  under its pre-existing maintenance contract; retain all 39 identities and immutable
+  19-entry baseline. Cost: the known coarse parser limitation remains; no gate is removed
+  and no evidence of broader coverage is claimed.
+
 - Preflight: source-bound HF code/tests require a new namespace. The server conductor is
   mutable; old raw process collectors and live quota code are not being certified.
 - Ruling: retire the legacy billable and affinity paths rather than patch frozen research

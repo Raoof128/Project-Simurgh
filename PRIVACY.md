@@ -17,7 +17,7 @@ the relevant experiment protocol and [security boundaries](SECURITY.md) before e
 access or publishing a capture. The academic telemetry exclusions below must not be generalized
 to those research inputs.
 
-## Legacy helper exception under review
+## Retired legacy helper path
 
 The legacy macOS helper path has a confirmed privacy mismatch: its payload includes raw process
 names and PIDs, and the historical server path retains those fields in affinity state and emits
@@ -25,6 +25,13 @@ them through audit/SSE. This differs from the counts-only modern daemon-proof co
 [security review](docs/openai/SECURITY_REVIEW.md) tracks the finding and any subsequent remediation.
 Do not interpret the intended exclusions in the historical policy below as proof that this legacy
 path never transmitted or retained identifiers.
+
+The current server now returns HTTP 410 for all legacy `/api/affinity` ingress, simulator
+and read endpoints before reaching that collection path. This prevents new use of its
+storage/audit/SSE projections through those routes. It does not erase prior exports or
+change the historical native helper's local collection behavior. The helper is unsupported
+on this server; modern signed daemon-proof routes retain their separate counts-only
+contract. See the [hardening disposition](docs/research/hardening-phase-1/README.md).
 
 ## Academic and device telemetry policy
 

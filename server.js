@@ -485,7 +485,26 @@ app.use((req, res, next) => {
 app.use(express.static(join(__dirname, "public")));
 app.use("/api/voting-pilot", votingPilotRouter);
 app.use("/api/banking-pilot", bankingPilotRouter);
-app.use("/api/llm-shield/gateway", gatewayRouter);
+// The historical billable gateway does not reliably account for every attempt. Keep
+// its source reproducible, but never expose live execution from this conductor.
+app.use(
+  "/api/llm-shield/gateway",
+  (req, res, next) => {
+    if (req.body?.provider_mode === "live")
+      return res.status(410).json({ error: "legacy_live_gateway_retired" });
+    // Match the mount-relative route, including Express's slash/case variants.
+    // A separate full-path auth route can be bypassed before the nested router.
+    if (req.method === "POST" && /^\/+sessions\/*$/i.test(req.path))
+      return requireInstructorAuth(req, res, next);
+    next();
+  },
+  gatewayRouter
+);
+// Retire collection as well as public reads: raw process identifiers must not
+// enter the old storage, audit, SSE or verdict projection paths below.
+app.use("/api/affinity", (_req, res) => {
+  res.status(410).json({ error: "legacy_affinity_retired" });
+});
 app.use("/api/llm-shield", llmShieldRouter);
 
 // Instructor route — serves the shell page. Data APIs below remain bearer-gated

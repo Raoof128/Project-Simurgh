@@ -7,6 +7,8 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
+    "assurance:hardened": "PYTHONDONTWRITEBYTECODE=1 python3 tools/assurance-hardening/demo.py",
+    "test:hardening": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tools/assurance-hardening/tests -v",
     "assurance:run": "node tools/assurance-lab/cli.mjs run",
     "assurance:verify": "node tools/assurance-lab/cli.mjs verify",
     "test:assurance": "node --test tests/unit/assuranceLab/*.test.js",

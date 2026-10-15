@@ -20,6 +20,13 @@ It does not establish general model safety, production readiness, or endorsement
 the evidence needed to challenge each result. The [presentation audit](docs/openai/PRESENTATION_AUDIT.md)
 records the scope and limits of the documentation review.
 
+For the latest implemented fixes, use the [hardening successor](docs/research/hardening-phase-1/README.md)
+and its [five-minute presentation script](docs/research/hardening-phase-1/PRESENTATION.md).
+`npm run test:hardening` and `npm run assurance:hardened` exercise exact task authority,
+local effects, strict capture numbers and transactional revocation without a model or key.
+This is a regression demonstration; earlier model results and their limitations are unchanged.
+The historical server now retires its live gateway and raw affinity endpoints with HTTP 410.
+
 - [One-page OpenAI research brief](docs/openai/OPENAI_BRIEF.md)
 - [Claim audit and evidence map](docs/openai/CLAIM_AUDIT.md)
 - [Research proposal](docs/openai/PROPOSAL.txt) and [application checklist](docs/openai/APPLICATION_CHECKLIST.md)

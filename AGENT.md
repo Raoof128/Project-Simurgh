@@ -2531,3 +2531,25 @@ one machine's local agent configuration:
 - **Verification:** Read affected callers, existing tests and frozen-source requirements.
   No implementation or new outcome is claimed by this scope commit.
 - **Follow-ups:** Failing regressions first, implement, independently review, verify and push.
+
+## 2026-10-15 — Raouf: hardening successor and presentation package (Australia/Sydney)
+
+- **Scope:** Implement phase 1 of the gap map under prior scope commit `f86f7723`;
+  preserve frozen studies and distinguish retirement from functional remediation.
+- **Summary:** Authenticated non-demo gateway session creation, retired mounted legacy
+  live/affinity endpoints, and added exact-action authority, strict finite capture parsing,
+  explicit task configuration and transactional SQLite revocation/effect successor.
+  Added a strict historical-wrapper successor and a five-minute presentation script.
+- **Files changed:** Server boundary/tests; new `tools/assurance-hardening/**` and strict
+  wrapper; npm/CI commands; reviewer/policy/navigation docs; phase evidence and both logs.
+  Current census only re-derived under its existing contract; all 39 identities retained.
+- **Verification:** Full npm 5,122 passed, zero failed, three recorded prerequisite skips;
+  17 successor tests, seven server tests (included in npm), 13+2 inherited focused tests.
+  Fifteen demo checks replay exactly; tamper/overwrite refuse; 94/19/27/34 frozen input
+  hashes match. Ruff, syntax and scoped formatting/link checks pass. Fresh reviewer found
+  slash-path auth and mutable-request issues; both reproduced RED then fixed GREEN.
+  First full suite's census classification mismatch is recorded and resolved; immutable
+  baseline untouched. Hosted verification pending publication; no paid inference or keys.
+- **Follow-ups:** Held-out adaptive model study, real IAM/connector integration and outside
+  reproduction remain open. Legacy clients now receive documented 410 responses; old
+  native helpers and direct historical modules are not certified or silently repaired.
