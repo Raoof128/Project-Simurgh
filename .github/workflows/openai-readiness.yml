@@ -3,6 +3,7 @@ name: OpenAI readiness instrument
 on:
   push:
     paths:
+      - "tools/hf-native/**"
       - "tools/hf-containment/**"
       - "tools/hf-incident-sim/**"
       - "tools/safety-study/**"
@@ -30,6 +31,7 @@ on:
       - ".github/workflows/openai-readiness.yml"
   pull_request:
     paths:
+      - "tools/hf-native/**"
       - "tools/hf-containment/**"
       - "tools/hf-incident-sim/**"
       - "tools/safety-study/**"
@@ -78,6 +80,8 @@ jobs:
           python -m unittest discover -s tools/hf-containment/tests -v
           python tools/hf-containment/study.py verify --protocol docs/assurance/hf-containment/evidence/protocol.json docs/assurance/hf-containment/evidence/report.json
           python tools/hf-containment/model.py verify --protocol docs/assurance/hf-containment/evidence/protocol.json --capture docs/assurance/hf-containment/evidence/model-capture.json --report docs/assurance/hf-containment/evidence/model-report.json
+          python -m unittest discover -s tools/hf-native/tests -v
+          python tools/hf-native/native.py verify --protocol docs/assurance/hf-native/evidence/protocol.json --capture docs/assurance/hf-native/evidence/capture.json --report docs/assurance/hf-native/evidence/report.json
 
   hf-incident-replay:
     runs-on: ubuntu-latest

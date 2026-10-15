@@ -3238,3 +3238,16 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   passes. Earlier 94 safety and 19 incident inputs unchanged. External operator remains absent.
 - **Follow-ups:** Separately freeze a native-tool interface successor to address the measured
   interface failure; retain this failed lane. Confirm hosted CI after pushing final evidence.
+
+## 2026-10-15 — Raouf: native HF model interface protocol (Australia/Sydney)
+
+- **Scope:** Separate successor to the retained eight-response plain-JSON failure.
+- **Summary:** Same corpus, model/settings and five actual controls; use the model's native
+  perform_action tool schema. One bounded capture, no output repair or retry. This interface
+  was selected after seeing the earlier failure and is not an unbiased predeclared comparison.
+- **Files changed:** New hf-native source/tests/plan/protocol, existing scoped CI job extension,
+  raw-evidence exclusion and both logs. No new census identity; all earlier inputs preserved.
+- **Verification:** Two native tests pass after initial missing-module failure; inherited
+  13 containment tests pass. Ruff clean. Exact prompt inventory and raw action linkage checked.
+- **Follow-ups:** Freeze before inference, execute once, verify tokenizer and fresh controls,
+  publish both outcomes, push and wait for hosted CI. External operator receipt remains absent.

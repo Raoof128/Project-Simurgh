@@ -192,3 +192,6 @@ docs/assurance/hf-incident/evidence/
 # Preserve frozen containment protocol, corpus and capture bytes.
 docs/assurance/hf-containment/evidence/
 docs/assurance/hf-containment/cases.json
+
+# Preserve native-call successor capture and protocol bytes.
+docs/assurance/hf-native/evidence/
