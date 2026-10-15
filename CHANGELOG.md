@@ -3289,3 +3289,13 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   maintenance scope; prioritize native interface reliability, held-out adaptive tasks,
   one authenticated connector and independent operator reproduction. Draft standards
   and public vendor guidance are not certification, endorsement or customer demand.
+
+## 2026-10-15 — Raouf: hardening phase 1 scope (Australia/Sydney)
+
+- **Scope:** Declare the first implementation phase of the current gap map before edits.
+- **Summary:** Mutable server-boundary retirement/authentication, versioned authority and
+  HF gateway/validator successors, strict reproduction wrapper and presentation evidence.
+- **Files changed:** `docs/research/HARDENING_PHASE_1.md` and both logs.
+- **Verification:** Read affected callers, existing tests and frozen-source requirements.
+  No implementation or new outcome is claimed by this scope commit.
+- **Follow-ups:** Failing regressions first, implement, independently review, verify and push.
