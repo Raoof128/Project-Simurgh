@@ -3414,3 +3414,11 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   replay saved proposals; model inference and tokenizer linkage were verified locally.
 - **Follow-ups:** Outside reproduction, broader tasks and recovery under attack remain
   open. Phase 3 complete within its bounded local protocol; no production safety claim.
+
+## 2026-10-16 — Raouf: declare reproduction phase 4 (Australia/Sydney)
+
+- **Scope:** Additive portable replay and retained receiver evidence.
+- **Summary:** Implement approved roadmap step 4; outside participation remains pending.
+- **Files changed:** `docs/research/REPRODUCTION_PHASE_4.md`, both logs.
+- **Verification:** Clean starting tree; frozen replay interfaces and lifecycle reviewed.
+- **Follow-ups:** Test-first runner, raw evidence, fresh review, local reproduction and handoff.
