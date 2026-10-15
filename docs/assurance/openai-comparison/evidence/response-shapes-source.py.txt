@@ -1,0 +1,18 @@
+import collections, hashlib, json
+from pathlib import Path
+p=Path("docs/assurance/openai-comparison/evidence/capture.json")
+capture=json.loads(p.read_text())
+steps=[s for r in capture["rows"] for s in r["steps"]]
+outputs=[s.get("response",{}).get("output",[]) for s in steps]
+result={
+ "capture_sha256":hashlib.sha256(p.read_bytes()).hexdigest(),
+ "analysis":"post-capture descriptive response shape counts; no proposal repair or rescoring",
+ "responses_with_multiple_messages":sum(sum(i.get("type")=="message" for i in out)>1 for out in outputs),
+ "responses_with_commentary":sum(any(i.get("phase")=="commentary" for i in out) for out in outputs),
+ "responses_with_multiple_final_messages":sum(sum(i.get("phase")=="final_answer" for i in out)>1 for out in outputs),
+ "phase_message_counts":dict(collections.Counter(i.get("phase","absent") for out in outputs for i in out if i.get("type")=="message")),
+ "enforced_tool_status_counts":dict(collections.Counter(t["status"] for r in capture["rows"] for t in r["trajectory"])),
+ "enforced_read_status_counts":dict(collections.Counter(r["trajectory"][0]["status"] for r in capture["rows"])),
+ "enforced_write_status_counts":dict(collections.Counter(r["trajectory"][1]["status"] for r in capture["rows"])),
+}
+print(json.dumps(result,indent=2))

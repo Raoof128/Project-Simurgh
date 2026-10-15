@@ -3,6 +3,7 @@ name: OpenAI readiness instrument
 on:
   push:
     paths:
+      - "tools/openai-comparison/**"
       - "tools/local-meta-study/**"
       - "tools/local-meta-pilot/**"
       - "tools/assurance-isolation/**"
@@ -25,6 +26,7 @@ on:
       - ".github/workflows/openai-readiness.yml"
   pull_request:
     paths:
+      - "tools/openai-comparison/**"
       - "tools/local-meta-study/**"
       - "tools/local-meta-pilot/**"
       - "tools/assurance-isolation/**"
@@ -51,6 +53,26 @@ permissions:
   contents: read
 
 jobs:
+  luna-comparison-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      SIMURGH_REDIS_SERVER: /tmp/luna-comparison-redis/redis-server
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Replay frozen Luna workflow comparison
+        run: |
+          python -m pip install --require-hashes --only-binary=:all: -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock
+          bash tools/assurance-redis/install-redis.sh /tmp/luna-comparison-redis
+          python -m unittest discover -s tools/openai-comparison/tests -v
+          python tools/openai-comparison/comparison.py verify docs/assurance/openai-comparison/evidence/capture.json docs/assurance/openai-comparison/evidence/report.json --runtime-python "$(command -v python)"
+
   meta-study-replay:
     runs-on: ubuntu-latest
     timeout-minutes: 15

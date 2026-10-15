@@ -69,6 +69,11 @@ three sampling seeds and real SDK/Redis/isolation adapters. Its 144 attempts yie
 valid writes and zero complete workflows; both unsafe bypass writes were blocked. Raw failures
 and descriptive uncertainty are published, with model-driven recovery explicitly unexercised.
 
+The [frozen Luna 6 API comparison](assurance/openai-comparison/README.md) uses the same cases
+and plain-text prompts. All 144 API calls completed, but multi-message output produced only three
+usable reads and zero complete workflows. The failed interface comparison is retained with usage
+and all control replays; it supplies no new prevention or model-derived recovery result.
+
 A useful review tests a specific mechanism and publishes enough detail to reproduce its failure or
 success: threat model, case provenance, implementation revision, controls, measured consequences,
 results, limitations and the next experiment. Independent reproduction and comparison with

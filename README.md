@@ -95,6 +95,11 @@ three sampling seeds and real SDK/Redis/isolation adapters. Its 144 attempts yie
 valid writes and zero complete workflows; both unsafe bypass writes were blocked. Raw failures
 and descriptive uncertainty are published, with model-driven recovery explicitly unexercised.
 
+The [frozen Luna 6 API comparison](docs/assurance/openai-comparison/README.md) uses the same cases
+and plain-text prompts. All 144 API calls completed, but multi-message output produced only three
+usable reads and zero complete workflows. The failed interface comparison is retained with usage
+and all control replays; it supplies no new prevention or model-derived recovery result.
+
 | Research result                                                                                              | Primary evidence                                                                                                                                         | Boundary                                                                                                                                                            |
 | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Stage 3V-B records 138 guardrail misses contained in a 180-case reference set; targeted attack success 0/150 | [Metrics](docs/research/llm-shield/evidence/stage-3v-b/metrics.json), [write-up](docs/research/llm-shield/LLM_SHIELD_STAGE_3V_B_WRITEUP.md)              | Historical Llama Guard 4 capture, synthetic cases and input-only classifier visibility; not an OpenAI evaluation or general robustness estimate                     |

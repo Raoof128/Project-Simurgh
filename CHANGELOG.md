@@ -3075,3 +3075,29 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   No evaluation inference has occurred at this protocol commitment.
 - **Follow-ups:** Execute once, retain every outcome, replay controls/recovery, document limitations,
   add credential-free CI and commit evidence. No independent reviewer or production claim.
+
+## 2026-10-15 — Raouf: Luna 6 capture and retained interface failure (Australia/Sydney)
+
+- **Scope:** Execute the precommitted owner-authorized API comparison and publish every outcome;
+  no additional paid run, prompt tuning or retroactive repair.
+- **Summary:** Protocol commit `e4965bbb` binds 67 inputs. All 144 requests returned responses,
+  with two incomplete responses and no API errors/refusals. Of 144 proposals, 137 were invalid or
+  incomplete JSON and four more failed tool schema. Three public reads executed through the real
+  kernel boundary; all writes were invalid. Zero complete workflows, zero unsafe bypass effects,
+  prevention unestimable (0/0), and model-derived recovery unexercised. Retained 142 multi-message
+  responses explain the plain-text aggregation mismatch; no capability or protection ranking.
+  Usage: 31,980 input and 7,961 output tokens; conservative standard-tier estimate $0.007978.
+- **Files changed:** Added capture/journal, three-control report, post-capture response-shape counts
+  and source snapshot, result guide; linked README/reviewer index, added credential-free replay CI
+  and updated mutable census 34 to 35. Both logs updated; frozen plan and source inputs unchanged.
+- **Verification:** Twelve new comparison tests and 21 inherited runtime tests pass. Full npm
+  after CI/census changes: 5,119 passed, zero failed, three prerequisite skips. All 432 local control
+  attempts executed; capture/journal exact agreement, source/ancestor binding and earlier Meta
+  replay pass. Exact credential scan clean; temporary downloaded key file removed. All eleven
+  earlier source/report families and historical census baseline unchanged. Hosted CI and external
+  review not claimed. Fresh semantic replay of all 72 trajectories/432 control attempts passed;
+  missing-row, changed-summary and report-overwrite CLI refusals passed.
+- **Follow-ups:** A separately precommitted native function-calling or structured/phase-aware
+  interface experiment is needed before judging model capacity or using larger-model credits.
+  Keep this negative result. No production, independent-operator, general robustness, incident
+  prevention, useful-workflow overhead or zero-provider-retention claim. No cloud settings change.

@@ -1,0 +1,22 @@
+{
+  "capture_sha256": "71c6bf0c2ee466a3e9fb0cddc2cc28e2eaf3b004806b081d802df8ab2826fabc",
+  "analysis": "post-capture descriptive response shape counts; no proposal repair or rescoring",
+  "responses_with_multiple_messages": 142,
+  "responses_with_commentary": 112,
+  "responses_with_multiple_final_messages": 53,
+  "phase_message_counts": {
+    "commentary": 164,
+    "final_answer": 195
+  },
+  "enforced_tool_status_counts": {
+    "invalid": 141,
+    "executed": 3
+  },
+  "enforced_read_status_counts": {
+    "invalid": 69,
+    "executed": 3
+  },
+  "enforced_write_status_counts": {
+    "invalid": 72
+  }
+}

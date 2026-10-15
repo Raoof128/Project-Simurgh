@@ -1,6 +1,6 @@
 {
   "schema": "simurgh.stage5q.problem_gate_set.v2",
-  "note": "Q1-F002. The SET is the authority; entry_count is telemetry. Added and removed are reported independently, so a repaired problem can never mask a new one. v2 SPLITS two things v1 conflated: the BASELINE measurement, which the Q1-F002 finding cites and which may never move, and the CURRENT census, which every later stage re-pins as it adds workflow steps. In v1 they were one field, so any stage that added a CI step could only go green by editing the number a prior finding had recorded \u2014 see Stage 5S finding 5S-F015.",
+  "note": "Q1-F002. The SET is the authority; entry_count is telemetry. Added and removed are reported independently, so a repaired problem can never mask a new one. v2 SPLITS two things v1 conflated: the BASELINE measurement, which the Q1-F002 finding cites and which may never move, and the CURRENT census, which every later stage re-pins as it adds workflow steps. In v1 they were one field, so any stage that added a CI step could only go green by editing the number a prior finding had recorded — see Stage 5S finding 5S-F015.",
   "baseline": {
     "tag": "v2.53.0-stage-5r-vpf",
     "entry_count": 19,
@@ -87,9 +87,13 @@
   },
   "current": {
     "as_of": "2026-10-15 repeated Meta workflow study CI extension",
-    "entry_count": 34,
+    "entry_count": 35,
     "why": "the LIVE census, re-pinned by each stage that adds workflow steps. `baseline` is NOT touched: it is the v2.53.0 measurement the Q1-F002 finding cites, and a later stage may never move it to go green (5S-F015).",
     "gate_problems": [
+      {
+        "gate_id": "openai-readiness.yml::Replay frozen Luna workflow comparison",
+        "reason_code": "missing_committed_universe_query"
+      },
       {
         "gate_id": "openai-readiness.yml::Replay frozen Meta workflow study",
         "reason_code": "missing_committed_universe_query"
