@@ -87,7 +87,7 @@
   },
   "current": {
     "as_of": "2026-10-15 repeated Meta workflow study CI extension",
-    "entry_count": 36,
+    "entry_count": 37,
     "why": "the LIVE census, re-pinned by each stage that adds workflow steps. `baseline` is NOT touched: it is the v2.53.0 measurement the Q1-F002 finding cites, and a later stage may never move it to go green (5S-F015).",
     "gate_problems": [
       {
@@ -100,6 +100,10 @@
       },
       {
         "gate_id": "openai-readiness.yml::Replay frozen Meta workflow study",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "openai-readiness.yml::Replay frozen synthetic safety study",
         "reason_code": "missing_committed_universe_query"
       },
       {

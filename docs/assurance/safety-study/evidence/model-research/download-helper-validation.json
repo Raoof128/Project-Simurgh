@@ -1,0 +1,20 @@
+{
+  "scope": "offline synthetic tests; no network requests, weights, or inference",
+  "checks": {
+    "origin_authorization_present": true,
+    "cdn_authorization_absent": true,
+    "unsafe_url_rejected_0": true,
+    "unsafe_url_rejected_1": true,
+    "unsafe_url_rejected_2": true,
+    "unsafe_url_rejected_3": true,
+    "manual_redirect_strips_authorization": true,
+    "sha256_verification": true,
+    "git_blob_verification": true,
+    "corruption_rejected": true,
+    "wrong_revision_rejected": true,
+    "missing_lfs_hash_rejected": true
+  },
+  "passed": 12,
+  "total": 12,
+  "helper_sha256": "f76f9c774fe179e958652137763e6aaaca5d7c79fdfa19357d2c15dba28c4c6c"
+}

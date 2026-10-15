@@ -182,3 +182,6 @@ docs/assurance/openai-comparison/evidence/capture*.jsonl
 # Preserve native-function response and journal bytes.
 docs/assurance/openai-native/evidence/capture*.json
 docs/assurance/openai-native/evidence/capture*.jsonl
+
+# Preserve original safety-study corpus, model metadata, captures and journals.
+docs/assurance/safety-study/evidence/

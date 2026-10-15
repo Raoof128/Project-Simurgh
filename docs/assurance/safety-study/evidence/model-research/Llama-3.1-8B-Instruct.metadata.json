@@ -1,0 +1,56 @@
+{
+  "repo": "meta-llama/Llama-3.1-8B-Instruct",
+  "api_url": "https://huggingface.co/api/models/meta-llama/Llama-3.1-8B-Instruct?blobs=true",
+  "api_status": 200,
+  "revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+  "gated": "manual",
+  "pipeline_tag": "text-generation",
+  "safetensors": {
+    "parameters": {
+      "BF16": 8030261248
+    },
+    "total": 8030261248
+  },
+  "weight_files": [
+    {
+      "name": "model-00001-of-00004.safetensors",
+      "size": 4976698672
+    },
+    {
+      "name": "model-00002-of-00004.safetensors",
+      "size": 4999802720
+    },
+    {
+      "name": "model-00003-of-00004.safetensors",
+      "size": 4915916176
+    },
+    {
+      "name": "model-00004-of-00004.safetensors",
+      "size": 1168138808
+    }
+  ],
+  "weight_bytes": 16060556376,
+  "files": {
+    "config.json": {
+      "url": "https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct/resolve/0e9e39f249a16976918f6564b8830bc894c89659/config.json",
+      "status": 403,
+      "bytes": 0
+    },
+    "tokenizer_config.json": {
+      "url": "https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct/resolve/0e9e39f249a16976918f6564b8830bc894c89659/tokenizer_config.json",
+      "status": 403,
+      "bytes": 0
+    },
+    "model.safetensors.index.json": {
+      "url": "https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct/resolve/0e9e39f249a16976918f6564b8830bc894c89659/model.safetensors.index.json",
+      "status": 403,
+      "bytes": 0
+    },
+    "README.md": {
+      "url": "https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct/resolve/0e9e39f249a16976918f6564b8830bc894c89659/README.md",
+      "status": 200,
+      "bytes": 44044
+    }
+  },
+  "first_weight_head_status": 403
+}

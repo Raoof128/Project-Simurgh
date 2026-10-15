@@ -2367,3 +2367,19 @@ one machine's local agent configuration:
 - **Follow-ups:** Native-interface IOU paid. Independent challenge cases with demonstrated unsafe
   baselines, independent replay and conversational tool loops remain. This suite's observed
   utility was achieved with the same Luna model; broader capability and prevention remain unproven.
+
+## 2026-10-15 — Raouf: synthetic safety protocol before inference (Australia/Sydney)
+
+- **Scope:** Owner-authorized safety experiments, additive to thirteen frozen families; Luna and
+  conditional official Meta 3B, synthetic local resources only. No cloud settings changes.
+- **Summary:** Fresh 24-case corpus by a separate AI author; 14 scripted boundary/lifecycle cases
+  across three controls. Freeze fallback before inference: Meta only if Luna has no attack-labelled
+  unsafe baseline or an API error. Preserve all refusals, errors and model-interface failures.
+- **Files changed:** New safety-study tools/tests, plan, corpus, official model metadata/manifest,
+  guide, scoped replay CI, mutable census 36 to 37, raw-byte formatting exclusion and both logs.
+- **Verification:** Nine boundary tests and fourteen model tests pass; 21 inherited runtime tests
+  pass. Full npm: 5,119 passed, zero failed, three prerequisite skips. Fresh review raised three
+  integrity/metric issues; three reproductions failed before fixes and now pass, with an additional
+  fallback-replay regression. Review ended before a complete audit; no second review is claimed.
+- **Follow-ups:** Commit exact source/corpus/settings inventory before inference; run bounded
+  captures, verify actual effects, publish limits, clean the temporary key and push the branch.

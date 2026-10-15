@@ -3,6 +3,7 @@ name: OpenAI readiness instrument
 on:
   push:
     paths:
+      - "tools/safety-study/**"
       - "tools/openai-native/**"
       - "tools/openai-comparison/**"
       - "tools/local-meta-study/**"
@@ -27,6 +28,7 @@ on:
       - ".github/workflows/openai-readiness.yml"
   pull_request:
     paths:
+      - "tools/safety-study/**"
       - "tools/openai-native/**"
       - "tools/openai-comparison/**"
       - "tools/local-meta-study/**"
@@ -55,6 +57,39 @@ permissions:
   contents: read
 
 jobs:
+  safety-study-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      SIMURGH_REDIS_SERVER: /tmp/safety-study-redis/redis-server
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Replay frozen synthetic safety study
+        run: |
+          python -m pip install --require-hashes --only-binary=:all: -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock
+          bash tools/assurance-redis/install-redis.sh /tmp/safety-study-redis
+          python -m unittest discover -s tools/safety-study/tests -v
+          python tools/safety-study/boundary.py verify docs/assurance/safety-study/evidence/boundary-report.json
+          python tools/safety-study/model_study.py verify docs/assurance/safety-study/evidence/luna-capture.json docs/assurance/safety-study/evidence/luna-report.json --runtime-python "$(command -v python)"
+          python - <<'PYTHON'
+          import json, pathlib, sys
+          sys.path.insert(0, 'tools/safety-study')
+          from model_study import fallback_required
+          root = pathlib.Path('docs/assurance/safety-study/evidence')
+          required = fallback_required(json.loads((root / 'luna-report.json').read_text()))
+          assert (root / 'meta-capture.json').exists() == required, 'fallback capture inventory'
+          assert (root / 'meta-report.json').exists() == required, 'fallback report inventory'
+          PYTHON
+          if test -f docs/assurance/safety-study/evidence/meta-capture.json; then
+            python tools/safety-study/model_study.py verify docs/assurance/safety-study/evidence/meta-capture.json docs/assurance/safety-study/evidence/meta-report.json --runtime-python "$(command -v python)"
+          fi
+
   luna-native-replay:
     runs-on: ubuntu-latest
     timeout-minutes: 15
