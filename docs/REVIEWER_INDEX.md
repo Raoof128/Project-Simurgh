@@ -4,6 +4,12 @@ Start with one falsifiable question: does the local authorization boundary rejec
 consequences while allowing authorized work on the declared synthetic cases? The current package
 makes this experiment inspectable and records what has and has not been validated.
 
+For the current priorities, start with the [15 October 2026 gap map](research/SIMURGH_GAP_MAP_2026-10-15.md).
+It distinguishes known historical defects, freshly checked fixture edges, evaluation limits
+and deployment work. It also links the latest containment/model results and current primary
+sources. Earlier readiness reports describe their own dated experiments: “no live request”
+in the initial offline review does not describe the later Luna captures.
+
 ## Suggested review sequence
 
 1. Read the [research brief](openai/OPENAI_BRIEF.md) and [evaluation protocol](openai/EVALUATION.md).
@@ -33,7 +39,8 @@ file sink. Its report distinguishes created, recovered and replayed completions.
 
 | Documents                                                                                                                                                                                                                                     | Read them as                                                                                                                                                    |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [README](../README.md), [ROADMAP](../ROADMAP.md), `docs/openai/`                                                                                                                                                                              | Current research entry point, focused evaluation and proposed follow-up work                                                                                    |
+| [README](../README.md), [ROADMAP](../ROADMAP.md), [current gap map](research/SIMURGH_GAP_MAP_2026-10-15.md)                                                                                                                                   | Current research navigation and priorities; follow links to separately scoped evidence                                                                          |
+| `docs/openai/`                                                                                                                                                                                                                                | Initial focused evaluation, dated readiness/security reviews and proposal; later live studies are linked below                                                  |
 | [SECURITY](../SECURITY.md), [PRIVACY](../PRIVACY.md)                                                                                                                                                                                          | Component-specific current guidance with explicitly identified historical architecture                                                                          |
 | [RESEARCH_HISTORY](../RESEARCH_HISTORY.md), [DEVICE_ROADMAP](../DEVICE_ROADMAP.md)                                                                                                                                                            | Exact historical copies, including old scores, vendor framing and status labels; not current assurance                                                          |
 | [Research programme](RESEARCH_PROGRAMME.md)                                                                                                                                                                                                   | May 2026 device-track plan at v0.4.4; its “current,” “next” and 10/10 score refer to that snapshot                                                              |

@@ -3269,3 +3269,23 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Follow-ups:** Local containment and replay package delivered. External operator receipt,
   reliable model interface over broader tasks, representative real IAM/connectors and native
   mandatory launcher remain explicit limits; the old failures are preserved for comparison.
+
+## 2026-10-15 — Raouf: current gap map and primary-source review (UTC)
+
+- **Scope:** Targeted audit of the agent-containment track at `9141ec0b`, selected legacy
+  findings and current primary guidance; no whole-repository semantic-audit claim.
+- **Summary:** Published 27 prioritized work items with pass conditions and a four-step
+  successor roadmap. Distinguished six previously documented open findings from fixture
+  hardening, evaluation limits and external validation. Retrieved 19 primary pages.
+- **Files changed:** New dated research map, source register, diagnostic script/results and
+  npm advisory snapshot; current roadmap/reviewer navigation and both logs.
+- **Verification:** Ten diagnostic observations reproduce: non-finite timing acceptance,
+  permissive unknown task configuration and an injected in-flight revocation ordering.
+  All published timings remain finite; 94/19/27/34 frozen input hashes match. npm audit
+  reports zero known advisories. Ruff and scoped formatting/link checks validate the new
+  package; no inference, external target probing or runtime remediation performed.
+  Baseline hosted readiness run 38704471366 passed all 13 jobs before this audit.
+- **Follow-ups:** Repair/isolate known historical paths through declared successor or
+  maintenance scope; prioritize native interface reliability, held-out adaptive tasks,
+  one authenticated connector and independent operator reproduction. Draft standards
+  and public vendor guidance are not certification, endorsement or customer demand.

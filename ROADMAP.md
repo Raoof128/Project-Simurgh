@@ -4,6 +4,13 @@ The active track is verifiable security controls and evidence for autonomous AI 
 device-integrity roadmap is preserved verbatim in [DEVICE_ROADMAP.md](DEVICE_ROADMAP.md); its old
 "current" and "next" labels describe that document's historical state.
 
+For priorities after the completed SDK, recovery, live-model and HF containment studies,
+use the [15 October 2026 gap map](docs/research/SIMURGH_GAP_MAP_2026-10-15.md). It records
+27 actionable items, six still-open historical findings, fresh local probes and 19 primary
+sources. The next milestone is one reliable, held-out end-to-end experiment with an
+authenticated connector and independent reproduction. Earlier milestone sections below
+retain their original scope; a past “next” item may now have a separate published result.
+
 ## Existing foundation
 
 - Provider-agnostic containment boundaries and historical signed, offline-reproducible research
