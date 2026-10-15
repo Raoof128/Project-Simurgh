@@ -58,3 +58,10 @@ review or endorsement merely because it has a DOI or is publicly hosted.
 The [presentation audit](openai/PRESENTATION_AUDIT.md) distinguishes complete automated document
 scanning from the smaller set of entry points reviewed semantically. It records unresolved issues
 rather than treating a file count as proof of quality.
+
+## Real Redis connector evidence
+
+The [Redis study](assurance/redis/README.md) adds 19 real-service cases for lost replies, conditional
+writes, conservative reconciliation, eight-worker contention and AOF restart. Read the
+[validation record](assurance/redis/VALIDATION.md) and [saved report](assurance/redis/evidence/report.json)
+with their same-host, synthetic-effect and unknown-outcome limits. Older reports remain unchanged.

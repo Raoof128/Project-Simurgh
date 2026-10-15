@@ -2064,3 +2064,31 @@ one machine's local agent configuration:
   documented. No paid/model call, external witness, hosted CI result, deployment, submission,
   new coverage discharge or production-readiness claim. Reusable durability startup checks
   were saved in the cloud configuration draft; publication is separate from local validation.
+
+## 2026-10-15 — Raouf: real Redis connector recovery (Australia/Sydney)
+
+- **Scope:** Implement the authorized next assurance phase with a real local service. Preserve
+  all earlier lab, SDK, durability and OpenAI instrument source/report bytes.
+- **Summary:** Added a verified-source Redis 8.10.2 installer, disposable Unix-socket/AOF service,
+  bounded RESP transport and an actual successful-response-loss proxy. Durable SQLite intents
+  precede conditional SET; existing intents reconcile with GET only. The 19-case report covers
+  lost replies, pre-send utility loss, eight binding mutations, malformed input, damaged records,
+  service SIGKILL/restart, eight cooperating workers, a duplicate RPUSH control and both native
+  SDK integrations. One completion is not counted as a second created effect.
+- **Files changed:** `tools/assurance-redis/` implementation, installer and tests;
+  `docs/assurance/redis/` evidence, sources, validation and results; dated Redis spec/plan;
+  scoped CI, README, roadmap, reviewer index and assurance status links; both change logs.
+  Re-derived only the workflow census `current` set (27 to 28) for the new step classified
+  `missing_committed_universe_query`; its immutable baseline remains 19.
+- **Verification:** 14 new Python tests, 31 SDK tests and 16 durability tests passed. Full npm:
+  5,122 total, 5,119 passed, zero failed, three skipped (Chrome/Lean unavailable). Source installer
+  ran successfully; clean hash-locked Python environment replayed all 19 report cases. All four
+  prior reports verify unchanged. CLI overwrite/omitted-case refusals, Ruff, formatting, shell
+  syntax, census and diff checks pass. Fresh independent reviewer reproduced tests and report,
+  checked source provenance and found no material or minor defect. No review code fix required.
+- **Follow-ups:** Commit a combined pending-executor-crash/concurrent-recovery fixture, persist
+  end-to-end SDK workflow state, obtain held-out authorship and external reproduction, and measure
+  integration cost. Remote connectors, identity/revocation, power loss and multi-host execution
+  remain open. No paid/model call, external witness, hosted CI result, deployment, submission,
+  coverage discharge, distributed exactly-once or production-readiness claim. Reusable Redis
+  install/start instructions saved as a cloud draft; publication remains separate.

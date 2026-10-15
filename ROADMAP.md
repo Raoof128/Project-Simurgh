@@ -48,8 +48,12 @@ The [durability extension](docs/assurance/durable/README.md) now tests a bounded
 restarts through both SDKs. A stable file identity allows receipt recovery without rewriting
 an effect; the file and receipt are not one atomic transaction.
 
-Next, test a real connector's idempotency and ambiguous-response recovery contract, then obtain
-held-out attacks and external reproduction. Power-loss validation, end-to-end SDK workflow
+The [Redis connector extension](docs/assurance/redis/README.md) now tests conditional record writes
+and ambiguous-response recovery against Redis 8.10.2 in 19 named cases. It includes a real lost
+success reply, GET-only reconciliation, a non-idempotent retry control and AOF process restart.
+
+Next, obtain held-out attacks and external reproduction, and specify a persisted end-to-end SDK
+workflow restart fixture. Power-loss validation, end-to-end SDK workflow
 recovery, authenticated approval identity, revocation and measured overhead remain open.
 These are evidence requirements, not claims that competitors lack these controls.
 

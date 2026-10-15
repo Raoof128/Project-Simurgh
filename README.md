@@ -67,7 +67,10 @@ rows through OpenAI Agents SDK and LangGraph approval/resume flows. Proposals re
 no live model or independent operator was tested.
 The [durability extension](docs/assurance/durable/README.md) adds 26 local crash/retry/concurrency
 cases with immutable authority and an idempotent file sink. It covers process restart, with
-explicit limits on power loss, distributed execution and real connector effects.
+explicit limits on power loss and distributed execution.
+The [Redis connector extension](docs/assurance/redis/README.md) adds 19 real-service cases for
+conditional writes, lost replies, GET-only recovery, eight-process contention and AOF restart.
+An unresolved pre-send attempt remains unknown, making its retry-availability cost explicit.
 
 | Research result                                                                                              | Primary evidence                                                                                                                                         | Boundary                                                                                                                                                            |
 | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

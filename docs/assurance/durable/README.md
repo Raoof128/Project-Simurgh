@@ -96,8 +96,9 @@ SDK cases restart the **executor** and start fresh SDK runs. They do not restore
 interrupted SDK workflow after an application crash. That separate capability remains open.
 The earlier [standalone LangGraph validation limitation](../sdk/VALIDATION.md) is unchanged.
 
-Next: test a real connector with a documented idempotency key and ambiguous-response recovery,
-then obtain independently authored cases and an outside reproduction. A power-loss fixture
+Follow-up: the [Redis connector extension](../redis/README.md) now tests a real conditional-write
+service and ambiguous-response recovery. Independently authored cases and an outside reproduction
+remain open. A power-loss fixture
 and durable end-to-end SDK workflow recovery would strengthen the local contract further.
 
 Subjective closeout scorecard: reproducibility **8/10** (raise with external replay), local
