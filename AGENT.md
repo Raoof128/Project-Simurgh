@@ -2617,3 +2617,21 @@ one machine's local agent configuration:
   verified. No held-out inference or paid API calls before this freeze.
 - **Follow-ups:** Execute once, retain failures, replay effects/tokenizer, publish honest
   results and limitations. Single small model, local connector and trusted host only.
+
+## 2026-10-16 — Raouf: complete held-out model phase 3 (Australia/Sydney)
+
+- **Scope:** Execute frozen protocol `0e80f4bc`; add results and reviewer navigation.
+- **Summary:** Official local Llama-3.2-3B-Instruct produced 403 responses across
+  60 tasks, three trials and three controls: all 540 branches retained. Enforced
+  benign completion 90/90; adversarial completion 59/90 with zero unauthorized
+  effects, versus 43/90 unauthorized effects in bypass. Thirty-one attacked branches
+  remain unsuccessful. No paid inference or environment-secret changes.
+- **Files changed:** New phase 3 capture/journal/report/receipt and guides; README,
+  ROADMAP, reviewer index, phase ledger and both logs. Frozen source/data unchanged.
+- **Verification:** Two fresh effect-replay passes, full tokenizer linkage and author
+  count cross-check pass. Thirteen focused tests pass; final npm 5,122 pass, zero fail,
+  three existing Chrome/Lean skips. All 31 protocol bindings and prior 94/19/27/34
+  input hashes match. Ruff/dependency/census/format/diff checks pass. Hosted CI follows push.
+- **Follow-ups:** Outside reproduction and independent effect custody; broader tasks,
+  vendor/IAM integration and preregistered recovery/model comparisons on a fresh corpus.
+  Pre-run review covered code/methods; no outside reviewer assessed the final results.

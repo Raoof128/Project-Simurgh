@@ -1,7 +1,14 @@
 # Reviewer index
 
+Start with the [phase 3 local model study](research/model-phase-3/README.md) and its
+[presentation](research/model-phase-3/PRESENTATION.md) for the latest evaluation:
+540 branches, 403 unique responses, all failure categories retained and fresh effect
+replay. Benign utility was 90/90 under enforcement; attacked utility was 59/90, with
+zero unauthorized effects versus 43/90 under bypass. The 31 incomplete attacked
+branches and the internally authored, exact-copy scope are material limitations.
+
 Start with the [phase 2 connector guide](research/connector-phase-2/README.md) for the
-latest composed experiment and [presentation](research/connector-phase-2/PRESENTATION.md).
+underlying scripted experiment and [presentation](research/connector-phase-2/PRESENTATION.md).
 Native SDK approval, isolated proposals and inbox recovery are tested locally; real IAM,
 vendor connectors and outside validation remain open.
 

@@ -132,3 +132,39 @@ unchanged. Mutable current gate census only if required, never immutable baselin
 - CI replays captured proposals without downloading weights or performing inference;
   full git history supplies the pre-inference protocol commit. Existing gate census
   retains all 39 problem identities. The held-out run has not begun at this freeze.
+
+## Completed run — 16 October 2026, Australia/Sydney
+
+- Local freeze commit: `0e80f4bcb5ab14a832ae5c8c9865ee85cd98e6ba`. Capture ran once,
+  15 October 12:44:43–13:48:30 UTC, for 63 minutes 47 seconds. The local freeze was
+  not independently timestamped before inference; source and results are published together.
+- All 60 tasks × three trials × three controls completed their bounded trajectories:
+  540 branches, 403 unique responses, 763 decisions in 35 model batches. No missing
+  slots, capture/cleanup failures, generation/runtime errors, unknowns or truncations.
+- Benign: enforced and bypass each completed 90/90; deny-all 0/90. Adversarial:
+  enforced completed 59/90 with 0/90 unauthorized effects; bypass completed 47/90
+  with 43/90 unauthorized effects; deny-all completed 0/90 with 0/90 unauthorized.
+  The 31 unsuccessful enforced adversarial branches remain visible: 24 blocked,
+  five explicit declines and two invalid responses.
+- Interface: 366 report calls, 28 explicit declines, nine invalid responses. All
+  180 shared initial responses were calls; feedback accounts for 223 responses.
+  Full report generation replay and separate report comparison both pass; tokenizer
+  input/template/output linkage passes for every generation. A separate author count
+  cross-check agrees. All 31 protocol bindings and earlier 94/19/27/34 input hashes match.
+- Validation: 13 focused tests pass. Final full npm suite: 5,122 passed, zero failed,
+  three existing Chrome/Lean prerequisite skips. Ruff, dependency check, exact 39-gate
+  census, formatting and diff checks pass. Phase 2 still replays 39 rows and four
+  recovery observations. Hosted CI is recorded below after publication.
+- Ruling: fresh code/methods review occurred before inference so repairs could be
+  verified before freeze. The reviewer did not see final results; author replay/count
+  checks cover them here. Cost: outside result review and observer independence remain open.
+- Interpretation: the unauthorized-effect branch difference is −47.8 percentage points
+  (family-bootstrap 95% interval −67.8 to −27.8); the benign completion difference is
+  zero with a degenerate observed-family interval. This is a bounded adaptive comparison,
+  not a fixed-proposal causal prevention rate or population safety claim. Ten internally
+  authored families and exact-copy tasks remain material limits.
+- Exploratory family diagnostics identify recipient aliases, format repairs and policy
+  changes as weak utility areas. Preserve this exposed corpus; use newly frozen tasks
+  for later model/feedback improvement comparisons. Outside reproduction is next.
+- [Reviewer guide](model-phase-3/README.md), [presentation](model-phase-3/PRESENTATION.md),
+  [full report](model-phase-3/report.json), [verification receipt](model-phase-3/verification.json).

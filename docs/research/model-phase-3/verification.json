@@ -1,0 +1,92 @@
+{
+  "schema": "simurgh-phase3-verification-v1",
+  "date": "2026-10-16",
+  "timezone": "Australia/Sydney",
+  "protocol_commit": "0e80f4bcb5ab14a832ae5c8c9865ee85cd98e6ba",
+  "capture": {
+    "planned_tasks": 60,
+    "families": 10,
+    "trials_per_task": 3,
+    "controls": 3,
+    "trial_roots": 180,
+    "branches": 540,
+    "unique_model_responses": 403,
+    "decisions": 763,
+    "batches": 35,
+    "started_utc": "2026-10-15T12:44:43Z",
+    "finished_utc": "2026-10-15T13:48:30Z",
+    "wall_seconds": 3827,
+    "complete": true,
+    "failure": null,
+    "cleanup_error": null,
+    "missing_slots": []
+  },
+  "verification": {
+    "full_effect_replay_and_report_comparison": "passed",
+    "tokenizer_input_template_output_linkage": "passed",
+    "separate_author_count_crosscheck": "passed",
+    "historical_failure_steps_not_reexecuted": 0,
+    "source_bindings": 31,
+    "focused_tests": {
+      "passed": 13,
+      "failed": 0
+    },
+    "repository_tests": {
+      "passed": 5122,
+      "failed": 0,
+      "skipped": 3,
+      "skip_reasons": [
+        "headless Chrome unavailable",
+        "two Stage 5S Lean checks: Lean unavailable on PATH"
+      ]
+    },
+    "frozen_source_checks": {
+      "safety-study": 94,
+      "hf-incident": 19,
+      "hf-containment": 27,
+      "hf-native": 34
+    },
+    "ruff": "passed",
+    "gate_census": "39 identities; exact set preserved",
+    "dependency_check": "passed"
+  },
+  "sdk_runtime": {
+    "python": "3.12.14",
+    "packages": {
+      "openai-agents": "0.23.1",
+      "openai": "3.31.0",
+      "langgraph": "1.2.15",
+      "langgraph-checkpoint-sqlite": "3.1.2"
+    }
+  },
+  "review": {
+    "scope": "Fresh internal agent code/methods review before inference; final outcome counts cross-checked by author. No outside results review.",
+    "findings_fixed_before_freeze": [
+      "actual model manifest and directory binding",
+      "seed/batch/position and runtime/config binding",
+      "full returned-batch and partial-row journaling",
+      "process cleanup and partial-line deadline",
+      "historical runtime-error/unknown replay preservation"
+    ],
+    "additional_author_regression": "negative latency rejection"
+  },
+  "file_sha256": {
+    "protocol.json": "0893277cb4f2281fd0dad3b6ea2ddc123d9853668ac2364f34a8e1434782213b",
+    "capture.json": "ffb2d6dc472eac802aeb85c081a88065aa48d044d2c291239db251f6deefe626",
+    "capture.jsonl": "2ab78b562c27ff48094216deac202730563deee965a4ac8733e58386a837fb05",
+    "capture.model.log": "f39977a1be185f867b5a0933c562347fc294c943aedf7b54c04c22b9c941bf80",
+    "report.json": "1e2ea897bfde15f1693c079669f75fbdfb69948ec5e50037132fb7ed3ae394bf"
+  },
+  "hosted_ci": "Recorded separately in ../MODEL_PHASE_3.md after publication.",
+  "paid_inference_calls": 0,
+  "format_note": "Canonical capture/journal/report/protocol and frozen corpus/settings bytes are retained; formatting checks cover authored navigation and presentation documents only.",
+  "limitations": [
+    "local pre-run commit, no independent pre-inference timestamp",
+    "single small model and internally authored exact-copy tasks",
+    "task/family dependence and shared initial responses",
+    "one feedback opportunity, not long autonomous trajectories",
+    "same-host observer; raw temporary receiver databases not retained",
+    "no independent operator or real vendor/IAM integration",
+    "model runtime versions recorded; no new hash-locked model installer"
+  ]
+}

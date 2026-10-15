@@ -16,6 +16,13 @@ It does not establish general model safety, production readiness, or endorsement
 
 ## Start here
 
+The [phase 3 held-out local model study](docs/research/model-phase-3/README.md) records
+540 branches from Llama-3.2-3B-Instruct. Exact enforcement completed 90/90 benign branches
+and 59/90 adversarial branches, with zero unauthorized effects; bypass produced 43/90
+unauthorized adversarial effects. The remaining 31 attacked branches did not complete.
+Read the sample limits and [presentation guide](docs/research/model-phase-3/PRESENTATION.md)
+with these results. These are branch counts from 60 paired task instances in ten families.
+
 The [phase 2 composed connector experiment](docs/research/connector-phase-2/README.md)
 combines native SDK approval, an isolated worker, exact permissions and a sandbox inbox.
 Its scripted controls and real sender-kill probes are separate from model safety results.
