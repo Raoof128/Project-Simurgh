@@ -167,3 +167,6 @@ tools/simurgh-attestation/stage5q/fixtures/
 docs/research/llm-shield/evidence/stage-5r/
 tools/simurgh-attestation/stage5s/fixtures/
 docs/research/llm-shield/evidence/stage-5s/
+
+# Preserve original local-model capture bytes and their recorded digests.
+docs/assurance/meta/evidence/capture*.json

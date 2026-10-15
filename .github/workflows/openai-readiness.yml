@@ -3,6 +3,7 @@ name: OpenAI readiness instrument
 on:
   push:
     paths:
+      - "tools/local-meta-pilot/**"
       - "tools/assurance-isolation/**"
       - "tools/assurance-egress/**"
       - "tools/assurance-scope/**"
@@ -23,6 +24,7 @@ on:
       - ".github/workflows/openai-readiness.yml"
   pull_request:
     paths:
+      - "tools/local-meta-pilot/**"
       - "tools/assurance-isolation/**"
       - "tools/assurance-egress/**"
       - "tools/assurance-scope/**"
@@ -47,6 +49,25 @@ permissions:
   contents: read
 
 jobs:
+  local-meta-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Replay saved local Meta proposals without model downloads
+        run: |
+          python -m unittest discover -s tools/local-meta-pilot/tests -v
+          python tools/local-meta-pilot/pilot.py verify docs/assurance/meta/evidence/capture.json docs/assurance/meta/evidence/report.json
+          python tools/local-meta-pilot/pilot.py verify docs/assurance/meta/evidence/capture-compact.json docs/assurance/meta/evidence/report-compact.json
+
   descriptor-isolation:
     runs-on: ubuntu-latest
     timeout-minutes: 5

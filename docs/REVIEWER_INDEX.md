@@ -60,6 +60,10 @@ The [descriptor isolation experiment](assurance/isolation/README.md) follows wit
 attack channels denied, three useful tasks preserved, two descriptor hygiene checks and two retained
 content-release failures. Review its explicit bootstrap and preconnected-peer limitations.
 
+The [local Meta pilot](assurance/meta/README.md) adds two CPU Llama 3.2 1B captures: the initial
+format failure and an exploratory compact-prompt improvement. Model proposals exercise the earlier
+mock boundary; these captures do not establish model-driven kernel-isolation coverage.
+
 A useful review tests a specific mechanism and publishes enough detail to reproduce its failure or
 success: threat model, case provenance, implementation revision, controls, measured consequences,
 results, limitations and the next experiment. Independent reproduction and comparison with

@@ -2218,3 +2218,28 @@ one machine's local agent configuration:
   real workload overhead, content-release policy and dynamic permissions remain open. No key,
   external target, paid/model call, environment edit, hosted CI result, independent operator,
   deployment, incident-prevention guarantee or production-readiness claim.
+
+## 2026-10-15 — Raouf: local Meta Llama CPU pilot (Australia/Sydney)
+
+- **Scope:** Download and run a small official Meta model in this cloud machine, with additive
+  model evidence and preserved earlier source/report families.
+- **Summary:** Verified the pinned Llama 3.2 1B Instruct safetensors artifact and eight supporting
+  files; installed a separate CPU runtime outside Git. Retained both 15-case captures: initial
+  schema prompt 0 usable proposals, exploratory compact prompt 13 schema-valid proposals, three
+  unsafe mock bypass effects all blocked under enforcement, and two of three benign tasks complete.
+  Compact generation took 38.54 seconds with 2,970.05 MiB peak RSS. Added saved-output replay CI.
+- **Files changed:** `tools/local-meta-pilot/**`, `docs/assurance/meta/**`, dated plan/ledger, scoped
+  CI and formatting exclusion, README, reviewer index and both logs. Current mutable census 32 to
+  33 for saved-proposal replay; baseline19 and nine earlier source/report families unchanged.
+- **Verification:** Ten local tests pass. Both complete saved-report replays pass. Full npm: 5,122
+  total, 5,119 passed, zero failed, three Chrome/Lean prerequisite skips. Fresh reviewer found one
+  Important counter defect: failed bypass actions received containment credit. Reproduced red,
+  required demonstrated unsafe bypass effects, reran all ten tests and regenerated only evaluations.
+  Raw captures and generator snapshots preserved. No second review; npm preceded this Python-only
+  fix. Model hashes and recorded generation-source hashes verified; lint and scoped formatting pass.
+- **Follow-ups:** Dependency-lock artifact hashes remain a deferred minor; exact versions are
+  pinned, the installed CPU wheel was verified, and model hashes are checked at load. Freeze prompts,
+  obtain independently authored attacks/outside replication, repeat captures and compare a stronger
+  model. This is a one-action mock pilot, not frontier robustness, real incident prevention, native
+  SDK integration or evaluation of the later kernel profiles. No paid API, secret/weight in Git,
+  environment settings change, hosted-CI result or deployment claim.

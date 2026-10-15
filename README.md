@@ -86,6 +86,10 @@ The [descriptor isolation experiment](docs/assurance/isolation/README.md) adds 5
 file handles, IPC denial and approved preconnected TCP peers. Twelve attack baselines are blocked
 while three useful tasks complete; approved channels can still carry unwanted content.
 
+The [local Meta pilot](docs/assurance/meta/README.md) now runs Llama 3.2 1B Instruct on CPU.
+A compact prompt produced 13 usable proposals from 15 cases; the initial prompt produced zero.
+Both captures are retained, with separate replay under enforced/bypass/deny-all mock controls.
+
 | Research result                                                                                              | Primary evidence                                                                                                                                         | Boundary                                                                                                                                                            |
 | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Stage 3V-B records 138 guardrail misses contained in a 180-case reference set; targeted attack success 0/150 | [Metrics](docs/research/llm-shield/evidence/stage-3v-b/metrics.json), [write-up](docs/research/llm-shield/LLM_SHIELD_STAGE_3V_B_WRITEUP.md)              | Historical Llama Guard 4 capture, synthetic cases and input-only classifier visibility; not an OpenAI evaluation or general robustness estimate                     |
