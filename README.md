@@ -16,6 +16,10 @@ It does not establish general model safety, production readiness, or endorsement
 
 ## Start here
 
+The [phase 2 composed connector experiment](docs/research/connector-phase-2/README.md)
+combines native SDK approval, an isolated worker, exact permissions and a sandbox inbox.
+Its scripted controls and real sender-kill probes are separate from model safety results.
+
 [Reviewer index](docs/REVIEWER_INDEX.md) identifies current instructions, historical records and
 the evidence needed to challenge each result. The [presentation audit](docs/openai/PRESENTATION_AUDIT.md)
 records the scope and limits of the documentation review.

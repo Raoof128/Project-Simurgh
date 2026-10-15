@@ -1,7 +1,12 @@
 # Reviewer index
 
+Start with the [phase 2 connector guide](research/connector-phase-2/README.md) for the
+latest composed experiment and [presentation](research/connector-phase-2/PRESENTATION.md).
+Native SDK approval, isolated proposals and inbox recovery are tested locally; real IAM,
+vendor connectors and outside validation remain open.
+
 The [hardening phase 1 reviewer guide](research/hardening-phase-1/README.md) records the
-latest implemented successor checks and retired legacy endpoints. It includes reproducible
+phase 1 successor checks and retired legacy endpoints. It includes reproducible
 commands and a [presentation script](research/hardening-phase-1/PRESENTATION.md); the gap
 map below remains the dated audit baseline, not a claim that all its items are closed.
 

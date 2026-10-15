@@ -1,9 +1,15 @@
 # Research roadmap
 
+[Phase 2](docs/research/connector-phase-2/README.md) now composes native SDK approval,
+mandatory worker isolation, exact authority and a sandbox inbox with crash reconciliation.
+Next are held-out model tasks and independent reproduction; enterprise identity and real
+vendor connectors remain unvalidated.
+
 The [first hardening implementation](docs/research/hardening-phase-1/README.md) now addresses
 G01–G09 through exact-authority/transaction/validation successors and legacy endpoint
 retirement. Read its disposition table: historical internals remain unchanged, and the
-held-out model/connector/external-validation phases remain ahead.
+held-out model and external-validation phases remain ahead. The local connector
+composition below does not establish vendor integration.
 
 The active track is verifiable security controls and evidence for autonomous AI agents. The earlier
 device-integrity roadmap is preserved verbatim in [DEVICE_ROADMAP.md](DEVICE_ROADMAP.md); its old

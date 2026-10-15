@@ -5,6 +5,8 @@ on:
     paths:
       - "server.js"
       - "tests/unit/securityHardening.test.js"
+      - "tools/assurance-connector/**"
+      - "docs/research/connector-phase-2/**"
       - "tools/assurance-hardening/**"
       - "scripts/reproduce-llm-shield-stage5l-strict.sh"
       - "docs/research/hardening-phase-1/**"
@@ -38,6 +40,8 @@ on:
     paths:
       - "server.js"
       - "tests/unit/securityHardening.test.js"
+      - "tools/assurance-connector/**"
+      - "docs/research/connector-phase-2/**"
       - "tools/assurance-hardening/**"
       - "scripts/reproduce-llm-shield-stage5l-strict.sh"
       - "docs/research/hardening-phase-1/**"
@@ -378,7 +382,7 @@ jobs:
 
   workflow-recovery:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     env:
       PYTHONPATH: tools/assurance-workflow:tools/assurance-redis:tools/assurance-durable:tools/assurance-sdk
       PYTHONDONTWRITEBYTECODE: "1"
@@ -400,6 +404,8 @@ jobs:
           python -m pip install --require-hashes --only-binary=:all: -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock
           python -m pip check
           bash tools/assurance-redis/install-redis.sh /tmp/simurgh-workflow-redis
+          python -m unittest discover -s tools/assurance-connector/tests -v
+          python tools/assurance-connector/study.py --verify docs/research/connector-phase-2/report.json
           python -m unittest discover -s tools/assurance-workflow/tests -v
           python -m simurgh_workflow.study run --out /tmp/simurgh-workflow/report.json
           python -m simurgh_workflow.study verify /tmp/simurgh-workflow/report.json

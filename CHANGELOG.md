@@ -3341,3 +3341,22 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Files changed:** `docs/research/CONNECTOR_PHASE_2.md`, both logs.
 - **Verification:** Clean starting tree; existing components and lifecycle read.
 - **Follow-ups:** Execute tests first, preserve frozen history, fresh review, commit/push.
+
+## 2026-10-15 — Raouf: composed connector phase 2 (Australia/Sydney)
+
+- **Scope:** Implement the additive phase 2 design `a52c5bd1` and matrix `57b10145`.
+- **Summary:** Native SDK approval, isolated proposal worker, exact identity/content
+  authority and authenticated sandbox inbox with durable intent, idempotency and lookup.
+  Two actual native-callback SIGKILL boundaries preserve unknown outcomes until observed.
+- **Files changed:** New `tools/assurance-connector/**` and phase 2 docs/evidence;
+  npm/CI integration, README, ROADMAP, reviewer index and both logs. Frozen inputs untouched.
+- **Verification:** 17 focused tests pass; full npm 5,122 pass, zero fail, three existing
+  Chrome/Lean skips. Matrix 39 rows: enforced 2/2 useful, 0/9 unauthorized; bypass 2/2
+  and 9/9; deny-all 0/2 and 0/9. Four recovery observations and 16 source hashes replay.
+  Historical 94/19/27/34 input hashes preserved. Fresh agent review plus author probe
+  found HTTP exception handling, worker resource cleanup and typed-evidence gaps;
+  one test-first repair pass closes them. Ruff/pip/census/diff/authored-doc checks pass.
+  Canonical report/preregistered protocol formatting warnings are recorded, bytes retained.
+- **Follow-ups:** Hosted CI pending push. Synthetic identities and local connector only;
+  SDK/bootstrap trusted, no CPU/memory/process-count quotas. Held-out model study,
+  real identity/vendor adapters and outside reproduction remain open. No paid inference.
