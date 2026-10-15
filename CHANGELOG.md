@@ -2951,3 +2951,38 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   IPC isolation, held-out probes, workload overhead and outside reproduction remain open. Trusted
   Python bootstrap, local file/process effects and ingress replies are explicit bounds. No key,
   external target, live model, environment setting change, hosted CI, deployment or production claim.
+
+## 2026-10-15 — Raouf: descriptor isolation and selective connections (Australia/Sydney)
+
+- **Scope:** Implement the authorized filesystem/IPC and selective-network experiment in a new
+  namespace; preserve all eight previous implementation/report families and frozen census baseline.
+- **Summary:** Added a Linux x86_64 descriptor-scoped seccomp profile, trusted file-mode/peer
+  validation, descriptor sanitation and outside file/network/signal observation. The unchanged
+  exact-scope broker admits a synthetic local capsule task. Nineteen cases under three controls
+  yield 57 rows: twelve attack baselines deliver and are blocked under the profile; three useful
+  operations survive. Two inherited-descriptor cases close in both running controls. Unwanted
+  content through approved output and TCP remains possible and is retained as negative evidence.
+- **Files changed:** `tools/assurance-isolation/**`, `docs/assurance/isolation/**`, dated spec/plan,
+  scoped CI, README, roadmap, reviewer index and assurance links; both logs. Only the mutable census
+  current set changes 31 to 32 (`unclassifiable_step`); baseline19 is unchanged.
+- **Verification:** 26 new Python tests and the source-bound 57-row saved-report replay pass.
+  Tests include actual kernel denials, raw-fork inheritance, exec, file-backed/shared mmap,
+  descriptor arguments, peer substitution, file modes, standard streams, multithreaded setup,
+  malformed worker output, observer timeouts and report tampering. Kernel/harness/report tests
+  began red before implementation. A malformed-result regression also failed before publication
+  was moved after validation. Previous egress 20 tests and 36-row report pass unchanged. Full npm:
+  5,122 total, 5,119 passed, zero failed, three missing Chrome/Lean prerequisite skips. Ruff,
+  scoped Prettier, CLI overwrite/omission/duplicate-key refusals, current census, frozen-byte and
+  diff checks pass. One fresh reviewer reproduced the original 24 tests/57 rows and source-response
+  hashes, found one Important worker-envelope defect and one minor protocol-check limitation.
+  Reproduced seven malformed CLI envelopes and boolean errno acceptance red; added shared strict
+  field/type/duplicate-key validation and reran the 26-test suite. The saved observations are
+  unchanged; only this phase's source hashes refresh. No second-review claim.
+- **Follow-ups:** Landlock ABI query returned ENOSYS and namespace setup was already unavailable;
+  use preopened capabilities without weakening platform controls. Cost: no dynamic paths,
+  reconnects or general application compatibility. Raw fork is supported; the glibc/Python clone
+  wrapper is intentionally denied. Deferred minor: bootstrap validates socket family/type/peer but
+  not protocol; current trusted provisioning creates TCP. Native mandatory launch, outside reproduction, held-out probes,
+  real workload overhead, content-release policy and dynamic permissions remain open. No key,
+  external target, paid/model call, environment edit, hosted CI result, independent operator,
+  deployment, incident-prevention guarantee or production-readiness claim.

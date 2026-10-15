@@ -56,6 +56,10 @@ The subsequent [kernel egress experiment](assurance/egress/README.md) adds an in
 profile inside the approved service, with actual loopback/Unix observers. Its 36 rows retain useful
 work and a filesystem mailbox failure; this is a syscall boundary, not a complete sandbox.
 
+The [descriptor isolation experiment](assurance/isolation/README.md) follows with 57 rows: twelve
+attack channels denied, three useful tasks preserved, two descriptor hygiene checks and two retained
+content-release failures. Review its explicit bootstrap and preconnected-peer limitations.
+
 A useful review tests a specific mechanism and publishes enough detail to reproduce its failure or
 success: threat model, case provenance, implementation revision, controls, measured consequences,
 results, limitations and the next experiment. Independent reproduction and comparison with

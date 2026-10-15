@@ -73,6 +73,12 @@ profile around the approved service: eight network channels blocked, two useful 
 a filesystem mailbox negative result. Next: reviewed native launch, destination-specific network
 policy on a suitable host, filesystem/IPC isolation and external reproduction.
 
+The [descriptor isolation extension](docs/assurance/isolation/README.md) now provides a bounded
+filesystem/IPC and selective-connection experiment. It denies new object acquisition after trusted
+bootstrap, with 57 measured rows. Next: outside reproduction and held-out probes, native mandatory
+launch, real workload compatibility/overhead and content-release policy. Dynamic path/reconnect
+permissions still need a suitable host and broader design.
+
 ## Further research requiring additional evidence or owner inputs
 
 1. **Authorized live capture:** select an available model, approve spending and data handling,

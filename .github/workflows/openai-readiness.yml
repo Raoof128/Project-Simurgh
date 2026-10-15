@@ -3,6 +3,7 @@ name: OpenAI readiness instrument
 on:
   push:
     paths:
+      - "tools/assurance-isolation/**"
       - "tools/assurance-egress/**"
       - "tools/assurance-scope/**"
       - "tools/assurance-workflow/**"
@@ -22,6 +23,7 @@ on:
       - ".github/workflows/openai-readiness.yml"
   pull_request:
     paths:
+      - "tools/assurance-isolation/**"
       - "tools/assurance-egress/**"
       - "tools/assurance-scope/**"
       - "tools/assurance-workflow/**"
@@ -45,6 +47,29 @@ permissions:
   contents: read
 
 jobs:
+  descriptor-isolation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      PYTHONPATH: tools/assurance-isolation:tools/assurance-scope
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate descriptor isolation and selective connections
+        run: |
+          python -m unittest discover -s tools/assurance-isolation/tests -v
+          python -m simurgh_isolation.study run --out /tmp/simurgh-isolation/report.json
+          python -m simurgh_isolation.study verify /tmp/simurgh-isolation/report.json
+          python -m simurgh_isolation.study verify docs/assurance/isolation/evidence/report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: descriptor-isolation-report
+          path: /tmp/simurgh-isolation/report.json
+          if-no-files-found: error
+
   kernel-egress:
     runs-on: ubuntu-latest
     timeout-minutes: 5

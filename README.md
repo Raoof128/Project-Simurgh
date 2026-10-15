@@ -82,6 +82,10 @@ The [kernel egress extension](docs/assurance/egress/README.md) now tests an ingr
 service profile against that onward-request gap. Its 36 rows block eight observed network channels
 while preserving two useful operations; a filesystem mailbox remains a documented failure.
 
+The [descriptor isolation experiment](docs/assurance/isolation/README.md) adds 57 rows for exact
+file handles, IPC denial and approved preconnected TCP peers. Twelve attack baselines are blocked
+while three useful tasks complete; approved channels can still carry unwanted content.
+
 | Research result                                                                                              | Primary evidence                                                                                                                                         | Boundary                                                                                                                                                            |
 | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Stage 3V-B records 138 guardrail misses contained in a 180-case reference set; targeted attack success 0/150 | [Metrics](docs/research/llm-shield/evidence/stage-3v-b/metrics.json), [write-up](docs/research/llm-shield/LLM_SHIELD_STAGE_3V_B_WRITEUP.md)              | Historical Llama Guard 4 capture, synthetic cases and input-only classifier visibility; not an OpenAI evaluation or general robustness estimate                     |

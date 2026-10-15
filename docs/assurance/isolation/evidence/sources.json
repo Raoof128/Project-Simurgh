@@ -1,0 +1,45 @@
+{
+  "reviewed_date": "2026-10-15",
+  "sources": [
+    {
+      "id": "landlock",
+      "requested_url": "https://docs.kernel.org/userspace-api/landlock.html",
+      "effective_url": "https://docs.kernel.org/userspace-api/landlock.html",
+      "http_status": 200,
+      "curl_exit": 0,
+      "retrieved_utc": "2026-10-15T02:57:24.273502+00:00",
+      "sha256": "13178ab12ace527f1ed652d3d41e138b20cfb52bf84fb3ab0639d82774011cc2",
+      "text_chars": 58999
+    },
+    {
+      "id": "open_man",
+      "requested_url": "https://man7.org/linux/man-pages/man2/open.2.html",
+      "effective_url": "https://man7.org/linux/man-pages/man2/open.2.html",
+      "http_status": 200,
+      "curl_exit": 0,
+      "retrieved_utc": "2026-10-15T02:57:24.848495+00:00",
+      "sha256": "d665489cadb85624d98fae03a8d8d06209030f32735cff8aeba949ad8491c789",
+      "text_chars": 50102
+    },
+    {
+      "id": "seccomp",
+      "requested_url": "https://docs.kernel.org/userspace-api/seccomp_filter.html",
+      "effective_url": "https://docs.kernel.org/userspace-api/seccomp_filter.html",
+      "http_status": 200,
+      "curl_exit": 0,
+      "retrieved_utc": "2026-10-15T02:57:24.145573+00:00",
+      "sha256": "51f4cc94e43586a04333ad46e17a2afd1f9516afc88996bd6ec38edbfaa61998",
+      "text_chars": 16937
+    },
+    {
+      "id": "seccomp_man",
+      "requested_url": "https://man7.org/linux/man-pages/man2/seccomp.2.html",
+      "effective_url": "https://man7.org/linux/man-pages/man2/seccomp.2.html",
+      "http_status": 200,
+      "curl_exit": 0,
+      "retrieved_utc": "2026-10-15T02:57:24.349822+00:00",
+      "sha256": "95eca2f89204259e96055c099662dc27c4cf68818f082c35f3dc4d715bb150fa",
+      "text_chars": 39436
+    }
+  ]
+}

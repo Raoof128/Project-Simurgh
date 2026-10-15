@@ -16,6 +16,10 @@ The [kernel egress extension](egress/README.md) applies an additional Linux prof
 service and measures eight blocked network channels across 36 case/control rows. The broker stays
 unchanged; filesystem communication remains outside the new profile's claim.
 
+The [descriptor isolation extension](isolation/README.md) adds a separate profile that denies new
+filesystem/IPC access while retaining approved file handles and connected TCP peers. Its 57 rows
+include useful work, twelve blocked attack baselines and approved-channel content failures.
+
 ## Reproduce
 
 Use Node.js 24 (the tested runtime is 24.19.0) and the repository lockfile. No keys, model calls,
