@@ -2654,3 +2654,13 @@ one machine's local agent configuration:
 - **Files changed:** `docs/research/REPRODUCTION_PHASE_4.md`, both logs.
 - **Verification:** Clean starting tree; frozen replay interfaces and lifecycle reviewed.
 - **Follow-ups:** Test-first runner, raw evidence, fresh review, local reproduction and handoff.
+
+## 2026-10-16 — Raouf: freeze phase 4 reproduction runner (Australia/Sydney)
+
+- **Scope:** New runner/observer/tests/contract and operator guide; prior evidence unchanged.
+- **Summary:** Exact report replay, raw decision snapshots, externally supplied expected
+  root, strict archive/schema/receipt checks and incomplete-run evidence retention.
+- **Files changed:** `tools/assurance-reproduce/**`, phase 4 docs/contract, npm/CI and both logs.
+- **Verification:** 13 focused tests; npm 5,122 pass, zero fail, three existing skips.
+  Fresh review's SQLite filter defect reproduced RED and repaired GREEN; Ruff/dependencies pass.
+- **Follow-ups:** Full clean-checkout reproduction and pack verification; external operator pending.

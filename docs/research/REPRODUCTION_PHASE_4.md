@@ -74,3 +74,19 @@ No frozen implementation, protocol, capture, report or historical claim changes.
   and portable execution; implementation follows the authorized next-phase roadmap.
 - Review focus: partial runs, falsified manifests, path/ZIP/SQLite inputs, observer
   cleanup, exact baseline linkage and misleading independence claims.
+
+- Pre-run verification: 13 focused tests pass in a fresh hash-locked Python environment;
+  full npm suite 5,122 pass, zero failures, three existing Chrome/Lean skips. Ruff and
+  dependency checks pass. The real SDK failure test retains a snapshot; forced observer
+  timeout produces incomplete evidence and no success receipt.
+- Fresh internal review found one schema-filter defect: SQL LIKE treated underscore as
+  a wildcard and hid an extra `sqliteXhidden` table. Full evidence-path regression failed
+  before repair and passes with the literal-prefix GLOB filter. No further important
+  findings; no deferred minor findings. Reviewer did not assess the final pack or run.
+- Ruling: final pack/source binding and full reproduction are author verification,
+  not reviewed outside evidence. Cost: independent result review/custody remains open.
+- Author test also rejected a forged receipt key that agreed with the altered database;
+  the verifier now recomputes the deterministic key from the exact action identity.
+- Freeze: the source contract includes the original protocol's 31 bindings, original
+  capture/journal/report/protocol, both dependency locks and all new runner/test files.
+  Source and contract freeze precede execution; no new model inference occurs.

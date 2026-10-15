@@ -5,6 +5,8 @@ on:
     paths:
       - "server.js"
       - "tests/unit/securityHardening.test.js"
+      - "tools/assurance-reproduce/**"
+      - "docs/research/reproduction-phase-4/**"
       - "tools/assurance-eval/**"
       - "docs/research/model-phase-3/**"
       - "tools/assurance-connector/**"
@@ -42,6 +44,8 @@ on:
     paths:
       - "server.js"
       - "tests/unit/securityHardening.test.js"
+      - "tools/assurance-reproduce/**"
+      - "docs/research/reproduction-phase-4/**"
       - "tools/assurance-eval/**"
       - "docs/research/model-phase-3/**"
       - "tools/assurance-connector/**"
@@ -412,6 +416,8 @@ jobs:
           bash tools/assurance-redis/install-redis.sh /tmp/simurgh-workflow-redis
           python -m unittest discover -s tools/assurance-connector/tests -v
           python tools/assurance-connector/study.py --verify docs/research/connector-phase-2/report.json
+          python -m unittest discover -s tools/assurance-reproduce/tests -v
+          python tools/assurance-reproduce/reproduce.py verify docs/research/reproduction-phase-4/evidence.zip --expected-root "$(cat docs/research/reproduction-phase-4/ROOT.sha256)"
           python -m unittest discover -s tools/assurance-eval/tests -v
           python tools/assurance-eval/report.py --capture docs/research/model-phase-3/capture.json --verify docs/research/model-phase-3/report.json
           python -m unittest discover -s tools/assurance-workflow/tests -v
