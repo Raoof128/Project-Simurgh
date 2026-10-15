@@ -1,0 +1,14 @@
+{
+  "threads": 4,
+  "batch_size": 16,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "max_new_tokens": 128,
+  "max_input_tokens": 1536,
+  "eos_token_ids": [
+    128001,
+    128008,
+    128009
+  ],
+  "date_string": "15 Oct 2026"
+}

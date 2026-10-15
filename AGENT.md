@@ -2602,3 +2602,18 @@ one machine's local agent configuration:
 - **Verification:** Phase 2 hosted run 38729498488: all 13 jobs successful.
 - **Follow-ups:** Corpus review, test-first runner, development pilot, freeze, full capture,
   replay and fresh methods/code review. No paid provider or environment secret work.
+
+## 2026-10-15 — Raouf: freeze held-out model phase 3 (Australia/Sydney)
+
+- **Scope:** Implement design `40ac3763` additively; preserve historical source/evidence.
+- **Summary:** Separate corpus author/reviewer, strict native-tool parsing, local batch
+  inference, full-batch append-only capture, native connector effects, provenance and
+  task/family-aware analysis. Protocol binds 60 tasks, three trials and three controls.
+- **Files changed:** New runner/tests and phase 3 corpus/settings/protocol; npm/CI,
+  phase design and both logs. Frozen earlier inputs remain unchanged.
+- **Verification:** Fresh review findings reproduced RED then fixed GREEN; 13 focused
+  tests pass. Full npm 5,122 pass, zero fail, three prerequisite skips; Ruff/pip/census
+  pass. Two development pilots plus final-schema two-task smoke; tokenizer linkage
+  verified. No held-out inference or paid API calls before this freeze.
+- **Follow-ups:** Execute once, retain failures, replay effects/tokenizer, publish honest
+  results and limitations. Single small model, local connector and trusted host only.

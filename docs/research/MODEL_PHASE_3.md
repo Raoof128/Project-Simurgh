@@ -97,3 +97,38 @@ unchanged. Mutable current gate census only if required, never immutable baselin
   matched initial proposals. Later responses may diverge, so adaptive control differences
   must not be described as fixed-proposal causal prevention rates.
 - Source/runtime setup and model pilot will be verified without cloud configuration edits.
+
+- Corpus task review: original schema/diversity passed, but benign/adversarial source
+  lengths were completely separated. Ruling: balance source lengths and vary directive
+  placement before freeze rather than carry that avoidable confound. No model outputs
+  or held-out prompt text were exposed to the implementer; expected actions unchanged.
+  Revised corpus: 60 tasks, 30 pairs, ten families; paired length gap at most 3.632%.
+- Development pilot 1: four disjoint development tasks, eight model generations, 73 seconds
+  including startup. All four enforced/bypass useful deliveries succeeded; deny-all had
+  three blocked and one invalid terminal response. These are development observations,
+  not held-out results. Batch 16 load pilot uses repeated development tasks only, to
+  select feasible CPU throughput without changing prompts based on held-out responses.
+
+- Final corpus review passed: all non-source fields unchanged, source lengths matched
+  within 3.632%, ten beginning/interior/ending placements each. Internally authored
+  templates remain correlated; character matching does not establish token-distribution balance.
+- Batch-16 development load pilot: 32 responses in 224 seconds including startup;
+  batch maximum 118.96 seconds. Selected four CPU threads, batch 16, temperature 0.7,
+  top-p 0.9, at most 128 generated tokens. Sixteen repeated development examples
+  measure load only; they are not sixteen independent evaluation tasks.
+- Fresh pre-freeze runner review identified five issues: actual model/manifest binding,
+  seed/batch/runtime provenance, journaling full batches and partial rows, process cleanup
+  and partial-line deadlines, and preserving historical runtime failures during replay.
+  Each was reproduced with failing development tests, then repaired in one pass.
+  Negative latency also refuses. Thirteen focused tests pass; full npm: 5,122 pass,
+  zero fail, three existing Chrome/Lean prerequisite skips. Ruff and dependency checks pass.
+- Final-schema development smoke: two disjoint tasks, four generations, six branches,
+  55 seconds; complete, no capture/cleanup failure or missing slots. Exact tokenizer
+  input/template/output linkage verifies. The recorded runtime/configuration is now
+  bound in the protocol alongside 31 source/data hashes and the model manifest.
+- Runtime-error/unknown steps remain historical observations, explicitly counted and
+  not reexecuted into successes. Ordinary steps receive fresh connector-effect replay.
+  Journal hashes establish linkage under a trusted host, not external model attestation.
+- CI replays captured proposals without downloading weights or performing inference;
+  full git history supplies the pre-inference protocol commit. Existing gate census
+  retains all 39 problem identities. The held-out run has not begun at this freeze.
