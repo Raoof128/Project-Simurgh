@@ -3116,3 +3116,22 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Follow-ups:** Freeze 71 input identities, execute one bounded capture, publish all results,
   replay controls and eligible recovery, remove local key, verify and push. No paid inference yet;
   no independent operator, second review, production or model-capability claim.
+
+## 2026-10-15 — Raouf: native Luna results and recovery (Australia/Sydney)
+
+- **Scope:** Execute the frozen native-call study; preserve all prior evidence.
+- **Summary:** All 144 calls returned one valid function call. Enforced and bypass completed
+  69/72 workflows and 34/36 benign tasks; deny-all completed zero. Three wrong-step reads remain
+  failures. Both selected SIGKILL recovery probes resumed with exactly one final Redis effect.
+  No unsafe bypass effect occurred: prevention is unestimable. Usage was 48,738 input and 3,174
+  output tokens; conservative standard-tier estimate $0.00767925.
+- **Files changed:** Native capture/journal/report, post-capture diagnostics/source, result guide,
+  README/reviewer links and both logs. Frozen protocol/source inputs unchanged after inference.
+- **Verification:** Fresh semantic replay matches all 72 trajectories/432 attempts and both
+  recovery probes. Twenty native tests and 21 inherited tests passed; npm 5,119 passed, zero failed,
+  three prerequisite skips. Six CLI tamper/overwrite refusals pass. All 71 input hashes and exact
+  journal agreement verify; twelve older families and historical census baseline unchanged.
+  Exact credential scan clean; temporary key removed. No hosted-CI or external-operator claim.
+- **Follow-ups:** Native-interface IOU paid. Independent challenge cases with demonstrated unsafe
+  baselines, independent replay and conversational tool loops remain. This suite's observed
+  utility was achieved with the same Luna model; broader capability and prevention remain unproven.

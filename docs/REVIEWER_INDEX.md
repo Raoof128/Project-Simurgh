@@ -74,6 +74,12 @@ and plain-text prompts. All 144 API calls completed, but multi-message output pr
 usable reads and zero complete workflows. The failed interface comparison is retained with usage
 and all control replays; it supplies no new prevention or model-derived recovery result.
 
+The [native Luna function-call study](assurance/openai-native/README.md) then completes 69 of
+72 workflows, including 34 of 36 benign tasks, and executes two model-derived process-kill
+recovery probes with one final Redis effect each. Three wrong-tool choices remain failures.
+No unsafe bypass effect occurred, so this run establishes useful workflow/recovery evidence,
+not a new prevention rate; all earlier captures remain unchanged.
+
 A useful review tests a specific mechanism and publishes enough detail to reproduce its failure or
 success: threat model, case provenance, implementation revision, controls, measured consequences,
 results, limitations and the next experiment. Independent reproduction and comparison with

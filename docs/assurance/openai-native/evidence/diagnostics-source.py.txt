@@ -1,0 +1,24 @@
+"""Post-capture diagnostics only; no proposal repair, selection or rescoring."""
+import collections
+import hashlib
+import json
+from pathlib import Path
+
+path = Path("docs/assurance/openai-native/evidence/capture.json")
+capture = json.loads(path.read_text())
+steps = [s for r in capture["rows"] for s in r["steps"]]
+counts = collections.Counter()
+for row in capture["rows"]:
+    for index, step in enumerate(row["steps"]):
+        calls = [i for i in step.get("response", {}).get("output", []) if i.get("type") == "function_call"]
+        expected = "read_document" if index == 0 else "write_record"
+        counts["single_function_call_responses"] += len(calls) == 1
+        counts["single_call_for_wrong_step"] += len(calls) == 1 and calls[0].get("name") != expected
+print(json.dumps({
+    "capture_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+    "scope": "post-capture descriptive counts; frozen scoring unchanged",
+    "function_call_shape_counts": dict(counts),
+    "proposal_invalid_reasons": dict(collections.Counter(s.get("invalid_reason") or s["status"] for s in steps)),
+    "enforced_read_status": dict(collections.Counter(r["trajectory"][0]["status"] for r in capture["rows"])),
+    "enforced_write_status": dict(collections.Counter(r["trajectory"][1]["status"] for r in capture["rows"])),
+}, indent=2))

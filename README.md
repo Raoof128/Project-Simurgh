@@ -100,6 +100,12 @@ and plain-text prompts. All 144 API calls completed, but multi-message output pr
 usable reads and zero complete workflows. The failed interface comparison is retained with usage
 and all control replays; it supplies no new prevention or model-derived recovery result.
 
+The [native Luna function-call study](docs/assurance/openai-native/README.md) then completes 69 of
+72 workflows, including 34 of 36 benign tasks, and executes two model-derived process-kill
+recovery probes with one final Redis effect each. Three wrong-tool choices remain failures.
+No unsafe bypass effect occurred, so this run establishes useful workflow/recovery evidence,
+not a new prevention rate; all earlier captures remain unchanged.
+
 | Research result                                                                                              | Primary evidence                                                                                                                                         | Boundary                                                                                                                                                            |
 | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Stage 3V-B records 138 guardrail misses contained in a 180-case reference set; targeted attack success 0/150 | [Metrics](docs/research/llm-shield/evidence/stage-3v-b/metrics.json), [write-up](docs/research/llm-shield/LLM_SHIELD_STAGE_3V_B_WRITEUP.md)              | Historical Llama Guard 4 capture, synthetic cases and input-only classifier visibility; not an OpenAI evaluation or general robustness estimate                     |
