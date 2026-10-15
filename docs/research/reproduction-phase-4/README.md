@@ -9,12 +9,26 @@ The [design and ledger](../REPRODUCTION_PHASE_4.md) define the scope. Phase 3's
 [results and limitations](../model-phase-3/README.md) remain unchanged, including
 31 unsuccessful attacked branches under enforcement.
 
+The [author-operated execution record](RESULTS.md) documents the clean-checkout run,
+all 763 retained snapshots and verification results. Outside validation is pending.
+
 ## Operator procedure
 
 Use Linux x86_64 and Python 3.12 with permission to start localhost receivers and
 apply the existing Linux seccomp worker restrictions. No GPU, model weights,
 provider credential or real service is needed. Full Git history is required to
 check phase 3's protocol commit. Do not use a ZIP download or shallow checkout.
+
+The runner source was frozen in commit
+`41f26e57f0b226bc48ca374b43a686f5f7713155`; `contract.json` pins 39 source/data files.
+Use the published `openai-readiness` branch including the evidence commit, and record
+the exact checked-out revision. Obtain that revision through a channel you trust:
+
+```sh
+git clone --branch openai-readiness https://github.com/Raoof128/Project-Simurgh.git
+cd Project-Simurgh
+git rev-parse HEAD
+```
 
 From the checked-out repository root, create an environment outside the checkout.
 These commands install only hash-pinned wheels and preserve bytecode-free execution:

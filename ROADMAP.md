@@ -1,5 +1,12 @@
 # Research roadmap
 
+[Phase 4](docs/research/reproduction-phase-4/README.md) now provides the portable
+replay handoff, pinned inputs and 763 retained raw receiver snapshots. All 540
+branches matched the baseline in a clean local checkout. This prepares G18 and
+partly addresses G19/G23; an outside operator, independent custody and a fresh-host
+run remain open. The [execution record](docs/research/reproduction-phase-4/RESULTS.md)
+distinguishes local reproduction from external validation.
+
 [Phase 3](docs/research/model-phase-3/README.md) now supplies a frozen local Llama
 capture: 60 tasks, three trials and three controls, with bounded feedback and all
 540 branches retained. Enforcement preserved 90/90 benign completions and had no

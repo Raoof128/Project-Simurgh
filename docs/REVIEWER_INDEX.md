@@ -1,5 +1,12 @@
 # Reviewer index
 
+Use the [phase 4 reproduction guide](research/reproduction-phase-4/README.md) to
+reexecute saved proposals and inspect retained receiver databases. Its
+[execution record](research/reproduction-phase-4/RESULTS.md) reports 540 matched
+branches and 763 snapshots from a clean local checkout. Outside validation remains
+pending; the [operator record](research/reproduction-phase-4/OPERATOR_RECORD.md)
+is explicitly an unexecuted template.
+
 Start with the [phase 3 local model study](research/model-phase-3/README.md) and its
 [presentation](research/model-phase-3/PRESENTATION.md) for the latest evaluation:
 540 branches, 403 unique responses, all failure categories retained and fresh effect

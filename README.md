@@ -16,6 +16,11 @@ It does not establish general model safety, production readiness, or endorsement
 
 ## Start here
 
+The [phase 4 reproduction package](docs/research/reproduction-phase-4/README.md)
+retains all 763 receiver snapshots and reproduces the phase 3 report across 540
+branches. A clean local checkout and fresh dependency environment passed; outside
+operator validation remains pending. See the [reproduction results](docs/research/reproduction-phase-4/RESULTS.md).
+
 The [phase 3 held-out local model study](docs/research/model-phase-3/README.md) records
 540 branches from Llama-3.2-3B-Instruct. Exact enforcement completed 90/90 benign branches
 and 59/90 adversarial branches, with zero unauthorized effects; bypass produced 43/90

@@ -3432,3 +3432,17 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Verification:** 13 focused tests; npm 5,122 pass, zero fail, three existing skips.
   Fresh review's SQLite filter defect reproduced RED and repaired GREEN; Ruff/dependencies pass.
 - **Follow-ups:** Full clean-checkout reproduction and pack verification; external operator pending.
+
+## 2026-10-16 — Raouf: publish phase 4 reproduction handoff (Australia/Sydney)
+
+- **Scope:** Retained local reproduction evidence and operator handoff; no model rerun.
+- **Summary:** Clean checkout/fresh dependency environment reproduced all 540 branches
+  and 763 decisions exactly in 89.236 seconds; 763 raw SQLite snapshots retained.
+  Outside operator validation remains pending; no independent custody claim.
+- **Files changed:** New phase 4 archive/root/receipt/results, guide/ledger/navigation and both logs.
+- **Verification:** Standard-library pack verification and author raw-effect count agree.
+  13 phase 4 plus 13 phase 3 tests pass; npm 5,122 pass, zero fail, three prior skips.
+  All 39 bound inputs match; previous frozen paths unchanged; exact gate census,
+  Ruff, dependencies, authored-doc formatting and diff checks pass.
+- **Follow-ups:** Hosted CI after push; outside operator and fresh-host run, independent
+  custody and new-protocol recovery improvements remain open. No external outreach.

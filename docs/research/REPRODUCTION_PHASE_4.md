@@ -90,3 +90,20 @@ No frozen implementation, protocol, capture, report or historical claim changes.
 - Freeze: the source contract includes the original protocol's 31 bindings, original
   capture/journal/report/protocol, both dependency locks and all new runner/test files.
   Source and contract freeze precede execution; no new model inference occurs.
+
+## Execution result — 16 October 2026, Australia/Sydney
+
+- Source freeze `41f26e57f0b226bc48ca374b43a686f5f7713155` preceded the run.
+  Clean local clone and fresh hash-locked environment; same host/operator.
+- Original run completed once, exit zero, stderr empty: 540 branches, 763 decisions,
+  full report identical. Replay/snapshot/report time 89.236 seconds, excluding install
+  and final packaging. Retained 329 nonempty and 434 empty databases.
+- Archive 413,485 bytes; 9,375,744 raw SQLite bytes. Manifest root
+  `02b3a143dcc1b3a19768d6849ed6ecd6b4ff49382611fc46dbc2f9fba517db7c`.
+  Standard-library verification and separate author raw-database count check agree.
+- All 39 source/data bindings and predecessor frozen paths remain unchanged. Thirteen
+  phase 4 and thirteen phase 3 tests pass; npm 5,122 pass with three prerequisite skips.
+  Gate census exactly retains its 39 problem identities. This preserves, not fixes, them.
+- [Results](reproduction-phase-4/RESULTS.md) and [handoff guide](reproduction-phase-4/README.md)
+  published with honest scope. Engineering preparation complete; G18 outside operator,
+  G19 independent custody, fresh-host execution and recovery utility remain open.
