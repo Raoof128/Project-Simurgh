@@ -3403,3 +3403,14 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Follow-ups:** Outside reproduction and independent effect custody; broader tasks,
   vendor/IAM integration and preregistered recovery/model comparisons on a fresh corpus.
   Pre-run review covered code/methods; no outside reviewer assessed the final results.
+
+## 2026-10-16 — Raouf: model phase 3 hosted verification receipt (Australia/Sydney)
+
+- **Scope:** Record hosted results; documentation only.
+- **Summary:** Implementation/evidence commit `78f6259aa5e063650a8f9b0f6eb6b222fd5f3cd8`
+  passed all 13 jobs in Actions run `38747723586`, including phase 3 capture replay.
+- **Files changed:** Phase 3 ledger and both logs; frozen source and results unchanged.
+- **Verification:** Overall conclusion success, 13/13 successful jobs. Hosted checks
+  replay saved proposals; model inference and tokenizer linkage were verified locally.
+- **Follow-ups:** Outside reproduction, broader tasks and recovery under attack remain
+  open. Phase 3 complete within its bounded local protocol; no production safety claim.

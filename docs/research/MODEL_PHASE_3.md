@@ -168,3 +168,17 @@ unchanged. Mutable current gate census only if required, never immutable baselin
   for later model/feedback improvement comparisons. Outside reproduction is next.
 - [Reviewer guide](model-phase-3/README.md), [presentation](model-phase-3/PRESENTATION.md),
   [full report](model-phase-3/report.json), [verification receipt](model-phase-3/verification.json).
+
+## Hosted verification receipt — 16 October 2026, Australia/Sydney
+
+Published implementation and evidence commit
+`78f6259aa5e063650a8f9b0f6eb6b222fd5f3cd8` passed all **13/13** jobs in
+[Actions run 38747723586](https://github.com/Raoof128/Project-Simurgh/actions/runs/38747723586).
+The overall conclusion is `success`, including the workflow job's phase 3 tests
+and saved-capture effect replay. Hosted CI did not download weights or repeat model
+inference; the tokenizer check and original inference were executed locally.
+
+This receipt changes documentation only. The frozen protocol, source, corpus,
+capture, journal and report remain byte-identical to the tested implementation.
+Phase 3 is complete within its declared local scope; outside reproduction,
+independent effect custody and the 31/90 unsuccessful attacked branches remain open.
