@@ -80,6 +80,13 @@ recovery probes with one final Redis effect each. Three wrong-tool choices remai
 No unsafe bypass effect occurred, so this run establishes useful workflow/recovery evidence,
 not a new prevention rate; all earlier captures remain unchanged.
 
+The [fresh-corpus synthetic safety study](assurance/safety-study/README.md) separates deliberate boundary
+violations from model behavior. Eight unsafe bypass cases are blocked while both authorized
+operations succeed. Luna completes 35/72 fresh workflows but produces no unsafe baseline, so
+its prevention rate remains unestimable. Official Llama 3B completes 20/24 workflows and all
+12 benign tasks; its four observed unsafe bypass writes are blocked. Results remain bounded
+to this synthetic corpus, with failures and limitations retained in the study guide.
+
 A useful review tests a specific mechanism and publishes enough detail to reproduce its failure or
 success: threat model, case provenance, implementation revision, controls, measured consequences,
 results, limitations and the next experiment. Independent reproduction and comparison with

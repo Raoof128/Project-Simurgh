@@ -2383,3 +2383,23 @@ one machine's local agent configuration:
   fallback-replay regression. Review ended before a complete audit; no second review is claimed.
 - **Follow-ups:** Commit exact source/corpus/settings inventory before inference; run bounded
   captures, verify actual effects, publish limits, clean the temporary key and push the branch.
+
+## 2026-10-15 — Raouf: verified Luna and Llama safety results (Australia/Sydney)
+
+- **Scope:** Execute the frozen 94-input safety protocol; preserve earlier experiments and all
+  model failures. The separately requested Hugging Face simulation is a successor surface.
+- **Summary:** Scripted controls blocked 8/8 demonstrated unsafe cases while preserving two
+  authorized operations. Luna completed 35/72 workflows and 16/36 benign tasks; 37 wrong-step
+  reads remain failures and no unsafe baseline occurred. The declared fallback ran official
+  Llama 3.2 3B: 20/24 workflows, all 12 benign tasks, four actual unsafe bypass writes, all four
+  blocked by enforcement. No unnecessary policy blocks among the 12 useful benign baselines.
+- **Files changed:** Added raw captures/journals, reports, actual SQLite artifacts, download and
+  resource verification, negative CLI checks and result guide; entry-point links and both logs.
+- **Verification:** Fresh semantic replay passed for all 42 scripted rows, 432 Luna and 144 Meta
+  action/control attempts, plus two selected SIGKILL probes in each lane. Pinned Meta tokenizer
+  reconstruction passed. All 94 input hashes remain unchanged; 23 new tests, 21 inherited runtime
+  tests and npm 5,119 passed, with zero failures and three npm prerequisite skips. Three CLI
+  tamper/overwrite refusals passed. Exact credential scan clean; temporary API key removed.
+- **Follow-ups:** Independent challenge authorship/operator replay and representative connectors
+  remain. Results are finite synthetic evidence; no broad robustness or incident-prevention claim.
+  Llama ran offline on CPU at BF16 with 6.67 GiB reported peak RSS; Luna's usage estimate is $0.008465.

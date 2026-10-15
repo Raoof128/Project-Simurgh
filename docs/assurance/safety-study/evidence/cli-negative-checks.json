@@ -1,0 +1,19 @@
+{
+  "checks": [
+    {
+      "check": "missing_capture_row",
+      "refused": true,
+      "expected_diagnostic": "exact ordered repetition/case inventory"
+    },
+    {
+      "check": "altered_summary",
+      "refused": true,
+      "expected_diagnostic": "summary mismatch"
+    },
+    {
+      "check": "report_overwrite",
+      "refused": true,
+      "expected_diagnostic": "refusing report overwrite"
+    }
+  ]
+}

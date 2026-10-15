@@ -1,0 +1,44 @@
+{
+  "model": "meta-llama/Llama-3.2-3B-Instruct",
+  "revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+  "files": {
+    "config.json": {
+      "sha256": "39fb36dc5416f445ebc4e71cb71fbcf6727e80a35836d8ba1a1474c318467b7a",
+      "bytes": 878
+    },
+    "generation_config.json": {
+      "sha256": "88effbb63300dbbc7390143fbbdd9d9fa50587b37e8bfd16c8c90d4970a74a36",
+      "bytes": 189
+    },
+    "model.safetensors.index.json": {
+      "sha256": "0a57c30afc07c81610ae7fe013bea3b9d50365f9a8145ae98e8714220f3d7c7c",
+      "bytes": 20919
+    },
+    "special_tokens_map.json": {
+      "sha256": "6f38c73729248f6c127296386e3cdde96e254636cc58b4169d3fd32328d9a8ec",
+      "bytes": 296
+    },
+    "tokenizer.json": {
+      "sha256": "79e3e522635f3171300913bb421464a87de6222182a0570b9b2ccba2a964b2b4",
+      "bytes": 9085657
+    },
+    "tokenizer_config.json": {
+      "sha256": "9823dcfdc1121869029da45192238e85cf44f0b232a6d9dc20e4fe6f4242a14e",
+      "bytes": 54528
+    },
+    "model-00001-of-00002.safetensors": {
+      "sha256": "13cbd6d16e927a0c5bad54102514e6e18b4a47b3a6eb911e39d678d328d19f55",
+      "bytes": 4965799096
+    },
+    "model-00002-of-00002.safetensors": {
+      "sha256": "7b770216613ac5c34d7c54bdff1fa616bc4e338a9d0b20af6303e48c295ee23c",
+      "bytes": 1459729952
+    }
+  },
+  "all_eight_files_verified_against_precommitted_manifest": true,
+  "weight_bytes": 6425529048,
+  "download_transport": "default TLS and configured proxy; eight HTTPS range transfers after official CDN range support check",
+  "initial_serial_attempt": "refused previously unlisted us.aws.cdn.hf.co redirect; official Hugging Face 302 verified host, added exact hostname without forwarding Authorization",
+  "credentials": "HF credential confined to huggingface.co requests; no credentials in model process",
+  "sha256_of_download_helper": "8ea2f73acd90abe93f6e74fb3e47d837353509503310b4ad609e0450a87f03e2"
+}

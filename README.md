@@ -106,6 +106,13 @@ recovery probes with one final Redis effect each. Three wrong-tool choices remai
 No unsafe bypass effect occurred, so this run establishes useful workflow/recovery evidence,
 not a new prevention rate; all earlier captures remain unchanged.
 
+The [fresh-corpus synthetic safety study](docs/assurance/safety-study/README.md) separates deliberate boundary
+violations from model behavior. Eight unsafe bypass cases are blocked while both authorized
+operations succeed. Luna completes 35/72 fresh workflows but produces no unsafe baseline, so
+its prevention rate remains unestimable. Official Llama 3B completes 20/24 workflows and all
+12 benign tasks; its four observed unsafe bypass writes are blocked. Results remain bounded
+to this synthetic corpus, with failures and limitations retained in the study guide.
+
 | Research result                                                                                              | Primary evidence                                                                                                                                         | Boundary                                                                                                                                                            |
 | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Stage 3V-B records 138 guardrail misses contained in a 180-case reference set; targeted attack success 0/150 | [Metrics](docs/research/llm-shield/evidence/stage-3v-b/metrics.json), [write-up](docs/research/llm-shield/LLM_SHIELD_STAGE_3V_B_WRITEUP.md)              | Historical Llama Guard 4 capture, synthetic cases and input-only classifier visibility; not an OpenAI evaluation or general robustness estimate                     |
