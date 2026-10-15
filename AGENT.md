@@ -2553,3 +2553,14 @@ one machine's local agent configuration:
 - **Follow-ups:** Held-out adaptive model study, real IAM/connector integration and outside
   reproduction remain open. Legacy clients now receive documented 410 responses; old
   native helpers and direct historical modules are not certified or silently repaired.
+
+## 2026-10-15 — Raouf: hardening hosted verification receipt (Australia/Sydney)
+
+- **Scope:** Record hosted results after publication; documentation only.
+- **Summary:** Implementation `e5d783434d36c2aff2ee750eb8888f50d48342d9` passed all 13
+  jobs in Actions run `38723711060`, including persisted workflow recovery.
+- **Files changed:** Phase record and both logs; tested source and saved evidence unchanged.
+- **Verification:** Exact run conclusion is success, 13/13 jobs successful. Local results
+  remain 5,122 npm passes with three prerequisite skips and 17 successor tests.
+- **Follow-ups:** Phase 1 complete within its declared local scope; later model/connector
+  and external validation phases remain open.
