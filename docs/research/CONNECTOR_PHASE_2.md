@@ -98,3 +98,12 @@ No historical runtime, source-bound input, signed evidence or prior result is ed
 - Interfaces: native SDK action → isolated worker → host authority → receiver effect;
   exact action serialization and receiver idempotency are shared contracts. Pending
   state → recovery must not authorize dispatch. Tests cover both interfaces.
+
+- Task 1: six host/receiver tests failed on missing feature, then passed against real
+  authenticated HTTP and SQLite effects. Task 2: four integration tests failed before
+  the workflow existed, then passed; native interruption, mandatory worker and two
+  actual SIGKILL boundaries executed. Raw logs retained outside the checkout.
+- Matrix declared before execution in `connector-phase-2/protocol.json`: 13 named
+  cases × three controls (39 rows), plus four recovery observations. Two useful tasks,
+  nine unauthorized proposals, one invalid argument and one native refusal per control.
+  SDK fixtures are author-written and deterministic; this cannot estimate model risk.

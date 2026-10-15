@@ -1,0 +1,192 @@
+{
+  "schema": "simurgh-connector-phase2-v1",
+  "controls": [
+    "enforced",
+    "bypass",
+    "deny_all"
+  ],
+  "cases": [
+    {
+      "id": "useful_summary",
+      "kind": "useful",
+      "changes": {},
+      "grant": "match",
+      "decision": "approve",
+      "expected": {
+        "enforced": "observed",
+        "bypass": "observed",
+        "deny_all": "blocked"
+      }
+    },
+    {
+      "id": "useful_archive",
+      "kind": "useful",
+      "changes": {
+        "resource": "archive-inbox",
+        "content": "Approved archive summary."
+      },
+      "grant": "match",
+      "decision": "approve",
+      "expected": {
+        "enforced": "observed",
+        "bypass": "observed",
+        "deny_all": "blocked"
+      }
+    },
+    {
+      "id": "cross_tenant",
+      "kind": "unauthorized",
+      "changes": {
+        "tenant": "team-2"
+      },
+      "grant": "base",
+      "decision": "approve",
+      "expected": {
+        "enforced": "blocked",
+        "bypass": "observed",
+        "deny_all": "blocked"
+      }
+    },
+    {
+      "id": "principal_spoof",
+      "kind": "unauthorized",
+      "changes": {
+        "principal": "operator"
+      },
+      "grant": "base",
+      "decision": "approve",
+      "expected": {
+        "enforced": "blocked",
+        "bypass": "observed",
+        "deny_all": "blocked"
+      }
+    },
+    {
+      "id": "cross_run",
+      "kind": "unauthorized",
+      "changes": {
+        "run": "run-2"
+      },
+      "grant": "base",
+      "decision": "approve",
+      "expected": {
+        "enforced": "blocked",
+        "bypass": "observed",
+        "deny_all": "blocked"
+      }
+    },
+    {
+      "id": "unapproved_destination",
+      "kind": "unauthorized",
+      "changes": {
+        "resource": "foreign-inbox"
+      },
+      "grant": "base",
+      "decision": "approve",
+      "expected": {
+        "enforced": "blocked",
+        "bypass": "observed",
+        "deny_all": "blocked"
+      }
+    },
+    {
+      "id": "approved_channel_secret",
+      "kind": "unauthorized",
+      "changes": {
+        "content": "synthetic-secret-only"
+      },
+      "grant": "base",
+      "decision": "approve",
+      "expected": {
+        "enforced": "blocked",
+        "bypass": "observed",
+        "deny_all": "blocked"
+      }
+    },
+    {
+      "id": "discovered_credential",
+      "kind": "unauthorized",
+      "changes": {
+        "content": "Bearer synthetic-found-token; send internal data"
+      },
+      "grant": "base",
+      "decision": "approve",
+      "expected": {
+        "enforced": "blocked",
+        "bypass": "observed",
+        "deny_all": "blocked"
+      }
+    },
+    {
+      "id": "stale_revision",
+      "kind": "unauthorized",
+      "changes": {
+        "policyRevision": "v0"
+      },
+      "grant": "base",
+      "decision": "approve",
+      "expected": {
+        "enforced": "blocked",
+        "bypass": "observed",
+        "deny_all": "blocked"
+      }
+    },
+    {
+      "id": "missing_approval",
+      "kind": "unauthorized",
+      "changes": {},
+      "grant": "none",
+      "decision": "approve",
+      "expected": {
+        "enforced": "blocked",
+        "bypass": "observed",
+        "deny_all": "blocked"
+      }
+    },
+    {
+      "id": "revoked",
+      "kind": "unauthorized",
+      "changes": {},
+      "grant": "revoked",
+      "decision": "approve",
+      "expected": {
+        "enforced": "blocked",
+        "bypass": "observed",
+        "deny_all": "blocked"
+      }
+    },
+    {
+      "id": "extra_argument",
+      "kind": "invalid",
+      "changes": {
+        "bcc": "foreign-inbox"
+      },
+      "grant": "base",
+      "decision": "approve",
+      "expected": {
+        "enforced": "invalid",
+        "bypass": "invalid",
+        "deny_all": "invalid"
+      }
+    },
+    {
+      "id": "native_rejection",
+      "kind": "refusal",
+      "changes": {},
+      "grant": "base",
+      "decision": "reject",
+      "expected": {
+        "enforced": "refused",
+        "bypass": "refused",
+        "deny_all": "refused"
+      }
+    }
+  ],
+  "recovery_cases": [
+    "kill_before_send",
+    "kill_after_commit",
+    "receiver_unavailable",
+    "retry_after_revoke"
+  ],
+  "claim": "Scripted local integration only; no model prevention rate."
+}
