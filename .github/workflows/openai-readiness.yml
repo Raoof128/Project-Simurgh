@@ -3,6 +3,7 @@ name: OpenAI readiness instrument
 on:
   push:
     paths:
+      - "tools/assurance-scope/**"
       - "tools/assurance-workflow/**"
       - "tools/assurance-redis/**"
       - "tools/assurance-durable/**"
@@ -20,6 +21,7 @@ on:
       - ".github/workflows/openai-readiness.yml"
   pull_request:
     paths:
+      - "tools/assurance-scope/**"
       - "tools/assurance-workflow/**"
       - "tools/assurance-redis/**"
       - "tools/assurance-durable/**"
@@ -41,6 +43,29 @@ permissions:
   contents: read
 
 jobs:
+  incident-scope:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      PYTHONPATH: tools/assurance-scope
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate incident scope and durable stopping
+        run: |
+          python -m unittest discover -s tools/assurance-scope/tests -v
+          python -m simurgh_scope.study run --out /tmp/simurgh-scope/report.json
+          python -m simurgh_scope.study verify /tmp/simurgh-scope/report.json
+          python -m simurgh_scope.study verify docs/assurance/scope/evidence/report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: incident-scope-report
+          path: /tmp/simurgh-scope/report.json
+          if-no-files-found: error
+
   offline:
     runs-on: ubuntu-latest
     timeout-minutes: 5

@@ -61,6 +61,12 @@ with a multi-step workflow crash matrix. Power-loss validation, arbitrary workfl
 recovery, authenticated approval identity, distributed revocation and measured overhead remain open.
 These are evidence requirements, not claims that competitors lack these controls.
 
+The [incident scope extension](docs/assurance/scope/README.md) now adds 54 local HTTP rows for exact
+task permissions, per-redirect checks, budgets and durable stopping. It explicitly fails to prevent
+an approved service's hidden onward request. The [2026 incident review](docs/assurance/scope/INCIDENT_RESEARCH.md)
+prioritizes network-layer containment and independent observation of that path, followed by held-out
+cases, outside reproduction, multi-step memory/checkpoint tests and measured integration cost.
+
 ## Further research requiring additional evidence or owner inputs
 
 1. **Authorized live capture:** select an available model, approve spending and data handling,

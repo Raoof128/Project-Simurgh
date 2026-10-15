@@ -2123,3 +2123,32 @@ one machine's local agent configuration:
   pending-intent crash/race fixture is still separate. No live/model call, hosted CI result,
   environment configuration change, deployment, submission, new coverage discharge or production
   readiness claim. The user's new Hugging Face/Medicare incident request is the following phase.
+
+## 2026-10-15 — Raouf: incident-driven task scope and durable stopping (Australia/Sydney)
+
+- **Scope:** Implement the authorized next phase around the reported 2026 Hugging Face and
+  Australian Medicare incidents; preserve earlier tool sources and all six saved reports.
+- **Summary:** Reviewed 12 primary/independent sources with URL/time/response-hash provenance.
+  Added a standard-library Python request broker with exact task identity/method/URL/body grants,
+  per-redirect authorization, monitoring-health precondition, bounded requests, SQLite audit and
+  terminal stop state. Real child HTTP services communicate only through local Unix sockets and
+  reserved `.test` names. The 18-case/three-control report contains 54 rows, including the explicit
+  failure where an approved service relays beyond the broker's view. The research map attributes
+  Medicare patient-record claims to OpenAI and separates other Australian activities accurately.
+- **Files changed:** `tools/assurance-scope/**`, `docs/assurance/scope/**`, dated spec/plan, scoped
+  CI, README, roadmap, reviewer index, assurance/industry links and both logs. Re-derived only the
+  standing mutable census current set 29 to 30 (`unclassifiable_step`); baseline19 is unchanged.
+- **Verification:** 24 new Python tests pass, including actual pending-intent SIGKILL/new process
+  recovery, four-process budget contention, source/report tamper refusal and audit-failure windows.
+  Complete saved-report replay passes; all 54 observations unchanged after the review correction.
+  Full npm: 5,122 total, 5,119 passed, zero failed, three Chrome/Lean prerequisite skips. Original
+  OpenAI/lab reports replay; all earlier tool/report bytes compare unchanged. Ruff, scoped formatting,
+  CLI overwrite/omission/duplicate-key refusals, census and diff checks pass. One fresh reviewer
+  independently reproduced tests/report, checked source hashes and found one Important stop-write
+  gap. Reproduced it red; fixed pending-state handling across admission/response classification;
+  added two regression tests and reran the complete Python suite/report. No second-review claim.
+- **Follow-ups:** Enforce and observe network-layer egress from approved services; obtain held-out
+  authorship and outside reproduction; broaden multi-step SDK/memory and identity tests; measure
+  utility and integration costs. Trusted host/mandatory broker mediation remain assumptions. No
+  live target, real credential, model call, environment settings change, hosted CI, deployment,
+  company endorsement, incident-prevention guarantee or production-readiness claim.

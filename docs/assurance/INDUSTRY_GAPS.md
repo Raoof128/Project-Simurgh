@@ -58,6 +58,11 @@ The potential contribution is an empirical comparison with explicit assumptions,
 
 No company has requested, endorsed or agreed to fund this experiment through these sources. Customer interviews, external reproduction, owner-confirmed application details and a demonstrated incremental benefit remain prerequisites for stronger adoption or research claims.
 
+The subsequent [incident review](scope/INCIDENT_RESEARCH.md) adds primary 2026 Hugging Face,
+Australian Medicare and OpenAI misalignment disclosures. Its [scope experiment](scope/README.md)
+executes exact HTTP permission and durable-stop checks across 54 local rows, including a retained
+approved-service relay failure. Network-layer egress enforcement remains the next concrete gap.
+
 ## Source provenance
 
 The compact [source register](evidence/sources.json) contains only sources cited here, preserving requested/final URLs, retrieval timestamps, HTTP status, response hashes and original review notes from the 15 October research pass. Relevant passages were checked for this mapping; no publication was independently replicated and this is not an exhaustive literature review.

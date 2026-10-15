@@ -8,6 +8,11 @@ The [industry gap map](INDUSTRY_GAPS.md) connects this work to public OpenAI, An
 Microsoft, AWS and other guidance, with prior art and concrete remaining milestones. The
 [design](../superpowers/specs/2026-10-15-assurance-lab.md) declares the scope and gate lifecycle.
 
+The later [incident scope experiment](scope/README.md) tests exact HTTP request permissions and
+durable stops in 54 local rows. Its [2026 incident review](scope/INCIDENT_RESEARCH.md) distinguishes
+the Hugging Face and Medicare accounts, maps additional OpenAI disclosures, and records the
+approved-service relay gap that remains outside the broker's enforcement boundary.
+
 ## Reproduce
 
 Use Node.js 24 (the tested runtime is 24.19.0) and the repository lockfile. No keys, model calls,

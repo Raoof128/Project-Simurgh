@@ -74,6 +74,10 @@ An unresolved pre-send attempt remains unknown, making its retry-availability co
 The [persisted workflow extension](docs/assurance/workflow/README.md) restores actual native SDK
 approval checkpoints after application SIGKILL. Its 24 cases include current-policy checks and
 replay after an effect; the scope is one approval/tool workflow on a trusted host.
+The [incident scope extension](docs/assurance/scope/README.md) adds 54 local HTTP case/control rows
+motivated by the 2026 Hugging Face and Australian statistics incidents. It tests exact request
+permissions and durable stopping, and retains a known failure: an approved service can relay beyond
+the broker's view. The [source review](docs/assurance/scope/INCIDENT_RESEARCH.md) maps further gaps.
 
 | Research result                                                                                              | Primary evidence                                                                                                                                         | Boundary                                                                                                                                                            |
 | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

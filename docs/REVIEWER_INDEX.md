@@ -48,6 +48,11 @@ Do not run historical fix/regeneration commands on signed evidence without revie
 
 ## What would strengthen the research?
 
+For the incident-driven follow-up, read the [2026 primary-source review](assurance/scope/INCIDENT_RESEARCH.md)
+and [task-scope experiment](assurance/scope/README.md). Its report retains an approved-service relay
+failure and 54 complete local rows; it does not claim to reproduce the actual incidents or supply
+OS-level network containment.
+
 A useful review tests a specific mechanism and publishes enough detail to reproduce its failure or
 success: threat model, case provenance, implementation revision, controls, measured consequences,
 results, limitations and the next experiment. Independent reproduction and comparison with
