@@ -3360,3 +3360,13 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Follow-ups:** Hosted CI pending push. Synthetic identities and local connector only;
   SDK/bootstrap trusted, no CPU/memory/process-count quotas. Held-out model study,
   real identity/vendor adapters and outside reproduction remain open. No paid inference.
+
+## 2026-10-15 — Raouf: declare held-out model phase 3 (Australia/Sydney)
+
+- **Scope:** New model study; historical source/evidence unchanged.
+- **Summary:** Separately authored 30 benign/30 adversarial tasks, three trials,
+  matched first proposals and adaptive control feedback, separate utility/safety metrics.
+- **Files changed:** Phase 3 design and both logs.
+- **Verification:** Phase 2 hosted run 38729498488: all 13 jobs successful.
+- **Follow-ups:** Corpus review, test-first runner, development pilot, freeze, full capture,
+  replay and fresh methods/code review. No paid provider or environment secret work.
