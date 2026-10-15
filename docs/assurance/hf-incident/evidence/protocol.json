@@ -1,0 +1,46 @@
+{
+  "schema": "simurgh-hf-incident-protocol-v1",
+  "cases": [
+    "useful_workflow",
+    "cross_run_chain",
+    "planted_credential",
+    "scorer_tamper",
+    "approved_service_relay"
+  ],
+  "modes": [
+    "scoped",
+    "origin_only",
+    "deny_all"
+  ],
+  "channels": [
+    "proxy_relay",
+    "unix_relay",
+    "filesystem_mailbox"
+  ],
+  "channel_controls": [
+    "unfiltered",
+    "kernel",
+    "deny_all"
+  ],
+  "sources": {
+    "docs/assurance/hf-incident/PLAN.md": "259fbc52c9c0b2ef8a553074d27352aee398a948cb9cbf987662cea844ad54e9",
+    "docs/assurance/scope/INCIDENT_RESEARCH.md": "c42ca9a2e56556565294fdc90f0c135c932123d93ddeb2d1399fcaf0168cf32d",
+    "docs/assurance/scope/evidence/sources.json": "9141269bef809a4aa06aa54c4c768d1133a35c354f8bb87f6a9396e4e6a324bf",
+    "tools/assurance-egress/simurgh_egress/__init__.py": "240e16454f24dd47e6347e045ec7c0f23e6fb2c4821ffd4b65e844b965a5d0e4",
+    "tools/assurance-egress/simurgh_egress/harness.py": "6c18dfb90596e0fdddab02ffb5802c23e752ee93e955578ecfcff78f27d3d245",
+    "tools/assurance-egress/simurgh_egress/kernel.py": "6fcc23976dd5a7ac3313716f64c23e86e238cad2d5f1e40214d2e5b9902ea15c",
+    "tools/assurance-egress/simurgh_egress/observer.py": "5bff0270b1f74025868c5596c981c640c443f1ee6c3a4d13eedc39e8f50dccf5",
+    "tools/assurance-egress/simurgh_egress/probes.py": "5c6350c3d11338f74b77fc52bc96f3ec9a984ae92d7c8312b550635d50732969",
+    "tools/assurance-egress/simurgh_egress/study.py": "1857c683940c6c122ac54ba993ce0dca2e34163f880992d8a8c5ef13dfa03b23",
+    "tools/assurance-egress/simurgh_egress/worker.py": "c64b0061c46d266de224a0488c29e0c9360e9551ae53d923ec5f8a3e2226c08e",
+    "tools/assurance-egress/tests/test_kernel.py": "7e9b46c25f4be1a9f73e6577699b95131030a89629872daa5227b470e9172f1d",
+    "tools/assurance-egress/tests/test_service.py": "9e41966399488cd5ec295082735b56725a9de55edb7b36b6554831c5e1e3ccf6",
+    "tools/assurance-egress/tests/test_study.py": "9b2b1aba9f4cf1f6190d5fd18989c9db3be93c4bbc1e559eea04b676e379d5f3",
+    "tools/assurance-scope/simurgh_scope/__init__.py": "9d54f70327ae0030b7a35516711b59239990e6b3f3ef40f17dd7e1025b26252b",
+    "tools/assurance-scope/simurgh_scope/broker.py": "f7e6bf9f09795abdf4fcaa4cafd2bdd5bef8a58495fe70279997e8e01197d17b",
+    "tools/assurance-scope/simurgh_scope/fixtures.py": "8631fc9ccab201b5ae42ef38151ec83a66eea4e9c4ad53b25938043e01bf3567",
+    "tools/hf-incident-sim/fixture.py": "ab6585a899bd15bec1d757392d5b6bbe0560689cd77d6df65a607a1654c92f0b",
+    "tools/hf-incident-sim/study.py": "5fd9cb8f86d6387c6615c6086b7cec309ec3539b2a125baf381cde8cc2e27485",
+    "tools/hf-incident-sim/tests/test_study.py": "f529e055781911c4b1278aac4ab9de24021437046c4cfc346c3f8976fe1b22ad"
+  }
+}

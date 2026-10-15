@@ -3,6 +3,7 @@ name: OpenAI readiness instrument
 on:
   push:
     paths:
+      - "tools/hf-incident-sim/**"
       - "tools/safety-study/**"
       - "tools/openai-native/**"
       - "tools/openai-comparison/**"
@@ -28,6 +29,7 @@ on:
       - ".github/workflows/openai-readiness.yml"
   pull_request:
     paths:
+      - "tools/hf-incident-sim/**"
       - "tools/safety-study/**"
       - "tools/openai-native/**"
       - "tools/openai-comparison/**"
@@ -57,6 +59,23 @@ permissions:
   contents: read
 
 jobs:
+  hf-incident-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Replay local Hugging Face incident simulation
+        run: |
+          python -m unittest discover -s tools/hf-incident-sim/tests -v
+          python tools/hf-incident-sim/study.py verify --protocol docs/assurance/hf-incident/evidence/protocol.json docs/assurance/hf-incident/evidence/report.json
+
   safety-study-replay:
     runs-on: ubuntu-latest
     timeout-minutes: 20

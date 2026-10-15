@@ -2403,3 +2403,18 @@ one machine's local agent configuration:
 - **Follow-ups:** Independent challenge authorship/operator replay and representative connectors
   remain. Results are finite synthetic evidence; no broad robustness or incident-prevention claim.
   Llama ran offline on CPU at BF16 with 6.67 GiB reported peak RSS; Luna's usage estimate is $0.008465.
+
+## 2026-10-15 — Raouf: local Hugging Face pattern protocol (Australia/Sydney)
+
+- **Scope:** Add a safe local simulation requested by the owner, preserving fourteen earlier
+  experiment families. Fake credentials and disposable services; no real target requests.
+- **Summary:** Five scripted scenarios across scoped, origin-only and deny-all controls;
+  nine separate mapped kernel channel probes. Real HTTP service effects test a cross-run
+  handoff/metadata/scorer/export chain, later barriers, useful work and an approved-service gap.
+- **Files changed:** New incident fixture, harness, five tests and plan; replay CI, mutable
+  census 37 to 38, raw-evidence formatting exclusion and both logs. Historical baseline unchanged.
+- **Verification:** Five new tests pass, including real service/egress effects, stop persistence,
+  fresh replay, missing inventory, summary/source tamper and overwrite refusal. Root inspected
+  source and control assumptions. No independent operator or production reconstruction claimed.
+- **Follow-ups:** Commit exact source/protocol before the published run; retain approved-service
+  relay and mailbox failures, publish results, verify the complete branch and push.
