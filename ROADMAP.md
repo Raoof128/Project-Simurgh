@@ -43,10 +43,15 @@ LangGraph 1.2.15 to the unchanged workload: all 102 matrix rows match the origin
 verdicts. Native rejection and LangGraph edits are exercised; OpenAI in-place edit is explicitly
 unsupported. Same-process serialization and in-memory checkpoints do not establish crash recovery.
 
-Next, define and test durable atomic replay semantics, and obtain held-out attacks and
-external reproduction. Durable replay, authenticated approval identity, revocation, realistic
-connector effects and measured overhead remain open. These are evidence requirements, not
-claims that competitors lack these controls.
+The [durability extension](docs/assurance/durable/README.md) now tests a bounded local contract:
+26 named cases, four process-kill windows, eight-worker races, immutable authority and executor
+restarts through both SDKs. A stable file identity allows receipt recovery without rewriting
+an effect; the file and receipt are not one atomic transaction.
+
+Next, test a real connector's idempotency and ambiguous-response recovery contract, then obtain
+held-out attacks and external reproduction. Power-loss validation, end-to-end SDK workflow
+recovery, authenticated approval identity, revocation and measured overhead remain open.
+These are evidence requirements, not claims that competitors lack these controls.
 
 ## Further research requiring additional evidence or owner inputs
 

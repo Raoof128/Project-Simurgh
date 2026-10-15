@@ -65,6 +65,9 @@ checkpoint and policy baselines, ineffective mutations and explicit unknown outc
 The [pinned SDK extension](docs/assurance/sdk/README.md) now reproduces all 102 case/control/runtime
 rows through OpenAI Agents SDK and LangGraph approval/resume flows. Proposals remain scripted;
 no live model or independent operator was tested.
+The [durability extension](docs/assurance/durable/README.md) adds 26 local crash/retry/concurrency
+cases with immutable authority and an idempotent file sink. It covers process restart, with
+explicit limits on power loss, distributed execution and real connector effects.
 
 | Research result                                                                                              | Primary evidence                                                                                                                                         | Boundary                                                                                                                                                            |
 | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

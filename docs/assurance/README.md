@@ -100,7 +100,9 @@ within the experiment; a local hash supplies no external identity or operator in
 - The [SDK extension](sdk/README.md) now exercises pinned OpenAI Agents SDK and LangGraph
   pause/resume/reject flows and LangGraph edits; OpenAI in-place editing is explicitly unsupported.
   Realistic multi-turn connector workloads and durable framework recovery remain open.
-- Durable atomic replay state, retry/crash recovery, concurrent enforcers and revocation.
+- The [durability extension](durable/README.md) now tests local process-crash recovery and
+  concurrent workers with an idempotent sink. Distributed recovery, power-loss behavior,
+  end-to-end SDK workflow recovery and revocation remain open.
 - Verified enterprise principals, tenant credentials, human approvals and independent custody.
 - Held-out attacks, real connector workloads, external reproduction and measured overhead.
 - Deployment-specific threat modeling and remediation of the disclosed [legacy reuse blockers](../openai/SECURITY_REVIEW.md).

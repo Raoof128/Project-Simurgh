@@ -2801,3 +2801,34 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   reproduction, realistic connectors and measured overhead remain open. No paid call, submission,
   independent custody, hosted CI success, production readiness or historical coverage increase
   is claimed. See `docs/assurance/sdk/VALIDATION.md` for the evidence and limits.
+
+## 2026-10-15 — Raouf: durable local effects and executor restart (Australia/Sydney)
+
+- **Scope:** Implement the authorized next assurance phase: local process-crash recovery,
+  retries and cooperating concurrent executors. Preserve all original lab/SDK sources and reports.
+- **Summary:** Added immutable SQLite authority and receipts, exact action binding, exclusive
+  idempotent file publication, cached completion and recovery of files published before receipt
+  commit. The 26-case report includes four SIGKILL windows, a volatile two-effect restart control,
+  one-effect durable replay, eight-worker races for one/two grants, changed arguments, authority
+  replacement, storage failures and lock timeout. Both unchanged SDK adapters perform native
+  approval/resume with fresh executor processes and one resulting effect across two attempts.
+  File and receipt writes are not one atomic transaction; no distributed exactly-once claim.
+- **Files changed:** `tools/assurance-durable/` package and tests; `docs/assurance/durable/`
+  report, sources, results and validation; dated durability spec/plan; scoped CI; README, roadmap,
+  reviewer index and assurance status links; both change logs. Re-derived only the existing
+  workflow census `current` set in `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json`
+  (26 to 27; one new unclassifiable CI step). Immutable baseline remains 19.
+- **Verification:** 16 durability tests and 31 existing SDK tests passed. Final npm suite:
+  5,122 tests, 5,119 passed, zero failed, three skipped (Chrome/Lean unavailable). Complete
+  26-case replay passed in the clean pip environment; all three prior saved reports verify.
+  CLI output-overwrite and tamper refusals pass. Census/finding-ledger tests: 23 passed. Ruff,
+  formatting and diff checks pass. Fresh review found a valid escaped-string effect exceeding
+  a fixed read cap; regression observed RED, then GREEN after encoded-length-bounded reads.
+  Final review found no other material issue or new deferred minor. Initial npm census drift
+  was diagnosed and current set updated under its existing lifecycle; frozen data stayed intact.
+- **Follow-ups:** Real connector idempotency and ambiguous-response recovery, power-loss tests,
+  end-to-end SDK workflow persistence, identity/revocation, held-out attacks and independent
+  reproduction remain open. Existing standalone LangGraph input-validation limitation remains
+  documented. No paid/model call, external witness, hosted CI result, deployment, submission,
+  new coverage discharge or production-readiness claim. Reusable durability startup checks
+  were saved in the cloud configuration draft; publication is separate from local validation.

@@ -27,7 +27,9 @@ actual disposable disk writes and trace discrepancies. Its saved report is repla
 simulated-effect limits above still apply to that original instrument. The subsequent
 [SDK integration](assurance/sdk/README.md) exercises native OpenAI Agents SDK and LangGraph
 approval/resume flows against the unchanged lab; it includes reproducible setup, all 102 matrix
-rows, native lifecycle probes and explicit unsupported behavior.
+rows, native lifecycle probes and explicit unsupported behavior. The [durability study](assurance/durable/README.md)
+then adds real process kills, restarts and concurrent workers against a separate idempotent
+file sink. Its report distinguishes created, recovered and replayed completions.
 
 | Documents                                                                                                                                                                                                                                     | Read them as                                                                                                                                                    |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |

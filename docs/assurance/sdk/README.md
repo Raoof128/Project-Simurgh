@@ -93,3 +93,6 @@ concurrent enforcers. Held-out attacks, independent reproduction, authenticated 
 revocation, real connectors and measured overhead also remain open. Integration effort,
 latency and storage were not benchmarked in this phase. Frozen historical coverage and
 the original lab and OpenAI artifacts remain unchanged.
+
+The subsequent [durability phase](../durable/README.md) now supplies a separate local executor
+crash/retry contract. The SDK report above remains frozen and makes no restart claim itself.

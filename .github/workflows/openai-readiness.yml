@@ -3,6 +3,7 @@ name: OpenAI readiness instrument
 on:
   push:
     paths:
+      - "tools/assurance-durable/**"
       - "tools/assurance-sdk/**"
       - "tests/unit/assuranceSdk/**"
       - "tools/assurance-lab/**"
@@ -17,6 +18,7 @@ on:
       - ".github/workflows/openai-readiness.yml"
   pull_request:
     paths:
+      - "tools/assurance-durable/**"
       - "tools/assurance-sdk/**"
       - "tests/unit/assuranceSdk/**"
       - "tools/assurance-lab/**"
@@ -68,7 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      PYTHONPATH: tools/assurance-sdk
+      PYTHONPATH: tools/assurance-durable:tools/assurance-sdk
       PYTHONDONTWRITEBYTECODE: "1"
     steps:
       - uses: actions/checkout@v4
@@ -89,8 +91,16 @@ jobs:
           python -m simurgh_sdk.study run --out /tmp/simurgh-sdk/report.json
           python -m simurgh_sdk.study verify /tmp/simurgh-sdk/report.json
           python -m simurgh_sdk.study verify docs/assurance/sdk/evidence/report.json
+      - name: Validate durable effects across process crashes and retries
+        run: |
+          python -m unittest discover -s tools/assurance-durable/tests -v
+          python -m simurgh_durable.study run --out /tmp/simurgh-durable/report.json
+          python -m simurgh_durable.study verify /tmp/simurgh-durable/report.json
+          python -m simurgh_durable.study verify docs/assurance/durable/evidence/report.json
       - uses: actions/upload-artifact@v4
         with:
           name: sdk-compatibility-report
-          path: /tmp/simurgh-sdk/report.json
+          path: |
+            /tmp/simurgh-sdk/report.json
+            /tmp/simurgh-durable/report.json
           if-no-files-found: error

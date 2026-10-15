@@ -1,0 +1,27 @@
+[
+  {
+    "id": "sqlite-atomic",
+    "url": "https://www.sqlite.org/atomiccommit.html",
+    "retrievedUtc": "2026-10-15T01:01:28.967347+00:00",
+    "sha256": "5a5be7b660217c9408c8a81eaf2faa2d08832ed3790f895a0a713916ad856ea1"
+  },
+  {
+    "id": "sqlite-transactions",
+    "url": "https://www.sqlite.org/lang_transaction.html",
+    "retrievedUtc": "2026-10-15T01:01:29.344544+00:00",
+    "sha256": "b65dc308fd9e0ce471844c97366a4f5ad3a1f42833a3b19486ad7d6555a8e24e"
+  },
+  {
+    "id": "aws-outbox",
+    "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html",
+    "retrievedUtc": "2026-10-15T01:01:29.815153+00:00",
+    "sha256": "8444f45302b4af60a33ae465c2fac9a48190a915a5c2b1f893692799b6546d7f"
+  },
+  {
+    "id": "langgraph-durable",
+    "url": "https://docs.langchain.com/oss/python/langgraph/durable-execution",
+    "retrievedUtc": "2026-10-15T01:12:09.623384+00:00",
+    "sha256": "3dd59172c46e5d405ce8483a5e624715702c9798fabb018a885e1957067f5090",
+    "effectiveUrl": "https://docs.langchain.com/oss/python/langgraph/persistence"
+  }
+]

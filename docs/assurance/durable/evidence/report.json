@@ -1,0 +1,1365 @@
+{
+  "schema": "simurgh.assurance-durable.v1",
+  "scope": "Local process crashes and cooperative workers; idempotent file sink; no power-loss or distributed exactly-once claim.",
+  "frameworkVersions": {
+    "openai-agents": "0.23.1",
+    "langgraph": "1.2.15"
+  },
+  "sourceManifest": {
+    "docs/assurance/evidence/report.json": "a91603495fce3b817493aaa449c05151fd2805c6e880b5d1ff9ed100d42895dd",
+    "docs/assurance/sdk/evidence/report.json": "525dc60cb523a56a7351741e716487e141c34628e0527cdffa1c7daa538edb78",
+    "tools/assurance-durable/simurgh_durable/__init__.py": "e6164e1b4e1e5101f32d9b22c701ce47cf0ea43fc257b9283f9afcbf2018ba7b",
+    "tools/assurance-durable/simurgh_durable/process.py": "d2bf6101613155317a179db8c825b58615e45379342ce8e31df58b3a4167f49b",
+    "tools/assurance-durable/simurgh_durable/store.py": "ad8f88216e2de1ab1367605f04754f8927f16989925c34415889b20a61d3e7cd",
+    "tools/assurance-durable/simurgh_durable/study.py": "63b830d0de1856f2c67b2faeea074f072a133c07c92393d19be56233308412a2",
+    "tools/assurance-durable/simurgh_durable/volatile.py": "56fc31a345cb65ccd81b04c764a0d5ebfccd4cb051e4077d75d3f50e73deb5b3",
+    "tools/assurance-durable/simurgh_durable/worker.py": "670e488f08dd31a64c04d64ccd76d273ed9851f8660bbfa3d3d35003ea3eb2e9",
+    "tools/assurance-durable/tests/test_process.py": "0a7a2b072b8af1f900e734047e65cc577a4d59fa307fd0b1bf6de16e34167cae",
+    "tools/assurance-durable/tests/test_store.py": "6a543dfbd2118e10f8c35ef45eba9b59f637e6698c4680f7be0a047300c84639",
+    "tools/assurance-durable/tests/test_study.py": "3d4ba186ecd8e96dbc0b1050877978abde7a4e48724c4b93460b6b78102d0855",
+    "tools/assurance-lab/cli.mjs": "552e676cee5e605f13a20e6398fefcb33861742176e93176aed718006e7eafc2",
+    "tools/assurance-lab/core.mjs": "cef9dfd33b852901dd9e18b8454b869f7eb0b5fe4e648934eb5ac2bf8559cfbc",
+    "tools/assurance-lab/corpus.mjs": "944bf56056d88f39776d50ad37c6c0932f86729680a20c3a39addc15c55f9975",
+    "tools/assurance-lab/sink-worker.mjs": "6d8acd67e77bcf6e8953e73cb475f6e53dc19c7dd5dcb0aaf45855b90419fee5",
+    "tools/assurance-lab/sink.mjs": "e819d0458fb4ce47adf0d4f03e3a9079657e3e95aba8f6f13a76d9a1c7b875dd",
+    "tools/assurance-lab/study.mjs": "1116dcaa02f073780cf0f45f66dd3d91d1e2304dbacaffa041084479f7b4c5bc",
+    "tools/assurance-sdk/bridge.mjs": "c4dec5a5aa20fa5c71a5a9bea747fe7ccdf02efdf8aa86de066d2816efc2a75c",
+    "tools/assurance-sdk/requirements.in": "1fb979398fbc639a761f4e119694500a06a3e2ecd74eed0b36e8d4a50cde526d",
+    "tools/assurance-sdk/requirements.lock": "40695ac2bd39bfaf4e5bddf4856b68caf6aa9bae7bc7b8b6a94ee4a8ceb70b49",
+    "tools/assurance-sdk/simurgh_sdk/__init__.py": "7d4de20045065944a1789f5b2451d285f2eccbc160cf7991e35d609bd9a36e55",
+    "tools/assurance-sdk/simurgh_sdk/bridge.py": "d759b095db2c1b6faf7857850bd52f0177186f24dcc57e94d242fc50f2799f49",
+    "tools/assurance-sdk/simurgh_sdk/langgraph_adapter.py": "824a07f7af9e5ade27ce738a55d0ad939dd618827f40fe669727e1703bf9a9aa",
+    "tools/assurance-sdk/simurgh_sdk/network.py": "56dc2105a7a5ce0106eee230fe9f4776c64e79fa8b621b74f88f9834f2aa11c7",
+    "tools/assurance-sdk/simurgh_sdk/openai_adapter.py": "31437e69d126e57469cde89adab99085b875b981324f533e58814518db2f92bb",
+    "tools/assurance-sdk/simurgh_sdk/study.py": "65a2e86db95da270c8f20420ef35b036efa586bc903ac92de6352206e19db476",
+    "tools/assurance-sdk/tests/test_bridge.py": "8853dcb774a6ca2545dabef7921734bb533fc7d6185c7bfa26974822f4e7b323",
+    "tools/assurance-sdk/tests/test_langgraph_adapter.py": "2583187b6ed3ab9adab7044f1c58598f174bebb2c2de6f0a61513b15cb002bed",
+    "tools/assurance-sdk/tests/test_openai_adapter.py": "c4a9428431808726e160e85a0862e798f3684e1b9a05148a775e45f4488af49b",
+    "tools/assurance-sdk/tests/test_study.py": "bb9ad2b1394d03a1c40733d2e3bd1ba6baa404237583ce3b13f1e1a93d45df4a"
+  },
+  "cases": [
+    {
+      "id": "durable_restart",
+      "distinctWorkers": 2,
+      "attempts": [
+        {
+          "status": "executed",
+          "disposition": "created",
+          "effectCreated": true,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        },
+        {
+          "status": "executed",
+          "disposition": "replayed",
+          "effectCreated": false,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        }
+      ],
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "run-1",
+                "tenant": "team-1"
+              }
+            }
+          ]
+        },
+        "effectCount": 1,
+        "receiptCount": 1,
+        "physicalFiles": 1
+      }
+    },
+    {
+      "id": "volatile_restart",
+      "distinctWorkers": 2,
+      "after": {
+        "effectCount": 2,
+        "effects": [
+          {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          },
+          {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        ]
+      },
+      "attempts": [
+        {
+          "status": "executed",
+          "effectCreated": true,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        },
+        {
+          "status": "executed",
+          "effectCreated": true,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "concurrent_same",
+      "distinctWorkers": 8,
+      "creators": 1,
+      "attempts": [
+        {
+          "status": "executed",
+          "disposition": "created",
+          "effectCreated": true,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        },
+        {
+          "status": "executed",
+          "disposition": "replayed",
+          "effectCreated": false,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        },
+        {
+          "status": "executed",
+          "disposition": "replayed",
+          "effectCreated": false,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        },
+        {
+          "status": "executed",
+          "disposition": "replayed",
+          "effectCreated": false,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        },
+        {
+          "status": "executed",
+          "disposition": "replayed",
+          "effectCreated": false,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        },
+        {
+          "status": "executed",
+          "disposition": "replayed",
+          "effectCreated": false,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        },
+        {
+          "status": "executed",
+          "disposition": "replayed",
+          "effectCreated": false,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        },
+        {
+          "status": "executed",
+          "disposition": "replayed",
+          "effectCreated": false,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        }
+      ],
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "run-1",
+                "tenant": "team-1"
+              }
+            }
+          ]
+        },
+        "effectCount": 1,
+        "receiptCount": 1,
+        "physicalFiles": 1
+      }
+    },
+    {
+      "id": "concurrent_distinct",
+      "distinctWorkers": 8,
+      "creators": 2,
+      "attempts": [
+        {
+          "status": "executed",
+          "disposition": "created",
+          "effectCreated": true,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        },
+        {
+          "status": "executed",
+          "disposition": "created",
+          "effectCreated": true,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a2",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "report",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        },
+        {
+          "status": "executed",
+          "disposition": "replayed",
+          "effectCreated": false,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        },
+        {
+          "status": "executed",
+          "disposition": "replayed",
+          "effectCreated": false,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        },
+        {
+          "status": "executed",
+          "disposition": "replayed",
+          "effectCreated": false,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        },
+        {
+          "status": "executed",
+          "disposition": "replayed",
+          "effectCreated": false,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a2",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "report",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        },
+        {
+          "status": "executed",
+          "disposition": "replayed",
+          "effectCreated": false,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a2",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "report",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        },
+        {
+          "status": "executed",
+          "disposition": "replayed",
+          "effectCreated": false,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a2",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "report",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        }
+      ],
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a2",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "report",
+                "run": "run-1",
+                "tenant": "team-1"
+              }
+            },
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "run-1",
+                "tenant": "team-1"
+              }
+            }
+          ]
+        },
+        "effectCount": 2,
+        "receiptCount": 2,
+        "physicalFiles": 2
+      }
+    },
+    {
+      "id": "crash_before_publish",
+      "killedExit": -9,
+      "before": {
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "effectCount": 0,
+        "receiptCount": 0,
+        "physicalFiles": 0
+      },
+      "retry": {
+        "status": "executed",
+        "disposition": "created",
+        "effectCreated": true,
+        "event": {
+          "action": {
+            "content": "approved",
+            "id": "a1",
+            "operation": "write",
+            "policyRevision": "v1",
+            "principal": "alice",
+            "resource": "patch",
+            "run": "run-1",
+            "tenant": "team-1"
+          }
+        }
+      },
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "run-1",
+                "tenant": "team-1"
+              }
+            }
+          ]
+        },
+        "effectCount": 1,
+        "receiptCount": 1,
+        "physicalFiles": 1
+      }
+    },
+    {
+      "id": "crash_after_publish",
+      "killedExit": -9,
+      "before": {
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "run-1",
+                "tenant": "team-1"
+              }
+            }
+          ]
+        },
+        "effectCount": 1,
+        "receiptCount": 0,
+        "physicalFiles": 1
+      },
+      "retry": {
+        "status": "executed",
+        "disposition": "recovered",
+        "effectCreated": false,
+        "event": {
+          "action": {
+            "content": "approved",
+            "id": "a1",
+            "operation": "write",
+            "policyRevision": "v1",
+            "principal": "alice",
+            "resource": "patch",
+            "run": "run-1",
+            "tenant": "team-1"
+          }
+        }
+      },
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "run-1",
+                "tenant": "team-1"
+              }
+            }
+          ]
+        },
+        "effectCount": 1,
+        "receiptCount": 1,
+        "physicalFiles": 1
+      }
+    },
+    {
+      "id": "crash_before_commit",
+      "killedExit": -9,
+      "before": {
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "run-1",
+                "tenant": "team-1"
+              }
+            }
+          ]
+        },
+        "effectCount": 1,
+        "receiptCount": 0,
+        "physicalFiles": 1
+      },
+      "retry": {
+        "status": "executed",
+        "disposition": "recovered",
+        "effectCreated": false,
+        "event": {
+          "action": {
+            "content": "approved",
+            "id": "a1",
+            "operation": "write",
+            "policyRevision": "v1",
+            "principal": "alice",
+            "resource": "patch",
+            "run": "run-1",
+            "tenant": "team-1"
+          }
+        }
+      },
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "run-1",
+                "tenant": "team-1"
+              }
+            }
+          ]
+        },
+        "effectCount": 1,
+        "receiptCount": 1,
+        "physicalFiles": 1
+      }
+    },
+    {
+      "id": "crash_after_commit",
+      "killedExit": -9,
+      "before": {
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "run-1",
+                "tenant": "team-1"
+              }
+            }
+          ]
+        },
+        "effectCount": 1,
+        "receiptCount": 1,
+        "physicalFiles": 1
+      },
+      "retry": {
+        "status": "executed",
+        "disposition": "replayed",
+        "effectCreated": false,
+        "event": {
+          "action": {
+            "content": "approved",
+            "id": "a1",
+            "operation": "write",
+            "policyRevision": "v1",
+            "principal": "alice",
+            "resource": "patch",
+            "run": "run-1",
+            "tenant": "team-1"
+          }
+        }
+      },
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "run-1",
+                "tenant": "team-1"
+              }
+            }
+          ]
+        },
+        "effectCount": 1,
+        "receiptCount": 1,
+        "physicalFiles": 1
+      }
+    },
+    {
+      "id": "changed_retry_after_crash",
+      "denied": {
+        "status": "denied",
+        "reason": "not_authorized"
+      },
+      "retry": {
+        "status": "executed",
+        "disposition": "recovered",
+        "effectCreated": false,
+        "event": {
+          "action": {
+            "content": "approved",
+            "id": "a1",
+            "operation": "write",
+            "policyRevision": "v1",
+            "principal": "alice",
+            "resource": "patch",
+            "run": "run-1",
+            "tenant": "team-1"
+          }
+        }
+      },
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "run-1",
+                "tenant": "team-1"
+              }
+            }
+          ]
+        },
+        "effectCount": 1,
+        "receiptCount": 1,
+        "physicalFiles": 1
+      }
+    },
+    {
+      "id": "authority_replacement",
+      "initialization": "refused",
+      "attempt": {
+        "status": "denied",
+        "reason": "not_authorized"
+      },
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "effectCount": 0,
+        "receiptCount": 0,
+        "physicalFiles": 0
+      }
+    },
+    {
+      "id": "denied_content",
+      "attempt": {
+        "status": "denied",
+        "reason": "not_authorized"
+      },
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "effectCount": 0,
+        "receiptCount": 0,
+        "physicalFiles": 0
+      }
+    },
+    {
+      "id": "denied_id",
+      "attempt": {
+        "status": "denied",
+        "reason": "not_authorized"
+      },
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "effectCount": 0,
+        "receiptCount": 0,
+        "physicalFiles": 0
+      }
+    },
+    {
+      "id": "denied_operation",
+      "attempt": {
+        "status": "denied",
+        "reason": "invalid_action"
+      },
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "effectCount": 0,
+        "receiptCount": 0,
+        "physicalFiles": 0
+      }
+    },
+    {
+      "id": "denied_policyRevision",
+      "attempt": {
+        "status": "denied",
+        "reason": "not_authorized"
+      },
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "effectCount": 0,
+        "receiptCount": 0,
+        "physicalFiles": 0
+      }
+    },
+    {
+      "id": "denied_principal",
+      "attempt": {
+        "status": "denied",
+        "reason": "not_authorized"
+      },
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "effectCount": 0,
+        "receiptCount": 0,
+        "physicalFiles": 0
+      }
+    },
+    {
+      "id": "denied_resource",
+      "attempt": {
+        "status": "denied",
+        "reason": "invalid_action"
+      },
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "effectCount": 0,
+        "receiptCount": 0,
+        "physicalFiles": 0
+      }
+    },
+    {
+      "id": "denied_run",
+      "attempt": {
+        "status": "denied",
+        "reason": "not_authorized"
+      },
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "effectCount": 0,
+        "receiptCount": 0,
+        "physicalFiles": 0
+      }
+    },
+    {
+      "id": "denied_tenant",
+      "attempt": {
+        "status": "denied",
+        "reason": "not_authorized"
+      },
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "effectCount": 0,
+        "receiptCount": 0,
+        "physicalFiles": 0
+      }
+    },
+    {
+      "id": "malformed_action",
+      "attempt": {
+        "status": "denied",
+        "reason": "invalid_action"
+      },
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "effectCount": 0,
+        "receiptCount": 0,
+        "physicalFiles": 0
+      }
+    },
+    {
+      "id": "missing_effect",
+      "attempt": {
+        "status": "error",
+        "reason": "ValueError"
+      },
+      "before": {
+        "observation": {
+          "available": false,
+          "reason": "storage_unavailable"
+        },
+        "effectCount": null,
+        "receiptCount": 1,
+        "physicalFiles": 0
+      },
+      "after": {
+        "observation": {
+          "available": false,
+          "reason": "storage_unavailable"
+        },
+        "effectCount": null,
+        "receiptCount": 1,
+        "physicalFiles": 0
+      }
+    },
+    {
+      "id": "corrupt_effect",
+      "attempt": {
+        "status": "error",
+        "reason": "ValueError"
+      },
+      "before": {
+        "observation": {
+          "available": false,
+          "reason": "storage_unavailable"
+        },
+        "effectCount": null,
+        "receiptCount": 1,
+        "physicalFiles": 1
+      },
+      "after": {
+        "observation": {
+          "available": false,
+          "reason": "storage_unavailable"
+        },
+        "effectCount": null,
+        "receiptCount": 1,
+        "physicalFiles": 1
+      }
+    },
+    {
+      "id": "missing_database",
+      "attempt": {
+        "status": "error",
+        "reason": "OperationalError"
+      },
+      "before": {
+        "observation": {
+          "available": false,
+          "reason": "storage_unavailable"
+        },
+        "effectCount": null,
+        "receiptCount": null,
+        "physicalFiles": 0
+      },
+      "after": {
+        "observation": {
+          "available": false,
+          "reason": "storage_unavailable"
+        },
+        "effectCount": null,
+        "receiptCount": null,
+        "physicalFiles": 0
+      }
+    },
+    {
+      "id": "corrupt_database",
+      "attempt": {
+        "status": "error",
+        "reason": "DatabaseError"
+      },
+      "before": {
+        "observation": {
+          "available": false,
+          "reason": "storage_unavailable"
+        },
+        "effectCount": null,
+        "receiptCount": null,
+        "physicalFiles": 0
+      },
+      "after": {
+        "observation": {
+          "available": false,
+          "reason": "storage_unavailable"
+        },
+        "effectCount": null,
+        "receiptCount": null,
+        "physicalFiles": 0
+      }
+    },
+    {
+      "id": "lock_timeout",
+      "attempt": {
+        "status": "error",
+        "reason": "database_locked"
+      },
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": []
+        },
+        "effectCount": 0,
+        "receiptCount": 0,
+        "physicalFiles": 0
+      }
+    },
+    {
+      "id": "sdk_restart_openai-agents",
+      "distinctWorkers": 2,
+      "runtime": [
+        {
+          "framework": "openai-agents",
+          "interruptions": 1,
+          "resumptions": 1,
+          "state_roundtrips": 1,
+          "decisions": ["approve"],
+          "tool_results": [
+            {
+              "status": "executed",
+              "disposition": "created",
+              "effectCreated": true,
+              "event": {
+                "action": {
+                  "content": "approved",
+                  "id": "a1",
+                  "operation": "write",
+                  "policyRevision": "v1",
+                  "principal": "alice",
+                  "resource": "patch",
+                  "run": "run-1",
+                  "tenant": "team-1"
+                }
+              }
+            }
+          ],
+          "pause_observations": [
+            {
+              "available": true,
+              "effects": []
+            }
+          ]
+        },
+        {
+          "framework": "openai-agents",
+          "interruptions": 1,
+          "resumptions": 1,
+          "state_roundtrips": 1,
+          "decisions": ["approve"],
+          "tool_results": [
+            {
+              "status": "executed",
+              "disposition": "replayed",
+              "effectCreated": false,
+              "event": {
+                "action": {
+                  "content": "approved",
+                  "id": "a1",
+                  "operation": "write",
+                  "policyRevision": "v1",
+                  "principal": "alice",
+                  "resource": "patch",
+                  "run": "run-1",
+                  "tenant": "team-1"
+                }
+              }
+            }
+          ],
+          "pause_observations": [
+            {
+              "available": true,
+              "effects": [
+                {
+                  "action": {
+                    "content": "approved",
+                    "id": "a1",
+                    "operation": "write",
+                    "policyRevision": "v1",
+                    "principal": "alice",
+                    "resource": "patch",
+                    "run": "run-1",
+                    "tenant": "team-1"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "attempts": [
+        {
+          "status": "executed",
+          "disposition": "created",
+          "effectCreated": true,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        },
+        {
+          "status": "executed",
+          "disposition": "replayed",
+          "effectCreated": false,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        }
+      ],
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "run-1",
+                "tenant": "team-1"
+              }
+            }
+          ]
+        },
+        "effectCount": 1,
+        "receiptCount": 1,
+        "physicalFiles": 1
+      }
+    },
+    {
+      "id": "sdk_restart_langgraph",
+      "distinctWorkers": 2,
+      "runtime": [
+        {
+          "framework": "langgraph",
+          "interruptions": 1,
+          "resumptions": 1,
+          "state_roundtrips": 0,
+          "decisions": ["approve"],
+          "tool_results": [
+            {
+              "status": "executed",
+              "disposition": "created",
+              "effectCreated": true,
+              "event": {
+                "action": {
+                  "content": "approved",
+                  "id": "a1",
+                  "operation": "write",
+                  "policyRevision": "v1",
+                  "principal": "alice",
+                  "resource": "patch",
+                  "run": "run-1",
+                  "tenant": "team-1"
+                }
+              }
+            }
+          ],
+          "pause_observations": [
+            {
+              "available": true,
+              "effects": []
+            }
+          ]
+        },
+        {
+          "framework": "langgraph",
+          "interruptions": 1,
+          "resumptions": 1,
+          "state_roundtrips": 0,
+          "decisions": ["approve"],
+          "tool_results": [
+            {
+              "status": "executed",
+              "disposition": "replayed",
+              "effectCreated": false,
+              "event": {
+                "action": {
+                  "content": "approved",
+                  "id": "a1",
+                  "operation": "write",
+                  "policyRevision": "v1",
+                  "principal": "alice",
+                  "resource": "patch",
+                  "run": "run-1",
+                  "tenant": "team-1"
+                }
+              }
+            }
+          ],
+          "pause_observations": [
+            {
+              "available": true,
+              "effects": [
+                {
+                  "action": {
+                    "content": "approved",
+                    "id": "a1",
+                    "operation": "write",
+                    "policyRevision": "v1",
+                    "principal": "alice",
+                    "resource": "patch",
+                    "run": "run-1",
+                    "tenant": "team-1"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "attempts": [
+        {
+          "status": "executed",
+          "disposition": "created",
+          "effectCreated": true,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        },
+        {
+          "status": "executed",
+          "disposition": "replayed",
+          "effectCreated": false,
+          "event": {
+            "action": {
+              "content": "approved",
+              "id": "a1",
+              "operation": "write",
+              "policyRevision": "v1",
+              "principal": "alice",
+              "resource": "patch",
+              "run": "run-1",
+              "tenant": "team-1"
+            }
+          }
+        }
+      ],
+      "after": {
+        "observation": {
+          "available": true,
+          "effects": [
+            {
+              "action": {
+                "content": "approved",
+                "id": "a1",
+                "operation": "write",
+                "policyRevision": "v1",
+                "principal": "alice",
+                "resource": "patch",
+                "run": "run-1",
+                "tenant": "team-1"
+              }
+            }
+          ]
+        },
+        "effectCount": 1,
+        "receiptCount": 1,
+        "physicalFiles": 1
+      }
+    }
+  ]
+}
