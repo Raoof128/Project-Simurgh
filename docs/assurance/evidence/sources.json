@@ -1,0 +1,183 @@
+{
+  "research_date_utc": "2026-10-15",
+  "scope": "Only primary sources cited in INDUSTRY_GAPS.md. Retrieval metadata copied from the research workspace source-register.json.",
+  "snapshot_availability": "Raw responses and extracted text remain in /workspace/simurgh-research/2026-10-15/ and are not committed. SHA-256 values identify raw responses; hashes alone cannot reconstruct source contents.",
+  "sources": [
+    {
+      "id": "anthropic_eval",
+      "requested_url": "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents",
+      "effective_url": "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents",
+      "retrieved_utc": "2026-10-15T00:05:17.547964+00:00",
+      "http_status": 200,
+      "curl_exit": 0,
+      "sha256": "0c3939612bbce830d5233ed304ad4839a80ae95efeb8a89b6ff06ae40e29583b",
+      "review_note": "Environment outcomes, grading and evaluation design.",
+      "evidence_use": "primary-source"
+    },
+    {
+      "id": "aws_temporal",
+      "requested_url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-temporal.html",
+      "effective_url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-temporal.html",
+      "retrieved_utc": "2026-10-15T00:06:22.055028+00:00",
+      "http_status": 200,
+      "curl_exit": 0,
+      "sha256": "4201d91a95c8527c92bfe30e27d84c1c230971789e7bdd51f635a32f91ab1a60",
+      "review_note": "Approval ordering, token propagation, session scope and documented rate-limit limits.",
+      "evidence_use": "primary-source"
+    },
+    {
+      "id": "google_adk",
+      "requested_url": "https://google.github.io/adk-docs/safety/",
+      "effective_url": "https://adk.dev/safety/",
+      "retrieved_utc": "2026-10-15T00:05:18.249424+00:00",
+      "http_status": 200,
+      "curl_exit": 0,
+      "sha256": "926c131488423e5c40342b4c3dc1cfa589d3d742f7657b1c3c31f533adc442f5",
+      "review_note": "Identity, deterministic in-tool controls, sandboxing and evaluation guidance.",
+      "evidence_use": "primary-source"
+    },
+    {
+      "id": "google_camel",
+      "requested_url": "https://arxiv.org/abs/2503.18813",
+      "effective_url": "https://arxiv.org/abs/2503.18813",
+      "retrieved_utc": "2026-10-15T00:05:17.850381+00:00",
+      "http_status": 200,
+      "curl_exit": 0,
+      "sha256": "873f10ca99e00f6e6978c381f07c41f7cbe88d1c76335eb9c20fbacf6661848b",
+      "review_note": "Versioned abstract and authorship; capability/control-flow prior art.",
+      "evidence_use": "primary-source"
+    },
+    {
+      "id": "ietf_audit",
+      "requested_url": "https://www.ietf.org/archive/id/draft-gilda-wimse-agent-audit-record-02.html",
+      "effective_url": "https://www.ietf.org/archive/id/draft-gilda-wimse-agent-audit-record-02.html",
+      "retrieved_utc": "2026-10-15T00:06:40.595212+00:00",
+      "http_status": 200,
+      "curl_exit": 0,
+      "sha256": "2c14d653bbf2134ab054248a9a31466c7ee73f31ca91b7d214b93492f4c8c346",
+      "review_note": "Draft abstract, observed-effect agreement and observer scope/tier design; draft, not RFC.",
+      "evidence_use": "primary-source"
+    },
+    {
+      "id": "ietf_evc",
+      "requested_url": "https://www.ietf.org/archive/id/draft-kondoju-evc-02.html",
+      "effective_url": "https://www.ietf.org/archive/id/draft-kondoju-evc-02.html",
+      "retrieved_utc": "2026-10-15T00:06:40.536273+00:00",
+      "http_status": 200,
+      "curl_exit": 0,
+      "sha256": "8a59eb086d0683bbe6bc93cdb89b552b09e484ef985b1dcf09188eecd0760348",
+      "review_note": "Draft abstract, fail-closed contract, nonce reservations and section 13.6 tail truncation; draft, not RFC.",
+      "evidence_use": "primary-source"
+    },
+    {
+      "id": "langchain_human",
+      "requested_url": "https://docs.langchain.com/oss/python/langchain/human-in-the-loop",
+      "effective_url": "https://docs.langchain.com/oss/python/langchain/human-in-the-loop",
+      "retrieved_utc": "2026-10-15T00:05:19.349565+00:00",
+      "http_status": 200,
+      "curl_exit": 0,
+      "sha256": "055cf94688faa76446b9d682afe2c92659ee89e8462cf3822b886bb28da3e9bd",
+      "review_note": "Documented persisted approval/interruption flow.",
+      "evidence_use": "primary-source"
+    },
+    {
+      "id": "meta_eval",
+      "requested_url": "https://github.com/meta-llama/PurpleLlama/tree/main/CybersecurityBenchmarks",
+      "effective_url": "https://github.com/meta-llama/PurpleLlama/tree/main/CybersecurityBenchmarks",
+      "retrieved_utc": "2026-10-15T00:05:49.006865+00:00",
+      "http_status": 200,
+      "curl_exit": 0,
+      "sha256": "9be50d7fd124f38490a7373f6ee14de365ecdfed1af0c865f7b6474ac0cadd0c",
+      "review_note": "CyberSecEval benchmark repository overview and evaluation categories.",
+      "evidence_use": "primary-source"
+    },
+    {
+      "id": "microsoft_controls",
+      "requested_url": "https://learn.microsoft.com/en-us/entra/agent-id/identity-platform/what-is-agent-id",
+      "effective_url": "https://learn.microsoft.com/en-us/entra/agent-id/what-are-agent-identities",
+      "retrieved_utc": "2026-10-15T00:05:18.571413+00:00",
+      "http_status": 200,
+      "curl_exit": 0,
+      "sha256": "80b84b91a75bed6935e4e80b48a1d1f6b233a11884937a9ddde475afdad48929",
+      "review_note": "Agent identity, delegated authority, lifecycle and enterprise access documentation.",
+      "evidence_use": "primary-source"
+    },
+    {
+      "id": "notarized_full",
+      "requested_url": "https://arxiv.org/html/2606.04193v1",
+      "effective_url": "https://arxiv.org/html/2606.04193v1",
+      "retrieved_utc": "2026-10-15T00:07:01.479956+00:00",
+      "http_status": 200,
+      "curl_exit": 0,
+      "sha256": "7d73b030baa5a9723253fedcbdd512398b6fb8f884c63e4b3c3126a6856a147f",
+      "review_note": "Introduction, suppression/collusion limits and proposed inverse-observability extensions read.",
+      "evidence_use": "primary-source"
+    },
+    {
+      "id": "nvidia_guardrails",
+      "requested_url": "https://docs.nvidia.com/nemo/guardrails/latest/index.html",
+      "effective_url": "https://docs.nvidia.com/nemo/guardrails/about-nemo-guardrails-library/overview",
+      "retrieved_utc": "2026-10-15T00:06:41.861241+00:00",
+      "http_status": 200,
+      "curl_exit": 0,
+      "sha256": "ee50ae392c800f3f6f8cf3525e7bf39538e106aa1bce80a90478636dd0e23ede",
+      "review_note": "Programmable guardrails overview; no performance claim tested.",
+      "evidence_use": "primary-source"
+    },
+    {
+      "id": "openai_agents",
+      "requested_url": "https://openai.github.io/openai-agents-python/human_in_the_loop/",
+      "effective_url": "https://openai.github.io/openai-agents-python/human_in_the_loop/",
+      "retrieved_utc": "2026-10-15T00:05:17.401686+00:00",
+      "http_status": 200,
+      "curl_exit": 0,
+      "sha256": "89dd49f6ecd1f8228652a59d75767a74b4fea553756166f20ab7926d64286a77",
+      "review_note": "Documented approval and interruption behavior; no runtime tested in this task.",
+      "evidence_use": "primary-source"
+    },
+    {
+      "id": "openai_grants",
+      "requested_url": "https://openai.com/form/cybersecurity-grant-program/",
+      "effective_url": "https://openai.com/form/cybersecurity-grant-program/",
+      "retrieved_utc": "2026-10-15T00:05:17.490311+00:00",
+      "http_status": 200,
+      "curl_exit": 0,
+      "sha256": "50a5582b2a164388e9d03c71a37e6ac4035574e611de68f1087b49bb4152deba",
+      "review_note": "Form priorities, defensive scope, public sharing, field limits and resource requests.",
+      "evidence_use": "primary-source"
+    },
+    {
+      "id": "openai_injection",
+      "requested_url": "https://openai.com/index/designing-agents-to-resist-prompt-injection/",
+      "effective_url": "https://openai.com/index/designing-agents-to-resist-prompt-injection/",
+      "retrieved_utc": "2026-10-15T00:05:17.445588+00:00",
+      "http_status": 200,
+      "curl_exit": 0,
+      "sha256": "f95928e3a6a723290ed132c7c880bbf39c8347ed61e34d27abdaa0f21285c78e",
+      "review_note": "March 2026 source/sink analysis and limiting consequences of manipulation.",
+      "evidence_use": "primary-source"
+    },
+    {
+      "id": "openai_tracing",
+      "requested_url": "https://openai.github.io/openai-agents-python/tracing/",
+      "effective_url": "https://openai.github.io/openai-agents-python/tracing/",
+      "retrieved_utc": "2026-10-15T00:05:17.489996+00:00",
+      "http_status": 200,
+      "curl_exit": 0,
+      "sha256": "4ac31843e033fbcdd16e6bea98b743d53825c53b002cf7f87509af93fa100dff",
+      "review_note": "Tracing and sensitive-data capture settings; no completeness guarantee inferred.",
+      "evidence_use": "primary-source"
+    },
+    {
+      "id": "owasp_acs",
+      "requested_url": "https://genai.owasp.org/resource/agent-control-standard-acs/",
+      "effective_url": "https://genai.owasp.org/resource/agent-control-standard-acs/",
+      "retrieved_utc": "2026-10-15T00:06:22.206529+00:00",
+      "http_status": 200,
+      "curl_exit": 0,
+      "sha256": "6c7e31c50d988c06f0abc6e4725c851e90d52448ec6b674f5f703b09324c1ab3",
+      "review_note": "September 2026 portable runtime-control initiative overview.",
+      "evidence_use": "primary-source"
+    }
+  ]
+}

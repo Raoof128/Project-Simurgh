@@ -3,6 +3,9 @@ name: OpenAI readiness instrument
 on:
   push:
     paths:
+      - "tools/assurance-lab/**"
+      - "tests/unit/assuranceLab/**"
+      - "docs/assurance/**"
       - "tools/openai-readiness/**"
       - "tests/unit/openaiReadiness/**"
       - "docs/openai/**"
@@ -12,6 +15,9 @@ on:
       - ".github/workflows/openai-readiness.yml"
   pull_request:
     paths:
+      - "tools/assurance-lab/**"
+      - "tests/unit/assuranceLab/**"
+      - "docs/assurance/**"
       - "tools/openai-readiness/**"
       - "tests/unit/openaiReadiness/**"
       - "docs/openai/**"
@@ -40,8 +46,16 @@ jobs:
       - run: npm run openai:verify -- /tmp/simurgh-openai/report.json
       - name: Verify the saved reviewer artifact against this source tree
         run: npm run openai:verify -- docs/openai/results/offline-report.json
+      - name: Run the real-effects assurance experiment
+        run: |
+          npm run test:assurance
+          npm run assurance:run -- --out /tmp/simurgh-assurance/report.json
+          npm run assurance:verify -- /tmp/simurgh-assurance/report.json
+          npm run assurance:verify -- docs/assurance/evidence/report.json
       - uses: actions/upload-artifact@v4
         with:
-          name: offline-synthetic-report
-          path: /tmp/simurgh-openai/report.json
+          name: bounded-evaluation-reports
+          path: |
+            /tmp/simurgh-openai/report.json
+            /tmp/simurgh-assurance/report.json
           if-no-files-found: error

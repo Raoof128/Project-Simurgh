@@ -29,7 +29,21 @@ These additions do not raise historical coverage figures or confer a release sta
 incomplete work. New results must identify their own corpus, implementation revision, parameters
 and limitations.
 
-## Proposed research after owner review
+## Real-effects milestone and remaining gaps
+
+The [assurance lab](docs/assurance/README.md) implements the first bounded milestone from the
+[industry gap review](docs/assurance/INDUSTRY_GAPS.md): precommitted exact-action permissions,
+actual child-process file effects, independent read-back within the same host, three enforcement
+controls and trace/checkpoint/effect comparisons. Its 51 case/control runs include ineffective
+mutations and explicit observation failures. The checkpoint baseline matches full reconciliation
+on the four trace mutations; no incremental detection advantage is claimed.
+
+Next, connect two pinned agent runtimes to the same workload, then obtain held-out attacks and
+external reproduction. Durable replay, authenticated approval identity, revocation, realistic
+connector effects and measured overhead remain open. These are evidence requirements, not
+claims that competitors lack these controls.
+
+## Further research requiring additional evidence or owner inputs
 
 1. **Authorized live capture:** select an available model, approve spending and data handling,
    freeze the dataset and capture parameters, then publish measured results including failures.

@@ -20,6 +20,12 @@ makes this experiment inspectable and records what has and has not been validate
 
 ## Which documents describe which state?
 
+For the next empirical milestone, read the [real-effects lab](assurance/README.md) and
+[source-backed industry gap map](assurance/INDUSTRY_GAPS.md). This separate experiment measures
+actual disposable disk writes and trace discrepancies. Its saved report is replayable with
+`npm run assurance:verify -- docs/assurance/evidence/report.json`. The original OpenAI report's
+simulated-effect limits above still apply to that original instrument.
+
 | Documents                                                                                                                                                                                                                                     | Read them as                                                                                                                                                    |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [README](../README.md), [ROADMAP](../ROADMAP.md), `docs/openai/`                                                                                                                                                                              | Current research entry point, focused evaluation and proposed follow-up work                                                                                    |

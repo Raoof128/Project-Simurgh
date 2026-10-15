@@ -7,6 +7,9 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
+    "assurance:run": "node tools/assurance-lab/cli.mjs run",
+    "assurance:verify": "node tools/assurance-lab/cli.mjs verify",
+    "test:assurance": "node --test tests/unit/assuranceLab/*.test.js",
     "openai:offline": "node tools/openai-readiness/run.mjs",
     "openai:live": "node tools/openai-readiness/run.mjs --live",
     "openai:verify": "node tools/openai-readiness/verify.mjs",

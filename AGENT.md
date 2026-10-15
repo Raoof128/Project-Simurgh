@@ -1968,3 +1968,35 @@ one machine's local agent configuration:
   - `README.md` — Updated lines 323 and 330.
 - **Verification:** Verified that "collaborate" and "partner" now appear in the "Why Anthropic?" and concluding sections. Global grep for "cooperate" returns zero matches in source code or documentation.
 - **Follow-ups:** None.
+
+### 2026-10-15 (Australia/Sydney) — Real-effects assurance lab and industry gap roadmap
+
+**Raouf:**
+
+- **Scope:** Owner-requested additive research improvement, implemented by Codex. First local
+  milestone of the approved comparative experiment; no numbered release or production rollout.
+- **Summary:** Added real child-process disposable file effects, precommitted exact-action policy,
+  bypass and deny-all controls, read-back observation, trace/checkpoint/effect comparison and
+  complete source-bound replay. The 17-case corpus runs under three controls: bypass has seven
+  forbidden effects; exact policy has zero observed forbidden effects and three benign completions;
+  deny-all loses all benign utility. Checkpoint and full observation both expose four trace
+  mutations. Two fault cases per control remain unknown; no-op mutations are excluded. Mapped
+  16 primary sources to industry needs, prior art, acceptance tests and remaining gaps.
+- **Files changed:** `tools/assurance-lab/{core,sink,sink-worker,corpus,study,cli}.mjs`;
+  `tests/unit/assuranceLab/{core,study,cli}.test.js`; `docs/assurance/` documentation, provenance and
+  report; `docs/superpowers/{specs,plans}/2026-10-15-assurance-lab.md`; `package.json`;
+  `.github/workflows/openai-readiness.yml`; `README.md`, `ROADMAP.md`, `docs/REVIEWER_INDEX.md`;
+  both change logs; the pre-existing mutable `current` census in
+  `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json` (25 to 26, added CI step
+  remains explicitly unclassifiable). Frozen baseline, historical evidence and original OpenAI
+  experiment sources/artifact remain unchanged.
+- **Verification:** Final `npm test`: 5,119 tests, 5,116 passed, zero failed, three skipped
+  (Chrome/Lean unavailable); 18 new lab tests included. Saved lab and original OpenAI report
+  verification passed. Three isolated mutations caused assertion failures. Fresh review found
+  non-enumerable/accessor/sparse-data validation bugs; three regressions were RED then GREEN
+  after stable data capture and strict descriptors. All 51 case outcomes stayed unchanged.
+  Corrected late-grant wording to after policy commitment, before execution. Workflow census is
+  set-identical, archive hashes unchanged. See `docs/assurance/VALIDATION.md` for scope and limits.
+- **Follow-ups:** Two actual SDK adapters, held-out attacks, external reproduction, durable atomic
+  replay, authenticated identity/revocation and measured overhead remain open. No paid model call,
+  submission, deployment, external operator independence or checkpoint superiority is claimed.

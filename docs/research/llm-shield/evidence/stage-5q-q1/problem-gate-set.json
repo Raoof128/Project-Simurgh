@@ -86,10 +86,14 @@
     ]
   },
   "current": {
-    "as_of": "2026-10-15, OpenAI reviewer workflow — saved-artifact verification step added under the existing next_phase_behaviour and maintenance_behaviour declarations",
-    "entry_count": 25,
+    "as_of": "2026-10-15 assurance-lab CI extension",
+    "entry_count": 26,
     "why": "the LIVE census, re-pinned by each stage that adds workflow steps. `baseline` is NOT touched: it is the v2.53.0 measurement the Q1-F002 finding cites, and a later stage may never move it to go green (5S-F015).",
     "gate_problems": [
+      {
+        "gate_id": "openai-readiness.yml::Run the real-effects assurance experiment",
+        "reason_code": "unclassifiable_step"
+      },
       {
         "gate_id": "openai-readiness.yml::Verify the saved reviewer artifact against this source tree",
         "reason_code": "unclassifiable_step"

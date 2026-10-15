@@ -25,6 +25,7 @@ records the scope and limits of the documentation review.
 - [Research proposal](docs/openai/PROPOSAL.txt) and [application checklist](docs/openai/APPLICATION_CHECKLIST.md)
 - [Evaluation protocol](docs/openai/EVALUATION.md) and [readiness report](docs/openai/READINESS_REPORT.md)
 - [Research roadmap](ROADMAP.md)
+- [Real-effects assurance lab](docs/assurance/README.md) and [industry gaps](docs/assurance/INDUSTRY_GAPS.md)
 - [Complete historical README](RESEARCH_HISTORY.md), preserved verbatim, including the prior
   Anthropic-oriented analysis, stage history, papers and reproduction instructions
 
@@ -55,6 +56,13 @@ required for the offline demonstration. See the [research brief](docs/openai/OPE
 evaluation design and [official-source notes](docs/openai/SOURCES.md) for the integration rationale.
 
 ## Read the evidence with its limits
+
+The additive [assurance lab](docs/assurance/README.md) now executes disposable file writes in a
+child process and compares reported actions with read-back disk effects. Its 17 authored cases
+under three controls are separate from the simulated OpenAI instrument. It includes ordinary
+checkpoint and policy baselines, ineffective mutations and explicit unknown outcomes. Run
+`npm run test:assurance` and `npm run assurance:verify -- docs/assurance/evidence/report.json`.
+The result remains local and synthetic; no SDK, live model or independent operator was tested.
 
 | Research result                                                                                              | Primary evidence                                                                                                                                         | Boundary                                                                                                                                                            |
 | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
