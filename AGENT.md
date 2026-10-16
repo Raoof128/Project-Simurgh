@@ -3039,3 +3039,14 @@ one machine's local agent configuration:
 - **Verification:** Mandatory replay, separate replay and all 48 tokenizer records passed;
   95 source bindings, 16 focused tests. No paid API use, retries or fallback model.
 - **Follow-ups:** Hosted replay, clean-clone handoff and presentation; external gaps remain open.
+
+## 2026-10-16 — Raouf: complete portable reproduction handoff (Australia/Sydney)
+
+- **Scope:** Phase 11 pinned manifest, clean-clone recipe, retained receipts and operator template.
+- **Summary:** Fresh clone and new Python environment replay the published Phase 10 evidence
+  without model files or API keys. Independent custody remains unestablished.
+- **Files changed:** Phase 11 guide/manifest/results/local and hosted receipts, root logs.
+- **Verification:** 16 tests passed; 48 generations, 144 branches, 1,440 snapshots replayed;
+  all 10 artifact/requirements hashes match; 63 distributions compatible; checkout clean.
+  Hosted run 38846752661 passed 16 tests and the same full replay at f020c56e.
+- **Follow-ups:** Presentation/gap closeout, outside operator and live-provider validation.

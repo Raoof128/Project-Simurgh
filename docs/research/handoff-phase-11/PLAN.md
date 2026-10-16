@@ -24,3 +24,7 @@ adds a new namespace; corrections to frozen bytes require declared repair author
 Acceptance: a complete 48-generation/144-branch/1,440-snapshot replay from a clean clone,
 with exact published root, dependency check and focused tests; omitted evidence or
 unknown prerequisite is never reported as a successful reproduction.
+
+Execution complete: clean clone/new virtual environment, 16 tests and full 48/144/1,440
+replay passed. Both checkout status files empty; 10 artifact/requirements hashes match.
+Hosted run 38846752661 succeeded separately. See RESULTS.md and retained receipts.

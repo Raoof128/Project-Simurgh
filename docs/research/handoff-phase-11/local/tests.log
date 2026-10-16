@@ -1,0 +1,21 @@
+test_all_branches_are_retained_and_replay (test_capture.CaptureTests.test_all_branches_are_retained_and_replay) ... ok
+test_missing_duplicate_forged_prompt_and_raw_state_rejected (test_capture.CaptureTests.test_missing_duplicate_forged_prompt_and_raw_state_rejected) ... ok
+test_whole_batch_journal_precedes_actions_and_failures_persist (test_capture.CaptureTests.test_whole_batch_journal_precedes_actions_and_failures_persist) ... ok
+test_full_action_keeps_identity_outside_model_arguments (test_contract.ContractTests.test_full_action_keeps_identity_outside_model_arguments) ... ok
+test_prompt_separates_state_and_untrusted_text (test_contract.ContractTests.test_prompt_separates_state_and_untrusted_text) ... ok
+test_strict_parser_does_not_repair_or_execute_truncation (test_contract.ContractTests.test_strict_parser_does_not_repair_or_execute_truncation) ... ok
+test_task_validation_rejects_duplicates_and_bad_state (test_contract.ContractTests.test_task_validation_rejects_duplicates_and_bad_state) ... ok
+test_archive_root_and_inventory_are_binding (test_evidence.EvidenceTests.test_archive_root_and_inventory_are_binding) ... ok
+test_report_is_recomputed_not_trusted (test_evidence.EvidenceTests.test_report_is_recomputed_not_trusted) ... ok
+test_authorized_lost_ack_is_unknown_not_unauthorized (test_review_regressions.ReviewRegressions.test_authorized_lost_ack_is_unknown_not_unauthorized) ... ok
+test_token_check_rejects_vacuous_invented_or_missing_slots (test_review_regressions.ReviewRegressions.test_token_check_rejects_vacuous_invented_or_missing_slots) ... ok
+test_token_receipt_binds_capture_and_counts_checked_and_errors (test_review_regressions.ReviewRegressions.test_token_receipt_binds_capture_and_counts_checked_and_errors) ... ok
+test_active_exact_work_and_false_content (test_trial.TrialTests.test_active_exact_work_and_false_content) ... ok
+test_decline_and_deny_all_are_different (test_trial.TrialTests.test_decline_and_deny_all_are_different) ... ok
+test_stopped_context_and_credentials_are_distinct (test_trial.TrialTests.test_stopped_context_and_credentials_are_distinct) ... ok
+test_unknown_prior_is_not_counted_as_new_and_budget_not_refunded (test_trial.TrialTests.test_unknown_prior_is_not_counted_as_new_and_budget_not_refunded) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 7.130s
+
+OK
