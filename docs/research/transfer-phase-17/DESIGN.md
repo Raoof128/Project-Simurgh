@@ -61,14 +61,14 @@ Append matching dated Raouf entries to `AGENT.md` and `CHANGELOG.md`. No predece
 source, protocol, archive, test, workflow or historical result changes are authorized.
 This declaration must be a strict ancestor of implementation.
 
-| Field | New transfer verification gate |
-| --- | --- |
-| active_phase | Phases 17–20 |
-| protected_surface | New source manifest, exact case/model/trial/control identities and evidence archive |
-| next_phase_behaviour | Recompute this captured study; unrelated additions are allowed |
-| maintenance_behaviour | New authority commit and versioned successor; retain original capture |
-| sunset_or_migration_condition | Remains an archive verifier; successor studies own new manifests |
-| anti_vacuity_condition | Reject empty/missing/duplicate identities, source drift, raw-state disagreement and altered summaries |
+| Field                         | New transfer verification gate                                                                        |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------- |
+| active_phase                  | Phases 17–20                                                                                          |
+| protected_surface             | New source manifest, exact case/model/trial/control identities and evidence archive                   |
+| next_phase_behaviour          | Recompute this captured study; unrelated additions are allowed                                        |
+| maintenance_behaviour         | New authority commit and versioned successor; retain original capture                                 |
+| sunset_or_migration_condition | Remains an archive verifier; successor studies own new manifests                                      |
+| anti_vacuity_condition        | Reject empty/missing/duplicate identities, source drift, raw-state disagreement and altered summaries |
 
 Implementation plan: write substantive negative tests; implement budget/decoder and
 capture/replay; run tests; freeze inputs; execute once; verify storage and replay;

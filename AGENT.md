@@ -3236,3 +3236,14 @@ one machine's local agent configuration:
   No inference calls yet; existing frozen lifecycle and reliability APIs inspected.
 - **Follow-ups:** Test new capture/verification code, freeze inputs, capture within budget,
   publish actual results and remaining platform/review limits without changing history.
+
+## 2026-10-17 — Raouf: freeze provider transfer implementation (Australia/Sydney)
+
+- **Scope:** New transfer namespace under authority 359202cf; predecessor bytes preserved.
+- **Summary:** Add strict Responses roundtrip, persistent request budget, matched local/API
+  comparison, paced process-based reliability capture and raw-storage/replay verification.
+- **Files:** `tools/assurance-transfer/**`, Phase 17 corpus/settings/source protocol and logs.
+- **Verification:** 15 substantive tests pass, including all eight lifecycle outcomes,
+  duplicate calls/arguments, budget exhaustion, source-request binding and storage mutation.
+  Ruff checks pass. A test import collision was corrected before capture; no API inference yet.
+- **Follow-ups:** Capture frozen inputs once, retain all outcomes, verify archive and publish brief.
