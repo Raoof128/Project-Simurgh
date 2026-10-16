@@ -15,3 +15,14 @@ A successor presentation may update current navigation but preserves this dated 
 Acceptance: one clear contribution and demonstration path; every numeric performance
 claim linked to retained evidence; separate scripted controls, model behavior and
 fresh replay; honest failures/denominators/uncertainty and a concrete next-study queue.
+
+Execution complete: presentation narrative, claim/evidence table and N01–N12 current
+gap map published. Headline counts and all-task/stopped-task denominators match the
+canonical Phase 10 report; 42 local links across 11 phase documents resolve. Current
+README/roadmap/reviewer navigation points to the presentation and portable handoff.
+No source, task, model setting or frozen historical evidence changed in this phase.
+
+Hosted Phase 10 run 38846752661 succeeded at `f020c56e`. Broader readiness run
+38846752700 is separately in progress: 10 jobs succeeded, three pending (SDK,
+safety-study replay and workflow recovery), none failed at this receipt time. This
+pending broader run is not labeled successful. Prior broader run 38843556999 succeeded.

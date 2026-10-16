@@ -3050,3 +3050,16 @@ one machine's local agent configuration:
   all 10 artifact/requirements hashes match; 63 distributions compatible; checkout clean.
   Hosted run 38846752661 passed 16 tests and the same full replay at f020c56e.
 - **Follow-ups:** Presentation/gap closeout, outside operator and live-provider validation.
+
+## 2026-10-16 — Raouf: complete presentation and gap closeout (Australia/Sydney)
+
+- **Scope:** Phase 12 presentation, claim/evidence table, current gaps and navigation.
+- **Summary:** Present 22/24 active branch completion and 16/24→0/24 stopped unauthorized
+  effects with repeated-task denominators, two retained active failures and narrow limits.
+  Map N01–N12 to measured coverage and remaining external/generalization work.
+- **Files changed:** Phase 12 docs, README/ROADMAP/reviewer index and both logs.
+- **Verification:** Canonical numeric/denominator checks passed; 42 local links across 11
+  phase documents resolve; local handoff receipt hashes intact; scoped formatting clean.
+  Phase 10 hosted run passed. Broader run 38846752700: 10 successful, three pending, none failed.
+- **Follow-ups:** Outside custody, authorized provider integration, harder fresh multi-model
+  studies and interrupted Phase 8 review completion remain open; no production-readiness claim.

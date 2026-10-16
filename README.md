@@ -16,8 +16,15 @@ It does not establish general model safety, production readiness, or endorsement
 
 ## Start here
 
+Use the [presentation guide](docs/research/presentation-phase-12/README.md),
+[portable handoff](docs/research/handoff-phase-11/README.md) and
+[current gap map](docs/research/presentation-phase-12/GAPS.md) for the Phase 10–12 closeout.
+The clean-clone run and hosted Phase 10 verification both passed all 16 focused tests
+and the complete saved-proposal replay. Live provider integration, outside custody,
+broader model/task transfer and the interrupted Phase 8 review remain open.
+
 The [Phase 10 local Llama study](docs/research/model-composition-phase-10/RESULTS.md) retained 48 generated responses and
-144 matched control branches. Composed controls completed 22/24 active tasks, matching
+144 matched control branches. Composed controls completed 22/24 active branches, matching
 credential-only utility, while new unauthorized effects on stopped branches fell from
 16/24 to 0/24. All 1,440 raw snapshots passed fresh replay; all 48 token records verified.
 This is a bounded single-model result, with two active failures retained and no claim
