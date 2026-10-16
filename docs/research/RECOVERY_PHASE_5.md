@@ -92,3 +92,31 @@ This declaration commit must strictly precede that edit; verify ancestry.
   independence remain unvalidated.
 - Review focus: authority substitution, fallback budget, unknown effects, persistent
   revocation, fabricated traces, denominator omission and concurrent ordering.
+
+## Execution ledger
+
+- Fresh hosted phase 4 reproduction succeeded in run `38827781172` at commit
+  `9d8a58fd`. Its 540 branches and 763 snapshots match the frozen report. The downloaded
+  pack verifies locally against the root printed in the hosted log. Runtime 105.660
+  seconds on Python 3.12.15/Linux Azure, compared with local Python 3.12.14. This is
+  project-controlled fresh-host evidence, not outside independence.
+- Live gate census: two new identities, none removed; current set rises 39→41.
+  P5-CI01 authority `619d31aa` is a strict ancestor. All non-current pin fields remain
+  byte-equivalent in parsed content, including the immutable historical baseline.
+- Recovery tests first failed on missing implementation; 15 focused tests now pass.
+  Tests execute all 39 cases and three concurrency drills, including real SDK effects,
+  preserved declines/unknowns, durable budget, revocation and evidence tampering.
+- Author negative test exposed duplicate JSON-key acceptance in the new report loader;
+  strict decoding now rejects it. No frozen predecessor loader was modified.
+- Fresh internal review found one important measurement defect: request-to-revocation
+  timing omitted the detection interval. A delayed-handler regression reproduced it;
+  automatic `detection_latency_ns` now includes that interval and binds to retained
+  detection/revocation events. `stop_latency_ns` remains a separate request metric.
+  Manual drills carry null detection latency. No other important findings or deferred minors.
+- Reviewer verified a real pack/fresh-replay comparison with pending protocol prerequisites
+  mocked; no claim that the reviewer assessed the final frozen pack. Author verification
+  will check final source binding, committed protocol and published evidence without mocks.
+- Ruling: broader hostile-host, distributed cancellation, model-efficacy and independent
+  validation judgments are outside this fixture. Cost: none of those gaps are claimed closed.
+- Full npm suite: 5,122 pass, zero fail, three existing Chrome/Lean prerequisite skips.
+  Ruff/dependency checks pass. Freeze this protocol/source before the published execution.

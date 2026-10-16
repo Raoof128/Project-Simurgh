@@ -2698,3 +2698,15 @@ one machine's local agent configuration:
 - **Verification:** P5-CI01 authority commit 619d31aa precedes this edit; one live gate
   identity added, no removed identities, historical baseline unchanged.
 - **Follow-ups:** Inspect hosted execution and verify its downloaded pack locally.
+
+## 2026-10-16 — Raouf: freeze guarded recovery experiment (Australia/Sydney)
+
+- **Scope:** Additive phase 5 source/tests/protocol and project-operated fresh-host evidence.
+- **Summary:** Durable exact-grant fallback, terminal decline, lookup-only uncertainty,
+  stop/revoke ordering, 39 scripted cases plus three in-flight drills and raw evidence checks.
+- **Files changed:** New recovery tools/docs/protocol, follow-up CI/npm, current census and both logs.
+- **Verification:** 15 focused tests pass; npm 5,122 pass, zero fail, three prior skips.
+  Reviewer timing finding and author strict-JSON finding reproduced RED and fixed GREEN.
+  Fresh hosted phase 4 pack from run 38827781172 verifies locally; historical pin unchanged.
+- **Follow-ups:** Execute frozen phase 5 once, fresh native verification, publish and run CI.
+  No new model efficacy, outside operator, real IAM or distributed-cancellation claim.

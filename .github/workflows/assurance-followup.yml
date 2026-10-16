@@ -4,11 +4,15 @@ on:
   push:
     paths:
       - ".github/workflows/assurance-followup.yml"
+      - "tools/assurance-recovery/**"
+      - "docs/research/recovery-phase-5/**"
       - "tools/assurance-reproduce/**"
       - "docs/research/reproduction-phase-4/**"
   pull_request:
     paths:
       - ".github/workflows/assurance-followup.yml"
+      - "tools/assurance-recovery/**"
+      - "docs/research/recovery-phase-5/**"
       - "tools/assurance-reproduce/**"
       - "docs/research/reproduction-phase-4/**"
   workflow_dispatch:
@@ -53,3 +57,22 @@ jobs:
             /tmp/simurgh-fresh-replay.stderr
           if-no-files-found: error
           retention-days: 14
+
+  recovery-and-response:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate guarded recovery and incident response
+        run: |
+          python -m pip install --require-hashes --only-binary=:all: -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock
+          python -m pip check
+          python -m unittest discover -s tools/assurance-recovery/tests -v
+          python tools/assurance-recovery/evidence.py verify docs/research/recovery-phase-5/evidence.zip --expected-root "$(cat docs/research/recovery-phase-5/ROOT.sha256)"
