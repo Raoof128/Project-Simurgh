@@ -3578,3 +3578,17 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   enforced runtime network policy and reusable Python environment available.
 - **Follow-ups:** Test-first implementation, review, source freeze, raw evidence and
   hosted replay. P7-CI01 authorizes only the live census addition. No live model claim.
+
+## 2026-10-16 — Raouf: implement context and lineage controls (Australia/Sydney)
+
+- **Scope:** Phase 7 durable checkpoints, structured summary audit and task delegation.
+- **Summary:** Exact grants and ancestor checks, one shared admission budget, retained
+  failures/unknowns and immutable old grants after any source change. Native experiment
+  and complete raw-state verifier added; source/protocol freeze still pending review.
+- **Files changed:** New assurance-context tools/tests, Phase 7 protocol and guide,
+  scoped CI, npm scripts, current census, design ledger and both logs.
+- **Verification:** Twenty focused tests passed before formatting. Source-restoration
+  defect reproduced RED and repaired GREEN; all raw tables and coordinated forgery
+  checked. Ruff passes. Live gate census is exact at 43; historical baseline unchanged.
+- **Follow-ups:** Final focused/repository checks, fresh whole-change review, source
+  freeze, retained execution, separate verification and hosted CI. No model claim.

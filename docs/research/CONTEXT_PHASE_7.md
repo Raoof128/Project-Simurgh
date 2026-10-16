@@ -138,3 +138,17 @@ This declaration's commit must be a strict ancestor of the census edit.
   cyclic/duplicate grants, revocation and concurrent dispatch, exception/crash state,
   summary omission, raw table edits, report inventory and replay laundering.
 - Progress: design declared; implementation pending.
+
+- Task 1 complete: 14 controller tests pass, including real process exit after
+  reservation. Source label restoration first reproduced grant reactivation, then
+  passed after source changes permanently revoked all existing grants.
+- Task 2 complete: exact 36-row native matrix passes; 108 raw snapshots retained
+  per development run. Five legitimate integrated cases complete; shared-budget
+  siblings produce one effect instead of two; unknown reservations remain charged.
+- Task 3 implementation: five evidence tests pass, including every raw table and
+  coordinated report/database forgery rejected by a fresh replay. Total 20 tests pass.
+- Ruling: source changes permanently revoke old grants, requiring a newly authorized
+  task to resume. This closes label-restoration reactivation at an availability cost.
+- P7-CI01 adds exactly one live gate identity (42→43), none removed. Baseline and
+  non-current fields are preserved. The classification limitation remains recorded.
+- Source freeze and retained published execution are still pending review.
