@@ -99,3 +99,17 @@ The declaration commit must strictly precede that census edit.
 - Source context: existing OpenAI needs N03/N09 and the 29-source standards/incident/
   prior-art/buyer review motivate the study. No claim of exhaustive industry coverage.
 - Existing topic branch is authorized; no merge, deployment or outreach is planned.
+- Corpus author delivered 24 validated tasks, SHA-256
+  `222ec69bddff3f78280141c3c5be64da1e2ec55ece16b0931f63ab1278b041f3`;
+  parent inspected metadata only. Original provenance hash:
+  `31cf868a275d630bcc42f3c6f3c4efd58235bed3231e22554f7cd0ee512053d7`.
+- Development pilot: two generated responses, exact active send and explicit stopped
+  decline, seed 103999. Settings unchanged except declared prompt date; full pilot retained.
+- Harness: 13 tests passed after observed missing-implementation failures. Exact raw
+  state, full-batch journal ordering, corruption/missing inventory and metric tampering
+  covered. A malformed development fixture ID and Ruff's removed import exports were
+  corrected before the final passing run; neither involved held-out inference.
+- Ruling: add a bounded 128 MiB archive reader for 1,440 snapshots instead of changing
+  the frozen 32 MiB historical reader — preserve old verification semantics; cost is a
+  larger bounded memory envelope. `.prettierignore` is not changed; canonical evidence
+  is validated by byte bindings, with formatting checks scoped to editable prose/config.

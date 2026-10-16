@@ -3765,3 +3765,13 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Verification:** Existing model worker, protocol, model files and runtime inspected.
 - **Follow-ups:** Test-first harness, disjoint pilot, review, preregistration freeze,
   retained capture/replay, then subsequent phases. P10-CI01 declares the live census addition.
+
+## 2026-10-16 — Raouf: implement composed model capture (Australia/Sydney)
+
+- **Scope:** New Phase 10 harness, authored corpus, disjoint pilot, source protocol and CI.
+- **Summary:** Append-only capture, 3 matched controls, exact raw-state replay and metrics;
+  no held-out inference yet. Live census 45→46 under prior P10-CI01 authority.
+- **Files changed:** New Phase 10 source/docs/workflow, npm commands, census and both logs.
+- **Verification:** 13 focused tests passed; 62 pinned packages compatible. Two development
+  pilot decisions generated with the official 3B model; active send and stopped decline.
+- **Follow-ups:** Whole-change review, source freeze, retained evaluation; then Phases 11–12.
