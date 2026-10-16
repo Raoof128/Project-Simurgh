@@ -120,3 +120,21 @@ This declaration commit must strictly precede that edit; verify ancestry.
   validation judgments are outside this fixture. Cost: none of those gaps are claimed closed.
 - Full npm suite: 5,122 pass, zero fail, three existing Chrome/Lean prerequisite skips.
   Ruff/dependency checks pass. Freeze this protocol/source before the published execution.
+
+## Frozen execution result
+
+- Implementation/protocol freeze `1e22da61` preceded the published execution.
+  Original run completed once; internal fresh replay and separate verification pass.
+  All 39 matrix rows and three concurrency rows retained, with 42 raw snapshots.
+- Baseline and stop policies complete 3/13 scripted cases; recovery completes 7/13,
+  including four guarded fallbacks. Zero unauthorized observed effects in the matrix.
+  Each policy preserves one unknown and one explicit decline. Stop detects 4/4 declared
+  mismatches and alerts on 0/9 other cases; no real-world rate is inferred.
+- All three in-flight legitimate effects commit before revocation; all three later
+  dispatches block. Automatic detection→revocation 14.208 ms; request→revocation
+  11.590 ms. Manual request timings 20.770/22.928 ms; single local samples, not an SLA.
+- Pack root `c02bb7bce06eb9329262794d0117a2ae9e19d0e0e8fa30741ddabf5121c97490`;
+  archive 25,589 bytes. All 46 source/data bindings match. Full final npm suite again
+  reports 5,122 pass, zero fail, three existing prerequisite skips.
+- Final frozen pack was verified by the author, not the internal code reviewer.
+  Outside custody, new model efficacy, real identity and distributed cancellation stay open.

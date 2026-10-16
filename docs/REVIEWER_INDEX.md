@@ -1,5 +1,11 @@
 # Reviewer index
 
+The [phase 5 results](research/recovery-phase-5/RESULTS.md) cover 39 scripted recovery
+rows and three in-flight stop drills, with raw snapshots and full replay verification.
+The linked [fresh-host receipt](research/recovery-phase-5/hosted-phase4/README.md)
+records project-operated GitHub reproduction of the frozen model trajectories.
+Neither is a new model benchmark or outside-operator validation.
+
 Use the [phase 4 reproduction guide](research/reproduction-phase-4/README.md) to
 reexecute saved proposals and inspect retained receiver databases. Its
 [execution record](research/reproduction-phase-4/RESULTS.md) reports 540 matched

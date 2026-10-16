@@ -1,10 +1,17 @@
 # Research roadmap
 
+[Phase 5](docs/research/recovery-phase-5/RESULTS.md) adds guarded exact-grant recovery,
+lookup-only uncertainty handling and a local detect/revoke/in-flight drill. Its new
+scripted cases show four additional completions; they are not new model results.
+A full [fresh GitHub-host reproduction](docs/research/recovery-phase-5/hosted-phase4/README.md)
+now passes the frozen phase 3 trajectories with retained phase 4 evidence. Outside
+operator/custody, broader model tasks and real identity/vendor integration remain open.
+
 [Phase 4](docs/research/reproduction-phase-4/README.md) now provides the portable
 replay handoff, pinned inputs and 763 retained raw receiver snapshots. All 540
 branches matched the baseline in a clean local checkout. This prepares G18 and
-partly addresses G19/G23; an outside operator, independent custody and a fresh-host
-run remain open. The [execution record](docs/research/reproduction-phase-4/RESULTS.md)
+partly addresses G19/G23. The fresh-host run is now recorded in phase 5; an outside
+operator and independent custody remain open. The [execution record](docs/research/reproduction-phase-4/RESULTS.md)
 distinguishes local reproduction from external validation.
 
 [Phase 3](docs/research/model-phase-3/README.md) now supplies a frozen local Llama

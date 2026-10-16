@@ -101,3 +101,10 @@ Commit `54119e5732eee06f5fb9046c33f8d096750e680b` passed all 13 jobs in
 This verified the retained pack and existing saved-proposal replay. A full phase 4
 run on a fresh hosted machine is separately tracked in phase 5; this receipt alone
 is not an outside-operator reproduction.
+
+## Successor fresh-host result
+
+The phase 5 [fresh-host record](../recovery-phase-5/hosted-phase4/README.md) now
+completes the previously pending fresh-machine replay: 540 branches, 763 retained
+snapshots, downloaded and verified locally. Project-operated GitHub execution remains
+separate from an independent outside operator or independent custody.

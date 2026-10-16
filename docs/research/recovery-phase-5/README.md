@@ -12,6 +12,9 @@ policy. Recovery copies that action once and submits it through the same native 
 isolated worker and exact permission check. It cannot invent an answer to an open-ended
 task, obtain a new grant, or authorize itself from model text.
 
+The [published results](RESULTS.md) include all outcomes and both stop-request and
+automatic detection latency, with raw evidence and known limits.
+
 ## Policies and outcomes
 
 - `baseline`: ordinary enforced dispatch with no fallback or automatic monitor stop.

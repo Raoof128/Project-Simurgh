@@ -2710,3 +2710,16 @@ one machine's local agent configuration:
   Fresh hosted phase 4 pack from run 38827781172 verifies locally; historical pin unchanged.
 - **Follow-ups:** Execute frozen phase 5 once, fresh native verification, publish and run CI.
   No new model efficacy, outside operator, real IAM or distributed-cancellation claim.
+
+## 2026-10-16 — Raouf: publish guarded recovery results (Australia/Sydney)
+
+- **Scope:** Frozen phase 5 execution, raw evidence and current reviewer navigation.
+- **Summary:** 39 scripted rows plus three in-flight drills retained; guarded recovery
+  adds four completions (3→7/13), with declines and unknowns preserved. Stop detects
+  four declared mismatches; in-flight effects commit before revoke, later sends block.
+- **Files changed:** New report/pack/root/receipt/results, guides/navigation/ledger and both logs.
+- **Verification:** Original run and fresh replay plus separate verification pass;
+  42 raw SQLite snapshots, 46 frozen bindings unchanged. Fifteen focused tests;
+  final npm 5,122 pass, zero fail, three existing skips. Fresh-host phase 4 pack verifies.
+- **Follow-ups:** Hosted phase 5 checks after push. Outside operator/custody, new model
+  study and real identity/vendor integration remain open; no model-score revision.

@@ -16,6 +16,13 @@ It does not establish general model safety, production readiness, or endorsement
 
 ## Start here
 
+The [phase 5 recovery and incident-response experiment](docs/research/recovery-phase-5/RESULTS.md)
+adds guarded host-approved fallback and stop/revoke tests: four additional scripted
+cases complete, explicit declines and unknowns remain, and in-flight effects stay
+visible. Its [fresh hosted reproduction](docs/research/recovery-phase-5/hosted-phase4/README.md)
+also reproduces all 540 frozen model branches. These are engineering and portability
+results; the original model scores below remain unchanged.
+
 The [phase 4 reproduction package](docs/research/reproduction-phase-4/README.md)
 retains all 763 receiver snapshots and reproduces the phase 3 report across 540
 branches. A clean local checkout and fresh dependency environment passed; outside
