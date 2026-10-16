@@ -263,6 +263,7 @@ def validate_row(row):
     old = {e["key"] for e in row["before_effects"]}
     if [e for e in all_effects if e["key"] not in old] != row["new_effects"]:
         raise ValueError("effect_attribution")
+    validate_durable_state(row, actions)
     if row["held"] != (case == "update_process_kill"):
         raise ValueError("hold_state")
     trans = row["transition"]
@@ -279,6 +280,10 @@ def validate_row(row):
             raise ValueError("transition")
         if case == "update_process_kill" and trans["exit_code"] != -9:
             raise ValueError("process_exit")
+        if case == "update_process_kill" and trans["end"] > min(
+            c["queued"] for c in row["calls"]
+        ):
+            raise ValueError("kill_queue_order")
         if case == "queued_stop" and (
             trans["exit_code"] is not None
             or max(c["queued"] for c in row["calls"]) > trans["start"]
@@ -287,6 +292,73 @@ def validate_row(row):
             raise ValueError("queue_stop_order")
     elif trans is not None:
         raise ValueError("unexpected_transition")
+
+
+def validate_durable_state(row, actions):
+    """Cross-check retained routes, reservations and transition state, not only totals."""
+    case = row["case"]
+    enforced = row["control"] == "composed"
+    effects = {e["action"]["id"]: e for e in row["effects"]}
+    if len(effects) != len(row["effects"]):
+        raise ValueError("duplicate_effect_route")
+    if case in ("authorized_reopen", "parallel_retry") and set(effects) != {"a"}:
+        raise ValueError("effect_route")
+    if case == "lost_ack_reopen" and (
+        row["before_effects"] != [effects.get("a")]
+        or set(effects) != ({"a"} if enforced else {"a", "b"})
+    ):
+        raise ValueError("initial_route")
+    leaf = {
+        route: "unknown"
+        if case == "lost_ack_reopen" and route == "a"
+        else "observed"
+        if route in effects
+        else None
+        for route in actions
+    }
+    if row["leaf_status"] != leaf:
+        raise ValueError("leaf_outcome")
+    for call in row["calls"]:
+        if call["native"]["status"] != (leaf[call["route"]] or "blocked"):
+            raise ValueError("route_outcome")
+    storage = row["storage"]
+    attempts = []
+    if enforced:
+        if case == "queued_stop":
+            actual = storage["context"]["tables"]["attempts"]
+            if len(actual) != 1 or actual[0][0] not in actions:
+                raise ValueError("stop_reservation")
+            attempts = [[actual[0][0], "child", "blocked"]]
+        else:
+            attempts = [[route, "child", leaf[route]] for route in sorted(effects)]
+    if storage["context"]["tables"]["attempts"] != attempts:
+        raise ValueError("durable_reservation")
+    events = ["update_started", "update_completed"] * 2
+    if case == "update_process_kill":
+        events += ["update_started"] + (["dispatch_held"] * 4 if enforced else [])
+    if case == "queued_stop" and enforced:
+        events += ["update_started", "update_completed"]
+    if storage["pipeline"]["tables"]["events"] != [
+        [i + 1, kind] for i, kind in enumerate(events)
+    ]:
+        raise ValueError("pipeline_events")
+    stopped = case == "queued_stop" and enforced
+    for route in actions:
+        intents = []
+        if route in effects:
+            effect = effects[route]
+            if effect["session_id"] != "s1":
+                raise ValueError("effect_session")
+            intents = [[effect["key"], composed.encode(actions[route]), leaf[route]]]
+        if storage[route + "-gateway"]["tables"]["intents"] != intents:
+            raise ValueError("gateway_intent")
+        state = (
+            [[2, 1, 1, 130.0, 100.0, "fixture-boot"]]
+            if stopped
+            else [[1, 0, 0, 130.0, 100.0, "fixture-boot"]]
+        )
+        if storage[route + "-signal"]["tables"]["state"] != state:
+            raise ValueError("signal_state")
 
 
 def execute(directory):

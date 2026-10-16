@@ -3851,3 +3851,13 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Verification:** Seven reliability and seven export tests pass after test-first development;
   Ruff passes. Corrected formatter-exposed import-order failure via explicit dependency bridge.
 - **Follow-ups:** Fresh whole-change review, freeze, retained runs and consolidated test matrix.
+
+## 2026-10-16 — Raouf: freeze reviewed reliability and export protocols (Australia/Sydney)
+
+- **Scope:** Phases 13–14 preregistration before retained execution.
+- **Summary:** Corrected two Important verifier findings with five RED→GREEN regressions;
+  bind per-route outcomes, durable reservations, stop state and interrupted-update ordering.
+  Clarified that latency covers final calls only; no Critical or deferred implementation finding.
+- **Files changed:** New reliability validator/tests, draft protocol bindings, ledger and both logs.
+- **Verification:** Full reliability suite 12 passed; export suite seven passed; Ruff clean.
+- **Follow-ups:** Retain one full run/export, independently verify, finish consolidated validation.

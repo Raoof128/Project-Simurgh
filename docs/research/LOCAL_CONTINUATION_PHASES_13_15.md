@@ -50,7 +50,7 @@ lost-acknowledgment calls**, **600 raw snapshots** (initial service plus nine fi
 Four worker threads perform separate native deliveries; the update interruption uses
 an actual killed process. The fixture clock stays at 100 to isolate scheduling from
 lease expiry; this is not sustained real-time monitor coverage or a production load test.
-Capture per-call enqueue/start/end monotonic offsets and elapsed time, report observed
+Capture final-call enqueue/start/end monotonic offsets and elapsed time, report observed
 medians and nearest-rank p95 with sample counts. These are host observations, not portable
 latency guarantees. Calls, exceptions and incomplete outputs are retained; no selective retry.
 
@@ -146,3 +146,17 @@ No prior frozen source or evidence modification is authorized by this declaratio
   Ruff sorting exposed a dependency initialization ordering defect; consolidated imports
   into the explicit bridge and reran both complete focused suites successfully.
   Draft protocols bind 101 and 102 files; not yet a preregistration freeze or retained run.
+
+- Whole-change review: no Critical findings, two Important findings, one Minor clarification.
+  Accepted both Important findings: aggregate call counts did not bind route winners, and
+  matching raw state did not enforce reservations/transition invariants. Five regressions
+  reproduced acceptance of wrong-route outcomes, refunded unknown reservation, missing
+  interrupted-update events, kill-after-call timing, and active state after stop. All five
+  failed before the fix and pass afterward; the full reliability suite passes 12 tests.
+  Added exact gateway/effect/route relationships, persistent attempts, signal state and
+  pipeline event sequence checks, plus kill-before-queue ordering. Either legitimate
+  concurrent winner remains valid. These are supplied-evidence consistency checks only.
+- Ruling: narrow latency reporting to the 210 final calls; the ten initial lost-ack calls
+  retain results/effects but no timing — resolves the Minor review ambiguity without adding
+  an unplanned latency denominator. Initial-call latency remains unmeasured; no deferred
+  implementation finding. No second review pass; predecessor files remain unchanged.
