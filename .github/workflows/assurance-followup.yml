@@ -1,0 +1,55 @@
+name: Assurance follow-up experiments
+
+on:
+  push:
+    paths:
+      - ".github/workflows/assurance-followup.yml"
+      - "tools/assurance-reproduce/**"
+      - "docs/research/reproduction-phase-4/**"
+  pull_request:
+    paths:
+      - ".github/workflows/assurance-followup.yml"
+      - "tools/assurance-reproduce/**"
+      - "docs/research/reproduction-phase-4/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fresh-reproduction:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Reproduce all saved proposals with retained receiver evidence
+        run: |
+          python -m pip install --require-hashes --only-binary=:all: -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock
+          python -m pip check
+          python tools/assurance-reproduce/reproduce.py preflight
+          python -m unittest discover -s tools/assurance-reproduce/tests -v
+          python tools/assurance-reproduce/reproduce.py run --out /tmp/simurgh-fresh-replay > /tmp/simurgh-fresh-replay.stdout 2> /tmp/simurgh-fresh-replay.stderr
+          python - <<'PYTHON'
+          import json, pathlib, subprocess, sys
+          output = pathlib.Path('/tmp/simurgh-fresh-replay')
+          root = json.loads((output / 'receipt.json').read_text())['manifest_sha256']
+          subprocess.run([sys.executable, 'tools/assurance-reproduce/reproduce.py', 'verify', str(output / 'evidence.zip'), '--expected-root', root], check=True)
+          print('Fresh-host generated root:', root)
+          PYTHON
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fresh-host-phase4-evidence
+          path: |
+            /tmp/simurgh-fresh-replay/
+            /tmp/simurgh-fresh-replay.stdout
+            /tmp/simurgh-fresh-replay.stderr
+          if-no-files-found: error
+          retention-days: 14

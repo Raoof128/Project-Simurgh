@@ -3456,3 +3456,13 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Verification:** Phase 4 commit 54119e57 passed all 13 jobs in run 38800643360.
 - **Follow-ups:** Test-first successor, strict source freeze, internal review, local/hosted
   evidence. Outside validation remains pending. P5-CI01 authorizes only live census edits.
+
+## 2026-10-16 — Raouf: fresh-host replay automation (Australia/Sydney)
+
+- **Scope:** Path-scoped hosted reproduction, synthetic artifacts only.
+- **Summary:** Execute the unchanged phase 4 runner on a fresh GitHub machine and retain
+  raw snapshots, roots, receipts and failure logs. Project-operated, not independent.
+- **Files changed:** New follow-up workflow, current gate census and both logs.
+- **Verification:** P5-CI01 authority commit 619d31aa precedes this edit; one live gate
+  identity added, no removed identities, historical baseline unchanged.
+- **Follow-ups:** Inspect hosted execution and verify its downloaded pack locally.
