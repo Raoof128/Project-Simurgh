@@ -110,4 +110,23 @@ This declaration commit must be a strict ancestor of that edit; verify ancestry.
 - Review focus: signature/key separation, replay/body collisions, wrong identity,
   pending-alert crash windows, expiry/reboot, restart forgery, stop/admission races,
   revocation failures, report tampering, denominator completeness and false-clean claims.
-- Progress: design declared; implementation and published execution pending.
+- Ruling: an alert with contradictory response/request IDs remains pending, rather
+  than being labeled unrelated. The first unrelated-alert test had this contradictory
+  fixture; both IDs now differ for that case. Cost: conservative availability on
+  inconsistent provider metadata, with the ambiguity preserved.
+- Author edge tests reproduced equal webhook/operator key acceptance; construction
+  now requires distinct decoded signing keys of at least 32 bytes. Lookup interruption
+  and contradictory identity tests retain pending holds across reopen.
+- Fresh internal review found four important defects: clock sampled before SQLite
+  lock acquisition, unused operator approvals surviving reboot, omitted deterministic
+  controller fields in evidence verification, and a standalone CLI import failure
+  introduced by import sorting. Each reproduced in a failing regression before repair.
+  Clock checks now occur inside the transaction; restart scope binds boot identity;
+  normalized raw evidence includes every table/schema; a separate interpreter checks CLI.
+- Ruling on review limits: live provider delivery, real credential custody, distributed
+  cancellation and outside observation remain unvalidated. The final committed-source
+  and artifact checks will be performed by the author, not this internal reviewer.
+  No deferred minor findings. The cost is a scoped engineering result, not deployment assurance.
+- P6-CI01 adds exactly one live gate identity (41→42), none removed. Historical
+  baseline fields remain unchanged. This records a census classification gap, not its repair.
+- Progress: implementation and review repairs complete; final tests and source freeze pending.

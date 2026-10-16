@@ -3527,3 +3527,16 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   exact 42 matrix plus two drill cases declared before implementation.
 - **Follow-ups:** Test-first implementation, fresh review, source freeze, retained evidence
   and hosted checks. P6-CI01 authorizes only the live census update.
+
+## 2026-10-16 — Raouf: freeze safety signals phase 6 (Australia/Sydney)
+
+- **Scope:** Additive local provider-signal/monitor gate, tests, protocol and scoped CI.
+- **Summary:** Signed alert intake, durable pending/terminal states, monitor leases,
+  boot-bound operator restart and complete raw controller/receiver evidence.
+- **Files changed:** New assurance-signals tools and phase 6 docs; npm/CI, current gate
+  census and both logs. Frozen prior studies unchanged.
+- **Verification:** 24 focused tests pass. Four important internal-review findings and
+  one author key-separation finding reproduced RED and repaired GREEN. Ruff and all
+  62 pinned dependencies pass. P6-CI01 precedes one live gate addition (41→42).
+- **Follow-ups:** Retained execution after this source/protocol commit, separate artifact
+  verification and hosted checks. No live provider or independent-custody result claimed.
