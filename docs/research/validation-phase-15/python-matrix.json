@@ -1,0 +1,578 @@
+{
+  "inventory": [
+    "tools/agentdojo-simurgh-adapter/tests",
+    "tools/assurance-composed/tests",
+    "tools/assurance-connector/tests",
+    "tools/assurance-context/tests",
+    "tools/assurance-credentials/tests",
+    "tools/assurance-durable/tests",
+    "tools/assurance-egress/tests",
+    "tools/assurance-eval/tests",
+    "tools/assurance-export/tests",
+    "tools/assurance-hardening/tests",
+    "tools/assurance-isolation/tests",
+    "tools/assurance-model-composed/tests",
+    "tools/assurance-recovery/tests",
+    "tools/assurance-redis/tests",
+    "tools/assurance-reliability/tests",
+    "tools/assurance-reproduce/tests",
+    "tools/assurance-scope/tests",
+    "tools/assurance-sdk/tests",
+    "tools/assurance-signals/tests",
+    "tools/assurance-workflow/tests",
+    "tools/hf-containment/tests",
+    "tools/hf-incident-sim/tests",
+    "tools/hf-native/tests",
+    "tools/local-meta-pilot/tests",
+    "tools/local-meta-study/tests",
+    "tools/openai-comparison/tests",
+    "tools/openai-native/tests",
+    "tools/safety-study/tests"
+  ],
+  "total_tests": 636,
+  "results": [
+    {
+      "suite": "tools/agentdojo-simurgh-adapter/tests",
+      "command": ["python", "-m", "pytest", "tests/", "-q"],
+      "cwd": "tools/agentdojo-simurgh-adapter",
+      "exit_code": 0,
+      "tests": 181,
+      "passed_gate": true,
+      "log_sha256": "e46e9c85fe84b146afa7a19faac7fa30c1d6dc16bbdf41d7579b82601a928f26"
+    },
+    {
+      "suite": "tools/assurance-composed/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/assurance-composed/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/assurance-composed:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 20,
+      "elapsed_seconds": 27.087,
+      "log_sha256": "134210611e4a8aeddb02017c018eab125c06128c32454e240d7622a7ceac4f5c",
+      "source_commit": "9622f490c9f62d3c4d984a7e6645b6efb4dd5652",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/assurance-connector/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/assurance-connector/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/assurance-connector:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 17,
+      "elapsed_seconds": 47.303,
+      "log_sha256": "d6db72e8e23426796347ca89c83c357233b43be8adb69ed87f83b68bc0a820e4",
+      "source_commit": "9622f490c9f62d3c4d984a7e6645b6efb4dd5652",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/assurance-context/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/assurance-context/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/assurance-context:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 25,
+      "elapsed_seconds": 27.897,
+      "log_sha256": "56348b6b57dcbc34d2cd3e9658cfebe34a8a07405ffeacba97430a48c88bec3c",
+      "source_commit": "9622f490c9f62d3c4d984a7e6645b6efb4dd5652",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/assurance-credentials/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/assurance-credentials/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/assurance-credentials:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 24,
+      "elapsed_seconds": 30.926,
+      "log_sha256": "178ba2696278bdc036d2550241d0c94b30d9baf1bc6d15c0a4bf67ed7b1c1f1d",
+      "source_commit": "9622f490c9f62d3c4d984a7e6645b6efb4dd5652",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/assurance-durable/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/assurance-durable/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 16,
+      "elapsed_seconds": 9.461,
+      "log_sha256": "91ab819d408fc012f6e1f69d550a988923d55b6b21d0007aa18c120b3b446d80",
+      "source_commit": "9622f490c9f62d3c4d984a7e6645b6efb4dd5652",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/assurance-egress/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/assurance-egress/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/assurance-egress:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope",
+      "exit_code": 0,
+      "tests": 20,
+      "elapsed_seconds": 15.351,
+      "log_sha256": "a7b62d3056646a9c5b438d9b0462b9cdd9b396c7297ac9b876a63d201fc0e801",
+      "source_commit": "9622f490c9f62d3c4d984a7e6645b6efb4dd5652",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/assurance-eval/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/assurance-eval/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/assurance-eval:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 13,
+      "elapsed_seconds": 13.29,
+      "log_sha256": "7fe17b23eb41613d55a800724870b3413fd5a0d897c6e8fba4d25edfc2676ec0",
+      "source_commit": "9622f490c9f62d3c4d984a7e6645b6efb4dd5652",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/assurance-export/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/assurance-export/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/assurance-export:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 7,
+      "elapsed_seconds": 0.365,
+      "log_sha256": "d54685eb7d19c64a249517098c7e8a1d0bd9a6655369558afb55d7ee1ae35d25",
+      "source_commit": "9622f490c9f62d3c4d984a7e6645b6efb4dd5652",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/assurance-hardening/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/assurance-hardening/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/assurance-hardening:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 17,
+      "elapsed_seconds": 0.415,
+      "log_sha256": "7bfddb7f8d0256484a595f1791429902196a8c18c5a9d89f0996f49593c8faec",
+      "source_commit": "9622f490c9f62d3c4d984a7e6645b6efb4dd5652",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/assurance-isolation/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/assurance-isolation/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 26,
+      "elapsed_seconds": 10.958,
+      "log_sha256": "6424919749ab74ba9b01fdfa084e157aba0911b4f4202883c9a582c8c1d82c96",
+      "source_commit": "9622f490c9f62d3c4d984a7e6645b6efb4dd5652",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/assurance-model-composed/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/assurance-model-composed/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/assurance-model-composed:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 16,
+      "elapsed_seconds": 10.725,
+      "log_sha256": "df35994f16689bbd29f99c18f214df92417b621b5458b67a6f5150d6adf7fe28",
+      "source_commit": "9622f490c9f62d3c4d984a7e6645b6efb4dd5652",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/assurance-recovery/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/assurance-recovery/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/assurance-recovery:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 15,
+      "elapsed_seconds": 15.473,
+      "log_sha256": "1d62fc47914da1ba72246c34753b533e0e462287f414593064671dfe97c75b73",
+      "source_commit": "9622f490c9f62d3c4d984a7e6645b6efb4dd5652",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/assurance-redis/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/assurance-redis/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 14,
+      "elapsed_seconds": 14.284,
+      "log_sha256": "0f4ac7ee4848c1df782f1db1691a77697c680d2feb0f10d17b7c4bc7b54ab237",
+      "source_commit": "9622f490c9f62d3c4d984a7e6645b6efb4dd5652",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/assurance-reliability/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/assurance-reliability/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/assurance-reliability:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 12,
+      "elapsed_seconds": 7.936,
+      "log_sha256": "fff05698624fe2ddb8956288e2cdea9b16e9c1917129b2330a8ad49bb4e85ffc",
+      "source_commit": "9622f490c9f62d3c4d984a7e6645b6efb4dd5652",
+      "passed_gate": true,
+      "initial_attempt": {
+        "exit_code": 1,
+        "tests": 12,
+        "passed_gate": false,
+        "log_sha256": "fff05698624fe2ddb8956288e2cdea9b16e9c1917129b2330a8ad49bb4e85ffc"
+      },
+      "final_log_sha256": "bdc6576b332bbeff07f4b34396fc02c4c2f8a95359558e3f1e0341467e201618",
+      "final_source_commit": "6b35f696c9a0b4f3064c1f9780fd721e582b7c66"
+    },
+    {
+      "suite": "tools/assurance-reproduce/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/assurance-reproduce/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/assurance-reproduce:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 13,
+      "elapsed_seconds": 3.929,
+      "log_sha256": "4c4f21fd7a9ded8dfc4ed5fbbb36756cc3383205f4c22bb56d38858f7f25a2ca",
+      "source_commit": "9622f490c9f62d3c4d984a7e6645b6efb4dd5652",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/assurance-scope/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/assurance-scope/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 24,
+      "elapsed_seconds": 11.84,
+      "log_sha256": "96a19ba3bd89d9d266f99b34d1d5ce65d7460027cf618bde240633625ca13b82",
+      "source_commit": "9622f490c9f62d3c4d984a7e6645b6efb4dd5652",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/assurance-sdk/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/assurance-sdk/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 31,
+      "elapsed_seconds": 35.555,
+      "log_sha256": "ac71e4a4c7745bc42827f857f808b349ea7e6472cf3502538e88477c8003c8ff",
+      "source_commit": "6b35f696c9a0b4f3064c1f9780fd721e582b7c66",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/assurance-signals/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/assurance-signals/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/assurance-signals:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 24,
+      "elapsed_seconds": 37.914,
+      "log_sha256": "c2a28d6460e1d6fda8be30aaf8a5b6b97161f0c5cbad8f96b6ccd9349a34b51e",
+      "source_commit": "6b35f696c9a0b4f3064c1f9780fd721e582b7c66",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/assurance-workflow/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/assurance-workflow/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 15,
+      "elapsed_seconds": 600.008,
+      "log_sha256": "9dfacb21aa3e14fbbfb890dd0b5498ea514c7cb1ce1f60e6bbf32c62b1ace0cf",
+      "source_commit": "97da52f425b4ccb0c3b3dcd009444c7a7ed2d3a5",
+      "passed_gate": true,
+      "initial_attempt": {
+        "exit_code": 124,
+        "tests": 0,
+        "passed_gate": false,
+        "log_sha256": "9dfacb21aa3e14fbbfb890dd0b5498ea514c7cb1ce1f60e6bbf32c62b1ace0cf"
+      },
+      "final_log_sha256": "88d9aabe899330f502c6c4acfb3de78dbb8a123195eb8b9b3f7be66f75d89aac",
+      "final_source_commit": "6b35f696c9a0b4f3064c1f9780fd721e582b7c66"
+    },
+    {
+      "suite": "tools/hf-containment/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/hf-containment/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/hf-containment:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 13,
+      "elapsed_seconds": 7.988,
+      "log_sha256": "72da7b4400cd74281c07748d9c7db9dcf7819972f681b92198315e99c8c6afbe",
+      "source_commit": "97da52f425b4ccb0c3b3dcd009444c7a7ed2d3a5",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/hf-incident-sim/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/hf-incident-sim/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/hf-incident-sim:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 5,
+      "elapsed_seconds": 5.649,
+      "log_sha256": "b7cf1645a98d752461bec8069b9401c487c2f1bd57417a361a676da09ce6cf55",
+      "source_commit": "97da52f425b4ccb0c3b3dcd009444c7a7ed2d3a5",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/hf-native/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/hf-native/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/hf-native:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 2,
+      "elapsed_seconds": 0.114,
+      "log_sha256": "82de699042898eb6315d9145471adaa0f1b3ae0473d7baf37c9bf4095a4f9d90",
+      "source_commit": "97da52f425b4ccb0c3b3dcd009444c7a7ed2d3a5",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/local-meta-pilot/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/local-meta-pilot/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/local-meta-pilot:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 10,
+      "elapsed_seconds": 0.669,
+      "log_sha256": "767582f65621f80130a704ffc6768b531d4a424c9b9e527abc1b4ce4c0cc19bc",
+      "source_commit": "97da52f425b4ccb0c3b3dcd009444c7a7ed2d3a5",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/local-meta-study/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/local-meta-study/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/local-meta-study:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 21,
+      "elapsed_seconds": 30.863,
+      "log_sha256": "63bb5f26ff4ecd770283e7691084f77c2c9f37aaea729edfa605a0bbed862779",
+      "source_commit": "f638d6dbcc84ffd0a99665a28d067741bfdc80eb",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/openai-comparison/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/openai-comparison/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/openai-comparison:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 12,
+      "elapsed_seconds": 0.215,
+      "log_sha256": "73beee4c40baa2cfd75484fa69c35f34c59879be4221f6a38a416291f755483d",
+      "source_commit": "f638d6dbcc84ffd0a99665a28d067741bfdc80eb",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/openai-native/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/openai-native/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/openai-native:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 20,
+      "elapsed_seconds": 0.264,
+      "log_sha256": "397f83af6af65e465881d9cded229573937b1cf3878fc9ae4d8a93c6fe1e830d",
+      "source_commit": "f638d6dbcc84ffd0a99665a28d067741bfdc80eb",
+      "passed_gate": true
+    },
+    {
+      "suite": "tools/safety-study/tests",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/safety-study/tests",
+        "-v"
+      ],
+      "pythonpath": "/workspace/Project-Simurgh/tools/safety-study:/workspace/Project-Simurgh/tools/assurance-workflow:/workspace/Project-Simurgh/tools/assurance-redis:/workspace/Project-Simurgh/tools/assurance-durable:/workspace/Project-Simurgh/tools/assurance-sdk:/workspace/Project-Simurgh/tools/assurance-isolation:/workspace/Project-Simurgh/tools/assurance-scope:/workspace/Project-Simurgh/tools/assurance-egress",
+      "exit_code": 0,
+      "tests": 23,
+      "elapsed_seconds": 91.749,
+      "log_sha256": "e71c7bdab70ada6d866e5fd7fdfe9d879548fbaa3c05c00301ee26ebceabd189",
+      "source_commit": "f638d6dbcc84ffd0a99665a28d067741bfdc80eb",
+      "passed_gate": true
+    }
+  ],
+  "notes": [
+    "Initial reliability matrix attempt intersected the intentionally RED review regressions; final complete suite supersedes it.",
+    "Initial workflow attempt timed out at the wrapper limit of 600 seconds; no completed test count is assigned to that attempt.",
+    "Non-reliability tool sources did not change during the matrix; end-of-suite commit markers are not snapshots of every file at invocation start."
+  ]
+}

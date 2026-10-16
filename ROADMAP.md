@@ -7,9 +7,13 @@ produce zero new effects after queued stop or interrupted update. The
 outcomes with explicit omissions and separate public/source verification. These local
 results leave sustained deployment load, live-provider behavior and outside custody open.
 
+See the [Phase 15 validation record](docs/research/validation-phase-15/RESULTS.md) and
+[current gaps](docs/research/validation-phase-15/GAPS.md) for test coverage, corrected setup
+issues and unresolved legacy gates. The complete repository is not yet fully green.
+
 Use the [presentation guide](docs/research/presentation-phase-12/README.md),
 [portable handoff](docs/research/handoff-phase-11/README.md) and
-[current gap map](docs/research/presentation-phase-12/GAPS.md) for the Phase 10–12 closeout.
+[Phase 12 gap map](docs/research/presentation-phase-12/GAPS.md) for the Phase 10–12 closeout.
 The clean-clone run and hosted Phase 10 verification both passed all 16 focused tests
 and the complete saved-proposal replay. Live provider integration, outside custody,
 broader model/task transfer and the interrupted Phase 8 review remain open.

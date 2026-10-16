@@ -1,0 +1,183 @@
+{
+  "schema": "simurgh-phase15-validation-v1",
+  "date": "2026-10-16",
+  "python": {
+    "directories": 28,
+    "tests": 636,
+    "failed": 0
+  },
+  "node": {
+    "tests": 5125,
+    "passed": 5124,
+    "failed": 0,
+    "skipped": 1
+  },
+  "gate_maintenance": {
+    "tests": 37,
+    "passed": 37,
+    "canonical_artifact_exceptions": 35,
+    "secret_scan_passed": true
+  },
+  "lean": {
+    "proofs": 39,
+    "typechecked": 39,
+    "escape_hatches": 0
+  },
+  "rust": {
+    "tests": 34,
+    "passed": 34,
+    "fmt": true,
+    "clippy": true,
+    "xvfb_required": true
+  },
+  "archives": [
+    {
+      "phase": "reproduction-phase-4",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-B",
+        "/workspace/Project-Simurgh/tools/assurance-reproduce/reproduce.py",
+        "verify",
+        "/workspace/Project-Simurgh/docs/research/reproduction-phase-4/evidence.zip",
+        "--expected-root",
+        "02b3a143dcc1b3a19768d6849ed6ecd6b4ff49382611fc46dbc2f9fba517db7c"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.467,
+      "log_sha256": "5982ff36e25f0357f08c31989e08edc062c7b471e3086ce62b5420d16a9ad329"
+    },
+    {
+      "phase": "recovery-phase-5",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-B",
+        "/workspace/Project-Simurgh/tools/assurance-recovery/evidence.py",
+        "verify",
+        "/workspace/Project-Simurgh/docs/research/recovery-phase-5/evidence.zip",
+        "--expected-root",
+        "c02bb7bce06eb9329262794d0117a2ae9e19d0e0e8fa30741ddabf5121c97490"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 9.206,
+      "log_sha256": "fd913e065bd066f7e2ae4b0425efec2376bb59e16d1b91cb0aabd203e1caf05b"
+    },
+    {
+      "phase": "signals-phase-6",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-B",
+        "/workspace/Project-Simurgh/tools/assurance-signals/evidence.py",
+        "verify",
+        "/workspace/Project-Simurgh/docs/research/signals-phase-6/evidence.zip",
+        "--expected-root",
+        "e965fce04c552df897f5f650660bb0b1106ae0486725b5f9a0d3e9f1f5f9039f"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 11.07,
+      "log_sha256": "188f26fecb6ff24e07939e367201437d9b319a17399f54778e98d91983c4742e"
+    },
+    {
+      "phase": "context-phase-7",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-B",
+        "/workspace/Project-Simurgh/tools/assurance-context/evidence.py",
+        "verify",
+        "/workspace/Project-Simurgh/docs/research/context-phase-7/evidence.zip",
+        "--expected-root",
+        "2eeff1f45fe67c7c192db2cc6ec25984f8125dc1c6f27fc47d7b1d8fb397fdb7"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 10.67,
+      "log_sha256": "7f7268c0dd638397efe6cf12ac90532efbdaf6f972c29bb2fb404e5d561e3745"
+    },
+    {
+      "phase": "credentials-phase-8",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-B",
+        "/workspace/Project-Simurgh/tools/assurance-credentials/evidence.py",
+        "verify",
+        "/workspace/Project-Simurgh/docs/research/credentials-phase-8/evidence.zip",
+        "--expected-root",
+        "b84c6c7472d02652f22604dda64cfd9ff46f41ef31f18b04d6c8a56d84c7a31d"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 10.658,
+      "log_sha256": "572629e2824fce73e1d76e83fafb4f3e53a33c07a69b89e82ac5cd7182b3db4a"
+    },
+    {
+      "phase": "composition-phase-9",
+      "command": [
+        "/workspace/simurgh-research/phase-4/clean-venv/bin/python",
+        "-B",
+        "/workspace/Project-Simurgh/tools/assurance-composed/evidence.py",
+        "verify",
+        "/workspace/Project-Simurgh/docs/research/composition-phase-9/evidence.zip",
+        "--expected-root",
+        "7fbcb77fcccc793100eb8f88839dea0a43df8b1701975e9ba1274377ca55d3be"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 13.164,
+      "log_sha256": "abbc7034fa0a462a4925e8cc96d7add680bb78db282aaed3ea82fb6c4793c911"
+    }
+  ],
+  "initial_aggregate": [
+    {
+      "name": "check",
+      "command": ["bash", "scripts/check.sh"],
+      "exit_code": 1,
+      "elapsed_seconds": 355.124,
+      "log_sha256": "fc7964b8768d104d395547009b311ebcf37ec3ced57559275b880b9ba2624ce4",
+      "source_commit": "9622f490c9f62d3c4d984a7e6645b6efb4dd5652"
+    },
+    {
+      "name": "check-e2e",
+      "command": ["bash", "scripts/check-e2e.sh"],
+      "exit_code": 1,
+      "elapsed_seconds": 207.518,
+      "log_sha256": "adc24cf783cfa5c703ec9770f0f16cd7055c8a88f8172fbc77854fbb634974cb",
+      "source_commit": "9622f490c9f62d3c4d984a7e6645b6efb4dd5652"
+    }
+  ],
+  "final_e2e": {
+    "steps_passed": 31,
+    "steps_failed": 1,
+    "tests": 580,
+    "passed": 578,
+    "failed": 1,
+    "skipped": 1,
+    "failure": "Stage5S frozen prior-reproduce set omits the later strict Stage5L successor",
+    "source_commit": "eb961854ebd2446c2829667b2760c9c2210ccdf0"
+  },
+  "node24_guard": {
+    "expected_exit": 2,
+    "actual_exit": 2
+  },
+  "browser": {
+    "type": "TimeoutExpired",
+    "attempts": 2,
+    "original_timeout_seconds": 90,
+    "isolated_timeout_seconds": 60
+  },
+  "unrun": [
+    "macOS/CryptoKit native suites",
+    "optional external/paid AgentDojo and live-provider campaigns",
+    "previously interrupted Phase8 whole-change security review"
+  ],
+  "production_ready": false,
+  "independent_custody": false,
+  "paid_api_calls": 0,
+  "docker": {
+    "health_status": 200,
+    "uid": "1000",
+    "mock_status": 200,
+    "receipt_schema": "3E",
+    "retired_live_status": 410,
+    "retired_error": "legacy_live_gateway_retired",
+    "external_provider_calls": 0,
+    "trusted_ca_during_prefetch": true,
+    "offline_package_cache": true,
+    "source_ownership_override": true
+  }
+}

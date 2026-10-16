@@ -7,9 +7,13 @@ produce zero new effects after queued stop or interrupted update. The
 outcomes with explicit omissions and separate public/source verification. These local
 results leave sustained deployment load, live-provider behavior and outside custody open.
 
+See the [Phase 15 validation record](research/validation-phase-15/RESULTS.md) and
+[current gaps](research/validation-phase-15/GAPS.md) for test coverage, corrected setup
+issues and unresolved legacy gates. The complete repository is not yet fully green.
+
 Use the [presentation guide](research/presentation-phase-12/README.md),
 [portable handoff](research/handoff-phase-11/README.md) and
-[current gap map](research/presentation-phase-12/GAPS.md) for the Phase 10–12 closeout.
+[Phase 12 gap map](research/presentation-phase-12/GAPS.md) for the Phase 10–12 closeout.
 The clean-clone run and hosted Phase 10 verification both passed all 16 focused tests
 and the complete saved-proposal replay. Live provider integration, outside custody,
 broader model/task transfer and the interrupted Phase 8 review remain open.
@@ -116,7 +120,7 @@ file sink. Its report distinguishes created, recovered and replayed completions.
 
 | Documents                                                                                                                                                                                                                                     | Read them as                                                                                                                                                    |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [README](../README.md), [ROADMAP](../ROADMAP.md), [current gap map](research/SIMURGH_GAP_MAP_2026-10-15.md)                                                                                                                                   | Current research navigation and priorities; follow links to separately scoped evidence                                                                          |
+| [README](../README.md), [ROADMAP](../ROADMAP.md), [Phase 12 gap map](research/SIMURGH_GAP_MAP_2026-10-15.md)                                                                                                                                  | Current research navigation and priorities; follow links to separately scoped evidence                                                                          |
 | `docs/openai/`                                                                                                                                                                                                                                | Initial focused evaluation, dated readiness/security reviews and proposal; later live studies are linked below                                                  |
 | [SECURITY](../SECURITY.md), [PRIVACY](../PRIVACY.md)                                                                                                                                                                                          | Component-specific current guidance with explicitly identified historical architecture                                                                          |
 | [RESEARCH_HISTORY](../RESEARCH_HISTORY.md), [DEVICE_ROADMAP](../DEVICE_ROADMAP.md)                                                                                                                                                            | Exact historical copies, including old scores, vendor framing and status labels; not current assurance                                                          |

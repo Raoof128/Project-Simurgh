@@ -184,3 +184,20 @@ occurred inside image dependency installation and remains an environment/build l
 - P15-CHECK01 complete: full Prettier and actual secret-scan section pass; narrow canary
   exception tested RED→GREEN with six changed-value/path/extra-token controls retained.
   All 37 related gate tests pass. No frozen artifact bytes changed.
+
+- Phase 15 complete: all 28 maintained Python suites pass (636 tests); initial review-RED
+  and 600-second workflow-timeout attempts remain in the logs. Final Node 5,124 pass/zero
+  fail/one browser skip, 39 Lean proofs and 34 Xvfb-required Rust tests pass. Six archived
+  Phases 4–9 pass fresh verification. End-to-end setup corrected; 31 steps pass and one
+  fails on the frozen prior-script inventory. Current gaps retain that migration and the
+  obsolete live-gateway assertions, browser/macOS limits and external validation gaps.
+- Docker setup: trusted host CA fixes the registry trust check; runtime npm install works,
+  but the BuildKit network install still fails. A lockfile-verified offline cache and
+  source ownership override build successfully and pass non-root health/mock/retired-route
+  checks. This isolated recipe does not relabel the original aggregate Docker step green.
+- Hosted runs 38852395272 and 38852395223 succeeded at `eb961854`; the latter passed all
+  13 jobs. P15-CHECK01 includes 35 individually named machine-JSON paths after adding the
+  separate export receipt. Frozen predecessors and Phase 13/14 bindings remain unchanged.
+- All planned locally executable phases are implemented, exercised and documented; the
+  handoff deliberately reports the remaining failed/unrun gates. No production-readiness,
+  outside-custody, anonymity or general model-safety claim is made.

@@ -24,7 +24,7 @@ retention/access-control deployment.
 See [tool instructions](../../../tools/assurance-export/README.md),
 [protocol](protocol.json), [public archive](public.zip), [public JSON](public.json),
 [JSONL](outcomes.jsonl), [metadata](metadata.json), [release binding](release.json),
-[pinned root](ROOT.sha256), and [verification receipt](receipt.json).
+[pinned root](ROOT.sha256), and [verification receipt](receipt.json), and [separate local verification](separate-verification.json).
 
 Export root: `f71802a1906178da56c7ebc7dd19227716d65a2d99901910611f022490a8eb12`.
 Source root: `3a63db0052b42c284b9feba94b82aa0b236e31530837c2caf42d927e2f008a96`.

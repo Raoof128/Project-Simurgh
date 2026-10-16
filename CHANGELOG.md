@@ -3892,3 +3892,18 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Verification:** Canary check RED→GREEN; two exact cases excluded and six altered controls
   retained. Actual secret-scan section passes; full Prettier check passes; 37 related gate tests pass.
 - **Follow-ups:** Finish consolidated validation and publish unresolved legacy/build limitations.
+
+## 2026-10-16 — Raouf: complete consolidated local validation (Australia/Sydney)
+
+- **Scope:** Phase 15 maintained test inventory, archive replays, setup diagnosis and handoff.
+- **Summary:** 636 Python tests across 28 suites pass; Node 5,124 pass/zero fail/one browser
+  skip; 39 Lean proofs and 34 mandatory-Xvfb Rust tests pass. End-to-end has 31 passing
+  steps and one frozen-inventory failure; legacy retired-route assertions remain visible.
+- **Files changed:** Validation inventory/log bundle/results/runbook/gaps, separate export
+  receipt, navigation, one additional exact canonical-file exclusion, ledger and both logs.
+- **Verification:** Phases 4–9 archive checks pass; Phases 10/13/14 full verification passes;
+  all 13 hosted readiness jobs and new hosted reliability/export pass at eb961854.
+  Trusted-CA prefetch/offline container build plus ownership override passes non-root mock
+  smoke and HTTP 410 retired-route refusal. TLS verification retained; no paid API calls.
+- **Follow-ups:** Legacy-gate migration, browser/macOS portability, interrupted Phase 8 review,
+  outside custody, live-provider integration and harder model generalization remain open.
