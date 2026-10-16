@@ -5,7 +5,8 @@ It uses native Agents SDK approval/resume, isolated workers, two owned loopback
 receivers and trusted host state. No model inference, actual OpenAI compaction or
 Agents API subagent is involved. Read the [design and lifecycle](../CONTEXT_PHASE_7.md)
 and [source-backed motivation](../OPENAI_NEEDS_2026-10-16.md).
-Published outcomes follow the source/protocol freeze and retained execution.
+The [published results](RESULTS.md) record the retained execution after source freeze,
+raw snapshots, verified replay and the limits of these engineering fixtures.
 
 ## Reproduce
 

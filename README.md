@@ -16,6 +16,13 @@ It does not establish general model safety, production readiness, or endorsement
 
 ## Start here
 
+The [phase 7 context and delegation experiment](docs/research/context-phase-7/RESULTS.md)
+keeps authority and recorded failures in durable host state across context changes.
+Across 36 scripted rows, the integrated policy completes all five permitted cases,
+blocks 12 declared hold/authority cases and retains one unknown outcome. Shared
+lineage budgeting limits two approved sibling actions to one effect. This is local
+control evidence, not model behavior or live OpenAI compaction validation.
+
 The [phase 6 safety-signal experiment](docs/research/signals-phase-6/RESULTS.md)
 connects signed local alert fixtures and monitor health to durable dispatch controls.
 It retains 42 matrix rows, two in-flight drills and 88 raw snapshots: all six permitted

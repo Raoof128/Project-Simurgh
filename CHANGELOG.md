@@ -3604,3 +3604,17 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   Prior phase readiness run 38832945810 now succeeded, all 13 jobs.
 - **Follow-ups:** Retained execution after this commit, separate archive verification,
   publication and hosted Phase 7 checks. Live models/integration and custody remain open.
+
+## 2026-10-16 — Raouf: publish verified context and delegation evidence (Australia/Sydney)
+
+- **Scope:** Frozen Phase 7 execution, raw evidence and current reviewer navigation.
+- **Summary:** All 36 rows retained. Integrated policy completes five intended cases,
+  blocks 12 hold/authority cases and keeps one final unknown. Shared sibling budget
+  limits two individually approved actions to one effect; prior uncertainty remains.
+- **Files changed:** Phase 7 report/pack/root/receipt/results, guide/design ledger,
+  root README/ROADMAP, reviewer index and both logs.
+- **Verification:** Original fresh replay and separate archive verification pass;
+  108 raw SQLite snapshots, 47 frozen bindings. Twenty-five focused tests; repository
+  suite 5,122 pass, zero fail, three prerequisite skips. Ruff and pinned packages pass.
+- **Follow-ups:** Hosted verification after push. Phase 8 credential lifecycle next;
+  live compaction, model generalization and independent custody remain unvalidated.

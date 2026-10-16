@@ -174,3 +174,22 @@ suite passed 5,122 tests, zero failures and three existing prerequisite skips.
   and implementations are unchanged. No deferred minor findings.
 - Prior-phase status update: readiness run `38832945810` completed successfully with
   all 13 jobs, closing the pending status recorded at the end of phase 6.
+
+## Retained execution
+
+Source/protocol freeze: `a43220d8`. One subsequent retained run completed all
+36 rows and passed mandatory fresh replay. A separate verification of the copied
+publication archive passed too. It retains 108 raw SQLite snapshots with 47 unchanged
+source/data bindings. Archive size: 92,947 bytes; manifest SHA-256:
+`2eeff1f45fe67c7c192db2cc6ec25984f8125dc1c6f27fc47d7b1d8fb397fdb7`.
+
+Integrated outcomes across 18 cases: five final deliveries, 12 blocks, one final
+unknown; six total receiver effects including the earlier sibling action. The
+local-only control records 17 final deliveries, zero blocks, one final unknown and
+18 effects. Five structured summary discrepancies per policy include three false
+claims and two stale-context mismatches. These are engineered cases, not detection
+or utility rates. [Results](context-phase-7/RESULTS.md) preserve the detailed limits.
+
+Implementation, fresh review, frozen execution and separate verification are complete.
+Hosted verification is pending push. Phase 8, fresh model experiments and independent
+custody remain open. The final archive was checked by the author, not an outside operator.

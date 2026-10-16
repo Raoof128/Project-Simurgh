@@ -1,12 +1,20 @@
 # Research roadmap
 
+[Phase 7](docs/research/context-phase-7/RESULTS.md) now tests host-owned authority
+and evidence through scripted context changes and delegated handoffs. All five
+permitted cases complete; 12 hold/authority cases block and one outage stays unknown.
+Shared budgeting limits sibling effects without erasing uncertain reservations.
+These are local engineering results; fresh model recognition of broken tasks and
+actual compaction/subagent integration remain open. Next is **phase 8: authenticated
+credential expiry, rotation, revocation and active-session behavior**.
+
 [Phase 6](docs/research/signals-phase-6/RESULTS.md) adds signed synthetic safety
 signals, durable stop/hold state and monitor-gated dispatch. Across 21 cases, the
 integrated controller allowed all six intended deliveries, blocked all 14 declared
 stop/hold cases and retained one unknown outcome. Two in-flight drills expose the
 limit: already admitted work can finish after a stop. Live provider delivery remains
 untested. The [16 October OpenAI needs review](docs/research/OPENAI_NEEDS_2026-10-16.md)
-sets the next sequence: phase 7 compaction/delegation, then phase 8 credential lifecycle.
+motivates this sequence; phase 7's bounded result is recorded above.
 
 [Phase 5](docs/research/recovery-phase-5/RESULTS.md) adds guarded exact-grant recovery,
 lookup-only uncertainty handling and a local detect/revoke/in-flight drill. Its new

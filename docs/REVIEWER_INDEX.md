@@ -1,5 +1,10 @@
 # Reviewer index
 
+The [phase 7 results](research/context-phase-7/RESULTS.md) cover durable checkpoints,
+structured summary discrepancies, narrowed delegation and shared admission budgets.
+All 36 scripted rows retain 108 raw snapshots and fresh replay verification. Semantic
+deception detection, live compaction/subagents and independent custody remain open.
+
 The [phase 6 safety-signal results](research/signals-phase-6/RESULTS.md) add signed
 local alerts, durable holds/stops, monitor leases and boot-bound operator restart.
 All 44 scripted rows retain receiver/controller snapshots and replay checks. Provider
