@@ -3831,3 +3831,12 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   Phase 10 hosted run passed. Broader run 38846752700: 10 successful, three pending, none failed.
 - **Follow-ups:** Outside custody, authorized provider integration, harder fresh multi-model
   studies and interrupted Phase 8 review completion remain open; no production-readiness claim.
+
+## 2026-10-16 — Raouf: declare reliability, export and validation phases (Australia/Sydney)
+
+- **Scope:** Consecutive Phases 13–15 under the user's instruction to continue all local work/tests.
+- **Summary:** Bounded concurrent/restart schedules, explicit privacy-aware outcome projection,
+  and a consolidated test inventory; preserve frozen predecessors and external validation gaps.
+- **Files changed:** New design/plan/ledger and both root logs. P13-CI01 declares one live census addition.
+- **Verification:** Current checkout clean; previous broad CI 38846752700 now succeeded all 13 jobs.
+- **Follow-ups:** Test-first implementation, fresh review/freeze, retained runs and full local checks.
