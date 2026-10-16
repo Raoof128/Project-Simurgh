@@ -3007,3 +3007,13 @@ one machine's local agent configuration:
 - **Verification:** 13 focused tests passed; 62 pinned packages compatible. Two development
   pilot decisions generated with the official 3B model; active send and stopped decline.
 - **Follow-ups:** Whole-change review, source freeze, retained evaluation; then Phases 11–12.
+
+## 2026-10-16 — Raouf: declare portable handoff and presentation closeout (Australia/Sydney)
+
+- **Scope:** Additive Phase 11 clean-clone reproduction and Phase 12 evidence-backed presentation.
+- **Summary:** Pin the published Phase 10 evidence, test a fresh dependency environment,
+  and map measured results to the existing OpenAI needs register with remaining gaps.
+- **Files changed:** Two phase plans and both logs; no runtime or historical evidence edits.
+- **Verification:** Prior Phase 10 checks: 13 focused, 20 composed, 13 model-harness tests
+  passed; repository 5,122 passed, zero failures, three prerequisite skips.
+- **Follow-ups:** Complete Phase 10 review/freeze/run, then execute both plans consecutively.
