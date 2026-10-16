@@ -40,6 +40,10 @@ and deployment work. It also links the latest containment/model results and curr
 sources. Earlier readiness reports describe their own dated experiments: “no live request”
 in the initial offline review does not describe the later Luna captures.
 
+The [16 October OpenAI needs review](research/OPENAI_NEEDS_2026-10-16.md) updates the
+public-source mapping after phase 5, including provider alerts, safe stopping,
+compaction, delegation and credential lifecycle gaps. Its recommendations are proposed work.
+
 ## Suggested review sequence
 
 1. Read the [research brief](openai/OPENAI_BRIEF.md) and [evaluation protocol](openai/EVALUATION.md).

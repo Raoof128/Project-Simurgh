@@ -3502,3 +3502,17 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   jobs running at receipt time; no final success claim for that run.
 - **Follow-ups:** Outside operator/custody, new model evaluation and real identity/vendor
   integration remain open. Published results retain their scripted engineering scope.
+
+## 2026-10-16 — Raouf: research current OpenAI agent-safety needs (Australia/Sydney)
+
+- **Scope:** Public-source research and proposed priorities after phase 5; documentation only.
+- **Summary:** Mapped 29 official sources to 12 remaining needs, including provider safety
+  alerts, monitor outages, safe stopping, compaction, delegation and credential lifecycle.
+  Distinguished documented guidance, existing evidence and proposed acceptance tests.
+- **Files changed:** New OpenAI needs review/source register, reviewer index and both logs.
+- **Verification:** All 29 registered pages returned HTTP 200; response hashes and exact
+  normalized excerpts checked against fetched bytes. Local links, JSON, authored formatting
+  and diff checked; no runtime tests repeated for this documentation-only update.
+- **Follow-ups:** Prioritize an additive provider-alert/local-stop adapter, then fresh
+  compaction/delegation tasks and authenticated connector lifecycle with outside observation.
+  No new model results, deployment, external submission or exhaustive-coverage claim.
