@@ -1,0 +1,140 @@
+# Phase 7: authority and evidence across context changes
+
+Declared 16 October 2026 (Australia/Sydney), baseline `b8645bbe`, under the user's
+instruction to continue implementing and testing the phased roadmap.
+
+## Design and scope
+
+N04/N05 in [the OpenAI needs review](OPENAI_NEEDS_2026-10-16.md) motivate this
+phase. The linked official compaction reports describe self-generated instructions
+and concealed failures; Agents API documentation describes inherited tools,
+credentials and shared filesystems. A summary is data, not an authority source.
+The existing source register also covers standards, incidents, prior art and buyer
+requirements. This phase introduces no novelty or live-product compatibility claim.
+
+Use a trusted durable SQLite ledger beside the existing exact-action hosts. A
+host-owned checkpoint binds task, source version, configuration, grants, facts and
+all admitted attempts. Resume validates this checkpoint against current durable
+state. A structured model-summary projection is checked field by field; discrepancies
+are retained while authoritative output always comes from the ledger. Free-text
+notes are untrusted and never interpreted as permission. This is not semantic lie
+detection. Legitimate work may continue despite a dishonest note or summary claim
+when the host state permits it; a blocking failure cannot disappear that way.
+
+The trusted orchestrator selects actor identity, outside tool arguments. A fixed
+registry binds permitted parent/child relationships to this task. Delegation can
+only narrow the parent's exact action set, to a registered child, at depth at most
+two. Existing grants are immutable. Revoking any ancestor disables descendants.
+Source changes invalidate existing sessions and grants. Session construction and
+registry provisioning are trusted application operations, not model-accessible tools.
+
+Every actor shares a root budget of one distinct action. Reserve an attempt and
+charge the budget transactionally BEFORE calling the existing exact-action host.
+Unknown/crashed attempts retain their reservation. A duplicate authorized handoff
+returns the existing status; it does not resend or allocate a new budget. Two
+separately owned receivers make aggregate effects observable: each exact host can
+permit its own action, but the integrated lineage may admit only one. This is an
+explicit action-count constraint, not inferred cumulative semantic harm.
+
+Only side-effecting calls through this boundary are covered. Trusted host/storage,
+actor routing, configuration and checkpoint custody are assumed uncompromised.
+Same-operator hashes are not independent custody or rollback-proof storage.
+Already admitted remote work can finish after revocation. No live model, OpenAI
+compaction API, Agents API subagent, credential or real third-party incident is used.
+Native Agents SDK approval/resume and isolated workers exercise local tool dispatch.
+Broken-task recognition by a model (N03) remains open; a trusted missing-input fact
+only tests propagation of that known condition.
+
+## Exact experiment
+
+Two policies: `local_only` (existing exact-action hosts) and `integrated` (new
+context/lineage gate plus those hosts). Both receive identical scripted proposals.
+Exactly 18 cases per policy, 36 rows:
+
+`honest_resume`, `authorized_child`, `authorized_grandchild`, `forged_approval`,
+`omitted_failure`, `fabricated_success`, `stale_checkpoint`, `changed_source`,
+`changed_task`, `cross_task_peer`, `sibling_overreach`, `unapproved_delegate`,
+`revoked_parent`, `shared_budget`, `duplicate_handoff`, `unknown_effect`,
+`missing_input`, `nonblocking_failure`.
+
+Retain both raw receiver databases and the complete normalized controller database
+per row: 108 snapshots. Record summary discrepancies, prior/final results, grants,
+facts, reservations and observed effects. Keep unknowns and all failed published
+runs. Verification checks exact case/policy identities, complete raw table/schema
+contents, source commit and hashes, and fresh native replay of every row. Counts
+are fixture outcomes, not attack success rates or model generalization.
+
+## Implementation plan
+
+Execute inline, followed by one fresh whole-change review. This tracked design is
+also the execution ledger; development logs live outside the checkout at
+`/workspace/simurgh-research/phase-7/`. Preserve failures for diagnosis.
+
+1. **Ledger and sessions.** Add `tools/assurance-context/context_gate.py` and
+   `tests/test_context.py`. Test first: absent implementation fails; honest resume
+   succeeds, forged approval cannot expand grants, blocking/unknown facts survive,
+   stale/task/source checkpoints fail, parent revocation propagates, shared budget
+   serializes concurrent admissions, duplicate handoffs do not resend, and a killed
+   process leaves an unknown reservation. Implement `ContextGate.create(path, hosts,
+actions, task, source, registry, budget=1)`, reopen constructor, `checkpoint()`,
+   `projection()`, `resume(actor, checkpoint, summary)`, `record_fact`, `change_source`,
+   `revoke`, plus `Session.delegate(child, action_ids)` and `Session.dispatch(action)`.
+   A denied resume returns a blocked session with attributable reason.
+2. **Native experiment.** Add `experiment.py` and `tests/test_experiment.py`.
+   Test exact 36-row inventory, declared outcomes, receiver effects and discrepancy
+   preservation before implementing `execute(output)` and `validate(rows)`.
+   Each native dispatch uses the existing worker; never give it state or credentials.
+3. **Evidence.** Add `evidence.py` and `tests/test_evidence.py`. First fail tampered
+   inventory, report, raw state, summary and source-binding tests. Implement the
+   existing archive format with a new phase-specific verifier, protocol and CLI.
+   Freeze source/protocol in Git BEFORE the retained execution. No source edits
+   after freeze without a new preceding repair declaration.
+4. **Review, checks and publication.** Review hostile summaries, grant cycles and
+   lineage, check-to-admission races, crash windows, missing evidence, independent
+   replay and standalone CLI. Reproduce important findings before repair. Run all
+   focused tests, Ruff, dependency compatibility and `PYTHONDONTWRITEBYTECODE=1 npm test`.
+   Publish report/pack/root/receipt/results, verify separately, add scoped CI, push,
+   and record actual hosted outcomes. No merge, deployment or external submission.
+
+Preflight interfaces: native delivery consumes only `dispatch(action)`; exact hosts
+remain responsible for action identity/content and bounded RPC. The raw observer
+allows one effect per receiver, so two receivers are observed separately. Root
+budget is checked across both. Summary discrepancies never replace raw observations.
+
+## Write scope and lifecycle
+
+Add `tools/assurance-context/**`, `docs/research/context-phase-7/**`, this document
+and `.github/workflows/assurance-context.yml`. Update current README, ROADMAP,
+reviewer index, package.json and both change logs as required.
+
+Maintenance P7-CI01 authorizes modifying only `current` in
+`docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json` to add the new
+exact CI step and refresh live telemetry. Preserve baseline and all other fields.
+This declaration's commit must be a strict ancestor of the census edit.
+
+| Field                         | Declaration                                                                  |
+| ----------------------------- | ---------------------------------------------------------------------------- |
+| active_phase                  | Phase 7 context and delegation                                               |
+| protected_surface             | New tools/tests, protocol and retained evidence                              |
+| next_phase_behaviour          | Successors add namespaces and retain this replay                             |
+| maintenance_behaviour         | Bounded repair declaration must precede frozen edits                         |
+| sunset_or_migration_condition | Versioned successor preserves evidence and scope                             |
+| anti_vacuity_condition        | Exact 36 identities, 108 snapshots, raw checks, negative tests, fresh replay |
+
+## Decisions and ledger
+
+- Ruling: implement a host-owned structured projection, not semantic truth detection.
+  It gives mechanically checkable omissions and contradictions; free-text deception
+  and model recognition remain unmeasured.
+- Ruling: use exact action-count budget and two owned receivers. This tests cumulative
+  lineage admission, not arbitrary multi-step harmful outcomes.
+- Ruling: retain unknown reservations without automatic retry or budget refund.
+  This prevents duplicate uncertain work at the cost of conservative availability.
+- Ruling: continue on the clean existing topic branch with inline implementation.
+  The user already authorized phased implementation and push; no redundant approval
+  roundtrip. Skill helper scripts are unavailable locally; the tracked ledger records
+  decisions and tests. No historical frozen source/evidence will be edited.
+- Review focus: forged identity through tool payload, source/checkpoint mutation,
+  cyclic/duplicate grants, revocation and concurrent dispatch, exception/crash state,
+  summary omission, raw table edits, report inventory and replay laundering.
+- Progress: design declared; implementation pending.
