@@ -1,10 +1,18 @@
 # Research roadmap
 
+[Phase 9](docs/research/composition-phase-9/RESULTS.md) now composes phases 6–8 in
+one native workflow with shared reservations and persistent partial-update holds.
+All 40 rows and 360 raw snapshots passed fresh replay; a fresh composition review
+reported no Critical, Important or Minor findings. Next: preregister and run fresh
+held-out model tasks on this pipeline, beginning with local Llama. Real provider
+identity integration and outside custody remain separate validation work.
+
 [Phase 8](docs/research/credentials-phase-8/RESULTS.md) now tests authenticated
 credential expiry, rotation, revocation and session behavior in an owned HTTP service.
 All 46 rows and 92 raw snapshots passed fresh replay; continuous checks deny three
 additional revoked/expired-credential cases. The whole-change review remains incomplete.
-Next: compose phases 6–8 in one pipeline and evaluate fresh held-out model tasks.
+Phase 9 now supplies the separately scoped composition result above. Fresh held-out
+model evaluation remains next.
 Real provider identity integration and outside observation remain separate gaps.
 
 [Phase 7](docs/research/context-phase-7/RESULTS.md) now tests host-owned authority

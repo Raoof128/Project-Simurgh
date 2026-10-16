@@ -16,6 +16,13 @@ It does not establish general model safety, production readiness, or endorsement
 
 ## Start here
 
+The [phase 9 composed lifecycle experiment](docs/research/composition-phase-9/RESULTS.md)
+connects safety signals, delegated authority and authenticated credentials in one
+native workflow. Across 40 scripted rows, the composed control completes three intended
+new deliveries, preserves unknown reservations and holds interrupted updates. A fourth
+observed result is cached prior success. All 360 raw snapshots pass fresh replay.
+This is local integration evidence; fresh model evaluation and provider integration remain open.
+
 The [phase 8 credential lifecycle experiment](docs/research/credentials-phase-8/RESULTS.md)
 distinguishes vault deletion, rotation, credential revocation and session cancellation.
 Across 46 scripted rows, continuous credential checks deny three cases still allowed

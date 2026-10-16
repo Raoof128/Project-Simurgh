@@ -1,5 +1,11 @@
 # Reviewer index
 
+The [phase 9 results](research/composition-phase-9/RESULTS.md) test actual composition
+of signal, context and credential controls. All 40 scripted rows retain 360 raw snapshots
+and fresh replay. Review found no Critical, Important or Minor defects in this change;
+raw denials, unknowns and cached prior observations remain separately inspectable.
+Fresh model behavior, real provider integration and independent custody remain open.
+
 The [phase 8 results](research/credentials-phase-8/RESULTS.md) distinguish vault,
 credential and session lifecycle using an authenticated owned service. All 46 rows
 retain 92 raw snapshots with fresh replay. A reproduced admission/revocation race

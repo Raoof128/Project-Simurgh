@@ -2,8 +2,8 @@
 
 This owned-service experiment connects the frozen phase 6 signal gate, phase 7
 context/lineage gate and phase 8 credential gateway/receiver in one native workflow.
-Read the [design and execution ledger](../COMPOSITION_PHASE_9.md). Results follow
-source freeze and retained execution. No model or provider account is used.
+Read the [results](RESULTS.md) and [design/execution ledger](../COMPOSITION_PHASE_9.md).
+All 40 rows and 360 raw snapshots are retained. No model or provider account is used.
 
 ## Reproduce
 

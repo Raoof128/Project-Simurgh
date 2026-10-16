@@ -3729,3 +3729,17 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   compatibility passed. Declared census authority precedes its exact single addition.
 - **Follow-ups:** Retained run, separate verification, publication and hosted CI. The
   clean composition review does not complete Phase 8's separate interrupted review.
+
+## 2026-10-16 — Raouf: publish composed lifecycle evidence (Australia/Sydney)
+
+- **Scope:** Frozen Phase 9 execution, raw evidence and current reviewer navigation.
+- **Summary:** All 40 rows retained. Composed final outcomes: four observed (one cached),
+  15 blocked, one unknown; seven actual effects. Four raw receiver denials remain visible
+  despite conservative translation to blocked. Three intended new deliveries complete.
+- **Files changed:** Phase 9 report/archive/root/receipt/results, guide/design ledger,
+  README/ROADMAP, reviewer index and both logs.
+- **Verification:** Mandatory fresh replay and separate verification passed; 360 raw
+  snapshots, 76 frozen bindings. Canonical report equality, source hashes and links pass.
+  Twenty focused tests, 73 inherited tests and 5,122 repository tests passed.
+- **Follow-ups:** Hosted verification after push. Fresh held-out model evaluation,
+  representative provider identity and independent custody remain separate milestones.

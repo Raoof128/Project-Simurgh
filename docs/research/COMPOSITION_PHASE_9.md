@@ -158,3 +158,20 @@ all non-current fields. This declaration must be a strict ancestor of that edit.
   76 source/data bindings pass preflight. Prior inherited suites and npm suite passed.
   Strict declaration ancestry, exact one added census identity and predecessor scope
   preservation passed. This source/protocol commit precedes the publication run.
+
+## Retained execution and publication
+
+- Source freeze `9c326a8cc384d52a685be3c51676ce13a6f38c8f` precedes the retained run
+  in `/workspace/simurgh-research/phase-9/published-run`. All 40 rows completed and
+  mandatory fresh replay matched. A separate verification of the copied archive passed.
+- Composed final outcomes: four observed, 15 blocked, one unknown; seven actual effects.
+  One observation is cached prior success. Credential-only: 14 observed, four denied,
+  two unknown; 17 effects. Both retain four raw receiver denials; the composed adapter
+  translates these to blocked. Initial unknowns remain visible outside final counts.
+- Archive 378,443 bytes; 360 snapshots; 76 frozen bindings. Manifest SHA-256:
+  `7fbcb77fcccc793100eb8f88839dea0a43df8b1701975e9ba1274377ca55d3be`.
+- Canonical report equals archive bytes; all phase links and frozen/current source
+  hashes pass. Only retained review tests changed after source review, no production code.
+- [Results](composition-phase-9/RESULTS.md) include costs, scorecard and limits. Remaining
+  work: fresh held-out model tasks, representative provider identity and outside custody.
+  Hosted verification follows publication; no hosted Phase 9 result is claimed yet.
