@@ -2861,3 +2861,14 @@ one machine's local agent configuration:
   run 38836069319 remains 7/13 passed, six pending, none failed at receipt time.
 - **Follow-ups:** Phase 8 authenticated credential lifecycle; fresh model integration,
   outside operator/custody and final broader CI status remain separate open items.
+
+## 2026-10-16 — Raouf: declare credential lifecycle phase 8 (Australia/Sydney)
+
+- **Scope:** Additive owned-service authentication, expiry, rotation and revocation study.
+- **Summary:** Compare session-snapshot and per-commit credential checks; distinguish
+  vault deletion, existing/new sessions, cancellation and unknown remote outcomes.
+- **Files changed:** Phase 8 design/plan/ledger and both logs.
+- **Verification:** Clean branch; native/replay interfaces inspected; 46 case identities
+  and 92 raw snapshots declared. Prior phase broader readiness run 38836069319 succeeded.
+- **Follow-ups:** Test-first implementation, fresh review, source freeze, retained
+  execution and hosted checks. P8-CI01 authorizes only the live census addition.
