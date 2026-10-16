@@ -2936,3 +2936,16 @@ one machine's local agent configuration:
   Prior broader CI: 12 passed, workflow-recovery still running.
 - **Follow-ups:** Test-first implementation, fresh review, source freeze, retained
   evidence and hosted replay. P9-CI01 authorizes only the new live census identity.
+
+## 2026-10-16 — Raouf: implement composed lifecycle controls (Australia/Sydney)
+
+- **Scope:** Actual phase 6–8 integration with adapters and durable update holds.
+- **Summary:** Two routes share lineage budget and credential authority; raw denials,
+  unknown revocations and interrupted multi-control updates retain their meanings.
+- **Files changed:** New assurance-composed code/tests, protocol/guide, scoped CI,
+  npm scripts, authorized current census, Phase 9 ledger and both logs.
+- **Verification:** All 17 focused tests passed; inherited suites passed 24/25/24 tests.
+  Repository suite: 5,122 passed, zero failures, three prerequisite skips. Ruff and
+  62 pinned packages passed. Live census exact at 45; historical fields preserved.
+- **Follow-ups:** Fresh whole-change review, source freeze, retained execution and
+  hosted replay. Prior broader Phase 8 CI now succeeded, all 13 jobs.

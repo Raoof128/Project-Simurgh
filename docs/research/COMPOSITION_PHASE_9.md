@@ -107,3 +107,27 @@ all non-current fields. This declaration must be a strict ancestor of that edit.
   review does not retroactively certify all Phase 8 surfaces.
 - Prior broader readiness run 38840727954: 12 jobs passed; workflow-recovery still
   running at preflight. No final success claim yet.
+
+## Implementation progress
+
+- Tasks 1–3 implemented after missing-component tests failed. Eight initial adapter/
+  composition tests and the complete 40-row native matrix passed before evidence work.
+- Evidence tests exposed an empty pipeline state raising an untyped indexing error;
+  the observer now explicitly rejects invalid state cardinality. Mutation fixtures now
+  alter empty-table schema instead of deleting zero rows. All 17 tests passed before
+  final lint formatting; final formatted checks and inherited suites are running.
+- Ruling: cached context success can return the prior observation after a signal stop,
+  with no new receiver call. The stop-after-delivery row reports that historical result
+  and one total effect, not successful delivery after stopping. This preserves the
+  frozen context cache semantics rather than inventing a stronger cancellation claim.
+- Four extra regressions exercise process exit inside an update, update ordering across
+  reopened pipeline instances, policy rebinding and monitor state after a boot change.
+- P9-CI01 adds exactly one live census identity (44→45); no predecessor code is changed.
+- A formatter removed an indirect Service import used by the fixtures; direct imports
+  corrected the resulting import failure before protocol generation and final checks.
+
+- Final pre-review checks: all 17 focused tests passed (43.616 seconds under parallel
+  load); inherited phase 6/7/8 suites passed 24/25/24. Repository suite passed 5,122,
+  zero failures, three prerequisite skips. Ruff and 62 pinned packages pass. Protocol
+  preflight and unchanged non-current census fields verified. Source freeze pending review.
+- Prior Phase 8 broader readiness run 38840727954 now succeeded, all 13 jobs.
