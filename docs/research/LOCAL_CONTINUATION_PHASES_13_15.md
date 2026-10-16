@@ -140,3 +140,9 @@ No prior frozen source or evidence modification is authorized by this declaratio
   consumes the frozen Phase 10 verified capture. Their namespaces and evidence do not overlap.
 - User's standing instruction supplies continuation authorization; routine design/plan choices
   proceed without another approval round. Paid/live external operations remain out of scope.
+
+- Implementation: schedule tests 5 RED→GREEN, raw evidence tests 2 RED→GREEN,
+  projection tests 5 RED→GREEN and bundle tests 2 RED→GREEN; 14 focused tests now pass.
+  Ruff sorting exposed a dependency initialization ordering defect; consolidated imports
+  into the explicit bridge and reran both complete focused suites successfully.
+  Draft protocols bind 101 and 102 files; not yet a preregistration freeze or retained run.

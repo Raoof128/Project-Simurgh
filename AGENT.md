@@ -3072,3 +3072,14 @@ one machine's local agent configuration:
 - **Files changed:** New design/plan/ledger and both root logs. P13-CI01 declares one live census addition.
 - **Verification:** Current checkout clean; previous broad CI 38846752700 now succeeded all 13 jobs.
 - **Follow-ups:** Test-first implementation, fresh review/freeze, retained runs and full local checks.
+
+## 2026-10-16 — Raouf: implement bounded reliability and reduced evidence export (Australia/Sydney)
+
+- **Scope:** Phases 13–14 implementation before review and source freeze.
+- **Summary:** Real queued native calls, interrupted durable update, complete raw-state
+  verification; allowlisted 144-branch projection with distinct public/source validation.
+- **Files changed:** Two new tools/tests/protocols, scoped CI/npm commands and the P13-CI01
+  live census addition (47 gates); predecessor sources/evidence remain unchanged.
+- **Verification:** Seven reliability and seven export tests pass after test-first development;
+  Ruff passes. Corrected formatter-exposed import-order failure via explicit dependency bridge.
+- **Follow-ups:** Fresh whole-change review, freeze, retained runs and consolidated test matrix.

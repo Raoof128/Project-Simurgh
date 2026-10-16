@@ -1,0 +1,44 @@
+name: Assurance reliability and evidence export
+
+on:
+  push:
+    paths:
+      - ".github/workflows/assurance-reliability-export.yml"
+      - "tools/assurance-reliability/**"
+      - "tools/assurance-export/**"
+      - "docs/research/reliability-phase-13/**"
+      - "docs/research/export-phase-14/**"
+  pull_request:
+    paths:
+      - ".github/workflows/assurance-reliability-export.yml"
+      - "tools/assurance-reliability/**"
+      - "tools/assurance-export/**"
+      - "docs/research/reliability-phase-13/**"
+      - "docs/research/export-phase-14/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reliability-export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate reliability and evidence export
+        run: |
+          python -m pip install --require-hashes --only-binary=:all: -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock
+          python -m pip check
+          python -m unittest discover -s tools/assurance-reliability/tests -v
+          python -m unittest discover -s tools/assurance-export/tests -v
+          python tools/assurance-reliability/reliability_evidence.py verify docs/research/reliability-phase-13/evidence.zip --expected-root "$(cat docs/research/reliability-phase-13/ROOT.sha256)"
+          python tools/assurance-export/export_evidence.py inspect docs/research/export-phase-14/public.zip --expected-root "$(cat docs/research/export-phase-14/ROOT.sha256)"
+          python tools/assurance-export/export_evidence.py verify docs/research/export-phase-14/public.zip --expected-root "$(cat docs/research/export-phase-14/ROOT.sha256)" --source-pack docs/research/model-composition-phase-10/evidence.zip --source-root "$(cat docs/research/model-composition-phase-10/ROOT.sha256)"

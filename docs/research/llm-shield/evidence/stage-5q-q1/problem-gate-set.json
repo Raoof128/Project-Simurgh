@@ -86,8 +86,8 @@
     ]
   },
   "current": {
-    "as_of": "2026-10-16 phase 10 composed model CI extension",
-    "entry_count": 46,
+    "as_of": "2026-10-16 phase 13 reliability/export CI extension",
+    "entry_count": 47,
     "why": "the LIVE census, re-pinned by each stage that adds workflow steps. `baseline` is NOT touched: it is the v2.53.0 measurement the Q1-F002 finding cites, and a later stage may never move it to go green (5S-F015).",
     "gate_problems": [
       {
@@ -112,6 +112,10 @@
       },
       {
         "gate_id": "assurance-model-composed.yml::Validate composed model evidence",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "assurance-reliability-export.yml::Validate reliability and evidence export",
         "reason_code": "missing_committed_universe_query"
       },
       {
