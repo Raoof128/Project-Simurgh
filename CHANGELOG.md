@@ -3743,3 +3743,14 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   Twenty focused tests, 73 inherited tests and 5,122 repository tests passed.
 - **Follow-ups:** Hosted verification after push. Fresh held-out model evaluation,
   representative provider identity and independent custody remain separate milestones.
+
+## 2026-10-16 — Raouf: record hosted composition verification (Australia/Sydney)
+
+- **Scope:** Receipt-only Phase 9 closeout; frozen source and evidence unchanged.
+- **Summary:** Publication commit 1db778f5 passed composed lifecycle run 38843557082.
+- **Files changed:** Phase 9 design/execution ledger and both logs.
+- **Verification:** Hosted 20 tests passed; archive verified with fresh replay, 40 rows,
+  360 snapshots and the published manifest hash. Broader readiness run 38843556999
+  remains seven jobs passed, six pending, none failed at receipt time.
+- **Follow-ups:** Fresh held-out model evaluation, authorized provider integration and
+  outside custody. The earlier interrupted Phase 8 review remains separately open.

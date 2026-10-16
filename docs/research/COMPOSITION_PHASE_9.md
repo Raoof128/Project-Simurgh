@@ -175,3 +175,16 @@ all non-current fields. This declaration must be a strict ancestor of that edit.
 - [Results](composition-phase-9/RESULTS.md) include costs, scorecard and limits. Remaining
   work: fresh held-out model tasks, representative provider identity and outside custody.
   Hosted verification follows publication; no hosted Phase 9 result is claimed yet.
+
+## Hosted verification receipt
+
+Publication commit `1db778f5` passed [composed lifecycle run 38843557082](https://github.com/Raoof128/Project-Simurgh/actions/runs/38843557082).
+The fresh hosted runner passed all 20 tests in 48.087 seconds, dependency compatibility
+and committed-archive verification with fresh native replay: 40 rows, 360 raw snapshots,
+manifest `7fbcb77fcccc793100eb8f88839dea0a43df8b1701975e9ba1274377ca55d3be`.
+
+Broader readiness [run 38843556999](https://github.com/Raoof128/Project-Simurgh/actions/runs/38843556999)
+was still running at receipt time: seven jobs passed, six pending, none failed. No
+final success is claimed for that workflow. This receipt changes no frozen source,
+protocol or artifact. Fresh model evaluation, provider identity, outside custody and
+Phase 8's separate incomplete review remain open.
