@@ -4035,3 +4035,11 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Verification:** Three role/budget tests pass; Ruff and workflow formatting pass. Original
   transfer source remains unchanged. Runtime/model dependency checks and npm audit are clean.
 - **Follow-ups:** Capture at most 16 corrected requests; run native jobs; retain all outcomes.
+
+## 2026-10-17 — Raouf: authorize exact frozen-baseline format exclusion (Australia/Sydney)
+
+- **Scope:** P17-FORMAT01, one exact addition to `.prettierignore`.
+- **Summary:** Preserve the compact baseline JSON committed before corrective capture.
+- **Files:** Phase 17 maintenance declaration and both root logs; ignore edit follows later.
+- **Verification:** Corrective protocol hashes the baseline bytes; reformatting changes that input.
+- **Follow-ups:** Add the exact path, retain source verification, format human-facing reports.
