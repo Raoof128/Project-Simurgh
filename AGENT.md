@@ -2914,3 +2914,14 @@ one machine's local agent configuration:
 - **Follow-ups:** Hosted verification after push. Whole-change review remains incomplete
   after an automatic reviewer block; the reported race was reproduced and fixed.
   Provider identity integration, new model evidence and independent custody remain open.
+
+## 2026-10-16 — Raouf: record hosted credential verification (Australia/Sydney)
+
+- **Scope:** Receipt-only Phase 8 closeout; frozen source and evidence unchanged.
+- **Summary:** Publication commit 8f665ae0 passed credential lifecycle run 38840727900.
+- **Files changed:** Phase 8 design/execution ledger and both logs.
+- **Verification:** Hosted 24 tests passed; committed archive verified with fresh
+  replay, 46 rows, 92 raw snapshots and the published manifest hash. Broader readiness
+  run 38840727954 remains seven jobs passed, six pending, none failed at receipt time.
+- **Follow-ups:** Complete the interrupted whole-change review; compose phases 6–8
+  before fresh model evaluation. Provider integration and outside custody remain open.

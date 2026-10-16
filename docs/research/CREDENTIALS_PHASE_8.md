@@ -209,3 +209,16 @@ commit must be a strict ancestor of the census edit. No frozen predecessor edits
 - The [published results](credentials-phase-8/RESULTS.md) record outcomes, partial
   review, costs, limitations and remaining composition/model/provider/custody gaps.
   Hosted checks follow publication; no hosted result is claimed yet.
+
+## Hosted verification receipt
+
+Publication commit `8f665ae0` passed [credential lifecycle run 38840727900](https://github.com/Raoof128/Project-Simurgh/actions/runs/38840727900).
+The fresh hosted runner passed all 24 tests in 33.475 seconds, dependency compatibility
+and the committed archive verification with fresh replay: 46 rows, 92 raw snapshots,
+manifest `b84c6c7472d02652f22604dda64cfd9ff46f41ef31f18b04d6c8a56d84c7a31d`.
+
+Broader readiness [run 38840727954](https://github.com/Raoof128/Project-Simurgh/actions/runs/38840727954)
+was still running at closeout: seven jobs passed, six pending, none failed. This is
+not a final success claim for that workflow. This receipt-only change preserves the
+frozen source/protocol and published artifacts. The interrupted whole-change review,
+provider integration, fresh model composition and independent custody remain open.
