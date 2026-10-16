@@ -3257,3 +3257,13 @@ one machine's local agent configuration:
 - **Verification:** Original capture retains all eight declines, including three active cases.
   Original 64-attempt study continues unchanged; combined corrective budget remains below $1.
 - **Follow-ups:** Test authority-role separation, bind prior ledger, capture once; run native CI.
+
+## 2026-10-17 — Raouf: freeze corrected provider roles and native jobs (Australia/Sydney)
+
+- **Scope:** Additive Phase 17B adapter and Phase 19 native workflow under authority 00503114.
+- **Summary:** Host-authored task/state uses developer messages; retrieved text stays tool data.
+  Bind the original 64-attempt ledger and all eight original workflow results before correction.
+- **Files:** New role adapter/tests/protocol/baseline, scoped native workflow and root logs.
+- **Verification:** Three role/budget tests pass; Ruff and workflow formatting pass. Original
+  transfer source remains unchanged. Runtime/model dependency checks and npm audit are clean.
+- **Follow-ups:** Capture at most 16 corrected requests; run native jobs; retain all outcomes.

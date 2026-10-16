@@ -1,0 +1,68 @@
+name: Provider transfer native assurance
+on:
+  workflow_dispatch:
+  push:
+    branches: [openai-readiness]
+    paths:
+      - .github/workflows/provider-transfer-native.yml
+      - tools/simurgh-node-macos/**
+      - tools/simurgh-daemon-macos/**
+      - tools/simurgh-daemon-windows/**
+  pull_request:
+    paths:
+      - .github/workflows/provider-transfer-native.yml
+      - tools/simurgh-node-macos/**
+      - tools/simurgh-daemon-macos/**
+      - tools/simurgh-daemon-windows/**
+permissions:
+  contents: read
+jobs:
+  macos:
+    runs-on: macos-15
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and execute both Swift package suites
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p native-results
+          git rev-parse HEAD > native-results/source.txt
+          swift --version > native-results/toolchain.txt
+          swift test --package-path tools/simurgh-node-macos 2>&1 | tee native-results/node.log
+          grep -E 'Executed [1-9][0-9]* tests?, with 0 failures' native-results/node.log
+          swift test --package-path tools/simurgh-daemon-macos 2>&1 | tee native-results/daemon.log
+          grep -E 'Executed [1-9][0-9]* tests?, with 0 failures' native-results/daemon.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: macos-native-results
+          path: native-results
+          if-no-files-found: error
+  windows:
+    runs-on: windows-2022
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Execute daemon tests and compile native affinity fixture
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory native-results -Force | Out-Null
+          git rev-parse HEAD | Set-Content native-results/source.txt
+          dotnet --info | Set-Content native-results/toolchain.txt
+          dotnet test tools/simurgh-daemon-windows/tests/SimurghDaemon.Windows.Tests/SimurghDaemon.Windows.Tests.csproj --artifacts-path "$pwd/.native-artifacts" --logger 'trx;LogFileName=windows.trx' --results-directory "$pwd/native-results"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          [xml]$result = Get-Content native-results/windows.trx
+          $counts = $result.TestRun.ResultSummary.Counters
+          if ([int]$counts.executed -le 0 -or [int]$counts.failed -ne 0 -or [int]$counts.passed -ne [int]$counts.executed) { throw 'Missing or failing test execution' }
+          dotnet build tools/simurgh-daemon-windows/src/SimurghAffinityFixture/SimurghAffinityFixture.csproj --artifacts-path "$pwd/.native-artifacts" | Tee-Object native-results/affinity-build.log
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-native-results
+          path: native-results
+          if-no-files-found: error
