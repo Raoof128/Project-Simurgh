@@ -3882,3 +3882,13 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Verification:** Aggregate run identified canonical-byte formatting conflicts and six
   matches of the same synthetic canary; all observed values are existing test fixtures.
 - **Follow-ups:** Negative-test the narrow exception and rerun affected gates; retain other failures.
+
+## 2026-10-16 — Raouf: align format and secret gates with frozen evidence (Australia/Sydney)
+
+- **Scope:** Implement P15-CHECK01 within its two-file authority.
+- **Summary:** Preserve 34 exact machine-evidence JSON paths; exclude only the exact public
+  synthetic canary assignment in two bound test paths, retaining all other scanner matches.
+- **Files changed:** `.prettierignore`, `scripts/check.sh`, continuation ledger and both logs.
+- **Verification:** Canary check RED→GREEN; two exact cases excluded and six altered controls
+  retained. Actual secret-scan section passes; full Prettier check passes; 37 related gate tests pass.
+- **Follow-ups:** Finish consolidated validation and publish unresolved legacy/build limitations.

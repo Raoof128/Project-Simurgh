@@ -282,6 +282,7 @@ if grep -RIEn \
   | grep -v "\.example:" \
   | grep -v "sk-ant-\\.\\.\\." \
   | grep -v "openssl rand" \
+  | grep -vE '^tools/(openai-native/tests/test_native|openai-comparison/tests/test_comparison)\.py:[0-9]+:[[:space:]]*key = "sk-test-secret-never-log"$' \
   >> "$SECRET_LOG"; then : ; fi
 
 # Detect SIMURGH_*_SECRET= or SIMURGH_INSTRUCTOR_TOKEN= with a non-empty,

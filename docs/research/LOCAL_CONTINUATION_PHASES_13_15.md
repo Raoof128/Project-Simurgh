@@ -180,3 +180,7 @@ or archive byte changes; no runtime changes, gate identity changes or census cha
 Historical retired-gateway expectations and predecessor reproduce-set drift are separate
 migration defects and must remain visible rather than broad-skipped. The Docker failure
 occurred inside image dependency installation and remains an environment/build limitation.
+
+- P15-CHECK01 complete: full Prettier and actual secret-scan section pass; narrow canary
+  exception tested RED→GREEN with six changed-value/path/extra-token controls retained.
+  All 37 related gate tests pass. No frozen artifact bytes changed.
