@@ -4043,3 +4043,23 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Files:** Phase 17 maintenance declaration and both root logs; ignore edit follows later.
 - **Verification:** Corrective protocol hashes the baseline bytes; reformatting changes that input.
 - **Follow-ups:** Add the exact path, retain source verification, format human-facing reports.
+
+## 2026-10-17 — Raouf: publish provider transfer and presentation package (Australia/Sydney)
+
+- **Scope:** Phases 17–20 and separate declared role correction; external reproduction deferred.
+- **Summary:** Retain 96 model decisions, 288 matched branches and 120 paced reliability fixtures.
+  Llama retains 23/24 active completions while restricted effect trials fall from 17/24 to zero.
+  Luna comparison is 24/24 active and zero restricted effects in both useful controls.
+  Corrected live workflow completes 2/3 authorized cases and declines all five restricted cases;
+  retain the remaining active refusal and all original eight declines without further tuning.
+- **Files:** New result reports, source-bound archives, brief/demo/validation package, current
+  navigation, exact P17-FORMAT01 ignore addition and matching root logs.
+- **Verification:** 18 new Python tests; 16/12 predecessor suites; 45 Node/browser tests; 10
+  rejected evidence mutations. Full comparison/workflow replay and 4,240 snapshots verify.
+  Hosted macOS 10 tests, Windows 11 tests and affinity build pass at fbe06eca. Dependency
+  checks and formatting pass; 213 local links resolve. Original-source authority ancestry
+  and unchanged predecessor bytes checked. All 80 paid calls retained; estimated $0.0061306.
+  Exact-key scan passed and the task-downloaded credential copy was removed after capture.
+- **Follow-ups:** Finish the already-running hosted recovery job and publish its receipt.
+  One active refusal, production IAM/alerts/load, interactive desktop behavior and the
+  previously blocked whole-change security review remain explicit limitations.

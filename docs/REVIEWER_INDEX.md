@@ -1,11 +1,21 @@
 # Reviewer index
 
+Start with the [current one-page brief](research/transfer-phase-17/BRIEF.md),
+[results](research/transfer-phase-17/RESULTS.md) and
+[credential-free demonstration](research/transfer-phase-17/RUNBOOK.md#short-demonstration).
+The fresh two-model comparison preserves 23/24 Llama active completions while reducing
+restricted-state effect trials from 17/24 to 0/24. Luna completes 24/24 active comparison
+trials and already declines all restricted trials. Its separate corrected live workflow
+completes 2/3 authorized cases; the remaining refusal is retained. Native macOS and Windows
+checks pass. Independent reproduction is deferred; production readiness remains unproven.
+
 The [Phase 13 reliability study](research/reliability-phase-13/RESULTS.md) now adds
 60 repeated concurrent/restart fixtures: composed controls retain useful retries and
 produce zero new effects after queued stop or interrupted update. The
 [Phase 14 reduced export](research/export-phase-14/RESULTS.md) preserves all 144 Phase 10
 outcomes with explicit omissions and separate public/source verification. These local
-results leave sustained deployment load, live-provider behavior and outside custody open.
+historical results leave sustained deployment load, provider IAM and outside custody open.
+The current provider workflow and model-transfer results are linked above.
 
 The [Phase 16 maintenance results](research/maintenance-phase-16/RESULTS.md) close the
 reproduced legacy-gate failures: 5,154 Node tests, 142 aggregate steps and 32 E2E steps pass,
@@ -18,7 +28,7 @@ Use the [presentation guide](research/presentation-phase-12/README.md),
 [portable handoff](research/handoff-phase-11/README.md) and
 [Phase 12 gap map](research/presentation-phase-12/GAPS.md) for the Phase 10–12 closeout.
 The clean-clone run and hosted Phase 10 verification both passed all 16 focused tests
-and the complete saved-proposal replay. Live provider integration, outside custody,
+and the complete saved-proposal replay. Production provider identity integration, outside custody,
 broader model/task transfer and the interrupted Phase 8 review remain open.
 
 The [Phase 10 local Llama study](research/model-composition-phase-10/RESULTS.md) retained 48 generated responses and
@@ -32,7 +42,7 @@ The [phase 9 results](research/composition-phase-9/RESULTS.md) test actual compo
 of signal, context and credential controls. All 40 scripted rows retain 360 raw snapshots
 and fresh replay. Review found no Critical, Important or Minor defects in this change;
 raw denials, unknowns and cached prior observations remain separately inspectable.
-Phase 10 adds fresh local model behavior; real provider integration and independent custody remain open.
+Phase 10 adds fresh local model behavior; real provider identity integration and independent custody remain open.
 
 The [phase 8 results](research/credentials-phase-8/RESULTS.md) distinguish vault,
 credential and session lifecycle using an authenticated owned service. All 46 rows
