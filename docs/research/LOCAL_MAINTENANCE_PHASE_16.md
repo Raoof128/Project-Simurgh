@@ -74,3 +74,12 @@ Reproduce gateway and inventory failures first. Exercise negative inventory cont
 browser-selection failures; run affected gateway suites and container smoke, full Node unit
 and E2E suites where prerequisites permit. Retain exact statuses and limitations. Check
 frozen paths unchanged, authority ancestry, formatting and push the topic branch.
+
+## Implementation ruling
+
+The existing Chromium 154 executable runs JavaScript through its debugging protocol, but
+`--dump-dom about:blank` times out and `file://` navigation returns
+`ERR_BLOCKED_BY_ADMINISTRATOR`. The new Stage 5P harness uses the supported loopback HTTP
+origin and local debugging pipe. It does not change browser policy, CSP, portable code,
+vectors or frozen receipts. A failing installed browser remains a failure. Other historical
+browser drivers retain their historical behavior and must not inherit this lane's result.

@@ -10,7 +10,12 @@ if ! command -v docker >/dev/null 2>&1 || ! docker info >/dev/null 2>&1; then
   exit 0
 fi
 IMG=simurgh-gateway-stage3e:smoke
-docker build -f Dockerfile.gateway -t "$IMG" . >/tmp/3e-docker-build.log 2>&1
+if [ -n "${SIMURGH_NPM_BUILD_CACHE:-}" ]; then
+  docker build --network=none --build-context "simurgh_npm_cache=$SIMURGH_NPM_BUILD_CACHE" \
+    -f docs/research/maintenance-phase-16/Dockerfile.gateway.offline -t "$IMG" . >/tmp/3e-docker-build.log 2>&1
+else
+  docker build -f Dockerfile.gateway -t "$IMG" . >/tmp/3e-docker-build.log 2>&1
+fi
 CID=$(docker run -d -p 33060:33030 -e SIMURGH_LLM_SHIELD_SECRET=docker-mock-secret-32-characters-xx "$IMG")
 cleanup() { docker rm -f "$CID" >/dev/null 2>&1 || true; }
 trap cleanup EXIT
@@ -22,4 +27,5 @@ SID=$(echo "$S" | node -e "process.stdin.on('data',d=>console.log(JSON.parse(d).
 TOK=$(echo "$S" | node -e "process.stdin.on('data',d=>console.log(JSON.parse(d).token))")
 R=$(curl -sf -X POST "http://127.0.0.1:33060/api/llm-shield/gateway/$SID/run" -H "Content-Type: application/json" -H "Authorization: Bearer $TOK" -d '{"input":"hi","provider_mode":"mock","provider":"mock","scenario":"benign"}')
 if echo "$R" | grep -q '"schema_version":"3E"'; then echo "[PASS] docker mock run emits 3E receipt"; else echo "[FAIL] no 3E receipt"; exit 1; fi
+node tests/e2e/llm_shield_stage3e_live_disabled_smoke.mjs http://127.0.0.1:33060
 echo "docker-smoke-llm-shield-stage3e: passed"

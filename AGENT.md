@@ -3147,3 +3147,16 @@ one machine's local agent configuration:
 - **Files:** `docs/research/LOCAL_MAINTENANCE_PHASE_16.md`, `AGENT.md`, `CHANGELOG.md`.
 - **Verification:** Reproduced gateway retired-response and strict-successor inventory failures.
 - **Follow-ups:** Implement declared repairs, retain negative controls, publish measured results.
+
+## 2026-10-16 — Raouf: implement Phase 16 maintenance (Australia/Sydney)
+
+- **Scope:** Exact Phase 16 authority paths; no frozen research source or evidence changed.
+- **Summary:** Migrate HTTP smokes to permanent retirement, hash-bind a versioned current
+  reproduction set, execute browser parity through a local debugging pipe and loopback fixture,
+  and support lock-verified offline Docker installation with non-root source ownership.
+- **Files:** Declared gateway scripts/tests, inventory and browser helpers/tests, Dockerfile,
+  offline recipe, current manifest, `AGENT.md`, `CHANGELOG.md` and Phase 16 design.
+- **Verification:** 33 focused tests pass, including inventory mutations and browser failure/
+  timeout controls; Stage 5P's real Chromium lane passes 1,734 checks. Gateway core/live smoke
+  fixtures pass (72/40); audit 14/14. Offline Docker mock smoke runs as UID 1000.
+- **Follow-ups:** Run broad aggregate/E2E gates in a disposable clone; publish exact outcomes.
