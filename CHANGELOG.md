@@ -3693,3 +3693,14 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   run 38840727954 remains seven jobs passed, six pending, none failed at receipt time.
 - **Follow-ups:** Complete the interrupted whole-change review; compose phases 6–8
   before fresh model evaluation. Provider integration and outside custody remain open.
+
+## 2026-10-16 — Raouf: declare composed lifecycle phase 9 (Australia/Sydney)
+
+- **Scope:** Compose phases 6–8 in an owned native workflow; preserve frozen predecessors.
+- **Summary:** Declare 40 rows, 360 raw snapshots, exact adapter contracts and durable
+  holds for interrupted multi-control updates. No model or provider-key use planned.
+- **Files changed:** Phase 9 design/plan/ledger and both logs.
+- **Verification:** Inspected real signal/context/credential interfaces and clean branch.
+  Prior broader CI: 12 passed, workflow-recovery still running.
+- **Follow-ups:** Test-first implementation, fresh review, source freeze, retained
+  evidence and hosted replay. P9-CI01 authorizes only the new live census identity.
