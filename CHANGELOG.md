@@ -3966,3 +3966,16 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Verification:** New privacy controls pass; literal gate now identifies only this new
   design's own diagnostic prose, so its by-name approval is declared before editing the list.
 - **Follow-ups:** Complete the bounded gate repair and rerun the affected suites.
+
+## 2026-10-16 — Raouf: repair precise legacy test false positives (Australia/Sydney)
+
+- **Scope:** P16-LITERAL and P16-CANARY, under prior commits b6b9a235 and f5cc3a91.
+- **Summary:** Hash-bind two historical total lines, allow the exact maintenance design,
+  and recognize a canonical optional paired-node digest without ignoring malformed/raw values.
+- **Files:** `tests/unit/llmShield/stage5p/rawCodeCensus.test.js`,
+  `tests/e2e/stage27_cross_platform_device_shield_smoke.mjs`,
+  `tests/unit/maintenance/privacyCanary.test.js`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 25 focused tests pass; the original numeric-canary collision was reproduced
+  before the fix. Changed path/line/code controls and seven raw-value controls remain rejecting.
+  The Stage 2.6/2.7 closeout smoke passes. Historical evidence and application code are unchanged.
+- **Follow-ups:** Repeat broad gates on the final implementation and retain initial failures.
