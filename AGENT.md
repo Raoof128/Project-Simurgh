@@ -2824,3 +2824,15 @@ one machine's local agent configuration:
   checked. Ruff passes. Live gate census is exact at 43; historical baseline unchanged.
 - **Follow-ups:** Final focused/repository checks, fresh whole-change review, source
   freeze, retained execution, separate verification and hosted CI. No model claim.
+
+## 2026-10-16 — Raouf: freeze reviewed context experiment (Australia/Sydney)
+
+- **Scope:** Phase 7 source/protocol freeze before retained execution.
+- **Summary:** Fresh review found no Critical, Important or Minor defects. Retained
+  five additional reviewer probes as regressions; no production edits after review.
+- **Files changed:** New review-probe tests, refreshed 47-binding protocol, ledger and both logs.
+- **Verification:** All 25 focused tests passed; Ruff and 62 pinned packages pass.
+  Repository suite: 5,122 passed, zero failed, three existing prerequisite skips.
+  Prior phase readiness run 38832945810 now succeeded, all 13 jobs.
+- **Follow-ups:** Retained execution after this commit, separate archive verification,
+  publication and hosted Phase 7 checks. Live models/integration and custody remain open.

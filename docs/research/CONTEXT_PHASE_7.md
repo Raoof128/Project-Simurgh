@@ -152,3 +152,25 @@ This declaration's commit must be a strict ancestor of the census edit.
 - P7-CI01 adds exactly one live gate identity (42→43), none removed. Baseline and
   non-current fields are preserved. The classification limitation remains recorded.
 - Source freeze and retained published execution are still pending review.
+
+## Review and source freeze
+
+Fresh whole-change review of `b8645bbe..77d1e4f6` found no Critical, Important or
+Minor defects within the declared boundary. The reviewer independently ran 20 tests
+and additional identity, duplicate/cyclic grant, depth-three, in-flight revocation
+and unexpected-exception probes. Those five probes are now retained as regression
+tests; the author ran all **25 tests**, passing in 24.238 seconds. No production code
+changed after review. Ruff and the 62-package dependency check pass. The repository
+suite passed 5,122 tests, zero failures and three existing prerequisite skips.
+
+- Ruling on review limits: unpublished evidence and hosted status will be checked
+  separately after this source freeze. Live model behavior, semantic deception,
+  actual compaction/Agents API integration, compromised trusted orchestration/storage,
+  rollback resistance and independent custody remain outside this result. Cost:
+  only the stated local engineering claims are supported.
+- Task 3 complete: raw verification and fresh replay reject the declared mutations.
+- Task 4 progress: reviewed source and protocol bind 47 source/data files; the next
+  commit freezes them before any retained published execution. Historical artifacts
+  and implementations are unchanged. No deferred minor findings.
+- Prior-phase status update: readiness run `38832945810` completed successfully with
+  all 13 jobs, closing the pending status recorded at the end of phase 6.
