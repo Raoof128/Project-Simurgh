@@ -191,5 +191,19 @@ claims and two stale-context mismatches. These are engineered cases, not detecti
 or utility rates. [Results](context-phase-7/RESULTS.md) preserve the detailed limits.
 
 Implementation, fresh review, frozen execution and separate verification are complete.
-Hosted verification is pending push. Phase 8, fresh model experiments and independent
-custody remain open. The final archive was checked by the author, not an outside operator.
+Phase 8, fresh model experiments and independent custody remain open. The final archive was checked by the author, not an outside operator.
+
+## Hosted verification receipt
+
+Publication commit `8b04e791` passed
+[context/delegation run 38836069448](https://github.com/Raoof128/Project-Simurgh/actions/runs/38836069448).
+The fresh hosted runner passed all 25 tests and verified the committed archive with
+fresh replay, 36 rows, 108 raw snapshots and manifest hash
+`2eeff1f45fe67c7c192db2cc6ec25984f8125dc1c6f27fc47d7b1d8fb397fdb7`.
+This is project-operated automation on another machine, not outside custody.
+
+The broader [readiness run 38836069319](https://github.com/Raoof128/Project-Simurgh/actions/runs/38836069319)
+was still running at this receipt: seven of 13 jobs passed, six pending, none failed.
+Its final outcome is not claimed. The previous readiness run `38832945810` passed
+all 13 jobs but does not substitute for this run. Phase 7 implementation, scoped
+hosted verification and publication are complete; broader CI status remains explicit.
