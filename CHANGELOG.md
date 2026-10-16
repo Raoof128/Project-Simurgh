@@ -3947,3 +3947,12 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Verification:** Three tests pass: 5 entries / 17 vectors across all evaluators and
   missing/altered-answer negative controls. Implementation follows authority commit ce580463.
 - **Follow-ups:** Finish aggregate/E2E validation and publish revision-specific results.
+
+## 2026-10-16 — Raouf: authorize precise literal and privacy-test corrections (Australia/Sydney)
+
+- **Scope:** P16-LITERAL and P16-CANARY exact test paths; no application or evidence changes.
+- **Summary:** Correct cross-era prose correlation and a random digest substring false positive.
+- **Files:** Phase 16 design, `AGENT.md`, `CHANGELOG.md` (prior authority only).
+- **Verification:** Aggregate logs retain both failures; the historical total line hashes and
+  leaked-value report identify the causes. E2E prior-stage failure shares the literal cause.
+- **Follow-ups:** Hash-bound two-line exclusions, canonical-field recognition and negative controls.

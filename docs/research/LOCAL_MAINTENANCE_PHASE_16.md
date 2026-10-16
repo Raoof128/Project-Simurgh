@@ -101,3 +101,24 @@ Authorize **add** of `docs/research/maintenance-phase-16/logs.zip` and
 hashes, exact tested revisions, test outcomes and exclusions. Any known public synthetic
 canary redaction must be stated. Do not include credentials, process environments or private
 attachments. This is a new publication, not a change to frozen Phase 15 observations.
+
+## Additional reproduced gate defects: prior authority
+
+P16-LITERAL authorizes **modify** of
+`tests/unit/llmShield/stage5p/rawCodeCensus.test.js`: retain the full reserved-code regex and
+file-level correlation; exclude only two exact hash-bound historical lines in `AGENT.md`
+and `CHANGELOG.md` whose unrelated total is 469. Require each exception to occur exactly
+once and prove changed bytes, changed paths and appended code do not qualify. No blanket
+root-log allowlist and no historical line edits. This supersedes a false correlation exposed
+when the new append-only log truthfully names Stage 5P. Lifecycle: current gate remains
+active; later edits require new prior authority; empty or altered exceptions refuse.
+
+P16-CANARY authorizes **modify** of
+`tests/e2e/stage27_cross_platform_device_shield_smoke.mjs` and **add** of
+`tests/unit/maintenance/privacyCanary.test.js`. Recognize only the exact
+`node_id_hash_if_paired` field with canonical SHA-256 syntax as a permitted hashed identifier;
+retain raw field/value detection elsewhere, including malformed values at that same key.
+Export the detector behind an import-safe CLI guard for deterministic regression controls.
+The reproduced failure was digits 4321 inside a valid 64-hex digest, not a raw PID leak.
+Lifecycle: this synthetic smoke remains active; no production privacy policy changes;
+missing/modified raw-value detection must fail the regression controls.
