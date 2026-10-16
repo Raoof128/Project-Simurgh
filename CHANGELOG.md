@@ -3861,3 +3861,14 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Files changed:** New reliability validator/tests, draft protocol bindings, ledger and both logs.
 - **Verification:** Full reliability suite 12 passed; export suite seven passed; Ruff clean.
 - **Follow-ups:** Retain one full run/export, independently verify, finish consolidated validation.
+
+## 2026-10-16 — Raouf: publish reliability and privacy-aware export evidence (Australia/Sydney)
+
+- **Scope:** Frozen Phases 13–14 runs and current reviewer navigation.
+- **Summary:** 60 reliability fixtures/210 final calls/600 snapshots pass; composed controls
+  retain useful retries and prevent new queued-stop/interrupted-update effects. Export retains
+  all 144 Phase 10 outcomes with explicit omissions and full source consistency verification.
+- **Files changed:** New phase artifacts/results, current navigation, ledger and both logs.
+- **Verification:** Mandatory fresh reliability validation plus separate invocation pass;
+  export validates full source before projection and again after packaging; focused tests 12/7.
+- **Follow-ups:** Separate export invocation, hosted checks and Phase 15 complete test closeout.

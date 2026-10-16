@@ -1,5 +1,12 @@
 # Reviewer index
 
+The [Phase 13 reliability study](research/reliability-phase-13/RESULTS.md) now adds
+60 repeated concurrent/restart fixtures: composed controls retain useful retries and
+produce zero new effects after queued stop or interrupted update. The
+[Phase 14 reduced export](research/export-phase-14/RESULTS.md) preserves all 144 Phase 10
+outcomes with explicit omissions and separate public/source verification. These local
+results leave sustained deployment load, live-provider behavior and outside custody open.
+
 Use the [presentation guide](research/presentation-phase-12/README.md),
 [portable handoff](research/handoff-phase-11/README.md) and
 [current gap map](research/presentation-phase-12/GAPS.md) for the Phase 10–12 closeout.

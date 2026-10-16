@@ -160,3 +160,8 @@ No prior frozen source or evidence modification is authorized by this declaratio
   retain results/effects but no timing — resolves the Minor review ambiguity without adding
   an unplanned latency denominator. Initial-call latency remains unmeasured; no deferred
   implementation finding. No second review pass; predecessor files remain unchanged.
+
+- Frozen at `6b35f696`: one retained full reliability run passed all 60 fixtures,
+  mandatory fresh schedule validation and separate verification; 600 raw snapshots retained.
+  One export retained all 144 branches after source verification and passed mandatory
+  source reprojection. No retry or fallback run; no paid API use. See new phase result pages.

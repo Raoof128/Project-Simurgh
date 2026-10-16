@@ -1,5 +1,12 @@
 # Project Simurgh
 
+The [Phase 13 reliability study](docs/research/reliability-phase-13/RESULTS.md) now adds
+60 repeated concurrent/restart fixtures: composed controls retain useful retries and
+produce zero new effects after queued stop or interrupted update. The
+[Phase 14 reduced export](docs/research/export-phase-14/RESULTS.md) preserves all 144 Phase 10
+outcomes with explicit omissions and separate public/source verification. These local
+results leave sustained deployment load, live-provider behavior and outside custody open.
+
 **Verifiable security controls for autonomous AI agents.**
 
 Simurgh is a provider-agnostic research prototype for measuring whether agent permissions,
