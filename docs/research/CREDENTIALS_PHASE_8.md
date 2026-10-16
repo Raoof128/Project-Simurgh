@@ -143,3 +143,22 @@ commit must be a strict ancestor of the census edit. No frozen predecessor edits
   skill helper scripts. Preserve development failures and frozen historical artifacts.
 - Prior phase: broader readiness run `38836069319` completed successfully.
 - Progress: design and exact cases declared; implementation pending.
+
+## Implementation and development checks
+
+- Tasks 1–3 implemented. Initial missing-service, gateway, matrix and verifier tests
+  failed before implementation. All 23 focused tests now pass (24.092 seconds),
+  including actual HTTP response loss and process exit after durable intent.
+- Exact 46-row development execution matches the declared outcomes with 92 raw
+  snapshots. Every service/gateway table is covered by mutation tests; coordinated
+  raw/report fabrication fails fresh replay. No bearer values are retained in evidence.
+- Ruling: issuer IDs additionally bind session handles and revocation acknowledgments.
+  This prevents rebinding equal local IDs to another issuer; provisioning that identity
+  remains a trusted host responsibility, not external identity attestation.
+- Additional tests discard a revocation reply after an actual remote commit, reject
+  malformed/bool/uncorrelated acknowledgment fields and duplicate credential issuance,
+  and preserve an unknown intent after process exit without resending it.
+- Ruff passes; repository suite 5,122 passed, zero failed, three existing prerequisite
+  skips. Protocol binds 50 source/data files. Source freeze awaits fresh review.
+- P8-CI01 adds exactly one live gate identity (43→44), none removed. Historical
+  baseline/non-current fields are unchanged; the classification limitation remains.

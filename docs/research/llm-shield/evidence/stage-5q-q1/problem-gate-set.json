@@ -86,12 +86,16 @@
     ]
   },
   "current": {
-    "as_of": "2026-10-16 phase 7 context CI extension",
-    "entry_count": 43,
+    "as_of": "2026-10-16 phase 8 credential CI extension",
+    "entry_count": 44,
     "why": "the LIVE census, re-pinned by each stage that adds workflow steps. `baseline` is NOT touched: it is the v2.53.0 measurement the Q1-F002 finding cites, and a later stage may never move it to go green (5S-F015).",
     "gate_problems": [
       {
         "gate_id": "assurance-context.yml::Validate durable context and delegated authority",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "assurance-credentials.yml::Validate authenticated credential lifecycle",
         "reason_code": "missing_committed_universe_query"
       },
       {

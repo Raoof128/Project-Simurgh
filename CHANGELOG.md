@@ -3640,3 +3640,16 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   and 92 raw snapshots declared. Prior phase broader readiness run 38836069319 succeeded.
 - **Follow-ups:** Test-first implementation, fresh review, source freeze, retained
   execution and hosted checks. P8-CI01 authorizes only the live census addition.
+
+## 2026-10-16 — Raouf: implement authenticated credential lifecycle (Australia/Sydney)
+
+- **Scope:** Owned HTTP credential/session service, durable gateway, matrix and verifier.
+- **Summary:** Per-commit expiry/revocation, separate auth roles and issuer binding,
+  vault snapshots, session cancellation, retained unknowns and real dropped responses.
+- **Files changed:** New assurance-credentials source/tests, Phase 8 protocol/guide,
+  scoped CI, npm scripts, current census, design ledger and both logs.
+- **Verification:** All 23 focused tests pass; exact 46-row development matrix and 92
+  snapshots. Ruff passes; npm 5,122 passed, zero failed, three prerequisite skips.
+  P8-CI01 precedes one exact live census addition (43→44), with baseline preserved.
+- **Follow-ups:** Fresh review, source/protocol freeze, retained execution, separate
+  verification and hosted replay. No real provider credentials or model calls used.

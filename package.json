@@ -63,7 +63,9 @@
     "test:phase6": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tools/assurance-signals/tests -v",
     "assurance:phase6": "PYTHONDONTWRITEBYTECODE=1 python3 tools/assurance-signals/evidence.py",
     "test:phase7": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tools/assurance-context/tests -v",
-    "assurance:phase7": "PYTHONDONTWRITEBYTECODE=1 python3 tools/assurance-context/evidence.py"
+    "assurance:phase7": "PYTHONDONTWRITEBYTECODE=1 python3 tools/assurance-context/evidence.py",
+    "test:phase8": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tools/assurance-credentials/tests -v",
+    "assurance:phase8": "PYTHONDONTWRITEBYTECODE=1 python3 tools/assurance-credentials/evidence.py"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
