@@ -3188,3 +3188,13 @@ one machine's local agent configuration:
 - **Verification:** Aggregate logs retain both failures; the historical total line hashes and
   leaked-value report identify the causes. E2E prior-stage failure shares the literal cause.
 - **Follow-ups:** Hash-bound two-line exclusions, canonical-field recognition and negative controls.
+
+## 2026-10-16 — Raouf: clarify Phase 16 literal-gate documentation authority (Australia/Sydney)
+
+- **Scope:** Permit the exact Phase 16 design as approved code-band documentation.
+- **Summary:** The design must describe its finding literally; preserve the reserved-band
+  regex and restrict root logs to two exact historical line hashes.
+- **Files:** Phase 16 design, `AGENT.md`, `CHANGELOG.md` (authority only).
+- **Verification:** New privacy controls pass; literal gate now identifies only this new
+  design's own diagnostic prose, so its by-name approval is declared before editing the list.
+- **Follow-ups:** Complete the bounded gate repair and rerun the affected suites.

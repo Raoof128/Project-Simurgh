@@ -122,3 +122,9 @@ Export the detector behind an import-safe CLI guard for deterministic regression
 The reproduced failure was digits 4321 inside a valid 64-hex digest, not a raw PID leak.
 Lifecycle: this synthetic smoke remains active; no production privacy policy changes;
 missing/modified raw-value detection must fail the regression controls.
+
+The exact design document `docs/research/LOCAL_MAINTENANCE_PHASE_16.md` is also
+approved code-band documentation under the predecessor's existing by-name documentation
+rule. The gate may add this exact path to its approved-documentation list so this finding
+can be described literally. The two root-log exceptions remain line-hash bound; no broad
+log exception is authorized. This clarification precedes that list edit.
