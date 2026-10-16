@@ -3994,3 +3994,13 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   and unchanged predecessor research paths verified. No paid provider calls or new inference.
 - **Follow-ups:** Native platforms, outside custody, provider entitlements, sustained deployment
   and the previously interrupted whole-change review remain unproven; push the topic branch.
+
+## 2026-10-17 — Raouf: authorize provider transfer and reviewer handoff (Australia/Sydney)
+
+- **Scope:** Phases 17–20, user-approved readiness items 2–5; external reproduction deferred.
+- **Summary:** Add bounded live workflow, two-family comparison, paced reliability and brief.
+- **Files:** New Phase 17 design and matching root logs; exact write paths declared in design.
+- **Verification:** Clean baseline 6a88786a; installed model and OpenAI model access checked.
+  No inference calls yet; existing frozen lifecycle and reliability APIs inspected.
+- **Follow-ups:** Test new capture/verification code, freeze inputs, capture within budget,
+  publish actual results and remaining platform/review limits without changing history.
