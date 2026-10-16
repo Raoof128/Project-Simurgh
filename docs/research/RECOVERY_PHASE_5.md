@@ -138,3 +138,14 @@ This declaration commit must strictly precede that edit; verify ancestry.
   reports 5,122 pass, zero fail, three existing prerequisite skips.
 - Final frozen pack was verified by the author, not the internal code reviewer.
   Outside custody, new model efficacy, real identity and distributed cancellation stay open.
+
+## Hosted verification receipt — 2026-10-16 (Australia/Sydney)
+
+Commit `34c01074cb54a2c18c0b8158b1b9c7de10976b20` passed both jobs in
+[follow-up run 38829379613](https://github.com/Raoof128/Project-Simurgh/actions/runs/38829379613):
+fresh-machine phase 4 reproduction and phase 5 recovery/response verification.
+The latter verifies the committed evidence and executes a fresh native replay.
+These are project-operated engineering checks, not a new model evaluation or
+independent custody. At receipt time, the separate broader readiness run
+`38829379622` had 10/13 jobs passed and three still running; its final result is
+not claimed here. This receipt changes no frozen source or evidence.

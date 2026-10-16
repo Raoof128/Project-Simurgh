@@ -2723,3 +2723,14 @@ one machine's local agent configuration:
   final npm 5,122 pass, zero fail, three existing skips. Fresh-host phase 4 pack verifies.
 - **Follow-ups:** Hosted phase 5 checks after push. Outside operator/custody, new model
   study and real identity/vendor integration remain open; no model-score revision.
+
+## 2026-10-16 — Raouf: record hosted recovery verification (Australia/Sydney)
+
+- **Scope:** Receipt-only closeout of phase 5 and fresh-machine reproduction.
+- **Summary:** Commit 34c01074 passed both follow-up workflow jobs in run 38829379613.
+- **Files changed:** Phase 5 design/execution ledger and both logs; frozen artifacts unchanged.
+- **Verification:** Hosted fresh reproduction and recovery/response verification both
+  succeeded. Separate broader readiness run 38829379622 was 10/13 passed with three
+  jobs running at receipt time; no final success claim for that run.
+- **Follow-ups:** Outside operator/custody, new model evaluation and real identity/vendor
+  integration remain open. Published results retain their scripted engineering scope.
