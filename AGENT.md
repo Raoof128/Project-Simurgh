@@ -3139,3 +3139,11 @@ one machine's local agent configuration:
   smoke and HTTP 410 retired-route refusal. TLS verification retained; no paid API calls.
 - **Follow-ups:** Legacy-gate migration, browser/macOS portability, interrupted Phase 8 review,
   outside custody, live-provider integration and harder model generalization remain open.
+
+## 2026-10-16 — Raouf: declare Phase 16 maintenance (Australia/Sydney)
+
+- **Scope:** Prior authority for bounded legacy gate, inventory, browser and Docker maintenance.
+- **Summary:** Preserve frozen research bytes; migrate obsolete checks under the Phase 16 design.
+- **Files:** `docs/research/LOCAL_MAINTENANCE_PHASE_16.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Reproduced gateway retired-response and strict-successor inventory failures.
+- **Follow-ups:** Implement declared repairs, retain negative controls, publish measured results.
