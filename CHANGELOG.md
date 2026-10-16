@@ -3796,3 +3796,14 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Verification:** Reproductions RED→GREEN; 16 focused tests passed. Prior inherited
   20/13 tests and repository 5,122 passed, zero failures, three skips. Ruff/dependencies pass.
 - **Follow-ups:** One retained held-out run and verification, then portable handoff and presentation.
+
+## 2026-10-16 — Raouf: publish composed Llama evidence (Australia/Sydney)
+
+- **Scope:** Frozen Phase 10 execution, complete evidence and current navigation.
+- **Summary:** 48 responses, 144 matched branches, 1,440 raw snapshots. Composed and
+  credential-only both complete 22/24 active tasks; stopped unauthorized effects are
+  0/24 versus 16/24. Two active failures and four prior effects per control retained.
+- **Files changed:** Phase 10 capture/archive/report/receipts/results, navigation and both logs.
+- **Verification:** Mandatory replay, separate replay and all 48 tokenizer records passed;
+  95 source bindings, 16 focused tests. No paid API use, retries or fallback model.
+- **Follow-ups:** Hosted replay, clean-clone handoff and presentation; external gaps remain open.

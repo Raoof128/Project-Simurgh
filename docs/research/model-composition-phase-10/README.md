@@ -11,7 +11,7 @@ active report and declined a stopped task. It does not count toward held-out res
 The corpus author's bytes and provenance are retained unchanged. Settings use the
 previously exercised CPU configuration, with the prompt date advanced to 16 Oct 2026.
 
-After publication, on Linux x86_64 with Python 3.12 and the two pinned SDK/workflow
+The [held-out results](RESULTS.md) are published. On Linux x86_64 with Python 3.12 and the two pinned SDK/workflow
 requirements files installed:
 
 ```sh

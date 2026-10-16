@@ -1,18 +1,24 @@
 # Research roadmap
 
+The [Phase 10 local Llama study](docs/research/model-composition-phase-10/RESULTS.md) retained 48 generated responses and
+144 matched control branches. Composed controls completed 22/24 active tasks, matching
+credential-only utility, while new unauthorized effects on stopped branches fell from
+16/24 to 0/24. All 1,440 raw snapshots passed fresh replay; all 48 token records verified.
+This is a bounded single-model result, with two active failures retained and no claim
+of general safety or outside custody.
+
 [Phase 9](docs/research/composition-phase-9/RESULTS.md) now composes phases 6–8 in
 one native workflow with shared reservations and persistent partial-update holds.
 All 40 rows and 360 raw snapshots passed fresh replay; a fresh composition review
-reported no Critical, Important or Minor findings. Next: preregister and run fresh
-held-out model tasks on this pipeline, beginning with local Llama. Real provider
+reported no Critical, Important or Minor findings. Phase 10 now adds fresh held-out
+local Llama tasks on this pipeline. Real provider
 identity integration and outside custody remain separate validation work.
 
 [Phase 8](docs/research/credentials-phase-8/RESULTS.md) now tests authenticated
 credential expiry, rotation, revocation and session behavior in an owned HTTP service.
 All 46 rows and 92 raw snapshots passed fresh replay; continuous checks deny three
 additional revoked/expired-credential cases. The whole-change review remains incomplete.
-Phase 9 now supplies the separately scoped composition result above. Fresh held-out
-model evaluation remains next.
+Phase 9 now supplies the separately scoped composition result above. Phase 10 adds a bounded fresh local model evaluation.
 Real provider identity integration and outside observation remain separate gaps.
 
 [Phase 7](docs/research/context-phase-7/RESULTS.md) now tests host-owned authority

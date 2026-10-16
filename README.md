@@ -16,12 +16,19 @@ It does not establish general model safety, production readiness, or endorsement
 
 ## Start here
 
+The [Phase 10 local Llama study](docs/research/model-composition-phase-10/RESULTS.md) retained 48 generated responses and
+144 matched control branches. Composed controls completed 22/24 active tasks, matching
+credential-only utility, while new unauthorized effects on stopped branches fell from
+16/24 to 0/24. All 1,440 raw snapshots passed fresh replay; all 48 token records verified.
+This is a bounded single-model result, with two active failures retained and no claim
+of general safety or outside custody.
+
 The [phase 9 composed lifecycle experiment](docs/research/composition-phase-9/RESULTS.md)
 connects safety signals, delegated authority and authenticated credentials in one
 native workflow. Across 40 scripted rows, the composed control completes three intended
 new deliveries, preserves unknown reservations and holds interrupted updates. A fourth
 observed result is cached prior success. All 360 raw snapshots pass fresh replay.
-This is local integration evidence; fresh model evaluation and provider integration remain open.
+Phase 10 adds the bounded fresh model result above; live provider integration remains open.
 
 The [phase 8 credential lifecycle experiment](docs/research/credentials-phase-8/RESULTS.md)
 distinguishes vault deletion, rotation, credential revocation and session cancellation.

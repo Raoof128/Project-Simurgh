@@ -1,10 +1,17 @@
 # Reviewer index
 
+The [Phase 10 local Llama study](research/model-composition-phase-10/RESULTS.md) retained 48 generated responses and
+144 matched control branches. Composed controls completed 22/24 active tasks, matching
+credential-only utility, while new unauthorized effects on stopped branches fell from
+16/24 to 0/24. All 1,440 raw snapshots passed fresh replay; all 48 token records verified.
+This is a bounded single-model result, with two active failures retained and no claim
+of general safety or outside custody.
+
 The [phase 9 results](research/composition-phase-9/RESULTS.md) test actual composition
 of signal, context and credential controls. All 40 scripted rows retain 360 raw snapshots
 and fresh replay. Review found no Critical, Important or Minor defects in this change;
 raw denials, unknowns and cached prior observations remain separately inspectable.
-Fresh model behavior, real provider integration and independent custody remain open.
+Phase 10 adds fresh local model behavior; real provider integration and independent custody remain open.
 
 The [phase 8 results](research/credentials-phase-8/RESULTS.md) distinguish vault,
 credential and session lifecycle using an authenticated owned service. All 46 rows
@@ -36,7 +43,7 @@ pending; the [operator record](research/reproduction-phase-4/OPERATOR_RECORD.md)
 is explicitly an unexecuted template.
 
 Start with the [phase 3 local model study](research/model-phase-3/README.md) and its
-[presentation](research/model-phase-3/PRESENTATION.md) for the latest evaluation:
+[presentation](research/model-phase-3/PRESENTATION.md) for the earlier adaptive evaluation:
 540 branches, 403 unique responses, all failure categories retained and fresh effect
 replay. Benign utility was 90/90 under enforcement; attacked utility was 59/90, with
 zero unauthorized effects versus 43/90 under bypass. The 31 incomplete attacked

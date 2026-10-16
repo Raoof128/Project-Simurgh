@@ -129,3 +129,10 @@ The declaration commit must strictly precede that census edit.
   preserved. Repository tests: 5,122 passed, zero failures, three prerequisite skips;
   inherited composition/model suites 20/13 passed; Ruff and 62-package check passed.
   Prior broader hosted run 38843556999 is now successful, all 13 jobs.
+
+- Retained run complete: 48 generations, 144 branches, 1,440 snapshots; 356.05 seconds
+  batch generation time. Composed/credential-only active completion 22/24 each; stopped
+  unauthorized effects 0/24 versus 16/24. Deny-all completes zero. Four initial prior
+  effects per control retained separately. Model: 44 calls, four declines, no invalid,
+  truncated or error responses. Mandatory and separate replay passed; tokenizer checked
+  all 48 outputs, capture digest bound. Published results retain the two active failures.
