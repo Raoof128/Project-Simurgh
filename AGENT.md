@@ -2772,3 +2772,18 @@ one machine's local agent configuration:
   62 pinned dependencies pass. P6-CI01 precedes one live gate addition (41→42).
 - **Follow-ups:** Retained execution after this source/protocol commit, separate artifact
   verification and hosted checks. No live provider or independent-custody result claimed.
+
+## 2026-10-16 — Raouf: publish safety signals phase 6 (Australia/Sydney)
+
+- **Scope:** Frozen phase 6 execution, evidence and current reviewer navigation.
+- **Summary:** 42 matrix rows and two in-flight drills retained. Integrated policy
+  allows six intended deliveries, blocks 14 stop/hold cases and retains one unknown;
+  already admitted effects can finish after a stop. No model/provider result claimed.
+- **Files changed:** Phase 6 report/pack/root/receipt/results and guide, root design,
+  README, ROADMAP, reviewer index, current census timestamp and both logs.
+- **Verification:** Published run, mandatory fresh replay and separate verification
+  pass; 88 raw SQLite snapshots, 48 frozen bindings unchanged. Twenty-four focused
+  tests; final npm 5,122 pass, zero fail, three existing prerequisite skips. Ruff and
+  pinned dependencies pass. P6-CI01 preserves historical census fields.
+- **Follow-ups:** Hosted safety-signal checks after push, then phase 7 compaction and
+  delegation. Live provider delivery and independent custody remain unvalidated.

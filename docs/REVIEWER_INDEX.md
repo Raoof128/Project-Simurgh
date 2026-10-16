@@ -1,5 +1,10 @@
 # Reviewer index
 
+The [phase 6 safety-signal results](research/signals-phase-6/RESULTS.md) add signed
+local alerts, durable holds/stops, monitor leases and boot-bound operator restart.
+All 44 scripted rows retain receiver/controller snapshots and replay checks. Provider
+delivery and authenticated alert fetching remain unvalidated; no new model score is claimed.
+
 The [phase 5 results](research/recovery-phase-5/RESULTS.md) cover 39 scripted recovery
 rows and three in-flight stop drills, with raw snapshots and full replay verification.
 The linked [fresh-host receipt](research/recovery-phase-5/hosted-phase4/README.md)

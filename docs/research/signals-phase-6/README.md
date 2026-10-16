@@ -5,9 +5,10 @@ It uses the pinned OpenAI SDK to verify synthetic webhook signatures, a trusted
 project-bound alert lookup fixture, native tool dispatch and a real owned receiver.
 It does not call OpenAI, expose a webhook endpoint or measure a model's behavior.
 
-Read the [design and lifecycle](../SAFETY_SIGNALS_PHASE_6.md) and
-[research motivation](../OPENAI_NEEDS_2026-10-16.md). Published outcomes will be in
-`RESULTS.md` after the source/protocol freeze and retained execution.
+Read the [published results](RESULTS.md),
+[design and lifecycle](../SAFETY_SIGNALS_PHASE_6.md) and
+[research motivation](../OPENAI_NEEDS_2026-10-16.md). The retained run and a separate
+verification both passed fresh replay against the frozen source/protocol commit.
 
 ## Reproduce
 

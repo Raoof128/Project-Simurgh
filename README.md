@@ -16,6 +16,12 @@ It does not establish general model safety, production readiness, or endorsement
 
 ## Start here
 
+The [phase 6 safety-signal experiment](docs/research/signals-phase-6/RESULTS.md)
+connects signed local alert fixtures and monitor health to durable dispatch controls.
+It retains 42 matrix rows, two in-flight drills and 88 raw snapshots: all six permitted
+cases complete, 14 declared stop/hold cases block final dispatch, and an outage stays
+unknown. This tests local integration behavior; live provider delivery remains unvalidated.
+
 The [phase 5 recovery and incident-response experiment](docs/research/recovery-phase-5/RESULTS.md)
 adds guarded host-approved fallback and stop/revoke tests: four additional scripted
 cases complete, explicit declines and unknowns remain, and in-flight effects stay

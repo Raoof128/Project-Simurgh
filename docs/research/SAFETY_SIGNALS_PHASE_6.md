@@ -130,3 +130,25 @@ This declaration commit must be a strict ancestor of that edit; verify ancestry.
 - P6-CI01 adds exactly one live gate identity (41→42), none removed. Historical
   baseline fields remain unchanged. This records a census classification gap, not its repair.
 - Progress: implementation and review repairs complete; final tests and source freeze pending.
+
+## Frozen execution and publication
+
+The source/protocol freeze is `1cdf1327`, following declaration `484a972c`.
+The retained execution ran after that commit: 42 matrix rows, two in-flight drills
+and 88 raw SQLite snapshots. Its mandatory fresh replay and a separate verification
+of the published archive both passed. The 48 source/data bindings remain unchanged.
+
+The integrated policy recorded six final deliveries, 14 blocked final deliveries
+and one unknown outcome across 21 cases, with eight total receiver effects because
+two cases include an earlier delivery. These are synthetic case outcomes, not a
+model safety rate. Both in-flight drills retain one already admitted effect; the
+integrated policy blocks the later attempt. See the
+[results and limits](signals-phase-6/RESULTS.md).
+
+Archive manifest SHA-256:
+`e965fce04c552df897f5f650660bb0b1106ae0486725b5f9a0d3e9f1f5f9039f`.
+The archive is 88,914 bytes. Final validation: 24 focused tests passed; repository
+suite 5,122 passed, zero failed and three existing prerequisite skips; Ruff and
+62-package pinned dependency compatibility passed. No live provider calls or model
+inference occurred. Hosted verification is pending publication; outside operator
+and independent custody remain open. Phase 7 and phase 8 are not completed here.
