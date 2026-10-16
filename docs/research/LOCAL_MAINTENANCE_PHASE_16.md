@@ -93,3 +93,11 @@ Node core, portable Node, Python and real browser answers with the existing chec
 must include missing/wrong-answer negative controls. This closes current portability
 coverage without rewriting the historical driver or its frozen receipt. The six lifecycle
 fields above apply; a missing browser explicitly skips and a failing browser fails.
+
+## Validation publication surface
+
+Authorize **add** of `docs/research/maintenance-phase-16/logs.zip` and
+`docs/research/maintenance-phase-16/validation.json` for retained command logs, per-file
+hashes, exact tested revisions, test outcomes and exclusions. Any known public synthetic
+canary redaction must be stated. Do not include credentials, process environments or private
+attachments. This is a new publication, not a change to frozen Phase 15 observations.

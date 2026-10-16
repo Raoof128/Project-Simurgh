@@ -3169,3 +3169,13 @@ one machine's local agent configuration:
 - **Verification:** Current manifest has 5 entries and 17 vectors; historical driver still uses
   the diagnosed failing dump-DOM/file-navigation path. No historical bytes changed.
 - **Follow-ups:** Compare all four evaluators and exercise missing/wrong-answer controls.
+
+## 2026-10-16 — Raouf: verify Stage 5R browser successor (Australia/Sydney)
+
+- **Scope:** Additive Phase 16 browser test; authorize new validation archive/manifest.
+- **Summary:** Compare the immutable Stage 5R manifest against Node core, portable Node,
+  Python and real Chromium. Historical driver and receipt remain byte-identical.
+- **Files:** `tests/unit/maintenance/stage5rBrowserParity.test.js`, Phase 16 design and root logs.
+- **Verification:** Three tests pass: 5 entries / 17 vectors across all evaluators and
+  missing/altered-answer negative controls. Implementation follows authority commit ce580463.
+- **Follow-ups:** Finish aggregate/E2E validation and publish revision-specific results.
