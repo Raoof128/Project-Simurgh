@@ -83,3 +83,13 @@ The existing Chromium 154 executable runs JavaScript through its debugging proto
 origin and local debugging pipe. It does not change browser policy, CSP, portable code,
 vectors or frozen receipts. A failing installed browser remains a failure. Other historical
 browser drivers retain their historical behavior and must not inherit this lane's result.
+
+## Additive Stage 5R browser successor authority
+
+P16-BROWSER-R authorizes **add** of the exact path
+`tests/unit/maintenance/stage5rBrowserParity.test.js` before implementation. It independently
+runs the unchanged Stage 5R portable module over the exact committed manifest, comparing
+Node core, portable Node, Python and real browser answers with the existing checker. It
+must include missing/wrong-answer negative controls. This closes current portability
+coverage without rewriting the historical driver or its frozen receipt. The six lifecycle
+fields above apply; a missing browser explicitly skips and a failing browser fails.

@@ -3160,3 +3160,12 @@ one machine's local agent configuration:
   timeout controls; Stage 5P's real Chromium lane passes 1,734 checks. Gateway core/live smoke
   fixtures pass (72/40); audit 14/14. Offline Docker mock smoke runs as UID 1000.
 - **Follow-ups:** Run broad aggregate/E2E gates in a disposable clone; publish exact outcomes.
+
+## 2026-10-16 — Raouf: authorize additive Stage 5R browser successor (Australia/Sydney)
+
+- **Scope:** Add only `tests/unit/maintenance/stage5rBrowserParity.test.js` under P16-BROWSER-R.
+- **Summary:** Fresh real-browser parity through the working harness; preserve old driver/receipt.
+- **Files:** Phase 16 design, `AGENT.md`, `CHANGELOG.md` (authority only).
+- **Verification:** Current manifest has 5 entries and 17 vectors; historical driver still uses
+  the diagnosed failing dump-DOM/file-navigation path. No historical bytes changed.
+- **Follow-ups:** Compare all four evaluators and exercise missing/wrong-answer controls.
