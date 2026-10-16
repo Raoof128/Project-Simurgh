@@ -5,9 +5,8 @@ from pathlib import Path
 
 from contract import CONTROLS, TRIALS, messages, parse
 from deps import wire
+from model_inputs import SEED_BASE
 from trial import run_branch
-
-SEED_BASE = 104000
 
 
 def schedule(tasks, trials, batch_size):

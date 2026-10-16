@@ -1,20 +1,69 @@
 """Offline tokenizer linkage; does not regenerate or attest inference."""
 
 import argparse
+import hashlib
 import os
 from pathlib import Path
 
-from contract import messages
-from model_inputs import DOCS, MANIFEST, TOOLS, loads, wire
+from contract import TRIALS, messages, validate_tasks
+from model_inputs import DOCS, MANIFEST, SEED_BASE, TOOLS, check_output, loads, wire
 from model_worker import verify_files
 
 
-def check(cap, tasks, tokenizer, settings):
+def check(cap, tasks, tokenizer, settings, *, trials=TRIALS, heldout=True):
+    validate_tasks(tasks, heldout=heldout)
+    if heldout:
+        if (
+            set(cap)
+            != {
+                "schema",
+                "metadata",
+                "model_header",
+                "complete",
+                "requests",
+                "generations",
+                "rows",
+            }
+            or cap["schema"] != "simurgh-phase10-capture-v1"
+            or cap["complete"] is not True
+        ):
+            raise ValueError("capture_schema")
+        protocol_raw = (DOCS / "protocol.json").read_bytes()
+        protocol = loads(protocol_raw)
+        if (
+            cap["metadata"].get("protocol_sha256")
+            != hashlib.sha256(protocol_raw).hexdigest()
+            or cap["model_header"] != protocol["model_header"]
+        ):
+            raise ValueError("capture_binding")
+    expected = [(case["id"], trial) for trial in trials for case in tasks]
+    if (
+        type(cap.get("generations")) is not list
+        or len(cap["generations"]) != len(expected)
+        or not expected
+    ):
+        raise ValueError("generation_inventory")
+    batch_size = settings.get("batch_size", 16)
+    checked = errors = 0
+    for i, (g, (task_id, trial)) in enumerate(zip(cap["generations"], expected)):
+        link = {
+            "id": "g" + str(i + 1),
+            "task_id": task_id,
+            "trial": trial,
+            "batch": i // batch_size,
+            "position": i % batch_size,
+            "seed": SEED_BASE + i // batch_size,
+        }
+        if set(g) != set(link) | {"output"} or any(g[k] != v for k, v in link.items()):
+            raise ValueError("generation_linkage")
+        check_output(g["output"])
     cases = {t["id"]: t for t in tasks}
     for g in cap["generations"]:
         o = g["output"]
-        if o["status"] != "generated":
+        if o["status"] == "generation_error":
+            errors += 1
             continue
+        checked += 1
         rendered = tokenizer.apply_chat_template(
             messages(cases[g["task_id"]]),
             tools=TOOLS,
@@ -39,8 +88,13 @@ def check(cap, tasks, tokenizer, settings):
             or (stop is None and len(ids) != settings["max_new_tokens"])
         ):
             raise ValueError("token_linkage:" + g["id"])
+    if checked == 0:
+        raise ValueError("empty_token_evaluation")
     return {
         "tokenizer_linkage": True,
+        "capture_sha256": hashlib.sha256(wire(cap)).hexdigest(),
+        "checked_generations": checked,
+        "generation_errors": errors,
         "generations": len(cap["generations"]),
         "inference_attestation": False,
     }

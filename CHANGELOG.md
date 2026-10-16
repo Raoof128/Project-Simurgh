@@ -3785,3 +3785,14 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Verification:** Prior Phase 10 checks: 13 focused, 20 composed, 13 model-harness tests
   passed; repository 5,122 passed, zero failures, three prerequisite skips.
 - **Follow-ups:** Complete Phase 10 review/freeze/run, then execute both plans consecutively.
+
+## 2026-10-16 — Raouf: freeze reviewed composed model study (Australia/Sydney)
+
+- **Scope:** Phase 10 preregistration freeze before held-out inference.
+- **Summary:** Fixed two Important review findings: authorized lost-ack effects remain
+  unknown rather than unauthorized; tokenizer validation rejects vacuous/invalid slots
+  and binds its counted result to the capture digest. No Critical or deferred Minor findings.
+- **Files changed:** New harness regressions/fixes, 95-binding protocol, ledger and both logs.
+- **Verification:** Reproductions RED→GREEN; 16 focused tests passed. Prior inherited
+  20/13 tests and repository 5,122 passed, zero failures, three skips. Ruff/dependencies pass.
+- **Follow-ups:** One retained held-out run and verification, then portable handoff and presentation.

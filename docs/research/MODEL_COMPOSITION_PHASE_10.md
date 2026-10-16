@@ -113,3 +113,19 @@ The declaration commit must strictly precede that census edit.
   the frozen 32 MiB historical reader — preserve old verification semantics; cost is a
   larger bounded memory envelope. `.prettierignore` is not changed; canonical evidence
   is validated by byte bindings, with formatting checks scoped to editable prose/config.
+- Fresh whole-change reviewer independently passed 13 tests and a seven-state,
+  21-branch/210-snapshot capture and replay. Corpus inventory/provenance and 94 initial
+  bindings checked. No Critical findings; two Important findings accepted and fixed:
+  P10-R01 separates effect authorization from lost acknowledgment; P10-R02 rejects
+  empty/invented/missing token inventories and binds checked/error counts to capture hash.
+- Final: fixed P10-R01 and P10-R02 — real lost-ack receiver and tokenizer regressions
+  observed RED, then GREEN; complete focused suite **16 passed**. Mixed generation
+  errors remain counted, while all-error tokenizer evaluation cannot pass. Explicit
+  all-task/stopped-task denominators are now reported. No second reviewer pass or
+  held-out inference was used to tune these fixes. No deferred Minor findings.
+- Review scope limits accepted: this review does not attest inference origin, internal
+  author independence, or complete the earlier interrupted Phase 8 security review.
+- Freeze: 95 source/data bindings before held-out inference; original corpus bytes
+  preserved. Repository tests: 5,122 passed, zero failures, three prerequisite skips;
+  inherited composition/model suites 20/13 passed; Ruff and 62-package check passed.
+  Prior broader hosted run 38843556999 is now successful, all 13 jobs.
