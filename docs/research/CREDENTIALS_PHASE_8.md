@@ -142,7 +142,8 @@ commit must be a strict ancestor of the census edit. No frozen predecessor edits
   without another approval roundtrip. The tracked ledger replaces unavailable local
   skill helper scripts. Preserve development failures and frozen historical artifacts.
 - Prior phase: broader readiness run `38836069319` completed successfully.
-- Progress: design and exact cases declared; implementation pending.
+- Progress: design and exact cases declared before implementation; subsequent checks
+  and review disposition are recorded below.
 
 ## Implementation and development checks
 
@@ -162,3 +163,32 @@ commit must be a strict ancestor of the census edit. No frozen predecessor edits
   skips. Protocol binds 50 source/data files. Source freeze awaits fresh review.
 - P8-CI01 adds exactly one live gate identity (43→44), none removed. Historical
   baseline/non-current fields are unchanged; the classification limitation remains.
+
+## Review disposition and source freeze
+
+- The fresh whole-change reviewer stopped after an automatic cybersecurity-content
+  block. Its review is incomplete; no clean independent-review conclusion is claimed.
+  Before stopping it identified a possible dispatch/revocation race. The author
+  reproduced it with a paused send and a second gateway instance: remote revocation
+  overtook the already-reserved call before that call reached the snapshot receiver.
+- P8-R01 adopted: the new regression failed before the fix. A same-inode Linux advisory
+  lock now serializes admission and remote revocation across gateway instances/processes.
+  Local stop persists before waiting for an admitted RPC; the remote operation waits
+  for that RPC to return. A test event-name typo was corrected after the first fix run.
+  The regression checks local stop, acknowledgment ordering and raw receiver event order.
+- Ruling: this lock drains synchronous calls only. A transport timeout or crashed sender
+  can leave a request executing remotely; only continuous receiver checks establish the
+  post-revocation commit bound. Cost: serialized calls and delayed remote revocation,
+  Linux-specific locking, trusted same-inode storage and no protection from host rollback.
+- Remaining review scope is author-checked, not independently cleared: role separation
+  assumes a trusted administrator and issuer provisioning, including no deliberate reuse
+  of a session bearer as a newly provisioned credential. Fixture public keys are separate.
+  Malicious administrator provisioning, production IAM/TLS and independent custody are
+  outside this study. No reviewer verdict on those external systems is implied.
+- Source/protocol freeze follows final checks below. Published execution must reference
+  that committed revision; its report and hosted receipts remain separate deliverables.
+
+- Final freeze checks: 24 focused tests passed in 29.677 seconds; repository suite
+  5,122 passed, zero failures and three prerequisite skips. Ruff passes. All 50
+  source/data bindings pass protocol preflight. P8-CI01 is a strict ancestor of the
+  census change; non-current census fields remain identical to the phase baseline.

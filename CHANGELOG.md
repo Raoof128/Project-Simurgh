@@ -3653,3 +3653,17 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   P8-CI01 precedes one exact live census addition (43→44), with baseline preserved.
 - **Follow-ups:** Fresh review, source/protocol freeze, retained execution, separate
   verification and hosted replay. No real provider credentials or model calls used.
+
+## 2026-10-16 — Raouf: fix admission race and freeze credential study (Australia/Sydney)
+
+- **Scope:** Phase 8 admission ordering, regression and source/protocol freeze.
+- **Summary:** Reproduced the partial review's paused-dispatch/revoke race before
+  fixing it with shared advisory locking; local stop persists before waiting. The
+  reviewer was automatically blocked and its whole-change review remains incomplete.
+- **Files changed:** Gateway, edge tests, 50-binding protocol, guide/design and both logs.
+- **Verification:** All 24 focused tests passed (29.677 seconds); Ruff passes. Repository
+  suite: 5,122 passed, zero failures, three prerequisite skips. Exact census is 44;
+  declaration ancestry and unchanged historical census fields verified.
+- **Follow-ups:** Retained execution, separate verification and hosted replay. Linux
+  locking cannot cancel timed-out remote work; only continuous receiver checks supply
+  the post-revocation commit bound. Outside review/provider integration remain open.

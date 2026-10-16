@@ -49,6 +49,11 @@ resends an unknown intent automatically. Cached observed results do not cause a 
 receiver call. Revocation durably stops local dispatch before contacting the service;
 only an issuer/credential-correlated positive acknowledgment records confirmation.
 An outage or malformed reply leaves the remote status unknown and local stop active.
+A same-inode advisory lock serializes admitted calls across gateway processes. Local
+stop persists before waiting for an admitted call to return, then remote revocation
+runs. This can delay revocation; it does not cancel a timed-out request still running
+at a receiver. Only the continuous receiver supplies the post-revocation commit bound.
+The gateway requires Linux and trusted storage without database replacement.
 
 In the continuous policy, session and credential checks run inside the receiver's
 SQLite effect transaction. Revocation acknowledgment follows commit. An admitted

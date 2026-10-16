@@ -1,7 +1,9 @@
 """Host-owned exact-action gateway and vault snapshots; no model-visible credentials."""
 
+import fcntl
 import json
 import sqlite3
+from contextlib import contextmanager
 from pathlib import Path
 
 from service import encode, key_for, valid
@@ -72,6 +74,17 @@ class Gateway:
     def db(self):
         return sqlite3.connect(self.path, timeout=10)
 
+    @contextmanager
+    def admission(self):
+        # Same-inode, cross-process lock; SQLite transactions remain short so stop
+        # can persist while an admitted RPC is running. Trusted storage is required.
+        with self.path.open("rb") as handle:
+            fcntl.flock(handle, fcntl.LOCK_EX)
+            try:
+                yield
+            finally:
+                fcntl.flock(handle, fcntl.LOCK_UN)
+
     def event(self, db, kind, **data):
         db.execute("INSERT INTO events(kind,payload) VALUES(?,?)", (kind, encode(data)))
 
@@ -83,6 +96,10 @@ class Gateway:
         return {"stopped": bool(stopped), "revocation": revocation, "ack_seq": ack}
 
     def dispatch(self, action):
+        with self.admission():
+            return self._dispatch(action)
+
+    def _dispatch(self, action):
         if not valid(action):
             return {"status": "blocked"}
         action = dict(action)
@@ -131,6 +148,10 @@ class Gateway:
             db.execute("BEGIN IMMEDIATE")
             db.execute("UPDATE state SET stopped=1,revocation='unknown',ack_seq=NULL")
             self.event(db, "local_stop")
+        with self.admission():
+            return self._remote_revoke(revoker)
+
+    def _remote_revoke(self, revoker):
         binding = self.config["binding"]
         status = "unknown"
         seq = None
