@@ -3516,3 +3516,14 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Follow-ups:** Prioritize an additive provider-alert/local-stop adapter, then fresh
   compaction/delegation tasks and authenticated connector lifecycle with outside observation.
   No new model results, deployment, external submission or exhaustive-coverage claim.
+
+## 2026-10-16 — Raouf: declare safety signals phase 6 (Australia/Sydney)
+
+- **Scope:** Additive provider-alert and monitor dispatch experiment; N01/N02 partial.
+- **Summary:** Signed local alerts, durable stop/pending state, bounded monitor leases,
+  separate operator restart and retained in-flight outcomes; no provider calls.
+- **Files changed:** Phase 6 design/plan and both logs.
+- **Verification:** Existing native dispatch and observation interfaces inspected;
+  exact 42 matrix plus two drill cases declared before implementation.
+- **Follow-ups:** Test-first implementation, fresh review, source freeze, retained evidence
+  and hosted checks. P6-CI01 authorizes only the live census update.
