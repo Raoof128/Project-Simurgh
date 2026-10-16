@@ -192,3 +192,20 @@ commit must be a strict ancestor of the census edit. No frozen predecessor edits
   5,122 passed, zero failures and three prerequisite skips. Ruff passes. All 50
   source/data bindings pass protocol preflight. P8-CI01 is a strict ancestor of the
   census change; non-current census fields remain identical to the phase baseline.
+
+## Retained execution and publication
+
+- Source/protocol freeze `dd861813b74dd05ba3203cda12259a24fe19e0c1` precedes the
+  retained run in `/workspace/simurgh-research/phase-8/published-run`. All 46 rows
+  completed, mandatory fresh replay matched, and separate archive verification passed.
+- Continuous: seven observed, nine denied, five blocked, two unknown; eight actual
+  effects. Snapshot: ten observed, six denied, five blocked, two unknown; 11 effects.
+  Each lost-acknowledgment row accounts for one effect without an observed outcome.
+- Archive 114,305 bytes, 92 raw snapshots, 50 frozen source/data bindings. Manifest:
+  `b84c6c7472d02652f22604dda64cfd9ff46f41ef31f18b04d6c8a56d84c7a31d`.
+- Canonical report matches the archive byte-for-byte. Phase links and frozen Git/current
+  hashes pass. No predecessor source or evidence changed; the authorized live census
+  exception is the only change under an earlier evidence namespace.
+- The [published results](credentials-phase-8/RESULTS.md) record outcomes, partial
+  review, costs, limitations and remaining composition/model/provider/custody gaps.
+  Hosted checks follow publication; no hosted result is claimed yet.

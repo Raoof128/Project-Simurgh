@@ -1,5 +1,11 @@
 # Reviewer index
 
+The [phase 8 results](research/credentials-phase-8/RESULTS.md) distinguish vault,
+credential and session lifecycle using an authenticated owned service. All 46 rows
+retain 92 raw snapshots with fresh replay. A reproduced admission/revocation race
+was fixed; the interrupted whole-change review remains incomplete. Real provider
+identity, model generalization and independent custody are not established.
+
 The [phase 7 results](research/context-phase-7/RESULTS.md) cover durable checkpoints,
 structured summary discrepancies, narrowed delegation and shared admission budgets.
 All 36 scripted rows retain 108 raw snapshots and fresh replay verification. Semantic

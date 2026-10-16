@@ -3,8 +3,8 @@
 This owned-service experiment distinguishes vault deletion, rotation, credential
 revocation, session cancellation and expiry. It compares session-snapshot checking
 with credential checks at every receiver commit. Read the [design/ledger](../CREDENTIALS_PHASE_8.md)
-and [source-backed motivation](../OPENAI_NEEDS_2026-10-16.md). Results follow the
-source/protocol freeze and retained execution.
+and [source-backed motivation](../OPENAI_NEEDS_2026-10-16.md). The [results](RESULTS.md)
+retain all 46 rows and 92 raw snapshots with fresh replay verification.
 
 ## Reproduce
 

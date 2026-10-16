@@ -1,12 +1,19 @@
 # Research roadmap
 
+[Phase 8](docs/research/credentials-phase-8/RESULTS.md) now tests authenticated
+credential expiry, rotation, revocation and session behavior in an owned HTTP service.
+All 46 rows and 92 raw snapshots passed fresh replay; continuous checks deny three
+additional revoked/expired-credential cases. The whole-change review remains incomplete.
+Next: compose phases 6–8 in one pipeline and evaluate fresh held-out model tasks.
+Real provider identity integration and outside observation remain separate gaps.
+
 [Phase 7](docs/research/context-phase-7/RESULTS.md) now tests host-owned authority
 and evidence through scripted context changes and delegated handoffs. All five
 permitted cases complete; 12 hold/authority cases block and one outage stays unknown.
 Shared budgeting limits sibling effects without erasing uncertain reservations.
 These are local engineering results; fresh model recognition of broken tasks and
-actual compaction/subagent integration remain open. Next is **phase 8: authenticated
-credential expiry, rotation, revocation and active-session behavior**.
+actual compaction/subagent integration remain open. Phase 8 adds the separately
+scoped credential result above.
 
 [Phase 6](docs/research/signals-phase-6/RESULTS.md) adds signed synthetic safety
 signals, durable stop/hold state and monitor-gated dispatch. Across 21 cases, the

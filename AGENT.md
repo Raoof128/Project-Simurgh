@@ -2899,3 +2899,18 @@ one machine's local agent configuration:
 - **Follow-ups:** Retained execution, separate verification and hosted replay. Linux
   locking cannot cancel timed-out remote work; only continuous receiver checks supply
   the post-revocation commit bound. Outside review/provider integration remain open.
+
+## 2026-10-16 — Raouf: publish credential lifecycle evidence (Australia/Sydney)
+
+- **Scope:** Frozen Phase 8 execution, raw archive and current reviewer navigation.
+- **Summary:** All 46 rows retained; continuous checks produce seven observed, nine
+  denied, five blocked and two unknown results. Snapshot checks produce ten observed,
+  six denied, five blocked and two unknown. Lost acknowledgment retains its actual effect.
+- **Files changed:** Phase 8 report/archive/root/receipt/results, guide/design ledger,
+  README/ROADMAP, reviewer index and both logs.
+- **Verification:** Retained fresh replay and separate archive verification passed;
+  92 raw snapshots, 50 frozen bindings, archive/report byte equality and links checked.
+  Twenty-four focused tests and 5,122 repository tests passed; three prerequisite skips.
+- **Follow-ups:** Hosted verification after push. Whole-change review remains incomplete
+  after an automatic reviewer block; the reported race was reproduced and fixed.
+  Provider identity integration, new model evidence and independent custody remain open.

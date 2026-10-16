@@ -16,6 +16,13 @@ It does not establish general model safety, production readiness, or endorsement
 
 ## Start here
 
+The [phase 8 credential lifecycle experiment](docs/research/credentials-phase-8/RESULTS.md)
+distinguishes vault deletion, rotation, credential revocation and session cancellation.
+Across 46 scripted rows, continuous credential checks deny three cases still allowed
+by login-time session snapshots. Both policies retain lost-response uncertainty.
+All 92 raw snapshots pass fresh replay. This is owned-service evidence, not real
+provider identity validation; the whole-change review remains incomplete.
+
 The [phase 7 context and delegation experiment](docs/research/context-phase-7/RESULTS.md)
 keeps authority and recorded failures in durable host state across context changes.
 Across 36 scripted rows, the integrated policy completes all five permitted cases,
