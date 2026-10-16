@@ -18,6 +18,7 @@ authorizes only the exact frozen baseline's formatting exclusion.
 | macOS native                           | Node 2 and daemon 8 tests passed                                                         |
 | Windows native                         | Daemon 11 tests passed; affinity fixture compiled with zero warnings/errors              |
 | Runtime / model dependency consistency | 62 / 34 installed packages compatible                                                    |
+| Existing hosted readiness workflow     | All 13 jobs passed at 4afe9538                                                           |
 | npm audit                              | Zero reported vulnerabilities at retrieval                                               |
 
 [Native CI run](https://github.com/Raoof128/Project-Simurgh/actions/runs/38962135213)
@@ -39,3 +40,11 @@ security-audit or independent-review claim. A one-minute isolated-fixture reliab
 also does not establish a sustained production deployment or service SLO.
 
 See [validation.json](validation.json) for exact artifacts, checks and source revisions.
+
+The final [13-job readiness run](https://github.com/Raoof128/Project-Simurgh/actions/runs/38961632209)
+passed at the original implementation freeze `4afe9538`. Its long-running persisted-workflow
+recovery job completed successfully. The [separate hosted receipt](hosted-validation.json)
+and [raw hosted logs](hosted-validation-logs.zip) preserve exact job identities and timestamps.
+The original validation bundle is unchanged; this is an additive receipt. The hosted jobs
+exercise their existing suites, while the new transfer/role suites and archive replay are
+recorded as local checks above. No final-publication-head hosted result is implied.

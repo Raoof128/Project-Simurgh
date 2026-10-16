@@ -4063,3 +4063,14 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Follow-ups:** Finish the already-running hosted recovery job and publish its receipt.
   One active refusal, production IAM/alerts/load, interactive desktop behavior and the
   previously blocked whole-change security review remain explicit limitations.
+
+## 2026-10-17 — Raouf: complete hosted readiness receipt (Australia/Sydney)
+
+- **Scope:** Additive final hosted receipt and current navigation wording; no runtime edits.
+- **Summary:** All 13 existing readiness jobs passed at implementation freeze 4afe9538,
+  including persisted workflow recovery; both native platform jobs already passed at fbe06eca.
+- **Files:** New hosted receipt/log archive, validation guide, current entry-point prose and logs.
+- **Verification:** Exact job identities, successful conclusions, source SHA and log hashes
+  checked. Prior evidence bundles remain byte-identical. Formatter and diff checks pass.
+- **Follow-ups:** Independent reproduction stays deferred. One corrected active refusal and
+  the documented provider/deployment/desktop/review limitations remain unresolved.

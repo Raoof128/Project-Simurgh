@@ -9,7 +9,7 @@ trials and already declines all restricted trials. Its separate corrected live w
 completes 2/3 authorized cases; the remaining refusal is retained. Native macOS and Windows
 checks pass. Independent reproduction is deferred; production readiness remains unproven.
 
-The [Phase 13 reliability study](research/reliability-phase-13/RESULTS.md) now adds
+The earlier [Phase 13 reliability study](research/reliability-phase-13/RESULTS.md) added
 60 repeated concurrent/restart fixtures: composed controls retain useful retries and
 produce zero new effects after queued stop or interrupted update. The
 [Phase 14 reduced export](research/export-phase-14/RESULTS.md) preserves all 144 Phase 10
