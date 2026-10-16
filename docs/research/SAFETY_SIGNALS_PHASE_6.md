@@ -150,5 +150,19 @@ Archive manifest SHA-256:
 The archive is 88,914 bytes. Final validation: 24 focused tests passed; repository
 suite 5,122 passed, zero failed and three existing prerequisite skips; Ruff and
 62-package pinned dependency compatibility passed. No live provider calls or model
-inference occurred. Hosted verification is pending publication; outside operator
-and independent custody remain open. Phase 7 and phase 8 are not completed here.
+inference occurred. Outside operator and independent custody remain open.
+Phase 7 and phase 8 are not completed here.
+
+## Hosted verification receipt
+
+Publication commit `820933bb` passed
+[Assurance safety signals run 38832945791](https://github.com/Raoof128/Project-Simurgh/actions/runs/38832945791).
+The fresh GitHub runner passed all 24 focused tests and verified the committed pack,
+including its fresh replay, 42 matrix rows, two in-flight drills and 88 raw snapshots.
+Its receipt reports the same manifest hash recorded above. This is a separate machine
+under the same repository's automation, not an independent operator or custody claim.
+
+The broader [readiness run 38832945810](https://github.com/Raoof128/Project-Simurgh/actions/runs/38832945810)
+had 12 of 13 jobs passed at this receipt, with only `workflow-recovery` still running
+and no failed jobs. Its final outcome is not claimed here. The preceding readiness
+run `38829379622` completed successfully, but does not substitute for this run.

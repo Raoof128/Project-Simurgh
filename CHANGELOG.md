@@ -3555,3 +3555,15 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   pinned dependencies pass. P6-CI01 preserves historical census fields.
 - **Follow-ups:** Hosted safety-signal checks after push, then phase 7 compaction and
   delegation. Live provider delivery and independent custody remain unvalidated.
+
+## 2026-10-16 — Raouf: record hosted safety signals verification (Australia/Sydney)
+
+- **Scope:** Receipt-only closeout of phase 6; frozen source and artifacts unchanged.
+- **Summary:** Publication commit 820933bb passed safety-signals run 38832945791.
+- **Files changed:** Phase 6 design/execution ledger and both logs.
+- **Verification:** Fresh hosted runner passed 24 tests and verified the archive with
+  fresh replay, 42 matrix rows, two drills, 88 raw snapshots and the published hash.
+  Broader readiness run 38832945810 is 12/13 passed with workflow-recovery pending;
+  no final success claim for that run. Previous readiness run 38829379622 succeeded.
+- **Follow-ups:** Phase 7 compaction/delegation, then phase 8 credential lifecycle.
+  Live provider delivery, outside operator and independent custody remain open.
