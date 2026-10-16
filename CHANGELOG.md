@@ -4015,3 +4015,13 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   duplicate calls/arguments, budget exhaustion, source-request binding and storage mutation.
   Ruff checks pass. A test import collision was corrected before capture; no API inference yet.
 - **Follow-ups:** Capture frozen inputs once, retain all outcomes, verify archive and publish brief.
+
+## 2026-10-17 — Raouf: authorize host-role correction and native CI (Australia/Sydney)
+
+- **Scope:** Separate Phase 17B correction and bounded macOS/Windows validation jobs.
+- **Summary:** Luna's returned reasons identify user-role host authority as insufficient;
+  preserve the complete first study and freeze a developer-role correction before 16 new calls.
+- **Files:** Phase 17B design and root logs; new adapter/docs/workflow paths declared exactly.
+- **Verification:** Original capture retains all eight declines, including three active cases.
+  Original 64-attempt study continues unchanged; combined corrective budget remains below $1.
+- **Follow-ups:** Test authority-role separation, bind prior ledger, capture once; run native CI.
