@@ -165,3 +165,18 @@ No prior frozen source or evidence modification is authorized by this declaratio
   mandatory fresh schedule validation and separate verification; 600 raw snapshots retained.
   One export retained all 144 branches after source verification and passed mandatory
   source reprojection. No retry or fallback run; no paid API use. See new phase result pages.
+
+## P15-CHECK01: bounded aggregate-gate maintenance
+
+Declared before edits. The aggregate run found two gate/configuration mismatches:
+Prettier tries to rewrite frozen canonical JSON artifacts, and its secret scanner flags
+six occurrences of the exact public synthetic canary `sk-test-secret-never-log` in
+source-bound tests. Authorize only `.prettierignore` additions for the individually
+identified machine-evidence JSON files and a `scripts/check.sh` filter anchored to the
+complete assignment line, that exact literal, and those two test paths. Continue scanning
+all other text, paths and token-like values. Test the exception against changed values,
+changed paths and a second token on the same line. No source-bound test, capture, protocol
+or archive byte changes; no runtime changes, gate identity changes or census changes.
+Historical retired-gateway expectations and predecessor reproduce-set drift are separate
+migration defects and must remain visible rather than broad-skipped. The Docker failure
+occurred inside image dependency installation and remains an environment/build limitation.

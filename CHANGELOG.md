@@ -3872,3 +3872,13 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Verification:** Mandatory fresh reliability validation plus separate invocation pass;
   export validates full source before projection and again after packaging; focused tests 12/7.
 - **Follow-ups:** Separate export invocation, hosted checks and Phase 15 complete test closeout.
+
+## 2026-10-16 — Raouf: declare precise aggregate-gate maintenance (Australia/Sydney)
+
+- **Scope:** P15-CHECK01, declared before two configuration/checker edits.
+- **Summary:** Exclude individually identified frozen machine JSON from prose formatting;
+  distinguish one exact public synthetic canary assignment from unexpected token values.
+- **Files changed:** Continuation ledger and both logs; no runtime/evidence mutation.
+- **Verification:** Aggregate run identified canonical-byte formatting conflicts and six
+  matches of the same synthetic canary; all observed values are existing test fixtures.
+- **Follow-ups:** Negative-test the narrow exception and rerun affected gates; retain other failures.
