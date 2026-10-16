@@ -131,3 +131,30 @@ all non-current fields. This declaration must be a strict ancestor of that edit.
   zero failures, three prerequisite skips. Ruff and 62 pinned packages pass. Protocol
   preflight and unchanged non-current census fields verified. Source freeze pending review.
 - Prior Phase 8 broader readiness run 38840727954 now succeeded, all 13 jobs.
+
+## Fresh review and freeze disposition
+
+- Fresh whole-change review of `f497775f..9a50d5d9` reported no Critical, Important
+  or Minor findings. It independently passed all 17 focused tests and current/committed
+  source bindings. Three additional probes are now retained in `tests/test_review.py`.
+- The additional probes interrupt the dispatch stack with SystemExit before sending
+  and after an actual receiver effect, then reopen with unknown intent and no resend
+  or budget refund. These are stack-interruption probes, not process-kill claims.
+  A third interrupts an update after stopping route A; route B remains globally held.
+  The earlier boundary test separately exercises real process exit during an update.
+- No production source changed after review. Adding the retained probe file expands
+  the source/data bindings from 75 to 76; final focused tests follow before freeze.
+- Ruling on unjudged scope: production identity/TLS/provider behavior, real clocks,
+  malicious host/admin or state rollback, independent custody and model generalization
+  remain outside this owned fixture result. Wrong deployment assumptions would defeat
+  these bounds; require separate provider/operator experiments before such claims.
+- Ruling on predecessor review: the reviewer inspected inherited interfaces only as
+  needed for composition. Phase 8's interrupted exhaustive review remains incomplete;
+  this clean Phase 9 review is not retroactive certification of predecessor internals.
+- Final retained execution, archive and hosted results are checked by author/automation
+  after freeze, not by the source reviewer. No deferred minor findings were reported.
+
+- Final freeze checks: all 20 focused tests passed, including all retained review probes;
+  76 source/data bindings pass preflight. Prior inherited suites and npm suite passed.
+  Strict declaration ancestry, exact one added census identity and predecessor scope
+  preservation passed. This source/protocol commit precedes the publication run.

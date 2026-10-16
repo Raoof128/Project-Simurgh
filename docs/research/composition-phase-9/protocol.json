@@ -45,6 +45,7 @@
     "tools/assurance-composed/tests/test_composition.py": "ecc95905d64f878d3761248f6f7cd00580fd3d4e6b59549633fb54cdab037788",
     "tools/assurance-composed/tests/test_evidence.py": "cb2c38ebb494b8ddfe07246340189e2b361667f595af4881472440ba79eababf",
     "tools/assurance-composed/tests/test_experiment.py": "55cf128f7bb3462b6891ee5c68676bca77be2bb5da8c77085a8bfa1272b2d9f7",
+    "tools/assurance-composed/tests/test_review.py": "b6f3e1262a7eeaabc2e9020f8cb9dfa47f4891c92d3aecc5f2f1abfffb555650",
     "tools/assurance-connector/core.py": "7a74856fb6595bbd418a98700b1fd226fa4b475df852ccbf6c74685715bdfc4e",
     "tools/assurance-connector/receiver.py": "3d5f34a1548ec2cc80860e76e7125e6b31f95ee197859ba4d109e5d11d220b8c",
     "tools/assurance-connector/study.py": "e75d8be74cf2ba0705f5cfc45f3d38fd466f5d42203b1ea2e7c7f67244cca672",

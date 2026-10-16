@@ -3717,3 +3717,15 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   62 pinned packages passed. Live census exact at 45; historical fields preserved.
 - **Follow-ups:** Fresh whole-change review, source freeze, retained execution and
   hosted replay. Prior broader Phase 8 CI now succeeded, all 13 jobs.
+
+## 2026-10-16 — Raouf: freeze reviewed composed lifecycle study (Australia/Sydney)
+
+- **Scope:** Phase 9 source/protocol freeze before retained execution.
+- **Summary:** Fresh review found no Critical, Important or Minor defects. Retained
+  three additional interruption/partial-stop probes; no production changes after review.
+- **Files changed:** Review-probe tests, refreshed 76-binding protocol, ledger and both logs.
+- **Verification:** All 20 focused tests passed; prior 73 inherited tests and 5,122
+  repository tests passed, zero failures, three prerequisite skips. Ruff and dependency
+  compatibility passed. Declared census authority precedes its exact single addition.
+- **Follow-ups:** Retained run, separate verification, publication and hosted CI. The
+  clean composition review does not complete Phase 8's separate interrupted review.
