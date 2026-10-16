@@ -3979,3 +3979,18 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   before the fix. Changed path/line/code controls and seven raw-value controls remain rejecting.
   The Stage 2.6/2.7 closeout smoke passes. Historical evidence and application code are unchanged.
 - **Follow-ups:** Repeat broad gates on the final implementation and retain initial failures.
+
+## 2026-10-16 — Raouf: publish Phase 16 validation (Australia/Sydney)
+
+- **Scope:** Results and reviewer navigation for final implementation 8ebe0103; frozen history intact.
+- **Summary:** Close reproduced gateway/inventory/browser/container maintenance failures and
+  precise legacy test false positives; retain initial failures and external/platform limits.
+- **Files:** Phase 16 results, runbook, validation manifest and log archive; `README.md`,
+  `ROADMAP.md`, `docs/REVIEWER_INDEX.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 5,154/5,154 direct Node tests with zero skips; aggregate 142/142 steps;
+  E2E 32/32 steps (579 tests passed, one path-specific skip separately exercised); Rust 34,
+  Lean 39 proofs, portable .NET 11 tests; Chromium parity for both declared surfaces.
+  Archive retains 326 logs with hashes and no secret/canary redactions. Authority ancestry
+  and unchanged predecessor research paths verified. No paid provider calls or new inference.
+- **Follow-ups:** Native platforms, outside custody, provider entitlements, sustained deployment
+  and the previously interrupted whole-change review remain unproven; push the topic branch.

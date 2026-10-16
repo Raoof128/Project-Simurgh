@@ -7,9 +7,12 @@ produce zero new effects after queued stop or interrupted update. The
 outcomes with explicit omissions and separate public/source verification. These local
 results leave sustained deployment load, live-provider behavior and outside custody open.
 
-See the [Phase 15 validation record](docs/research/validation-phase-15/RESULTS.md) and
-[current gaps](docs/research/validation-phase-15/GAPS.md) for test coverage, corrected setup
-issues and unresolved legacy gates. The complete repository is not yet fully green.
+The [Phase 16 maintenance results](docs/research/maintenance-phase-16/RESULTS.md) close the
+reproduced legacy-gate failures: 5,154 Node tests, 142 aggregate steps and 32 E2E steps pass,
+with explicit platform exclusions. Real-browser parity and 11 portable .NET tests also pass.
+See the [remaining limits](docs/research/maintenance-phase-16/RESULTS.md#remaining-limits) and
+[Phase 15 record](docs/research/validation-phase-15/RESULTS.md); production readiness and outside
+validation remain unproven.
 
 **Verifiable security controls for autonomous AI agents.**
 
