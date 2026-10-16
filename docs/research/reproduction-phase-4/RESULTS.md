@@ -93,3 +93,11 @@ The next external action is for an operator to execute the guide on their own ho
 retain their root/pack, and complete the [operator record](OPERATOR_RECORD.md).
 That record is currently an unexecuted template. No private details, keys or outreach
 are needed from the user to inspect the published author pack.
+
+## Hosted receipt — 16 October 2026, Australia/Sydney
+
+Commit `54119e5732eee06f5fb9046c33f8d096750e680b` passed all 13 jobs in
+[run 38800643360](https://github.com/Raoof128/Project-Simurgh/actions/runs/38800643360).
+This verified the retained pack and existing saved-proposal replay. A full phase 4
+run on a fresh hosted machine is separately tracked in phase 5; this receipt alone
+is not an outside-operator reproduction.

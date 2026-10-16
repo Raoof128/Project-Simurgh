@@ -3446,3 +3446,13 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
   Ruff, dependencies, authored-doc formatting and diff checks pass.
 - **Follow-ups:** Hosted CI after push; outside operator and fresh-host run, independent
   custody and new-protocol recovery improvements remain open. No external outreach.
+
+## 2026-10-16 — Raouf: declare recovery phase 5 (Australia/Sydney)
+
+- **Scope:** New guarded recovery, incident drills and fresh-host reproduction.
+- **Summary:** One exact host-approved fallback, no override of explicit decline,
+  read-only unknown reconciliation, revoke/stop ordering and retained raw effects.
+- **Files changed:** Phase 5 design, phase 4 hosted receipt and both logs.
+- **Verification:** Phase 4 commit 54119e57 passed all 13 jobs in run 38800643360.
+- **Follow-ups:** Test-first successor, strict source freeze, internal review, local/hosted
+  evidence. Outside validation remains pending. P5-CI01 authorizes only live census edits.
