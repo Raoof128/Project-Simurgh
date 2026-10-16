@@ -2986,3 +2986,14 @@ one machine's local agent configuration:
   remains seven jobs passed, six pending, none failed at receipt time.
 - **Follow-ups:** Fresh held-out model evaluation, authorized provider integration and
   outside custody. The earlier interrupted Phase 8 review remains separately open.
+
+## 2026-10-16 — Raouf: declare composed model phase 10 (Australia/Sydney)
+
+- **Scope:** Fresh local Llama decisions against frozen composed controls, followed
+  by portable handoff and presentation closeout under the user's continuing instruction.
+- **Summary:** Separate authored 24-task corpus, two trials, three matched controls;
+  48 generations, 144 branches and 1,440 raw snapshots. No paid provider use.
+- **Files changed:** Phase 10 design/plan/ledger and both logs.
+- **Verification:** Existing model worker, protocol, model files and runtime inspected.
+- **Follow-ups:** Test-first harness, disjoint pilot, review, preregistration freeze,
+  retained capture/replay, then subsequent phases. P10-CI01 declares the live census addition.
