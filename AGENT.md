@@ -3851,3 +3851,21 @@ Owner-requested work; implementation and review by Codex assistance.
   prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
   full E2E rerun; temporary probes preserve retained evidence and source bytes.
 - **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 886-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 886 of 919 baseline
+  candidates completely read, 33 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M122–M123 for complete Stage 5C/5D specifications and plans; correct
+  SECURITY guidance on conditional completeness, severity labels and adaptive-ledger checks.
+- **Findings:** Eight VSB and eight VARL probe cases retain baseline/refusal controls and
+  demonstrate extra slips, omitted rate groups, missing audit input and unchecked declarations.
+  Distinguish digest-derived severity, partial parity and finite proofs from stronger claims.
+- **Research:** S45–S46 check primary metamorphic/guardrail research, the BrowseComp account
+  and official Unicode standards; correct dates, denominators and normalization inferences.
+- **Validation:** Check formatting, local links, baseline identities/read hashes, append-only
+  prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
+  full E2E rerun; temporary probes preserve retained evidence and source bytes.
+- **Remaining:** Complete every pending manual read and final correction verification.

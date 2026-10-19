@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **882 documents have complete manual reads; 37 remain
+SHA-256 values. At this checkpoint, **886 documents have complete manual reads; 33 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -4822,3 +4822,169 @@ only. Lean proves abstract counting, membership and Boolean implications, withou
 ratio/zero-denominator theorem or cryptographic/runtime refinement. Reproduction rebuilds
 tracked evidence in place, can skip Python, and does not run Lean or every prior stage. S44
 qualifies the external measurements; legal and standards claims remain subject to M41/M47/S38.
+
+### M122 — Stage 5C completeness is conditional and severity is a digest label
+
+Read the complete 555-line specification and 538-line plan, then all core modules, builders,
+CLI, Lane B/C adapters, Python/browser, Lean, parity/K7 tests and reproduction script. The
+[eight-case VSB probe](vsb-verifier-probe.json) demonstrates accepted producer-signed extra
+slips, duplicate rate rows, invalid base digests/reduction declarations, null Lane C metadata,
+an empty corpus and a no-text audit with all slips hidden. The baseline passes and an unsigned
+mutation correctly fails signature verification. These are documentation findings, not fixes
+to frozen runtime code.
+
+Node's silent-slip check requires each slipped grid ID to appear in the table, but does not
+require the reverse inclusion, uniqueness or matching mechanism/version metadata. An invented
+extra slip therefore passes audit. Rate validation checks row count and each supplied key but
+not unique key coverage; copying one valid rate row over another hides a group. Grid coverage
+is relative to supplied bases and optional caller-supplied MR IDs, with no independent corpus
+commitment, nonempty requirement or unique-base validation. An empty corpus is accepted. This
+is weaker than the advertised exact projection over a frozen campaign and cannot establish
+that an operator submitted every relevant base or mutation.
+
+When raw base texts are absent, mutation, verdict and class-correctness checks are skipped
+without a named SKIPPED result. Normally audit's floor check then throws on absent texts;
+removing the floor rows avoids that path. The probe relabels every cell caught, clears slips,
+recounts rates and removes floor rows; this passes `tier: audit` with no raw texts. Thus the
+promise that audit necessarily recomputes the whole grid is false. Unknown tier values follow
+public-depth behavior. Supplied raw text enables important checks, but its digest is not
+compared to `base_text_digest`. The ruleset ID, reduction declaration, predecessor gate digests,
+campaign label and fixed non-claim/limitation contents are not validated. The ruleset hash
+covers relation cards, not executable transform/gate source; its imported-slice witness is not
+a source-byte or transitive dependency witness. Equivalence-basis checking validates only enum
+membership, not the correct basis for each MR or semantic preservation.
+
+The nine slips occupy 54 grid cells: 19 caught and 26 degenerate, so the aggregate evaluated-cell
+fraction is 9/28, not 9/54. Published rates group by mechanism and MR family, not version;
+zero-scored groups are omitted rather than emitted as a guarded 0/0 record. All retained bases
+use version v1. The floor helper separately compares leakage v1/v2 over the older-flagged domain,
+where subset monotonicity follows from construction; it does not establish an irreducible
+semantic lower bound. A digit-removing rewrite or the supposed voice-flip rewrite can change
+quantitative meaning. The six authored ASCII base strings are analogous fixtures, not a replay
+of every predecessor corpus or Gemini probe; only mutations introduce the advertised Unicode
+geometry. Document-residue reuses the leakage lexicon and is not a semantically independent
+detector. M49 already corrects the “first non-zero result” claim: 4X/4Y had nonzero residue.
+
+`blindSeverity` selects an enum bucket using the first digest nibble modulo four. This is a
+content-free deterministic fixture label, not human or model analysis of consequence. The
+parent builder calls it directly; the subprocess repeats the same function. Its binding hashes
+IDs and labels but omits the mutated-text digest and independent child identity. A producer can
+rewrite labels, recalculate the binding and sign consistently. Child inputs contain informative
+base IDs, extra input fields are ignored, and filesystem access remains available despite an
+environment scrub and PEM-argument guard. There is no sealed input-profile receipt or proof
+of adversary-independent judgment. Byte consistency of a label is not severity correctness.
+
+Lane C checks field presence, not digest syntax, threshold range, model provenance, log bytes
+or reconstruction. The orchestrator does not even require `audit_private_log_digest`, unlike
+the separate adapter validator. All required values can be null and pass. It has no implemented
+private-log audit path or external-detector dispatch in the grid reducer. The Prompt Guard
+function requires caller-loaded model/tokenizer objects; running the file exits with an example
+message, and the planned `run-vsb-lanec.py` is absent. The closeout correctly records no actual
+capture. “Itemize and externalize” payment is therefore only partially implemented at this
+stage, and neither real-detector performance nor contamination freedom follows. Pinning a
+threshold alone also cannot make arbitrary inference deterministic.
+
+The anti-overclaim gate screens ten literal substrings in `analyst_note`; it can flag negated
+mentions, misses paraphrases, accepts nonstring notes, and does not police the other signed
+free-text surfaces. Its symbolic kernel-disjoint theorem assumes the separation it proves and
+is not a runtime integration proof. The signature binds content to a bundle-supplied key, not
+a trusted organization. The CLI verifies only the committed green fixture at both tiers,
+ignores submission flags and exits 0/1; separate corpus/full-negative-fixture builders described
+in the plan are absent. The K7 tests exercise code reachability and a predecessor diff, not
+every export or complete malicious-input behavior.
+
+Python and browser do not port `applyMR5C`, reproduce source witnesses or rerun gates. They
+check classes/arithmetic over supplied labels; their set-equality slip check is stronger than
+Node's one-way check, while browser rate checking lacks total-row coverage. The browser has
+no CSP meta tag or shipped CSP injector despite the plan/comment, and its two VM cases do not
+establish the proposed Chromium smoke or network isolation (M34). Lean proves product length,
+not pair uniqueness for duplicate input lists; projection completeness is definitional, and
+the rate lemmas prove denominator/numerator facts rather than a signed-runtime ratio. There
+are eight theorem declarations because the rate obligation is split. Reproduction rebuilds
+tracked evidence, runs the finite tests, and scans Lean while explicitly skipping type-check
+when unavailable. S45 corrects source dates and positions research comparisons as bounded
+related work, not independent endorsements or conformance to 2026 standards.
+
+### M123 — Stage 5D omits required audit checks and classifies declared hardening labels
+
+Read the complete 310-line specification and 281-line plan, then the core, builders, verifier,
+API runner/BYO helper, Python/browser, Lean, parity/K7 and reproduction code. The
+[eight-case VARL probe](varl-verifier-probe.json) retains baseline and signature-refusal controls.
+Audit accepts a missing private log under the original signature. Producer-signed empty source
+registries, contradictory attempt/round commitments, false durability descriptions, unknown
+meaning classes and malformed UTS-39 outcome fields also pass.
+
+`checkAuditPrivate` returns success for `undefined`, contradicting the explicit missing-log
+refusal requirement. When supplied, it authenticates the log hash and checks that logged round
+numbers occur in the ledger. It does not compare attempt counts, per-round digest sets, individual
+evasions, transcript hashes or the reverse round inclusion. The retained “private” log is a
+publicly committed, generated 18-attempt summary containing only round numbers and transform/
+literal labels, not the original attacker conversation or a separately signed watcher receipt.
+The documented signing-time omission caveat is necessary but insufficient: even required input
+presence and the declared per-attempt bindings are not enforced. Re-running a stochastic
+ceremony can reveal more examples but cannot prove that a historical transcript was complete.
+
+Source validation loops over submitted registry rows without requiring coverage of used gates;
+an empty registry passes. The v1 file list omits its own dispatch module and the imported
+canonical helper, so “every transitive module” is too strong. v3/v4 hash the same listed source
+set; gate-version dispatch still matters. Neither runtime Unicode data nor all recipe code is
+pinned by those hashes. Schema checking limits top-level names but does not require the full
+promised field/type set or fixed ruleset identity. Embedded public keys prove signing-key
+possession, not independent actor identity or human review.
+
+Recipe reconstruction and target-verdict recomputation work on supplied public bases, but do
+not require each base to have been flagged, unique evasion coverage, a clear target result or
+unique base IDs. The implementation's confusable operation uses indexed `replacements`, not
+the plan's `map`; positions apply to the current intermediate string, not necessarily the
+original base. Argument validation is partial, and a literal recipe can replace the entire
+meaning. `human_reviewed: true` is a producer assertion; reviewer identity is neither required
+nor authenticated. Changing the class to an unknown string bypasses the review condition.
+The anti-overclaim substring screen covers only the top-level analyst note and is neither a
+semantic classifier nor proof that the remaining statements are justified.
+
+Closed counts are per rung, not cumulative 6/12 totals; an open rung skips the count check.
+The residual check requires any nonempty value for every rung, rather than the proposed iff
+relationship to remaining exact-preserving misses. Durability is computed from caller-declared
+`rule_kinds`, without comparing those kinds to the actual hardening code. Relabelling v3's
+closing rules as property-only changes its accepted status to durable. The finite monotonicity
+helper compares counts, not caught-set inclusion, and is not called by the full verifier.
+Neither a rule label nor a nondecreasing count proves permanent closure under arbitrary future
+inputs or Unicode releases.
+
+The trilemma evaluates two confusable strings and one legitimate-diacritic sentence for A/B;
+C is a declared row with no skeleton implementation. Only C's `fixed:false` and
+`declared_only:true` are checked, so malformed other axes pass. The prose argument that adding
+Latin-1 to ASCII necessarily admits Latin Extended-A is incorrect: U+0131 lies outside Latin-1.
+A fixed version of a confusable table is possible, and properties themselves depend on Unicode
+version data. These facts do not remove the observed tradeoffs, but they invalidate the leap
+from three examples to the only possible separator or an irreducible semantic ceiling. S46
+separates normalization stability from confusable-skeleton versioning.
+
+Public evidence includes raw benign bases and literal evasions, not just digests. The API
+provenance record is generated from fixed strings and a declared model/org; its response digest
+is compared with the first matching base ID across rounds, not a unique request/round/response
+receipt. The request digest is only the base sentence. Preserve the historical execution report
+as such; current verification does not independently establish provider provenance, model
+version or CVP authorization. Lane B is a documented historical two-role protocol rather than
+an executable isolation harness. The BYO helper checks a sample Boolean return and source hash;
+the evaluator still uses its local gates, with no external-detector replay dispatch.
+
+The live runner operates one base against v1, not the three-round defender-hardening cycle.
+It prints plaintext benign candidates, retries caught outputs, treats empty text as potentially
+clear, and does not inspect provider refusal signals before deciding whether to continue.
+Exhaustion combines refusal and no-slip into one message and exits zero; API exceptions are not
+sealed as signed outcomes. Attempt settings are unvalidated, SDK retries are implicit, and
+there is no monetary cap or automatic evidence integration. These are reasons to describe its
+limits accurately, not authorization to run it during this documentation audit.
+
+Python reconstructs 18 recipe digests and log hashes only; it does not implement watcher gates,
+closure/residual/durability/corners or signatures. Its Unicode-digit and position semantics also
+differ outside the fixtures. Browser verification covers signature and evasion digests only,
+yet displays “raw 0 (public surface)”; it omits the other public checks and has no CSP. Its error
+HTML is unescaped. The parity test executes a copied recipe function, not the actual page or
+WebCrypto handler; manual browser execution is not established by those tests. Lean proves
+facts about literal counts/rounds/strings and an enumerated corner table, not runtime correctness,
+set inclusion or the proposed interleaving argument. Its empty-rule durability definition also
+differs from JS. Reproduction compares only the rebuilt ledger hash, not every emitted file,
+and explicitly permits a Lean type-check skip while scanning sources. M49's bounded historical
+execution and external-validation qualifications remain applicable.

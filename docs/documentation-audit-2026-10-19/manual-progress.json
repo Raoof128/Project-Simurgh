@@ -171,7 +171,7 @@
       "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check. M70/M71 disclose retained risk mapping, SDK retry/abort behavior, raw context prefixes and caller receipt strings; runtime remains unchanged.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "28ad8cc5d66958e443aa0a2cfd08502f8191cf701c3885f678b170a8abf11251"
+      "read_sha256": "725418a0c3b2d04f23e4e96a256e2493dc89fa09142d3de7c89729dda9244739"
     },
     {
       "path": "docs/DECISIONS.md",
@@ -1107,7 +1107,7 @@
       "assessment": "Read all 13 primary-source applicability rows and limits. Correctly separates publication from review year, pinned SDK from living docs and alignment from compliance. Previous-turn fetch provenance retained; no fresh fetch claimed.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "96eaabd605f1e3b84c4f2090b0317a1ae835fdce750ae7ae628f9505c3087763"
+      "read_sha256": "2b6422739138444a7000f8eefff90675062eaead6ba40928255ece1071e3a101"
     },
     {
       "path": "docs/documentation-audit-2026-10-19/VALIDATION.md",
@@ -8734,11 +8734,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "ee8b4bb2bbbeffac3387c2e063e83455a3e2ef53f0aaa1adcb1e9b36b56a826f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read; M122 corrects conditional grid coverage, extra slips and duplicate rate rows, skipped raw-text checks, digest-derived severity, unexecuted detector adapter, incomplete browser/Python/proof claims. Eight-case VSB probe and S45 primary-source checks retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "ee8b4bb2bbbeffac3387c2e063e83455a3e2ef53f0aaa1adcb1e9b36b56a826f"
     },
     {
       "path": "docs/superpowers/plans/2026-07-09-stage-5d-varl-adaptive-red-team-ledger.md",
@@ -8747,11 +8747,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "bea723388774d1e35295efac2019f7abce866f2d5a49462997e35ef5c80b1fc5",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read; M123 corrects missing-log acceptance, unchecked attempt/round commitments, empty gate registry, producer-declared durability/review, bounded normalization examples, provenance/runner and partial parity/proofs. Eight-case VARL probe and S46 Unicode standards checks retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "bea723388774d1e35295efac2019f7abce866f2d5a49462997e35ef5c80b1fc5"
     },
     {
       "path": "docs/superpowers/plans/2026-07-10-stage-5e-vda-deployed-detector-attestation.md",
@@ -9956,11 +9956,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "3bc2df2ba363273d8ffb393f4309db5c1df3fbbd67e4ee4dbfe2c8ec254efa3f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read; M122 corrects conditional grid coverage, extra slips and duplicate rate rows, skipped raw-text checks, digest-derived severity, unexecuted detector adapter, incomplete browser/Python/proof claims. Eight-case VSB probe and S45 primary-source checks retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "3bc2df2ba363273d8ffb393f4309db5c1df3fbbd67e4ee4dbfe2c8ec254efa3f"
     },
     {
       "path": "docs/superpowers/specs/2026-07-09-stage-5d-varl-adaptive-red-team-ledger-design.md",
@@ -9969,11 +9969,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "ec38ed88e914ea566d21e43a81885407eca26be55beda673efc0b8758294857a",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read; M123 corrects missing-log acceptance, unchecked attempt/round commitments, empty gate registry, producer-declared durability/review, bounded normalization examples, provenance/runner and partial parity/proofs. Eight-case VARL probe and S46 Unicode standards checks retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "ec38ed88e914ea566d21e43a81885407eca26be55beda673efc0b8758294857a"
     },
     {
       "path": "docs/superpowers/specs/2026-07-10-stage-5e-vda-deployed-detector-attestation-design.md",

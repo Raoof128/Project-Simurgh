@@ -596,3 +596,17 @@ unsigned root passes. Floor obligations can also be omitted. See
 [M121 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m121--stage-5b-does-not-authenticate-its-capture-or-enforce-replayed-finding-truth).
 The retained 0/46 result primarily measures signature mutations; it does not demonstrate semantic
 attack resistance, independent capture custody or a complete no-omission guarantee.
+
+Stage 5C accepts extra slip records and duplicate rate rows; its grid coverage is relative to
+producer-supplied bases. Audit without raw texts can accept laundered classifications when floor
+rows are omitted. See
+[M122 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m122--stage-5c-completeness-is-conditional-and-severity-is-a-digest-label).
+Its severity labels are deterministic digest buckets, and Lane C validates shallow metadata
+rather than captured detector provenance. Its browser lacks the documented CSP.
+
+Stage 5D accepts audit verification without its private log and does not reconcile signed attempt
+counts or per-round commitments. Its source registry may be empty, and durability is derived from
+producer-declared rule labels. See
+[M123 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m123--stage-5d-omits-required-audit-checks-and-classifies-declared-hardening-labels).
+The finite normalization examples and self-reported review/provenance do not establish general
+closure, independent human adjudication or complete historical ceremony capture.

@@ -461,3 +461,42 @@ survey, regulatory endorsement or independent assessment of this implementation.
   checks covered primary metadata/abstracts, Table 1/§2.2 and the relevant NIST experiment
   passages, not full external papers. Source validity does not establish VAR adoption,
   regulatory conformance, novelty priority or independent validation.
+
+- **S45 — Stage 5C metamorphic testing and guardrail sources (checked 2026-10-19).**
+  [MORTAR](https://arxiv.org/abs/2412.15557), Guo et al., originated 20 December 2024;
+  the current v4 is dated 17 June 2026 and marked accepted in IEEE TSE. It establishes
+  relevant prior work, not VSB novelty or contamination freedom. [Young's guardrail study](https://arxiv.org/abs/2511.22047),
+  submitted 27 November 2025, confirms ten models and 1,445 prompts in its abstract. Its
+  reported generalization gaps do not prove that all associated artifacts lack itemized
+  outcomes; that blanket negative comparison remains unestablished.
+  [Hackett et al.](https://arxiv.org/abs/2504.11168), submitted 15 April and revised 14 July
+  2025, reports evasion reaching 100% in some evaluated settings across six protection
+  systems. This is not a guarantee that every Prompt Guard version, corpus or threshold is
+  fully evadable, and VSB did not execute that experiment. [BingoGuard's ICLR 2025 record](https://proceedings.iclr.cc/paper_files/paper/2025/hash/782b6152c04e9948c2cb3833e9a288ef-Abstract-Conference.html)
+  describes topic-specific severity rubrics and model predictions. A digest-nibble bucket
+  is not an equivalent severity assessment. The underspecified MTF/ICAIAT citation was not
+  resolved in the targeted search and must not support priority claims.
+  [Seth and Sankarapu's position paper](https://arxiv.org/abs/2605.15164), submitted 14 May
+  2026, argues for limits on behavioral assurance; it is not a binding governance standard
+  or validation of Simurgh. Anthropic's [BrowseComp engineering account](https://www.anthropic.com/engineering/eval-awareness-browsecomp)
+  was published **6 March 2026**, not February. It separates nine ordinary contamination
+  cases from two successful evaluation-aware answer-key retrievals across 1,266 problems.
+  Static transforms and signed counts do not by themselves establish immunity to selection
+  bias, training contamination or benchmark gaming. These checks covered primary metadata,
+  abstracts, the conference record and the relevant engineering passages, not full external
+  papers. S42 qualifies the Gemini-probe analogy; M41/M47 qualify EU dates and legal status.
+
+- **S46 — Stage 5D Unicode claims (checked 2026-10-19).**
+  The official [UTS #39 confusable-detection guidance](https://www.unicode.org/reports/tr39/)
+  distinguishes same-script, mixed-script and whole-script confusability. Its skeletons are
+  internal comparison forms, not display text or a general normalization replacement, and
+  stored skeletons need version-aware handling when Unicode is updated. This supports
+  explicit data/version pinning, not a proof that every fixed table must fail every chosen
+  corpus or that Simurgh's unimplemented C corner has measured complete closure.
+  [UAX #15 §3](https://www.unicode.org/reports/tr15/) gives normalization stability guarantees
+  for characters assigned in the relevant versions; its introduction also cautions that
+  compatibility normalization can erase meaningful distinctions. Those guarantees differ
+  from confusable-table stability and do not validate an arbitrary lexical detector's
+  permanent robustness. These targeted primary-standard sections, not the entire reports,
+  were checked. Neither standard establishes the proposed three-corner impossibility or
+  certifies the repository's implementation; S45 retains the bounded guardrail prior art.
