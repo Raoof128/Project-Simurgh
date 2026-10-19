@@ -1,10 +1,14 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import { createServer } from "node:http";
-import { readFileSync, realpathSync, statSync } from "node:fs";
+import { existsSync, readFileSync, realpathSync, statSync } from "node:fs";
 import { resolve, relative, extname, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 const HERE = dirname(fileURLToPath(import.meta.url));
-export function createExplorerServer({ directory = resolve(HERE, "dist") } = {}) {
+export function createExplorerServer({
+  directory = existsSync(resolve(HERE, "dist"))
+    ? resolve(HERE, "dist")
+    : resolve(HERE, "node_modules/.simurgh-explorer-dist"),
+} = {}) {
   const base = realpathSync(directory);
   return createServer((req, res) => {
     res.setHeader("X-Content-Type-Options", "nosniff");

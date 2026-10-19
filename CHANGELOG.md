@@ -3971,3 +3971,11 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Files changed:** Explorer import/detail validation, copy-command UI and interaction tests; continuation handoff, receipt template and both logs.
 - **Verification:** 15 explorer tests pass, including filtered export and imported-file CLI context. Fresh full-source/export verification confirms all 144 outcomes. No loaded producer claim is promoted to verification.
 - **Follow-ups:** Finish aggregate/reliability checks and package the local dashboard and complete source history. External measurements remain explicitly open.
+
+## 2026-10-19 — Raouf: align explorer output with repository checks (Australia/Sydney)
+
+- **Scope:** Additive Phase 18 source/build maintenance; historical gate unchanged.
+- **Summary:** Validate external link user-info via serialized origin; keep generated frontend/public index in ignored build cache. Preserve explicit record and detail source bounds.
+- **Files changed:** Explorer URL validation, negative tests, Vite configuration, build/serve paths, README and both logs.
+- **Verification:** Aggregate privacy scan initially flagged a URL API property; unchanged scanner now passes. Credential-bearing/executable URLs still refuse. All 16 explorer tests and production build pass.
+- **Follow-ups:** Retain initial aggregate failures alongside corrected runtime prerequisite reruns; finish E2E and delivery.

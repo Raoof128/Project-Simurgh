@@ -70,3 +70,14 @@ test("command identifiers cannot carry shell syntax and flags are recomputed", (
   clean.records[0].flags = ["unauthorized"];
   assert.ok(!parseBundle(JSON.stringify(clean)).records[0].flags.includes("unauthorized"));
 });
+
+test("external links allow ordinary HTTP but refuse credentials and executable schemes", async () => {
+  const { safeUrl } = await import("../core.mjs");
+  assert.equal(
+    safeUrl("https://example.com/docs?q=test#part"),
+    "https://example.com/docs?q=test#part"
+  );
+  assert.equal(safeUrl("https://fixture:synthetic@example.com/"), null);
+  assert.equal(safeUrl("javascript:alert(1)"), null);
+  assert.equal(safeUrl("data:text/html,test"), null);
+});

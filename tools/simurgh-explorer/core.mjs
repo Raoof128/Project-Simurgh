@@ -23,7 +23,11 @@ const string = (v, name) => {
 export function safeUrl(value) {
   try {
     const u = new URL(value);
-    return ["https:", "http:"].includes(u.protocol) && !u.username && !u.password ? u.href : null;
+    // An origin excludes URL user-info. Require the serialized URL to begin at
+    // that origin so credential-bearing links never become clickable.
+    return ["https:", "http:"].includes(u.protocol) && u.href.startsWith(`${u.origin}/`)
+      ? u.href
+      : null;
   } catch {
     return null;
   }

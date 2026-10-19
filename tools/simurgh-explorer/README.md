@@ -15,6 +15,8 @@ npm --prefix tools/simurgh-explorer start
 ```
 
 Open <http://127.0.0.1:4173>. `SIMURGH_EXPLORER_PORT` selects another local port.
+Build output lives in the ignored `node_modules/.simurgh-explorer-dist` cache so
+historical source/format scanners do not inspect generated dependency bundles.
 The server binds loopback and serves only built assets. It provides no filesystem,
 provider or command-execution API. Do not expose it as a multi-user hosted service.
 

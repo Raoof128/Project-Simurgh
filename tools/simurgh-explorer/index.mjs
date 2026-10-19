@@ -127,7 +127,11 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     JSON.stringify(buildIndex({ detail: args.includes("--detail") }), null, 2) + "\n",
     {
       flag:
-        out === resolve(dirname(fileURLToPath(import.meta.url)), "public/evidence.json")
+        out ===
+        resolve(
+          dirname(fileURLToPath(import.meta.url)),
+          "node_modules/.simurgh-explorer-public/evidence.json"
+        )
           ? "w"
           : "wx",
     }
