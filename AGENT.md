@@ -3139,3 +3139,11 @@ one machine's local agent configuration:
   smoke and HTTP 410 retired-route refusal. TLS verification retained; no paid API calls.
 - **Follow-ups:** Legacy-gate migration, browser/macOS portability, interrupted Phase 8 review,
   outside custody, live-provider integration and harder model generalization remain open.
+
+## 2026-10-19 — Raouf: declare maintained gate migration (Australia/Sydney)
+
+- **Scope:** Phase 16, P16-G01 retired HTTP contract and P16-G02 versioned reproduce inventory.
+- **Summary:** Preserve the historical 50-script pin; declare the strict successor separately and validate exact identities.
+- **Files changed:** `docs/research/CONTINUATION_PHASE_16.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Original inventory test fails on the strict Stage 5L addition; original gateway smoke fails on the already-retired response.
+- **Follow-ups:** Implement declared maintenance, test negative controls and run the affected gates before the Phase 8 review.
