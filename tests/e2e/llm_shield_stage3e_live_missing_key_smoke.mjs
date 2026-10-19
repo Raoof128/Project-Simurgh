@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// Maintained retirement check. Historical flags cannot reactivate the live HTTP route.
+// Retirement holds with legacy enablement and no provider key:
+// no network. Boots its own server with the scenario env.
 import { startServer, newSession, ok } from "./_live_server.mjs";
+
 const { base, stop } = await startServer({
   SIMURGH_GATEWAY_PROVIDER_MODE: "live",
   SIMURGH_LIVE_PROVIDER_ENABLED: "true",
@@ -15,13 +17,13 @@ try {
     headers: auth,
     body: JSON.stringify({ provider_mode: "live", input: "hi" }),
   });
-  const body = await response.json();
+  const r = await response.json();
   ok(
-    response.status === 410 && body.error === "legacy_live_gateway_retired",
-    "retired live contract",
-    body
+    response.status === 410 && r.error === "legacy_live_gateway_retired",
+    "legacy configuration must never re-enable the retired endpoint",
+    r
   );
-  console.log("[PASS] retired live route: missing_key");
+  console.log("[PASS] stage3e live missing-key smoke");
 } finally {
   stop();
 }

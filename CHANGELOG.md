@@ -3908,6 +3908,173 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Follow-ups:** Legacy-gate migration, browser/macOS portability, interrupted Phase 8 review,
   outside custody, live-provider integration and harder model generalization remain open.
 
+## 2026-10-16 — Raouf: declare Phase 16 maintenance (Australia/Sydney)
+
+- **Scope:** Prior authority for bounded legacy gate, inventory, browser and Docker maintenance.
+- **Summary:** Preserve frozen research bytes; migrate obsolete checks under the Phase 16 design.
+- **Files:** `docs/research/LOCAL_MAINTENANCE_PHASE_16.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Reproduced gateway retired-response and strict-successor inventory failures.
+- **Follow-ups:** Implement declared repairs, retain negative controls, publish measured results.
+
+## 2026-10-16 — Raouf: implement Phase 16 maintenance (Australia/Sydney)
+
+- **Scope:** Exact Phase 16 authority paths; no frozen research source or evidence changed.
+- **Summary:** Migrate HTTP smokes to permanent retirement, hash-bind a versioned current
+  reproduction set, execute browser parity through a local debugging pipe and loopback fixture,
+  and support lock-verified offline Docker installation with non-root source ownership.
+- **Files:** Declared gateway scripts/tests, inventory and browser helpers/tests, Dockerfile,
+  offline recipe, current manifest, `AGENT.md`, `CHANGELOG.md` and Phase 16 design.
+- **Verification:** 33 focused tests pass, including inventory mutations and browser failure/
+  timeout controls; Stage 5P's real Chromium lane passes 1,734 checks. Gateway core/live smoke
+  fixtures pass (72/40); audit 14/14. Offline Docker mock smoke runs as UID 1000.
+- **Follow-ups:** Run broad aggregate/E2E gates in a disposable clone; publish exact outcomes.
+
+## 2026-10-16 — Raouf: authorize additive Stage 5R browser successor (Australia/Sydney)
+
+- **Scope:** Add only `tests/unit/maintenance/stage5rBrowserParity.test.js` under P16-BROWSER-R.
+- **Summary:** Fresh real-browser parity through the working harness; preserve old driver/receipt.
+- **Files:** Phase 16 design, `AGENT.md`, `CHANGELOG.md` (authority only).
+- **Verification:** Current manifest has 5 entries and 17 vectors; historical driver still uses
+  the diagnosed failing dump-DOM/file-navigation path. No historical bytes changed.
+- **Follow-ups:** Compare all four evaluators and exercise missing/wrong-answer controls.
+
+## 2026-10-16 — Raouf: verify Stage 5R browser successor (Australia/Sydney)
+
+- **Scope:** Additive Phase 16 browser test; authorize new validation archive/manifest.
+- **Summary:** Compare the immutable Stage 5R manifest against Node core, portable Node,
+  Python and real Chromium. Historical driver and receipt remain byte-identical.
+- **Files:** `tests/unit/maintenance/stage5rBrowserParity.test.js`, Phase 16 design and root logs.
+- **Verification:** Three tests pass: 5 entries / 17 vectors across all evaluators and
+  missing/altered-answer negative controls. Implementation follows authority commit ce580463.
+- **Follow-ups:** Finish aggregate/E2E validation and publish revision-specific results.
+
+## 2026-10-16 — Raouf: authorize precise literal and privacy-test corrections (Australia/Sydney)
+
+- **Scope:** P16-LITERAL and P16-CANARY exact test paths; no application or evidence changes.
+- **Summary:** Correct cross-era prose correlation and a random digest substring false positive.
+- **Files:** Phase 16 design, `AGENT.md`, `CHANGELOG.md` (prior authority only).
+- **Verification:** Aggregate logs retain both failures; the historical total line hashes and
+  leaked-value report identify the causes. E2E prior-stage failure shares the literal cause.
+- **Follow-ups:** Hash-bound two-line exclusions, canonical-field recognition and negative controls.
+
+## 2026-10-16 — Raouf: clarify Phase 16 literal-gate documentation authority (Australia/Sydney)
+
+- **Scope:** Permit the exact Phase 16 design as approved code-band documentation.
+- **Summary:** The design must describe its finding literally; preserve the reserved-band
+  regex and restrict root logs to two exact historical line hashes.
+- **Files:** Phase 16 design, `AGENT.md`, `CHANGELOG.md` (authority only).
+- **Verification:** New privacy controls pass; literal gate now identifies only this new
+  design's own diagnostic prose, so its by-name approval is declared before editing the list.
+- **Follow-ups:** Complete the bounded gate repair and rerun the affected suites.
+
+## 2026-10-16 — Raouf: repair precise legacy test false positives (Australia/Sydney)
+
+- **Scope:** P16-LITERAL and P16-CANARY, under prior commits b6b9a235 and f5cc3a91.
+- **Summary:** Hash-bind two historical total lines, allow the exact maintenance design,
+  and recognize a canonical optional paired-node digest without ignoring malformed/raw values.
+- **Files:** `tests/unit/llmShield/stage5p/rawCodeCensus.test.js`,
+  `tests/e2e/stage27_cross_platform_device_shield_smoke.mjs`,
+  `tests/unit/maintenance/privacyCanary.test.js`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 25 focused tests pass; the original numeric-canary collision was reproduced
+  before the fix. Changed path/line/code controls and seven raw-value controls remain rejecting.
+  The Stage 2.6/2.7 closeout smoke passes. Historical evidence and application code are unchanged.
+- **Follow-ups:** Repeat broad gates on the final implementation and retain initial failures.
+
+## 2026-10-16 — Raouf: publish Phase 16 validation (Australia/Sydney)
+
+- **Scope:** Results and reviewer navigation for final implementation 8ebe0103; frozen history intact.
+- **Summary:** Close reproduced gateway/inventory/browser/container maintenance failures and
+  precise legacy test false positives; retain initial failures and external/platform limits.
+- **Files:** Phase 16 results, runbook, validation manifest and log archive; `README.md`,
+  `ROADMAP.md`, `docs/REVIEWER_INDEX.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 5,154/5,154 direct Node tests with zero skips; aggregate 142/142 steps;
+  E2E 32/32 steps (579 tests passed, one path-specific skip separately exercised); Rust 34,
+  Lean 39 proofs, portable .NET 11 tests; Chromium parity for both declared surfaces.
+  Archive retains 326 logs with hashes and no secret/canary redactions. Authority ancestry
+  and unchanged predecessor research paths verified. No paid provider calls or new inference.
+- **Follow-ups:** Native platforms, outside custody, provider entitlements, sustained deployment
+  and the previously interrupted whole-change review remain unproven; push the topic branch.
+
+## 2026-10-17 — Raouf: authorize provider transfer and reviewer handoff (Australia/Sydney)
+
+- **Scope:** Phases 17–20, user-approved readiness items 2–5; external reproduction deferred.
+- **Summary:** Add bounded live workflow, two-family comparison, paced reliability and brief.
+- **Files:** New Phase 17 design and matching root logs; exact write paths declared in design.
+- **Verification:** Clean baseline 6a88786a; installed model and OpenAI model access checked.
+  No inference calls yet; existing frozen lifecycle and reliability APIs inspected.
+- **Follow-ups:** Test new capture/verification code, freeze inputs, capture within budget,
+  publish actual results and remaining platform/review limits without changing history.
+
+## 2026-10-17 — Raouf: freeze provider transfer implementation (Australia/Sydney)
+
+- **Scope:** New transfer namespace under authority 359202cf; predecessor bytes preserved.
+- **Summary:** Add strict Responses roundtrip, persistent request budget, matched local/API
+  comparison, paced process-based reliability capture and raw-storage/replay verification.
+- **Files:** `tools/assurance-transfer/**`, Phase 17 corpus/settings/source protocol and logs.
+- **Verification:** 15 substantive tests pass, including all eight lifecycle outcomes,
+  duplicate calls/arguments, budget exhaustion, source-request binding and storage mutation.
+  Ruff checks pass. A test import collision was corrected before capture; no API inference yet.
+- **Follow-ups:** Capture frozen inputs once, retain all outcomes, verify archive and publish brief.
+
+## 2026-10-17 — Raouf: authorize host-role correction and native CI (Australia/Sydney)
+
+- **Scope:** Separate Phase 17B correction and bounded macOS/Windows validation jobs.
+- **Summary:** Luna's returned reasons identify user-role host authority as insufficient;
+  preserve the complete first study and freeze a developer-role correction before 16 new calls.
+- **Files:** Phase 17B design and root logs; new adapter/docs/workflow paths declared exactly.
+- **Verification:** Original capture retains all eight declines, including three active cases.
+  Original 64-attempt study continues unchanged; combined corrective budget remains below $1.
+- **Follow-ups:** Test authority-role separation, bind prior ledger, capture once; run native CI.
+
+## 2026-10-17 — Raouf: freeze corrected provider roles and native jobs (Australia/Sydney)
+
+- **Scope:** Additive Phase 17B adapter and Phase 19 native workflow under authority 00503114.
+- **Summary:** Host-authored task/state uses developer messages; retrieved text stays tool data.
+  Bind the original 64-attempt ledger and all eight original workflow results before correction.
+- **Files:** New role adapter/tests/protocol/baseline, scoped native workflow and root logs.
+- **Verification:** Three role/budget tests pass; Ruff and workflow formatting pass. Original
+  transfer source remains unchanged. Runtime/model dependency checks and npm audit are clean.
+- **Follow-ups:** Capture at most 16 corrected requests; run native jobs; retain all outcomes.
+
+## 2026-10-17 — Raouf: authorize exact frozen-baseline format exclusion (Australia/Sydney)
+
+- **Scope:** P17-FORMAT01, one exact addition to `.prettierignore`.
+- **Summary:** Preserve the compact baseline JSON committed before corrective capture.
+- **Files:** Phase 17 maintenance declaration and both root logs; ignore edit follows later.
+- **Verification:** Corrective protocol hashes the baseline bytes; reformatting changes that input.
+- **Follow-ups:** Add the exact path, retain source verification, format human-facing reports.
+
+## 2026-10-17 — Raouf: publish provider transfer and presentation package (Australia/Sydney)
+
+- **Scope:** Phases 17–20 and separate declared role correction; external reproduction deferred.
+- **Summary:** Retain 96 model decisions, 288 matched branches and 120 paced reliability fixtures.
+  Llama retains 23/24 active completions while restricted effect trials fall from 17/24 to zero.
+  Luna comparison is 24/24 active and zero restricted effects in both useful controls.
+  Corrected live workflow completes 2/3 authorized cases and declines all five restricted cases;
+  retain the remaining active refusal and all original eight declines without further tuning.
+- **Files:** New result reports, source-bound archives, brief/demo/validation package, current
+  navigation, exact P17-FORMAT01 ignore addition and matching root logs.
+- **Verification:** 18 new Python tests; 16/12 predecessor suites; 45 Node/browser tests; 10
+  rejected evidence mutations. Full comparison/workflow replay and 4,240 snapshots verify.
+  Hosted macOS 10 tests, Windows 11 tests and affinity build pass at fbe06eca. Dependency
+  checks and formatting pass; 213 local links resolve. Original-source authority ancestry
+  and unchanged predecessor bytes checked. All 80 paid calls retained; estimated $0.0061306.
+  Exact-key scan passed and the task-downloaded credential copy was removed after capture.
+- **Follow-ups:** Finish the already-running hosted recovery job and publish its receipt.
+  One active refusal, production IAM/alerts/load, interactive desktop behavior and the
+  previously blocked whole-change security review remain explicit limitations.
+
+## 2026-10-17 — Raouf: complete hosted readiness receipt (Australia/Sydney)
+
+- **Scope:** Additive final hosted receipt and current navigation wording; no runtime edits.
+- **Summary:** All 13 existing readiness jobs passed at implementation freeze 4afe9538,
+  including persisted workflow recovery; both native platform jobs already passed at fbe06eca.
+- **Files:** New hosted receipt/log archive, validation guide, current entry-point prose and logs.
+- **Verification:** Exact job identities, successful conclusions, source SHA and log hashes
+  checked. Prior evidence bundles remain byte-identical. Formatter and diff checks pass.
+- **Follow-ups:** Independent reproduction stays deferred. One corrected active refusal and
+  the documented provider/deployment/desktop/review limitations remain unresolved.
+
 ## 2026-10-19 — Raouf: declare maintained gate migration (Australia/Sydney)
 
 - **Scope:** Phase 16, P16-G01 retired HTTP contract and P16-G02 versioned reproduce inventory.
@@ -3987,3 +4154,11 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Files changed:** Fresh validation record/receipts/log bundle, current navigation and both logs. No frozen evidence changed in the primary checkout.
 - **Verification:** 16 explorer tests/build/HTTP/packaged CLI pass. Root unit run: 5,137 pass, zero fail, three skips; real Lean rerun resolves its two prerequisite skips. Rust 34 pass with Xvfb, fallback 4 pass on rerun. Default Docker npm build still fails; separate documented offline build and non-root mock/retirement smoke pass.
 - **Follow-ups:** Owner/classmate handles independent reproduction. Browser/macOS, real provider lifecycle, harder externally held multi-model tasks, sustained deployment and real-data privacy remain scoped external inputs. No remote publication or paid inference performed.
+
+## 2026-10-19 — Raouf: reconcile remote continuation before push (Australia/Sydney)
+
+- **Scope:** Merge remote `4fb57b2c` with local dashboard continuation `71e4a5a9` at the owner's explicit push request.
+- **Summary:** Preserve both histories and append-only logs. Retain remote maintained gateway/inventory/browser gate implementations; retain local dashboard, CLI, runtime helpers and review records. Navigation distinguishes the Phase 10 viewer snapshot from newer provider/native results.
+- **Files changed:** Conflict resolution in current navigation, both logs and overlapping maintenance gates; no frozen provider captures/protocols modified.
+- **Verification:** 40 merged-tree maintenance tests and 16 explorer tests pass; production build passes. No fresh provider inference or platform certification implied.
+- **Follow-ups:** Push combined branch without rewriting remote history. Earlier downloadable bundles remain snapshots of their recorded commits.

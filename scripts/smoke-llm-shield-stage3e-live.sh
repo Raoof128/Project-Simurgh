@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: AGPL-3.0-or-later
-# Maintained Stage 3E retirement smoke. Every historical live configuration returns
-# HTTP 410; mock fixtures continue testing the archived pipeline without provider calls.
+# Stage 3E retired-live smoke. Checks permanent retirement under legacy settings;
+# the env-specific live smokes self-boot their own server child. No network: live
+# smokes must return retirement before any provider call.
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"

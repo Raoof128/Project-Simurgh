@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import crypto from "node:crypto";
+import { pathToFileURL } from "node:url";
+import { resolve } from "node:path";
 
 const INSTRUCTOR_TOKEN = process.env.SIMURGH_INSTRUCTOR_TOKEN || "demo";
 
@@ -31,7 +33,7 @@ function isCryptoOrGeneratedKey(key) {
   return CRYPTO_OR_GENERATED_KEYS.has(key) || key === "hash" || key.endsWith("_hash");
 }
 
-function findForbiddenData(value, forbiddenValues, path = "$") {
+export function findForbiddenData(value, forbiddenValues, path = "$") {
   if (value === null || value === undefined) return null;
 
   if (typeof value === "string" || typeof value === "number") {
@@ -50,6 +52,14 @@ function findForbiddenData(value, forbiddenValues, path = "$") {
 
   if (typeof value === "object") {
     for (const [key, item] of Object.entries(value)) {
+      // This exact optional field carries a digest, not a raw PID. Validate the representation
+      // before excluding coincidental substrings; malformed/raw values still enter the scan.
+      if (
+        key === "node_id_hash_if_paired" &&
+        typeof item === "string" &&
+        /^sha256:[0-9a-f]{64}$/.test(item)
+      )
+        continue;
       if (isCryptoOrGeneratedKey(key)) continue;
       const found = findForbiddenData(item, forbiddenValues, `${path}.${key}`);
       if (found) return found;
@@ -661,7 +671,9 @@ async function main() {
   console.log("Stage 2.7 cross-platform Device Shield smoke: pass");
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+  main().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+}

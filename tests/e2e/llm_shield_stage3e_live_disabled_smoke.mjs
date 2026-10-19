@@ -20,7 +20,7 @@ const res = await fetch(`${api}/${s.session_id}/run`, {
 const r = await res.json();
 ok(
   res.status === 410 && r.error === "legacy_live_gateway_retired",
-  "retired live route must return HTTP 410",
+  "legacy live endpoint must be retired",
   r
 );
-console.log("[PASS] stage3e retired-route smoke");
+console.log("[PASS] stage3e live-disabled smoke");

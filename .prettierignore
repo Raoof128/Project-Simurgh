@@ -232,3 +232,6 @@ docs/research/reproduction-phase-4/receipt.json
 docs/research/signals-phase-6/receipt.json
 docs/research/signals-phase-6/report.json
 docs/research/export-phase-14/separate-verification.json
+
+# P17-FORMAT01: immutable corrective-study input; checked by protocol verifier.
+docs/research/provider-role-phase-17b/baseline.json

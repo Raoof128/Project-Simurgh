@@ -16,14 +16,17 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-# SELF=reproduce-llm-shield-stage5s.sh is excluded by the shared validator.
-# REFUSED — the prior set drifted from its pin: includes independently reported additions/removals.
+# Phase 16 current inventory extends, and hash-binds, the historical Stage 5S pin.
+SELF=reproduce-llm-shield-stage5s.sh
 DISCOVERED_FILE=$(mktemp)
 trap 'rm -f "$DISCOVERED_FILE"' EXIT
-node scripts/lib/priorReproduceSet.mjs > "$DISCOVERED_FILE"
+if ! node scripts/lib/currentReproduceSet.mjs > "$DISCOVERED_FILE"; then
+  printf 'REFUSED — the prior set drifted from its pin\n'
+  exit 1
+fi
 
 DISCOVERED_COUNT=$(wc -l < "$DISCOVERED_FILE" | tr -d ' ')
-printf 'maintained prior reproduce scripts: %s (historical pin + declared successors, 5S excluded)\n' "$DISCOVERED_COUNT"
+printf 'prior reproduce scripts: %s (pinned as a set, 5S excluded by name)\n' "$DISCOVERED_COUNT"
 
 PASSED=0
 FAILED=0

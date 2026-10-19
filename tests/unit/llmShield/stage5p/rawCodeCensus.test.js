@@ -225,6 +225,30 @@ test("the static and dynamic nets disagree in scope, and both are required", () 
 
 // ---- repo hygiene: the literals live in exactly the approved places -----------------------------
 
+// Phase 16: exact historical test-count prose, not an unrestricted log-file exception.
+const HISTORICAL_TOTAL_LINES = new Map([
+  ["AGENT.md", "b369006e5cb739418756c4890469910b77d7105abe1bb22e46384d3b0bc7a472"],
+  ["CHANGELOG.md", "7aae9708e6bbab3d30624e1d62a0462b64d924a0c823c75e286ce97585f6daa4"],
+]);
+const approvedHistoricalTotal = (path, line) =>
+  HISTORICAL_TOTAL_LINES.get(path) === createHash("sha256").update(line).digest("hex");
+
+test("historical total exceptions bind exact paths and bytes, never new code literals", () => {
+  for (const [path, digest] of HISTORICAL_TOTAL_LINES) {
+    const matches = readFileSync(join(REPO, path), "utf8")
+      .split("\n")
+      .filter((line) => approvedHistoricalTotal(path, line));
+    assert.equal(
+      matches.length,
+      1,
+      `${path}: historical exception missing or duplicated (${digest})`
+    );
+    assert.equal(approvedHistoricalTotal(`elsewhere/${path}`, matches[0]), false);
+    assert.equal(approvedHistoricalTotal(path, matches[0] + " const VSI_LEAK = 467;"), false);
+    assert.equal(approvedHistoricalTotal(path, matches[0].replace("469", "468")), false);
+  }
+});
+
 test("raw literals 464-474 occur ONLY in the allocator, the registry, goldens and approved docs", () => {
   // The reviewer entry point moved the old README verbatim to this archive. Keep
   // the existing approved-documentation exception bound to those exact bytes;
@@ -237,6 +261,7 @@ test("raw literals 464-474 occur ONLY in the allocator, the registry, goldens an
     "Historical README archive must retain the original approved bytes"
   );
   const APPROVED = [
+    "docs/research/LOCAL_MAINTENANCE_PHASE_16.md",
     "tools/simurgh-attestation/stage5p/core/rawCodeAllocator.mjs",
     "tools/simurgh-attestation/stage4h/exitCodes.mjs",
     "tools/simurgh-attestation/stage5p/node/measureStage5pRawCodes.mjs",
@@ -295,7 +320,8 @@ test("raw literals 464-474 occur ONLY in the allocator, the registry, goldens an
       // number in a 20-stage repo becomes noise, and a noisy gate is a gate people switch off.
       if (!MENTIONS_5P.test(text)) continue;
       text.split("\n").forEach((line, i) => {
-        if (BAND.test(line)) offenders.push(`${rel}:${i + 1}: ${line.trim().slice(0, 90)}`);
+        if (BAND.test(line) && !approvedHistoricalTotal(rel, line))
+          offenders.push(`${rel}:${i + 1}: ${line.trim().slice(0, 90)}`);
       });
     }
   };

@@ -11,10 +11,12 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { readFileSync, writeFileSync, mkdtempSync, rmSync } from "node:fs";
+import { readFileSync, writeFileSync, rmSync, mkdtempSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
+import { createServer } from "node:http";
+import { findBrowser, browserResult } from "../../../../scripts/lib/browserExecutable.mjs";
 import {
   AXES,
   AXIS_VALUES,
@@ -28,10 +30,7 @@ import { evidenceReplayIdentity } from "../../../../tools/simurgh-attestation/st
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../../..");
 const S5P = join(ROOT, "tools/simurgh-attestation/stage5p");
 const VECTORS = JSON.parse(readFileSync(join(S5P, "python/parity-vectors.json"), "utf8"));
-import {
-  discoverBrowser,
-  managedBrowserBlockReason,
-} from "../../../../scripts/lib/runtimePrerequisites.mjs";
+const CHROME = findBrowser();
 
 test("the vector file was generated from the AUTHORITATIVE Node surface, and still matches it", () => {
   // Guards the whole lane: if the vectors drifted from Node, Python and the browser would agree
@@ -72,15 +71,13 @@ test("PARITY — stdlib Python reproduces every value byte for byte", () => {
   assert.match(out, /on 1734 checks/);
 });
 
-test("PARITY — a REAL headless browser reproduces every value byte for byte", (t) => {
-  const chrome = discoverBrowser();
-  const missing = chrome ? managedBrowserBlockReason(chrome) : "browser_unavailable";
-  if (missing) {
-    t.skip(`${missing} — browser parity remains UNPROVEN`);
+test("PARITY — a REAL headless browser reproduces every value byte for byte", async (t) => {
+  if (!CHROME) {
+    // Explicit skip. Never a silent pass, and never Node's WebCrypto standing in for a browser.
+    t.skip("no Chrome present — the browser lane is SKIPPED, not assumed");
     return;
   }
   const work = mkdtempSync(join(tmpdir(), "s5p-browser-"));
-  t.after(() => rmSync(work, { recursive: true, force: true }));
   // Inline the vectors: CSP forbids all egress, so the page must not fetch anything, not even
   // a sibling file. A verifier that can make a request is not offline by construction.
   const html = readFileSync(join(S5P, "browser/index.html"), "utf8").replace(
@@ -92,24 +89,33 @@ test("PARITY — a REAL headless browser reproduces every value byte for byte", 
     writeFileSync(join(work, f), readFileSync(join(S5P, "browser", f)));
   }
 
-  const dom = execFileSync(
-    chrome,
-    [
-      "--headless",
-      `--user-data-dir=${join(work, "profile")}`,
-      "--disable-gpu",
-      "--no-sandbox",
-      "--allow-file-access-from-files",
-      "--virtual-time-budget=8000",
-      "--dump-dom",
-      `file://${join(work, "index.html")}`,
-    ],
-    { encoding: "utf8", timeout: 90_000, stdio: ["ignore", "pipe", "ignore"] }
-  );
-
-  const m = dom.match(/<pre id="out">(.*?)<\/pre>/s);
-  assert.ok(m, `the browser produced no result block:\n${dom.slice(0, 400)}`);
-  const result = JSON.parse(m[1].replace(/&quot;/g, '"').replace(/&amp;/g, "&"));
+  // Serve only these owned files over loopback. Managed Chromium forbids file:// navigation.
+  // The original page CSP and browser code remain byte-identical; no outbound fetch is added.
+  const server = createServer((req, res) => {
+    const files = new Map([
+      ["/index.html", "text/html"],
+      ["/vsi-portable.mjs", "text/javascript"],
+      ["/parity-run.mjs", "text/javascript"],
+    ]);
+    if (!files.has(req.url)) {
+      res.writeHead(404).end();
+      return;
+    }
+    res.setHeader("Content-Type", files.get(req.url));
+    res.end(readFileSync(join(work, req.url.slice(1))));
+  });
+  await new Promise((resolve, reject) => {
+    server.once("error", reject);
+    server.listen(0, "127.0.0.1", resolve);
+  });
+  let result;
+  try {
+    result = await browserResult(CHROME, `http://127.0.0.1:${server.address().port}/index.html`);
+  } finally {
+    server.closeAllConnections();
+    await new Promise((resolve) => server.close(resolve));
+    rmSync(work, { recursive: true, force: true });
+  }
   assert.equal(result.runtime, "browser");
   assert.deepEqual(result.failures, [], "the browser disagreed with Node");
   assert.equal(result.ok, true);
