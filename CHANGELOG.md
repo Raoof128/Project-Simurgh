@@ -3923,3 +3923,11 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Files changed:** Exact Phase 16 maintenance surface; shared inventory validator, versioned manifest and eight behavioral regression tests.
 - **Verification:** 15 inventory tests pass; core smoke (72 fixtures), retirement smoke (40 fixtures), and 14 security-audit checks pass in a disposable checkout. Historical pin hash matches. Added/removed, equal-count substitution, duplicate, path, empty-set and changed-pin controls refuse.
 - **Follow-ups:** Run consolidated end-to-end checks after the Phase 8 review and portability work. No aggregate-green claim yet.
+
+## 2026-10-19 — Raouf: complete local Phase 8 follow-up review (Australia/Sydney)
+
+- **Scope:** All Phase 8 Python source/tests and its workflow, with supporting boundary reads.
+- **Summary:** No new confirmed vulnerability within the declared trusted-host lab model. The earlier interrupted review is superseded by this local review, not relabeled as independent.
+- **Files changed:** `docs/research/PHASE_8_REVIEW_2026-10-19.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 24 tests passed in 21.659 seconds; separate fresh archive replay verified 46 rows, 92 snapshots and all 50 frozen bindings.
+- **Follow-ups:** External review/custody and production identity/TLS remain separate. Browser portability is next.
