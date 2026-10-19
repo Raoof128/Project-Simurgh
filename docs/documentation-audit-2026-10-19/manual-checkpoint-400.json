@@ -1,0 +1,34 @@
+{
+  "baseline": "15105bac03588d601a2961b3d6f61db72c3b37a4",
+  "prior_checkpoint": "48bface4071f4750e520eb00d9137cc3cfdb7370",
+  "manual_read_count": 400,
+  "candidate_count": 919,
+  "complete": false,
+  "append_only_logs": true,
+  "changed_paths": [
+    "AGENT.md",
+    "CHANGELOG.md",
+    "PRIVACY.md",
+    "docs/REVIEWER_INDEX.md",
+    "docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md",
+    "docs/documentation-audit-2026-10-19/manual-progress.json",
+    "docs/documentation-audit-2026-10-19/browser-vnc-node-vm.json"
+  ],
+  "checks": {
+    "changed_file_format": "pass",
+    "local_links": {
+      "documents": 813,
+      "links": 1845,
+      "issues": 0
+    },
+    "candidate_identity": "919 paths preserved; 400 complete reads, 519 pending; scratch and tracked ledgers identical",
+    "preservation": "HEAD AGENT.md and CHANGELOG.md bytes are exact prefixes; only current privacy/reviewer guidance and audit records otherwise changed",
+    "prior_authority": "4ca41a95 is a strict ancestor of HEAD",
+    "stage5r_altered_family": {
+      "command": "node tools/simurgh-attestation/stage5r/node/verifyCampaignCommitment.mjs --against tests/fixtures/llmShield/stage5r/altered-family/",
+      "exit_code": 1,
+      "output": "REFUSED \u2014 1 difference(s)\n  F1/vulnerable: control bytes differ from the commitment"
+    }
+  },
+  "scope": "Documentation checkpoint with source review and narrow diagnostics; no fresh inference, full E2E rerun or interactive desktop/browser validation. No hosted run was returned for the prior checkpoint SHA during this check."
+}

@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **281 documents have complete manual reads; 638 remain
+SHA-256 values. At this checkpoint, **400 documents have complete manual reads; 519 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -605,6 +605,333 @@ Manager composition for successful retrieval. Its remarks expressly decline a DR
 claims in the foundation paper, ARA and older device-track prose must be narrowed accordingly.
 `SECURITY.md` now states these limits. This correction is not a fresh interactive desktop test
 and does not rewrite historical results or change scanner behavior.
+
+### M32 — Stage 1–2 reviewer packs and device guides
+
+The remaining 18 documents in `docs/stages/` were read completely, including every checklist,
+validation row and the 966-line Stage 1 reference. These stage records remain historical; their
+unchecked boxes are review tasks, not evidence that a reviewer executed each item.
+
+- `STAGE_1_5_REVIEWER_PACK.md` contradicts its own May 2026 header by saying Stage 2 is not
+  implemented. Its MIT-license claim is historical and must not describe the current AGPL-3.0-or-later
+  repository. Its global no-capture/privacy statements inherit the legacy-helper exception (M10).
+  `STAGE_1_ACADEMIC_SHIELD.md` describes the retired `/api/affinity` surface; the current route
+  returns 410. Historical 65/234/239/273/327/331 test totals remain scoped to their recorded stages.
+- `STAGE_2_ARCHITECTURE.md` contains a proposed proof sketch, local-log root, revocation and
+  node-status endpoint; those proposals are not a current API contract. Stage 2.5 shipped a
+  CoreGraphics scanner, not the proposed ScreenCaptureKit scanner. The macOS brief's illustrative
+  Ed25519 JSON has wrong version, timestamp/key/capability shapes and is not a valid proof fixture.
+  Use the checked-in schema and golden fixtures with the two separate protocols in M30.
+- `STAGE_2_3_MACOS_LOCALHOST_DAEMON.md` changes into the Swift package before invoking the
+  repository-root `./scripts/check.sh`. Run the Swift work in a subshell, then run the root gate:
+  `(cd tools/simurgh-daemon-macos && swift test && swift build)`. The macOS technical brief's
+  `node tools/verify-audit.mjs <chain.json>` is shell-invalid and omits the original HMAC secret;
+  use the corrected current `SECURITY.md` example. Warning wording is “recommended”; Critical
+  wording is “required,” rather than the brief's one exact string for both.
+- `STAGE_2_WINDOWS_TECHNICAL_BRIEF.md` says the scanner never reads HWNDs, despite needing
+  those transient handles for Win32 calls. The privacy boundary concerns emitted summaries.
+  Its example has excluded = 1 and restricted = 0, while `DisplayAffinityScanner.cs` calculates
+  **restricted = excluded + monitor-only**; that example should use restricted = 1. The actual
+  scanner summary does not emit the claimed position/size fingerprint hashes. The generic server
+  validator's acceptance of a hash field is not evidence that this scanner generates it. Its
+  privacy/capture absolutes also require M31's OS-specific limits.
+- The Linux brief and checklist omit implemented `POST /pair`. The success body from `/proof`
+  is `{ ok: true, daemon_proof: ... }`, not `{ proof_payload, signature }`; the telemetry route
+  does not return the claimed `proof_id`. `privacy_mode` is the string `metadata_only`, not a
+  boolean. The brief's “exhaustive” field list omits proof identity, session, challenge and signature
+  fields. `validateDaemonProof` is defined in `src/device/daemonProof.js`, not `server.js`;
+  `src/academic/riskEngine.js` does not exist. Current scoring/report references are
+  `riskScoring.js`, `scannerRiskPolicy.js` and `reportBuilder.js`.
+- Linux X11 enumeration uses `_NET_CLIENT_LIST` and root children from `query_tree`, not a
+  recursive walk of all descendants. It necessarily uses XIDs locally. `is_local_display` allows
+  loopback host forms as well as Unix-display forms; “Unix socket only” is inaccurate. Detector
+  state `healthy` is not the matrix's `x11_active`; Wayland coverage is `wayland_limited`, not the
+  brief's `wayland_portal_only`. Wayland states depend on the property-probe result, rather than
+  a universal `portal_probe` state. `portal_active` means the property was readable, not that
+  screen recording was active.
+- `display_server_mismatch` is enforced by the Node server, not the daemon as the Linux closeout
+  says. The route appends a rejection event but does not call `recordRejected` in that branch;
+  do not claim that this event directly increments the scorer's rejected-proof counter. Lock
+  eviction follows the active-session sweep, not immediate session-end deletion. Environment
+  strings identify a claimed display context; a signature does not prove the compositor's truth.
+- The Linux brief's “XWayland under a Wayland compositor (Xvfb-backed in CI)” must not be read
+  as real-compositor validation. The validation matrix correctly leaves real desktops and live
+  systemd lifecycle untested. Shellcheck and script-existence tests do not execute installation.
+  `check-user-unit.sh` and `doctor-user-unit.sh` are read-only diagnostics and do not implement
+  a distinct `--dry-run` parser, despite the matrix's dry-run column. The unit fixes its writable
+  state path at `%h/.local/state/simurgh`; custom XDG state locations require separate validation.
+- The Windows closeout records **47/48**, including a Windows formatting failure. Preserve that
+  failure alongside the separate Linux CI result; do not call the local run all-pass. Stage 2.7's
+  Linux-unsupported checks describe its frozen baseline, not current Linux support. A tag can be
+  reachable from `main` without pointing to the current tip. The checklist's forbidden substring
+  “automatic misconduct” must exclude the explicitly required negated sentence. New log entries
+  must attribute assistance accurately, not imply the owner personally executed assistant work.
+
+These corrections retain the dates, release tags and original measurements. M01–M05, M10,
+M18, M30 and M31 also apply to repeated identity, audit, native-test and privacy claims here.
+
+### M33 — Capture runbooks and conformance-kit handoff
+
+Read all 14 remaining lane/conformance Markdown guides under `tools/simurgh-attestation/`.
+These are historical recipes, not authorization to launch captures or contact external actors.
+The Stage 5A/5C/5F “not executed” statements describe their stated build; subsequent closeouts
+must be checked before interpreting them as today's backlog.
+
+- Stage 4Z and 5B recipes use shell-invalid `export REV=<pinned-revision-sha>` and non-installable
+  package placeholders. They are templates, not copy-and-run instructions. Resolve the exact
+  revision, dependency lock, configuration and working directory first. Stage 4Z's capture contains
+  an elided lens step, acknowledged by the Stage 5B successor; the two harnesses are not equivalent.
+- Stage 5C's opening “we beat a deployed detector” conflicts with its explicit unexecuted status.
+  Use “adapter for a prospective pinned-detector capture.” Recorded threshold misses do not
+  establish downstream harm or defeat of the underlying provider model. Stage 5D's claim that a
+  local subagent “cannot be refused” is unsupported; local orchestration guarantees neither model
+  availability nor a response. A signed ceremony also cannot establish omitted-round completeness.
+- Stage 5E's default kit verifies committed scores; it does not rerun Prompt Guard. Lean execution
+  is conditional on an installed toolchain and must retain a skip if absent. The droplet guide's
+  pipeline `bash run.sh 2>&1 | tee ...` requires **`set -o pipefail` in the invoking shell**;
+  otherwise `$?` is normally `tee`'s status, even when the child runner fails closed. Required
+  success markers supplement, rather than replace, that exit status. Avoid including hostnames
+  in shared log names; redact host paths before external handoff.
+- Stage 5F's droplet setup contains a placeholder NodeSource URL ending in `/...`, `git clone
+<repo>` and `git checkout <tag-or-branch>`. Use the actual repository URL and a trusted full
+  revision in an isolated checkout, with Node 26 provisioned separately. A byte-stability diff
+  requires diagnosis; it is not “almost certainly” a Node-version issue. The runner explicitly
+  skips Python parity if Python is missing yet can print ALL PASS. A handoff claiming Python
+  corroboration must require Python and confirm that the parity step actually ran.
+- Stage 5G's kit proves distinct-key/challenge binding under its trust inputs, not organizational
+  independence. Verify the external actor's public-key provenance through the agreed channel;
+  an embedded key and self-reported identity cannot establish that relationship. Keep private
+  actor keys out of the returned package. No outside actor was contacted during this review.
+
+The exact archived recipes are preserved; current reproduction should follow
+[the historical replay guide](../HISTORICAL_REPLAY.md) with the corrections above. New inference
+and external ceremonies remain separately scoped work.
+
+### M34 — Archived browser pages are not interchangeable verifiers
+
+All 17 HTML candidates under `tools/simurgh-attestation/` were read completely, including their
+embedded JavaScript and the 1,616-line Stage 5O vector page. This is source review, not a claim
+that every page was exercised in a real browser. Important handoff corrections:
+
+- Stage 5F, 5G and 5H use `script-src 'self'` but put the module entry point inline, without an
+  allowed hash or nonce. Their own policy blocks that entry point in a conforming browser.
+  Stage 5F additionally exposes a function without implementing its promised drop interaction.
+  Stage 4Z says to drop a bundle and public key but has no file input/drop handler. Loading these
+  pages is not evidence that verification ran.
+- Stage 5C's comment promises a stamped hash CSP, but this checked-in HTML has no CSP meta tag.
+  Stage 5D likewise has no document CSP. An unknown server response header cannot be assumed.
+  Stage 5B's inline script hash was recomputed and matches its declared CSP hash; that one check
+  is not a claim that every page's policy is valid.
+- Stage 4T interpolates supplied section values and errors into `innerHTML`; its policy permits
+  inline scripts. Stage 5D similarly inserts an error message containing an untrusted recipe
+  operation into HTML. Stage 4X inserts family names and identifiers as HTML too, although its
+  hashed policy restricts script execution. Treat these as unresolved unsafe-rendering surfaces;
+  do not load untrusted bundles into them. Frozen runtime repairs require their own stage authority.
+- Stage 4V and 4W are convenience checks without author-signature verification, as their comments
+  or banners state. Stage 4X never reads the ledger textarea: it recomputes the supplied corpus
+  only. Stage 4Y's upload flow always passes an empty redaction manifest and a salt hint/default
+  to audit recomputation; it does not expose the full audit input contract. Its hash-only style
+  policy also does not authorize the generated inline width attributes. These distinctions matter
+  when interpreting a displayed result or visualization.
+- Stage 5A verifies the attestation signature with a supplied key and selected arithmetic, but the
+  `digs` array in the purported Merkle-recompute section is unused. It does not bind every supplied
+  component back to those signed digest fields. A fresh local execution of the extracted core in
+  Node WebCrypto returned `raw: 0` for four existing negative fixtures: adapter loss, borrowed story,
+  manifest inclusion and post-hoc claim table. It rejected the signature, silent-claim, silent-flag,
+  tally and two-story negatives. The [diagnostic receipt](browser-vnc-node-vm.json) preserves all
+  thirteen outcomes and explicitly identifies the VM scope. This is not a browser/CSP test or a
+  rerun of the authoritative Node verifier.
+- Stage 5B/5C/5D accept public keys from the submitted material; a valid signature under such a
+  key is not an external trust pin. Their arithmetic checks also do not establish model truth,
+  full audit coverage or independent capture. Stage 5D's “raw 0 (public surface)” is a local
+  signature/digest summary, not the authoritative verifier's complete return code.
+- Stage 5O executes fixed hashing, sampling, inclusion and rational-arithmetic vectors. Its
+  embedded `negatives` object is not consumed by `run()`, and that page's title still says §7
+  while its actual driver includes §8/§9. Passing the page does not establish every frozen
+  negative or the full protocol. Stage 5Q requires its driver to replace the module/vector markers
+  and otherwise fails explicitly; the page on disk is not a ready-to-open report. Stage 5P uses
+  an external same-origin module rather than an inline entry point, so it does not have the
+  specific 5F–5H CSP conflict. Neither CSP nor local execution establishes all-channel isolation.
+
+The [MDN script-src documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/script-src),
+checked 19 October 2026, confirms that inline scripts require an explicit matching authorization;
+`'self'` alone does not supply it. Current reviewer guidance now directs authentication/replay
+work to the stage's authoritative CLI and distinguishes the maintained evidence explorer from
+these historical pages. Existing scientific/browser-parity receipts retain their original scope.
+
+### M35 — Legacy public-page claims and current routes
+
+All seven HTML pages directly under `public/` were read completely, including embedded scripts.
+These are the historical academic/banking/voting interfaces, not the maintained evidence explorer.
+The following corrections apply to their displayed documentation:
+
+- All seven pages request Google Fonts stylesheets and reference Google's font asset host. A
+  metadata-only application payload does not mean the browser makes no third-party request.
+  `PRIVACY.md` now discloses this separate traffic boundary, including requests before notice
+  dismissal. A banking AI receipt's egress flag cannot measure the whole browser's network use.
+- `banking-pilot-scenario.html` says withdrawal “removes” the synthetic session. The store sets
+  `withdrawn` and `withdrawn_at`; it retains scenario metadata and the audit chain. The report
+  route returns 403 after withdrawal, while token-authorized audit/verify routes remain present.
+  The corrected privacy guide distinguishes blocked reports from deletion. The example consent
+  hash is the SHA-256 of an empty string, not evidence that actual consent was independently bound.
+- The banking consent/report pages describe the synthetic Phase A flow. Their fixed scenarios,
+  category flags, session identifiers and receipts are not real-bank data collection or an
+  independent network sensor. Receipt presence is route-dependent, as described in M27; early
+  errors must not be presented as complete privacy receipts. An exported “safe evidence” report
+  has the store's declared provenance and trust limits, not independent authenticity.
+- Both voting pages display closed-pilot notices. The submission header still says “Session
+  active,” and the landing page retains prospective collection/withdrawal language. The checked-in
+  submission script hides the ballot instead of collecting a new vote. Static closure text is
+  separate from the server's configuration-controlled write gate. Participant HMACs are
+  pseudonymous, not anonymous; clearing an input is not proof of erasure from all browser or
+  exported copies. Do not reuse these pages as current participant consent forms.
+- `public/index.html` still says pasted content is logged, but its paste handler adds only the
+  length to the telemetry bucket. It reads the clipboard text locally to calculate that length.
+  Its “never sees your screen” language requires the legacy-helper exception in `PRIVACY.md`.
+  “Flagging cheating,” guaranteed one-window detection, universal capture invisibility on macOS
+  14–26 and a ~700 ms p50 are not established current results. Apply the Apple/Microsoft limits
+  in M31 and the manual-review requirement instead of treating heuristic flags as misconduct.
+- The page advertises the retired `/api/affinity` helper/simulator paths, which now return 410.
+  Its zero-valued offline fidelity gauge is not a measured clean screen. A local “Submitted”
+  label does not establish server-side exam submission: that handler makes the textarea read-only
+  and sends telemetry, without calling the session submission route. Its audit-download success
+  toast follows an anchor click without checking an authenticated response or download success.
+- The page calls a hardcoded historical prompt “the actual system prompt sent to Claude.” The
+  server has a separate prompt and returns a locally computed score with optional narrative.
+  More seriously, `paintVerdict` calls `source.startsWith`, while current server verdicts supply
+  an object `{score, reasoning}`. This is an unresolved interface mismatch, not a passing visual
+  smoke result. The browser's local cadence visualization also does not establish that its
+  calculated baseline or key intervals were sent: `summarize` omits both.
+- `public/instructor.html` promises immediate SSE updates, but with an instructor token it
+  explicitly uses five-second polling. Its filter is applied only when clicked; the next full
+  render recreates all cards. The timeline stays at its placeholder in this page's script.
+  The unused `lvl` allowlist does not sanitize `renderSessionCard`'s interpolated level/category
+  fields. HTML escaping a session identifier inside an inline JavaScript handler is not a
+  general JavaScript-context escaping guarantee. These are source-review findings, not a new
+  exploit demonstration or an assertion that server-generated identifiers are attacker-controlled.
+
+Current privacy guidance also corrects the Windows scanner's restricted count to include both
+monitor-only and capture-excluded windows, and identifies fingerprint hashes as an optional schema
+field that the current scanner does not emit. Runtime changes are outside this documentation
+maintenance authority; the historical UI must not be used as the current reviewer demonstration.
+
+### M36 — Personal résumé is not verified project evidence
+
+The complete extracted text of `docs/Raouf_Portfolio_Resume.docx` was read. Its education,
+employment, work-rights and external-project claims are personal assertions, not measurements
+established by this repository. The review did not obtain private employment or immigration records
+and does not certify those assertions. Preserve the original document; do not invent replacement
+dates, qualifications or benchmark results.
+
+For a current handoff, use the maintained project README and study receipts rather than treating
+this résumé as an up-to-date Simurgh report. It does not describe the current project. Statements
+such as 500K packets/second, 1M operations/second, 1,000 users, zero regressions and percentage
+improvements need their own dated benchmark/operational provenance before being reused. The 2024
+“Claude Code Human Preference” label needs author verification: Anthropic's
+[public introduction of Claude Code](https://www.anthropic.com/news/claude-3-7-sonnet) is dated
+24 February 2025. That public date alone cannot establish the timing or name of a private evaluation
+engagement, so this audit records the discrepancy without assuming a false employment claim.
+Text extraction does not establish a Word layout review.
+
+### M37 — Continuation studies need dated status and reproduction context
+
+The remaining prose guides, plans, result pages and operator forms for local Phases 1–16,
+the earlier 19 October continuation validation, and both October needs/gap maps were read
+completely. Their recorded counts distinguish model responses, execution branches, scripted
+fixtures and retained snapshots; the corresponding small phase receipts were cross-checked.
+Those receipts were inspected, not regenerated. Corrections for current use:
+
+- The 15 October G01–G27 map describes its named baseline. Phase 1 adds exact-action and
+  transactional successors, protects mounted session creation and retires legacy live/affinity
+  routes. It does not repair every frozen implementation. Phase 2 adds the owned connector;
+  Phases 3–4 add the 540-branch study and 763 retained snapshots; Phase 5 adds deterministic
+  recovery and project-operated fresh-host replay. The Phase 1 presentation's “latest” 4/8 HF
+  interface result and proposed next connector are historical, not today's project summary.
+- Phase 2's “hosted CI pending push” is superseded by the Phase 3 declaration's receipt for
+  `bb9d67dd`, run `38729498488`. Likewise, intermediate pending statuses inside later execution
+  ledgers must be read with their subsequent receipts. A later successful run cannot replace
+  the original revision's result. Do not turn an internal fresh reviewer into an outside evaluator.
+- Phase 3's corpus note ends with re-review pending because it records the author handoff;
+  the later design ledger records final review and freeze. The original corpus remains exposed
+  and cannot become a newly held-out tuning set. Its adaptive branch result is different from
+  Phase 10's shared fixed proposals and the newer transfer study.
+- The Phase 8 review was interrupted when those Phase 8–16 records were written. The
+  [19 October follow-up](../research/PHASE_8_REVIEW_2026-10-19.md) completes the declared local
+  source review and records 24 tests plus 46-row/92-snapshot replay. It is an assistant review,
+  not external certification or independent custody. Current presentations should link that
+  successor instead of saying the local review is still incomplete.
+- Phase 12's “current” gap map precedes the Phase 13 reliability fixtures, Phase 14 projection,
+  and [Phase 17 transfer](../research/transfer-phase-17/RESULTS.md). Those are scoped additions,
+  not closure of real provider lifecycle, external custody, realistic tasks or deployment load.
+  The latest transfer and role-correction results belong in a current presentation; Phase 10's
+  144 branches remain the explorer's dataset and must retain their own denominator.
+- Phase 15's retired-route assertions and prior-script inventory failures were repaired under
+  the [Phase 16 declaration](../research/LOCAL_MAINTENANCE_PHASE_16.md). Preserve the original
+  failed runs. Phase 16's real-browser observations likewise do not establish browser operation
+  in today's environment: the newer strict browser check records a blocked navigation and exit 1.
+  Use the [latest implementation smoke](../research/smoke-validation-2026-10-19/RESULTS.md)
+  for its exact revision and limits, rather than the older continuation's base gate result.
+- Fixed `/tmp/simurgh-*-venv` paths in several older phase guides are examples, not guaranteed
+  fresh environments. Choose unused paths or `mktemp -d`, and activate the selected Python 3.12
+  environment before invoking npm aliases that call `python3`. Hash-locked installation checks
+  the requested packages; `pip check` does not prove that an existing environment contains no
+  unrelated distributions. The Phase 11 guide already uses a new temporary clone/environment.
+  Its final `git status --porcelain` prints status; an exit of zero alone does not assert a clean
+  checkout. Inspect that output or enforce emptiness separately. The two empty retained status
+  files are consistent with the accompanying receipt, not self-authenticating execution evidence.
+- The Phase 15 runbook says pytest uses a separate environment but its example installs pytest
+  into the SDK environment. For exact reproduction, keep the locked SDK/workflow environment
+  separate and use a fresh pytest environment for the adapter's documented test command. Its
+  Docker override filename is relative to the recipe directory; from the repository root use
+  `-f docs/research/validation-phase-15/Dockerfile.gateway.validation` and supply the verified
+  named cache context. Do not reuse the abbreviated command as a complete root-level build.
+
+The freshly checked official [monitoring guide](https://developers.openai.com/api/docs/guides/safety-checks/misalignment-monitoring)
+continues to distinguish alert receipt, registered blocking and completed effects. The
+[Agents API multi-agent guide](https://developers.openai.com/api/docs/guides/agents-api/multi-agent)
+describes shared environment files and inherited tools/credentials. The
+[vault guide](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults) distinguishes
+stored-secret updates/deletion from provider revocation and running sessions. The
+[sandbox security guide](https://developers.openai.com/api/docs/guides/agents-api/environments/security)
+keeps application credentials outside the agent environment. These source checks support the
+existing integration boundaries; they are not live entitlement tests, normative certification,
+or a fresh review of every linked vendor page. The dated maps remain project recommendations,
+not OpenAI procurement requirements or an exhaustive 2026 industry survey.
+
+### M38 — Banking alignment approval and hash validation have limited scope
+
+The complete `BANKING_PILOT_SIMURGH_ALIGNMENT_AUDIT.md` was read. Its 12 June B3 internal-demo
+approval and 389-test receipt are historical. Later B4 changes and the public-page findings in
+M35 must accompany it in a current handoff. “Privacy claims: Pass” based on fields hardcoded to
+false does not independently prove absence of collection, and the narrative sanitization tests
+cover their declared fields rather than all possible sensitive semantics.
+
+The statement “weak consent_scope_hash is rejected” overstates the implementation. The policy
+checks `^sha256:[a-f0-9]{64}$`; it does not verify the hash against an actual consent document,
+its entropy or its provenance. Describe this as a format check. Rejection responses and audit
+entries retain field names. They avoid echoing the submitted field values on the cited paths,
+but an arbitrary unknown key can itself contain sensitive text. Avoid a universal no-sensitive-
+value logging claim based solely on that distinction. Frozen audit and runtime bytes remain
+unchanged; current privacy guidance documents the additional browser and withdrawal boundaries.
+
+### M39 — Historical fixture descriptions are narrower than behavioral assurance
+
+Both remaining fixture READMEs were read with their implementation:
+
+- Stage 4O Lane B hashes a public MCP tool manifest and assigns authority from tool names.
+  Its classifier defaults unmatched names to `read_only`, uses empty declared sinks and sets
+  risk to `low`; “conservative” is not a soundness guarantee about actual tool behavior.
+  The capture example launches an unversioned npm package and inherits the child's stderr.
+  The script's digest-only stdout does not establish that descriptions never reached any disk
+  or surrounding process log. Retain the existing capture; any new capture needs its own
+  package/protocol identity, provenance and output review. None was executed in this audit.
+- Stage 5R's documented altered-family command was executed read-only and returned exit 1,
+  naming `F1/vulnerable` as different from the commitment. That verifies the supplied negative.
+  The `--against` helper compares only committed families present in the supplied directory;
+  absent families are skipped. It is a partial comparison, not a complete-corpus inventory
+  check. Use the normal commitment rebuild for the declared full-tree check and retain its
+  separate trust assumptions. This audit does not claim that arbitrary empty comparison
+  directories are rejected or that a corpus hash proves independent authorship.
 
 ## Primary sources rechecked during this continuation
 

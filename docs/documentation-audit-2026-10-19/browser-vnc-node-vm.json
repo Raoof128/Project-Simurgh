@@ -1,0 +1,88 @@
+{
+  "scope": "Extracted browser core in Node WebCrypto VM; not a browser/CSP run",
+  "results": [
+    {
+      "file": "clean_corroborated_absent.json",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "file": "clean_unnarrated_flags.json",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "file": "clean_unreadable_claim.json",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "file": "clean_zero_claims.json",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "file": "tamper_adapter_lossy.json",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "file": "tamper_borrowed_story.json",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "file": "tamper_manifest_inclusion.json",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "file": "tamper_posthoc_claim_table.json",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "file": "tamper_signature.json",
+      "result": {
+        "raw": 200,
+        "detail": "attestation_signature"
+      }
+    },
+    {
+      "file": "tamper_silent_claim.json",
+      "result": {
+        "raw": 205,
+        "reason": "verdict_recompute_mismatch"
+      }
+    },
+    {
+      "file": "tamper_silent_flag.json",
+      "result": {
+        "raw": 204,
+        "reason": "flag_uncovered"
+      }
+    },
+    {
+      "file": "tamper_tally.json",
+      "result": {
+        "raw": 208,
+        "reason": "tally_mismatch"
+      }
+    },
+    {
+      "file": "tamper_two_stories.json",
+      "result": {
+        "raw": 205,
+        "reason": "verdict_recompute_mismatch"
+      }
+    }
+  ]
+}

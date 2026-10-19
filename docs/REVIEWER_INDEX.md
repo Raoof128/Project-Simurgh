@@ -59,6 +59,19 @@ benchmark or reused as another study's denominator.
 | Phase 17 and correction         | [Transfer](research/transfer-phase-17/RESULTS.md), [correction](research/provider-role-phase-17b/RESULTS.md)                                                                                           | Latest two-model, live-role and 120-fixture reliability results                                                 |
 | Local continuation              | [Phase 8 review](research/PHASE_8_REVIEW_2026-10-19.md), [explorer](../tools/simurgh-explorer/README.md), [smoke](research/smoke-validation-2026-10-19/RESULTS.md)                                     | Merged branch follow-up; local phase numbers overlap the provider track, so cite full paths                     |
 
+The older HTML verifiers under `tools/simurgh-attestation/` have different, sometimes partial,
+verification contracts. Source review found blocked inline entry points, missing upload flows and
+unsafe HTML rendering in specific pages. Use the stage's authoritative CLI for verification and
+consult [the per-page findings](documentation-audit-2026-10-19/MANUAL_REVIEW.md#m34--archived-browser-pages-are-not-interchangeable-verifiers)
+before opening historical pages. These pages are separate from the maintained evidence explorer;
+that explorer displays imported data and does not authenticate it.
+
+The legacy academic and pilot pages directly under `public/` also retain obsolete helper paths,
+misleading status/privacy copy and a verdict-rendering mismatch. See
+[their specific corrections](documentation-audit-2026-10-19/MANUAL_REVIEW.md#m35--legacy-public-page-claims-and-current-routes).
+Use the maintained explorer for the current dashboard demonstration; the historical pages are
+not a current participant-study or working exam-interface handoff.
+
 ## Historical and supporting material
 
 | Collection                                                                                              | How to read it                                                                                          |

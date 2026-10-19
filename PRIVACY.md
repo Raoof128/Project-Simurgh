@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Scope clarification:** 2026-10-15. The academic/device policy below records the Stage 2.8
+**Scope clarification:** 2026-10-19. The academic/device policy below records the Stage 2.8
 closeout of 2026-05-19. It applies to that telemetry pipeline, not every research tool in this
 repository.
 
@@ -50,6 +50,22 @@ storage/audit/SSE projections through those routes. It does not erase prior expo
 change the historical native helper's local collection behavior. The helper is unsupported
 on this server; modern signed daemon-proof routes retain their separate counts-only
 contract. See the [hardening disposition](docs/research/hardening-phase-1/README.md).
+
+## Legacy public pages and pilot withdrawal
+
+The seven HTML pages directly under `public/` reference Google Fonts stylesheets and font
+assets on `fonts.googleapis.com` and `fonts.gstatic.com`. Opening these pages can contact
+Google before a participant dismisses the notice or submits a form. Those requests expose
+ordinary connection/request metadata to the asset provider; the application telemetry allowlist
+does not govern them. A banking AI receipt's `no_network_egress` field is not a measurement of
+all browser traffic. This asset behavior is separate from the maintained evidence explorer.
+
+Banking withdrawal marks the in-memory session as withdrawn and blocks the report route. It
+does **not** delete the session record, scenario metadata or audit chain; token-authorized audit
+and verification routes remain available. Previously exported copies are outside this mechanism.
+See [`bankingSessionStore.js`](src/bankingPilot/bankingSessionStore.js) and the
+[route implementation](src/bankingPilot/index.js). The historical scenario page's promise that
+withdrawal “removes” the session must be read with this correction.
 
 ## Academic and device telemetry policy
 
@@ -147,7 +163,11 @@ compromised account or host.
 
 ## Risk Scores and Reports
 
-Risk scores are produced by **local deterministic heuristics**. When a session reaches Warning or Critical level, an optional Claude AI narrative is appended — this call receives only the sanitised telemetry metadata listed above, never content.
+Risk scores are produced by **local deterministic heuristics**. An optional Claude call supplies
+narrative text from sanitized telemetry, without answer or paste content. The server skips this
+call in demo mode or without a configured client, and skips Safe verdicts unless
+`stagingConfig.claudeOnSafe` is enabled. The model's proposed risk level does not replace the
+local score.
 
 **All risk findings are recommendations for manual human review. Simurgh does not make automatic misconduct findings.**
 
@@ -172,12 +192,13 @@ delete those files, external copies or provider-held records. Export retention i
 
 ## Third-Party Services
 
-| Service              | What it receives             | Purpose                                |
-| -------------------- | ---------------------------- | -------------------------------------- |
-| Anthropic Claude API | Sanitised telemetry metadata | Risk narrative (Warning/Critical only) |
+| Service              | What it receives             | Purpose                                                     |
+| -------------------- | ---------------------------- | ----------------------------------------------------------- |
+| Anthropic Claude API | Sanitised telemetry metadata | Optional risk narrative; Safe calls depend on configuration |
 
 This table describes the historical academic narrative integration. Optional research integrations
-are described in the research evaluation section above.
+are described in the research evaluation section above; browser asset requests are disclosed in
+the legacy public pages section.
 
 ---
 
@@ -187,7 +208,7 @@ Simurgh enforces privacy constraints at the code level:
 
 - `src/privacy/privacyConfig.js` — declarative policy (what is and is not collected)
 - `src/privacy/normaliseTelemetry.js` — strict allowlist enforcement before any processing
-- `src/privacy/hashIdentity.js` — one-way hashing at point of entry
+- `src/privacy/hashIdentity.js` — keyed pseudonymization after receipt of the raw identifier
 - `public/sdk/simurgh-browser-sdk.js` — daemon status state machine with metadata-only proof attachment
 - `tools/simurgh-daemon-macos/Sources/SimurghDaemon/AffinityScanner.swift` — CoreGraphics metadata scanner with aggregate output only
 - `tools/simurgh-daemon-windows/src/SimurghDaemon.Windows/DisplayAffinityScanner.cs` — Win32 `GetWindowDisplayAffinity` scanner with aggregate counts only; raw field transmission is unconditionally rejected
@@ -205,21 +226,21 @@ The Windows Device Shield scanner (`tools/simurgh-daemon-windows/src/SimurghDaem
 
 **Allowed Windows scanner output:**
 
-| Field                             | Type     | Description                                             |
-| --------------------------------- | -------- | ------------------------------------------------------- |
-| `platform`                        | string   | `"windows"`                                             |
-| `scanner_state`                   | string   | `healthy`, `risk_detected`, `restricted_detected`, etc. |
-| `scanner_version`                 | string   | `"2.6.0"`                                               |
-| `scan_timestamp`                  | ISO-8601 | When the scan ran                                       |
-| `scan_duration_ms`                | int      | How long the scan took                                  |
-| `visible_window_count`            | int      | Count of visible non-trivial windows                    |
-| `suspicious_window_count`         | int      | Count of display-restricted windows                     |
-| `capture_excluded_window_count`   | int      | Count of `WDA_EXCLUDEFROMCAPTURE` windows               |
-| `capture_restricted_window_count` | int      | Count of `WDA_MONITOR` windows                          |
-| `monitor_only_window_count`       | int      | Count of `WDA_MONITOR` windows                          |
-| `scan_error_count`                | int      | Count of scan errors                                    |
-| `privacy_mode`                    | string   | Always `"metadata_only"`                                |
-| `window_fingerprint_hashes`       | string[] | SHA-256 of position/size tuple — no title, no handle    |
+| Field                             | Type     | Description                                                       |
+| --------------------------------- | -------- | ----------------------------------------------------------------- |
+| `platform`                        | string   | `"windows"`                                                       |
+| `scanner_state`                   | string   | `healthy`, `risk_detected`, `restricted_detected`, etc.           |
+| `scanner_version`                 | string   | `"2.6.0"`                                                         |
+| `scan_timestamp`                  | ISO-8601 | When the scan ran                                                 |
+| `scan_duration_ms`                | int      | How long the scan took                                            |
+| `visible_window_count`            | int      | Count of visible non-trivial windows                              |
+| `suspicious_window_count`         | int      | Count of display-restricted windows                               |
+| `capture_excluded_window_count`   | int      | Count of `WDA_EXCLUDEFROMCAPTURE` windows                         |
+| `capture_restricted_window_count` | int      | Combined count of monitor-only and capture-excluded windows       |
+| `monitor_only_window_count`       | int      | Count of `WDA_MONITOR` windows                                    |
+| `scan_error_count`                | int      | Count of scan errors                                              |
+| `privacy_mode`                    | string   | Always `"metadata_only"`                                          |
+| `window_fingerprint_hashes`       | string[] | Optional schema field; not emitted by the current Windows scanner |
 
 **Unconditionally forbidden in Windows scanner output:**
 

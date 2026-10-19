@@ -4245,3 +4245,24 @@ Owner-requested work; implementation and review by Codex assistance.
 - Verification is documentation-scoped: changed-file formatting, local links, exact baseline
   candidate coverage and preservation checks are recorded in the dated audit checkpoint.
   No new inference, human study, interactive desktop test or full E2E run is claimed.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 400-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under preceding declaration `4ca41a95`. The continuation now
+  records 400 complete reads of 919 baseline candidates; 519 remain pending. This is not
+  completion of the exhaustive audit. Frozen sources, publications and evidence are preserved.
+- **Changes:** Add M32–M39 corrections for stage recipes, archived browser verifiers, legacy
+  public-page claims, the personal résumé, dated continuation status and fixture limitations.
+  Update current privacy and reviewer guidance for external font requests, banking withdrawal,
+  Windows count semantics and the maintained dashboard route.
+- **Evidence:** Retain the thirteen-case Node WebCrypto diagnostic for the archived Stage 5A
+  page. Read the remaining local Phase 1–16 prose and compare small published receipts. The
+  existing altered-family negative returns exit 1 naming F1/vulnerable. Recheck official OpenAI
+  monitoring, multi-agent, vault and environment-security guidance. These are scoped checks,
+  not a fresh full E2E run or interactive desktop/browser validation.
+- **Validation:** Checkpoint receipt records formatting, local links, exact ledger identity and
+  preservation checks. No inference, outreach, deployment, gate or runtime change.
+- **Remaining:** Continue the unread stage records, plans, specifications and large logs;
+  preserve unresolved runtime defects and outside-validation limits as explicit findings.
