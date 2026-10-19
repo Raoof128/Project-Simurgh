@@ -11,29 +11,34 @@ Tested with Python 3.12.14, Node.js 24.19.0 and `inspect-ai==0.3.280`. The requi
 Run from the repository root. Put the environment, caches, framework trace files and logs **outside the checkout** so repository inspection does not scan installed dependencies:
 
 ```bash
-export UV_CACHE_DIR=/workspace/.cache/uv
-export XDG_CACHE_HOME=/workspace/.cache
-export XDG_DATA_HOME=/workspace/.local/share
-export XDG_CONFIG_HOME=/workspace/.config
-export TIKTOKEN_CACHE_DIR=/workspace/.cache/tiktoken
+simurgh_inspect_dir=$(mktemp -d "${TMPDIR:-/tmp}/simurgh-inspect.XXXXXX")
+export XDG_CACHE_HOME="$simurgh_inspect_dir/cache"
+export XDG_DATA_HOME="$simurgh_inspect_dir/data"
+export XDG_CONFIG_HOME="$simurgh_inspect_dir/config"
+export TIKTOKEN_CACHE_DIR="$simurgh_inspect_dir/tiktoken"
 export PYTHONDONTWRITEBYTECODE=1
 
-uv venv /workspace/.venvs/simurgh-inspect
-uv pip sync --python /workspace/.venvs/simurgh-inspect/bin/python \
-  tools/openai-readiness/inspect/requirements.txt
+python3.12 -m venv "$simurgh_inspect_dir/venv"
+"$simurgh_inspect_dir/venv/bin/python" -m pip install \
+  -r tools/openai-readiness/inspect/requirements.txt
+"$simurgh_inspect_dir/venv/bin/python" -m pip check
 ```
 
 Installation requires the package registry and artifact hosts. Retain inherited TLS, certificate and proxy settings; never disable verification. The mock evaluation itself needs neither internet access nor provider credentials. Alternate writable absolute paths outside the checkout work for other machines. Inspect uses XDG data directories for traces as well as a cache directory, so set both when the home directory is read-only.
 
+Keep `simurgh_inspect_dir` set in the same shell for the commands below. Retain its logs
+before removing the temporary environment. This portable setup example does not change the
+version lock or claim a fresh install on every platform.
+
 ## Run the measured smoke
 
 ```bash
-/workspace/.venvs/simurgh-inspect/bin/python \
+"$simurgh_inspect_dir/venv/bin/python" \
   tools/openai-readiness/inspect/test_task.py
 
-/workspace/.venvs/simurgh-inspect/bin/python \
+"$simurgh_inspect_dir/venv/bin/python" \
   tools/openai-readiness/inspect/task.py \
-  --log-dir /tmp/simurgh-inspect-smoke
+  --log-dir "$simurgh_inspect_dir/logs"
 
 node --test tests/unit/openaiReadiness/inspectBridge.test.js
 ```
@@ -76,7 +81,8 @@ A safe model-generated proposal on an attack task may score 1 without challengin
 
 ## Optional live evaluation: owner-run only
 
-No live model evaluation was run. The task blocks non-mock generation unless explicitly configured with `allow_live=true`. A future authorized run can load `task.py@simurgh_boundary` with Inspect's CLI and an owner-selected model, e.g. `--model PROVIDER/MODEL -T allow_live=true`. Configure provider credentials securely and pre-agree a request/token budget before that run. Do not treat this smoke script as approval to spend.
+No live model evaluation was run through this Inspect adapter. Later repository live captures
+use separate instruments; see the [integration matrix](../../../docs/INTEGRATIONS.md). The task blocks non-mock generation unless explicitly configured with `allow_live=true`. A future authorized run can load `task.py@simurgh_boundary` with Inspect's CLI and an owner-selected model, e.g. `--model PROVIDER/MODEL -T allow_live=true`. Configure provider credentials securely and pre-agree a request/token budget before that run. Do not treat this smoke script as approval to spend.
 
 The task requests at most 512 generated tokens and zero retries in its default generation configuration. Framework command-line overrides can change these settings. This optional Inspect path uses Inspect's provider integration, not Simurgh's separate Responses adapter, so it does **not** inherit that adapter's endpoint, redirect, timeout or response-size checks. Supported model availability, pricing, provider SDK extras, transport policy, retention and rate limits require a separate authorized integration check. No Agents SDK compatibility is claimed.
 

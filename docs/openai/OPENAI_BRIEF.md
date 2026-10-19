@@ -1,19 +1,63 @@
-# Project Simurgh: Verifiable Tool Authorization for AI Agents
+# Project Simurgh: inspectable authorization for AI agents
 
-**Owner-review draft · 15 October 2026 · No OpenAI endorsement or live-model result claimed.**
+**Technical review brief · Updated 19 October 2026 · Research prototype.**
+No provider endorsement, funding, submission or production-readiness claim is implied.
 
-**Research question.** For a fixed synthetic agent workload, can a tool authorization boundary prevent unauthorized effects while preserving allowed work, and can a separate verifier detect inconsistencies in the evidence? The contribution is a falsifiable measurement instrument for application controls, not a claim that a model cannot be manipulated.
+## Research question
 
-**Defensive use.** Security teams increasingly let agents read documents and propose consequential actions. An injected document can influence a tool call even when the model returns perfectly valid JSON. Developers need evidence about the resulting state, authorization scope, and missed or altered records—not only a model's explanation or a gateway's “blocked” label. OpenAI's [agent safety guidance](https://developers.openai.com/api/docs/guides/agent-builder-safety) describes this threat and recommends constrained data flow and tool approvals.
+Can a host-controlled boundary reject a proposed action when authority changes, preserve
+legitimate work, and retain enough receiver evidence for another person to inspect the result?
+Simurgh studies this question with exact-action permissions, delegation, safety stops, monitor
+leases, credential/session lifecycle and conservative handling of unknown effects.
 
-**Focused demonstration.** The additive [OpenAI readiness harness](../../tools/openai-readiness/) uses synthetic inputs, deterministic offline proposals, local controlled effects, authorized-task controls, prohibited-action controls, and deliberately vulnerable controls. A consequence checker examines resulting state separately from the authorization decision. Signed artifacts can be checked offline. An optional Responses API adapter generates proposals for the same local boundary; it does not grant the model credentials to execute arbitrary tools. See the harness README for exact commands and current supported cases.
+## Measured result
 
-**Evidence standard.** Publish the complete case denominator, allowed-task completion, prohibited effects, control outcomes, verifier failures, source revision, and configuration. Compare guarded and deliberately vulnerable execution under the same workload. A refusal or malformed proposal is reported as such, not silently excluded or called successful task completion. Offline execution evaluates the instrument; only an explicitly authorized, recorded live run could support claims about an OpenAI model. Current measured results belong in the [readiness report](READINESS_REPORT.md).
+A two-model study retained **96 proposals and 288 matched control branches** over 24 internally
+authored tasks. Llama's restricted-state trials with new effects fell from **17/24 to 0/24**
+under composed controls while active completions stayed **23/24**. Luna completed **24/24**
+active trials but already had zero restricted effects in the credential-only baseline; no
+incremental protection is established for Luna. All controls retain prior effects in unknown-
+acknowledgement fixtures. The small, known-family corpus and different model interfaces do not
+support a model ranking or general safety conclusion.
 
-**Scope limits.** Synthetic local effects do not establish real deployment containment. The consequence checker is a separate code path, not an independent external observer. A self-generated signing key establishes artifact consistency under that key, not who created the experiment or whether the recorded world was true. An approval record does not establish informed human deliberation. Historical [Stage 5Q](../research/llm-shield/STAGE_5Q_CLOSEOUT.md) coverage remains **1,438/23,332 (6.2%)**; [5R](../research/llm-shield/STAGE_5R_CLOSEOUT.md) adds **zero discharged cells**; [5S](../research/llm-shield/STAGE_5S_CLOSEOUT.md) remains comparison-bounded with witness independence unproven.
+A separate live Responses workflow initially declined all eight cases because host updates
+were supplied in the user role. The separately frozen developer-role correction completes
+**2/3 authorized cases** and declines **5/5 restricted cases**. One active refusal remains;
+all original outcomes are retained. Only host-authored lifecycle state belongs in the developer
+update. A model decline is not an attempted call stopped by the enforcement boundary.
 
-**Research alignment.** OpenAI's [March 2026 agent-security analysis](https://openai.com/index/designing-agents-to-resist-prompt-injection/) motivates constraining effects even when manipulation succeeds. [Research fit](RESEARCH_FIT.md) connects that threat model to the experiment, established evaluation tools, and a proposed independently authored held-out extension. These connections establish relevance, not novelty or external validation.
+Read the [comparison](../research/transfer-phase-17/RESULTS.md) and
+[correction](../research/provider-role-phase-17b/RESULTS.md), then run the
+[credential-free replay](../../README.md#replay-the-evidence). No new API request or model
+download is needed. Source revisions and expected archive roots are part of verification.
 
-**Proposed delivery.** An eight-week pilot would freeze the threat model and fixtures, validate controls and artifact tampering, run an owner-approved live model comparison, and publish reproducible results including failures. The [proposal](PROPOSAL.txt) defines milestones, synthetic datasets, and illustrative resource scenarios. Model identifiers, owner identity, start date, eligibility, and the selected funding request remain owner decisions.
+## What a reviewer can inspect
 
-**Public benefit and fit.** Release local tooling, schemas, synthetic data, and negative findings through the existing AGPL-3.0 project. Do not relicense it or assume compatibility with contributions to MIT-licensed projects. The [current grant form](https://openai.com/form/cybersecurity-grant-program/) welcomes focused defensive research and public sharing; its linked program update emphasizes operational cyber defense. This small instrument is a research proposal, with no established deployment impact or guarantee of program fit. [Sources](SOURCES.md) and the [application checklist](APPLICATION_CHECKLIST.md) separate verified requirements from owner review.
+- Matched credential-only, composed and deny-all controls; useful completion and unauthorized
+  effects are reported separately, with refusals, malformed proposals and unknowns retained.
+- Raw receiver snapshots, frozen source bindings and fresh local execution of saved proposals.
+  Signatures and hashes establish key/byte relationships, not truthful capture or outside custody.
+- [Full smoke receipts](../research/smoke-validation-2026-10-19/RESULTS.md): 142 base steps,
+  32 E2E steps and supplemental suites at recorded revisions. Managed browser parity remains
+  blocked; native unit/build results do not establish interactive platform behavior.
+- A [dashboard and JSON CLI](../../tools/simurgh-explorer/README.md) sharing one query core.
+  Their built-in 144-row dataset is the earlier Phase 10/14 study, not the newer comparison.
+
+## Relevance and next evidence
+
+[OpenAI's prompt-injection analysis](https://openai.com/index/designing-agents-to-resist-prompt-injection/)
+motivates controlling consequential actions as well as model behavior. Existing SDK guardrails,
+MCP/OAuth requirements and OWASP runtime-control work are relevant prior art; the
+[primary-source map](../documentation-audit-2026-10-19/SOURCES.md) records applicability and limits.
+This evidence does not establish that competitors lack equivalent controls.
+
+Next priorities are independent replay, externally authored transfer tasks, real provider identity
+and alert lifecycle, representative deployment reliability and browser/accessibility validation.
+The [research roadmap](../../ROADMAP.md) names acceptance evidence for each. The local Phase 8
+review is [complete within its scope](../research/PHASE_8_REVIEW_2026-10-19.md), not independent
+certification. Historical 5Q coverage remains 6.2%; 5R adds no discharged cells; 5S witness
+independence remains unproven.
+
+The [application proposal](PROPOSAL.txt) remains an owner-review draft. Applicant identity,
+affiliation, resources, terms and submission are separate decisions. Existing code remains under
+its applicable licenses; no acceptance, endorsement or relicensing is implied.

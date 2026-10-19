@@ -1,0 +1,90 @@
+{
+  "schema": "simurgh.documentation_checks.v1",
+  "baseline": "8d47bbbfd2bc2e351fa334fa3a61acc7ac108ef5",
+  "authority_commit": "4ca41a95",
+  "status": "passed_with_declared_review_limits",
+  "candidate_count": 910,
+  "candidate_paths_sha256": "7b2894a3d172af65a47bde3ebc5f3eb0d2fe0cfd6f89a52a1f03d264865d4bd9",
+  "preserved_candidates": 881,
+  "changed_candidates": 29,
+  "review_scope_counts": {
+    "selected_claims_and_scope_review_plus_full_text_scan": 37,
+    "standing_rules_and_recent_entries_reviewed_plus_full_text_scan": 2,
+    "manual_editorial_review_and_correction": 27,
+    "byte_preservation_and_full_text_scan": 2,
+    "complete_text_automated_scan": 842
+  },
+  "local_links": 1819,
+  "link_documents": 812,
+  "unresolved_local_links": 0,
+  "format_check": "npm run format:check: exit 0; final edited generated files checked separately",
+  "diff_check": "git diff --check: exit 0",
+  "baseline_changes_exactly_match_declared_editorial_and_log_set": true,
+  "all_other_tracked_baseline_files_unchanged": true,
+  "root_logs_append_only": true,
+  "syntax": "both Python audit tools parsed successfully",
+  "command_examples": 12,
+  "command_examples_all_exit_zero": true,
+  "auditor_controls": {
+    "empty_inventory": "refused",
+    "missing_candidate": "refused",
+    "missing_path_and_anchor": [
+      {
+        "path": "README.md",
+        "line": 3,
+        "target": "absent.md",
+        "status": "missing_path"
+      },
+      {
+        "path": "README.md",
+        "line": 5,
+        "target": "target.md#missing",
+        "status": "missing_anchor"
+      }
+    ],
+    "resolved_inline_and_reference_links": 2,
+    "prose_reference_false_positive": "not_a_link",
+    "all_controls_passed": true
+  },
+  "claims": {
+    "transfer_branches": 288,
+    "llama_active_both_controls": 23,
+    "llama_restricted_credential_only": 17,
+    "llama_restricted_composed": 0,
+    "luna_active_both_controls": 24,
+    "luna_restricted_both_controls": 0,
+    "corrected_active_effects": 2,
+    "corrected_active_cases": 3,
+    "corrected_restricted_declines": 5,
+    "proposal_words": 1822,
+    "problem_words": 175
+  },
+  "logs_archive": {
+    "path": "logs.zip",
+    "sha256": "83b4d6aa7a0568436508c2a8126f103437d92a7b4a24006f27d2bb11aa65e479",
+    "manifest_files": 20,
+    "all_member_hashes_verified": true
+  },
+  "new_paths": [
+    "DOCUMENTATION.md",
+    "docs/HISTORICAL_REPLAY.md",
+    "docs/INTEGRATIONS.md",
+    "docs/documentation-audit-2026-10-19/DESIGN.md",
+    "docs/documentation-audit-2026-10-19/ERRATA.md",
+    "docs/documentation-audit-2026-10-19/FILES.md",
+    "docs/documentation-audit-2026-10-19/README.md",
+    "docs/documentation-audit-2026-10-19/SOURCES.md",
+    "docs/documentation-audit-2026-10-19/VALIDATION.md",
+    "docs/documentation-audit-2026-10-19/audit.py",
+    "docs/documentation-audit-2026-10-19/check_links.py",
+    "docs/documentation-audit-2026-10-19/checks.json",
+    "docs/documentation-audit-2026-10-19/inventory.json",
+    "docs/documentation-audit-2026-10-19/logs.zip",
+    "docs/documentation-audit-2026-10-19/reviews.json"
+  ],
+  "scope_limits": [
+    "842 candidates received automated-only review; this is not a universal semantic audit.",
+    "No fresh full implementation suite, browser/platform interaction, independent custody or provider lifecycle validation.",
+    "No universal 2026 standards compliance or certification claimed."
+  ]
+}

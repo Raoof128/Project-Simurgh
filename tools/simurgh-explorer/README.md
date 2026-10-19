@@ -4,6 +4,15 @@ One local React dashboard and JSON CLI for humans and agents to inspect the same
 retained outcomes. Supports the complete Phase 14 public export and the versioned
 `simurgh.explorer.v1` bundle; it is not a universal log parser or execution controller.
 
+## Dataset and current project status
+
+The built-in dataset contains **144 Phase 10/14 outcomes**. The newer
+[288-branch comparison](../../docs/research/transfer-phase-17/RESULTS.md) and
+[provider-role correction](../../docs/research/provider-role-phase-17b/RESULTS.md)
+have separate archives/verifiers and are not loaded by this viewer. The eight gap entries
+(six open) describe the dated index, not current repository-wide readiness. For current
+status use the [roadmap](../../ROADMAP.md) and [integration matrix](../../docs/INTEGRATIONS.md).
+
 ## Human dashboard
 
 From the repository root, with Node 24 or 26:
@@ -24,7 +33,7 @@ provider or command-execution API. Do not expose it as a multi-user hosted servi
 - Select a row to inspect proposal, status, acknowledgment and effect counts; compare
   its matched controls and view/copy the source record/CLI command.
 - Search the scoped 2026 research index and open primary-source links.
-- Inspect eight gap entries, including six still open; locally addressed is not external validation.
+- Inspect the eight archived gap entries, including six marked open at that snapshot; current status is linked above.
 - Load a supported JSON bundle in memory (12 MiB maximum); export the current filtered
   selection with its denominator and scope. No file uploads or persistent browser storage.
 - Restore repository data after an import. Unsupported or malformed input reports an error.
@@ -76,6 +85,9 @@ source register and five sources reviewed October 19. The year filter means **re
 in that year, not necessarily published then. Search is local, not a live web research
 service. Rebuild after source updates and keep new reviews dated.
 
+The [19 October primary-source review](../../docs/documentation-audit-2026-10-19/SOURCES.md)
+is a separate documentation update; it does not silently replace the viewer's source dataset.
+
 ## Validation and design
 
 ```sh
@@ -83,6 +95,8 @@ npm --prefix tools/simurgh-explorer test
 npm --prefix tools/simurgh-explorer run build
 ```
 
+The [full smoke report](../../docs/research/smoke-validation-2026-10-19/RESULTS.md) records
+16 passing tests, a production build and built-asset HTTP/CLI agreement at the tested revision.
 Tests cover real CLI agreement, all 144 public rows, detail joins, unknown preservation,
 invalid imports, source escapes, read-only HTTP, UI interactions and inert hostile text.
 UI interaction tests use jsdom and do not establish browser layout or accessibility.

@@ -1,5 +1,11 @@
 # Simurgh macOS Integrity Node CLI (Stage 2.1 + 2.2)
 
+**Scope update — 19 October 2026.** This CLI still has no daemon behavior of its own.
+The repository subsequently added a [separate macOS daemon](../simurgh-daemon-macos/);
+the “Stage 2.3 future work” statement below is a May 2026 snapshot. The
+[latest native receipt](../../docs/research/smoke-validation-2026-10-19/RESULTS.md) records
+unit tests on macOS, not fresh interactive device attestation or hardware-backed identity.
+
 Generates signed integrity-proof and pairing envelopes from the local macOS device and prints them to stdout. Two subcommands:
 
 - **`proof`** (Stage 2.1) — emits a v1 signed integrity proof envelope. Unpaired sessions accept the proof with `signature_status: "unregistered_node"`.

@@ -1,5 +1,9 @@
 # Privacy-aware outcome projection (Phase 14)
 
+**Dataset scope.** This projection feeds the [dashboard and CLI](../simurgh-explorer/README.md).
+It contains the earlier 144 outcomes, not the newer 288-branch transfer study. Use the
+[current evidence map](../../docs/REVIEWER_INDEX.md) to select the correct archive.
+
 Exports all 144 Phase 10 branches into a strict allowlisted outcome view. Omits
 prompts, content/tool arguments, token IDs, original text IDs, free-form reasons,
 raw databases and individual timings. Ordinal IDs and source digests are linkable;

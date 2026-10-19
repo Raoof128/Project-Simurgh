@@ -15,7 +15,9 @@ produced zero restricted effects. That result establishes no incremental protect
 [Full results](docs/research/transfer-phase-17/RESULTS.md) ·
 [Run the demo](#replay-the-evidence) ·
 [Dashboard and CLI](#inspect-with-a-dashboard-or-an-agent) ·
-[Reviewer handoff](#reviewer-handoff)
+[Reviewer handoff](#reviewer-handoff) ·
+[Integration matrix](docs/INTEGRATIONS.md) ·
+[Documentation map](DOCUMENTATION.md)
 
 ## The problem and the contribution
 
@@ -106,7 +108,12 @@ passed at `4afe9538`; these are recorded results for those revisions, not a clai
 check has run at the current branch head.
 
 The [19 October full smoke report](docs/research/smoke-validation-2026-10-19/RESULTS.md)
-records the maintained branch checks, harness repairs and explicit browser/platform exclusions.
+records the maintained branch checks, harness repairs and explicit browser/platform exclusions:
+142/142 base steps, 32/32 E2E steps and 5,171 root tests at implementation `ebf2a752`.
+The strict browser-parity command remains blocked by managed navigation policy. The
+[documentation audit](docs/documentation-audit-2026-10-19/README.md) separately records current
+guidance corrections, per-file coverage and [primary sources reviewed in 2026](docs/documentation-audit-2026-10-19/SOURCES.md).
+These documentation checks do not refresh implementation test receipts or establish standards compliance.
 
 ## Replay the evidence
 

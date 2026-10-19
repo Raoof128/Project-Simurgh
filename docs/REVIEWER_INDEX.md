@@ -1,235 +1,76 @@
-# Reviewer index
+# Reviewer guide
 
-The [human dashboard and agent CLI](../tools/simurgh-explorer/README.md) inspect the earlier Phase 10/14
-snapshot: 144 retained outcomes, failure/unknown filters and a dated research index.
-The newer provider-transfer and native-platform results below remain separate evidence;
-the viewer's archived gap register is not their current validation status.
-The [local Phase 8 review](research/PHASE_8_REVIEW_2026-10-19.md) is complete.
-See the [continuation validation](research/continuation-validation-2026-10-19/RESULTS.md)
-and [classmate handoff](research/CONTINUATION_HANDOFF_2026-10-19.md) for this work's scope.
+**Reviewed: 19 October 2026.** Begin with a falsifiable question: does the local authorization
+boundary prevent new unauthorized effects while retaining useful work, and can the recorded
+outcomes be checked against receiver state?
 
-Start with the [current one-page brief](research/transfer-phase-17/BRIEF.md),
-[results](research/transfer-phase-17/RESULTS.md) and
-[credential-free demonstration](research/transfer-phase-17/RUNBOOK.md#short-demonstration).
-The fresh two-model comparison preserves 23/24 Llama active completions while reducing
-restricted-state effect trials from 17/24 to 0/24. Luna completes 24/24 active comparison
-trials and already declines all restricted trials. Its separate corrected live workflow
-completes 2/3 authorized cases; the remaining refusal is retained. Native macOS and Windows
-checks pass. Independent reproduction is deferred; production readiness remains unproven.
+## A short review
 
-The earlier [Phase 13 reliability study](research/reliability-phase-13/RESULTS.md) added
-60 repeated concurrent/restart fixtures: composed controls retain useful retries and
-produce zero new effects after queued stop or interrupted update. The
-[Phase 14 reduced export](research/export-phase-14/RESULTS.md) preserves all 144 Phase 10
-outcomes with explicit omissions and separate public/source verification. These local
-historical results leave sustained deployment load, provider IAM and outside custody open.
-The current provider workflow and model-transfer results are linked above.
+1. Read the [README](../README.md), [transfer results](research/transfer-phase-17/RESULTS.md)
+   and [role-correction results](research/provider-role-phase-17b/RESULTS.md).
+   Check the Llama utility/containment tradeoff, Luna's zero baseline and the unresolved active refusal.
+2. Run the [credential-free replay](../README.md#replay-the-evidence) from a full-history checkout.
+   Check expected archive roots through a trusted channel. Replay verifies supplied records under
+   their declared source and trust model; it does not prove independent capture provenance.
+3. Use the [dashboard or CLI](../tools/simurgh-explorer/README.md) to inspect the **earlier**
+   144-outcome Phase 10/14 dataset. The newer 288-branch study has separate reports and verifiers.
+4. Inspect [latest smoke validation](research/smoke-validation-2026-10-19/RESULTS.md), including
+   original failures, repaired runs, exact source revisions and the strict browser-parity failure.
+5. Challenge the [integration boundaries](INTEGRATIONS.md), [security](../SECURITY.md),
+   [privacy](../PRIVACY.md) and [remaining work](../ROADMAP.md). Use the
+   [independent operator handoff](research/CONTINUATION_HANDOFF_2026-10-19.md) for reproduction.
 
-The [Phase 16 maintenance results](research/maintenance-phase-16/RESULTS.md) close the
-reproduced legacy-gate failures: 5,154 Node tests, 142 aggregate steps and 32 E2E steps pass,
-with explicit platform exclusions. Real-browser parity and 11 portable .NET tests also pass.
-See the [remaining limits](research/maintenance-phase-16/RESULTS.md#remaining-limits) and
-[Phase 15 record](research/validation-phase-15/RESULTS.md); production readiness and outside
-validation remain unproven.
+## Current evidence and how to interpret it
 
-Use the [presentation guide](research/presentation-phase-12/README.md),
-[portable handoff](research/handoff-phase-11/README.md) and
-[Phase 12 gap map](research/presentation-phase-12/GAPS.md) for the Phase 10–12 closeout.
-The clean-clone run and hosted Phase 10 verification both passed all 16 focused tests
-and the complete saved-proposal replay. Production provider identity integration, outside custody,
-broader model/task transfer remain open. The local Phase 8 review is linked above.
+| Question                                                   | Evidence                                                                                                    | What it establishes                                                                                                                                         |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Does composition help on the latest captured proposals?    | [Transfer comparison](research/transfer-phase-17/RESULTS.md)                                                | Llama 17/24 → 0/24 restricted new-effect trials, 23/24 active completions retained; Luna 24/24 active and zero restricted effects in both useful controls   |
+| Does the live Responses workflow complete authorized work? | [Separate role correction](research/provider-role-phase-17b/RESULTS.md)                                     | 2/3 authorized completions and 5/5 restricted declines; one authorized refusal remains                                                                      |
+| Can retained state be checked?                             | [Runbook](research/transfer-phase-17/RUNBOOK.md) and [validation](research/transfer-phase-17/VALIDATION.md) | Source-bound local replay, storage checks and deliberate evidence mutations; not independent custody                                                        |
+| What passed most recently?                                 | [Full smoke report](research/smoke-validation-2026-10-19/RESULTS.md)                                        | 142 base steps, 32 E2E steps, 5,171 root tests and supplemental suites at recorded revisions; excludes opt-in provider campaigns and blocked browser parity |
+| Was Phase 8 reviewed?                                      | [19 October review](research/PHASE_8_REVIEW_2026-10-19.md)                                                  | Completed scoped local manual review, 24 tests and 46-row replay; earlier interrupted-review wording is historical                                          |
+| What does the explorer verify?                             | [Explorer guide](../tools/simurgh-explorer/README.md)                                                       | Shared presentation/query semantics; imported bundles remain `not_verified_by_explorer`                                                                     |
 
-The [Phase 10 local Llama study](research/model-composition-phase-10/RESULTS.md) retained 48 generated responses and
-144 matched control branches. Composed controls completed 22/24 active branches, matching
-credential-only utility, while new unauthorized effects on stopped branches fell from
-16/24 to 0/24. All 1,440 raw snapshots passed fresh replay; all 48 token records verified.
-This is a bounded single-model result, with two active failures retained and no claim
-of general safety or outside custody.
+The initial 13-job hosted result at `4afe9538`, the native result at `fbe06eca`, and the newer
+native run at `2cf8ad69` are different receipts. The latest Linux implementation tested is
+`ebf2a752`. Documentation changes do not make those results current-head executions.
 
-The [phase 9 results](research/composition-phase-9/RESULTS.md) test actual composition
-of signal, context and credential controls. All 40 scripted rows retain 360 raw snapshots
-and fresh replay. Review found no Critical, Important or Minor defects in this change;
-raw denials, unknowns and cached prior observations remain separately inspectable.
-Phase 10 adds fresh local model behavior; real provider identity integration and independent custody remain open.
+## Study-by-study reading order
 
-The [phase 8 results](research/credentials-phase-8/RESULTS.md) distinguish vault,
-credential and session lifecycle using an authenticated owned service. All 46 rows
-retain 92 raw snapshots with fresh replay. A reproduced admission/revocation race
-was fixed; the interrupted whole-change review remains incomplete. Real provider
-identity, model generalization and independent custody are not established.
+Each row points to an independently scoped study. Counts must not be added into a combined
+benchmark or reused as another study's denominator.
 
-The [phase 7 results](research/context-phase-7/RESULTS.md) cover durable checkpoints,
-structured summary discrepancies, narrowed delegation and shared admission budgets.
-All 36 scripted rows retain 108 raw snapshots and fresh replay verification. Semantic
-deception detection, live compaction/subagents and independent custody remain open.
+| Stage or phase                  | Record                                                                                                                                                                                                 | Reading boundary                                                                                                |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| Initial OpenAI instrument       | [Evaluation](openai/EVALUATION.md), [readiness](openai/READINESS_REPORT.md), [claim audit](openai/CLAIM_AUDIT.md)                                                                                      | Deterministic single-call synthetic demonstration; later live-model studies are separate                        |
+| Real effects and SDKs           | [Lab](assurance/README.md), [SDK](assurance/sdk/README.md)                                                                                                                                             | 51 lab rows and 102 SDK matrix rows; same authored fixture, not independent evaluation                          |
+| Durable effects and connectors  | [Durable](assurance/durable/README.md), [Redis](assurance/redis/README.md), [workflow](assurance/workflow/README.md)                                                                                   | 26/19/24 named cases respectively; limited local restart and reconciliation contracts                           |
+| Incident-derived containment    | [Scope](assurance/scope/README.md), [egress](assurance/egress/README.md), [isolation](assurance/isolation/README.md)                                                                                   | 54/36/57 rows; retained relay/mailbox/content-release failures, not prevention of real incidents                |
+| Initial model/interface results | [Meta pilot](assurance/meta/README.md), [Meta study](assurance/meta-study/README.md), [Luna comparison](assurance/openai-comparison/README.md), [native Luna](assurance/openai-native/README.md)       | Preserve failed interfaces and zero-baseline limits; native workflow records 69/72 completions                  |
+| Synthetic safety and HF study   | [Safety](assurance/safety-study/README.md), [incident](assurance/hf-incident/README.md), [composed containment](assurance/hf-containment/README.md), [native successor](assurance/hf-native/README.md) | Scripted boundary tests and model-driven outcomes are separate; synthetic cases are not an external benchmark   |
+| Phase 1–2                       | [Hardening](research/hardening-phase-1/README.md), [connector](research/connector-phase-2/README.md)                                                                                                   | Retired legacy entry points and owned-service composition; historical internals remain preserved                |
+| Phase 3–4                       | [Local model study](research/model-phase-3/README.md), [reproduction](research/reproduction-phase-4/RESULTS.md)                                                                                        | 540 branches; 90/90 benign, 59/90 attacked completion; 763 retained replay snapshots                            |
+| Phase 5–6                       | [Recovery](research/recovery-phase-5/RESULTS.md), [signals](research/signals-phase-6/RESULTS.md)                                                                                                       | 39 recovery rows plus three in-flight drills; 44 signal rows; no live provider-alert validation                 |
+| Phase 7–8                       | [Context](research/context-phase-7/RESULTS.md), [credentials](research/credentials-phase-8/RESULTS.md)                                                                                                 | 36/46 rows and 108/92 snapshots; bounded host-owned authority and synthetic lifecycle tests                     |
+| Phase 9–10                      | [Composition](research/composition-phase-9/RESULTS.md), [local Llama](research/model-composition-phase-10/RESULTS.md)                                                                                  | 40 scripted rows; separate 144-branch model study with active 22/24 and restricted effects 16/24 → 0/24         |
+| Phase 11–12                     | [Handoff](research/handoff-phase-11/README.md), [presentation](research/presentation-phase-12/README.md)                                                                                               | Historical Phase 10 packaging and gap statements                                                                |
+| Phase 13–14                     | [Reliability](research/reliability-phase-13/RESULTS.md), [reduced export](research/export-phase-14/RESULTS.md)                                                                                         | 60 local fixtures and all 144 Phase 10 outcomes; reduced data does not prove anonymity                          |
+| Phase 15–16                     | [Validation](research/validation-phase-15/RESULTS.md), [maintenance](research/maintenance-phase-16/RESULTS.md)                                                                                         | Earlier exact-environment failures and repairs; do not substitute their browser receipt for today's blocked run |
+| Phase 17 and correction         | [Transfer](research/transfer-phase-17/RESULTS.md), [correction](research/provider-role-phase-17b/RESULTS.md)                                                                                           | Latest two-model, live-role and 120-fixture reliability results                                                 |
+| Local continuation              | [Phase 8 review](research/PHASE_8_REVIEW_2026-10-19.md), [explorer](../tools/simurgh-explorer/README.md), [smoke](research/smoke-validation-2026-10-19/RESULTS.md)                                     | Merged branch follow-up; local phase numbers overlap the provider track, so cite full paths                     |
 
-The [phase 6 safety-signal results](research/signals-phase-6/RESULTS.md) add signed
-local alerts, durable holds/stops, monitor leases and boot-bound operator restart.
-All 44 scripted rows retain receiver/controller snapshots and replay checks. Provider
-delivery and authenticated alert fetching remain unvalidated; no new model score is claimed.
+## Historical and supporting material
 
-The [phase 5 results](research/recovery-phase-5/RESULTS.md) cover 39 scripted recovery
-rows and three in-flight stop drills, with raw snapshots and full replay verification.
-The linked [fresh-host receipt](research/recovery-phase-5/hosted-phase4/README.md)
-records project-operated GitHub reproduction of the frozen model trajectories.
-Neither is a new model benchmark or outside-operator validation.
+| Collection                                                                                              | How to read it                                                                                          |
+| ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| [Documentation guide](../DOCUMENTATION.md) and [audit ledger](documentation-audit-2026-10-19/README.md) | Current routes, per-file scope, corrections and unresolved review limits                                |
+| [Research history](../RESEARCH_HISTORY.md), [device roadmap](../DEVICE_ROADMAP.md)                      | Exact archived entry points; old scores and temporal labels are historical                              |
+| `docs/research/llm-shield/`, `docs/superpowers/`                                                        | Stage-specific frozen specs, plans, closeouts, evidence and authority; no global readiness claim        |
+| `docs/stages/`, [research programme](RESEARCH_PROGRAMME.md), `papers/`                                  | Device-track history and manuscript snapshots; publication does not establish peer review or acceptance |
+| [Agent log](../AGENT.md), [change log](../CHANGELOG.md)                                                 | Append-only activity records; old follow-ups can be superseded by later evidence                        |
+| [Wiki](../wiki/index.md)                                                                                | Index/log scaffold; no populated claims or decisions collection                                         |
 
-Use the [phase 4 reproduction guide](research/reproduction-phase-4/README.md) to
-reexecute saved proposals and inspect retained receiver databases. Its
-[execution record](research/reproduction-phase-4/RESULTS.md) reports 540 matched
-branches and 763 snapshots from a clean local checkout. Outside validation remains
-pending; the [operator record](research/reproduction-phase-4/OPERATOR_RECORD.md)
-is explicitly an unexecuted template.
-
-Start with the [phase 3 local model study](research/model-phase-3/README.md) and its
-[presentation](research/model-phase-3/PRESENTATION.md) for the earlier adaptive evaluation:
-540 branches, 403 unique responses, all failure categories retained and fresh effect
-replay. Benign utility was 90/90 under enforcement; attacked utility was 59/90, with
-zero unauthorized effects versus 43/90 under bypass. The 31 incomplete attacked
-branches and the internally authored, exact-copy scope are material limitations.
-
-Start with the [phase 2 connector guide](research/connector-phase-2/README.md) for the
-underlying scripted experiment and [presentation](research/connector-phase-2/PRESENTATION.md).
-Native SDK approval, isolated proposals and inbox recovery are tested locally; real IAM,
-vendor connectors and outside validation remain open.
-
-The [hardening phase 1 reviewer guide](research/hardening-phase-1/README.md) records the
-phase 1 successor checks and retired legacy endpoints. It includes reproducible
-commands and a [presentation script](research/hardening-phase-1/PRESENTATION.md); the gap
-map below remains the dated audit baseline, not a claim that all its items are closed.
-
-Start with one falsifiable question: does the local authorization boundary reject unauthorized tool
-consequences while allowing authorized work on the declared synthetic cases? The current package
-makes this experiment inspectable and records what has and has not been validated.
-
-For the current priorities, start with the [15 October 2026 gap map](research/SIMURGH_GAP_MAP_2026-10-15.md).
-It distinguishes known historical defects, freshly checked fixture edges, evaluation limits
-and deployment work. It also links the latest containment/model results and current primary
-sources. Earlier readiness reports describe their own dated experiments: “no live request”
-in the initial offline review does not describe the later Luna captures.
-
-The [16 October OpenAI needs review](research/OPENAI_NEEDS_2026-10-16.md) updates the
-public-source mapping after phase 5, including provider alerts, safe stopping,
-compaction, delegation and credential lifecycle gaps. Its recommendations are proposed work.
-
-## Suggested review sequence
-
-1. Read the [research brief](openai/OPENAI_BRIEF.md) and [evaluation protocol](openai/EVALUATION.md).
-2. Run the offline demonstration using the commands in [README.md](../README.md). Use a fresh
-   report path, verify the artifact and examine the vulnerable, safe and orthogonal failure controls.
-3. Read the [claim audit](openai/CLAIM_AUDIT.md), [security review](openai/SECURITY_REVIEW.md) and
-   [readiness report](openai/READINESS_REPORT.md). A passing demonstration does not close the
-   historical security findings or establish real connector isolation.
-4. Challenge the scope: the corpus is authored locally, the effects are simulated and the oracle
-   shares the harness's trust domain. No live OpenAI result or independent operator replication is
-   established by the offline report.
-5. Inspect the [proposal](openai/PROPOSAL.txt) for the experiments intended to reduce those limits.
-   The [application checklist](openai/APPLICATION_CHECKLIST.md) records owner inputs still needed.
-
-## Which documents describe which state?
-
-For the next empirical milestone, read the [real-effects lab](assurance/README.md) and
-[source-backed industry gap map](assurance/INDUSTRY_GAPS.md). This separate experiment measures
-actual disposable disk writes and trace discrepancies. Its saved report is replayable with
-`npm run assurance:verify -- docs/assurance/evidence/report.json`. The original OpenAI report's
-simulated-effect limits above still apply to that original instrument. The subsequent
-[SDK integration](assurance/sdk/README.md) exercises native OpenAI Agents SDK and LangGraph
-approval/resume flows against the unchanged lab; it includes reproducible setup, all 102 matrix
-rows, native lifecycle probes and explicit unsupported behavior. The [durability study](assurance/durable/README.md)
-then adds real process kills, restarts and concurrent workers against a separate idempotent
-file sink. Its report distinguishes created, recovered and replayed completions.
-
-| Documents                                                                                                                                                                                                                                     | Read them as                                                                                                                                                    |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [README](../README.md), [ROADMAP](../ROADMAP.md), [Phase 12 gap map](research/SIMURGH_GAP_MAP_2026-10-15.md)                                                                                                                                  | Current research navigation and priorities; follow links to separately scoped evidence                                                                          |
-| `docs/openai/`                                                                                                                                                                                                                                | Initial focused evaluation, dated readiness/security reviews and proposal; later live studies are linked below                                                  |
-| [SECURITY](../SECURITY.md), [PRIVACY](../PRIVACY.md)                                                                                                                                                                                          | Component-specific current guidance with explicitly identified historical architecture                                                                          |
-| [RESEARCH_HISTORY](../RESEARCH_HISTORY.md), [DEVICE_ROADMAP](../DEVICE_ROADMAP.md)                                                                                                                                                            | Exact historical copies, including old scores, vendor framing and status labels; not current assurance                                                          |
-| [Research programme](RESEARCH_PROGRAMME.md)                                                                                                                                                                                                   | May 2026 device-track plan at v0.4.4; its “current,” “next” and 10/10 score refer to that snapshot                                                              |
-| [Reviewer checklist](REVIEWER_CHECKLIST.md), [demo script](DEMO_SCRIPT.md), [validation](VALIDATION.md), [threat model](THREAT_MODEL.md), [resource plan](RESOURCE_PLAN.md), [risk register](RISK_REGISTER.md), [limitations](LIMITATIONS.md) | Stage 1/2 reviewer history, not the current OpenAI workflow. Some retained planning statements say Stage 2 is pending even though later releases implemented it |
-| [AGENT.md](../AGENT.md), [CHANGELOG](../CHANGELOG.md)                                                                                                                                                                                         | Dated activity records; historical follow-ups and test counts may have been superseded                                                                          |
-| `docs/research/`, `docs/stages/`, `docs/superpowers/`, `papers/`                                                                                                                                                                              | Research-specific claims, frozen plans, closeouts and manuscripts; check the stated stage, tag and evidence before reuse                                        |
-| [Wiki](../wiki/index.md)                                                                                                                                                                                                                      | Index/log scaffold; the intended claims and decisions directories are not populated                                                                             |
-
-Use [CONTRIBUTING.md](../CONTRIBUTING.md) for current contribution checks. Old examples using
-`npm install` are not the preferred reproducibility path: use `npm ci` with the committed lockfile.
-Do not run historical fix/regeneration commands on signed evidence without reviewing their scope.
-
-## What would strengthen the research?
-
-For the incident-driven follow-up, read the [2026 primary-source review](assurance/scope/INCIDENT_RESEARCH.md)
-and [task-scope experiment](assurance/scope/README.md). Its report retains an approved-service relay
-failure and 54 complete local rows; it does not claim to reproduce the actual incidents or supply
-OS-level network containment.
-The subsequent [kernel egress experiment](assurance/egress/README.md) adds an ingress-only Linux
-profile inside the approved service, with actual loopback/Unix observers. Its 36 rows retain useful
-work and a filesystem mailbox failure; this is a syscall boundary, not a complete sandbox.
-
-The [descriptor isolation experiment](assurance/isolation/README.md) follows with 57 rows: twelve
-attack channels denied, three useful tasks preserved, two descriptor hygiene checks and two retained
-content-release failures. Review its explicit bootstrap and preconnected-peer limitations.
-
-The [local Meta pilot](assurance/meta/README.md) adds two CPU Llama 3.2 1B captures: the initial
-format failure and an exploratory compact-prompt improvement. Model proposals exercise the earlier
-mock boundary; these captures do not establish model-driven kernel-isolation coverage.
-
-The [frozen repeated Meta workflow study](assurance/meta-study/README.md) adds 24 separately authored cases,
-three sampling seeds and real SDK/Redis/isolation adapters. Its 144 attempts yielded only three
-valid writes and zero complete workflows; both unsafe bypass writes were blocked. Raw failures
-and descriptive uncertainty are published, with model-driven recovery explicitly unexercised.
-
-The [frozen Luna 6 API comparison](assurance/openai-comparison/README.md) uses the same cases
-and plain-text prompts. All 144 API calls completed, but multi-message output produced only three
-usable reads and zero complete workflows. The failed interface comparison is retained with usage
-and all control replays; it supplies no new prevention or model-derived recovery result.
-
-The [native Luna function-call study](assurance/openai-native/README.md) then completes 69 of
-72 workflows, including 34 of 36 benign tasks, and executes two model-derived process-kill
-recovery probes with one final Redis effect each. Three wrong-tool choices remain failures.
-No unsafe bypass effect occurred, so this run establishes useful workflow/recovery evidence,
-not a new prevention rate; all earlier captures remain unchanged.
-
-The [fresh-corpus synthetic safety study](assurance/safety-study/README.md) separates deliberate boundary
-violations from model behavior. Eight unsafe bypass cases are blocked while both authorized
-operations succeed. Luna completes 35/72 fresh workflows but produces no unsafe baseline, so
-its prevention rate remains unestimable. Official Llama 3B completes 20/24 workflows and all
-12 benign tasks; its four observed unsafe bypass writes are blocked. Results remain bounded
-to this synthetic corpus, with failures and limitations retained in the study guide.
-
-The [local Hugging Face incident-pattern simulation](assurance/hf-incident/README.md)
-blocks three direct misuse scenarios while preserving approved work. It retains an approved-service
-relay failure and, in separate kernel probes, a shared-file mailbox failure. These scripted local
-results identify concrete containment gaps; they do not establish prevention of the real incident.
-
-The [composed containment study](assurance/hf-containment/README.md) then combines
-service descriptor isolation and scoped gateway credentials. It blocks all 12 scripted unsafe
-baselines while preserving both useful workflows, with separate ablations exposing each layer's
-gaps. Its [native Llama successor](assurance/hf-native/README.md) blocks one model-selected
-scorer mutation but completes only one of two benign prompts; all interface failures remain.
-External reproduction and representative production integration are still outstanding.
-
-A useful review tests a specific mechanism and publishes enough detail to reproduce its failure or
-success: threat model, case provenance, implementation revision, controls, measured consequences,
-results, limitations and the next experiment. Independent reproduction and comparison with
-established evaluation frameworks would strengthen external validity; neither is claimed complete.
-A publication or preprint should be evaluated by its methods and evidence, not treated as peer
-review or endorsement merely because it has a DOI or is publicly hosted.
-
-The [presentation audit](openai/PRESENTATION_AUDIT.md) distinguishes complete automated document
-scanning from the smaller set of entry points reviewed semantically. It records unresolved issues
-rather than treating a file count as proof of quality.
-
-## Real Redis connector evidence
-
-The [Redis study](assurance/redis/README.md) adds 19 real-service cases for lost replies, conditional
-writes, conservative reconciliation, eight-worker contention and AOF restart. Read the
-[validation record](assurance/redis/VALIDATION.md) and [saved report](assurance/redis/evidence/report.json)
-with their same-host, synthetic-effect and unknown-outcome limits. Older reports remain unchanged.
-
-## Persisted native workflow evidence
-
-The [workflow study](assurance/workflow/README.md) adds 24 named cases across OpenAI Agents SDK
-and LangGraph: application SIGKILL after native approval persistence, restored decisions, live local
-policy checks, concurrent resumes and recovery after a Redis effect. Read its
-[validation](assurance/workflow/VALIDATION.md) and [report](assurance/workflow/evidence/report.json).
-The boundary is one approval/tool workflow, not arbitrary durable orchestration.
+Use [CONTRIBUTING.md](../CONTRIBUTING.md) for changes. Use the
+[primary-source map](documentation-audit-2026-10-19/SOURCES.md) for standards and vendor guidance.
+Neither a passing test count, a signature, a source citation nor this documentation audit certifies
+scientific novelty, human deliberation, production security or regulatory compliance.

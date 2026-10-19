@@ -13,7 +13,7 @@ transport and publication limits are documented in [PRIVACY.md](../PRIVACY.md) a
 
 ### 1. No Automatic Misconduct Findings
 
-Simurgh produces risk scores and event timelines. It **never** automatically accuses, flags, or penalises a student. Every anomaly recommendation requires a human reviewer who applies institutional judgment and due process.
+Simurgh produces risk scores and event timelines. It emits review flags, but does not make automatic misconduct findings or impose penalties. Every anomaly recommendation requires a human reviewer who applies institutional judgment and due process.
 
 The scoring module emits “Manual review recommended. No automatic misconduct finding.” for
 Warning and “Manual review required. No automatic misconduct finding.” for Critical. These

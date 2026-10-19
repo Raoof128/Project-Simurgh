@@ -1,98 +1,48 @@
-# simurgh-helper
+# Historical macOS display-affinity helper
 
-**Countermeasure A — native display-affinity flag enumeration (Abedini, 2026 §VI-A).**
+**Unsupported by the current server.** The supported `/api/affinity` ingress, simulator and
+read routes return HTTP 410. This directory preserves an earlier Swift research helper; it is
+not a current installation path or the modern counts-only daemon.
 
-A small Swift agent that runs alongside the Simurgh browser session and reports any
-on-screen window excluded from screen capture (`NSWindow.SharingType.none` /
-display-affinity-protected) to the Simurgh server. Closes the §VI-C blind spot
-that pure JavaScript focus monitoring cannot.
+For the maintained device research, see the [integration matrix](../../docs/INTEGRATIONS.md),
+[macOS daemon](../simurgh-daemon-macos/) and [privacy policy](../../PRIVACY.md).
 
-## Build
+## Historical behavior
 
-```bash
+The helper compares CoreGraphics window metadata with ScreenCaptureKit shareable content.
+It also obtains image buffers with `SCScreenshotManager.captureImage` and samples five alpha
+locations as a capture-integrity heuristic. Detection depends on OS/API behavior; all-zero
+samples or absence from a capture list do not establish malicious intent or complete visibility.
+The earlier two-second detection statements concerned a controlled fixture, not a general SLO.
+
+The payload includes raw process owner names and PIDs. Verbose output can include window and
+process identifiers. Pixel values are not included in the HTTP payload, but local image-buffer
+access still occurs. Do not describe this helper as metadata-only or as hashing every identifier.
+See [`reportToServer` and the scanner](main.swift) and the
+[documented historical exception](../../PRIVACY.md#retired-legacy-helper-path).
+
+## Historical build and configuration
+
+Building this preserved source on macOS requires the applicable Xcode command-line tools and SDK:
+
+```sh
 cd tools/simurgh-helper
 make
 ```
 
-Produces a single ~200 KB binary `simurgh-helper`. Requires the Xcode command-line
-tools (`xcode-select --install`).
+The original flags include `--session`, `--server`, `--secret`, `--interval` and `--verbose`.
+The original service expected a shared helper secret. Building the helper does not restore
+server compatibility. Do not put real secrets into committed examples or shell history.
 
-## Run
+This implementation requests Screen Recording access for its capture probes. Permission state
+and supported OS behavior must be tested on an owned interactive Mac; current native CI does
+not validate this retired helper's capture workflow. Historical setup/demo claims can be read
+at their original Git revisions, with their original limitations.
 
-```bash
-./simurgh-helper --session sess-XXXXXXXX
-```
+## Review boundaries
 
-The `sess-XXXXXXXX` value is shown in the bottom-right of the Simurgh exam page
-("session: sess-…"). Once running, the dashboard's **Display-Affinity Watch**
-panel will turn green ("helper online") and any capture-invisible window will
-appear in the panel within 2 seconds.
-
-### Flags
-
-| Flag         | Default                  | Meaning                                            |
-| ------------ | ------------------------ | -------------------------------------------------- |
-| `--session`  | _(required)_             | Browser session ID to attach to                    |
-| `--server`   | `http://localhost:3030`  | Simurgh server URL                                 |
-| `--secret`   | _(required, or env var)_ | Shared secret (must match `SIMURGH_HELPER_SECRET`) |
-| `--interval` | `2000`                   | Scan interval in ms                                |
-| `--verbose`  | off                      | Print every detected window                        |
-
-## How it detects capture-invisible windows
-
-The helper does **not** parse a private API or read kernel structures. It uses
-two complementary public-API signals from Apple's ScreenCaptureKit (the same
-framework Apple ships its own screen-capture tools on top of):
-
-1. **Diff signal.** Enumerate every on-screen window with
-   `CGWindowListCopyWindowInfo`, then ask `SCShareableContent` for every
-   window the OS will surface to a capture pipeline. Any window present in
-   the first list but missing from the second is _on-screen but uncapturable_.
-   On some macOS versions, capture-excluded windows are filtered out of
-   `SCShareableContent` entirely — the diff catches them.
-
-2. **Probe signal.** For windows that DO appear in `SCShareableContent`,
-   call `SCScreenshotManager.captureImage(contentFilter:configuration:)`
-   (the supported replacement for `CGWindowListCreateImage`, which Apple
-   obsoleted in macOS 15). A capture-excluded window returns a buffer of
-   the right dimensions but with all-zero alpha. Five probe pixels are
-   sampled per window — if every one is zero, the window is hostile.
-
-A double-probe pass after a 50 ms settle filters transient SCK failures on
-legitimate windows. Both passes run in parallel via Swift TaskGroups.
-
-This implementation is verified live against the bundled
-[`invisible-window-poc`](../invisible-window-poc/) — running the PoC while
-the helper is attached produces a detection within 2 s and escalates the
-next telemetry verdict to Critical.
-
-## Permission
-
-The first time you run the helper, macOS will ask you to grant **Screen
-Recording** permission. You must allow this. Without it,
-`SCShareableContent.excludingDesktopWindows(...)` throws and the helper
-exits cleanly with a clear error pointing at System Settings.
-
-## Privacy
-
-The helper:
-
-- Reads window metadata only: PID, owner name, layer, on-screen bounds.
-- Reads exactly **five pixels** per window per scan interval, used only as a
-  binary integrity probe (zero / non-zero alpha). Pixel values are not
-  transmitted.
-- Sends no keystroke, mouse, screen, or camera data anywhere.
-
-The full body of every POST is visible in the helper source: `reportToServer`
-in `main.swift`.
-
-## Troubleshooting
-
-- **All processes show as hostile** → you didn't grant Screen Recording
-  permission. Open System Settings → Privacy & Security → Screen Recording,
-  toggle the helper on, restart it.
-- **`401 invalid_helper_secret`** → set `SIMURGH_HELPER_SECRET` in the
-  server's `.env` and pass the same value via `--secret` to the helper.
-- **The dashboard says "helper offline" even though the helper is running** →
-  the helper sends one POST every 2 s; the server marks it offline after 8 s
-  of silence. Check that the server URL passed to `--server` is reachable.
+No hardware-rooted identity, kernel visibility, complete overlay detection, production support
+or automatic misconduct judgment is established. The current server retirement prevents new
+use through its supported routes; it does not erase old exports or change what this native
+source can collect locally. Retain historical evidence and use a separately declared scope for
+any future replacement.

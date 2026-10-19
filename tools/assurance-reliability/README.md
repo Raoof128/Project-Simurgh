@@ -1,5 +1,9 @@
 # Bounded reliability study (Phase 13)
 
+**Study scope.** The counts below describe the original Phase 13 run. A separate
+[Phase 17 extension](../../docs/research/transfer-phase-17/RESULTS.md) records 120 paced
+fixtures and 1,200 snapshots. Do not replace the Phase 13 denominator with the newer counts.
+
 Runs six preregistered schedules, five repetitions and two controls through the
 frozen native SDK/receiver fixture: 60 fixtures, 210 final calls, 10 initial calls
 and 600 raw database snapshots. See the

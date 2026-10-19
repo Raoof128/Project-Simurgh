@@ -1,5 +1,10 @@
 # OpenAI Cybersecurity Grant application checklist
 
+**Evidence update — 19 October 2026.** The [current brief](OPENAI_BRIEF.md) now includes
+separately recorded live transfer and role-correction results. The form-field mapping below
+was checked on 15 October and must still be rechecked before submission. Completed local
+captures do not authorize a new paid campaign or resolve applicant identity/budget decisions.
+
 **Status: prepared for owner review, not submitted.** Requirements below reflect the [official form](https://openai.com/form/cybersecurity-grant-program/) retrieved on **15 October 2026 (Australia/Sydney)**. The applicant must recheck the form and terms before submission. This document identifies remaining decisions; it does not authorize API expenditure, publishing, or submitting.
 
 ## Map the form fields
@@ -32,7 +37,7 @@
 ## Owner decisions that prevent a final submission
 
 1. Confirm applicant identity, team, track record, relevant paper authorship, and work location.
-2. Confirm or replace the proposed `gpt-6.1-sol` / `gpt-6-luna` candidates and choose the explicit live Responses API model ID(s), account/project, synthetic data transmission scope, repetitions, token budget, and maximum spend. The repository's optional live path is not itself authorization to incur charges. No live result was produced for this package.
+2. Confirm or replace the proposed `gpt-6.1-sol` / `gpt-6-luna` candidates and choose the explicit live Responses API model ID(s), account/project, synthetic data transmission scope, repetitions, token budget, and maximum spend. The repository's optional live path is not itself authorization to incur charges. The original offline package produced no live result; separate later captures are now linked in the brief. Their approved spending scope does not authorize a new application campaign.
 3. Choose a resource scenario and calendar milestones. USD 500 credits and USD 25,000 combined support are illustrative proposals, not approvals, prices, or known grant offers. Explain how labor is supported if requesting credits only.
 4. Review current program terms and any eligibility/export-control representations presented during submission. Their exact applicability is not established by this package. The visible form's non-exclusivity notice also requires owner consideration.
 5. Review the final application text and authorize any external submission or publication separately. No application, email, upload to OpenAI, or public release has been sent by preparing these files.

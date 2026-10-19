@@ -2,7 +2,8 @@
 
 ## Research scope and versions
 
-Project Simurgh is a research prototype. The active development branch is `main`; published
+Project Simurgh is a research prototype. The default repository branch is `main`; the current agent-research
+continuation is on `openai-readiness`. Published
 research evidence through `v2.54.1` and the historical application package version `0.4.18`
 are separate version lines. A frozen tag is a reproducibility reference, not a promise that
 its runtime remains production-supported or has received every later fix. The historical
@@ -45,6 +46,27 @@ to arbitrary remote services. Demo-mode mock access remains intentionally public
 - Approval fixtures are not authenticated human decisions, and replay checks are local
   to a sandbox instance. Production connectors require durable authorization, replay
   protection, identity, secret management, quotas and independent operational review.
+
+## Current integration boundaries
+
+The [integration matrix](docs/INTEGRATIONS.md) identifies each tested surface and its limits.
+The current composition trusts the host policy, issuer/admin, storage and owned receiver.
+Model proposals and retrieved text are untrusted. Valid function-call JSON does not grant
+permission; host checks must still bind the action, resource, lifecycle state and budget.
+Only host-generated policy state belongs in the corrected developer-role update. Copying
+retrieved/user content into that role would cross the intended trust boundary.
+
+The explorer is a loopback, read-only evidence viewer, not an authorization service or a
+multi-user hosted dashboard. Imports remain unverified; opening a source link does not
+verify its evidence. Its static index is an older study snapshot. See its
+[guide](tools/simurgh-explorer/README.md) for import/export and detailed-data limits.
+
+The [completed local Phase 8 review](docs/research/PHASE_8_REVIEW_2026-10-19.md) is scoped
+assistant review, not independent certification. The [full smoke report](docs/research/smoke-validation-2026-10-19/RESULTS.md)
+retains the managed-browser failure and distinguishes native CI from interactive platform testing.
+Real provider IAM, authenticated provider-alert lifecycle and production deployments remain unvalidated.
+The [2026 source map](docs/documentation-audit-2026-10-19/SOURCES.md) informs review; it is not a
+claim of MCP, OAuth, NIST, OWASP, SLSA or accessibility conformance.
 
 ## Reporting a Vulnerability
 
@@ -152,7 +174,7 @@ The historical academic/device telemetry pipeline is designed around data minimi
 - Paste content (only paste length and count are recorded)
 - Raw student names or email addresses (SHA-256 hashed at ingress only)
 - Biometric identifiers
-- Raw process names or window titles (Stage 1 helper hashes these; Stage 2+ daemon proofs reject them unconditionally as `forbidden_local_field` — no flag enables raw transmission)
+- Raw process names or window titles in modern daemon proofs (rejected as `forbidden_local_field`). The legacy helper collected/transmitted identifiers and sampled capture pixels; its server routes are retired. See [PRIVACY.md](PRIVACY.md) for this historical exception.
 
 Enforcement points:
 
@@ -167,7 +189,7 @@ logs are not a complete record of source-code changes.
 
 ### No Automatic Misconduct Finding
 
-Simurgh produces **risk scores and event timelines**. It never automatically accuses, flags, or penalises a student. Every anomaly recommendation is worded as:
+Simurgh produces **risk scores and event timelines**. It emits review flags, not automatic misconduct findings or penalties. The Critical recommendation is:
 
 > "Manual review required. No automatic misconduct finding."
 
@@ -184,7 +206,7 @@ The following attack classes are **not** detectable from telemetry alone:
 
 Mitigations:
 
-- The macOS `simurgh-helper` (Countermeasure A) enumerates display-affinity flags at the OS level and triggers a Critical override when a capture-excluded window is detected.
+- The historical macOS `simurgh-helper` attempted native detection, but its `/api/affinity` integration is retired with HTTP 410. Use the modern signed daemon contracts for current device-track research; neither route establishes complete capture visibility.
 - The historical device roadmap proposes hardware-rooted attestation and on-device verification
   for GPU-layer overlays. These remain proposals; see [DEVICE_ROADMAP.md](DEVICE_ROADMAP.md).
 

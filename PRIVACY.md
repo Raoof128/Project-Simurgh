@@ -17,10 +17,28 @@ the relevant experiment protocol and [security boundaries](SECURITY.md) before e
 access or publishing a capture. The academic telemetry exclusions below must not be generalized
 to those research inputs.
 
+## Current model archives and explorer
+
+The transfer study and role correction retain synthetic prompts/proposals, provider usage,
+outcomes and local receiver snapshots within their declared protocols. Replaying these archives
+makes no new model request. It does not establish a production retention policy or anonymity.
+
+The [explorer](tools/simurgh-explorer/README.md) loads the earlier Phase 10/14 public projection:
+144 outcomes with deliberate field omissions. Local JSON imports remain in browser memory;
+filtered downloads are new copies under the recipient's control. The server serves built assets
+and exposes no upload, provider or command-execution endpoint. Opening a remote source link
+contacts that source, and dependency installation contacts package services.
+
+The explicit detail option exposes selected **synthetic** model output and action details and
+does not apply the public projection when exported. Review detail files before sharing. Ordinal
+IDs, hashes and repeated patterns can remain linkable even when direct content is omitted.
+The public projection has not been validated on real personal or confidential traces.
+
 ## Retired legacy helper path
 
 The legacy macOS helper path has a confirmed privacy mismatch: its payload includes raw process
-names and PIDs, and the historical server path retains those fields in affinity state and emits
+names and PIDs; it also uses ScreenCaptureKit image buffers and samples alpha values locally.
+The historical server path retains the identifiers in affinity state and emits
 them through audit/SSE. This differs from the counts-only modern daemon-proof contract. The
 [security review](docs/openai/SECURITY_REVIEW.md) tracks the finding and any subsequent remediation.
 Do not interpret the intended exclusions in the historical policy below as proof that this legacy
@@ -121,7 +139,9 @@ Risk scores are produced by **local deterministic heuristics**. When a session r
 | Audit chain (in-memory)     | Session lifetime                     |
 | Exported reports            | Operator-controlled                  |
 
-This is a stateless prototype. No data is written to a database. Restarting the server clears all session data.
+This retention table concerns the historical in-memory academic server. Research tools separately
+write SQLite/Redis state, archives and exported reports; restarting the academic server does not
+delete those files, external copies or provider-held records. Export retention is operator-controlled.
 
 ---
 

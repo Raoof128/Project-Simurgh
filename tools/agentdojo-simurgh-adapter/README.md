@@ -1,5 +1,12 @@
 # Simurgh ↔ AgentDojo Adapter (Stage 3H)
 
+**Scope update — 19 October 2026.** This is the historical Stage 3H adapter, not the
+current composed lifecycle evaluator. The legacy live gateway is retired through supported
+server entry points; optional live integration below is not a current validated deployment path.
+The [full smoke report](../../docs/research/smoke-validation-2026-10-19/RESULTS.md) records
+181 local adapter tests. It does not establish a new external AgentDojo/provider campaign.
+See the [integration matrix](../../docs/INTEGRATIONS.md) before choosing an experiment.
+
 In-loop mediating defence that lets AgentDojo evaluate the Simurgh LLM Shield as a real defence.
 This package is **transport + enforcement only**. It performs no safety classification — every
 allow/block decision comes from the real Node gateway and is never reinterpreted here.

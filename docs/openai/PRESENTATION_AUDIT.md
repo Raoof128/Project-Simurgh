@@ -1,5 +1,10 @@
 # Documentation and presentation audit
 
+**Historical audit record.** The 710-document automated scan and 20-entry-point semantic
+review below describe the original presentation sweep. See the
+[19 October repository audit](../documentation-audit-2026-10-19/README.md) for the later
+910-candidate inventory, current corrections and explicitly bounded content-review scope.
+
 The current entry points now distinguish the focused research experiment, historical device work
 and proposed future evidence. The review corrected factual overclaims and navigation problems;
 it does not certify every historical sentence or predict an application outcome.

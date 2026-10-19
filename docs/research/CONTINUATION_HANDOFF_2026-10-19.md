@@ -13,12 +13,22 @@ ready to give them; their work is not represented as already completed.
    explicit managed-policy prerequisite and a fresh-output browser parity command.
 4. Phase 18: human dashboard and JSON agent CLI share the same queries and outcomes;
    source-linked research and gap search, local JSON import/export and detailed inspection.
-5. Current validation is retained separately. Historical source/protocol/evidence bytes
-   were not regenerated to improve results. Browser/macOS remain platform-dependent.
+5. The merged provider-transfer track adds 288 comparison branches and the separate live-role
+   correction. These newer archives are not part of the explorer's older 144-row dataset.
+6. [Full smoke validation](smoke-validation-2026-10-19/RESULTS.md) passes both prescribed
+   scripts plus supplemental suites at the recorded source revisions. Native CI passes 10 macOS
+   and 11 Windows tests plus fixture compilation; interactive desktop work remains unverified.
+   Strict browser parity is blocked in the managed local environment. Historical bytes remain intact.
 
 ## Short independent reproduction
 
-Use the delivered Git bundle or the exact local branch commit in the delivery manifest.
+For current source, clone the full `openai-readiness` branch and record its commit. Follow
+[README replay](../../README.md#replay-the-evidence) for the latest transfer and role-correction
+archives, including hash-locked dependencies and expected roots. Do not use a shallow clone.
+
+The earlier delivered Git bundle remains the snapshot named in its delivery manifest; it
+predates the merged provider-transfer work and later smoke repairs. The bundle commands below
+reproduce that older dashboard handoff, not the latest branch.
 The bundle includes history needed for frozen source bindings. After cloning, verify the
 expected commit and compare hashes supplied by the owner through a trusted channel.
 A hash delivered alongside a malicious replacement does not establish authenticity.

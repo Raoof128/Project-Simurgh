@@ -17,6 +17,13 @@ Add new measurements with their own scope and provenance; do not overwrite old r
 metrics. Separate implemented mechanisms, executed experiments and proposed work. Report failed,
 skipped and unverified checks explicitly. See [CONTRIBUTING.md](CONTRIBUTING.md) for review steps.
 
+## Documentation maintenance
+
+Use [DOCUMENTATION.md](DOCUMENTATION.md) for current integration/reviewer routes and the
+[dated audit](docs/documentation-audit-2026-10-19/README.md) for per-file review scope and errata.
+Cite full paths when referring to phase numbers: the local continuation and provider-transfer
+tracks reuse some numbers. Do not silently reinterpret an archived “current” or “pending” claim.
+
 ## Knowledge wiki
 
 The Zurvan-federated [wiki scaffold](wiki/index.md) currently contains an index and log.
