@@ -3947,3 +3947,11 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Files changed:** Declared Phase 17 runtime helpers, runner and tests; both logs.
 - **Verification:** Regression tests RED→GREEN; 15 targeted checks pass with one explicit browser skip. Real Node 24 wrapper test passes. Fresh Stage 5R receipt establishes Node/portable/Python agreement and records three-runtime parity false (exit 1).
 - **Follow-ups:** Run browser/macOS checks on a permitted machine; build the owner-requested shared evidence explorer.
+
+## 2026-10-19 — Raouf: declare shared evidence explorer (Australia/Sydney)
+
+- **Scope:** Owner-requested Phase 18 human dashboard and agent CLI.
+- **Summary:** One local schema/query layer, honest failure classifications, source-linked research and explicit open gaps. Isolated frontend package; preserve all predecessor artifacts.
+- **Files changed:** Phase 18 declaration and both logs.
+- **Verification:** Reviewed public Phase 14 schema, Phase 10 capture/report and existing 29-source register; consulted current official evaluation, monitoring and MCP documentation.
+- **Follow-ups:** Build, test and prepare the independent-operator handoff; external custody remains with the owner/classmate.
