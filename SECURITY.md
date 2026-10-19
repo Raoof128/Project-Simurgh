@@ -40,6 +40,14 @@ not repair direct module use or old revisions. The [four-case local probe and co
 record the scope; no live API or HTTP route was exercised. These modules need a separately
 reviewed implementation change before a successor can claim the historical refusal contract.
 
+## Archived browser-verifier limitation
+
+The frozen Stage 4M HTML verifier has duplicate top-level lexical declarations and fails to
+parse before its handlers run. Its published file hash matches the affected bytes. Use the
+stage's authoritative CLI within its declared scope; the archived page is not an operational
+verification surface. The [syntax-check receipt and correction](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m54--the-archived-stage-4m-browser-verifier-cannot-parse)
+distinguish this finding from interactive browser testing and from CLI behavior.
+
 ## OpenAI demonstration trust boundaries
 
 - Model output and retrieved context cannot grant permissions. A trusted local registry

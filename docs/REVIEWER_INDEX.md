@@ -63,7 +63,9 @@ The older HTML verifiers under `tools/simurgh-attestation/` have different, some
 verification contracts. Source review found blocked inline entry points, missing upload flows and
 unsafe HTML rendering in specific pages. Use the stage's authoritative CLI for verification and
 consult [the per-page findings](documentation-audit-2026-10-19/MANUAL_REVIEW.md#m34--archived-browser-pages-are-not-interchangeable-verifiers)
-before opening historical pages. These pages are separate from the maintained evidence explorer;
+before opening historical pages. The separate [Stage 4M evidence page cannot parse](documentation-audit-2026-10-19/MANUAL_REVIEW.md#m54--the-archived-stage-4m-browser-verifier-cannot-parse)
+because its module repeats a lexical declaration; its generated-byte parity claim does not
+establish a functioning browser verifier. These pages are separate from the maintained evidence explorer;
 that explorer displays imported data and does not authenticate it.
 
 The legacy academic and pilot pages directly under `public/` also retain obsolete helper paths,

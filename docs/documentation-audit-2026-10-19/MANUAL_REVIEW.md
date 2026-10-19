@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **600 documents have complete manual reads; 319 remain
+SHA-256 values. At this checkpoint, **700 documents have complete manual reads; 219 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -1388,3 +1388,94 @@ Checked 19 October 2026; retrieval date is distinct from publication date:
 - [Agent Audit Record draft 02](https://www.ietf.org/archive/id/draft-gilda-wimse-agent-audit-record-02.html):
   an Informational Internet-Draft proposing decision/effect/agreement records, not an adopted RFC
   or a compliance certification.
+
+### M53 — Evidence guides must preserve skipped checks and measurement limits
+
+The evidence READMEs and captured outputs through Stage 4M require these additional qualifications:
+
+- The three early Llama experiments use different baselines. Demotion records 10/140 attack
+  successes falling to 8/140; authority gating records 9/140 to 0/140; egress gating records
+  9/140 to 4/140. Do not combine their observations. Overlapping confidence intervals do not
+  establish a null effect, especially for paired tasks. “Task completion 150/150” describes
+  runner completion where the separately reported task-utility counts are lower.
+- The authority experiment's one benign regression has no retained per-action attribution.
+  Its report says both addresses were explicit in `user_task_8`. Stage 4B's explanation that
+  addresses were absent from the task therefore does not establish the cause of that live
+  regression. Stage 4B and 4C demonstrate recovery of selected model-free cases; their results
+  and authority-chain release notes must not present this as verified recovery of the live cost.
+  Finite differential tests preserve behavior on their tested inputs, not every argument shape.
+- `stage-3e-live/smoke-output.txt` explicitly skips the live provider while passing 40 fixture
+  checks. `stage-3e/docker-smoke-output.txt` explicitly skips Docker. A Dockerfile `USER`
+  assertion is not container execution. Keep both skips visible; neither is a passing live run.
+- Stage 3G's 60 cases across three modes are 180 mode observations, not 180 live calls.
+  Stage 3Y's 35 goals crossed with five envelopes are selected, dependent fixtures, not 175
+  independent population samples. Its structural demotion/rejection rate does not establish
+  live containment. Stage 3Z's four oracle cases assume truthful observations; a separate
+  channel inside the same authored experiment does not establish independent custody.
+- One-line `PASS` receipts lack standalone revision and environment context. Interpret them
+  with their surrounding artifact bindings. Citation tables' June “resolved” statuses are
+  historical; a news homepage and unnamed corroboration are not precise incident citations.
+- Raw inputs and model outputs retained as replay sources are distinct from metadata-only
+  derived artifacts. Fingerprint files identify key bytes; they do not authenticate an operator
+  independently. The Stage 4D deterministic private key is explicitly a fixture, so blanket
+  statements that no private key exists anywhere in the repository are incorrect.
+- Historical regeneration commands write evidence. Run maintenance only in an appropriately
+  authorized isolated checkout. Replace shell angle-bracket placeholders before execution;
+  the Runpod runbook's literal URL placeholder is parsed as shell redirection. Its unpinned
+  vLLM minimum and greedy seed do not establish environment or batched-output determinism.
+
+### M54 — The archived Stage 4M browser verifier cannot parse
+
+The complete 1,065-line source of
+`docs/research/llm-shield/evidence/stage-4m/verify-stage4m.html` contains three top-level
+`const fail` declarations in one module, at HTML lines 278, 586 and 711. JavaScript rejects
+those duplicate lexical declarations before registering the upload or verification handlers.
+The exact extracted module fails Node 26.12.0 `--check` with exit 1 and
+`SyntaxError: Identifier 'fail' has already been declared`.
+The [diagnostic receipt](stage4m-browser-parse.json) pins the original HTML hash, which matches
+its README's published digest. This is a syntax check, not an interactive browser run.
+
+The Stage 4M evidence README's “open in any browser” instruction is not a working handoff for
+these archived bytes. Generated-byte equality and core/WebCrypto parity checks cannot substitute
+for parsing the shipped page. Use the stage's authoritative CLI and retain its own scope and
+limitations; this finding does not establish a CLI failure. The frozen HTML remains unchanged.
+A future implementation repair must also examine the adapter's acknowledgement key selection
+and accumulation of dropped files across bundles; source inspection alone does not establish
+those paths' end-to-end consequences.
+
+### M55 — Distinct reviewer keys do not prove distinct machines
+
+`evidence/stage-4r/reviewer-runs/README.md` describes five named keys and an earlier anonymous
+record, with out-of-band attribution reported by the requester. Preserve that attribution as
+reported. Distinct fingerprints prove distinct public-key bytes, not distinct machines or
+independent people. A persistent key file can be copied, deleted or replaced, so the claims
+that one machine cannot mint another key and that padding is impossible are incorrect.
+A signature authenticates the signed declaration relative to its key; it does not itself prove
+that the ceremony ran on the claimed OS. The listed Node majors `18/20/22` number **three**,
+not four. This audit performs no new identity verification or outreach.
+
+The Stage 4T live stdio ceremony is a real two-process interaction within the declared host
+scope. It does not establish separate operators. A common capsule root binds the supplied
+views; it does not prove that no undisclosed alternate capsule exists.
+
+### M56 — Reproduction archives and timestamp targets need exact identities
+
+The corrected Stage 5E independent-verification README explicitly leaves party independence
+**uncompleted**. Author-originated SSH commands support a foreign-environment replay, not an
+independent operator claim. Five runs across two architectures are finite compatibility
+observations; they do not discharge all platform independence. No model inference was rerun.
+
+`KIT_DIGESTS.txt` records that the ZIP used by Runs 3–4 was overwritten and is unavailable.
+Its recorded digest cannot recover those bytes. ZIP modification times make archive digests
+vary, while extracted-content and evidence-byte reproduction are separate checks. The initial
+Lean success wording was unearned: one run type-checked without excluding `sorry`, another
+skipped Lean entirely. Later repairs and failed toolchain attempts must remain in the record.
+
+Stage 5L Lane B's OTS log is pending at capture time. Lane D later reports three confirmed
+calendar branches and one pending branch, but `ots info` output describes proof structure;
+it is not this audit's fresh Bitcoin verification. The two `ANCHOR_ME.txt` files represent the
+same commitment with different prefix/newline bytes. OTS stamps the hash of the actual text
+file, not automatically the represented 32-byte digest. Its file hash must not be described as
+equal to the commitment hex. Lane D's local/cloud runs exercise the core and stub quorum
+packs; they do not establish independent-party custody or a newly integrated real quorum.
+The historical `StrictHostKeyChecking=no` command is a captured action, not current SSH guidance.

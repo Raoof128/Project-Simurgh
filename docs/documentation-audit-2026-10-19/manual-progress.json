@@ -103,7 +103,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
       "status": "read_pending_final_verification",
-      "assessment": "Read all AGPLv3 terms including reread of truncated sections 6/7. Preserve verbatim legal text; template placeholders are part of the license, not project defects. No license-change authority inferred.",
+      "assessment": "Read all AGPLv 3 terms including reread of truncated sections 6/7. Preserve verbatim legal text; template placeholders are part of the license, not project defects. No license-change authority inferred.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0"
@@ -171,7 +171,7 @@
       "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "ebbe9c6581e092aa5695d22ea843a83d0fe2fff78e9b8615186036861908ba4c"
+      "read_sha256": "d5680cc9554c94797ea440088fd1b4c7ea28b78f41b4ffb571ee362a31020e3c"
     },
     {
       "path": "docs/DECISIONS.md",
@@ -353,7 +353,7 @@
       "assessment": "Full guide read; carefully separates study denominators and original implementation receipts. Pending crosscheck with complete study documents, not universal verification from navigation.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "9a2e3fad61fc71f5fcdfe2c224e48087f5cc5c07f0b90d319d3ba28fc88a4b51"
+      "read_sha256": "edf44e4dfe1b289ad03cd48c4acc34675bc4cc958e07d868e4fac49594b9e1aa"
     },
     {
       "path": "docs/RISK_REGISTER.md",
@@ -428,7 +428,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "735aa45e514daa30d6e048be0fc035b3e0350f61dd88798697a9fc8396644c44",
       "status": "read_pending_final_verification",
-      "assessment": "Full 51-row lab description read: 17 cases x3 controls, four applied trace mutations, no-op exclusion, faults unknown and equal checkpoint/effect performance. Later durability/workflow gaps must be read at study scope.",
+      "assessment": "Full 51-row lab description read: 17 cases x 3 controls, four applied trace mutations, no-op exclusion, faults unknown and equal checkpoint/effect performance. Later durability/workflow gaps must be read at study scope.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "735aa45e514daa30d6e048be0fc035b3e0350f61dd88798697a9fc8396644c44"
@@ -519,7 +519,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "87e023754b8d6cea9b175ef65af817679432a1d05ebb3cc28201f6733774426d",
       "status": "read_pending_final_verification",
-      "assessment": "Read 20-test final receipt and observer accepted-stream timeout regression. Namespace restriction remains explicit; current-set census31 is not historical discharge. Same-host and unarchived temporary logs limits retained.",
+      "assessment": "Read 20-test final receipt and observer accepted-stream timeout regression. Namespace restriction remains explicit; current-set census 31 is not historical discharge. Same-host and unarchived temporary logs limits retained.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "87e023754b8d6cea9b175ef65af817679432a1d05ebb3cc28201f6733774426d"
@@ -1715,7 +1715,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "788b70bf7e42a8cfe31489d3175287c8e9304ce725de7f00ca28f9cfff1dc721",
       "status": "read_pending_final_verification",
-      "assessment": "Complete 2,726-line historical TAP transcript: 389 tests, 54 suites, 389 passes, zero failures/cancellations/skips/todos. Root unit-test glob is not the current full E2E campaign. Historical SHA-256 student-id assertion and macOS-only legacy proof validator are scoped to that revision, not current HMAC-v1 identity or cross-platform daemon envelope. Consent-hash tests check accepted syntax, not participant consent provenance. No new execution or independent pilot validation inferred.",
+      "assessment": "Complete 2,726-line historical TAP transcript: 389 tests, 54 suites, 389 passes, zero failures/cancellations/skips/todos. Root unit-test glob is not the current full E2E campaign. Historical SHA-256 student-id assertion and macOS-only legacy proof validator are scoped to that revision, not current HMAC-v 1 identity or cross-platform daemon envelope. Consent-hash tests check accepted syntax, not participant consent provenance. No new execution or independent pilot validation inferred.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "788b70bf7e42a8cfe31489d3175287c8e9304ce725de7f00ca28f9cfff1dc721"
@@ -2105,7 +2105,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "505b6236d211eecb913b23b5f2ba3b911dbdbb477e60ae2e67bfcfc2454f8173",
       "status": "read_pending_final_verification",
-      "assessment": "Read complete frozen evidence pack and each gate row. Receipt flags are assertions, lexical network scan bounded, Phase B provenance discrepancies retained. Counts refer to specific 92dabb4 freeze.",
+      "assessment": "Read complete frozen evidence pack and each gate row. Receipt flags are assertions, lexical network scan bounded, Phase B provenance discrepancies retained. Counts refer to specific 92 dabb 4 freeze.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "505b6236d211eecb913b23b5f2ba3b911dbdbb477e60ae2e67bfcfc2454f8173"
@@ -2378,7 +2378,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "14970b7b0036f620bf2957d6301c382684d89d32a2ac826e7fa2ffa6dba4c18d",
       "status": "read_pending_final_verification",
-      "assessment": "Complete earlier continuation receipt read: revisions 7bc4dfb6 and 6a5d12e7; 32 E2E steps, 580 tests, 16 explorer tests, 5,137 Node passes with three skips, 138 aggregate passes with four failures, strict browser exit 1. M37 links later implementation smoke at ebf2a752.",
+      "assessment": "Complete earlier continuation receipt read: revisions 7 bc 4 dfb 6 and 6 a 5 d 12 e 7; 32 E2E steps, 580 tests, 16 explorer tests, 5,137 Node passes with three skips, 138 aggregate passes with four failures, strict browser exit 1. M37 links later implementation smoke at ebf 2 a 752.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "14970b7b0036f620bf2957d6301c382684d89d32a2ac826e7fa2ffa6dba4c18d"
@@ -2482,7 +2482,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "4bacbdd13419560f4e698e02b809b0a1a0657e151249a1e4bcc87e9fdce3c4f2",
       "status": "read_pending_final_verification",
-      "assessment": "Complete receipt read: publication f020c56e and freeze 67d1442f; 16 tests, 48 generations, 144 branches and 1,440 snapshots. The 63 distributions include pip; clean status files and hosted run are scoped observations.",
+      "assessment": "Complete receipt read: publication f 020 c 56 e and freeze 67 d 1442 f; 16 tests, 48 generations, 144 branches and 1,440 snapshots. The 63 distributions include pip; clean status files and hosted run are scoped observations.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "4bacbdd13419560f4e698e02b809b0a1a0657e151249a1e4bcc87e9fdce3c4f2"
@@ -2859,7 +2859,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "bdace10fa347f8ddb1f891cff2d67d34dead1e63722b6a408343833f44d3e82a",
       "status": "read_pending_final_verification",
-      "assessment": "Full detector-v2 narrative names A10 false positive, A9 metadata smuggling, any-two-strong benign collisions and 256-bit opaque hash slots. Grammar checks shape rather than digest authenticity; new version preserves 3T frozen result. Red-team crypto held means listed finite attacks failed, not proof against arbitrary cryptographic compromise. Manual review/no attribution boundaries explicit.",
+      "assessment": "Full detector-v 2 narrative names A10 false positive, A9 metadata smuggling, any-two-strong benign collisions and 256-bit opaque hash slots. Grammar checks shape rather than digest authenticity; new version preserves 3T frozen result. Red-team crypto held means listed finite attacks failed, not proof against arbitrary cryptographic compromise. Manual review/no attribution boundaries explicit.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "bdace10fa347f8ddb1f891cff2d67d34dead1e63722b6a408343833f44d3e82a"
@@ -2898,7 +2898,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "d2d35e0070d965c2d01498832fc2631e31d5e02d5d37d9bc3852047dd6d96f85",
       "status": "read_pending_final_verification",
-      "assessment": "Full witness narrative: local Ed25519 and GitHub OIDC roots corroborate sealed evidence digest; CI computes exit results, but workflow provenance does not establish independent-party execution or live GPU origin. Offline verifier does not validate Sigstore layer; gh verification separate. Self-reported-origin caveat retained.",
+      "assessment": "Full witness narrative: local Ed 25519 and GitHub OIDC roots corroborate sealed evidence digest; CI computes exit results, but workflow provenance does not establish independent-party execution or live GPU origin. Offline verifier does not validate Sigstore layer; gh verification separate. Self-reported-origin caveat retained.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "d2d35e0070d965c2d01498832fc2631e31d5e02d5d37d9bc3852047dd6d96f85"
@@ -2937,7 +2937,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "971ae5af5c497ca1faf6d7c954b6a6f5ea1c6ac8fdc081ff8334a7537fd5c5d2",
       "status": "read_pending_final_verification",
-      "assessment": "Full July direction and dated updates read, including 4S/4U/4T/4V/4W. Six of22 machine-derivable template sections explicitly limited. Legally-binding-guidance claim incorrect; official Article73/113 source checked and M41 corrects distinction and application exceptions. Universal competitor gap/first/nobody proof claims unsupported; Sello composition qualifies prior-art table. Declared-participant/guarded-boundary nonclaims must constrain opening omniscient rhetoric.",
+      "assessment": "Full July direction and dated updates read, including 4S/4U/4T/4V/4W. Six of 22 machine-derivable template sections explicitly limited. Legally-binding-guidance claim incorrect; official Article 73/113 source checked and M41 corrects distinction and application exceptions. Universal competitor gap/first/nobody proof claims unsupported; Sello composition qualifies prior-art table. Declared-participant/guarded-boundary nonclaims must constrain opening omniscient rhetoric.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "971ae5af5c497ca1faf6d7c954b6a6f5ea1c6ac8fdc081ff8334a7537fd5c5d2"
@@ -2963,7 +2963,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "0356f884348fb929bead5b3d77851f8fae1c9250bdbee994c12f28971ef9b51e",
       "status": "read_pending_final_verification",
-      "assessment": "Full long-form historical brief read. Operator-cannot-fake, only-public-key, cannot-self-approve claims exceed later trust caveats; M40 corrects. 3VB classifier evidence, 4C live-agent taxonomy, frontier and red-team are different experiments, not additive denominators. OIDC provenance and independent consequence function do not establish independent human custody. 51 scripts not uniform replay; detailed 12/10/5/3/2 tiers retained. Stage5S comparison-bounded/unproven and Q0 6.2% limitations explicit. Live computer-use future status historical.",
+      "assessment": "Full long-form historical brief read. Operator-cannot-fake, only-public-key, cannot-self-approve claims exceed later trust caveats; M40 corrects. 3VB classifier evidence, 4C live-agent taxonomy, frontier and red-team are different experiments, not additive denominators. OIDC provenance and independent consequence function do not establish independent human custody. 51 scripts not uniform replay; detailed 12/10/5/3/2 tiers retained. Stage 5S comparison-bounded/unproven and Q0 6.2% limitations explicit. Live computer-use future status historical.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "0356f884348fb929bead5b3d77851f8fae1c9250bdbee994c12f28971ef9b51e"
@@ -2976,7 +2976,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "acd9552b0ea4b3845d4e551b09dcdd464155b0204401ece4b66e24d88d77725a",
       "status": "read_pending_final_verification",
-      "assessment": "Full historical related-work survey read. Anthropic June12 primary statement supports provider-account suspension, narrow alleged technique and defense-in-depth framing; not current-access determination or independent incident proof. Patent inventor list is not a precise patent reference or performance evidence. Guidance parallels are not endorsement, semantic equality, comparative superiority or certification. 2026 arXiv AgentDyn/Firewalls/PISmith titles verified separately; other paper content checks remain scoped.",
+      "assessment": "Full historical related-work survey read. Anthropic June 12 primary statement supports provider-account suspension, narrow alleged technique and defense-in-depth framing; not current-access determination or independent incident proof. Patent inventor list is not a precise patent reference or performance evidence. Guidance parallels are not endorsement, semantic equality, comparative superiority or certification. 2026 arXiv AgentDyn/Firewalls/PISmith titles verified separately; other paper content checks remain scoped.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "acd9552b0ea4b3845d4e551b09dcdd464155b0204401ece4b66e24d88d77725a"
@@ -2989,7 +2989,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "c7391611dd1f3aa0c1d874aba63b5f165e2e4d907a2377ddf8be6fa73b4bbb05",
       "status": "read_pending_final_verification",
-      "assessment": "Full findings and ablation read. 18/30 detection comprises13blocked5warned, heldout7/9 comprises6blocked1warned; larger denylist alone5/30, canonical14/30, heuristics18/30. Framing reduces blocked false positives but still warns; cannot claim all benign unflagged. Nine authored heldout attacks do not rule out corpus overfitting or solve obfuscation families; M42 narrows those causal/generalization assertions.",
+      "assessment": "Full findings and ablation read. 18/30 detection comprises 13 blocked 5 warned, heldout 7/9 comprises 6 blocked 1 warned; larger denylist alone 5/30, canonical 14/30, heuristics 18/30. Framing reduces blocked false positives but still warns; cannot claim all benign unflagged. Nine authored heldout attacks do not rule out corpus overfitting or solve obfuscation families; M42 narrows those causal/generalization assertions.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "c7391611dd1f3aa0c1d874aba63b5f165e2e4d907a2377ddf8be6fa73b4bbb05"
@@ -3041,7 +3041,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "8934c58166943d9a19a6594c8fffd6a64c703dcbf5f84075900881323f39d588",
       "status": "read_pending_final_verification",
-      "assessment": "Full mapping table read:60fixtures, metadata/audit/input/receipt regression mappings; requirement table is not executed result. No-egress row is static module import check, not host network enforcement. Unsafe-output claim limited finite leakage patterns.",
+      "assessment": "Full mapping table read:60 fixtures, metadata/audit/input/receipt regression mappings; requirement table is not executed result. No-egress row is static module import check, not host network enforcement. Unsafe-output claim limited finite leakage patterns.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "8934c58166943d9a19a6594c8fffd6a64c703dcbf5f84075900881323f39d588"
@@ -3080,7 +3080,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "65dbe8b92bdd989a07ae945da39e216797d40a7a6afe9cf5fe807e40d99c00af",
       "status": "read_pending_final_verification",
-      "assessment": "Full threat model read: synthetic provider-shaped tools and manifest selector; no live egresstype at frozen core. Deferred browser/MCP/multiagent now have separate research lanes, not retroactively included in core assurance. Existing preserved module must be read with M43 and current410retirement.",
+      "assessment": "Full threat model read: synthetic provider-shaped tools and manifest selector; no live egresstype at frozen core. Deferred browser/MCP/multiagent now have separate research lanes, not retroactively included in core assurance. Existing preserved module must be read with M43 and current 410 retirement.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "65dbe8b92bdd989a07ae945da39e216797d40a7a6afe9cf5fe807e40d99c00af"
@@ -3093,7 +3093,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "8a41061f513860132bb617e11e357e6a63de391a3525e87ceeee48333fddf0d3",
       "status": "read_pending_final_verification",
-      "assessment": "Full table read after truncated first output. Live-not-implemented and no-adapter rows historical, later live-disabled/adapter exception supersede.70fixture and gateway-only no-egress scope, Docker skips, lexical privacy controls distinct from semantic or host assurances.",
+      "assessment": "Full table read after truncated first output. Live-not-implemented and no-adapter rows historical, later live-disabled/adapter exception supersede.70 fixture and gateway-only no-egress scope, Docker skips, lexical privacy controls distinct from semantic or host assurances.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "8a41061f513860132bb617e11e357e6a63de391a3525e87ceeee48333fddf0d3"
@@ -3106,7 +3106,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "7424a5af22605cd4fe244dc2eaba3049917b90c4a715491a28de83bb1e38cb6e",
       "status": "read_pending_final_verification",
-      "assessment": "Full closeout:589unit pass,40/40synthetic fixtures,optionalAnthropic skipped,85checksteps pass2fail onmacOS. Two environment-specific failures remain failures, notallgreen; static allowedSDK and live-disabledreason intentional changes. Historical audit0at highlevel notcurrentdependencyassessment.",
+      "assessment": "Full closeout:589 unit pass,40/40 synthetic fixtures,optionalAnthropic skipped,85 checksteps pass 2 fail onmacOS. Two environment-specific failures remain failures, notallgreen; static allowedSDK and live-disabledreason intentional changes. Historical audit 0 at highlevel notcurrentdependencyassessment.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "7424a5af22605cd4fe244dc2eaba3049917b90c4a715491a28de83bb1e38cb6e"
@@ -3249,7 +3249,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "e05eaf75ab570a2bf4be0b975556a3d6fdcdc3cfb40a38ce4f2cf53369a45f58",
       "status": "read_pending_final_verification",
-      "assessment": "Complete core closeout: 30 vendored canary cases through HTTP, not full AgentDojo execution; over-defence 0/10 is this canary. Adapter pytest changes cwd; tag commands historical. Future Layer2 has since shipped separately.",
+      "assessment": "Complete core closeout: 30 vendored canary cases through HTTP, not full AgentDojo execution; over-defence 0/10 is this canary. Adapter pytest changes cwd; tag commands historical. Future Layer 2 has since shipped separately.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "e05eaf75ab570a2bf4be0b975556a3d6fdcdc3cfb40a38ce4f2cf53369a45f58"
@@ -3262,7 +3262,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "54fd205c2eb4ff00eeb916395856599562c543cfd4a980f2926e3c2be10a3d05",
       "status": "read_pending_final_verification",
-      "assessment": "Complete sampled closeout repeats unfrozen 0/10 utility and 10/10 over-defence history; current committed metrics show10/10 utility and0/10 over-defence, M42. Fixed /tmp venv may pre-exist. Real runner rewrites evidence; no new run authorized by read.",
+      "assessment": "Complete sampled closeout repeats unfrozen 0/10 utility and 10/10 over-defence history; current committed metrics show 10/10 utility and 0/10 over-defence, M42. Fixed /tmp venv may pre-exist. Real runner rewrites evidence; no new run authorized by read.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "54fd205c2eb4ff00eeb916395856599562c543cfd4a980f2926e3c2be10a3d05"
@@ -3288,7 +3288,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "5a0ba334db5f3deeeadd9f58aeeeb035004d8e10e95ea860aa5dab66024f705a",
       "status": "read_pending_final_verification",
-      "assessment": "Complete model lists scorer drift, in-loop enforcement, raw trajectory leakage and matched conditions. Final high-over-defence measured-finding claim is excluded prose history under3N/M42, not frozen current metric. Manifest assertions need source/execution provenance.",
+      "assessment": "Complete model lists scorer drift, in-loop enforcement, raw trajectory leakage and matched conditions. Final high-over-defence measured-finding claim is excluded prose history under 3N/M42, not frozen current metric. Manifest assertions need source/execution provenance.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "5a0ba334db5f3deeeadd9f58aeeeb035004d8e10e95ea860aa5dab66024f705a"
@@ -3340,7 +3340,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "ad3ac8f217248e3332afa2dfc81ecabdd18975615c30d58808e5b937197b1374",
       "status": "read_pending_final_verification",
-      "assessment": "Complete mapping: scorer-unmodified and version-pin checks test stored fields; without provenance they do not prove actual dependency/source identity. Canary blocked tool_called and receipt coverage concern30 known cases, not independent sink observation or unknown omitted events.",
+      "assessment": "Complete mapping: scorer-unmodified and version-pin checks test stored fields; without provenance they do not prove actual dependency/source identity. Canary blocked tool_called and receipt coverage concern 30 known cases, not independent sink observation or unknown omitted events.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "ad3ac8f217248e3332afa2dfc81ecabdd18975615c30d58808e5b937197b1374"
@@ -3353,7 +3353,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "ef1f2f7b51769aced80fdeb9c868de778544181d47e512ad54c27c0a08c74a59",
       "status": "read_pending_final_verification",
-      "assessment": "Complete historical completed plan read. Root-cause section uses correct system_seed/synthetic/task_data and tool_result/untrusted/reference, but Task1 Step3 proposes invalid agentdojo_benign_seed/agentdojo_untrusted_injection source_type values. Actual layer2_runner uses correct enums. Unchecked task boxes conflict with completed header; preserve as historical plan, not pending actions. Smoke script really runs writer directly; SIMURGH_RUN_STAGE3H_LAYER2 is not an enforced opt-in. Before/after collapse is unfrozen prose history per3N/M42.",
+      "assessment": "Complete historical completed plan read. Root-cause section uses correct system_seed/synthetic/task_data and tool_result/untrusted/reference, but Task 1 Step 3 proposes invalid agentdojo_benign_seed/agentdojo_untrusted_injection source_type values. Actual layer 2_runner uses correct enums. Unchecked task boxes conflict with completed header; preserve as historical plan, not pending actions. Smoke script really runs writer directly; SIMURGH_RUN_STAGE3H_LAYER2 is not an enforced opt-in. Before/after collapse is unfrozen prose history per 3N/M42.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "ef1f2f7b51769aced80fdeb9c868de778544181d47e512ad54c27c0a08c74a59"
@@ -3366,7 +3366,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "cd4e6f3fc696f3a682984c956542f5e453f2343972bddf250e4dd22eed9aa435",
       "status": "read_pending_final_verification",
-      "assessment": "Complete all-suite closeout:97benign949security1046receipts,625Node56adapter tests are dated. Deterministic known-good path means no live-model robustness result. Stage3K deferred is superseded by later probe; no new defense logic claimed.",
+      "assessment": "Complete all-suite closeout:97 benign 949 security 1046 receipts,625Node 56 adapter tests are dated. Deterministic known-good path means no live-model robustness result. Stage 3K deferred is superseded by later probe; no new defense logic claimed.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "cd4e6f3fc696f3a682984c956542f5e453f2343972bddf250e4dd22eed9aa435"
@@ -3379,7 +3379,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "9aadbf996c9deba9293d6d8f6a94af2eb29bfc1d213580586cd1a05ecaf7bae5",
       "status": "read_pending_final_verification",
-      "assessment": "Complete checklist fixes97/35/949 inventory and separate soft utility/ASR versus hard consequence/evidence requirements. Full all-suite evidence is required; workspace-only checkpoint insufficient. Stored false flags need source provenance and are not independent execution attestations.",
+      "assessment": "Complete checklist fixes 97/35/949 inventory and separate soft utility/ASR versus hard consequence/evidence requirements. Full all-suite evidence is required; workspace-only checkpoint insufficient. Stored false flags need source provenance and are not independent execution attestations.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "9aadbf996c9deba9293d6d8f6a94af2eb29bfc1d213580586cd1a05ecaf7bae5"
@@ -3405,7 +3405,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "75c416590c9e903b9a7a89eefed4dd502833ab04f8eda7d08cf295df562769bc",
       "status": "read_pending_final_verification",
-      "assessment": "Complete counts:40+20+16+21=97,560+140+144+105=949,combined1046; no denominator pooling with paper629. Audit OK is dated recorded result; no fresh run claimed. Requirements named hard/soft appropriately.",
+      "assessment": "Complete counts:40+20+16+21=97,560+140+144+105=949,combined 1046; no denominator pooling with paper 629. Audit OK is dated recorded result; no fresh run claimed. Requirements named hard/soft appropriately.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "75c416590c9e903b9a7a89eefed4dd502833ab04f8eda7d08cf295df562769bc"
@@ -3418,7 +3418,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "40e805a88fd1525d764ad2ba3799ccf5a46a8124284a7177c916ee19394e3b7f",
       "status": "read_pending_final_verification",
-      "assessment": "Complete deterministic probe:97benign,350mutations,35action-open,385security. No live provider. ZeroASR and goal-selection are bounded authored variants; comparing delta to3J949-case baseline is not matched-pair population improvement. Stage3L calibration not triggered; actual3L reference experiment separate.",
+      "assessment": "Complete deterministic probe:97 benign,350 mutations,35 action-open,385 security. No live provider. ZeroASR and goal-selection are bounded authored variants; comparing delta to 3J949-case baseline is not matched-pair population improvement. Stage 3L calibration not triggered; actual 3L reference experiment separate.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "40e805a88fd1525d764ad2ba3799ccf5a46a8124284a7177c916ee19394e3b7f"
@@ -3470,7 +3470,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "42828fdca591aed3879037f10ad9a62484c9b776717296fb3269c74cd8575f56",
       "status": "read_pending_final_verification",
-      "assessment": "Complete bounded180case frozen outcome,11unit642root historical passes.120downstream and30direct plus30controls remain separate. No real tools or actual Fable exploit run. Stage3M remediation not triggered is not absence of shipped3M attestation.",
+      "assessment": "Complete bounded 180 case frozen outcome,11 unit 642 root historical passes.120 downstream and 30 direct plus 30 controls remain separate. No real tools or actual Fable exploit run. Stage 3M remediation not triggered is not absence of shipped 3M attestation.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "42828fdca591aed3879037f10ad9a62484c9b776717296fb3269c74cd8575f56"
@@ -3483,7 +3483,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "936225e4ce0510d0b28153587553145fdfdfd41e0e0dd70be712ad1d03d74864",
       "status": "read_pending_final_verification",
-      "assessment": "Complete checked historical checklist atv1.5.0. Phrase absence/private/raw payload scans bounded; not all semantic leaks excluded. Policy drift and detector identity refer that release, not arbitrary current HEAD. No new review signatures inferred.",
+      "assessment": "Complete checked historical checklist atv 1.5.0. Phrase absence/private/raw payload scans bounded; not all semantic leaks excluded. Policy drift and detector identity refer that release, not arbitrary current HEAD. No new review signatures inferred.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "936225e4ce0510d0b28153587553145fdfdfd41e0e0dd70be712ad1d03d74864"
@@ -3496,7 +3496,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "0c1d846e5938f21590e3e1e9f5a3d59ee2d91125dd3b9376e867ac1a95b9c799",
       "status": "read_pending_final_verification",
-      "assessment": "Complete attacker capability table describes modeled memory/subagent drift but explicitly excludes actual MCP/computer/shell/provider tools.120input misses deliberately constructed;30direct blocked cannotcountasdownstream. Context demotion is configured boundary, not live-model obedience proof.",
+      "assessment": "Complete attacker capability table describes modeled memory/subagent drift but explicitly excludes actual MCP/computer/shell/provider tools.120 input misses deliberately constructed;30 direct blocked cannotcountasdownstream. Context demotion is configured boundary, not live-model obedience proof.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "0c1d846e5938f21590e3e1e9f5a3d59ee2d91125dd3b9376e867ac1a95b9c799"
@@ -3509,7 +3509,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "84c0a2b84f186be7760b099bae88d368be42774e760c198b9b823d777c0a1c9d",
       "status": "read_pending_final_verification",
-      "assessment": "Complete180/150/30 matrix read. Default verify versus opted regeneration distinguished; do not execute update path against frozen evidence for docs maintenance. Evidence-completeness header means coverage of declared fixture cases.",
+      "assessment": "Complete 180/150/30 matrix read. Default verify versus opted regeneration distinguished; do not execute update path against frozen evidence for docs maintenance. Evidence-completeness header means coverage of declared fixture cases.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "84c0a2b84f186be7760b099bae88d368be42774e760c198b9b823d777c0a1c9d"
@@ -3522,7 +3522,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "7d5da366e04dd78b00a6b5cd0c79f149012c48c54820cb44d4d28609e809ba34",
       "status": "read_pending_final_verification",
-      "assessment": "Complete committed verifier output and660unit count. Public key pinning and canonical signature assure represented content integrity, not independent execution truth. Explicitly does not upgrade sample audit to per-case full HMAC. Historical alltrue outputs notfresh run.",
+      "assessment": "Complete committed verifier output and 660 unit count. Public key pinning and canonical signature assure represented content integrity, not independent execution truth. Explicitly does not upgrade sample audit to per-case full HMAC. Historical alltrue outputs notfresh run.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "7d5da366e04dd78b00a6b5cd0c79f149012c48c54820cb44d4d28609e809ba34"
@@ -3782,7 +3782,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "2154b8c7f7c415d835df63481c69455c480ef8b4e3ecddf2a43e646ed5ac08bf",
       "status": "read_pending_final_verification",
-      "assessment": "Complete historical result: 104 gateway tests, four E2E tests and nine self-proof fixtures. M43 demonstrates an adapter response shape absent from the mock evidence. Swap events use HMAC, not per-event Ed25519. Current route retirement limits the supported entry point.",
+      "assessment": "Complete historical result: 104 gateway tests, four E2E tests and nine self-proof fixtures. M43 demonstrates an adapter response shape absent from the mock evidence. Swap events use HMAC, not per-event Ed 25519. Current route retirement limits the supported entry point.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "2154b8c7f7c415d835df63481c69455c480ef8b4e3ecddf2a43e646ed5ac08bf"
@@ -3938,7 +3938,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "c3a381e5d3c72b51555acb452b86422ec4137a50b7e4cbbe0c23baa768d0a3f9",
       "status": "read_pending_final_verification",
-      "assessment": "Complete additive v2 closeout: volume contextual, two strong families required, both main/regression digests bound, 3T preserved. No general accuracy or adaptive-evasion claim. Stage 3V-A later used synthetic recorded signal; actual OSS capture arrived 3V-B.",
+      "assessment": "Complete additive v 2 closeout: volume contextual, two strong families required, both main/regression digests bound, 3T preserved. No general accuracy or adaptive-evasion claim. Stage 3V-A later used synthetic recorded signal; actual OSS capture arrived 3V-B.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "c3a381e5d3c72b51555acb452b86422ec4137a50b7e4cbbe0c23baa768d0a3f9"
@@ -3964,7 +3964,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "3aa096b8d2316a0dbde5b93ff935ff2690935b177d21b8df2d87f0db1a90a518",
       "status": "read_pending_final_verification",
-      "assessment": "Complete second-round limitations: any two strong families can occur benignly; valid-shaped hashes are opaque slots. Grammar closes raw tag strings, not semantic privacy or trusted digest origin. Frozen v1 preserved; finite adversarial failures not universal crypto proof.",
+      "assessment": "Complete second-round limitations: any two strong families can occur benignly; valid-shaped hashes are opaque slots. Grammar closes raw tag strings, not semantic privacy or trusted digest origin. Frozen v 1 preserved; finite adversarial failures not universal crypto proof.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "3aa096b8d2316a0dbde5b93ff935ff2690935b177d21b8df2d87f0db1a90a518"
@@ -4042,7 +4042,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "22193c5b621a259f1917786ed4bc49422a6543974b093a0daafb9c51bbaf3672",
       "status": "read_pending_final_verification",
-      "assessment": "Complete captured LG4 closeout: 168 allowed, 12 blocked, 138 missed/contained, 180 cases. Raw-output-never-exported wording conflicts with deliberately committed raw_lg4_output replay source; derived bundle is metadata-only. Shipped header and next-tag-after-capture footer are historical status inconsistency.",
+      "assessment": "Complete captured LG4 closeout: 168 allowed, 12 blocked, 138 missed/contained, 180 cases. Raw-output-never-exported wording conflicts with deliberately committed raw_lg 4_output replay source; derived bundle is metadata-only. Shipped header and next-tag-after-capture footer are historical status inconsistency.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "22193c5b621a259f1917786ed4bc49422a6543974b093a0daafb9c51bbaf3672"
@@ -4055,7 +4055,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "08ba91da6672b6c8601fa4af398b0a2eae1f7a1c2069ccd6664309a6ddae4165",
       "status": "read_pending_final_verification",
-      "assessment": "Complete replay checklist explicitly names raw_lg4_output in frozen capture. Live flag, digest shape and non-1970 timestamp do not independently prove GPU execution. No model rerun in CI; origin self-reported retained.",
+      "assessment": "Complete replay checklist explicitly names raw_lg 4_output in frozen capture. Live flag, digest shape and non-1970 timestamp do not independently prove GPU execution. No model rerun in CI; origin self-reported retained.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "08ba91da6672b6c8601fa4af398b0a2eae1f7a1c2069ccd6664309a6ddae4165"
@@ -4094,7 +4094,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "b351282b131a23c0e2096f0e65cfc1c5597baaa129731f8aec864590a7b96a51",
       "status": "read_pending_final_verification",
-      "assessment": "Complete release witness closeout: pinned 3V-B release, offline Ed25519 and additive online OIDC. Mutable @v3 action recommendation needs current workflow inspection; no new workflow run claimed. Two roots are not two independent experiment operators.",
+      "assessment": "Complete release witness closeout: pinned 3V-B release, offline Ed 25519 and additive online OIDC. Mutable @v 3 action recommendation needs current workflow inspection; no new workflow run claimed. Two roots are not two independent experiment operators.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "b351282b131a23c0e2096f0e65cfc1c5597baaa129731f8aec864590a7b96a51"
@@ -4159,7 +4159,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "c92e3161113d5edcb7e41b2184c99cfc6ca8e95a5bd73c2c2373d2357e9f227b",
       "status": "read_pending_final_verification",
-      "assessment": "Complete clone/tag prerequisites and separate summaries.12rungs_passed includes index-only and hash tiers, not twelve full replays. git fetch --tags requires network setup before offline verification and may not supply every needed ancestor in a shallow clone.",
+      "assessment": "Complete clone/tag prerequisites and separate summaries.12 rungs_passed includes index-only and hash tiers, not twelve full replays. git fetch --tags requires network setup before offline verification and may not supply every needed ancestor in a shallow clone.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "c92e3161113d5edcb7e41b2184c99cfc6ca8e95a5bd73c2c2373d2357e9f227b"
@@ -4315,7 +4315,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "5acfef16a7ae1d2c8c5bd5c3614b35e071bdc14b8dcb90bc13d56bd3357e76b1",
       "status": "read_pending_final_verification",
-      "assessment": "Complete v0 closeout. Q8 enforces declared exposure policy, not measured capability transfer or distillation prevention. Raw 30 is over-budget, 29 harness/schema, 39 reserved. Weights 1/2/3/4 and a synthetic window are not empirical information bounds. Historical suite count retained.",
+      "assessment": "Complete v 0 closeout. Q8 enforces declared exposure policy, not measured capability transfer or distillation prevention. Raw 30 is over-budget, 29 harness/schema, 39 reserved. Weights 1/2/3/4 and a synthetic window are not empirical information bounds. Historical suite count retained.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "5acfef16a7ae1d2c8c5bd5c3614b35e071bdc14b8dcb90bc13d56bd3357e76b1"
@@ -4328,7 +4328,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "31be20059c7564f198e504ce993f41f26098ce75ecd00bf1bdf315b9df42f5c9",
       "status": "read_pending_final_verification",
-      "assessment": "Complete 333-line v1/v2 draft including truncated middle reread. Future scope/cluster/control receipts and raw 39 are not shipped v0. Provider reports and controls need source attribution; pseudonymous digests are not anonymity, weights are not QIF, reported measures are not independently observed. OpenAI Evals lifecycle is superseded by dated current deprecations.",
+      "assessment": "Complete 333-line v 1/v 2 draft including truncated middle reread. Future scope/cluster/control receipts and raw 39 are not shipped v 0. Provider reports and controls need source attribution; pseudonymous digests are not anonymity, weights are not QIF, reported measures are not independently observed. OpenAI Evals lifecycle is superseded by dated current deprecations.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "31be20059c7564f198e504ce993f41f26098ce75ecd00bf1bdf315b9df42f5c9"
@@ -4406,7 +4406,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "fe2e3f54529a9d8c66400eb533e1ffafed80d28bab65b5d9b5753cbba4ca4391",
       "status": "read_pending_final_verification",
-      "assessment": "Complete gate table. Check/check-e2e cannot establish every prose claim; tests cover implemented assertions. Lean CI, source guards and counts must bind the actual revision. Full-chain and tier scope remain distinct; no new run claimed.",
+      "assessment": "Complete gate table. Check/check-e 2 e cannot establish every prose claim; tests cover implemented assertions. Lean CI, source guards and counts must bind the actual revision. Full-chain and tier scope remain distinct; no new run claimed.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "fe2e3f54529a9d8c66400eb533e1ffafed80d28bab65b5d9b5753cbba4ca4391"
@@ -4718,7 +4718,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "3177dee2481ccf9e52e5762a9c6709e23c607d044c68f6c67126189fa4a35881",
       "status": "read_pending_final_verification",
-      "assessment": "Complete incident closeout. Separates pinned Article55 and draft Article73 templates, but first-ever/automatic-law-timing claims exceed evidence. Six of22 sections are machine projections, not complete legal answers. Synthetic beat anchoring is not actual incident awareness or filing. Browser/public-tier parity excludes signature and engine rerun.",
+      "assessment": "Complete incident closeout. Separates pinned Article 55 and draft Article 73 templates, but first-ever/automatic-law-timing claims exceed evidence. Six of 22 sections are machine projections, not complete legal answers. Synthetic beat anchoring is not actual incident awareness or filing. Browser/public-tier parity excludes signature and engine rerun.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "3177dee2481ccf9e52e5762a9c6709e23c607d044c68f6c67126189fa4a35881"
@@ -4744,7 +4744,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "d7fe3ce8922f84f5f69dc6de6167e82fab7ad32e63f7a2e4783b4078a62a0c29",
       "status": "read_pending_final_verification",
-      "assessment": "Complete counter-capsule closeout. Conflict status and mirror symmetry do not adjudicate truth or legally compel disclosure. Six recomputation sections and16 judgment-only are registry-scoped. Respondent-blindness booleans/minimal env are not OS access isolation. Firstness and internal scorecard are not external findings.",
+      "assessment": "Complete counter-capsule closeout. Conflict status and mirror symmetry do not adjudicate truth or legally compel disclosure. Six recomputation sections and 16 judgment-only are registry-scoped. Respondent-blindness booleans/minimal env are not OS access isolation. Firstness and internal scorecard are not external findings.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "d7fe3ce8922f84f5f69dc6de6167e82fab7ad32e63f7a2e4783b4078a62a0c29"
@@ -4796,7 +4796,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "bab5615ea8cc21f81c8a8394dd428fa72023b79494959f91d3684c7a1fb21e75",
       "status": "read_pending_final_verification",
-      "assessment": "Complete six-item residue closeout. One-of-six remaining miss is observed corpus residue, not a proved irreducible semantic floor. Author chooses seeds and transform table; deterministic residue does not remove selection bias. v2 union makes monotonicity by construction. Lane B is process-separated, not independent implementation/operator.",
+      "assessment": "Complete six-item residue closeout. One-of-six remaining miss is observed corpus residue, not a proved irreducible semantic floor. Author chooses seeds and transform table; deterministic residue does not remove selection bias. v 2 union makes monotonicity by construction. Lane B is process-separated, not independent implementation/operator.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "bab5615ea8cc21f81c8a8394dd428fa72023b79494959f91d3684c7a1fb21e75"
@@ -4809,7 +4809,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "0eae5f2f7e3776fd9ea505e0d31a5e08cc7a6cdb57c3b8d68f2e3c8e0c9561c0",
       "status": "read_pending_final_verification",
-      "assessment": "Complete ten-fixture document residue closeout. Counts18regions34applicable15/2slips are shadow-transform observations, not document truth or all possible slips. Public map reveals lengths/geometry and cannot establish withheld text analysis. Any-UTF8 needs canonical/size/runtime scope. Claimed regulatory deadline/secondary incident figures not fresh verified facts.",
+      "assessment": "Complete ten-fixture document residue closeout. Counts 18 regions 34 applicable 15/2 slips are shadow-transform observations, not document truth or all possible slips. Public map reveals lengths/geometry and cannot establish withheld text analysis. Any-UTF8 needs canonical/size/runtime scope. Claimed regulatory deadline/secondary incident figures not fresh verified facts.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "0eae5f2f7e3776fd9ea505e0d31a5e08cc7a6cdb57c3b8d68f2e3c8e0c9561c0"
@@ -4822,7 +4822,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "d2c5c726a735830066a1cfa3f7f0127bc0773a793a68563c635feacf11324c8a",
       "status": "read_pending_final_verification",
-      "assessment": "Complete workspace closeout. Opening reference-monitor language must be read with explicit Lane-C not-executed caveat; elided lens was completed in5B. Declaration signature binds bytes, not external before-capture chronology. Public withheld-tensor verification is structural. Decimal-string exactness and model-scale limitations retained.",
+      "assessment": "Complete workspace closeout. Opening reference-monitor language must be read with explicit Lane-C not-executed caveat; elided lens was completed in 5B. Declaration signature binds bytes, not external before-capture chronology. Public withheld-tensor verification is structural. Decimal-string exactness and model-scale limitations retained.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "d2c5c726a735830066a1cfa3f7f0127bc0773a793a68563c635feacf11324c8a"
@@ -4991,7 +4991,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "deb535382b026b75d84caed4a13a10ce6d6aec76bdb354cbd82fb23440ea66fc",
       "status": "read_pending_final_verification",
-      "assessment": "Complete three-root quorum closeout. Earlier independent two-machine receipt was raw372 pending, not the later confirmed raw0 bundle. Stage5Q-F002 subsequently falsified the local six-attack containment claim: five arms measured pristine input. Separate real anchor verification from invalid adversarial coverage; browser adapter-attestation is not independent anchor crypto.",
+      "assessment": "Complete three-root quorum closeout. Earlier independent two-machine receipt was raw 372 pending, not the later confirmed raw 0 bundle. Stage 5Q-F002 subsequently falsified the local six-attack containment claim: five arms measured pristine input. Separate real anchor verification from invalid adversarial coverage; browser adapter-attestation is not independent anchor crypto.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "deb535382b026b75d84caed4a13a10ce6d6aec76bdb354cbd82fb23440ea66fc"
@@ -5043,7 +5043,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "5ccc74ced48b82964213c03bff234506b2afa0b527b145615f65a57094c51987",
       "status": "read_pending_final_verification",
-      "assessment": "Complete13-section release closeout. Exact rational probability is conditional on sampling/model assumptions, not empirical detection calibration.210/210 export references are not behavioural coverage. Earlier stages already had semantic decision parity, so first-arithmetic/every-earlier-only-hashing overstates distinction. Only-CI-gated-stage statement is a dated finding superseded by later workflow integration.",
+      "assessment": "Complete 13-section release closeout. Exact rational probability is conditional on sampling/model assumptions, not empirical detection calibration.210/210 export references are not behavioural coverage. Earlier stages already had semantic decision parity, so first-arithmetic/every-earlier-only-hashing overstates distinction. Only-CI-gated-stage statement is a dated finding superseded by later workflow integration.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "5ccc74ced48b82964213c03bff234506b2afa0b527b145615f65a57094c51987"
@@ -5069,7 +5069,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "9e6bd67a98ef2060e88e7e1608f738ab3a53dbe56f45ca3b4eafb429f7348765",
       "status": "read_pending_final_verification",
-      "assessment": "Complete six-family identity map. Signature validity duration is not the full lifetime of principal accountability; PKI is not inherently durable identity. Partial order describes declared axes, not statistical independence. W3C/CAWG ecosystem absence claims need scope; no conformance or legal Article18 fulfillment inferred. Earlier keys/source quotes retained as dated records.",
+      "assessment": "Complete six-family identity map. Signature validity duration is not the full lifetime of principal accountability; PKI is not inherently durable identity. Partial order describes declared axes, not statistical independence. W3C/CAWG ecosystem absence claims need scope; no conformance or legal Article 18 fulfillment inferred. Earlier keys/source quotes retained as dated records.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "9e6bd67a98ef2060e88e7e1608f738ab3a53dbe56f45ca3b4eafb429f7348765"
@@ -5120,11 +5120,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "44bfa657b7e965e1a3ed9121b74b765df1b4b28c152fc3f24f344cfa68cc6b76",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete HTML source, styles and prose. M40\u2013M41 apply: absolute completeness, only-a-public-key, self-approval and binding-guidance claims exceed evidence; clone command omits tag checkout. Contains dated counts and outside-operator correction. System fonts/local image, no script or external font import; source review is not browser/layout validation.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "44bfa657b7e965e1a3ed9121b74b765df1b4b28c152fc3f24f344cfa68cc6b76"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-1-live/README.md",
@@ -5146,11 +5146,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "4e65c5b75d0563710407eb35a34157410d7ebd33c9a7058ca80d99b28345aa05",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete historical paid-run instructions. Unpinned vLLM minimum is not a reproducible environment; 8-bit VRAM estimate excludes runtime/KV overhead. Literal angle-bracket URLs are shell-invalid. Greedy seed zero does not ensure byte determinism under concurrent batching. No authentication shown for exposed endpoint; no new pod/inference authorized.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "4e65c5b75d0563710407eb35a34157410d7ebd33c9a7058ca80d99b28345aa05"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/README.md",
@@ -5159,11 +5159,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "14f7f3eca8b9a5947be99faaa4ef75e526d6f3fc1402596f9f9fda94c63cad90",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete three-experiment overview and demotion result. Different baselines 10 versus 9 must remain separate. Overlapping confidence intervals do not establish no effect in paired observations; model nondeterminism is an attribution hypothesis. Zero observed benchmark successes does not count every unauthorized side effect. Final next-action paragraph superseded by earlier gate results.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "14f7f3eca8b9a5947be99faaa4ef75e526d6f3fc1402596f9f9fda94c63cad90"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/authority-gate/RESULTS.md",
@@ -5172,11 +5172,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "e9390c2f74d71b361b18c372ccc1cbd5e188462aaefd65e7ecd069551c2d77f7",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete authority results:9/140 to 0,7/10 to 6,91/140 to 80;1569 gated 1111 blocked. Class denominator sum 140 retained. Per-action attribution explicitly missing, so benign regression is not established as either gate overblock or noise. Bounded stock-taxonomy result, not all side effects or general attack resistance.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "e9390c2f74d71b361b18c372ccc1cbd5e188462aaefd65e7ecd069551c2d77f7"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/authority-gate/byclass-output.txt",
@@ -5185,11 +5185,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "4442a8267591b5e099f41edf7815f6f2cc498cc51e04d4d6df15b2326873748f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 15-line analyzer output.9/140 to 0,7/10 to 6,91/140 to 80;1569/1111 gated/blocked. Classes 40+80+10+10=140; one user_task_8 regression. Frozen numerical receipt, no causal attribution or fresh run.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "4442a8267591b5e099f41edf7815f6f2cc498cc51e04d4d6df15b2326873748f"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/egress-gate/RESULTS.md",
@@ -5198,11 +5198,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "20d63a7c1a559f39105b5c153c5a83217dcf74d17b7e8a1d3e9c626e4e7004ec",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete egress results.9/140 to 4, benign 7/10 both, attackedutility 91 to 74;1574 gated 1111 blocked. Six baseline egress successes disappear while delete-only changes 3 to 4. No benign tax applies only ten observed tasks; zero regressions is not universal utility. Concurrent-batching explanation requires scoped attribution.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "20d63a7c1a559f39105b5c153c5a83217dcf74d17b7e8a1d3e9c626e4e7004ec"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/egress-gate/byclass-output.txt",
@@ -5211,11 +5211,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "b13821d97671bfc8e00dde0de08fe8b9a41a23e31a5573a99c03477583a5d90f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 15-line analyzer output. Four defended successes are delete_only; zero benign regressions among ten. Negative contained count -1 is arithmetic, not proof of harmful gate causality. Frozen receipt retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "b13821d97671bfc8e00dde0de08fe8b9a41a23e31a5573a99c03477583a5d90f"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3a/README.md",
@@ -5224,11 +5224,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "f43c541ba6acfaa58a08f8d45b2f048d003c5ee2138b09948fb52867d0cf6479",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 17-line alpha evidence guide. Input-only fixtures and later context-channel change are distinct scopes. Historical smoke starts server; fixture passes do not imply jailbreak immunity. Current retired route requires revision-aware reproduction.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "f43c541ba6acfaa58a08f8d45b2f048d003c5ee2138b09948fb52867d0cf6479"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3b/README.md",
@@ -5237,11 +5237,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "6be6f98002126325ff7e99e3d76bb46d4f101560e4bd4b96eda71cf5a1febac4",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 30 attack/15 benign baseline guide.2/30 detection is recorded weakness, not CI drift failure. --update-baseline is an evidence writer, not authorized audit action; angle-bracket URL is a placeholder. Multi-step fixtures are single-input proxies, not actual multiturn evaluation.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "6be6f98002126325ff7e99e3d76bb46d4f101560e4bd4b96eda71cf5a1febac4"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3d/README.md",
@@ -5250,11 +5250,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "5e05bdec08414cbfc9b6dc4ce0bed4f20f5d82b529b70adce9751a63fb08a630",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete six-category mock corpus guide. Last-turn expectations and reason-code subset assertions are correctly distinct from full traces/exact equality. Direct-import fixture runner is not HTTP E2E; --metrics writes frozen output. Changed expected fields require original stage authority, not this audit.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5e05bdec08414cbfc9b6dc4ce0bed4f20f5d82b529b70adce9751a63fb08a630"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3d/privacy-audit-output.txt",
@@ -5263,11 +5263,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "7da0aedbd8d7bc54e0ba0fad9c55e29827c692f5c4434fd24ca4f06e29830b86",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full four-line receipt: metrics metadata-only and receipt hash-only scans passed. This is a historical scanner output, not proof that all runtime ingress/storage excludes content.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "7da0aedbd8d7bc54e0ba0fad9c55e29827c692f5c4434fd24ca4f06e29830b86"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3d/security-audit-output.txt",
@@ -5276,11 +5276,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "264cfb7a4d7072c5ce75025d28b43a196cf0b9ac4d6fc682d50e2a761d58f19b",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 11-line receipt: nine checks passed, including network-import exclusion, input rejection and audit chain. Finite assertions do not prove every network path or immutable audit completeness. Historical output preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "264cfb7a4d7072c5ce75025d28b43a196cf0b9ac4d6fc682d50e2a761d58f19b"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3d/smoke-output.txt",
@@ -5289,11 +5289,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "cbb204255f47e37e945ef3f08dfd961ae6ab2c1399f69c73b9822a6bf0feb24d",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full nine-line smoke receipt: five activation/boundary smokes plus fixture runner 60 pass 0 fail. Aggregate status is dated; no new live provider or full-host test implied.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "cbb204255f47e37e945ef3f08dfd961ae6ab2c1399f69c73b9822a6bf0feb24d"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3e-live/privacy-audit-output.txt",
@@ -5302,11 +5302,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "83cff7a3dc195ce86028cd3897aac3af5afaa6566c59ce4fb69a3062b7576c3e",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire one-line PASS receipt read. It states no scan scope, revision or timestamp internally; interpret with its surrounding retained stage evidence, not as a standalone current privacy certification.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "83cff7a3dc195ce86028cd3897aac3af5afaa6566c59ce4fb69a3062b7576c3e"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3e-live/security-audit-output.txt",
@@ -5315,11 +5315,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "d709419801e5e431da997798455d8715e0a61a3729b7025cf91cf925897413be",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire one-line PASS receipt read. No internal test count or revision is present. It does not override later adapter findings or establish production security.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "d709419801e5e431da997798455d8715e0a61a3729b7025cf91cf925897413be"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3e-live/smoke-output.txt",
@@ -5328,11 +5328,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "bc52fa912914d15f4dac8a303c4e6e55ffccb031e669a6a70fd6053bf0f5311a",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 10-line receipt. Live provider explicitly skipped because environment disabled;40 fixturepasses are not 40 livecalls. Metrics write occurred historically. Preserve skip as skip.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "bc52fa912914d15f4dac8a303c4e6e55ffccb031e669a6a70fd6053bf0f5311a"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3e/README.md",
@@ -5341,11 +5341,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "62f4ccf2da296ade933315868550cea63f385adfdcf8664583d19162902d3386",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 70 fixture gateway guide. Recorded-fixture mode is synthetic, not a captured transcript. Raw payloads under fixtures distinguish source data from generated metadata. --metrics writes evidence; current/live behavior cannot be inferred from frozen core-only assertions.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "62f4ccf2da296ade933315868550cea63f385adfdcf8664583d19162902d3386"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3e/docker-smoke-output.txt",
@@ -5354,11 +5354,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "dd92beb345eaa38f796bd5b0a5fa144e4a7639ec5ab5550c2a611f4303ef427e",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire receipt says SKIP because Docker unavailable. This is not a passing container execution or evidence of runtime container security.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "dd92beb345eaa38f796bd5b0a5fa144e4a7639ec5ab5550c2a611f4303ef427e"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3e/privacy-audit-output.txt",
@@ -5367,11 +5367,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "8540e532f22c0f70a0688bd7fe50774fa271c3080af347a6c79d1e011a216c72",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full five-line receipt: seven generated files scanned, synthetic provenance and hash-only receipt checks passed. Finite lexical checks do not establish semantic privacy or every repository file.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "8540e532f22c0f70a0688bd7fe50774fa271c3080af347a6c79d1e011a216c72"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3e/security-audit-output.txt",
@@ -5380,11 +5380,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "e9d29b7ec55f48bc54f054306225e14f96ec2ee13fff5da86730414bc5c17966",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 17-line receipt:15 passes including absence of live adapter/imports at original core stage and Dockerfile nonroot check. Later adapter existence does not invalidate dated scope. Dockerfile text check is not a container execution.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "e9d29b7ec55f48bc54f054306225e14f96ec2ee13fff5da86730414bc5c17966"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3e/smoke-output.txt",
@@ -5393,11 +5393,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "aba5967887d3c24c207ecf7133c79ad8087121db09d47b0b06049330a6265ae5",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 11-line receipt: seven gateway mode/boundary smokes and 71 fixture-runnerpasses. Guide names 70 fixtures; assertion count need not equal fixture count. No fresh run or live provider inferred.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "aba5967887d3c24c207ecf7133c79ad8087121db09d47b0b06049330a6265ae5"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3f/README.md",
@@ -5406,11 +5406,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "387cb82914ca5cd0cb08443af0de29c9485d23b60f3b632054571a3a1548ff40",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 240-case synthetic evidence inventory and four reproduction commands. Raw source fixtures and generated metadata have separate privacy scope. Gate replay is declared consequence benchmark, not live model behavior or exhaustive attack-space coverage.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "387cb82914ca5cd0cb08443af0de29c9485d23b60f3b632054571a3a1548ff40"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3g/README.md",
@@ -5419,11 +5419,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "f9fff064bbdd5a11da66215378fe83f8ddbb699301457a419ca7c21c2d79c2cf",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 60-case shadow guide across three modes.180 modeobservations do not mean 180 livecalls. Live execution optional and outside key-free CI; literal model/key angle-bracket values need replacement and secrets must not enter shell history. No execution authorized here.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "f9fff064bbdd5a11da66215378fe83f8ddbb699301457a419ca7c21c2d79c2cf"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3h-layer2/README.md",
@@ -5432,11 +5432,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "08176d5070b9ed211330a1778c8168404cf041ac3789853db7aa231aa3daf7fb",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 11-line inventory of 10 benign/20 securitycases. Manifest hash binds sample, not independently witnessed pre-run chronology. Run/provider fields are provenance declarations. M42 distinguishes actual frozen metrics from excluded earlier narrative.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "08176d5070b9ed211330a1778c8168404cf041ac3789853db7aa231aa3daf7fb"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3h/README.md",
@@ -5445,11 +5445,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "29f9aa0628d66bf3ed7532e9d5013d0cb7bffeaa58460846d78c5dd3098a06d3",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 13-line guide. Core canary is synthetic; native utility/ASR requires Layer 2 external run. Metadata-only statement applies generated artifacts, not all synthetic canary content. Declared scorer pin is not independent verification.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "29f9aa0628d66bf3ed7532e9d5013d0cb7bffeaa58460846d78c5dd3098a06d3"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3k/README.md",
@@ -5458,11 +5458,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "484d46e817de0edd61cdb8e9a4a6c16415768c618530083ddc7d151e411d7945",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 21-line adaptive-readiness summary.350 mutations+35 action-open=385 securitycases,97 benign. operator_asr_delta stores counts per M44, not rate differences. Deterministic key-free replay is not adaptive live-model robustness.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "484d46e817de0edd61cdb8e9a4a6c16415768c618530083ddc7d151e411d7945"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3l/README.md",
@@ -5471,11 +5471,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "c4bfd12592f3f146e5d720a01ac121340fe0abc6f729b6deb333a3766581dc96",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 180-case evidence inventory and regeneration instructions. --update-metrics and prettier mutate frozen evidence and are not audit actions. Raw deterministic inputs exist in generator source even when not stored in evidence. Metadata scanning is scoped.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "c4bfd12592f3f146e5d720a01ac121340fe0abc6f729b6deb333a3766581dc96"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3l/citation-verification.md",
@@ -5484,11 +5484,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "6944790f8d3c8d328ab365cb3e64adcf97f3463f4ea4784efa2834ded76ad355",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete six-source citation table. Wired homepage plus unnamed secondary corroboration is not a precise article citation or verified incident claim. June 20 resolved status is historical, not October revalidation. Provider primary chronology is now separately sourced inM46.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "6944790f8d3c8d328ab365cb3e64adcf97f3463f4ea4784efa2834ded76ad355"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3l/runner-output.txt",
@@ -5497,11 +5497,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "617d4bc5a382c3b888945a13ae71e515c5c5119bec9e00b77dafe0703acbe569",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire one-line all-hard-gates PASS marker read. No revision, environment or individual checks in the line; surrounding artifact bindings are required.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "617d4bc5a382c3b888945a13ae71e515c5c5119bec9e00b77dafe0703acbe569"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3m/README.md",
@@ -5510,11 +5510,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "da1d75c80eb8f42246a711f4dd7e54c2a861950148359a2297e5f5e0bfed1396",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete signed evidence guide. Explicit expected fingerprint is stronger than only checking supplied sidecar agreement, but must be obtained through trusted provenance. --reproduce checks scoped run-set. Signing command needs private key and is not part of this audit.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "da1d75c80eb8f42246a711f4dd7e54c2a861950148359a2297e5f5e0bfed1396"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3m/verifier-output.txt",
@@ -5523,11 +5523,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "06116f5fd7048968bb168c81916998bbf4fd397f98fb6641bc6132d0936d4563",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 13-line verifier receipt read after truncation reread. All 11 named booleans true plusPASSandfingerprint. Receipt explicitly unsigned; signature, hashes and reproduced metrics do not prove real-world truth or independent signer identity.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "06116f5fd7048968bb168c81916998bbf4fd397f98fb6641bc6132d0936d4563"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3n/README.md",
@@ -5536,11 +5536,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "b75c0850d8bf86f73bac7978289df21011f42270d04a2572780b6fab8153affc",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete five-family ledger inventory after reread. No cross-family pooling; four measurement families plus 3Mattestation explains source count. Regeneration is an evidence writer. M42 excludes superseded 3H-L2 narrative rather than erasing it.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "b75c0850d8bf86f73bac7978289df21011f42270d04a2572780b6fab8153affc"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3n/citation-verification.md",
@@ -5549,11 +5549,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "cff6d7ab89ac6ac2ad49fc5e7605bd04ec2ddf5855eb12af82aaa2c218caf799",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete eight-source table after reread. June 20 resolution claims are historical; arXiv titles were checked separately but not all paper bodies. Reported task/URLcounts require primary methodological scope. AI100-1 baseRMF correctly distinct fromGenAIprofile.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "cff6d7ab89ac6ac2ad49fc5e7605bd04ec2ddf5855eb12af82aaa2c218caf799"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3n/runner-output.txt",
@@ -5562,11 +5562,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "a7617c57cf8e1e856c83eaaf1333d67edccc9435491a799a6ff279c3b05db99c",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire one-line all-hard-gates PASS marker read. Historical output does not establish new full-suite success or original source truth.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "a7617c57cf8e1e856c83eaaf1333d67edccc9435491a799a6ff279c3b05db99c"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3o/README.md",
@@ -5575,11 +5575,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "5982d866ed6f61c60043f747f67c2add52d3208b9fcf56eb24285ccad7aa25c7",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 150-case BYO inventory after reread.120 containedattackcases separate 30 benign;11 scoringfixtures separatebenchmarkdenominator. Maintenance/signing commands mutate evidence; arbitrary target example is not authorization for external testing. measured_not_certified retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5982d866ed6f61c60043f747f67c2add52d3208b9fcf56eb24285ccad7aa25c7"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3o/citation-verification.md",
@@ -5588,11 +5588,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "1ad8571b0da3dfef0ed60197c578a94e18c1acae713cf786d9aa8f64e16642c8",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete seven-source table after reread. Distinguish historicallinkresolution from fullclaimverification, datasetcounts fromsimurghmeasurements, and baseRMF fromGenAIprofile. No external benchmark result rerun here.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "1ad8571b0da3dfef0ed60197c578a94e18c1acae713cf786d9aa8f64e16642c8"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3o/runner-output.txt",
@@ -5601,11 +5601,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "6b0671ad669341523ccf80057730c2cba185f3ab95ea3525af1d5c0adc49dd25",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire one-line generation-gates PASS receipt read. Generation success is not independent reproduction, external target execution or current repository validation.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "6b0671ad669341523ccf80057730c2cba185f3ab95ea3525af1d5c0adc49dd25"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3p/keys/stage3p-key-fingerprint.txt",
@@ -5614,11 +5614,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "0d7f092aaca3ed19f43c35874e37ed24ef557826cd5611aa2c93f61373a07695",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire SHA-256 public-key fingerprint read. Identifier is not a secret; equality to a supplied key is not independent signer authentication. Frozen value preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "0d7f092aaca3ed19f43c35874e37ed24ef557826cd5611aa2c93f61373a07695"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3q/keys/stage3q-key-fingerprint.txt",
@@ -5627,11 +5627,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "3a96bdf22724e65ddacf6d42a0991efc09f0378f2b148c9d46c2d5cf7b955549",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire Stage 3Q SHA-256 key fingerprint read. Trust requires a separately chosen anchor; format/equality alone is not custody evidence. Frozen value preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "3a96bdf22724e65ddacf6d42a0991efc09f0378f2b148c9d46c2d5cf7b955549"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3q/registry/registry-head-digest.txt",
@@ -5640,11 +5640,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "4b09deab167ddc18dfb87847261be9c11de27e8e849450b3e3608f6783807a01",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire registry-head SHA-256 digest read. Commits a particular supplied registry state; not proof that no later state or alternate fork exists. Frozen value preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "4b09deab167ddc18dfb87847261be9c11de27e8e849450b3e3608f6783807a01"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3s/keys/stage3s-key-fingerprint.txt",
@@ -5653,11 +5653,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "97d4a394f709fbd6787b4c01b8ce48df3ee7cd97eeef00ebbf4efa17bf756b03",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire Stage 3S SHA-256 key fingerprint read. Public identifier distinguishes key bytes, not operator independence. Frozen value preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "97d4a394f709fbd6787b4c01b8ce48df3ee7cd97eeef00ebbf4efa17bf756b03"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3t/README.md",
@@ -5666,11 +5666,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "36133750dbb2f1607b06b3dafa5a3ef263a904290ae430b02fb5f0be1879bc1e",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete synthetic extraction evidence inventory and verify commands. Eleven benign-silence fixtures demonstrate selected behavior, not general false-positive absence. Stage 3U later identifies benign combination/metadata limits. No live traffic attribution.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "36133750dbb2f1607b06b3dafa5a3ef263a904290ae430b02fb5f0be1879bc1e"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3t/keys/fingerprint.txt",
@@ -5679,11 +5679,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "255dc540439cf8b7c9c3f3323819b64ddb9335acbcb98b982a5973d09c6d0c93",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire Stage 3T SHA-256 public-key fingerprint read; matches the README literal. Separate trust provenance still required. No change to frozen identifier.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "255dc540439cf8b7c9c3f3323819b64ddb9335acbcb98b982a5973d09c6d0c93"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3u/README.md",
@@ -5692,11 +5692,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "394d723dd1be96c446c6d337ed216f6a90ec4f2fa63318f2553ad1f03e3aee50",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete v 2 synthetic evidence guide. Grammar-enforced hashes can still encode opaque arbitrary values; two strong benign families can collide. Synthetic hashed labels are not evidence of real telemetry. Both versions remain separately reproducible.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "394d723dd1be96c446c6d337ed216f6a90ec4f2fa63318f2553ad1f03e3aee50"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3u/keys/fingerprint.txt",
@@ -5705,11 +5705,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "5c15e0fa332992cad55e07fc5e578471819535f5c94c329cef93490fbaa3c4ba",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire Stage 3U SHA-256 public-key fingerprint read; matches its README literal and differs from 3T. Different bytes do not establish independent custody.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5c15e0fa332992cad55e07fc5e578471819535f5c94c329cef93490fbaa3c4ba"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3v-b/README.md",
@@ -5718,11 +5718,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "0ad270d1eab7821df4ff53b67e0c034d17ea97ae9ec8fdce517c61b6d9c9baec",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete external-defence inventory. Explicitly commits raw classifier outputs as replay source while derived observations omit them. Model not rerun or weights rehashed by verifier; capture origin self-reported. Input-only guard deployment scope is distinct from arbitrary contextual use of same model.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "0ad270d1eab7821df4ff53b67e0c034d17ea97ae9ec8fdce517c61b6d9c9baec"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3v-b/keys/fingerprint.txt",
@@ -5731,11 +5731,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "644a6977aac4c94a5d307783c8176f7f1736aa7eb9fb5feaa8592d456d958178",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full public-key fingerprint read; identity requires an independently chosen trust anchor, not supplied sidecar agreement.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "644a6977aac4c94a5d307783c8176f7f1736aa7eb9fb5feaa8592d456d958178"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3v/README.md",
@@ -5744,11 +5744,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "83ab8d42ea0a116718472c37493a34867748f0b9fec76802b1ee2db40c899560",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete inventory: raw external output source distinguished from derived metadata; canonical signature binds content, not serialization. Portable and reproduction checks have different scopes. Advisory recorded-model evidence is not fresh inference.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "83ab8d42ea0a116718472c37493a34867748f0b9fec76802b1ee2db40c899560"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3v/keys/fingerprint.txt",
@@ -5757,11 +5757,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "3fade5e38e974898abb094d79482b02fd873124cd54d1a4314580d3d5dbd4bb4",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full public-key fingerprint read and preserved; not independent signer custody evidence.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "3fade5e38e974898abb094d79482b02fd873124cd54d1a4314580d3d5dbd4bb4"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3w/README.md",
@@ -5770,11 +5770,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "8739ae664c3192c7fbda562820205406dc850156957b8f19eca7e3ac26893fa7",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete offline Ed 25519 and optional online OIDC guide. Two cryptographic/workflow roots do not establish two independent operators or truth of original model outputs. GitHub verification needs exact subject, repository and workflow context.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "8739ae664c3192c7fbda562820205406dc850156957b8f19eca7e3ac26893fa7"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3w/keys/fingerprint.txt",
@@ -5783,11 +5783,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "479d4dadf7b1dc0b29488b3ba8d7587db6d7f5b3dc6e89a25d8bfdc5222b1302",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full public-key fingerprint read; fixed identifier preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "479d4dadf7b1dc0b29488b3ba8d7587db6d7f5b3dc6e89a25d8bfdc5222b1302"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3x/README.md",
@@ -5796,11 +5796,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "9d562559e607c2b3038fc900377b0d0affb1aba45b1db752ee19d92162f48442",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 12-rung inventory. Ten roots, five deep checks, three full reproductions and two index checks overlap rather than sum. Fetching tags alone does not guarantee full shallow-clone history. npm ci precedes offline checks.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "9d562559e607c2b3038fc900377b0d0affb1aba45b1db752ee19d92162f48442"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3x/keys/fingerprint.txt",
@@ -5809,11 +5809,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "d099c8171dc5b77ce5aec6773ff215fafe23d65b279de7b584ae3bf19f2c15b1",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full public-key fingerprint read; no independent operator attribution inferred.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "d099c8171dc5b77ce5aec6773ff215fafe23d65b279de7b584ae3bf19f2c15b1"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3y/README.md",
@@ -5822,11 +5822,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "afb77e438efee6fcecb18e7fc1c4f379c37e836496117a782761068bf2eb221b",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 35-goal by five-envelope corpus: 175 selected boundary cases, 35 detections, 140 misses, 170 demotions and five rejections. Structural demotion is not live containment. Dependent selected fixtures do not justify population-level CI interpretation.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "afb77e438efee6fcecb18e7fc1c4f379c37e836496117a782761068bf2eb221b"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-3z/README.md",
@@ -5835,11 +5835,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "bb74dd7808cca57763cdae29cded9a1f6ccd94baae314decfc10cc4b3349baab",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete four-case synthetic oracle demonstration: two corroborations, two conflicts, zero observed false or missed conflicts. Separate oracle channel is still same-operator evidence; closure depends on truthful independent custody outside this fixture.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "bb74dd7808cca57763cdae29cded9a1f6ccd94baae314decfc10cc4b3349baab"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4a-lite/RESULTS.md",
@@ -5848,11 +5848,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "2e9ab5d6e05462c7cccbf03ac97c3ec819b7017bb985796b7b6dbc89452e694a",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete model-free 26-decision result: 23 block, three allow, zero confirm. Frozen live result inherited through finite differential tests, not replayed live traces. Exhaustive argument-shape language exceeds finite test evidence.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "2e9ab5d6e05462c7cccbf03ac97c3ec819b7017bb985796b7b6dbc89452e694a"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4a-lite/keys/fingerprint.txt",
@@ -5861,11 +5861,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "2c75db76af13f3ab409ee9e965a38590b35170d50d16898e7b4181eb65c611b8",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full public-key fingerprint read; frozen bytes preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "2c75db76af13f3ab409ee9e965a38590b35170d50d16898e7b4181eb65c611b8"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4b-intent/RESULTS.md",
@@ -5874,11 +5874,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "c36abd1bf2bf281f0881e576821b8b83aadca9a781be2dccd5acd5f799d9c705",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete model-free intent result. Claimed original overblock cause contradicts authority-gate report: both addresses were explicit and causality untraced. Four synthetic recoveries and three required blocks do not establish recovery of observed live regression. Intent is trusted by construction.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "c36abd1bf2bf281f0881e576821b8b83aadca9a781be2dccd5acd5f799d9c705"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4b-intent/keys/fingerprint.txt",
@@ -5887,11 +5887,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "75d04ab7c96e4dd3f55cd0564e7f96673ab43a4742573e82af300264d0ebdd8c",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full public-key fingerprint read; trust provenance remains separate.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "75d04ab7c96e4dd3f55cd0564e7f96673ab43a4742573e82af300264d0ebdd8c"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4c-provenance/RELEASE-NOTES-stage-4-authority-chain.md",
@@ -5900,11 +5900,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "deb0b346c0537b9bdae9b78d59aa024e8dc1d99cf0227b0c4bac549f73ee3056",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete release note. Independent reproducibility is a capability, not proof of outside-party execution. Finite differential checks are not exhaustive all-input proof; documented live overblock cause was not established. Retained 128 adapter and 27 tamper passes are dated results.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "deb0b346c0537b9bdae9b78d59aa024e8dc1d99cf0227b0c4bac549f73ee3056"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4c-provenance/RESULTS.md",
@@ -5913,11 +5913,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "74f6bf1d3f388e121ab54c9f384552f6c1eae95c81fffa02edc7a077cd5507e4",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete modeled-provenance experiment: two poisoned entries contained, two synthetic recoveries, zero laundering. Faithful labels are assumed, not derived by live tracker. Finite fixture results do not prove universal gate soundness or live regression recovery.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "74f6bf1d3f388e121ab54c9f384552f6c1eae95c81fffa02edc7a077cd5507e4"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4c-provenance/keys/fingerprint.txt",
@@ -5926,11 +5926,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "2d87b80fdf44e0a7e8729b36708783a0ed7bee60f5afa1152817fc7becceb995",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full public-key fingerprint read; preserved identifier is not signer independence evidence.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "2d87b80fdf44e0a7e8729b36708783a0ed7bee60f5afa1152817fc7becceb995"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4d-decision-replay-evidence-pack/README.md",
@@ -5939,11 +5939,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "1fb596799f929724c2d9add24bb783298abbc39083b7792492d07dc51d3c7198",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete scoped completeness guide and explicit deterministic test-private-key disclosure. Completeness covers mediator-observed actions; non-bypassable enforcement remains separate. npm ci requires dependencies before offline replay; regeneration is a writer.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "1fb596799f929724c2d9add24bb783298abbc39083b7792492d07dc51d3c7198"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4d-to-4f-integration/README.md",
@@ -5952,11 +5952,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "f3423cf1e8e9ccd3d1aede95c1e667f76b52cd0542157133df8a990260986f30",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete three-line historical integration guide. Regeneration command writes evidence and is not authorization to overwrite frozen artifacts during audit.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "f3423cf1e8e9ccd3d1aede95c1e667f76b52cd0542157133df8a990260986f30"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4e-browser-agent-containment-run/README.md",
@@ -5965,11 +5965,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "7919a51ea70027be40f63a249b4ae0153d90ae0be6c0ad809f54767eea37a8a5",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete recorded-fixture one-scene proof sketch, four arms and exit contract. Observed-but-unreceipted detection does not detect jointly omitted observation and receipt. Signer/verifier trusted; no live browser-agent or execution truth inferred.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "7919a51ea70027be40f63a249b4ae0153d90ae0be6c0ad809f54767eea37a8a5"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4f-containment-utility-pareto/canary/README.md",
@@ -5978,11 +5978,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "81db86be652885298569bfb6aa55e56c5880bba67a27faac6f000c0cfaf0b7aa",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete canary lane note. External public-key argument, expected negative reasons and byte stability correctly distinguished from lane-local convenience key.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "81db86be652885298569bfb6aa55e56c5880bba67a27faac6f000c0cfaf0b7aa"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4f-containment-utility-pareto/canary/clean/README.md",
@@ -5991,11 +5991,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "d37a713e919ba361a3c777aafb5cc474ebcf025917cfa90fc36aa8dd2ed54603",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete metric semantics. Authorized reached actions differ from attack-success cells; equal frontier points show no observed tradeoff on this suite, not global optimum. Certification wording limited to record integrity.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "d37a713e919ba361a3c777aafb5cc474ebcf025917cfa90fc36aa8dd2ed54603"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4f-containment-utility-pareto/full-suite/README.md",
@@ -6004,11 +6004,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "75904fb13a7006dbf4eb21eb730bcd1967c3781fd90d3e2996015d03a576e508",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete full-suite lane note. Corpus scope and external key trust explicitly stated; no population robustness implied.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "75904fb13a7006dbf4eb21eb730bcd1967c3781fd90d3e2996015d03a576e508"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4f-containment-utility-pareto/full-suite/clean/README.md",
@@ -6017,11 +6017,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "6174bcad0d4c14b4032706d70334afc6205b2c4537e258a0d37e090c3c0a6ee2",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete metric semantics independently read. Zero attack-success rate can coexist with authorized irreversible effects; frontier ties are not proof of optimality.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "6174bcad0d4c14b4032706d70334afc6205b2c4537e258a0d37e090c3c0a6ee2"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4g-adaptive-red-team-campaign/README.md",
@@ -6030,11 +6030,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "2287c27ee5ca8fc46677f5f0a24dbe60633db4ff8fe3c1b4ce39731f8a63540d",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete four-attempt campaign: two caught, one escape, one out of scope. Passing integrity check honestly retains escape and is not attack-prevention success; completeness bounded to precommitted schedule.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "2287c27ee5ca8fc46677f5f0a24dbe60633db4ff8fe3c1b4ce39731f8a63540d"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4h/README.md",
@@ -6043,11 +6043,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "cd80ff1478fbb652c2265b5d9e9aac1b6ccc047217b54227b93bfb9953daa8db",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete Q0\u2013Q7 reproduction guide. Explicit non-claims include implicit flows, collusion, execution truth and kernel isolation. Exit zero is expected historical contract, not new run.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "cd80ff1478fbb652c2265b5d9e9aac1b6ccc047217b54227b93bfb9953daa8db"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4j/README.md",
@@ -6056,11 +6056,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "ed103a6c06dcc57a53765fd9f90f4f93383177236396b5b398fd390172cb6855",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete five-artifact inventory. Applied means recorded-as-allowed; verifier does not execute or block. Expected-matrix agreement is finite declared evidence consistency.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "ed103a6c06dcc57a53765fd9f90f4f93383177236396b5b398fd390172cb6855"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4k/README.md",
@@ -6069,11 +6069,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "3365d7a436699233ab49a2571bdd8acc72021c72730d68b23bad965da32a43e2",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete evidence inventory and byte-stability distinction. Fresh signing keys change manifest signatures while fixed ledger bytes remain stable. Exposure weights are declared policy, synthetic stream and pseudonyms, not measured transfer or anonymity.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "3365d7a436699233ab49a2571bdd8acc72021c72730d68b23bad965da32a43e2"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4l/README.md",
@@ -6082,11 +6082,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "983dae7c1cd6c0b971a5044ec5e8d6d9afe0fb25dd3855de55db349584b3da81",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete synthetic cluster guide. One 100-account cluster is caught; 100 singletons evade honestly. Enforcement depends on supplied clustering, not identity truth or Sybil closure.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "983dae7c1cd6c0b971a5044ec5e8d6d9afe0fb25dd3855de55db349584b3da81"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4m/README.md",
@@ -6095,11 +6095,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "978c009335c5720917c0cfab5f03243af1a6ff803073dfc8382394da6fb064fa",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete browser/evidence guide. Article 73 projection is not legal compliance; Tier R explicitly seeded rather than full respondent slice. Any-browser claim needs browser compatibility validation; source generation parity alone does not establish browser behavior.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "978c009335c5720917c0cfab5f03243af1a6ff803073dfc8382394da6fb064fa"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4m/verify-stage4m.html",
@@ -6108,11 +6108,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "76860c0b7a0542610d7ad7adb3fd940d944e139e5c1f83db774c18249ad8a445",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All 1065 source lines read in four ranges. Fatal duplicate const fail declarations in one module prevent parsing; exact extracted module fails Node 26 --check. No browser execution claimed. Also source adapter passes acknowledgement respondent key as provider key, and accumulates dropped files across bundles; these need separate runtime investigation after parse repair. Frozen artifact retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "76860c0b7a0542610d7ad7adb3fd940d944e139e5c1f83db774c18249ad8a445"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4n/README.md",
@@ -6121,11 +6121,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "1cf08980ecb7990d5d4e70e4ef4c746f286f4e7dcef23aa2af096b394c46b185",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete public heartbeat inventory. Seven heartbeats and five reveals are synthetic chronology. Denylisted inclusion-proof keys limit selected linkage fields, not all possible metadata linkage; public policy and hash commitments do not guarantee nothing leaks.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "1cf08980ecb7990d5d4e70e4ef4c746f286f4e7dcef23aa2af096b394c46b185"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4o/README.md",
@@ -6134,11 +6134,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "41c87d18ee165ab86e46940f0553dde3e7574e9f30ed617da670cb385fb9f55d",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete evidence/fixture-key guide. Embedded public key verifies self-consistency but needs independently pinned trust for production identity. Two signing roles do not alone ensure independent custody. No human reading or incident prevention claimed.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "41c87d18ee165ab86e46940f0553dde3e7574e9f30ed617da670cb385fb9f55d"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4r/reviewer-runs/README.md",
@@ -6147,11 +6147,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "07a4f941b53de9e4287a31e92f0083380269e6122a4245600cd83c159610ed31",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete six-row reviewer ledger. Distinct fingerprints establish distinct keys, not machines or operators; persistent files can be replaced or copied, so padding-impossible assertion is false. Requester reports out-of-band confirmation, not cryptographic proof. Listed Node majors 18/20/22 number three, not four. No new outreach or identity verification.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "07a4f941b53de9e4287a31e92f0083380269e6122a4245600cd83c159610ed31"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4t/laneb/README.md",
@@ -6160,11 +6160,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "f6a45d5e44ad7bfd2a28ab3502e5040fbed3ba68ec6160c4ac2a84e94088e068",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete live two-process MCP capture description. Real stdio handshake differs from outside-party operation or model inference. Same capsule root binds supplied audience projections, not absence of undisclosed alternate roots. Legal seriousness remains human input.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "f6a45d5e44ad7bfd2a28ab3502e5040fbed3ba68ec6160c4ac2a84e94088e068"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4y/botched_marker_shaped.document.txt",
@@ -6173,11 +6173,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "84511ceaf4e6604b444e6b6658f2080788996e13b33a03a4ee6f723072e232b6",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete synthetic document fixture read. Numbers, prose and redaction markers are selected extraction inputs, not real incident, survey or legal-policy evidence. Lexical coverage is limited to these declared fixtures; frozen bytes retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "84511ceaf4e6604b444e6b6658f2080788996e13b33a03a4ee6f723072e232b6"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4y/consulting_report_shaped_v1.document.txt",
@@ -6186,11 +6186,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "1e6b02780b2ae8a1a20c797676a3d02c7c5d1067a3de74c8c7825189bc95aca6",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete synthetic document fixture read. Numbers, prose and redaction markers are selected extraction inputs, not real incident, survey or legal-policy evidence. Lexical coverage is limited to these declared fixtures; frozen bytes retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "1e6b02780b2ae8a1a20c797676a3d02c7c5d1067a3de74c8c7825189bc95aca6"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4y/consulting_report_shaped_v2.document.txt",
@@ -6199,11 +6199,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "616b9d90c2c5953bb5c64991c7b8eb9b17a3b29d2aa7c8311b0cba4d9a73fdd4",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete synthetic document fixture read. Numbers, prose and redaction markers are selected extraction inputs, not real incident, survey or legal-policy evidence. Lexical coverage is limited to these declared fixtures; frozen bytes retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "616b9d90c2c5953bb5c64991c7b8eb9b17a3b29d2aa7c8311b0cba4d9a73fdd4"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4y/incident_report_shaped.document.txt",
@@ -6212,11 +6212,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "4632d586fc81eefc30db35c6925494f5ee1a43195652c3f1320e1dbde367af68",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete synthetic document fixture read. Numbers, prose and redaction markers are selected extraction inputs, not real incident, survey or legal-policy evidence. Lexical coverage is limited to these declared fixtures; frozen bytes retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "4632d586fc81eefc30db35c6925494f5ee1a43195652c3f1320e1dbde367af68"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4y/minimal_edge.document.txt",
@@ -6225,11 +6225,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "ec7f78f45557e24af07f3b19e2da031873a66d878ac7717d682ff51c23bd8da4",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete synthetic document fixture read. Numbers, prose and redaction markers are selected extraction inputs, not real incident, survey or legal-policy evidence. Lexical coverage is limited to these declared fixtures; frozen bytes retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "ec7f78f45557e24af07f3b19e2da031873a66d878ac7717d682ff51c23bd8da4"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4y/reconciliation_mismatch_shaped.document.txt",
@@ -6238,11 +6238,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "3b1c4f2672e018fde0279265acfe6e07d381f6fc88662a0d16e03c147144d5fe",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete synthetic document fixture read. Numbers, prose and redaction markers are selected extraction inputs, not real incident, survey or legal-policy evidence. Lexical coverage is limited to these declared fixtures; frozen bytes retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "3b1c4f2672e018fde0279265acfe6e07d381f6fc88662a0d16e03c147144d5fe"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4y/risk_report_shaped_private.document.txt",
@@ -6251,11 +6251,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "8239074fa4422d65d0dac3fd0f407d4e68b40aa7cbdc7e6cae9f8ad477759891",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete synthetic document fixture read. Numbers, prose and redaction markers are selected extraction inputs, not real incident, survey or legal-policy evidence. Lexical coverage is limited to these declared fixtures; frozen bytes retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "8239074fa4422d65d0dac3fd0f407d4e68b40aa7cbdc7e6cae9f8ad477759891"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4y/risk_report_shaped_public.document.txt",
@@ -6264,11 +6264,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "8fc8595391c5832183fb8150c84469c47f136de3a5a2e92fc3005e001710f06f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete synthetic document fixture read. Numbers, prose and redaction markers are selected extraction inputs, not real incident, survey or legal-policy evidence. Lexical coverage is limited to these declared fixtures; frozen bytes retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "8fc8595391c5832183fb8150c84469c47f136de3a5a2e92fc3005e001710f06f"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-4y/withdrawn_policy_shaped.document.txt",
@@ -6277,11 +6277,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "78d79503f66ea0b1cd42d8c9a670576bc86881bef443527a70a2beed23ebdda0",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete synthetic document fixture read. Numbers, prose and redaction markers are selected extraction inputs, not real incident, survey or legal-policy evidence. Lexical coverage is limited to these declared fixtures; frozen bytes retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "78d79503f66ea0b1cd42d8c9a670576bc86881bef443527a70a2beed23ebdda0"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-5e-independent-verification/KIT_DIGESTS.txt",
@@ -6290,11 +6290,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "65b35f1c2721c22e9ea4e3d78b83d35aeb3b24a5d96375b4a26dc4c352850013",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete five-artifact identity history. Runs 3\u20134 exact archive not retained; recorded digest cannot reconstruct it. ZIP mtimes prevent archive-byte reproduction; extracted content and signed evidence have distinct scopes. Runs 1\u20132 false Lean success disclosed.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "65b35f1c2721c22e9ea4e3d78b83d35aeb3b24a5d96375b4a26dc4c352850013"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-5e-independent-verification/RAW_RESULTS.md",
@@ -6316,11 +6316,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "5d0bdda7b5a746a0c517b83acb7510fadd156017a47f23f51a8aecdd23af9ea8",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete corrected conformance framing. Independent environment evidence only; party attestation uncompleted and author SSH access prevents independence inference. Five runs across two architectures are finite compatibility observations. Lean absence skip differs from broken-toolchain failure. Run 3\u20134 kit lost.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5d0bdda7b5a746a0c517b83acb7510fadd156017a47f23f51a8aecdd23af9ea8"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-5e/droplet-repro-receipt.txt",
@@ -6329,11 +6329,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "6a8755c501afcba8f4d9ab6c6e67cbf14256e06917bc1e3ab762f8125dcee656",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete historical environment receipt. Explicit author-owned VM and no model inference. Step six says gated by CI, not local Lean execution. Arithmetic score near 9.6 is internal opinion; finite cross-architecture observations are not universal platform independence.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "6a8755c501afcba8f4d9ab6c6e67cbf14256e06917bc1e3ab762f8125dcee656"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-5k/real-lanec/ANCHOR_ME.txt",
@@ -6342,11 +6342,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "5f026ef39db4416e744a36aaad8f1af372b7525981466117de7cc44785a1ca74",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire prefixed digest read. Anchor text bytes differ from raw 32-byte digest; independent timestamp/custody requires separate proof.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5f026ef39db4416e744a36aaad8f1af372b7525981466117de7cc44785a1ca74"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-5l/real-laneb/ANCHOR_ME.txt",
@@ -6355,11 +6355,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "9f1f14af4cafd0243fa37787822f2afcd3b599090f081d56aad6dc854ea0366d",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire unprefixed anchor text read. Its file hash differs from the represented commitment digest; preserve exact newline and representation.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "9f1f14af4cafd0243fa37787822f2afcd3b599090f081d56aad6dc854ea0366d"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-5l/real-laneb/VERIFY_LOG.txt",
@@ -6368,11 +6368,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "e64505480944fc29bc319d8fbcc497d5ab5212626655ed9d3a71bdb17517aae9",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 15-line historical log. DigiCert status and verification reported; OTS still pending in this capture. The OTS target hash covers text-file bytes, not equal to represented commitment hex. Later lane-D confirmation is separate evidence.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "e64505480944fc29bc319d8fbcc497d5ab5212626655ed9d3a71bdb17517aae9"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-5l/real-laned/ANCHOR_ME.txt",
@@ -6381,11 +6381,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "6e1dd226b872bb0ff23a36a68dd1203cc1e8e94d20ad6f5133f70a21f4c3ca34",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire prefixed anchor text read. Same represented commitment as lane B, different file representation and hash; no claim of byte identity between those files.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "6e1dd226b872bb0ff23a36a68dd1203cc1e8e94d20ad6f5133f70a21f4c3ca34"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-5l/real-laned/RAW_RESULTS.md",
@@ -6394,11 +6394,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "ece26a3ace91afe9a9e6f8af3b9d6c31546ee0702efdee9bb7972987da090b4f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All 198 lines read. Local and author-accessed remote runs verify selected core/stub bundles; not independent party or real quorum integration. SSH host-key checking disabled in historical command, not current guidance. Three OTS branches reported confirmed, one pending; info output reports proof structure, not a fresh full Bitcoin verification. Source contains a repeated block-height typo in final summary.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "ece26a3ace91afe9a9e6f8af3b9d6c31546ee0702efdee9bb7972987da090b4f"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-5m/real-laneb/canonical-anchor.txt",
@@ -6407,11 +6407,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "25f17ef0da3497b7146e6b6def28526c2ac53a0b7fa63c4882d069831e0b77cb",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire canonical anchor digest read; file identity and timestamp chronology require separate proof, not the hex label alone.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "25f17ef0da3497b7146e6b6def28526c2ac53a0b7fa63c4882d069831e0b77cb"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-5n/real-laneb/end_artifact.txt",
@@ -6420,11 +6420,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "5ddb9c696531b2e303c19aef230a335b4f397a1d1f2007ea65a5a7f364523f2c",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire ending artifact digest read; label alone does not prove when underlying work occurred.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5ddb9c696531b2e303c19aef230a335b4f397a1d1f2007ea65a5a7f364523f2c"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-5n/real-laneb/start_artifact.txt",
@@ -6433,11 +6433,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "89bf6ffbdd8401d3e9cd0fa2d7083f73e4992a886febd3b4207c6cbe999eff38",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire starting artifact digest read; chronology depends on bound external timestamp evidence.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "89bf6ffbdd8401d3e9cd0fa2d7083f73e4992a886febd3b4207c6cbe999eff38"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-5p/gleif-capture/sha256-manifest.txt",
@@ -6772,7 +6772,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "a882ddd57b9cf6b29ea5ed3e0c3d3695b4e23c109f8c7e3e24e4c678c3e38007",
       "status": "read_pending_final_verification",
-      "assessment": "Complete results read: 22/24 active, credential-only16/24 stopped effects versus zero composed, four earlier effects/control, 44 sends/four declines; descriptive intervals and batch timing bounded, Phase 8 review status superseded.",
+      "assessment": "Complete results read: 22/24 active, credential-only 16/24 stopped effects versus zero composed, four earlier effects/control, 44 sends/four declines; descriptive intervals and batch timing bounded, Phase 8 review status superseded.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "a882ddd57b9cf6b29ea5ed3e0c3d3695b4e23c109f8c7e3e24e4c678c3e38007"
@@ -6811,7 +6811,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "1de8ea0b953bd70cc592ca135ed287ef4394f7bebf36a75291776994b174cf8b",
       "status": "read_pending_final_verification",
-      "assessment": "Complete script read: gallery-crate example explicitly post-run, g2 wrong inbox/g18 invalid/g19 decline; model prevention versus SDK transport and outside custody correctly separated; next tasks historical.",
+      "assessment": "Complete script read: gallery-crate example explicitly post-run, g 2 wrong inbox/g 18 invalid/g 19 decline; model prevention versus SDK transport and outside custody correctly separated; next tasks historical.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "1de8ea0b953bd70cc592ca135ed287ef4394f7bebf36a75291776994b174cf8b"
@@ -7578,7 +7578,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "cddc4429c4390d2ea69994aa06f1b721948b59272c3fec532d73560cabdf353b",
       "status": "read_pending_final_verification",
-      "assessment": "Read all evidence/license/reviewer tables. Header Stage2 merged contradicts not-implemented body; MIT is not current license; helper privacy and empty scanner limits apply. M32 preserves historical scope.",
+      "assessment": "Read all evidence/license/reviewer tables. Header Stage 2 merged contradicts not-implemented body; MIT is not current license; helper privacy and empty scanner limits apply. M32 preserves historical scope.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "cddc4429c4390d2ea69994aa06f1b721948b59272c3fec532d73560cabdf353b"
@@ -7643,7 +7643,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "c021572ec42cad8062fe72a08f0e7157ffad4d2bb443d606b8de5e874e656325",
       "status": "read_pending_final_verification",
-      "assessment": "Read all 400 lines. Universal capture/DRM claims, SHA256 identity, shell-invalid audit command, Ed25519 sketch, warning string and Keychain never-leaves claim need M01/M03/M30/M31/M32 scope. Preserve historical 234 and 50 counts.",
+      "assessment": "Read all 400 lines. Universal capture/DRM claims, SHA256 identity, shell-invalid audit command, Ed 25519 sketch, warning string and Keychain never-leaves claim need M01/M03/M30/M31/M32 scope. Preserve historical 234 and 50 counts.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "c021572ec42cad8062fe72a08f0e7157ffad4d2bb443d606b8de5e874e656325"
@@ -7747,7 +7747,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "6ac118f8d0f6ca0d90dddfc4cbcec2b70c32f01bb5e3262b67a4e121f483dffc",
       "status": "read_pending_final_verification",
-      "assessment": "Read full dated architecture and illustrative payload. Local-log root/revocation/node-status route are proposals; Stage2.5 implemented CoreGraphics, not proposed ScreenCaptureKit. M30/M32.",
+      "assessment": "Read full dated architecture and illustrative payload. Local-log root/revocation/node-status route are proposals; Stage 2.5 implemented CoreGraphics, not proposed ScreenCaptureKit. M30/M32.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "6ac118f8d0f6ca0d90dddfc4cbcec2b70c32f01bb5e3262b67a4e121f483dffc"
@@ -7786,7 +7786,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "be66d6cfa846f5690812a75913dec32a7aa5c931c9c4f5c016d39ccd4ec9af89",
       "status": "read_pending_final_verification",
-      "assessment": "Read all 377 lines. HWND never-read claim false, example restricted0 contradicts scanner excluded1, fingerprint-generation claim unsupported by actual summary; OS limitations and historical scope M31/M32.",
+      "assessment": "Read all 377 lines. HWND never-read claim false, example restricted 0 contradicts scanner excluded 1, fingerprint-generation claim unsupported by actual summary; OS limitations and historical scope M31/M32.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "be66d6cfa846f5690812a75913dec32a7aa5c931c9c4f5c016d39ccd4ec9af89"
@@ -10282,7 +10282,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "5cc4d5e9d3df2010615a1e8351253f4fd68630132a6f248608ab3a44f70e01f3",
       "status": "read_pending_final_verification",
-      "assessment": "Full read. Absolute every-fact/zero-unverifiable verdict exceeds evidence; two HTTP 403s do not verify content. Bibliography has seventeen entries including later self-citation; four records have incorrect expanded author names despite historical all-verified claim. See M27/M28.",
+      "assessment": "Full read. Absolute every-fact/zero-unverifiable verdict exceeds evidence; two HTTP 403 s do not verify content. Bibliography has seventeen entries including later self-citation; four records have incorrect expanded author names despite historical all-verified claim. See M27/M28.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "5cc4d5e9d3df2010615a1e8351253f4fd68630132a6f248608ab3a44f70e01f3"
@@ -10451,7 +10451,7 @@
       "extraction": "pdftotext_layout",
       "baseline_sha256": "fedf0d9705b3a3dee3cd7c90856c28b04af6f7daa02a85eda631201de3cbbad2",
       "status": "read_pending_final_verification",
-      "assessment": "Complete fourteen-page PDF text read. Predates Markdown corrections: 28 phrases, v1.1 disclosure, older issue years, planning caption, old paths and stronger related-work claims. Page 13 visually checked and EPC URL clips at right edge. See M27.",
+      "assessment": "Complete fourteen-page PDF text read. Predates Markdown corrections: 28 phrases, v 1.1 disclosure, older issue years, planning caption, old paths and stronger related-work claims. Page 13 visually checked and EPC URL clips at right edge. See M27.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "fedf0d9705b3a3dee3cd7c90856c28b04af6f7daa02a85eda631201de3cbbad2"
@@ -10854,7 +10854,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "051e7aa62b3364ef7b91e86fecba717a94b5d65225e2b1ada497c5cc145f116b",
       "status": "read_pending_final_verification",
-      "assessment": "Full diagram specification read. No-content scanner language must exclude helper capture behavior; paired Ed25519 and P-256 paths need separate routes. Read-only dashboard wording describes a scoped view, not every application action.",
+      "assessment": "Full diagram specification read. No-content scanner language must exclude helper capture behavior; paired Ed 25519 and P-256 paths need separate routes. Read-only dashboard wording describes a scoped view, not every application action.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "051e7aa62b3364ef7b91e86fecba717a94b5d65225e2b1ada497c5cc145f116b"
@@ -10867,7 +10867,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "a6e564f86c8758bdeb9a7298441588a4a5cbeb7c4f76d3d6db045cdfdbd42e41",
       "status": "read_pending_final_verification",
-      "assessment": "Full sequence read. Pairing routes omit /api/integrity prefix and mix browser Ed25519 with daemon path. Not all reject outcomes are audited; capped chain stops appending. Manual-review text is scoped to academic scorer. See M30.",
+      "assessment": "Full sequence read. Pairing routes omit /api/integrity prefix and mix browser Ed 25519 with daemon path. Not all reject outcomes are audited; capped chain stops appending. Manual-review text is scoped to academic scorer. See M30.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "a6e564f86c8758bdeb9a7298441588a4a5cbeb7c4f76d3d6db045cdfdbd42e41"
@@ -10984,7 +10984,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "39a7d07ae9d63a0187cc51fbb319f592a07d78f12229b086cfc71dae180a4696",
       "status": "read_pending_final_verification",
-      "assessment": "Full pseudocode and complexity table read. Daemon envelope has challenge but pseudocode reads nonce and posts to Ed25519 endpoint; route families conflated. Python json.dumps defaults differ from JS signing bytes. Listed weights sum to 1.05, not normalized 1.0. See M30.",
+      "assessment": "Full pseudocode and complexity table read. Daemon envelope has challenge but pseudocode reads nonce and posts to Ed 25519 endpoint; route families conflated. Python json.dumps defaults differ from JS signing bytes. Listed weights sum to 1.05, not normalized 1.0. See M30.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "39a7d07ae9d63a0187cc51fbb319f592a07d78f12229b086cfc71dae180a4696"
@@ -10997,7 +10997,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "44225980f0120b872dfade1289ad1cd5ff5e16a2b42cea88d55bdd676818ebf9",
       "status": "read_pending_final_verification",
-      "assessment": "Full graph and nine-step flow read. Browser SDK actually uses /api/device/challenge and /api/device/pair with daemon proof on telemetry. Document mixes Ed25519 flow; weights total 1.05, audit cap limits every-event claim, privacy helper exceptions apply. See M30.",
+      "assessment": "Full graph and nine-step flow read. Browser SDK actually uses /api/device/challenge and /api/device/pair with daemon proof on telemetry. Document mixes Ed 25519 flow; weights total 1.05, audit cap limits every-event claim, privacy helper exceptions apply. See M30.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "44225980f0120b872dfade1289ad1cd5ff5e16a2b42cea88d55bdd676818ebf9"
@@ -11452,7 +11452,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "bc46963bf38d960fc7028ed7f7d51c77a1dc7391782e602538a1e18f236981e9",
       "status": "read_pending_final_verification",
-      "assessment": "Read all 83 lines and every pinned package. Correctly scoped as Python3.12/Linux version closure, not hash-locked or portable guarantee; no dependency change necessary.",
+      "assessment": "Read all 83 lines and every pinned package. Correctly scoped as Python 3.12/Linux version closure, not hash-locked or portable guarantee; no dependency change necessary.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "bc46963bf38d960fc7028ed7f7d51c77a1dc7391782e602538a1e18f236981e9"
@@ -11478,7 +11478,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "a99c5fce88a6dbe971d534f347ae7f93b163433320f2e6d9319b805a7601f7d2",
       "status": "read_pending_final_verification",
-      "assessment": "Read all 321 lines including compact embedded core. Public contest recomputation omits Ed25519; raw0 is bounded convenience result, not authentic capsule/contest verification. Output uses textContent. M34.",
+      "assessment": "Read all 321 lines including compact embedded core. Public contest recomputation omits Ed 25519; raw 0 is bounded convenience result, not authentic capsule/contest verification. Output uses textContent. M34.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "a99c5fce88a6dbe971d534f347ae7f93b163433320f2e6d9319b805a7601f7d2"
@@ -11582,7 +11582,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "c48f3dd49fa69db6d6b1e62534f105a49a268b7ef9fcf2b0f801cb87bb87d131",
       "status": "read_pending_final_verification",
-      "assessment": "Read all 93 lines. Recomputed inline CSP hash matches; signature uses embedded key and ASR only is recomputed. Broad unsupported-Ed25519 catch also covers malformed key failures. M34.",
+      "assessment": "Read all 93 lines. Recomputed inline CSP hash matches; signature uses embedded key and ASR only is recomputed. Broad unsupported-Ed 25519 catch also covers malformed key failures. M34.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "c48f3dd49fa69db6d6b1e62534f105a49a268b7ef9fcf2b0f801cb87bb87d131"
@@ -11790,7 +11790,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "bb975daf2c4c9bc1909d7aad42af214837652ff037d9c7780c5c83d0497886f8",
       "status": "read_pending_final_verification",
-      "assessment": "Read all acquisition/output/independence limits. Rung1 distinct-key binding is explicitly weaker than organizational noncontrol; ownership remains separately reported. M33.",
+      "assessment": "Read all acquisition/output/independence limits. Rung 1 distinct-key binding is explicitly weaker than organizational noncontrol; ownership remains separately reported. M33.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "bb975daf2c4c9bc1909d7aad42af214837652ff037d9c7780c5c83d0497886f8"
@@ -11829,7 +11829,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "a2fb7a48c87c736bc90224619c89d6b0407aeb1e2ca2a090be343a64800bcca1",
       "status": "read_pending_final_verification",
-      "assessment": "Read all 1616 lines, every embedded vector and final driver. Executes section7/8/9 selected positive/boundary checks; negatives object unused. Title section7 stale. Node parity not actual browser receipt. M34.",
+      "assessment": "Read all 1616 lines, every embedded vector and final driver. Executes section 7/8/9 selected positive/boundary checks; negatives object unused. Title section 7 stale. Node parity not actual browser receipt. M34.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "a2fb7a48c87c736bc90224619c89d6b0407aeb1e2ca2a090be343a64800bcca1"

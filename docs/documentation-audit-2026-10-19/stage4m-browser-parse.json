@@ -1,0 +1,7 @@
+{
+  "artifact": "docs/research/llm-shield/evidence/stage-4m/verify-stage4m.html",
+  "sha256": "76860c0b7a0542610d7ad7adb3fd940d944e139e5c1f83db774c18249ad8a445",
+  "check": "Node 26 --check on exact extracted module; no evaluation or browser execution",
+  "exit_code": 1,
+  "stderr": "/workspace/work/simurgh-manual-review/stage4m-browser-script.mjs:536\nconst fail = (reason) => ({ ok: false, rawCode: 45, reason });\n      ^\n\nSyntaxError: Identifier 'fail' has already been declared\n    at checkSyntax (node:internal/main/check_syntax:84:5)\n\nNode.js v26.12.0\n"
+}

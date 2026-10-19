@@ -3541,3 +3541,20 @@ Owner-requested work; implementation and review by Codex assistance.
   full E2E rerun or independent custody claim.
 - **Remaining:** Continue every pending evidence document, specification, plan and large log;
   resolve remaining claim checks before marking the manual audit complete.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 700-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under preceding declaration `4ca41a95`; 700 of 919 baseline
+  documents completely read, 219 pending. The exhaustive review remains in progress.
+- **Changes:** Add M53–M56 corrections for evidence counts, skipped execution, unsupported
+  live-regression attribution, reviewer-key independence and archive/timestamp identities.
+- **Finding:** The frozen Stage 4M HTML module repeats `const fail` at top level and cannot
+  parse. Exact extracted-module syntax check under Node 26 returns exit 1; the published HTML
+  hash matches. Update current security and reviewer guidance; preserve the frozen artifact.
+- **Validation:** Check changed-file formatting, local links, baseline identities, current read
+  hashes and append-only preservation. No runtime repair, new inference, outside ceremony,
+  fresh full E2E or interactive browser validation is claimed.
+- **Remaining:** Read every pending specification, plan, evidence document and large log,
+  resolve findings and validate the final ledger before claiming completion.
