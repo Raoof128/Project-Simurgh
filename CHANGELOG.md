@@ -3963,3 +3963,11 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Files changed:** Isolated `tools/simurgh-explorer` package, dated research/gap register, current navigation and both logs.
 - **Verification:** Behavioral tests pass for CLI/UI equivalence, complete outcomes, unknowns, invalid imports, read-only server and inert content; Vite production build passes. Runtime dependency audit reports zero known advisories. Browser layout remains unverified under managed navigation policy.
 - **Follow-ups:** Consolidated disposable-checkout gates and owner/classmate handoff; no production-readiness, live-provider or outside-custody claim.
+
+## 2026-10-19 — Raouf: prepare independent handoff and tighten explorer provenance (Australia/Sydney)
+
+- **Scope:** Phase 18 follow-up within its additive authority.
+- **Summary:** Add pinned replay instructions and blank operator receipt; imported-data CLI commands require the loaded file, and local detail shows its separate capture pointer.
+- **Files changed:** Explorer import/detail validation, copy-command UI and interaction tests; continuation handoff, receipt template and both logs.
+- **Verification:** 15 explorer tests pass, including filtered export and imported-file CLI context. Fresh full-source/export verification confirms all 144 outcomes. No loaded producer claim is promoted to verification.
+- **Follow-ups:** Finish aggregate/reliability checks and package the local dashboard and complete source history. External measurements remain explicitly open.

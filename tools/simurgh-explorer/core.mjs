@@ -135,7 +135,12 @@ export function validateBundle(b) {
       r.detail === null || (typeof r.detail === "object" && !Array.isArray(r.detail)),
       "Invalid detail"
     );
-    if (r.detail !== null) string(r.detail.model_output, "model output");
+    if (r.detail !== null) {
+      string(r.detail.model_output, "model output");
+      ensure(r.detail.source && typeof r.detail.source === "object", "Missing detail source");
+      string(r.detail.source.path, "detail source path");
+      string(r.detail.source.pointer, "detail source pointer");
+    }
     return { ...r, flags: flagsFor(r.outcome) };
   });
   for (const key of ["documents", "gaps", "omissions"])

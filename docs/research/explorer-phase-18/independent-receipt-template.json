@@ -1,0 +1,15 @@
+{
+  "schema": "simurgh.independent-continuation-receipt.v1",
+  "status": "not_executed_template",
+  "operator": null,
+  "date_utc": null,
+  "repository_commit": null,
+  "archive_hashes_from_trusted_channel": {},
+  "platform_and_versions": {},
+  "commands": [],
+  "observed_results": [],
+  "failed_or_unavailable_checks": [],
+  "discrepancies": [],
+  "independent_original_custody": false,
+  "notes": "Complete under the operator's own custody. Include stdout/stderr/log hashes and exact commands/exit codes. Do not prefill success. Original experiment custody differs from independent replay."
+}

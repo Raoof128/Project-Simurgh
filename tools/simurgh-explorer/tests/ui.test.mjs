@@ -37,6 +37,23 @@ test("dashboard interactions: shared filter, source record, research, gaps and i
       document.querySelectorAll("tbody tr").length,
       queryRecords(bundle, { kind: "unauthorized" }).length
     );
+    let exported;
+    const originalCreate = URL.createObjectURL;
+    const originalClick = dom.window.HTMLAnchorElement.prototype.click;
+    URL.createObjectURL = (blob) => {
+      exported = blob;
+      return "blob:simurgh-test";
+    };
+    dom.window.HTMLAnchorElement.prototype.click = () => {};
+    try {
+      await click("↓ Export 16 records");
+      const selection = JSON.parse(await exported.text());
+      assert.equal(selection.records.length, 16);
+      assert.equal(selection.selection.total, 144);
+    } finally {
+      URL.createObjectURL = originalCreate;
+      dom.window.HTMLAnchorElement.prototype.click = originalClick;
+    }
     await click("View source record");
     assert.match(document.querySelector(".raw").textContent, /unauthorized_new_effects/);
     await click("Unknown");
@@ -70,6 +87,9 @@ test("dashboard interactions: shared filter, source record, research, gaps and i
       input.dispatchEvent(new dom.window.Event("change", { bubbles: true }));
     });
     assert.match(document.querySelector("[role=status]").textContent, /Loaded 3 records/);
+    await act(() => document.querySelectorAll("nav button")[1].click());
+    await click("Copy CLI");
+    assert.match(document.querySelector("[role=status]").textContent, /loaded-bundle.json/);
     await click("Restore repository data");
     assert.match(document.querySelector("[role=status]").textContent, /restored/);
   } finally {

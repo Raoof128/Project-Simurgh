@@ -104,13 +104,17 @@ export function App({ initial }) {
     setNotice("Repository evidence restored.");
   }
   async function copyCommand() {
+    const fileOption = bundle !== initial ? " --file '/path/to/loaded-bundle.json'" : "";
+    const command = `node tools/simurgh-explorer/cli.mjs inspect --id '${chosen.id}'${fileOption}`;
     try {
-      await navigator.clipboard.writeText(
-        `node tools/simurgh-explorer/cli.mjs inspect --id '${chosen.id}'`
+      await navigator.clipboard.writeText(command);
+      setNotice(
+        bundle !== initial
+          ? "CLI command copied. Replace the file placeholder with the loaded bundle path."
+          : "CLI command copied."
       );
-      setNotice("CLI command copied.");
     } catch {
-      setNotice(`Run: node tools/simurgh-explorer/cli.mjs inspect --id '${chosen.id}'`);
+      setNotice(`Run: ${command}`);
     }
   }
   const heading = {
@@ -402,6 +406,7 @@ export function App({ initial }) {
                         </p>
                       ))}
                       <Source source={chosen.source} />
+                      {chosen.detail && <Source source={chosen.detail.source} />}
                       <details className="compare">
                         <summary>Compare matched controls</summary>
                         {bundle.records
