@@ -17,6 +17,13 @@ the relevant experiment protocol and [security boundaries](SECURITY.md) before e
 access or publishing a capture. The academic telemetry exclusions below must not be generalized
 to those research inputs.
 
+The retained Anthropic adapter's `minimal_summary` is a bounded prefix of context text with
+control characters removed. Ordinary source text can be sent verbatim; this is not semantic
+summarization or anonymization. The supported legacy live route is retired, but direct module
+use and old revisions retain that behavior. Caller-supplied `task_type` also passes through the
+historical gateway receipt, so a metadata-shaped receipt does not exclude sensitive caller
+strings. See the [source review and local synthetic check](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m71--stage-3e-live-draft-limits-and-retained-adapter-behavior).
+
 ## Current model archives and explorer
 
 The transfer study and role correction retain synthetic prompts/proposals, provider usage,

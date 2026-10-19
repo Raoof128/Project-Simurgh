@@ -116,10 +116,10 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "f2b1fb2b9c18c89241c735b1d55d807836d06ba94bb256f14928b65422ded7a5",
       "status": "correction_in_progress",
-      "assessment": "Full read and source checks found HMAC vs SHA-256 mismatch, raw ingress omission, platform key-storage conflation and exact TTL claim. M01/M02/M05 corrections applied; final verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check.",
+      "assessment": "Full read and source checks found HMAC vs SHA-256 mismatch, raw ingress omission, platform key-storage conflation and exact TTL claim. M01/M02/M05 corrections applied; final verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check. M70/M71 disclose retained risk mapping, SDK retry/abort behavior, raw context prefixes and caller receipt strings; runtime remains unchanged.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "c671a1535c19b6210d3c8ac2c41cf46554c81eb9c3101ecb03c476ffae502012"
+      "read_sha256": "98f455add429c7fe849ae7325440bdbea7c874fc3021c43bc8b86633c235c63e"
     },
     {
       "path": "README.md",
@@ -168,10 +168,10 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "b282ef25d5a34576b34f64a3d1f8db46648ea1eb0d7ed00550a0870156d05865",
       "status": "correction_in_progress",
-      "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check.",
+      "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check. M70/M71 disclose retained risk mapping, SDK retry/abort behavior, raw context prefixes and caller receipt strings; runtime remains unchanged.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "61cf1a61b67d2613347aa86fe28fbf13e9d62d732e1008917b97b6ef839a6b2d"
+      "read_sha256": "9489b45cab8b24937e01ae42cf949e93faeb061b34a0bfdff2f28beaeadf2b2f"
     },
     {
       "path": "docs/DECISIONS.md",
@@ -1107,7 +1107,7 @@
       "assessment": "Read all 13 primary-source applicability rows and limits. Correctly separates publication from review year, pinned SDK from living docs and alignment from compliance. Previous-turn fetch provenance retained; no fresh fetch claimed.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "01f8645197f3fc310a2c99f96db6e893d9a5bfd0a641e6a6b393d77fc621863c"
+      "read_sha256": "636070cef402ccdfdc57f7e0a4c8bc4c146c33a3287908f418826da4331fdb38"
     },
     {
       "path": "docs/documentation-audit-2026-10-19/VALIDATION.md",
@@ -8045,11 +8045,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "1cb00154903d763da722bb74f3fb2d6acf6361c08645aafafc3b90b7795b40d1",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 2788-line plan read. M69 records finite mock scope, non-array activation, self-declared provenance, caller task_type, post-provider risk, warning threshold/test contradiction, audit sequence omission, fixture risk reset and missing assertions, privacy/network scan scope and shell status issues. Preserved draft; no implementation/release instructions executed.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "1cb00154903d763da722bb74f3fb2d6acf6361c08645aafafc3b90b7795b40d1"
     },
     {
       "path": "docs/superpowers/plans/2026-06-17-stage-3e-core-llm-shield-industry-gateway.md",
@@ -8058,11 +8058,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "97e7d685ca565af95bd310dbdb159b3c1f01d9824880367dff4462443035ce61",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 2243-line plan read. M70 identifies post-provider risk mapping that accepts standalone Blocked, unused timeout/output caps, unauthenticated session creation, mismatched provider names, hardcoded rejection mode, raw error/task strings, null normalizer failure, unbound fixture tool request, six tests not five. OpenAPI selected-property tests not conformance; fixture oracle generated from implementation; Docker skips and network scope qualified. Preserved draft.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "97e7d685ca565af95bd310dbdb159b3c1f01d9824880367dff4462443035ce61"
     },
     {
       "path": "docs/superpowers/plans/2026-06-18-stage-3e-live-anthropic-adapter.md",
@@ -8071,11 +8071,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "1e9ea6d83b3040bac5904ad85171bb079af51882142af7799a903b7b6a8042a5",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 1954-line plan read. M71 records truncated raw context not canonical semantic summary, local nonreserved quotas, missing maxRetries override, actual SDK abort mismatch, signal bypassing own timer, truncation before hash, unconditional draft live events since partly corrected, config-based risk bonus, weak optional flag gate, incomplete smoke scaffold and privacy-scan exceptions. Local injected-fetch SDK probe confirms retry/abort/text-copy behavior without network; current guidance corrected, runtime preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "1e9ea6d83b3040bac5904ad85171bb079af51882142af7799a903b7b6a8042a5"
     },
     {
       "path": "docs/superpowers/plans/2026-06-19-stage-3h-agentdojo-external-benchmark.md",
@@ -8942,11 +8942,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "62059033b63ff78efb729bff102b24571f7d01e2e4a28699baa04850ec414316",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete plan read. Specifies real process kills, crash-window observations, eight-worker contention, source binding and no universal exactly-once claim. Prospective delivery steps are not execution receipts; M72 points to later validation.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "62059033b63ff78efb729bff102b24571f7d01e2e4a28699baa04850ec414316"
     },
     {
       "path": "docs/superpowers/plans/2026-10-15-assurance-egress.md",
@@ -8955,11 +8955,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "cba564719691681add7c3c6bbf90bf885640fd886637cb49a825d0723de61799",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete plan and execution ledger read. The initial 19 tests become 20 after the stalled-observer regression; all 36 outcomes remain unchanged. Baseline delivery and useful replies bound absence claims. Observation is outside the worker, on the same trusted host. M72 distinguishes dated counts and local platform limits.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "cba564719691681add7c3c6bbf90bf885640fd886637cb49a825d0723de61799"
     },
     {
       "path": "docs/superpowers/plans/2026-10-15-assurance-isolation.md",
@@ -8968,11 +8968,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "2621a82f0cd01c9cacf588b005d854daf48bf7462e2d12ae2ad393c047ac34c1",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete plan and execution ledger read. The initial 24 tests become 26 after strict worker-envelope validation; 57 outcomes are retained. Raw fork differs from the Python wrapper. SO_PROTOCOL is not queried despite trusted TCP provisioning. Final verification supersedes earlier pending entries. M72.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "2621a82f0cd01c9cacf588b005d854daf48bf7462e2d12ae2ad393c047ac34c1"
     },
     {
       "path": "docs/superpowers/plans/2026-10-15-assurance-lab.md",
@@ -8981,11 +8981,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "1331b752348a3a49718942d06820cae3ea13ae65b7e1a46779902242d34f48f1",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete plan read. Seventeen authored cases use three controls, actual file effects, four effective trace mutations, a no-op and two faults. Checkboxes are prospective; subjective targets are not achieved scores. Later SDK and durability work has separate contracts. M72.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "1331b752348a3a49718942d06820cae3ea13ae65b7e1a46779902242d34f48f1"
     },
     {
       "path": "docs/superpowers/plans/2026-10-15-assurance-redis.md",
@@ -8994,11 +8994,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "035e4e061f33d232aee0cd0f6441063bd628d0ce6528b41ec46220ef4311635e",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete plan and ledger read. Actual pinned Redis service, 14 tests and 19 cases are distinguished from hosted or independently operated validation. Combined pending-crash and concurrent-recovery testing is explicitly deferred outside this corpus. Delivery intent does not prove a push. M72.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "035e4e061f33d232aee0cd0f6441063bd628d0ce6528b41ec46220ef4311635e"
     },
     {
       "path": "docs/superpowers/plans/2026-10-15-assurance-scope.md",
@@ -9007,11 +9007,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "00bc80a469f6be9a9bbce64818ee31fea689e23ee3f81174c0cd171d67dd841a",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete plan and ledger read. The suite grows from 22 to 24 tests after stop-persistence regressions, retaining all 54 outcomes. Approved-service relay remains a negative result. Own source refresh differs from preservation of previous families; no incident reproduction is claimed. M72.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "00bc80a469f6be9a9bbce64818ee31fea689e23ee3f81174c0cd171d67dd841a"
     },
     {
       "path": "docs/superpowers/plans/2026-10-15-assurance-sdk.md",
@@ -9020,11 +9020,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "e097c8ff37d7881a40d7fc3c65c223375452e681ebeba9f6d55f397c8b27705a",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete plan read. Two actual approval/resume frameworks use scripted proposals, 102 baseline rows and four lifecycle outcomes; unsupported editing is separate. Historical task roles are not instructions to delegate this audit. No durable workflow or external-operator result is implied. M72.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "e097c8ff37d7881a40d7fc3c65c223375452e681ebeba9f6d55f397c8b27705a"
     },
     {
       "path": "docs/superpowers/plans/2026-10-15-assurance-workflow.md",
@@ -9033,11 +9033,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "c8894449d2d51b9367bd45dd10c63072e7bfcf27505022bc65ded37dab1b04ea",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete plan and ledger read. Native checkpoint recovery uses SIGKILL, fresh processes and 24 cases. Final 15 tests include cleanup and transport-unknown corrections. Dependency extensions preserve prior versions; the CI timeout is not a performance result. M72.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "c8894449d2d51b9367bd45dd10c63072e7bfcf27505022bc65ded37dab1b04ea"
     },
     {
       "path": "docs/superpowers/plans/2026-10-15-local-meta-pilot.md",
@@ -9046,11 +9046,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "27172f3073519dd02a544fcfa2a8085d58156d0ff7f9d7765f8bc06627a5dc0c",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete plan and ledger read. The failed original capture remains alongside the exploratory compact-prompt ablation. Three unsafe proposals include two attacks and one benign error; corrected attack-containment count is two. Dependency versions are pinned without a full artifact-hash lock. Model hashes do not independently attest generation. M72.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "27172f3073519dd02a544fcfa2a8085d58156d0ff7f9d7765f8bc06627a5dc0c"
     },
     {
       "path": "docs/superpowers/plans/2026-10-15-luna-comparison.md",
@@ -9059,11 +9059,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "fc640d4b4446695bcbb3f66a5081240a1802963b0041269f73122d8c3e5ca8e4",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete pre-inference plan read. Specifies 24 cases, three repetitions and two turns, bounded transport, fixed-action replay and failure retention. The ledger ends before collection; later results supply outcomes. Repetition indices are not seeds; cost estimates and store:false have bounded meanings. M72.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "fc640d4b4446695bcbb3f66a5081240a1802963b0041269f73122d8c3e5ca8e4"
     },
     {
       "path": "docs/superpowers/plans/2026-10-15-luna-native.md",
@@ -9072,11 +9072,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "c6f2be150792164ca5997180e9d027f7aa9e53dbb08cbab9939b8699b4804e39",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete plan read. Native schemas, tool choice and system instruction form a combined interface intervention. Required calls do not authorize effects. The protocol retains 144 request slots and 432 control attempts; credential-decoding and journal checks were corrected before inference. M72.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "c6f2be150792164ca5997180e9d027f7aa9e53dbb08cbab9939b8699b4804e39"
     },
     {
       "path": "docs/superpowers/plans/2026-10-15-meta-study.md",
@@ -9085,11 +9085,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "45f358290c16f09652e044a1ae416e4b102ba1bfc94aba36122daa0dd562e7cb",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete plan and ledger read. Separate AI authorship is not external independence. The 144-generation capture has 141 invalid proposals and three writes; all reads are invalid, leaving no complete model workflow or eligible recovery. Two unsafe bypass writes were blocked. Later tokenizer verification is not another capture. M72.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "45f358290c16f09652e044a1ae416e4b102ba1bfc94aba36122daa0dd562e7cb"
     },
     {
       "path": "docs/superpowers/specs/2026-05-13-simurgh-academic-shield-design.md",
@@ -9280,11 +9280,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "6517962f6bef72ccf86fdef0ad750990777d265b8945db34aa758aeaf9fc6b36",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 474-line design read. Strong mock-only/nonclaims language retained; absolute framing requires finite-corpus qualification. No real tool execution or authenticated context provenance, canonical text can equal source, no raw-payload guarantee from schema alone. M69 separates intended multi-turn/corpus/audit requirements from the weaker shown runner and historical observations.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "6517962f6bef72ccf86fdef0ad750990777d265b8945db34aa758aeaf9fc6b36"
     },
     {
       "path": "docs/superpowers/specs/2026-06-17-stage-3e-core-llm-shield-industry-gateway-design.md",
@@ -9293,11 +9293,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "4d709e16de9c93453ae6cf81df59e750f81bbc825e47a02c934b40cb0aa27278",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 574-line design read. No-provider-network and synthetic replay explicitly distinguished from real capture. M70 qualifies zero-network-surface wording, unattested provenance flags, intended pre-provider risk/time/output/auth controls absent from shown plan, limited API test, differing derivation labels, and superseded live-spec filename. Checked requirements are not execution receipts.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "4d709e16de9c93453ae6cf81df59e750f81bbc825e47a02c934b40cb0aa27278"
     },
     {
       "path": "docs/superpowers/specs/2026-06-18-stage-3e-live-anthropic-adapter-design.md",
@@ -9306,11 +9306,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "3178a0de91bbd79c516840b08f7a742e54789d4f28103c496b513539c29023dd",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 852-line design read. Optional live test not evidence of execution; 40 synthetic fixtures not live calls. M71 compares canonical summary/oversized-output/timeouts/no-retry/privacy/audit claims with draft and retained modules. Summary prefix can retain source text, output digest covers reduced text, self-reported flags not independent egress measurement. S25 official retry reference plus pinned SDK local probe; no paid inference or stage changes.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "3178a0de91bbd79c516840b08f7a742e54789d4f28103c496b513539c29023dd"
     },
     {
       "path": "docs/superpowers/specs/2026-06-19-stage-3h-agentdojo-external-benchmark-design.md",
@@ -10177,11 +10177,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "e93cb88e695f703f7e0c3132c22f4e93c18ad1587cd65c284abfc35af9d4f8eb",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete contract read. Exclusive file publication and receipt commitment are deliberately separate; cached missing effects refuse. Eight-worker and crash-boundary requirements remain local, without hostile-host, rollback or power-loss coverage. Executor restart is distinct from native workflow recovery. M72.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "e93cb88e695f703f7e0c3132c22f4e93c18ad1587cd65c284abfc35af9d4f8eb"
     },
     {
       "path": "docs/superpowers/specs/2026-10-15-assurance-egress.md",
@@ -10190,11 +10190,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "67e90faa21cd707199f402ce6d8056da992758c9dcd4293b344f9044c0ca0f91",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete contract read. Ingress-only x86_64 seccomp, descriptor hygiene, delivering baselines and useful replies define the tested boundary. Observation remains on the trusted host; files, signals and authorized replies remain channels. No arbitrary-application launcher or general sandbox claim. M72.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "67e90faa21cd707199f402ce6d8056da992758c9dcd4293b344f9044c0ca0f91"
     },
     {
       "path": "docs/superpowers/specs/2026-10-15-assurance-isolation.md",
@@ -10203,11 +10203,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "fd77a2aae141a28e2c94ec477ba668f99a06fbb1b2290a9d4cfa650faccb8b4a",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete contract read. Preopened descriptors rely on trusted imports and provisioning. Connected-TCP wording requires the final plan caveat that SO_PROTOCOL is not queried. Selectivity concerns preconnected peers, not DNS/TLS identity or a general firewall. Authorized payload failures remain explicit. M72.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "fd77a2aae141a28e2c94ec477ba668f99a06fbb1b2290a9d4cfa650faccb8b4a"
     },
     {
       "path": "docs/superpowers/specs/2026-10-15-assurance-lab.md",
@@ -10216,11 +10216,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "f7872272ad9721fc08dd17ff2e0e136f592deb7684f32aefcc8b63b8464f9575",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete contract read. Eight-field authority, 17 authored cases and 51 control rows use shared-host disk observation. The information advantage of checkpoint/reconciliation is disclosed. Unknowns and no-ops are not containment. Later milestones remain separately evidenced. M72.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "f7872272ad9721fc08dd17ff2e0e136f592deb7684f32aefcc8b63b8464f9575"
     },
     {
       "path": "docs/superpowers/specs/2026-10-15-assurance-redis-design.md",
@@ -10229,11 +10229,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "54117ab39e4d6e3e68a878bda7045e151b8512a595187b750fce0d6dae300b2f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete contract read. Redis NX/GET and durable intents retain ambiguity instead of automatically repeating an uncertain operation. Local locks are not distributed fencing. The lost-response proxy and non-idempotent control have bounded purpose; expiry, failover and power loss are excluded. M72.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "54117ab39e4d6e3e68a878bda7045e151b8512a595187b750fce0d6dae300b2f"
     },
     {
       "path": "docs/superpowers/specs/2026-10-15-assurance-scope.md",
@@ -10242,11 +10242,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "1c96aa5bfb670c7a56a3ed67c573a5eb15204759905a1d2fe190af4d4d4b7f9f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete contract read. Exact URL/body/identity binding, persistent pending guards and terminal stops operate through a closed Unix-socket registry. The service relay exposes a retained gap. Monitoring means a host predicate and audit availability, not staffed incident response. M72.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "1c96aa5bfb670c7a56a3ed67c573a5eb15204759905a1d2fe190af4d4d4b7f9f"
     },
     {
       "path": "docs/superpowers/specs/2026-10-15-assurance-sdk-design.md",
@@ -10255,11 +10255,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "8bb46d7c72390220c469aa2713be3fb6ec7e1aaf1eb101a7cc96571ac961ac9d",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete contract read. Pinned API compatibility covers 102 baseline rows plus four lifecycle outcomes. Unsupported OpenAI editing is not passed; scripted approvals are not human identity. LangGraph in-memory checkpoints do not establish process recovery. Source-bound replay is not historical host authentication. M72.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "8bb46d7c72390220c469aa2713be3fb6ec7e1aaf1eb101a7cc96571ac961ac9d"
     },
     {
       "path": "docs/superpowers/specs/2026-10-15-assurance-workflow-design.md",
@@ -10268,11 +10268,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "be0c29aa2700b355d043d73a751c16d1fd78c86c73ff8e46de4fdb61ba703303",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete contract read. Checkpoint bytes, hashes and versions are checked before native deserialization; local locks order revocation and effect admission. Twenty-four cases cover bounded approval/effect recovery. Replay can repeat workflow logic; no arbitrary exactly-once guarantee or hostile-checkpoint handling is claimed. M72.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "be0c29aa2700b355d043d73a751c16d1fd78c86c73ff8e46de4fdb61ba703303"
     },
     {
       "path": "papers/banking-shield/PAPER_CLAIM_AUDIT.md",

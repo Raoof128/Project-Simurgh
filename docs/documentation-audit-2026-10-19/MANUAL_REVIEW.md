@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **757 documents have complete manual reads; 162 remain
+SHA-256 values. At this checkpoint, **783 documents have complete manual reads; 136 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -1889,3 +1889,173 @@ real personal data or external service was used. The [probe receipt](banking-rej
 records the inspected source hashes and scope. Current privacy/security guides now disclose
 this limitation. The preserved runtime remains unchanged; a separately authorized successor
 should use fixed rejection categories or allowlisted field identifiers.
+
+### M69 — Stage 3D draft containment and runner limits
+
+The complete 3D plan/spec describe deterministic mock boundaries, not a proof that all
+jailbreak consequences are contained. The plan's absolute goal and the spec's one-line
+framing need that scope. A context label and a finite authority-marker scan do not authenticate
+provenance. The shown guard does not require every illustrated context field, rejects every
+`trusted` claim without implementing a signature verifier, and accepts synthetic labels supplied
+by the caller. Non-array `contexts` do not activate 3D by themselves and are treated as absent
+by the shown guard. Canonical text can equal the original text; “never raw text out” means an
+ephemeral scan view, not guaranteed removal of source content. Mock outputs do not consume the
+context, so these fixtures cannot establish effective demotion inside a live model.
+
+The tool gate decides from a class label; it does not bind the tool name, arguments and resource
+to an independently trusted registry. Neither allowed nor blocked tools execute. The newer
+OpenAI demonstration adds separate authority checks; it does not retroactively establish them
+for 3D. Top-level `Object.freeze` does not freeze nested scenario/policy objects. The output
+scanner is finite pattern matching. Receipt `task_type` is a caller string in the plan, so a
+hashes-and-enums-only description is false. Audit events are appended after the pipeline and
+encode its reported decisions, not independently witnessed execution timing.
+
+The plan's risk calculation occurs after the provider step. Its warning-only example gives two
+points, which maps to Safe under the stated thresholds, despite a test expecting Warning.
+The fixture runner resets the score for each fixture, sets `repeatedWarning: false`, and does
+not assert the supplied expected risk verdict or audit sequence; it cannot establish the
+claimed cross-run softening behavior. The proposed red risk smoke can pass a zero-point stub
+because equal scores satisfy its monotonic assertion and context rejection forces Blocked.
+The tool-audit expected sequence omits the risk-escalation event emitted by its own code.
+Counting failed assertions as failed fixtures can inflate the apparent corpus size.
+
+The privacy example scans metrics and source-key strings, not all claimed receipts/audit
+exports. The no-network grep is a limited structural check, not an egress observation. The
+security script lists eight checks despite its expected seven-pass message. Shell pipelines
+and the final `kill` can mask preceding failures without explicit status handling. Historical
+whole-repository formatting, baseline-writing and release instructions are not authorized by
+this documentation audit. Preserve the drafts and use stage-specific retained receipts for
+actual outcomes.
+
+### M70 — Stage 3E-core draft contracts exceed the shown implementation
+
+The complete gateway spec/plan promise pre-provider risk enforcement, active timeout/output
+caps and authenticated session creation. The shown router instead creates sessions without
+a bearer check, parses timeout/output limits without enforcing them, and computes risk after
+the provider. Its final ternary blocks input/context/tool/output failures but maps a standalone
+`riskVerdictValue === "blocked"` to Accepted; only Warning gets its own branch. The same final
+mapping remains in the preserved router inspected during this review. This is a source finding,
+not a newly executed HTTP scenario. Current supported-entry-point restrictions and the separate
+transactional successor must not be confused with repairing that module.
+
+Provider mode and provider are validated independently, allowing mismatched permitted names;
+the receipt can therefore name a provider other than the selected implementation. Unknown mock
+scenarios silently fall back to benign. Config rejection hardcodes `provider_mode: live` even
+for invalid recorded-fixture requests, and passes an exception message into reason codes.
+The raw caller `task_type` also reaches the receipt. A metadata-shaped schema is not a guarantee
+that every string has an allowlisted value. The normalizer's “total, never throws” description
+is false for `null` and objects with throwing conversions. The replay validator checks a
+self-declared synthetic flag and output hash, not independently established authorship; the
+shown hash does not bind the tool request or the entire fixture. Six replay-provider tests are
+shown, not the stated five.
+
+The OpenAPI check verifies selected properties, not complete OpenAPI validity or implementation
+conformance. Global bearer security contradicts the unauthenticated sample session/OpenAPI
+routes; the run response schema describes a receipt rather than the actual wrapper. Required
+`provider_mode` conflicts with the runtime default, and the sparse receipt schema does not enforce
+its privacy claims. Spec and plan also use different key-derivation labels. The spec's linked
+June 17 live-adapter filename was superseded by the June 18 Anthropic design.
+
+The 70 fixtures and expected outcomes generated from the same pipeline are regression checks,
+not an independent security oracle or 70 live-model observations. The direct-import runner
+cannot establish every HTTP behavior. “No network” describes provider operation in mock/replay:
+HTTP serving, dependency installation, audit and Docker builds have separate network surfaces.
+A non-root image and a matching `.env` ignore line do not prove that the image contains no
+secrets. Docker SKIP with exit zero is not a successful container execution. Version-string
+greps do not establish byte preservation. These qualifications apply to the plan's checked
+self-review and the spec's intended success criteria, which are not execution receipts.
+
+### M71 — Stage 3E-live draft limits and retained adapter behavior
+
+The complete live plan/spec describe proposed optional live validation. Forty synthetic
+fixtures, including five metadata fixtures, do not establish forty live calls; the preserved
+optional smoke is separately recorded as skipped. The plan's skip guard checks truthiness for
+most flags, so a literal `false` is not equivalent to its advertised all-flags-enabled condition.
+Its “all code complete” self-review also overlooks the smoke's explicit scaffolding placeholder.
+The plan lists five ledger tests and four adapter tests while expecting four and three.
+
+The draft context builder strips selected controls and takes source prefixes; it does not perform
+the specified canonicalization or semantic summarization. The current builder broadens control
+removal to C0/C1 but still copies ordinary source text verbatim. Its 500-unit bound uses UTF-16
+length, while its combined 2048-byte bound uses UTF-8 (S24); the latter excludes the surrounding
+instruction and input. `context_id_hash` hashes content, not the illustrated context identifier.
+A bounded prefix is neither anonymization nor proof that content is safe to send. The plan's
+privacy scanner traverses fixture JSON despite promising to exclude fixtures, omits text logs,
+and can excuse another occurrence of a forbidden key when any same-named key has value false.
+
+The draft SDK client sets only `apiKey`, despite claiming no automatic retry. The installed
+SDK 0.39.0 defaults to two retries. A local SDK test with an injected fetch implementation
+returning synthetic HTTP 429 responses made three fetch calls; it opened no connection.
+A second injected-fetch test let the adapter's timer abort a real SDK operation. The adapter
+returned `gateway_provider_error`/`unknown`, not `gateway_live_timeout`/`timeout`: its check for
+an exception named `AbortError` does not match the SDK's wrapped exception. The draft's custom
+fake client uses that exact name and therefore misses the integration difference. The
+[probe receipt](gateway-sdk-probe.json) records versions, source hashes and bounded observations.
+The official SDK reference independently documents default retries and disabling them (S25).
+
+The adapter also bypasses its own timer when the caller supplies a signal; truncates output
+before hashing/scanning instead of reporting the specified oversized-output rejection; and
+labels import/client failures as provider-called/egress-used without observing a connection.
+A response hash here binds reduced text, not the full provider response or discarded tool-use
+blocks. A fixed latency bucket is not measured latency. The direct adapter export does not
+itself call the live-env guard. Session/minute counters are local, daily counts reset per process,
+and incrementing after `await generate` does not reserve capacity against concurrent requests.
+The retained router checks the primary live attempt but its `callProvider` helper does not
+recheck/reserve a fallback attempt. These limits qualify denial-of-wallet claims; no new live
+request was made to test quotas.
+
+The draft unconditionally emits live-called events and egress flags whenever config exists,
+even after an input/context block. The retained router has since added `providerCalled` to
+those two conditions, so that specific draft error is not attributed to the current path.
+Its risk bonus still uses config presence, and its receipt head is obtained before later live
+annotations. Defined import event names do not establish that those events were emitted.
+The current mounted legacy live route returns HTTP 410; this does not remediate direct imports
+or old server revisions. Current security/privacy guidance now distinguishes these boundaries.
+
+### M72 — October assurance plans and contracts retain dated scope
+
+All twelve October 15 plans and all eight paired assurance specifications were read completely.
+Their prospective acceptance lists and interim execution entries are historical records; unchecked
+boxes do not mean that later published work is absent, and “commit/push follows” is not evidence
+that a push occurred. Current outcome/validation guides and the integration matrix supply the
+later disposition. The 5,119-pass/three-skip totals describe those checkpoints, not the October 19
+full-smoke result. Earlier missing-prerequisite skips are not retroactively successful executions.
+A fresh assistant review or fresh environment is not an independent outside operator. Subjective
+scorecards are neither measured quality scores nor reviewer/vendor endorsement.
+
+The lab's 51 case/control rows and SDK's 102 baseline rows count authored cases under controls;
+the four extra lifecycle outcomes include an unsupported OpenAI in-place edit, which is not an
+executed edit. Framework approval defaults are scripted decisions, not authenticated human consent.
+The SDK spec's “no in-place argument-edit parameter” is limited to the pinned public RunState API;
+it is not a statement about every newer API. Durable file recovery restarts executors, whereas the
+later workflow experiment restores native approval state. The durable and Redis designs explicitly
+separate effect publication from receipt commitment: local idempotency and reconciliation are not
+universal exactly-once execution. The Redis plan's deferred combined pending-crash/concurrent-recovery
+case remains outside its 19-case report; later workflow cases do not silently expand that corpus.
+
+The scope, egress and isolation plans record material observer/envelope/stop-persistence fixes and
+refreshes of their own source bindings; “preserve previous sources” must be read as preserving
+previous families, not prohibiting those disclosed pre-closeout corrections. A namespace denial or
+Landlock ENOSYS is an observation of that environment, not proof of platform-wide unavailability.
+“Outside” observation in the egress design means outside the filtered worker on the same trusted
+host. The isolation spec's connected-TCP wording is bounded by its plan's final SO_PROTOCOL caveat:
+trusted bootstrap creates TCP, but validation does not independently query the protocol. Raw fork
+inheritance is not compatibility with every language/runtime fork wrapper. Both network experiments
+retain authorized-content and host-relay limits; they do not establish general sandbox security.
+
+The local Meta pilot's compact prompt is an explicitly post-result exploratory ablation; report it
+with the failed original capture. Its version-only dependency lock is not an artifact-hash lock.
+The repeated Meta study records separate AI-agent authorship, not organizational independence or
+unknown training data. Its all-invalid reads mean no complete model workflow and no eligible
+model-derived recovery, despite passing scripted recovery tests. The later tokenizer consistency
+check is additional provenance evidence, not another capture or external attestation.
+
+The Luna plain-text plan ends at pre-inference preparation; use its later result guide for actual
+collection. The native plan correctly treats schemas, tool-choice settings and changed system text
+as a combined interface intervention. Required function calling supplies no authorization, and
+host-orchestrated stateless turns are not an autonomous conversational tool loop. Repetition indices
+are not API seeds. Case-cluster intervals describe this purposive suite, not a sampled population.
+`store:false` is not zero retention, and the dated pricing estimate is neither an invoice nor a
+hard account cap. Old capture authorization and key-handling instructions are not authorization to
+make another paid request during this docs-only review. Frozen plans/specs remain unchanged;
+M16 and the current entry-point guides describe subsequently completed work and external gaps.

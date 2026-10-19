@@ -130,3 +130,12 @@ String length counts 16-bit elements, not UTF-8 bytes. This supports M65's disti
 `MAX_INPUT_CHARS` and a byte limit. The fetched living specification labels itself ECMAScript
 2027; it is not cited as a finalized 2026 edition. GNU's online Bash redirection pages failed
 to load during this check and are not presented as verified web sources.
+
+### S25 — Anthropic SDK retry and timeout behavior
+
+Checked 19 October 2026: the official [TypeScript SDK reference](https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/typescript),
+particularly Retries and Timeouts. It documents two automatic retries for specified transient
+failures and the `maxRetries` setting for disabling them. The installed 0.39.0 SDK was separately
+inspected and tested with injected local fetch functions; M71 distinguishes that pinned behavior
+from the living reference. No provider request was made. The attempted raw GitHub v0.39.0 README
+URL returned 404 and is not used as evidence.

@@ -3598,3 +3598,24 @@ Owner-requested work; implementation and review by Codex assistance.
   interactive browser/native test was performed for this documentation checkpoint.
 - **Remaining:** Complete all pending plans, specifications and logs, resolve documentation
   findings and validate the final ledger before reporting the exhaustive review complete.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 783-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 783 of 919 baseline
+  candidates completely read, 136 pending. Exhaustive review remains in progress.
+- **Changes:** Add M69–M72 corrections for complete Stage 3D/3E plans/specifications and all
+  October 15 assurance plans/contracts. Separate mock tests, API contracts, source findings,
+  local recovery, dated results and independent validation. Preserve historical documents.
+- **Findings:** Inspect retained gateway risk mapping, raw context prefixes, caller receipt
+  strings and call accounting. An injected-fetch SDK 0.39.0 check confirms two default retries
+  and generic error mapping on adapter timeout. No provider or socket request was made.
+- **Guidance:** Update current security/privacy disclosures, retain a scoped probe receipt,
+  and cite the official SDK retry/timeout reference. The legacy live route remains retired;
+  these documentation changes do not repair direct module use or old revisions.
+- **Validation:** Formatting, local links, exact baseline identities, reviewed hashes,
+  append-only logs and frozen-surface preservation checked for this checkpoint. No new model
+  capture, full E2E rerun, external ceremony or interactive browser/native test.
+- **Remaining:** Finish every pending manual read, resolve documentation findings and validate
+  the final ledger before reporting the exhaustive review complete.

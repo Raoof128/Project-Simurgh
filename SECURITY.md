@@ -40,6 +40,18 @@ not repair direct module use or old revisions. The [four-case local probe and co
 record the scope; no live API or HTTP route was exercised. These modules need a separately
 reviewed implementation change before a successor can claim the historical refusal contract.
 
+## Retained gateway enforcement limits
+
+The preserved gateway can map a standalone blocked cumulative-risk verdict to an accepted
+response; its final decision checks other boundary blocks and Warning but omits that risk
+case. The retained live adapter also leaves SDK retries enabled, records calls after awaiting
+them, and misclassifies the installed SDK's abort exception as a generic provider error.
+A local synthetic SDK probe confirmed the retry and abort behavior without network access.
+See the [gateway corrections and probe scope](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m70--stage-3e-core-draft-contracts-exceed-the-shown-implementation).
+These findings qualify historical risk, quota and timeout claims. The mounted legacy live
+route remains retired; direct module use and old revisions retain the defects. No runtime
+repair or live-provider validation is claimed by this documentation update.
+
 ## Archived browser-verifier limitation
 
 The frozen Stage 4M HTML verifier has duplicate top-level lexical declarations and fails to
