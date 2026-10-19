@@ -218,6 +218,10 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
   is complete within its stated scope. It preserves the earlier interrupted review and does
   not constitute an independent or repository-wide security audit.
 
+The retained Stage 4F frontier verifier has confirmed unsigned-certificate and utility-binding
+gaps. Its result is not assurance against a dishonest producer; see the
+[scoped finding and probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m94--retained-stage-4f-frontier-is-unsigned-and-does-not-meet-the-dishonest-evaluator-claim).
+
 Frozen documents describe their publication-time status. The later local review above and
 [continuation validation](docs/research/continuation-validation-2026-10-19/RESULTS.md) are additive
 records; earlier downloadable bundles remain snapshots of their recorded commits.

@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **820 documents have complete manual reads; 99 remain
+SHA-256 values. At this checkpoint, **830 documents have complete manual reads; 89 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -2798,3 +2798,279 @@ release's exact workflow, source revision, subject digest or successful run. App
 and revision checks; mutable action tags in the retained workflow are not commit pins. The
 historical release commands and pre-existing-failure exceptions are not current authorization
 or current test results. Preserve frozen specifications, signed artifacts and runtime source.
+
+### M91 — Timeline replay separates manifest roots, file checks and delegated reproduction
+
+The complete Stage 3X specification/plan predate the retained split between ten manifest-root
+checks and five strict per-file re-walks. Use the retained signed index and results: 12 pinned
+rungs, ten evidence roots, five deep re-walk surfaces, three delegated reproduce paths and two
+index-only rungs. These are overlapping surfaces, not additive counts. The exclusive replay tiers
+contain seven evidence-hash rungs, three reproduce rungs and two index-only rungs. The draft's
+expected `tier_summary` of 10/3/2 is inconsistent with its own filtering code. Its consistency
+loop also filters the seven evidence-hash rungs while announcing ten. Retained code correctly
+separates root, deep and tier counts. M45's earlier timeline correction applies throughout.
+
+A root check hashes the manifest file; it does not verify all its referenced files. The current
+generic verifier rejects raw parent segments and paths lexically outside the stage directory,
+fixing the draft's normalization-before-check and missing containment. It still checks listed
+entries rather than an independent complete inventory, accepts an empty map, reads files as UTF-8
+and does not resolve symlinks to prove physical containment. Its self-inclusion suffix test also
+rejects any listed filename ending in `evidence-hashes.json`, not only the exact manifest path.
+Use trusted local packs and preserve the distinction between a helper contract and a full signed
+root/rebuild check. “Pure” is inaccurate for these helpers' file and Git subprocess I/O.
+
+Tag resolution proves equality with a signed commit identifier, not that it is a merge commit,
+that the tag signature is trusted, or that every working-tree evidence file equals that commit's
+version. The timeline builder reads current files and local tags. Fingerprint lookup chooses the
+first matching public-key filename and does not independently verify every rung signature.
+`buildChainSummary()` counts declared table capabilities; it does not perform those checks.
+The complete runner's separate checks supply execution evidence. An available reviewer command
+is not evidence that an independent reviewer has run it. Required tags and dependencies must
+already be present for offline use; fetching missing tags is a separate network operation.
+
+Portable timeline verification authenticates the canonical object plus limited schema/non-claim
+fields, not every tier, rung, claim or referenced artifact. Reproduction compares a trusted
+callback's rebuilt object, not raw serialized file bytes; canonicalization retains M79's limits.
+Index-only Stage 3M means no integration into this chain's replay surface, not absence of its
+historical standalone verifier. The spec's `full_reproduce_available: true` example for 3M
+conflicts with the plan's false value and aggregate three; use the retained index's declared
+chain integration and explain the standalone capability separately.
+
+The draft reviewer shell can print PASS after its Node replay fails because it omits `-e` and
+an explicit status branch. Retained source wraps the Node command in an `if` and returns failure,
+so this is a corrected draft defect, not a current failure claim. The command writes its results
+artifact; it is not a read-only verifier. The ordinary smoke verifies the timeline and its own
+hash map, with historical-rung checks in the separately wired consistency audit; it is not the
+full delegated reviewer replay. Tamper cases, finite privacy patterns, no-base warn/pass and
+function-coverage scope retain the limitations described in M90. Preserve historical source
+examples and signed evidence; no replay, signing or release command was executed for this review.
+
+### M92 — Capability-kernel equivalence is finite, and bundle reproduction has a narrow scope
+
+The complete Stage 4A-lite spec/plan call a finite differential suite an exhaustive proof. The
+retained suite compares 19 authored tool/argument cases × five task strings × two mutation-gate
+settings: 190 comparisons. This is useful regression evidence, not proof over all strings,
+argument types, exceptions, tools or future versions. The draft shim returns family `none` for
+an egress tool with no destinations, unlike the legacy `egress` label; retained source fixes that
+case. Current direct `is_grounded` also rejects an empty destination, unlike the draft's allow.
+Therefore preserve the exact historical test/revision scope when inheriting the frozen
+`9/140 → 0/140` outcome; no live re-execution or per-action trace was reconstructed.
+
+The legacy grounding policy accepts a destination or its sufficiently long local-part as a
+substring, not necessarily a complete address/token or explicit authorization. A destructive
+keyword can match negated or unrelated task text and does not bind a specific target. Unknown
+families/tools are non-gated, and missing egress arguments can produce no actions. Type hints
+and comments do not enforce closed enums. This is a bounded adapter policy, not universal
+capability enforcement. The plan's claimed Policy abstraction is implemented as conditional
+branches and tables, so adding arbitrary families is not guaranteed to be data-only. Later
+additions mean the current module is no longer just the original dependency-free two-family
+surface; distinguish its versioned entry points.
+
+The model-free corpus derives class coverage from the frozen taxonomy, then authors representative
+tool arguments and benign task strings. It does not reconstruct actual AgentDojo tool-call traces
+or reproduce the exact user-task-8 over-block. Its 25 tool-call rows emit 26 action decisions
+because a multi-recipient call yields multiple actions: the retained summary is 23 block, three
+allow, ten destructive-mutation and 16 egress, with zero confirmation decisions. The duplicate
+mass-recipient example is not an independent destination or a measured mass-egress workload.
+`would_execute: false` describes simulation, including allowed decisions, not live enforcement.
+
+“No raw data persisted” applies to emitted decision records, not the whole evidence directory:
+`corpus-actions.json` intentionally retains public/authored task text, arguments and destinations.
+The emitter copies caller identifiers/tool names and declares privacy booleans; it is not a general
+arbitrary-input privacy validator. Target hashing does not prevent dictionary reconstruction.
+Offline reproducibility depends on retained code, data and compatible runtimes; “forever” is not
+a supported operational guarantee. The custom canonicalizer is not RFC 8785 compliance (M79).
+
+The retained Node verifier's reproduce mode hashes supplied decisions and rebuilds using the
+bundle's existing summary and supplied manifest. It does not rerun the Python kernel, recompute
+summary counts, rehash the five inherited files or check those files against Git commit `37f2de0`.
+Those require separate checks. Editing the manifest or decisions after signing is detectable,
+but that is distinct from validating their original meaning. Its inheritance check requires one
+substring, not the complete mandated statement. Calling the exported function without an argument
+or with null can throw during parameter destructuring before its catch; the documented
+never-throws contract is too broad. The example `node -e` reports FAIL without setting a nonzero
+exit status, and the file exports a helper without a standalone verification CLI. The key-name
+status grep is not a secret scan and misses already tracked/renamed secrets. Preserve the signed
+records and historical plans; these are documentation qualifications, not new runtime fixes.
+
+### M93 — Decision-replay packs need explicit fixture, signer and verifier limits
+
+The complete Stage 4D spec/plan describes a four-action recorded fixture, not a browser session,
+live model run or observed external execution. Completeness compares supplied observations and
+receipts under the trusted mediator assumption; it cannot establish that every real mediated
+action was logged, or detect a consistently omitted action against an absent external commitment.
+Signed fixture data does not establish model identity or policy correctness. Later enforcement
+work does not retroactively extend Stage 4D's observed surface.
+
+The plan's initial in-process signer does not implement the spec's IPC boundary. Current build
+CLI source does use `withSignerProcess` and the signer daemon, while the unit helper remains
+in-process. This is a corrected draft gap, but a subprocess with the same filesystem privileges
+is not protection against a caller reading the key. The deterministic private key is explicitly
+public test material, so anyone can regenerate fixture signatures; they are not independent
+operator authentication. The daemon restricts message types/run IDs and receipt structure, but
+its pack branch checks only version/run ID before signing. The Python dispatch controller checks
+a caller boolean, not a cryptographic receipt, and the Node pack builder has no dispatch operation.
+Unit-tested simulated dispatch and awaited receipt signing are separate observations, not proof
+of an integrated real executor refusing all unsigned actions.
+
+The retained canonicalizer has the same object-construction limitations described in M79 and
+is not complete RFC 8785 JCS. The Merkle helper duplicates an odd final node and uses an all-zero
+empty root; [RFC 9162](SOURCES.md#s27--rfc-9162-merkle-tree-definition) specifies a different
+construction for those cases. Describe the retained algorithm exactly rather than claiming RFC
+conformance. Its odd-node duplication can give the same root for a three-leaf list and that list
+with its final leaf repeated; separate ordered-list/count checks matter. The four-leaf golden
+fixture does not exercise this distinction. Frozen roots must not be silently regenerated.
+
+Current receipt validation adds a JSON schema and digest/mode/boolean checks, superseding the
+plan's manual-validation-only claim. Pack verification remains narrower than the spec's complete
+schema language: it compares the two declared embedded fingerprints to the external key but does
+not recompute the fingerprint from the embedded PEM. It checks observation/receipt lengths,
+IDs, steps, ordered receipt hashes and roots, but does not recompute every manifest count,
+per-sink tally or ordered observation-hash field. It does not require the complete non-claims
+object. A valid signature authenticates those supplied values without making them semantically
+verified. Cross-field run/session/sink/consequence declarations also need separate consistency
+checks beyond binding a receipt to an observation hash.
+
+Replay rederives selected features from supplied replay metadata, not from original raw content
+or independently authenticated provenance. Unknown/missing taint labels can yield `trusted_only`;
+Boolean coercion is not strict input validation. Several declared policy flags, explicit-authorization
+features, rate buckets and lattice semantics are not used by `decide()`. The signed bundle
+commits policy data, not the complete Python/Node decision implementation. Agreement for the
+four fixture actions is bounded parity evidence, not equivalence over arbitrary inputs.
+
+The CLI reads and parses the complete JSON before applying limits. The verifier measures
+`JSON.stringify(...).length` in UTF-16 code units, not bytes, and its size helper does not apply
+the declared maximum string/observation-log limits. The privacy checker uses ten exact forbidden
+keys and two string patterns; it cannot guarantee absence of arbitrary raw/private content under
+other names or encodings. The environment variables labelled offline are not network isolation;
+no corresponding enforcement is present in the reviewed Stage 4D modules. Installing dependencies
+is a separate potentially networked step. CLI failures can include environment-dependent exception
+messages, and writing results can itself fail; the unconditional stable-output guarantee is too
+strong. No-argument helper destructuring can also throw before its catch.
+
+The draft falsifier expectations conflict with its pack-signature-first order: ordinary post-sign
+edits fail before the deeper semantic layer. Its initial lying-decision helper does not repair
+later receipt links, and its key-swap helper changes labels rather than the PEM. Do not interpret
+those drafts as proof of each named layer. The plan directly writes success-shaped summary JSON;
+those constants are not measured test outcomes. Use actual reproduce logs/results and exact
+executed falsifiers. The retained harness improves temporary isolation and golden failure exit
+code 3, but still needs a caller-owned disposable path when overriding its recursively cleaned
+temporary directory. Historical “every gate” conclusions require the individual evidence, not
+just an echoed PASS or static summary. This audit did not sign or replace any fixture evidence.
+
+### M94 — Retained Stage 4F frontier is unsigned and does not meet the dishonest-evaluator claim
+
+The complete Stage 4F spec/plan promises an Ed25519 frontier certificate, complete external
+anchor binding and directly executed red arms. Retained implementation does not establish those
+properties. `frontier.sig` is a public SHA-256 certificate digest; the verifier compares strings
+and never cryptographically verifies a frontier signature. Signed Stage 4D cell packs remain a
+separate check. The frontier domain constant is unused for signing, and the certificate has
+cell IDs and aggregate hashes rather than the specified point/frontier Merkle roots.
+
+A [disposable-copy direct-verifier probe](frontier-verifier-probe.json) retained the original
+external public key and all signed per-cell pack bytes. The baseline passed. Adding a certificate
+annotation and recomputing its public digest also passed. Changing an external suite fixture hash
+without changing its declared suite hash passed. Finally, changing all 12 benign-cell utility
+observations to false, updating their unsigned manifest hashes, recomputing metrics/frontier and
+the unsigned certificate/digest yielded benign utility zero for each point and still passed.
+No private key was read and nothing was signed. These observations establish gaps in the direct
+frontier verifier; the committed golden-byte comparison harness would separately detect those
+changed files. Do not describe this verifier as securing a frontier against a dishonest producer.
+
+The verifier trusts `suite.suite_hash` instead of recomputing it, and does not inspect fixture
+paths/content. Python's separate suite validator checks resolved paths, file hashes and duplicate
+IDs, but that is not the direct Node verifier's contract. Cell verification checks pack signatures,
+pack hashes, utility hashes and the expected ID cross-product; it does not bind every manifest
+field to its actual pack, compare the recorded signature hash, or establish that the expanded
+grid policy equals the policy executed in that pack. External paths must be independently trusted;
+passing producer-supplied files through external-argument names creates no independent trust.
+
+The builder hashes/enumerates Stage 3F fixtures but executes copies of two Stage 4E templates,
+selected by label. It updates scenario/run labels and policy mode; it does not execute each
+fixture's distinct payload. The other numeric grid knobs are recorded in the cell ID policy but
+not applied by this run-record transform. Thus 12 canary scenarios × three points and 240 full-suite
+manifest entries × three points describe packaging coverage, not 36/720 independent behavioral
+experiments or full payload execution. Hard-negative labels select the attack template while
+being excluded from attack/benign metric denominators. Some label selection uses substring rules;
+counts must come from the actual committed manifest. Run/scenario name normalization is not
+injective in general, although the suite builder detects duplicate normalized scenario IDs.
+
+“Packs-only” also needs correction: utility is read from an unsigned sidecar. The builder assigns
+`task_completed` from the benign label and `benign_subtask_completed` from that label or any blocked
+receipt, rather than observing task completion. ASR counts attack cells with an allowed receipt
+whose authority flag is true; consequence `reached` counts allowed receipts, not executed effects.
+Utility-under-attack requires any block and the authored sidecar flag, not demonstrated containment
+plus completed work. `verify_coverage` is fixed to one in the metric helper, and zero-denominator
+rates/Wilson intervals return zeros. Wilson bounds here do not establish independent sampling or
+generalization from repeated deterministic templates. Equal frontier vectors are retained and
+are not proof of an optimum; the no-quality-gate principle remains appropriate.
+
+The builder manufactures clean/red-arm verification summaries and privacy/golden success flags
+without calling the direct verifier on corresponding red artifacts. Tests asserting those
+returned constants and the harness's echoed red-arm labels do not prove the specified mutations
+failed. The direct clean verifier and repeated-file comparisons are separate evidence. The
+privacy helper has a null-object edge case and finite content patterns; it audits selected
+aggregate objects, while inherited Stage 4D scanning covers pack content. Size bounds before
+parsing, complete artifact privacy checks and OS network isolation are not implemented by the
+shown verifier/harness. Offline environment labels and source-grep tests do not supply them.
+
+M93's public test-key, canonicalization, replay and signer-isolation limitations carry forward.
+The draft imports a nonexistent `jcs` export (retained code uses the actual canonical helper),
+and several large implementation steps are pseudocode despite the completeness checklist.
+Preserve frozen signatures, measurements and plans; current README/security guidance must flag
+the direct-verifier limits rather than repeat the historical certified-frontier claim.
+
+### M95 — Integration summaries do not independently establish every inherited guarantee
+
+The complete Stage 4D–4F integration spec/plan describes orchestration and expected-result
+checking, not a new containment experiment. Its readiness label is bounded by the underlying
+stage checks, including M93/M94. Reading a generated red-result JSON does not prove the named
+mutation was executed: Stage 4F's builder supplies those summaries as constants. The wrapper
+runs actual stage commands and wrong-key attempts, but that does not transform the historical
+red-arm summaries into independently observed falsifiers or fix the unsigned frontier.
+
+The oracle reads stored fields; it does not capture the process exit that created each file.
+Missing exit codes are inferred from `ok`. A clean record's failure reason need not be null,
+and a red record need not explicitly have `ok: false` if its exit/reason match. Empty expectations
+are vacuously successful. The wrong-key evaluator accepts several broad failure classes,
+including `pack_verify_failed`, and does not require an integer exit code. The Stage 4F attempt
+therefore establishes rejection at a signed cell-pack boundary, not authentication of its unsigned
+frontier certificate. Errors are swallowed in the shell before reading result files; a stale
+result can remain if an invocation fails before replacing it. Record freshness and exact observed
+failure are prerequisites for stronger claims.
+
+The required runtime no-network guard is not implemented by the retained source scanner. It
+looks for selected textual patterns in eleven integration files, not all transitive stage/Python
+code, dynamically loaded modules or child commands. The shell removes six environment names,
+whereas the broader prefix scrubber is a separate helper; neither disables the operating system's
+network access. The report builder itself is called outside `run_offline`. Source scanning and
+locale/environment pins are useful checks, not the spec's sandbox/runtime interception guarantee.
+The Node runtime is labelled required but its version is explicitly not recorded. The default
+canary invocation also inherits a caller's full-suite environment flag, so full mode can run the
+full lane twice rather than only at its separately labelled command.
+
+Current shell `log_hash` hashes label, command text and exit code, not log bytes. This produces
+stable status metadata, but cannot authenticate the volatile log's content. The separate Node
+command helper hashes captured output instead; do not conflate the two. Status/exit logs do not
+prove statistical robustness or stable execution timing. The full-suite flag passed to the report
+is a caller assertion, and its guard compares two booleans rather than independently inspecting
+a complete full-suite result set. Default oracle entries remain canary-focused.
+
+Coverage matrices mark hardcoded nonempty source-label arrays as covered. The report's golden
+and non-claim summaries are fixed assertions, not independent complete audits of stage artifacts.
+It accepts supplied command entries without requiring every prescribed command exactly once;
+`offlineEnforcement.ok: false` with an empty failures array contributes no failure. The retained
+report does fix the draft's stale return after a final privacy/audit failure, but neither version
+makes the report an independent release oracle. Privacy scans cover generated summary objects,
+not all referenced stage contents, and use finite patterns after reading each file. The absolute
+path scanner recognizes only selected Unix prefixes, not every absolute path or machine-specific
+value. The README is written after those JSON scans.
+
+The shell compares final regular-file hashes to an initial snapshot, detecting net changes to
+that enumerated surface. It does not make stage directories read-only, detect write-then-restore,
+or inspect symlink targets as ordinary files. An earlier failed command can exit before the final
+comparison; report creation also precedes it. The helper's snapshot comparison ignores additions,
+although the shell's complete listing comparison detects added regular files. Use disposable
+caller-owned paths for temporary-directory overrides because cleanup recursively removes them.
+The wrapper writes integration evidence and is not globally read-only. Preserve historical
+outputs, and qualify “proves the ladder” as orchestration of the exact bounded checks above.

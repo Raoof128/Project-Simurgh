@@ -132,7 +132,7 @@
       "assessment": "Read entire contribution, measured-results, replay and handoff text; verify each study result and install assumptions in study review. Fixed /tmp environment path is not guaranteed fresh despite maintenance guidance.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "5a0648303ccad12d5bd8fdb57409ec1ffe6d31588c7a6aa384acb6b28d926c4f"
+      "read_sha256": "d3f7e629a03a294182e9d358e35242b5b4c6d832079742a7dfb10c46df741c26"
     },
     {
       "path": "RESEARCH_HISTORY.md",
@@ -171,7 +171,7 @@
       "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check. M70/M71 disclose retained risk mapping, SDK retry/abort behavior, raw context prefixes and caller receipt strings; runtime remains unchanged.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "487e26136c25e69f985005df67700895b692fdb6499f861aae3282e145d19f91"
+      "read_sha256": "2fe8503775ecde8d2cf6b0280665f9886c3369b7f04895cc1ffe8ee0fd441266"
     },
     {
       "path": "docs/DECISIONS.md",
@@ -1107,7 +1107,7 @@
       "assessment": "Read all 13 primary-source applicability rows and limits. Correctly separates publication from review year, pinned SDK from living docs and alignment from compliance. Previous-turn fetch provenance retained; no fresh fetch claimed.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "bf3cb851e5c0917ba1b36815f554f8f001cf7aa111783887ce5ebc8969372db1"
+      "read_sha256": "8dfefaed3791caed361c769f391e179742119527494e268df63d2da09dadd65b"
     },
     {
       "path": "docs/documentation-audit-2026-10-19/VALIDATION.md",
@@ -8331,11 +8331,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "52664aad64f424340dda4242587048e2573f9d789cf429cde45fd143508d2f14",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual plan read; M91 distinguishes 10 root, 5 deep and 3 reproduce surfaces, exclusive 7/3/2 tiers, corrected draft shell/path defects, remaining lexical/listed-file limits, tag/working-tree identity, standalone versus chain integration and bounded portable verification. Current reviewer script, generic helper, timeline verifier/builder and consistency audit checked; preserve historical bytes.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "52664aad64f424340dda4242587048e2573f9d789cf429cde45fd143508d2f14"
     },
     {
       "path": "docs/superpowers/plans/2026-06-25-stage-4a-lite-capability-kernel.md",
@@ -8344,11 +8344,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "60bff146b5036d41c34aaee7fec13ec9f1dc41439ae907a1644b4beb04cf4ac7",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual plan read; M92 bounds 190-case differential evidence, fixes draft/current empty-egress distinction, qualifies substring/keyword authority and raw corpus exception, records 25 calls/26 decisions and exact verifier rebuild limits. Current kernel, shim, differential suite, verifier and signed summary inspected; historical files preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "60bff146b5036d41c34aaee7fec13ec9f1dc41439ae907a1644b4beb04cf4ac7"
     },
     {
       "path": "docs/superpowers/plans/2026-06-27-stage-4d-decision-replay-evidence-pack.md",
@@ -8357,11 +8357,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "fe077a6b369822df1a2154190effe33dbe76f6797285d7c8ae6ef1b06ae18815",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual plan read; M93 checks current signer IPC versus public fixture key, completeness/dispatch assumptions, non-RFC Merkle and canonicalization, partial schema/replay/privacy/size guarantees, draft falsifier ordering and static outcome summaries. Current verifier, CLI, crypto, receipt, signer daemon/client, replay and harness read; official RFC 9162 checked; frozen evidence preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "fe077a6b369822df1a2154190effe33dbe76f6797285d7c8ae6ef1b06ae18815"
     },
     {
       "path": "docs/superpowers/plans/2026-06-28-stage-4f-containment-utility-pareto.md",
@@ -8370,11 +8370,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "5959edfac10a6befc7ebf6e9361ddd984b9b6b33b7a944ca4787ef23fc7c2d6f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual plan read, including rereading truncated boundary; M94 confirms digest-only frontier, trusted suite-hash string, template-based execution, authored utility, static red-arm summaries and incomplete verification guarantees. Disposable public-evidence copies accepted changed unsigned utility/frontier and fixture hash; no signing/network/inference. Current README/security corrected; frozen stage bytes preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5959edfac10a6befc7ebf6e9361ddd984b9b6b33b7a944ca4787ef23fc7c2d6f"
     },
     {
       "path": "docs/superpowers/plans/2026-06-29-stage-4d-to-4f-integrated-verification-gate.md",
@@ -8383,11 +8383,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "a65b2e6f2ad9434528ddc1a4c1435443cc3ddb6a79eae66f89d1f2438a05c525",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual plan read; M95 distinguishes stored oracle summaries from direct falsifiers, source scanning from network enforcement, status hashes from log hashes, caller flags/hardcoded matrices from full coverage, and net mutation comparison from write prevention. Current shell, oracle, wrong-key, guards, report/CLI and snapshot audit checked; M93/M94 inherited limitations retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "a65b2e6f2ad9434528ddc1a4c1435443cc3ddb6a79eae66f89d1f2438a05c525"
     },
     {
       "path": "docs/superpowers/plans/2026-06-29-stage-4g-adaptive-red-team-campaign.md",
@@ -9553,11 +9553,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "c5df5107085973d6e3778f239657522b3bd8de75418d43ef9aee824be28b26b9",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual specification read; M91 distinguishes 10 root, 5 deep and 3 reproduce surfaces, exclusive 7/3/2 tiers, corrected draft shell/path defects, remaining lexical/listed-file limits, tag/working-tree identity, standalone versus chain integration and bounded portable verification. Current reviewer script, generic helper, timeline verifier/builder and consistency audit checked; preserve historical bytes.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "c5df5107085973d6e3778f239657522b3bd8de75418d43ef9aee824be28b26b9"
     },
     {
       "path": "docs/superpowers/specs/2026-06-25-stage-4a-lite-capability-kernel-design.md",
@@ -9566,11 +9566,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "5f02b288c02f249d707ebe49ffd4b5f58c224c4dfb802adfefeb212b492ca491",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual specification read; M92 bounds 190-case differential evidence, fixes draft/current empty-egress distinction, qualifies substring/keyword authority and raw corpus exception, records 25 calls/26 decisions and exact verifier rebuild limits. Current kernel, shim, differential suite, verifier and signed summary inspected; historical files preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5f02b288c02f249d707ebe49ffd4b5f58c224c4dfb802adfefeb212b492ca491"
     },
     {
       "path": "docs/superpowers/specs/2026-06-27-stage-4d-decision-replay-evidence-pack-design.md",
@@ -9579,11 +9579,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "71fe7ceb913632d88332c6d431cfddc68683ab9e454bd1e1a52773cb9272599f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual specification read; M93 checks current signer IPC versus public fixture key, completeness/dispatch assumptions, non-RFC Merkle and canonicalization, partial schema/replay/privacy/size guarantees, draft falsifier ordering and static outcome summaries. Current verifier, CLI, crypto, receipt, signer daemon/client, replay and harness read; official RFC 9162 checked; frozen evidence preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "71fe7ceb913632d88332c6d431cfddc68683ab9e454bd1e1a52773cb9272599f"
     },
     {
       "path": "docs/superpowers/specs/2026-06-28-stage-4f-containment-utility-pareto-design.md",
@@ -9592,11 +9592,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "3b6144b3de2d4f56a73b8bcdd8007784d472fcc29fb017ef9d8af6df5282c645",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual specification read, including rereading truncated boundary; M94 confirms digest-only frontier, trusted suite-hash string, template-based execution, authored utility, static red-arm summaries and incomplete verification guarantees. Disposable public-evidence copies accepted changed unsigned utility/frontier and fixture hash; no signing/network/inference. Current README/security corrected; frozen stage bytes preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "3b6144b3de2d4f56a73b8bcdd8007784d472fcc29fb017ef9d8af6df5282c645"
     },
     {
       "path": "docs/superpowers/specs/2026-06-29-stage-4d-to-4f-integrated-verification-gate-design.md",
@@ -9605,11 +9605,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "0789c8ee069e9c1606cc74e931a82f05e57008f56fd42eccd103657c68b23045",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual specification read; M95 distinguishes stored oracle summaries from direct falsifiers, source scanning from network enforcement, status hashes from log hashes, caller flags/hardcoded matrices from full coverage, and net mutation comparison from write prevention. Current shell, oracle, wrong-key, guards, report/CLI and snapshot audit checked; M93/M94 inherited limitations retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "0789c8ee069e9c1606cc74e931a82f05e57008f56fd42eccd103657c68b23045"
     },
     {
       "path": "docs/superpowers/specs/2026-06-29-stage-4g-adaptive-red-team-campaign-design.md",

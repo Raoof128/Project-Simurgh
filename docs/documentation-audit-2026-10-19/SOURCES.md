@@ -149,3 +149,12 @@ is this experiment's configuration. The model-card example uses `AutoProcessor` 
 This supports M89's distinction between the draft loading code, retained capture code and broader
 model capability. No weights were downloaded or inference performed; this source does not
 independently authenticate the repository's historical capture.
+
+### S27 — RFC 9162 Merkle-tree definition
+
+Checked 19 October 2026 against the [RFC Editor's RFC 9162, §2.1.1](https://www.rfc-editor.org/rfc/rfc9162.html#section-2.1.1).
+The standard hashes an empty tree as the hash of an empty string and splits a nontrivial tree
+at the largest power of two below its length. Stage 4D instead uses an all-zero empty root and
+duplicates an odd final node. Its domain prefixes are similar, but that is not the standard's
+complete tree construction. This source qualifies the historical “RFC 6962 / 9162 style” label;
+it does not certify repository conformance or change frozen roots.

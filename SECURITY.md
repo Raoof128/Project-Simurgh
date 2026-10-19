@@ -383,3 +383,26 @@ and [M89](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m89--frozen-llama
 for probe receipts, metric definitions and the raw-classifier replay exception. Script, input
 and snapshot hashes bind supplied values; they do not authenticate live execution. The retained
 capture has conflicting 64/20-token declarations, and its recorded origin remains self-reported.
+
+### Retained Stage 4D fixture verification
+
+Stage 4D uses a public deterministic test key and a separate signer process with shared filesystem
+access. These demonstrate fixture signing and IPC, not private-key isolation or independent
+operator identity. Its verifier checks supplied observations and receipts; it does not prove
+that the mediator logged every real action. Privacy rejection uses finite keys/patterns, and
+input limits apply after JSON parsing and count JavaScript string units. Use trusted local
+fixture packs and the explicitly bounded replay claims. See
+[M93](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m93--decision-replay-packs-need-explicit-fixture-signer-and-verifier-limits)
+for schema, Merkle, dispatch and offline-enforcement qualifications.
+
+### Retained Stage 4F frontier verification
+
+The Stage 4F `frontier.sig` file is a public digest, not an Ed25519 signature. A local probe
+changed utility sidecars and recomputed unsigned aggregate metadata; the direct verifier accepted
+the changed frontier while all signed cell packs and the external public key stayed unchanged.
+It also accepted a changed fixture hash in the external suite without a recomputed suite hash.
+The golden-byte harness provides a separate fixed-file comparison. Do not use the direct verifier
+as assurance against a dishonest frontier producer. See
+[M94](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m94--retained-stage-4f-frontier-is-unsigned-and-does-not-meet-the-dishonest-evaluator-claim)
+for the probe receipt, template/utility limitations and exact scope. Runtime repair remains separate
+from this documentation audit.

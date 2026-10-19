@@ -4441,3 +4441,20 @@ Owner-requested work; implementation and review by Codex assistance.
 - **Validation:** Check formatting, local links, ledger identities and hashes, append-only log
   prefixes and frozen-surface preservation. No inference, signing, external ceremony or E2E rerun.
 - **Remaining:** Complete all pending reads and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 830-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 830 of 919 baseline
+  candidates completely read, 89 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M91–M95 for complete Stage 3X, 4A-lite, 4D, 4F and integrated-gate plans
+  and specifications. Qualify replay surfaces, finite equivalence, fixture signing and summaries.
+- **Findings:** Direct Stage 4F verification accepts changed utility/frontier metadata with
+  unchanged signed cell packs. Its frontier file is a digest, not an Ed25519 signature. Preserve
+  a disposable-copy probe receipt and distinguish direct verification from golden comparisons.
+- **Guidance:** Update README and SECURITY; check RFC 9162 against the retained Merkle helper.
+  Preserve frozen evidence, source, specifications and signatures. Runtime repair is separate.
+- **Validation:** Check formatting, links, ledger identities/hashes, append-only prefixes and
+  frozen-surface preservation. No signing, inference, external ceremony or full E2E rerun.
+- **Remaining:** Complete every pending manual read and final correction verification.
