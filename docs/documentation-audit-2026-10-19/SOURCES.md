@@ -121,3 +121,12 @@ particularly the lifecycle and `AvailableSourceTypes` property. The property rep
 bitmask; session creation, source selection, starting and PipeWire access are separate operations.
 The reference says starting typically presents a user dialog. This qualifies the C/D plan's
 portal-active and consent wording in M62; no compositor interaction was performed for this check.
+
+### S24 — ECMAScript string length
+
+Checked 19 October 2026: TC39's living [String type definition](https://tc39.es/ecma262/multipage/ecmascript-data-types-and-values.html#sec-ecmascript-language-types-string-type)
+and [String instance length](https://tc39.es/ecma262/multipage/text-processing.html#sec-properties-of-string-instances-length).
+String length counts 16-bit elements, not UTF-8 bytes. This supports M65's distinction between
+`MAX_INPUT_CHARS` and a byte limit. The fetched living specification labels itself ECMAScript
+2027; it is not cited as a finalized 2026 edition. GNU's online Bash redirection pages failed
+to load during this check and are not presented as verified web sources.

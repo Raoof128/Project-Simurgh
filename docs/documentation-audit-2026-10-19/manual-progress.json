@@ -116,10 +116,10 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "f2b1fb2b9c18c89241c735b1d55d807836d06ba94bb256f14928b65422ded7a5",
       "status": "correction_in_progress",
-      "assessment": "Full read and source checks found HMAC vs SHA-256 mismatch, raw ingress omission, platform key-storage conflation and exact TTL claim. M01/M02/M05 corrections applied; final verification pending.",
+      "assessment": "Full read and source checks found HMAC vs SHA-256 mismatch, raw ingress omission, platform key-storage conflation and exact TTL claim. M01/M02/M05 corrections applied; final verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "af293f214ad69854175df295d3307f4e7d91ce8912ef00c40ea973e484c1c373"
+      "read_sha256": "c671a1535c19b6210d3c8ac2c41cf46554c81eb9c3101ecb03c476ffae502012"
     },
     {
       "path": "README.md",
@@ -168,10 +168,10 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "b282ef25d5a34576b34f64a3d1f8db46648ea1eb0d7ed00550a0870156d05865",
       "status": "correction_in_progress",
-      "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending.",
+      "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "6caf2e13f19ca26ca0daafbdefc08e6a0722eaac680b8b5b74275f84c94d32ba"
+      "read_sha256": "61cf1a61b67d2613347aa86fe28fbf13e9d62d732e1008917b97b6ef839a6b2d"
     },
     {
       "path": "docs/DECISIONS.md",
@@ -1107,7 +1107,7 @@
       "assessment": "Read all 13 primary-source applicability rows and limits. Correctly separates publication from review year, pinned SDK from living docs and alignment from compliance. Previous-turn fetch provenance retained; no fresh fetch claimed.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "019294a0bbd4c810e79a30f012ec78e3e842092ca8e7827029b31ef1881631e2"
+      "read_sha256": "01f8645197f3fc310a2c99f96db6e893d9a5bfd0a641e6a6b393d77fc621863c"
     },
     {
       "path": "docs/documentation-audit-2026-10-19/VALIDATION.md",
@@ -7941,11 +7941,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "21df7d15ab8ea92a9b9222088276eed6594fdd4efd5b7696a89258294ac01c78",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 2019-line plan read. Atomic consent claim excludes configuration failure; withdrawal blocks exports, not erasure; top-level field filtering and hardcoded privacy/report flags are not data-flow or UI observations. Persona decline does not exercise browser; fixed clock does not fix UUID/server timestamps; replay/withdraw status expectations and missing auth disagree with route. Draft markSubmitted omits duplicate check, current store includes it. Draft shell counters can falsely call failure on first success; curl -f drops expected error body; redirection order omits stderr. Synthetic outputs and Phase B humans require distinct provenance and governance; M63 qualifies plan. Historical release instructions not executed.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "21df7d15ab8ea92a9b9222088276eed6594fdd4efd5b7696a89258294ac01c78"
     },
     {
       "path": "docs/superpowers/plans/2026-06-11-banking-shield-phase-a.md",
@@ -7954,11 +7954,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "c857f1da2bda6557a0d0029ab25a4b006630e643e9f3a7f2bb2f2fa18df203e3",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 739-line plan read. Phase A synthetic-only implementation and B/C roadmap separated. Recursive guard snippet has no depth limit despite prose requiring 20; implementation must supply it. Hash syntax does not prove meaningful consent content; false privacy assertions and internal HMAC checks do not prove ingress absence or chain completeness. Formatter is not UI syntax/browser verification. Synthetic attack scans are bounded and do not authorize human work or certify CDR/CoP/APRA. Historical commands not executed; M64 qualifies scope.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "c857f1da2bda6557a0d0029ab25a4b006630e643e9f3a7f2bb2f2fa18df203e3"
     },
     {
       "path": "docs/superpowers/plans/2026-06-12-banking-shield-ai-privacy-explanation-ui.md",
@@ -7967,11 +7967,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "99d0c862b572b567fe97289533e52d9cee2fdda2d73d0d5839d618f218764251",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 29-line completed checklist read. Correctly constrains local deterministic explanation, textContent rendering and no backend semantic changes. Smoke page-contract assertions do not establish rendered browser behavior or usability; completed boxes are historical, not current validation. No live AI or bank integration claimed.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "99d0c862b572b567fe97289533e52d9cee2fdda2d73d0d5839d618f218764251"
     },
     {
       "path": "docs/superpowers/plans/2026-06-12-banking-shield-ai-privacy-firewall.md",
@@ -7980,11 +7980,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "4724c6a9098ea46f8a9cbc00c8e24a9fc807f37b8e3846d5673568fa5fd55e85",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 1499-line plan read. Draft substring scanner rejects its own not fraud detection/not financial advice disclaimers; current scanner adds bounded negation handling and schema rejects extra fields/nonstring nonclaims. Four-file source regex is not whole-program egress proof; comment injection tests regex only. Receipt flags are asserted, hash not signature; failed gate can mark unexecuted checks passed. Official field equality does not semantically validate narrative; missing values compare equal. Route tests omit several matrix cases despite self-review. Unit glob not recursive without shell setting. Prewritten all-pass closeout not measurement; M64 records additive corrections.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "4724c6a9098ea46f8a9cbc00c8e24a9fc807f37b8e3846d5673568fa5fd55e85"
     },
     {
       "path": "docs/superpowers/plans/2026-06-12-banking-shield-phase-b-internal-dry-run.md",
@@ -7993,11 +7993,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "dcce42e596622e808da4aa10d3a36a294522b56ca850ea98a744a3cdd948671d",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 208-line plan read. Explicit completion is scaffold/protocol only and says human dry run not executed. Templates human_participant=true/synthetic=false are intended future schema, not participant evidence. Literal marker scan cannot establish absence of overclaims or sensitive values; aggregate-only is not automatically anonymous. Historical fixed gates/checkmarks need dated receipts. No human run authorized or conducted; prior M23 governance/retention corrections apply.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "dcce42e596622e808da4aa10d3a36a294522b56ca850ea98a744a3cdd948671d"
     },
     {
       "path": "docs/superpowers/plans/2026-06-16-stage-3a-alpha-llm-shield.md",
@@ -8006,11 +8006,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "23882d16eb00e600b7d3720f9a942d2974c8e7bf97f5963a95bbd25ccd1b5fcc",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 1671-line plan read. C1 removal comment exceeds regex; string length is not byte cap; Content-Length-only check incomplete. Six router tests claimed seven. Mock echoes arbitrary task_type and response discarded, so benign pass not task utility. Audit ordered after invocation not independent timing; receipt pre-export head; contexts hashes empty input; 10 attacks plus context refusal counted 11. Fixture runner permits empty corpus and reason-code supersets. M65 records scope; current later-stage routes not inferred from alpha sketch.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "23882d16eb00e600b7d3720f9a942d2974c8e7bf97f5963a95bbd25ccd1b5fcc"
     },
     {
       "path": "docs/superpowers/plans/2026-06-16-stage-3b-adversarial-llm-shield-benchmark.md",
@@ -8019,11 +8019,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "df727cd9cead78b6c601b9d538cd28b412ae02aca39353eecc30a61b6ac4fc52",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 927-line plan read. Honest clean/hard-negative split, single-turn proxies explicit. Validator lacks ground-truth/type/nonempty census; 0/0 passes equality; partial digest map can be empty, two detector files not whole boundary freeze; source variable grep not nonempty rules. Writer mode overwrites historical baseline, not authorized now. Privacy scan limited and emits logging PASS even after failure but final exit nonzero. M65 qualifies draft; no benchmark reseeding or runtime change.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "df727cd9cead78b6c601b9d538cd28b412ae02aca39353eecc30a61b6ac4fc52"
     },
     {
       "path": "docs/superpowers/plans/2026-06-16-stage-3c-hardening-llm-shield.md",
@@ -8032,11 +8032,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "f0957eaba5d4ccc835b55a65724866da22d10b7c8c077f5594a29e82fc0217a7",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 1494-line plan read. Decode-before-fold correction valid, compact matching bypasses negation and merges whole sentence, educational regex unanchored and any quote can soften other matches. Role-play expected warning contradicts new hard phrase; five guard tests not three; literal router replacement omits safe response. Warning detection still calls mock; sequential ablation not original baseline. Current-only fixture census misses deletions, parsed equality not bytes; PLACEHOLDER explicitly accepted despite fix instruction. Held-out source scan not folder scan; printed specimen already exposed pre-freeze. M66 qualifies methodology and draft execution claims.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "f0957eaba5d4ccc835b55a65724866da22d10b7c8c077f5594a29e82fc0217a7"
     },
     {
       "path": "docs/superpowers/plans/2026-06-17-stage-3d-llm-shield-provenance-containment.md",
@@ -9098,11 +9098,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "1d082890467b89443abaa97d9ca02e3561fa43a9468665499927a9f3c6b50fbb",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 395-line spec read. Mission/proposed acceptance distinct from execution. SHA-vs-HMAC mismatch M01; spec weights sum100 vs plan105, example category weights yield42.75 not64; confidence uncalibrated; signed-report and30daydeletion not established. Metadata/pseudonyms not anonymous; optional Claude is separate network path. M67 records additive corrections, frozen specification preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "1d082890467b89443abaa97d9ca02e3561fa43a9468665499927a9f3c6b50fbb"
     },
     {
       "path": "docs/superpowers/specs/2026-05-14-stage-2-1-macos-integrity-proof-design.md",
@@ -9111,11 +9111,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "76db6b19372f1aff9ddf3d5ef8b85becfb188b92f24b87c48ef0f3fa9adbf6a0",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 531-line spec read. Clearly scoped unregistered software-key handshake, CLI file key not later Keychain daemon. One golden sample not universal canonicalization interoperability; periodic cleanup cannot promise auxiliary state never outlives session; conditional Swift skip not execution. Targets/checkmarked acceptance not receipts, native sensor scanning explicitly absent. M60/M67 qualify claims.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "76db6b19372f1aff9ddf3d5ef8b85becfb188b92f24b87c48ef0f3fa9adbf6a0"
     },
     {
       "path": "docs/superpowers/specs/2026-05-14-stage-2-2-macos-node-pairing-design.md",
@@ -9124,11 +9124,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "4cee9904025b62fff25c96bf27c7de7987daeeca3949d7819fa05b629d42d210",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 713-line spec read. Key continuity/check ordering/TTL/manual transport reviewed. Verified key not physical device or sensor truth. unknown_field key can propagate via reason despite safe metadata claim. Four server gates plus extended existing check not five new; future stage numbering shifted. Current retained proof evidence separate. M61/M67 additive corrections; no implementation/release commands executed.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "4cee9904025b62fff25c96bf27c7de7987daeeca3949d7819fa05b629d42d210"
     },
     {
       "path": "docs/superpowers/specs/2026-05-17-stage-2-7-cross-platform-device-shield-design.md",
@@ -9137,11 +9137,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "07611ad8dafda2f962917886ef62839b60b58aa69e6e1a165d83a3e19c613a61",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 381-line spec read. Mock P256 tests do not establish native behavior; added daemon_platform is observable contract change. Scenario platform differs named report field; automatic misconduct substring ban conflicts required negation. Platform tamper may schema-fail before signature. Linux unsupported is dated before2.8, not current. M61/M67 qualify; retain historical spec.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "07611ad8dafda2f962917886ef62839b60b58aa69e6e1a165d83a3e19c613a61"
     },
     {
       "path": "docs/superpowers/specs/2026-05-17-stage-2-8-linux-display-integrity-design.md",
@@ -9150,11 +9150,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "668c4c97c73014cda021a4ce56a97b4edb346ee7eebec6200dca6c8521cee483",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 613-line spec read. Selected real-desktop matrix is target not measurement; portal property probe not capture readiness; shared port still collides with other processes. Code list invalid_linux_scanner_version differs smoke invalid_scanner_version. Redacted signature copy nonverifiable. Nonclaims/partial XWayland appropriate; browser confinement hint and Xvfb not real-desktop coverage. M62/M67/S23 qualify; current license conflict M62 separate.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "668c4c97c73014cda021a4ce56a97b4edb346ee7eebec6200dca6c8521cee483"
     },
     {
       "path": "docs/superpowers/specs/2026-05-21-simurgh-paper-design.md",
@@ -9163,11 +9163,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "daeb27bf23ff3a1aacf1819adbabc4d7d39fe1ea519b806ae2497b298bf9d15f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 68-line spec read. Proposed paper/venue not acceptance. Generic Ed25519 conflates legacy CLI and P256 daemon; 327/33/11 are historical totals. Replaces screen trust thesis not proof of trustworthy sensors; plaintext process exclusions need legacy exception. Later actual publication reviews and M67 bound claims; design preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "daeb27bf23ff3a1aacf1819adbabc4d7d39fe1ea519b806ae2497b298bf9d15f"
     },
     {
       "path": "docs/superpowers/specs/2026-05-28-voting-pilot-design.md",
@@ -9176,11 +9176,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "a8b73b2640ef8c15f5a5be6646b069cfd5551614ae5b66101e5345fed90d84e0",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 484-line locked spec read. Distinct human/synthetic categories sound but schema flags no provenance proof. CommonJS require mount mismatches ESM; broad daemon/persona behavior deferred in browser-only implementation. Fixed-clock not all timestamps; before-any-mutation conflicts rejection audit. No telemetry/real browser evidence inferred. Human ethics not limited to publication intent; M23/M63/M67 qualify consent/withdrawal and privacy claims.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "a8b73b2640ef8c15f5a5be6646b069cfd5551614ae5b66101e5345fed90d84e0"
     },
     {
       "path": "docs/superpowers/specs/2026-06-11-banking-shield-phase-a-design.md",
@@ -9189,11 +9189,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "6811935163ae00678815d0d1c56bda00afa98ef8236995f7be72fb863d57e83f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 487-line spec read. Synthetic scope and local sanitiser not real banking/LLM. Accepted-state exclusion narrower than ingress; arbitrary unknown key returned/audited confirmed current helpers/source M68. Hash form and privacy flags not proof of content absence; closure before auth distinct from pre-router parsing/config; withdrawal not deletion. Human roadmap not executed. M64/M67/M68 qualify.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "6811935163ae00678815d0d1c56bda00afa98ef8236995f7be72fb863d57e83f"
     },
     {
       "path": "docs/superpowers/specs/2026-06-12-banking-shield-ai-privacy-explanation-ui-design.md",
@@ -9202,11 +9202,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "d4f53be807ac8dd196fa6102568ec0d23f265871e554e9da9be83d1c7654a927",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 90-line completed spec read. Static panel/API receipt checks explicitly described, not rendered mobile/accessibility or human comprehension evidence. No-egress scope excludes browser assets and static flags are assertions. textContent design appropriate. M64/M67 and current PRIVACY disclose scope.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "d4f53be807ac8dd196fa6102568ec0d23f265871e554e9da9be83d1c7654a927"
     },
     {
       "path": "docs/superpowers/specs/2026-06-12-banking-shield-ai-privacy-firewall-design.md",
@@ -9215,11 +9215,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "1aa07aa669c87d61ed17ea385f09e2346e09bd62318e49ec2bcf3aff12554951",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 310-line spec read. Deterministic mock not measured AI comprehension benefit; grep-provable no-egress too broad. Phrase rules finite; proposed hash insertion-order JSON not general canonical contract; official primitive equality not narrative meaning; default-off/withdraw routes have precedence. Preimplementation status not receipt. M64/M67 qualify, no liveprovider added.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "1aa07aa669c87d61ed17ea385f09e2346e09bd62318e49ec2bcf3aff12554951"
     },
     {
       "path": "docs/superpowers/specs/2026-06-12-banking-shield-phase-b-internal-dry-run-design.md",
@@ -9228,11 +9228,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "fc5ad5bcc0a8acb368e83347f7c3ff48e72081e31cef80d2d5ad2aea95a3f5aa",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 152-line spec read. 2\u20133 human testers a proposed future study, not templates as evidence; synthetic=false means human interaction with fictional scenarios. Needs separate fresh session per scenario and human governance, aggregate tiny counts not anonymity. If-passes wording conditional; prior reviewed closeout pending. M23/M64 govern; no human study executed.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "fc5ad5bcc0a8acb368e83347f7c3ff48e72081e31cef80d2d5ad2aea95a3f5aa"
     },
     {
       "path": "docs/superpowers/specs/2026-06-16-stage-3a-alpha-llm-shield-design.md",
@@ -9241,11 +9241,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "81df58e99871551aeef208075bd9a897a7d9ee955cb96d8806c6bed5af764c0e",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 333-line spec read. The token-bound claim for all three routes excludes session creation; every-run receipts exclude invalid requests. The draft 4 KB limit uses UTF-16 length; ordered HMAC events are not an independent invocation witness. Sixteen fixtures include one unsupported-context refusal, not an additional jailbreak. Stage forecasts were superseded by 3B/3C; classifier acceptance is not task utility. M65/M67 qualify the claims.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "81df58e99871551aeef208075bd9a897a7d9ee955cb96d8806c6bed5af764c0e"
     },
     {
       "path": "docs/superpowers/specs/2026-06-16-stage-3b-adversarial-llm-shield-benchmark-design.md",
@@ -9254,11 +9254,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "89f4a6b1b4f501ec6b87d527fd421693e262f06c2c0e1b3f740c6f1393c52e18",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 250-line spec read. The 100% hard-negative claim was relaxed explicitly in the implementation plan. Ground-truth labels are author assignments, not an independent oracle. Raw payloads also appear in specifications/tests; the fixture-only rule must be scoped to generated evidence. Two-file digests do not freeze all source behavior; required privacy coverage exceeds the script. M65/M67 record corrections; no baseline writer was run.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "89f4a6b1b4f501ec6b87d527fd421693e262f06c2c0e1b3f740c6f1393c52e18"
     },
     {
       "path": "docs/superpowers/specs/2026-06-16-stage-3c-hardening-llm-shield-design.md",
@@ -9267,11 +9267,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "b21ecd18ee68f8579d98eb8b71d3f43ae45436d72696274dd57f914b455bdc66",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full 299-line spec read. The plan corrects the spec by decoding base64 before folding. Whole-string compact matching differs from conservative separator handling. Warning counts as detection while invoking the provider; benign false positives count blocks only. The ablation first row is not the literal original detector, and changed metrics are not an unchanged benchmark. A small same-author held-out gap is not a causal overfitting estimate or demonstrated ceiling. M59/M66/M67 qualify methodology; prior source qualifications apply to June event claims.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "b21ecd18ee68f8579d98eb8b71d3f43ae45436d72696274dd57f914b455bdc66"
     },
     {
       "path": "docs/superpowers/specs/2026-06-17-stage-3d-llm-shield-provenance-containment-design.md",

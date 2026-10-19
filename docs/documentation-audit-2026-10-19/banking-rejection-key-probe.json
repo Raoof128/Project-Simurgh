@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-19",
+  "node": "v24.19.0",
+  "scope": "Local current validator and audit-payload helper calls; route connection inspected in source. No HTTP or real personal data.",
+  "synthetic_marker": "FICTIONAL_PRIVATE_LABEL",
+  "observed_validation": {
+    "ok": false,
+    "reason": "unknown_field",
+    "field": "FICTIONAL_PRIVATE_LABEL"
+  },
+  "observed_audit": {
+    "route": "submit",
+    "reason": "unknown_field",
+    "field_name": "FICTIONAL_PRIVATE_LABEL"
+  },
+  "caller_key_retained": true,
+  "source_sha256": {
+    "src/bankingPilot/bankingScenarioPolicy.js": "4792d894f36439931bba6db5e828e013c5652dff3e913dae314b16051746eead",
+    "src/bankingPilot/bankingAudit.js": "a947673ba275402de1ebea7b8a752977864bc1b156dcaa89d322e39ca6d69c03",
+    "src/bankingPilot/index.js": "e72ab370bff83c4fd7f162b58f0498771de62603026e69a5168fb24ca027f2ae"
+  }
+}

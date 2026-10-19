@@ -67,6 +67,14 @@ See [`bankingSessionStore.js`](src/bankingPilot/bankingSessionStore.js) and the
 [route implementation](src/bankingPilot/index.js). The historical scenario page's promise that
 withdrawal “removes” the session must be read with this correction.
 
+Banking rejection records can retain caller-supplied **field names**. For an unknown field,
+the scenario validator returns that key; the submit route includes it in the error response
+and the session audit payload. Excluding a property's value therefore does not exclude private
+text placed in its key. Use fictional data in both keys and values, and review exported audits.
+The [manual audit finding](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m68--banking-rejection-keys-remain-caller-controlled)
+records the source trace and a local synthetic helper check. This behavior remains in the
+preserved banking implementation.
+
 ## Academic and device telemetry policy
 
 > **Stage 2.7 note:** The canonical list of forbidden raw-field names now lives in [`src/device/forbiddenLocalFields.js`](src/device/forbiddenLocalFields.js) and is enforced recursively by the daemon proof validator, the privacy audit CLI (`tools/privacy-audit.mjs`), and the Stage 2.7 security audit gate. Any new field added to that list automatically tightens the privacy contract across both macOS and Windows.

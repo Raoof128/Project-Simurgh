@@ -3578,3 +3578,23 @@ Owner-requested work; implementation and review by Codex assistance.
   No new model inference, external ceremony, full E2E or interactive native/browser run.
 - **Remaining:** Finish every pending plan, specification and large log, resolve remaining
   documentation findings and validate the final ledger before claiming completion.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 757-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 757 of 919 baseline
+  candidates completely read, 162 pending. Exhaustive review remains in progress.
+- **Changes:** Add M63–M68 corrections for voting/banking plans, early device specifications,
+  and LLM benchmark methodology. Distinguish mock classification, browser behavior, native
+  observation, consent and independently verified effects. Preserve historical specifications.
+- **Finding:** Current banking rejection helpers retain arbitrary unknown key names. Trace the
+  submit route in source, confirm helper behavior with a fictional marker, retain the scoped
+  receipt and disclose the limitation in privacy/security guides. No runtime repair is claimed.
+- **Sources:** Read TC39 string-length semantics; distinguish the living 2027 draft from a
+  finalized 2026 edition. Do not count failed Bash webpage retrievals as verified sources.
+- **Validation:** Check formatting, local links, exact baseline identities, reviewed hashes and
+  append-only log preservation. No new model request, external ceremony, full E2E rerun or
+  interactive browser/native test was performed for this documentation checkpoint.
+- **Remaining:** Complete all pending plans, specifications and logs, resolve documentation
+  findings and validate the final ledger before reporting the exhaustive review complete.

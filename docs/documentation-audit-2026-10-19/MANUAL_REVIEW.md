@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **735 documents have complete manual reads; 184 remain
+SHA-256 values. At this checkpoint, **757 documents have complete manual reads; 162 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -1697,3 +1697,195 @@ and Scenario P delegated to other scripts; they are not 16 unconditional executi
 smoke. Redacting a signature produces a non-verifiable copy, which must remain distinct
 from the preserved signed original. These are additive corrections to plans, not new native
 runtime measurements.
+
+### M63 — Voting-plan consent, privacy and test assertions
+
+The 28 May voting implementation plan describes an atomic consent gate, but its sketch
+creates the record before reading the token secret; missing configuration can leave a
+record after a failed response. An empty consent POST is an API action, not proof that a
+person read and accepted the notice. Withdrawal marks the session and blocks report export;
+it does not erase the record or previously exported material. The plan supplies no retention
+expiry. Its Phase B internal testers are human participants too; M23's governance and
+retention corrections apply before any such study. A template's ethics-approved retention
+wording does not establish actual institutional approval.
+
+The sketch rejects a top-level ballot-field list, not arbitrary nested data, and its static
+`ballot_presented`, privacy and data-source fields do not establish actual browser activity
+or data provenance. Clearing radio values leaves the checked element and labels available;
+it is not memory erasure. The persona runner's decline branch does not visit the page, and
+its simulated delay does not produce a browser focus event. Its fixed clock affects its own
+metadata, not server UUIDs, timestamps or output filenames. Report-step failures can leave
+the aggregate assertion unchanged, and forbidden-payload personas cannot truthfully be
+summarized as having sent no ballot choice merely because the service rejects it.
+
+Several proposed gates contradict the route: a withdrawn-report request without its token
+exercises authentication rather than withdrawal; the replay/body-mismatch route returns 409,
+not the proposed 401/404. A fabricated-ID request does not establish that declining created
+no record. The draft `markSubmitted` omits the duplicate-submission guard; the current store
+contains that guard. Current smoke code also uses increment-before-test counters and expects
+401 for the unauthenticated fabricated-ID request. Do not copy the draft's `((PASS++))` into
+an `&& ok || fail` chain: its first successful increment returns status 1 and invokes `fail`.
+The proposed `curl -f` suppresses the expected 400 response body, undermining that body test.
+For complete logs, use `> file 2>&1`; the plan's `2>&1 > file` leaves stderr on the prior
+stdout destination. These are historical-plan corrections, not newly executed route tests.
+
+### M64 — Banking-plan firewall and evidence limits
+
+The 11 June Phase A plan correctly separates synthetic implementation from future human
+work. Its recursive guard snippet nevertheless lacks the depth limit required by its prose.
+Hash-shape validation does not establish meaningful consent content, static false privacy
+fields do not establish absence of raw ingress, and HMAC verification does not prove record
+completeness (M03). Formatting checks do not validate interactive page behavior. The 12 June
+Phase B plan explicitly completes a protocol scaffold, not a participant run; template flags
+such as `human_participant: true` must not be counted as collected human evidence.
+
+The B4-A implementation sketch's plain substring scanner rejects its own required
+“not fraud detection” and “not financial advice” disclaimers. The current output firewall
+adds a bounded negation rule, rejects extra narrative fields and validates non-claim element
+types and lengths; those corrections are absent from the historical sketch. Neither version's
+finite phrase list establishes semantic detection of every misleading claim. Equality of
+three official fields establishes equality of those fields, not agreement of the narrative's
+meaning with them; the helper alone also treats two missing fields as equal.
+
+The proposed no-egress gate searches four source files for listed strings. Adding a `fetch`
+comment proves that regex fires, not that the running program cannot communicate. Receipt
+flags are software assertions, and a narrative SHA-256 hash is a fingerprint, not a signature
+or independent witness. The draft failed-firewall receipt can mark later checks passed even
+when an earlier gate returned before they ran. Scope such claims to the actual executed path
+and its evidence. The route test block does not cover every response-matrix row despite the
+self-review saying it does, and `tests/unit/**/*.test.js` is not recursively expanded at all
+depths by default Bash globbing. Prewritten completed closeouts and expected PASS outputs
+are instructions, not receipts. B4-B's page-contract smoke likewise does not establish a
+rendered browser result or improved human comprehension.
+
+### M65 — Early LLM benchmark plans and measurement boundaries
+
+The Stage 3A plan's control-character expression removes C0 characters and DEL, but not
+C1 U+0080–U+009F despite its comment. Its length check uses JavaScript string length after
+normalization; that is not a 4 KB UTF-8 byte cap. The Content-Length header check alone does
+not cap an absent/chunked body or undo parsing already performed upstream. The router's
+supposed seven-case test block contains six tests. The mock interpolates caller-provided
+`task_type`, so “never echoes raw input” is limited to the `input` property, not every
+caller-controlled value. The run sketch discards the mock's response; its benign pass rate
+measures classification, not successful summarization or translation.
+
+The plan records its safe-path audit events after invoking the mock. Their serialized event
+order does not independently establish real execution timing. Response flags and a valid
+server-owned HMAC chain are evidence of the configured reporting path, not an independent
+provider-call observation. The receipt points to the decision head before the receipt-export
+event; it is not the final post-export head. Alpha contexts rejection hashes the empty string
+instead of the submitted input. Ten direct attack examples plus one unsupported-context
+case give eleven blocked cases; the context refusal should not be presented as an eleventh
+observed jailbreak detection. The runner has no explicit nonempty-corpus assertion and checks
+expected reason-code inclusion rather than exact equality.
+
+The Stage 3B plan improves reporting by separating clean benign and hard-negative results.
+Its historical baseline-seeding command writes observations; it is not authority to refresh
+frozen results now. The validator sketch omits required ground-truth/type/census validation,
+and its `pass === total` condition accepts 0/0 if an empty baseline were also supplied.
+The digest loop likewise needs a pinned nonempty path set; finding the literal denylist
+variable name does not prove a nonempty active rule set. A two-file digest does not freeze
+all router/provider behavior. Its privacy script searches selected strings and files, and
+prints a no-logging PASS line even after recording a logging failure; the final exit remains
+nonzero, so that intermediate line must not be cited alone. These bounds qualify the draft
+security/privacy claims without changing frozen detector bytes or benchmark measurements.
+
+### M66 — Stage 3C draft contradictions and evaluation interpretation
+
+The complete Stage 3C plan and spec differ in consequential ways. The spec folds before
+base64 decoding, while the plan correctly decodes case-sensitive blobs first. The spec says
+not to merge whole-sentence spacing, but the plan's compact view removes every non-ASCII
+alphanumeric separator. That compact match also bypasses the spaced match's negation test.
+The educational regex is not anchored to a lead-in; one quoted matched phrase can soften
+other unquoted matches in the same input. These are heuristic rules, not instruction-scope
+parsing. The proposed role-play test expects Warning for text containing the newly added
+`output your system prompt` hard phrase, yet the shown mapping returns Blocked without
+educational framing. The context-guard block contains five tests, not the expected three.
+The router replacement instruction says to replace through the response but shows only the
+safe mock call at its end; applied literally, it omits the safe response construction.
+
+Warning still invokes the mock. Reporting Warning plus Blocked as “detection” must retain
+the split and cannot be relabeled prevention. The hard-negative false-positive metric counts
+blocks only; it does not measure warning friction or human utility. The all-off ablation uses
+the expanded 3C phrase set, not the literal original 3A detector; the plan acknowledges this,
+but the spec's table labels it as the frozen 3B baseline. Sequential ablations also depend on
+addition order and interactions. A tiny same-author held-out set is a descriptive transfer
+probe, not a quantified causal overfitting estimate or proof of a deterministic ceiling (M59).
+A specimen already printed in a pre-implementation plan cannot establish that its text was
+unseen until after implementation merely because the task is numbered after the freeze.
+
+The plan's immutable-field checker enumerates current files only, so it cannot detect a
+deleted fixture, and parsed-value equality is not whole-file byte equality. Its held-out
+runner explicitly exempts `sha256:PLACEHOLDER`, contrary to the instruction to fix placeholders
+“flagged” by that runner. The promised held-out privacy extension only repeats a source-key
+scan; it does not traverse that evidence folder. Measurement-only runners can still fail on
+bad hashes or I/O, so “exit 0 by design” is too broad. Historical re-freeze instructions do
+not authorize changing frozen evidence during this audit.
+
+### M67 — Foundational design specifications are historical contracts
+
+The Stage 1 Academic Shield spec alternates between SHA-256 and HMAC-SHA256 identity
+wording; current keyed behavior is documented in M01. Its seven listed weights sum to 100%,
+whereas the later implementation-plan weights sum to 105% (M30/M60). Its example category
+values give 42.75 under the displayed weights, not the example score 64. The confidence
+number is illustrative, not calibrated. A planned signed report and a 30-day config value
+do not establish an exported digital signature or enforced deletion. Stored pseudonymous
+identifiers and behavioral timings are not automatically anonymous.
+
+Stage 2.1 correctly separates signature verification from unregistered node trust, but a
+single Node/Swift fixture does not establish all-input canonicalization interoperability.
+Its five-minute cleanup callback does not establish the assertion that an auxiliary record
+never outlives its session. Conditional Swift skips are not macOS test executions. Stage 2.2
+binds a key to a session, not a physical device or sensor truth; M61's arbitrary rejection-key
+and four-versus-five gate corrections apply to this spec too. Its later-stage numbering is
+an early roadmap, superseded by the released stage records.
+
+Stage 2.7's mock P-256 scenarios are not native scanner measurements. Its scenario table
+uses `device_integrity.platform` while its report contract names `daemon_platform`.
+The ban on “automatic misconduct” conflicts with the required negated disclaimer, and a
+platform mutation can fail scanner schema checks before signature verification (M61).
+Stage 2.8's real-Linux matrix is a validation target, not an executed matrix. A readable
+portal property is not active capture or universal coverage (S23), and signature-redacted
+proof copies cannot be verified. Sharing port 3031 does not make collisions impossible:
+another local process or daemon instance can occupy it. Its scanner-version error names
+also differ between the fail-code list and smoke table; consult the implementation/receipt
+for the applicable route rather than treating examples as current code.
+
+The May paper design's generic Ed25519 claim must distinguish the earlier CLI protocol
+from the P-256 daemon protocol. Historical platform counts and an intended venue are not
+current test totals or publication acceptance. Its replacement-of-screen-trust thesis is a
+research proposal, not evidence that signed self-reported metadata establishes trustworthy
+observation. The voting design likewise includes future daemon/persona behavior absent from
+the browser-only plan; its CommonJS `require` mount is not valid guidance for this ESM server.
+“Before any session mutation” conflicts with appending a rejection audit event; the actual
+boundary is rejection before accepting the scenario. M63 qualifies the related consent,
+provenance, withdrawal and deterministic-output claims.
+
+The 3A spec's “all three routes are token-bound” excludes its unauthenticated session-creation
+route in the plan. Invalid requests do not necessarily emit receipts, so “every run” needs a
+valid admitted-run scope. Its stage forecasts were revised by 3B/3C and later records.
+The 3B spec's 100% hard-negative pass claim was explicitly relaxed in the plan; benchmark
+labels are author-assigned, not an independently established truth oracle. Its privacy-audit
+requirements cover more artifact classes than the shown implementation scans (M65).
+The banking B4-A/B specs' “improves explanation” remains an unmeasured human-outcome claim;
+template generation and static UI checks do not establish comprehension improvement. The
+receipt hash uses `JSON.stringify` insertion order in the plan, not a general cross-language
+canonical serialization contract. These corrections preserve the original approved documents
+while making their interpretation reviewable.
+
+### M68 — Banking rejection keys remain caller-controlled
+
+The Phase A banking design says rejected-attempt audit payloads contain only route, reason
+and field name. That shape alone does not exclude sensitive content. Current
+`bankingScenarioPolicy.js` returns an arbitrary unknown key as `validation.field`;
+`index.js` passes it to both the error response and `appendRejectedAttempt`, and
+`bankingAudit.js` retains it unchanged as `field_name`. A caller can put private text in
+that key even when the property's value is omitted.
+
+A local call to the current validator and audit-payload builder using the fictional key
+`FICTIONAL_PRIVATE_LABEL` returned `unknown_field` and retained that key in `field_name`.
+This confirms helper behavior; the route connection was checked in source. No HTTP request,
+real personal data or external service was used. The [probe receipt](banking-rejection-key-probe.json)
+records the inspected source hashes and scope. Current privacy/security guides now disclose
+this limitation. The preserved runtime remains unchanged; a separately authorized successor
+should use fixed rejection categories or allowlisted field identifiers.

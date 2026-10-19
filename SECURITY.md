@@ -57,6 +57,16 @@ These omissions remain in the frozen standalone implementation; its exit zero is
 for the complete artifact/inclusion-verification claim. This finding does not establish that
 the genuine captured log entry is false or that the separate main-stage CLI has the same behavior.
 
+## Banking rejection-record limitation
+
+The banking submit path returns and audits unknown field names supplied by the caller.
+Rejecting a property value does not prevent sensitive text in its key from reaching the
+response or audit export. The [documented source trace and synthetic helper check](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m68--banking-rejection-keys-remain-caller-controlled)
+qualify the historical claim that field-name-only rejection records cannot retain sensitive
+input. Use fictional keys and values; this documentation correction does not repair the
+preserved runtime. A successor should emit a fixed rejection category instead of arbitrary
+unknown keys.
+
 ## OpenAI demonstration trust boundaries
 
 - Model output and retrieved context cannot grant permissions. A trusted local registry
@@ -226,7 +236,7 @@ Enforcement points:
 
 - `src/privacy/privacyConfig.js` — declarative allowlist of what may be collected
 - `src/privacy/normaliseTelemetry.js` — strict allowlist applied before storage
-- `src/privacy/hashIdentity.js` — one-way SHA-256 hashing at point of entry
+- `src/privacy/hashIdentity.js` — HMAC-SHA256 pseudonymization after receipt of the raw identifier
 - `tools/privacy-audit.mjs` — CI-ready scanner that fails if forbidden fields appear in generated data
 
 These controls are implemented in the named validation paths. They do not protect against a
