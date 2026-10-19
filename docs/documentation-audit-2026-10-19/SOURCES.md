@@ -139,3 +139,13 @@ failures and the `maxRetries` setting for disabling them. The installed 0.39.0 S
 inspected and tested with injected local fetch functions; M71 distinguishes that pinned behavior
 from the living reference. No provider request was made. The attempted raw GitHub v0.39.0 README
 URL returned 404 and is not used as evidence.
+
+### S26 — Llama Guard 4 model card and execution surface
+
+Checked 19 October 2026: Meta's [Llama Guard 4 model card](https://huggingface.co/meta-llama/Llama-Guard-4-12B).
+It supports classifying both prompts and responses; the user-turn-only restriction in Stage 3V-B
+is this experiment's configuration. The model-card example uses `AutoProcessor` and
+`Llama4ForConditionalGeneration` and identifies the LlamaGuard preview Transformers release.
+This supports M89's distinction between the draft loading code, retained capture code and broader
+model capability. No weights were downloaded or inference performed; this source does not
+independently authenticate the repository's historical capture.

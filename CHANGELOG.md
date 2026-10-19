@@ -4424,3 +4424,20 @@ Owner-requested work; implementation and review by Codex assistance.
 - **Validation:** Formatting, links, ledger identities and hashes, append-only log prefixes and
   frozen-surface preservation checked. No inference, signing, external ceremony or E2E rerun.
 - **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 820-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 820 of 919 baseline
+  candidates completely read, 99 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M86–M90 for complete Stage 3T–3W specifications and plans, including
+  metadata/collision guarantees, external replay metrics, capture provenance and release witnesses.
+- **Findings:** Bounded synthetic probes confirm permissive adapter metadata and classifier
+  parsing. Separate helper behavior from complete release checks. Record the frozen capture's
+  conflicting decode declarations and preserve its signature and self-reported-origin limitation.
+- **Guidance:** Update current security disclosures and check the official Llama Guard 4 card.
+  Preserve frozen plans, evidence, signatures and runtime source.
+- **Validation:** Check formatting, local links, ledger identities and hashes, append-only log
+  prefixes and frozen-surface preservation. No inference, signing, external ceremony or E2E rerun.
+- **Remaining:** Complete all pending reads and final correction verification.

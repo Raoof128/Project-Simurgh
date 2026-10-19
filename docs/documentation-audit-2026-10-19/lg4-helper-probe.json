@@ -1,0 +1,36 @@
+{
+  "schema": "simurgh.documentation_audit.lg4_helper_probe.v1",
+  "date_utc": "2026-10-19",
+  "node": "v24.19.0",
+  "scope": "Pure synthetic parser/integrity helpers; no model/network/signing or complete privacy-pipeline acceptance claim.",
+  "source_sha256": {
+    "tools/external-defense-adapters/llamaGuard4OutputGrammar.mjs": "bf248acd6b5dcb243598e9bb5893a601e437c7c85615406eb28c9d5df34bf7d0",
+    "tools/external-defense-adapters/llamaGuard4Adapter.mjs": "f677fc9a82264b8a196e5c0ef428273c4c66b644bb5334c46ed0a13c87b3adcd"
+  },
+  "parser": [
+    {
+      "input": "safe\nSYNTHETIC EXTRA TEXT",
+      "result": {
+        "label": "safe",
+        "categories": [],
+        "error_code": "none"
+      }
+    },
+    {
+      "input": "unsafe\nS999\nSYNTHETIC EXTRA TEXT",
+      "result": {
+        "label": "unsafe",
+        "categories": ["S999"],
+        "error_code": "none"
+      }
+    }
+  ],
+  "prefixed_task_echo_integrity": {
+    "raw_capture_cases": 1,
+    "unique_case_ids": 1,
+    "matches_stage3l_case_ids": true,
+    "missing_outputs": 0,
+    "duplicate_outputs": 0,
+    "raw_prompts_exported": false
+  }
+}

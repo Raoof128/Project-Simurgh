@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **810 documents have complete manual reads; 109 remain
+SHA-256 values. At this checkpoint, **820 documents have complete manual reads; 99 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -2563,3 +2563,238 @@ The final implementer note says rejected slots prevent rendering, whereas the bu
 renders survivors and sets `claim_check_passed` true even when some fail; consult
 `all_slots_verified` and rejection/conflict counts. Preserve frozen signatures and historical text;
 these findings required no model calls, signing or runtime changes.
+
+### M86 — Frozen extraction decisions do not validate every input or detector identity
+
+The complete Stage 3T spec/plan correctly distinguish synthetic pattern reproduction from
+intent, attribution and general accuracy. Distinct authored families are not statistically
+independent corroboration: benign structural or targeting signals can combine with volume to
+cross the v1 threshold. Stage 3U explicitly addresses that limited class and retains other benign
+collisions. The eleven selected self-proof fixtures and instructions to adjust fixture data to
+fit the frozen detector do not establish general benign silence or an independent benchmark.
+
+The retained v1 validator restricts row keys but accepts arbitrary strings after `sha256:` and
+does not validate the tag/bucket grammars or required values. Missing tags can cluster under
+`undefined`. It accepts extra top-level fields that normalization drops, so the digest binds
+selected header fields and sorted rows, not every raw set member. Its provenance booleans are
+author assertions. The privacy scan's finite tokens/email regex do not detect all IP addresses,
+full timestamps, account identifiers, secrets or payloads in allowed fields. Synthetic hash
+labels are not actual content hashes. Stage 3U is additive; do not silently retrofit its stronger
+input contract into v1's historical claim.
+
+The retained portable verifier checks config/attestation ID agreement and a true threshold-lock
+flag, but not all threshold values, rules, signal code or complete config semantics. Its self-proof
+checks the exported threshold and ID against constants; it does not mutate each threshold/map
+and demonstrate enforced version changes. The family-map digest is not a hash of the detector
+implementation. Reproduction reruns current source and compares parsed/reserialized result and
+attestation objects, not raw file bytes or an independently authenticated executable. The
+consistency-script example does not verify a signature itself despite its title; the smoke
+invokes that separate verifier. The unsigned hash-map loop verifies listed files, not completeness
+against an independently required inventory. M79's canonicalization/trust qualifications apply.
+
+The detector's hydra predicate counts distinct actors and sessions without proving a coordinated
+relationship; tool-use shape and token buckets are validated/carried but do not drive these
+signals. `template_prefix_cluster` compares supplied whole hash labels, not prompt prefixes.
+The renderer is a fixed-template helper with a finite denylist, not general intent-language
+understanding. Cross-platform order claims require a defined collation for unrestricted v1 IDs;
+`localeCompare` alone does not define one. The draft guard's local no-base path warns and succeeds,
+contrary to its universal fail-closed comment. Its signer is not exercised by verify-only smoke,
+and its expected test counts/output labels include draft mismatches. Historical instructions to
+rebuild/re-sign evidence are not part of this documentation audit; all frozen bytes are preserved.
+
+### M87 — Extraction v2 hardening is scoped to rows and selected false-fire classes
+
+The complete Stage 3U spec/plan explicitly retain benign two-strong-family collisions and
+threshold dilution. Keep those limitations prominent; the reported zero benign-escalation counter
+excludes the deliberately accepted collision fixture. “The trust root held on every attack”
+describes that historical test selection, not all possible canonicalization or trust failures;
+M79 independently qualifies the reused canonicalizer.
+
+The stronger grammar validates row values, not every string in the complete set or evidence pack.
+The retained set validator does not constrain `set_id` or reject extra top-level fields; normalization
+selects a header subset and drops extras. Shape-valid 256-bit strings do not prove known preimages,
+synthetic origin or absence of encoded data. Even the regex contract is a JavaScript regex contract:
+`$` can match before a final line terminator. The spec's synthetic-label hashing rule applies to
+fixture identifiers; real artifact/config digests must hash their actual content. The draft grammar
+uses only a shallow outer freeze despite promising deep freezing; retained code correctly freezes
+nested rules and arrays. The plan uses frozen arrays for family strengths, avoiding the spec's
+frozen-Set ambiguity described in M85.
+
+The family-map digest hashes membership, not the separately defined strong/contextual split or
+all detector thresholds/logic. Current portable verification adds main-result and regression-set/
+result digest checks omitted from the original draft, and recomputes those detector results.
+Do not report those draft omissions as present behavior. Complete config semantics, arbitrary
+rendered wording and every signed limitation are still not independently enforced by the portable
+checks; full attestation reproduction and separate audits are different gates. The draft comparison
+summary contains authored zeros; the current signed bundle adds regression bindings and hardening
+fields. Its grammar JSON draft is only a note/schema stub, not the promised human-readable rule table.
+
+The standalone regression set is one template-plus-volume dataset; additional capability/behavioral
+and volume-only cases live in the self-proof, not four separately committed regression datasets.
+The draft omits its promised benign-heavy-power-user fixture and never increments that counter;
+retained self-proof includes the fixture and updates the counter. The draft detector unit rows all
+share task/capability labels, unintentionally firing targeting in tests that expect only structural
+or structural/behavioral families; varied data are required for those exact expectations. Accepting
+any thrown exception in rejection fixtures does not prove the intended typed rejection fired.
+Repeated execution of the same row order tests repeatability, not all row permutations.
+
+The freeze guard's branch comparison omits shared canonicalization dependencies and does not
+check every working-tree modification; successful v1 replay is a separate, finite assertion.
+Its local no-base warning is not universal fail-closed behavior. Verify-only smoke does not run
+the signer, and targeted throw tests do not establish 100% branch coverage. Parsing/reserializing
+comparison remains distinct from raw-byte identity. Preserve additive v1/v2 history and all signed
+limitations; no historical rebuild, signing or runtime modification was performed in this audit.
+
+### M88 — External advisory replay has narrower schema and metric guarantees
+
+The complete Stage 3V-A spec/plan make the synthetic backing explicit. The plan's approved
+amendments supersede its earlier ambiguous manifest examples: retained code separates the external
+manifest from the Stage 3L corpus manifest and emits explicit recomputation checks. The final
+synchronous verifier supersedes the intermediate async placeholder. Do not execute the intermediate
+drafts or describe their superseded field names as current interfaces.
+
+The retained adapter contract does not reject all unknown fields, recurse into nested hash keys,
+or validate the case ID's type/content. A [local synthetic probe](external-adapter-helper-probe.json)
+confirmed acceptance of an extra raw-prompt field, a nested digest and a null case ID. This is a
+contract-helper limitation, not evidence that the fixed fixture adapter emitted those inputs or
+that the full privacy pipeline accepted them. The normalizer uses an ordinary object's property
+lookup: `constructor` and `__proto__` produce non-string values with `error_code: none`. The
+subsequent closed-enum contract rejects those values, so this is not a demonstrated gateway bypass.
+Free target strings also do not authenticate which defence was executed.
+
+The fixture derives verdicts from case names and a fixed numeric rotation, then chooses matching
+raw-output templates. It does not parse a real detector response; raw and normalized values share
+an authored selection rule. Trusted-harness hashing proves which supplied values were hashed,
+not that an external model produced them or that their semantic relationship is correct. The
+raw aggregate is newline-joined output text without a length-prefixed case/value encoding; it is
+not a general injective serialization of arbitrary output sets. Config and verdict hashes have
+separate canonical-object semantics. M79 applies to reused canonicalization.
+
+The retained external-only ASR is the fraction of malicious fixtures whose external verdict is
+not `block`, including warning, abstention, error or an absent observation. It is not an executed
+external-only unsafe-consequence rate. The plus-Simurgh metric uses the independent Stage 3L
+containment result and does not implement combined blocking semantics. `over_defence_delta` is
+an external benign-block fraction, not a measured before/after difference. Missing observations
+are omitted from the miss-but-contained denominator but counted as non-blocks in external ASR;
+duplicate IDs overwrite in the lookup. The fixed adapter supplies the corpus, while these metric
+helpers alone do not enforce exact one-to-one coverage. Receipt/audit flags and authored zero
+leakage inherit Stage 3L's qualifications in M78. Four mode labels do not establish four separate
+end-to-end executions. Advisory invariance follows from not passing the verdict to containment;
+the shown test repeats that function rather than mutating an actual integrated defence decision.
+
+Portable verification authenticates the supplied bundle and checks a few structural/result fields;
+it does not recompute all four hashes, validate every non-claim/coverage field or verify every
+referenced evidence file. Reproduction supplies those computations through a trusted callback;
+an arbitrary callback returning its input is not independent reproduction. The tamper fixture
+named verdict-flipped edits an aggregate metric, and the removed-file case supplies a null
+sidecar. Signature rejection of an injected raw field does not prove rejection of raw content
+that was present before signing. Finite privacy tokens cannot enforce arbitrary metadata-only
+content. Canonical signing tolerates formatting/key-order changes, not arbitrary merge edits.
+
+The draft policy guard warns/passes without a base and masks diff errors, contradicting its
+fail-closed headline. The smoke boots a local health-check server while doing the substantive
+replay in process; offline here means no external inference, not no socket. Its separately wired
+audits are not all part of the smoke alone. The blanket doc grep also flags the required negated
+non-claims. These are historical reproduction/wording qualifications, not instructions to rerun
+old release/tag/signing steps. Preserve frozen evidence and runtime source.
+
+### M89 — Frozen Llama Guard replay does not authenticate execution or all output text
+
+The complete Stage 3V-B spec/plan must retain their self-reported-origin limitation throughout.
+A capture-script hash identifies supplied script bytes; it does not prove those bytes executed.
+The prompt-rendering hash covers a small declared surface/wrapper/role object, not the rendered
+token sequence. Locally hashing the corpus binds expected inputs, not an independently observed
+capture input trace. Snapshot and tokenizer hashes are capture-environment assertions included
+in the signed provenance; the offline verifier neither downloads weights nor proves GPU execution.
+A signed timestamp is not trusted execution time. These limits directly qualify the spec's
+stronger “this exact harness produced the raw outputs” wording.
+
+The [official model card](SOURCES.md#s26--llama-guard-4-model-card-and-execution-surface)
+supports prompt and response classification. Stage 3V-B deliberately supplied only user turns;
+downstream content was outside that experiment's observed surface, not an inherent restriction
+of Llama Guard 4. The draft's `AutoTokenizer`/`AutoModelForCausalLM` loader is superseded by the
+retained `AutoProcessor`/`Llama4ForConditionalGeneration` capture script. The latter uses 8-bit
+quantization by default and a 20-token generation limit. The frozen signed bundle still declares
+64 in `target_defense.decode.max_new_tokens`, while its capture-provenance decode records 20.
+Report the captured 20-token setting and this internal discrepancy; do not silently harmonize or
+re-sign the historical bundle. Its version-specific loading/quantization observations are not
+proof about all current library releases or full-precision quality.
+
+The retained parser accepts extra lines after `safe`, and after a valid `unsafe` category line;
+it also accepts arbitrary numeric category IDs. A [pure synthetic probe](lg4-helper-probe.json)
+confirmed both trailing-text acceptance and `S999` acceptance. The capture-integrity helper
+rejects exact equality with a corpus task, not a prefixed/suffixed copy: the probe's prefixed task
+echo passed that helper. The separate privacy scanner searches complete task substrings in raw
+serialized files and finite secret patterns, so it provides additional checks but not a general
+schema/semantic guarantee against fragments, JSON escaping, encoded text or unknown sensitive
+content. This is not a claim that the full privacy audit accepted the probe. The shared malformed
+result's categories array is only shallow-frozen. Observation latency is a fixed `0-100` bucket,
+not a captured inference-time measurement.
+
+The replay artifact intentionally retains raw classifier text. “No raw output in evidence” is
+therefore false across the entire evidence directory; it applies to derived bundle content with
+the documented replay-input exception. Copying a capture file is not a sanitization transform.
+The intended checks must run before publication; redaction changes the replay input and must be
+reported as redaction, not silently called untouched model output. Provenance booleans are
+self-declarations, and the capture code sets them before any semantic privacy determination.
+
+The retained release gate tests live/environment flags, digest shape, a non-sample revision and
+a timestamp not starting with 1970. All-zero digests still have the accepted shape, and these
+conditions do not authenticate real execution, a valid date or correspondence to loaded weights.
+The capture code loads model/processor and downloads a snapshot by mutable model identifier in
+separate calls without an explicit shared immutable revision. Its snapshot-manifest digest covers
+listed files, not just model weights; tokenizer fallback uses that snapshot digest if the config
+file is absent. The Python transport does hash self-reported provenance, contradicting the draft's
+unqualified “no hashing” sentence, while authoritative evidence hashes/signing remain local.
+
+M88's inherited metrics, adapter, raw aggregation, tamper and portable-verifier limits apply.
+The sample has 180 cases despite “small sample” wording; replay smoke uses the committed capture
+and does not execute a model. Generic replay verification can legitimately accept sample evidence;
+it is distinct from the release gate. The capture-mode label alone is not proof of live origin.
+The draft's fallback policy guard warns/passes without a base, and removing an uncovered module
+narrows coverage scope rather than proving it covered. Preserve the actual frozen capture,
+signature, settings and measurements; no GPU, model call, signing or capture replacement occurred.
+
+### M90 — Release witnesses authenticate bounded checks, not independent capture origin
+
+The complete Stage 3W specification and plan describe two cryptographic trust roots over
+related evidence. They do not establish independent operators, independent verifier code,
+independent measurements or GPU execution. The offline custom Ed25519 sidecar signs an in-toto
+Statement-shaped object; that alone is not DSSE packaging or a particular SLSA assurance level.
+The online subject is the deterministic verdict file, not the offline signature or live capture.
+Retain the explicit self-reported-origin non-claim and the distinction between optional online
+verification and offline reproduction.
+
+The retained library's `buildWitnessVerdict()` defaults omitted observations to expected passes.
+Its `ci_observed_not_echoed` label therefore cannot prove observation when called locally.
+The actual workflow supplies all four command results explicitly and compares the regenerated
+verdict bytes with the committed file before attesting. This is materially stronger than the
+helper's default, but attests those retained checks, not their completeness or model execution.
+The statement builder also fixes its two pass booleans to true. Subject hashing reads four
+working-tree files, while the release commit/tag are fixed labels; the helper does not itself
+resolve those labels and compare the files against that Git tree. It performs file I/O despite
+the plan calling it pure.
+
+Portable verification checks the signature, fingerprint, predicate type, witnessed stage and
+model-not-reexecuted flag; it does not validate every subject, non-claim, release label or
+statement/schema field. Reproduction depends on trusted rebuild callbacks and serializes parsed
+objects; it is not an independent execution trace or raw-file byte comparison. In particular,
+the standalone verifier rebuilds the verdict instead of reading its committed file. The runner's
+separate verification supplies the file comparison. Unsigned hash-map iteration checks listed
+entries, not an independently required complete inventory. M79's canonicalization limits apply;
+canonical signing tolerates certain serialization changes, not arbitrary merge edits.
+
+The tamper cases are bounded: a supplied null sidecar represents file removal, a digest edit
+represents a flipped CI observation, and raw-field injection is rejected after signing. None
+proves a pre-signing metadata-only schema. The raw-field counter checks top-level names, and the
+privacy audit uses finite patterns. The draft security grep rejects its own ordinary Sigstore
+labels; retained source narrows this to object markers. The no-base policy guard warns/passes,
+contrary to a blanket fail-closed description, and masks diff errors. Function coverage is scoped
+to the library; it is not complete verifier/workflow coverage. The draft YAML validation command
+may merely import an installed parser without parsing the workflow.
+
+A latest-run listing and repository-only attestation check do not establish the intended
+release's exact workflow, source revision, subject digest or successful run. Apply M45's identity
+and revision checks; mutable action tags in the retained workflow are not commit pins. The
+historical release commands and pre-existing-failure exceptions are not current authorization
+or current test results. Preserve frozen specifications, signed artifacts and runtime source.

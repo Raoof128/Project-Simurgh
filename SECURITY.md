@@ -369,3 +369,17 @@ signature verifier does not recompute slots or bind the complete gateway receipt
 hash/rebuild pipeline has additional checks. Treat these retained artifacts as fixture evidence,
 not verified semantic truth or proof of a completed human review. See [M85](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m85--allowed-narrative-wording-is-not-bound-to-the-proposition-checked)
 for reproducible local observations and their scope.
+
+### Retained external-defence and capture adapters
+
+The Stage 3V-A metadata contract accepts additional properties and does not establish that
+arbitrary adapter content is metadata-only. Its normalizer also has inherited-property edge
+cases; a later enum check rejects those synthetic values. Stage 3V-B's parser accepts trailing
+text and unregistered numeric category IDs, while its capture-integrity helper checks exact
+prompt equality rather than all embedded copies. Separate privacy scans add bounded checks.
+These observations do not establish acceptance by a complete release pipeline. See
+[M88](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m88--external-advisory-replay-has-narrower-schema-and-metric-guarantees)
+and [M89](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m89--frozen-llama-guard-replay-does-not-authenticate-execution-or-all-output-text)
+for probe receipts, metric definitions and the raw-classifier replay exception. Script, input
+and snapshot hashes bind supplied values; they do not authenticate live execution. The retained
+capture has conflicting 64/20-token declarations, and its recorded origin remains self-reported.

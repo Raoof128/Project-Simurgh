@@ -171,7 +171,7 @@
       "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check. M70/M71 disclose retained risk mapping, SDK retry/abort behavior, raw context prefixes and caller receipt strings; runtime remains unchanged.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "6ba830f633ffec877c09e1c7fdcd112026eeacdc6dc34ba7c8b3582fc0b7e0ef"
+      "read_sha256": "487e26136c25e69f985005df67700895b692fdb6499f861aae3282e145d19f91"
     },
     {
       "path": "docs/DECISIONS.md",
@@ -1107,7 +1107,7 @@
       "assessment": "Read all 13 primary-source applicability rows and limits. Correctly separates publication from review year, pinned SDK from living docs and alignment from compliance. Previous-turn fetch provenance retained; no fresh fetch claimed.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "636070cef402ccdfdc57f7e0a4c8bc4c146c33a3287908f418826da4331fdb38"
+      "read_sha256": "bf3cb851e5c0917ba1b36815f554f8f001cf7aa111783887ce5ebc8969372db1"
     },
     {
       "path": "docs/documentation-audit-2026-10-19/VALIDATION.md",
@@ -8266,11 +8266,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "82453dc825f4cc0c3676b6d6b704b4df82fbea4563f3f7980aba2419005eb13c",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire document manually read. M86 qualifies v1 metadata validation, correlated families and finite benign silence, config/implementation identity and hash-inventory limits, canonical versus byte reproduction, and draft gate/coverage expectations. Stage 3U is additive; frozen v1 text preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "82453dc825f4cc0c3676b6d6b704b4df82fbea4563f3f7980aba2419005eb13c"
     },
     {
       "path": "docs/superpowers/plans/2026-06-22-stage-3u-red-team-hardened-extraction-attestation.md",
@@ -8279,11 +8279,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "959be59cba5577cec345243e54625dff8ae09bc493ca7a954c3094f522e8dd17",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire document manually read. M87 distinguishes row grammar from whole-pack privacy, residual benign collisions/opaque hashes, unbound detector configuration, draft fixture and freeze defects, and current deep-freeze/result-binding/self-proof corrections. M79 canonicalization limits apply; frozen text preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "959be59cba5577cec345243e54625dff8ae09bc493ca7a954c3094f522e8dd17"
     },
     {
       "path": "docs/superpowers/plans/2026-06-22-stage-3v-a-recorded-external-signal-attestation.md",
@@ -8292,11 +8292,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "2beac3f1449ac974409b5333258fd485b6764cd24fa5bc53baed96a7c930adc0",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire document manually read. M88 records approved manifest/verifier amendments, reproduced contract/normalizer limitations, synthetic verdict construction, ASR and over-defence metric semantics, structural advisory invariance, limited portable/tamper/privacy scope and draft gate defects. Frozen text preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "2beac3f1449ac974409b5333258fd485b6764cd24fa5bc53baed96a7c930adc0"
     },
     {
       "path": "docs/superpowers/plans/2026-06-23-stage-3v-b-llamaguard-external-defense-attestation.md",
@@ -8305,11 +8305,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "7096af7ccda921de570f487b885979516131e833b7bc32f36c714914caaadbdd",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire document manually read. M89 qualifies self-reported execution/input provenance, official prompt/response capabilities, superseded loader, retained 64-versus-20 token discrepancy, reproduced parser/integrity helper limits, replay privacy exception and weak release predicates. Frozen capture and settings preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "7096af7ccda921de570f487b885979516131e833b7bc32f36c714914caaadbdd"
     },
     {
       "path": "docs/superpowers/plans/2026-06-23-stage-3w-witnessed-vca-release-provenance.md",
@@ -8318,11 +8318,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "1134f9e2108921750a7f60b3f4d5776d8e769342d2fc4e71d6e919167a4eab2c",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read of Stage 3W plan; M90 qualifies dual roots, default-pass local observations, actual CI exit-code binding, working-tree subjects versus release labels, portable/rebuild boundaries, finite tamper/privacy checks and exact online identity. Current library, verifier, workflow and security audit checked. Preserve frozen historical bytes.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "1134f9e2108921750a7f60b3f4d5776d8e769342d2fc4e71d6e919167a4eab2c"
     },
     {
       "path": "docs/superpowers/plans/2026-06-23-stage-3x-public-vca-timeline-external-reproduction.md",
@@ -9488,11 +9488,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "c8ed1fb9b6c7ba3c9dd7eabaa9c2954d2680eaf222c2a79ac14e80d231372695",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire document manually read. M86 qualifies v1 metadata validation, correlated families and finite benign silence, config/implementation identity and hash-inventory limits, canonical versus byte reproduction, and draft gate/coverage expectations. Stage 3U is additive; frozen v1 text preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "c8ed1fb9b6c7ba3c9dd7eabaa9c2954d2680eaf222c2a79ac14e80d231372695"
     },
     {
       "path": "docs/superpowers/specs/2026-06-22-stage-3u-red-team-hardened-extraction-attestation-design.md",
@@ -9501,11 +9501,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "30d46ccb1cf241b6bde68023c0f150046d67d6b8be10d149c0ac7ab86d82965f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire document manually read. M87 distinguishes row grammar from whole-pack privacy, residual benign collisions/opaque hashes, unbound detector configuration, draft fixture and freeze defects, and current deep-freeze/result-binding/self-proof corrections. M79 canonicalization limits apply; frozen text preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "30d46ccb1cf241b6bde68023c0f150046d67d6b8be10d149c0ac7ab86d82965f"
     },
     {
       "path": "docs/superpowers/specs/2026-06-22-stage-3v-a-recorded-external-signal-attestation-design.md",
@@ -9514,11 +9514,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "1382b393e3be4559610fc61c40eee993b83838ee76191ca93f90497b14255597",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire document manually read. M88 records approved manifest/verifier amendments, reproduced contract/normalizer limitations, synthetic verdict construction, ASR and over-defence metric semantics, structural advisory invariance, limited portable/tamper/privacy scope and draft gate defects. Frozen text preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "1382b393e3be4559610fc61c40eee993b83838ee76191ca93f90497b14255597"
     },
     {
       "path": "docs/superpowers/specs/2026-06-23-stage-3v-b-llamaguard-external-defense-attestation-design.md",
@@ -9527,11 +9527,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "746b1f90ba6d9d5700f017cd3f469c58e44972c73eb5a07288a32ccca68e65b8",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire document manually read. M89 qualifies self-reported execution/input provenance, official prompt/response capabilities, superseded loader, retained 64-versus-20 token discrepancy, reproduced parser/integrity helper limits, replay privacy exception and weak release predicates. Frozen capture and settings preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "746b1f90ba6d9d5700f017cd3f469c58e44972c73eb5a07288a32ccca68e65b8"
     },
     {
       "path": "docs/superpowers/specs/2026-06-23-stage-3w-witnessed-vca-release-provenance-design.md",
@@ -9540,11 +9540,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "d2dcb5c13d9aeb3cdd77caaf8b8d0487cafaa5abf544a54853d9e3b2d7c3159c",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read of Stage 3W specification; M90 qualifies dual roots, default-pass local observations, actual CI exit-code binding, working-tree subjects versus release labels, portable/rebuild boundaries, finite tamper/privacy checks and exact online identity. Current library, verifier, workflow and security audit checked. Preserve frozen historical bytes.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "d2dcb5c13d9aeb3cdd77caaf8b8d0487cafaa5abf544a54853d9e3b2d7c3159c"
     },
     {
       "path": "docs/superpowers/specs/2026-06-23-stage-3x-public-vca-timeline-external-reproduction-design.md",
