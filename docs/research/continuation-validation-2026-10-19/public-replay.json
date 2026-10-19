@@ -1,0 +1,8 @@
+{
+  "branches": 144,
+  "independent_custody": false,
+  "manifest_sha256": "f71802a1906178da56c7ebc7dd19227716d65a2d99901910611f022490a8eb12",
+  "public_sha256": "7f5cf804b0d87d55acb99b2fee4acd652901e4249a2dd018f32a1732d69dc363",
+  "public_structure_verified": true,
+  "source_consistency_verified": false
+}

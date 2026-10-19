@@ -7,6 +7,8 @@ and an explicit [open-gap register](docs/research/explorer-phase-18/RESEARCH.md)
 [Phase 17](docs/research/CONTINUATION_PHASE_17.md) makes runtime prerequisites portable.
 The [Phase 8 local review](docs/research/PHASE_8_REVIEW_2026-10-19.md) is complete.
 Browser/macOS execution, real provider integration and independent custody remain open.
+See [October 19 validation](docs/research/continuation-validation-2026-10-19/RESULTS.md)
+and the [classmate handoff](docs/research/CONTINUATION_HANDOFF_2026-10-19.md).
 
 The [Phase 13 reliability study](docs/research/reliability-phase-13/RESULTS.md) now adds
 60 repeated concurrent/restart fixtures: composed controls retain useful retries and
