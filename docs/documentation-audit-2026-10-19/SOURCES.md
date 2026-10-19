@@ -193,3 +193,13 @@ The records match the cited research identities. Brundage et al. discuss multipl
 software and hardware mechanisms; the fingerprinting work reports statistical detection
 experiments. Neither establishes Simurgh's novelty, deployed enforcement, legal applicability
 or an absence of other verifiable evidence systems. M105 uses these as context, not standards.
+
+### S31 — Frontier-safety reproducibility position paper
+
+Checked 19 October 2026: [arXiv:2605.08192v1](https://arxiv.org/abs/2605.08192v1),
+_NeurIPS Should Require Reproducibility Standards for Frontier AI Safety Claims_, by
+Varad Vishwarupe, Nigel Shadbolt, Marina Jirotka and Ivan Flechais (submitted 5 May 2026).
+The abstract proposes public, controlled and claim-restricted disclosure with scoped claims.
+The record identifies a preprint; it does not establish an adopted conference policy or
+endorse Simurgh's P/A/R mapping. This check covered bibliographic identity and abstract scope,
+not a full-paper review or implementation conformance assessment.

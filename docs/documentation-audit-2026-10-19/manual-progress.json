@@ -132,7 +132,7 @@
       "assessment": "Read entire contribution, measured-results, replay and handoff text; verify each study result and install assumptions in study review. Fixed /tmp environment path is not guaranteed fresh despite maintenance guidance.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "d3f7e629a03a294182e9d358e35242b5b4c6d832079742a7dfb10c46df741c26"
+      "read_sha256": "d7ea76e26156f462f4e6d76d614081f2cf7a64ce7c877809be4e51268bb1afb8"
     },
     {
       "path": "RESEARCH_HISTORY.md",
@@ -171,7 +171,7 @@
       "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check. M70/M71 disclose retained risk mapping, SDK retry/abort behavior, raw context prefixes and caller receipt strings; runtime remains unchanged.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "cc28ee5360fd6e4edca704b8aca9a33a1f31db8e76fcad302d7649b6b187305e"
+      "read_sha256": "911762d1fed8b6634d8a27f0c65412224e5143fc02ceecad4ff19960f22ec425"
     },
     {
       "path": "docs/DECISIONS.md",
@@ -1107,7 +1107,7 @@
       "assessment": "Read all 13 primary-source applicability rows and limits. Correctly separates publication from review year, pinned SDK from living docs and alignment from compliance. Previous-turn fetch provenance retained; no fresh fetch claimed.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "1d96091b004cbcbf685506661d3fc0326d908dc63567d82fd55fe9e3b4dfcc8f"
+      "read_sha256": "d817693fa79669f5fb86643c4ff5135bb08809a38adf0499f2902da4af746e9c"
     },
     {
       "path": "docs/documentation-audit-2026-10-19/VALIDATION.md",
@@ -8526,11 +8526,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "d99eb9a07338b494dc7f269e48d2c662c7ca6b27eb5a816813c1ed3ecb67383a",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 3247-line plan read against current core/Node/merge/disclosure/respondent/proof/reproduction/tests. M106 and six core probe cases plus one helper case qualify implementation promises; M54 browser parse failure remains. Node parity is not browser execution; selected comparisons and finite tamper/export checks are not complete coverage.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "d99eb9a07338b494dc7f269e48d2c662c7ca6b27eb5a816813c1ed3ecb67383a"
     },
     {
       "path": "docs/superpowers/plans/2026-07-04-stage-4n-extraction-seismograph.md",
@@ -8539,11 +8539,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "d35cefc835074456dcce1fd841ad39c56ebc70302e5055d1322e9b001fd07011",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 3519-line plan read. M107 compares current CLI/core/source roots/signer/proof/reproduction/E2E. Seven local CLI cases confirm unsigned arbitrary bands, future times, earlier-horizon truncation and unbound inclusion acceptance; original-horizon truncation correctly fails. Separate fixed-evidence signature checks and selected comparisons are not complete CLI authentication or all-path coverage.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "d35cefc835074456dcce1fd841ad39c56ebc70302e5055d1322e9b001fd07011"
     },
     {
       "path": "docs/superpowers/plans/2026-07-04-stage-4o-vtsa.md",
@@ -9748,11 +9748,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "ce69632b4931ffe0a60fccdd5b587afa1bf3865a6f4b78919ea18588f396791f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 692-line design read. M106 records demonstrated unsigned Tier-P disclosure/chain acceptance and deletion, producer-signed attestation gaps, conditional Lean scope, missing upstream verification, respondent/chronology/privacy and legal limits. Preserve frozen design; correct handover guidance additively.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "ce69632b4931ffe0a60fccdd5b587afa1bf3865a6f4b78919ea18588f396791f"
     },
     {
       "path": "docs/superpowers/specs/2026-07-04-stage-4n-extraction-seismograph-design.md",
@@ -9761,11 +9761,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "ee370c9a2cd29ad6fc61609c9b8668c55c1171d9b285f5716a8e1e3d648d4c8c",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 673-line design read; truncated table reread in full with spacing compacted. M107 qualifies CLI authentication, declared-horizon liveness, four-bit/public-surface claims, bundle inclusion and conditional Lean scope. M47 legal and computational-binding corrections apply; S31 verifies preprint identity without endorsement.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "ee370c9a2cd29ad6fc61609c9b8668c55c1171d9b285f5716a8e1e3d648d4c8c"
     },
     {
       "path": "docs/superpowers/specs/2026-07-04-stage-4o-vtsa-design.md",

@@ -458,3 +458,24 @@ confirmed these gaps while unsigned attestation tampering was rejected. See
 [M105 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m105--stage-4ls-cluster-calculation-does-not-authenticate-every-narrative-or-upstream-verifier).
 A provider's declared partition does not establish real-world identity, complete observation
 or deployed enforcement. A later merge can reflect new knowledge rather than a prior falsehood.
+
+### Retained Stage 4M public-tier disclosure verification
+
+The Tier-P path skips signed root and chain bindings. A local probe accepted a changed
+public disclosure and matching chain while the original signed attestation, manifest and pinned
+key remained unchanged; it also accepted removal of both public files. Signature success therefore
+does not authenticate those public-tier files. Tier A checks local roots but does not recompute
+all attestation totals or verify the referenced upstream/proof artifacts. See
+[M106 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m106--stage-4m-public-tier-verification-omits-signed-disclosure-and-chain-bindings).
+The retained browser page also has the parsing failure recorded in M54. Use these artifacts as
+bounded research fixtures pending runtime repair.
+
+### Retained Stage 4N heartbeat verification
+
+The documented Stage 4N CLI checks supplied feed/policy consistency at a caller-selected cutoff;
+it does not authenticate the signed attestation or manifest. A local probe accepted an unsigned
+rewritten band, a future-dated reveal and a shortened feed with an earlier cutoff. Separate E2E
+checks authenticate the committed evidence only. The advertised four-bit bound also does not
+cover the CLI's accepted arbitrary string bands or other public fields. See
+[M107 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m107--stage-4n-cli-consistency-does-not-authenticate-a-feed-or-bound-all-public-disclosure).
+Do not treat CLI success as authenticated publication, complete telemetry or a general privacy bound.

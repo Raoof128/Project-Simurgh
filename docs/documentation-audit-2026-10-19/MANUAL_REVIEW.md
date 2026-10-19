@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **850 documents have complete manual reads; 69 remain
+SHA-256 values. At this checkpoint, **854 documents have complete manual reads; 65 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -3557,3 +3557,148 @@ and its export-name inventory is not exhaustive function/branch coverage. Its so
 uses an available base ref and silently omits that check when neither ref exists; it does not
 report a test skip. Later code correctly updates mapped 43–46 while retaining 39 as reserved.
 The historical all-green counts, branch/tag workflow and proposed code are not current validation.
+
+### M106 — Stage 4M public-tier verification omits signed disclosure and chain bindings
+
+The complete VXD design and implementation plan were read against the retained core, Node
+loader/CLI, disclosure/respondent/merge helpers, Lean proof, reproduction script and tests.
+The [isolated local probe](vxd-verifier-probe.json) confirmed that Tier-P verification accepts
+an altered disclosure value with a matching altered chain entry while the original attestation,
+manifest and pinned signer remain unchanged. It also accepts deletion of both disclosure and
+chain. The public path skips the entire `attestation_roots` gate, including roots and chain
+bindings for files available in that tier. Its internal disclosure-position check therefore
+does not authenticate those bytes against the signed artifact. This is a demonstrated verifier
+binding gap, not merely an inability to recompute private evidence. Missing inputs become empty
+arrays/null and their `present` flags are unused. Do not describe Tier P as authenticating every
+present public disclosure or detecting suppression of its required files.
+
+Tier A does compare local ledger roots and the whole-chain digest, but does not recompute
+attestation aggregates, verify the referenced CCB/Lean files, or require the declared non-claims
+and limitations. The probe accepted producer-signed false totals and zeroed source/proof digests
+with non-claims removed. Those cases explicitly pinned an ephemeral producer key; they do not
+forge a retained signature. The core receives a manifest verdict from its caller; standalone
+core calls are not themselves cryptographic verification. The Node wrapper performs that check.
+The upstream CCB artifact is not loaded or verified by the VXD verifier. Locally authored windows
+and first-window genesis do not establish the provenance or truth of the 4L partition.
+
+The Lean file proves conditional inequalities over lists of natural numbers. It does not prove
+JavaScript refinement, real-world clustering, source completeness or universal resistance to
+account structuring. Non-inflating budgets and nonnegative exposure remain essential assumptions
+(M46/M105). JavaScript numeric and input-size constraints are narrower than an unbounded Nat
+model. The merge helper's new-ID collision check looks in a map keyed by old IDs; an isolated
+helper probe accepted two disjoint groups with the same new commitment, yielding duplicate
+output clusters. No complete-core exploitation is claimed for that helper observation. The
+property tests exercise bounded generated examples and selected fixed chains, not every partition.
+
+The disclosure chain records positions rather than a predecessor-hash link for every entry.
+Signing its digest binds a supplied list; it does not establish independent chronology, append-only
+publication or complete record coverage. Disclosure checks cover selected references/positions,
+not a full semantic chain schema. Consumer-window counts are not distinct affected people.
+The Article-73 projection file is not loaded by the verifier; its separate deterministic projection
+is neither a legal incident assessment nor compliance certification (M41/M47 and S16). The custom
+canonicalization/Merkle limitations in M79/M93 apply; a sorted digest tree alone does not provide
+semantic respondent-key non-membership or completeness proofs.
+
+Respondent lookup searches canonical JSON substrings in windows, rescores and merges. It does
+not establish respondent identity, exact digest-key selection or all disclosure claims. Contest
+validation does not compare the declared window with the targeted record's window or require
+contest/acknowledgement chain membership and chronological order. The Node adapter takes its
+acknowledgement verification key from the first acknowledgement's inline respondent key, not an
+independently pinned provider identity. A producer-authenticated choice of key is not independent
+provider authentication. These are source-level qualifications, distinct from the six core probe
+cases. The finite forbidden-key checks and opaque digest slots do not prove value-level privacy
+or an information bound; persistent cluster IDs and arbitrary window labels can carry linkage.
+
+The browser parity test runs Node paths with an alternate contest/acknowledgement verifier;
+it does not exercise HTML parsing, DOM file loading or the browser manifest path. M54 already
+records the retained page's fatal duplicate declaration. Generated-string parity cannot establish
+that the page runs. Current proof CI discovers the proof set and rejects escape hatches; the old
+optional local command can also mask proof failure as an unavailable tool. Neither a workflow
+file nor historical all-green counts establish current branch protection or a fresh CI result.
+
+Reproduction uses selected byte comparisons because fresh signing keys change other artifacts.
+It runs unit tests and a separate 4L smoke, not the complete 4M E2E net, a 4K replay or a Lean
+check. It does not scrub credentials or establish a fully clean Git tree. As in M104/M105, a
+matrix mismatch that routes an unexpected raw 0 through the wrapper can continue. Some arms
+check a broad nonzero result or a malformed extra field rather than the promised semantic
+mutation; the projection arm compares derived data separately. Export-name inventories,
+finite forbidden-key checks and selected tamper files do not establish every-function coverage
+or universal privacy. Preserve the frozen spec/plan and read their intended guarantees with
+these demonstrated and source-inspected limits. Runtime repairs remain separate from this audit.
+
+### M107 — Stage 4N CLI consistency does not authenticate a feed or bound all public disclosure
+
+The full 673-line design and 3519-line implementation plan were read against the retained CLI,
+core gates, source adapter, signer, Lean proof, reproduction script and E2E net. The CLI accepts
+feed, policy and caller-selected `--as-of`; it does not load the signed manifest/attestation or
+accept a pinned signing key. Separate E2E checks rebuild the committed attestation and verify
+its signature. Those checks do not authenticate arbitrary inputs passed to the documented CLI.
+The [seven-case local probe](seismograph-verifier-probe.json) preserved the original signed
+evidence and used no signing key. Six cases passed, including arbitrary plaintext in a band,
+a reveal claiming future publication, unrestricted nested policy/non-claim text, a one-record
+prefix with an earlier caller-supplied horizon, and an unbound root-as-leaf inclusion proof.
+The one-record prefix correctly failed raw 47 at the original horizon. Thus silence detection
+is relative to a supplied cutoff, not evidence that continuous real-world reporting occurred.
+
+Q15 hashes the 4K/4L expected-result matrices and available parsed 4M disclosure files. These
+are not recomputed exposure/cluster ledgers or authenticated upstream verifier results. All
+synthetic windows reuse those roots; the seven raw-count pairs are separately authored in the
+builder. The `private_evidence_root` is derived entirely from public root fields and the window
+label, not a commitment to independently collected private observations. The adapter silently
+omits disclosures on any read/parse error, not just missing files. M103–M106's upstream limits
+therefore persist. A consistent producer can choose false telemetry; a whole new locally
+consistent chain does not establish that an older public history was never rewritten.
+
+The actual Q10 checks an ordered subsequence, leaving missing heartbeats/reveals to Q11/Q13;
+this deliberately differs from the spec's exact per-position schedule language. The committed
+horizon is not consulted by the CLI. Q13 compares the declared reveal time with the heartbeat's
+declared due time and enforces a lower bound, but does not require equality with the
+policy-derived due window or consistency with the chain's current publication window. The
+probe changed both declarations to `synthetic-9999` while preserving their original position
+and the `synthetic-0006` horizon; the CLI accepted it. The proposed timing discipline is
+therefore stronger than the implemented checks.
+
+The four-bit calculation bounds the nine intended band vectors only. Q10 deliberately invokes
+structural reveal validation without dimensions; later Q14 checks dimension names and the
+copied arithmetic, but never invokes the full label/missing-dimension validator. Q16 rejects
+numeric counts under two names and four forbidden key names. An arbitrary string band with a
+matching rebuilt commitment passed the CLI, so the actual accepted public language is not
+bounded to nine vectors. Nested policy fields, extra non-claim strings and opaque digest/salt
+slots further exceed that channel model. Q16 receives feed and policy only, not every file in
+the evidence directory, manifest, attestation or report. The spec's complete public-surface and
+no-linkage claims are unsupported. M47's correction also applies: SHA-256 commitments are
+computationally binding under hash assumptions, not unconditionally binding; deterministic
+low-entropy salts permit guessing, and random deployment salts need not prevent fixed fixtures.
+
+Q12 receives a proof object, not actual bundle bytes. Its `bundle_digest` is actually a disclosure
+leaf in the fixture adapter. The tier is only enum-checked, not included in the hashed leaf;
+`stage`, `distribution`, extra fields and exact proof shape are not validated. A supplied root
+as the leaf with an empty path passed without demonstrating inclusion of any particular bundle.
+This is not a hash collision. Q17 compares an unauthenticated digest assertion for record kind
+and window; it neither verifies a second signed feed nor checks the advertised `chain_id` tuple.
+Absent optional Q12/Q17 inputs silently return success. A raw-48 mismatch is not independently
+authenticated evidence of provider equivocation. Synthetic bilateral proofs are tracked under
+public test fixtures, so “never in the repo” must be read as a rule for real deployment evidence,
+not a description of repository contents.
+
+The Lean model contains record kind/window only. Its well-formed predicate already assumes
+exact equality with an expected schedule; the presence theorem specializes that assumption.
+The no-fork result compares kind/window, not hashes, commitments or two authenticated producer
+stories. The proof does not establish the JavaScript implementation, wall-clock liveness,
+cryptographic non-equivocation or reliable publication. Current proof CI discovers files rather
+than using the historical single appended command. The optional second delayed-reveal lemma
+is not a shipped requirement satisfied by this file. S31 confirms the related position paper's
+proposal and preprint identity, not an adopted NeurIPS rule or endorsement of Simurgh's specific
+tiers. The Article-55/73, deadlines and application-date corrections in M41/M47/S16 apply here too.
+
+The retained E2E net checks exact verdict/reason/gate/exit for seven feed mutations, but T10/T11
+public-extra mutations are exercised separately by unit helpers, not the CLI's complete artifact
+loading. T2/T5 do not assert every promised result field; T13 checks any nonzero result after tail
+deletion. Its inventory test checks presence of four files rather than equality of directory
+contents, and byte comparison covers selected artifacts. Reproduction runs units and this E2E
+net, compares a larger selected list, and checks only fixture/evidence Git status; it does not
+run Lean, replay every upstream stage, scrub credentials or establish a fully clean repository.
+Temporary setup and interpreter failures remain outside the universal exit-wrapper claim.
+Historical commands also contain wrong relative imports, incomplete inventory/schema grep
+checks and assumptions about then-existing worktree failures; current source/receipts take
+precedence. Frozen records remain preserved with these explicit corrections.

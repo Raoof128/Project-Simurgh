@@ -1,0 +1,78 @@
+{
+  "schema": "simurgh.documentation_audit.seismograph_probe.v1",
+  "date": "2026-10-19",
+  "entrypoint": "verify-stage4n.mjs CLI",
+  "scope": "Temporary local feed/policy copies only, no signing, inference, publication or retained fixture/runtime changes. Original signed evidence untouched. CLI has no manifest/attestation/key input.",
+  "cases": [
+    {
+      "name": "baseline feed and policy only; no manifest, attestation or signer input",
+      "exit": 0,
+      "schema": "simurgh.seismograph.verdict.v1",
+      "rawCode": 0,
+      "runLevel": 0,
+      "reason": null,
+      "gate": null,
+      "as_of_window": "synthetic-0006"
+    },
+    {
+      "name": "unsigned arbitrary plaintext band with matching rebuilt commitment",
+      "exit": 0,
+      "schema": "simurgh.seismograph.verdict.v1",
+      "rawCode": 0,
+      "runLevel": 0,
+      "reason": null,
+      "gate": null,
+      "as_of_window": "synthetic-0006"
+    },
+    {
+      "name": "unsigned reveal and heartbeat claim publication in future window 9999",
+      "exit": 0,
+      "schema": "simurgh.seismograph.verdict.v1",
+      "rawCode": 0,
+      "runLevel": 0,
+      "reason": null,
+      "gate": null,
+      "as_of_window": "synthetic-0006"
+    },
+    {
+      "name": "unsigned policy nested identity field and non-claim plaintext",
+      "exit": 0,
+      "schema": "simurgh.seismograph.verdict.v1",
+      "rawCode": 0,
+      "runLevel": 0,
+      "reason": null,
+      "gate": null,
+      "as_of_window": "synthetic-0006"
+    },
+    {
+      "name": "one-record prefix with caller-selected earlier horizon",
+      "exit": 0,
+      "schema": "simurgh.seismograph.verdict.v1",
+      "rawCode": 0,
+      "runLevel": 0,
+      "reason": null,
+      "gate": null,
+      "as_of_window": "synthetic-0000"
+    },
+    {
+      "name": "one-record prefix retains original horizon",
+      "exit": 1,
+      "schema": "simurgh.seismograph.verdict.v1",
+      "rawCode": 47,
+      "runLevel": 1,
+      "reason": "heartbeat_absent_for_expected_window",
+      "gate": "Q11",
+      "as_of_window": "synthetic-0006"
+    },
+    {
+      "name": "root-as-leaf empty proof; no bundle bytes and false distribution/stage",
+      "exit": 0,
+      "schema": "simurgh.seismograph.verdict.v1",
+      "rawCode": 0,
+      "runLevel": 0,
+      "reason": null,
+      "gate": null,
+      "as_of_window": "synthetic-0006"
+    }
+  ]
+}

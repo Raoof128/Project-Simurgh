@@ -3725,3 +3725,21 @@ Owner-requested work; implementation and review by Codex assistance.
   prefixes and frozen-surface preservation. Probes used temporary inputs and ephemeral local
   test keys only; no inference, external ceremony, production signing or full E2E rerun.
 - **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 854-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 854 of 919 baseline
+  candidates completely read, 65 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M106–M107 for the complete Stage 4M/4N specs and plans; correct README
+  and SECURITY descriptions of signed bindings, disclosure bounds and reporting liveness.
+- **Findings:** Local temporary probes confirm unsigned Tier-P disclosure/chain acceptance,
+  unchecked VXD producer claims, and Stage 4N CLI authentication and band/schedule gaps.
+  Distinguish fixed-artifact signature tests from verification of arbitrary supplied inputs.
+- **Research:** Verify the frontier-safety reproducibility position paper identity and scope
+  (S31). Preserve frozen plans, proof/runtime source, captures and signed evidence.
+- **Validation:** Check formatting, local links, baseline identities/read hashes, append-only
+  prefixes and frozen surfaces. No inference, external ceremony or full E2E rerun; runtime
+  repairs remain separate. Local probes used temporary inputs and explicitly scoped keys.
+- **Remaining:** Complete every pending manual read and final correction verification.
