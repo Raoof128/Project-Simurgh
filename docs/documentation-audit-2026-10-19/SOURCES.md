@@ -538,3 +538,43 @@ an extensible envelope capable of carrying one are different questions. The olde
 attestation section is not an exclusion applying to all C2PA assertions. These targeted sections
 do not establish absence of equivalent prior art, patent novelty, universal interoperability or
 SCITT incompatibility. The scorecard remains the author's assessment, without lab endorsement.
+
+### S49 — Stage 5G mock anchoring versus the Sigstore bundle contract
+
+Read the relevant verification-material and content sections of the official
+[Sigstore Bundle Format](https://docs.sigstore.dev/about/bundle/) (page identifies version 0.3.2,
+updated 14 January 2025). It distinguishes a certificate with identity extensions from an
+out-of-band public-key identifier, and specifies signed timing evidence for validating short-lived
+certificates after expiry. Transparency entries are encouraged, not universally required by the
+format. DSSE content uses an envelope and an in-toto statement. The implementation's bare PEM,
+fixed integer time and plain JSON signature do not implement that contract. A key fingerprint
+allowlist alone is not an OIDC/Fulcio identity chain. This targeted source check does not assert
+that every Sigstore deployment must use identical log policy or that offline verification is
+impossible; the bundle is specifically designed to carry verification material.
+
+### S50 — Stage 5H transparency figures, benchmark comparability and legal dates
+
+The current [Stanford CRFM December 2025 FMTI page](https://crfm.stanford.edu/fmti/December-2025/index.html)
+reports a mean of **41**, down 17 points from 58, across 13 companies. It explicitly changes
+indicators and adds companies, so this is not a controlled longitudinal estimate for a fixed
+population. The frozen spec's 40/100 should not be repeated as the current page's value.
+Relevant indicator/results passages in the [report](https://crfm.stanford.edu/fmti/December-2025/paper.pdf)
+support no scored company disclosing train-test overlap; that is the index's assessed sample,
+not a census of every developer. This was a targeted source check, not a full report review.
+
+[Epoch's 23 January 2025 clarification](https://epoch.ai/latest/openai-and-frontiermath)
+describes ownership/access to the commissioned problems and a 50-question solution holdout.
+Its [historical benchmark methodology](https://epoch.ai/benchmarks/frontiermath-tiers-1-3-v1)
+explicitly identifies possible differences in scaffolding, test-time compute and problem subset
+(180 versus 290) from OpenAI's evaluations. The quoted approximately 25% versus 10% comparison
+is therefore not a same-recipe reproduction failure or evidence of cheating. A holdout protects
+an access boundary; it does not alone supply VSD signatures or justify an automatic tier label.
+
+The Commission's [GPAI guidelines overview](https://digital-strategy.ec.europa.eu/en/policies/guidelines-gpai-providers)
+distinguishes obligations applying from **2 August 2025**, enforcement powers from **2 August
+2026**, and compliance by **2 August 2027** for models placed on the market before the first date.
+The spec incorrectly places both GPAI transparency obligations and enforcement in August 2026.
+Article 50 system-transparency provisions are a separate scope; consult M41/M47 for the wider
+schedule. The guidelines and Code are not binding statutes themselves, and a model-documentation
+form or private/public reporting distinction does not mandate VSD's tier calculus. S48 retains
+the Code's systemic-risk applicability qualification.

@@ -626,3 +626,19 @@ reference checks. See
 [M125 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m125--stage-5f-verifies-a-declared-grid-with-incomplete-capture-and-ceremony-binding).
 For external directories, supply an independently trusted signer fingerprint; the default pin
 is read from the pack. Its completeness flags do not establish actual execution coverage.
+
+Stage 5G binds signatures and key separation but does not reconcile capture context/cases with
+the challenged corpus. Its audit accepts duplicate capture cells and empty attempt histories.
+The fixture anchor checks a key signature and fixed time, not a real Sigstore certificate/log
+chain, and its subject metadata is insufficiently bound. Lane B can corroborate a rejected
+attestation. See
+[M126 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m126--stage-5g-proves-signature-separation-with-weaker-capture-and-anchor-checks).
+Neither a rung-2 fixture result nor a ceremony flag establishes independently anchored custody.
+
+Stage 5H authenticates reviewer signatures but does not match the review output digest to the
+claim's committed output or enforce unique, consistent receipts. Core audit can accept an
+incomplete reference census when bytes are supplied separately. Its CLI executes recipes and
+loads unconstrained artifact paths before full validation. See
+[M127 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m127--stage-5h-disclosure-tiers-depend-on-incompletely-checked-reviewer-facts).
+The portable browser check does not verify signatures. Tier/ceremony flags are not proof of
+independent model reproduction, and the current CLI should not serve untrusted uploads.

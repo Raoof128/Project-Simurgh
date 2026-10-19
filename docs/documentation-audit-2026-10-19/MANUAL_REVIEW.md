@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **890 documents have complete manual reads; 29 remain
+SHA-256 values. At this checkpoint, **894 documents have complete manual reads; 25 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -5179,3 +5179,193 @@ Python is required by the earlier test even though a later standalone step says 
 Lean is not run by this stage script. The conformance kit runs repository checks, not the planned
 self-contained dependency-copy bundle. S48 corrects the regulatory and standards claims: VMP
 is a research contract, not proof that other extensible formats cannot express panel evidence.
+
+### M126 — Stage 5G proves signature separation with weaker capture and anchor checks
+
+Read all 481 specification lines and 655 plan lines, rereading the truncated comparison table.
+Compared every core module, issuance/verification/build path, foreign pack, Lane B, Python,
+browser, Lean and reproduction script. The [eight-case VFC probe](vfc-verifier-probe.json)
+retains valid/signature-refusal controls and establishes five accepted producer-signed
+inconsistencies plus a Lane B corroboration of an overclaim-rejected bundle. M49's historical
+outside-party reports remain reports; cryptographic rungs do not independently authenticate
+separate humans, account ownership or non-collusion. No external capture was requested here.
+
+Domain-separated signatures and SPKI-DER fingerprints bind the producer identity, whole capture
+and verifier identity under an external verifier pin. The implemented signatures follow the
+plan's domain-prefixed messages, not the spec's unprefixed pseudocode. However, schema checking
+does not validate the top-level schema value or recursively close nested content/cells/anchor
+objects, and does not enforce every required field/type. Arbitrary schema strings and extra
+nested fields pass after signing. Nonce size is enforced by the issuance helper, not by all
+receipt verification paths. Identity and policy checks are separate from truth of the capture.
+
+Challenge verification reopens the three supplied artifacts, but never compares the capture's
+own corpus/snapshot digests with that challenge. A signed capture can therefore name unrelated
+context. Its cells need not cover the challenge corpus. Audit compares terminal case-ID sets
+with capture case-ID sets, accepts duplicate capture cells, and only checks that supplied
+attempts point to some terminal ID. An empty attempt list passes; terminal IDs/statuses and
+census challenge/corpus/capture fields are not fully reconciled. A jointly signed capture/census
+for an out-of-corpus case passes. The real ingest constructs a new census from returned cells;
+it does not recover all actual attempts, omissions or failures. The `_ref` path/digest copies
+are not the Node challenge check's source of truth and are not comprehensively validated.
+
+The so-called Sigstore kernel verifies a plain canonical-JSON signature using a supplied public
+key and requires the literal timestamp `1700000000`. Its reported root fingerprint is the same
+supplied key's fingerprint. It does not validate X.509 issuance/validity, a Fulcio chain, SCT,
+Rekor checkpoint/inclusion proof, DSSE pre-authentication encoding or OIDC claims. The core
+requires that fingerprint in the caller's allowlist and checks four statement bindings and the
+anchor digest; issuer/audience are not checked. The kernel subject is copied from unsigned
+metadata relative to the anchor-key signature and need only differ from the verifier subject;
+it is not matched to the producer's declared anchored subject. The probe replaces subject,
+issuer and audience, re-signs producer/verifier wrappers with fixture keys and still gets rung 2.
+Thus the synthetic rung exercises a local key-attestation predicate, not real Sigstore identity
+assurance. Neither the spec's same-certified-key rule nor the plan's cross-binding correction
+establishes deployed interoperability. S49 supplies the actual bundle-format boundary.
+
+Presence-driven implementation follows the later plan: with no anchor, an unsupported claimed
+rung yields 296 and a higher policy minimum yields 298, rather than the spec's blanket 293 for
+missing rung-2 trust configuration. A missing kernel result yields 299 but the direct result
+can still set `record_authentic: true`; this is signature-stage status, not accepted attestation.
+Unknown tiers use the public path and file reads can throw outside the safe wrapper. Challenge
+issuer/verifier files expose functions, not the promised executable argument-handling tools.
+The synthetic builder regenerates a fixed-nonce challenge in memory instead of loading the
+planned pre-issued receipt. Fresh issuance remains a separate operation.
+
+Lane B calls the same JS verifier and signs a sidecar. Its `corroborated` predicate requires
+`record_authentic`, not full attestation validity: the probe's raw-296 overclaim is corroborated
+with a valid receipt. Audit failure, missing anchor execution and other later failures must not
+be inferred absent from a corroboration flag. The runner uses public tier and derives the
+ceremony pin from its own fixture private key; it does not load an independent ceremony trust
+pin or persist the receipt. `verifyReceipt` authenticates the receipt but does not compare it
+to a supplied bundle. Diversity accepts caller-provided rung/subject values without verification;
+campaign validation checks a transcript-present boolean, not the actual transcript object.
+These helpers require trusted upstream inputs and are not independent validation APIs.
+
+The foreign pack does set offline environment variables and uses a pinned model revision.
+It does not validate weight/tokenizer manifests or match the supplied snapshot/corpus to the
+challenge before inference. The snapshot is hashed afterward, and the capture script ignores
+its contents. Labels are retained without scores or runtime provenance; input digests hash
+source text, not tokenized input. The signer discards emitted model/revision metadata and uses
+a fixed `external-actor` subject. The fixed `/tmp/vfc-cells.json` path is not isolated between
+runs; shell interpolation of caller paths into Python source is not robust. Relative arguments
+are resolved after changing into the pack directory. Failure aborts rather than emitting the
+planned campaign outcome. Keep these limits in external handoff instructions; a successful
+rung does not prove an untampered model run or a complete retry history.
+
+Python uses `json.dumps` and checks selected digests/declarations; it does not independently
+verify Ed25519, census bijection, external roots, policy or raw-code precedence. It promotes
+anchor presence to the top predicate without anchor validation. General JS/Python canonical
+agreement for astral-key ordering or number serialization is not established by this script.
+Browser verification is explicitly incomplete and unsigned; its displayed challenge rung is
+based on binding-field presence, not receipt verification. The HTML inline module conflicts
+with its own CSP, as M34 already records. The planned WebCrypto signature implementation and
+full rung-0/1 portable validation did not ship. Lean proves symbolic equalities/predicates;
+the last theorem excludes numeric sentinel 99, not arbitrary runtime independence claims.
+Reproduction rebuilds in place, checks tracked Git differences, permits absent real capture
+and optional Python, and does not itself run Lean or a real browser. These are different gates
+from the planned two-clean-directory, complete-file-manifest comparison.
+
+The broad claims that an entire industry uses a binary model, or that a lab's research index
+proves absence of a verification primitive, are unsupported. Keep OVERT/CAP-SRP comparison and
+crosswalk debts explicit, without claiming conformance, legal accreditation or a completed
+prior-art exclusion. Annex VI describes an internal-control procedure; its applicability must
+follow the Act's system-specific route, not an unqualified claim about all high-risk systems.
+The stage's operational title decision depends on documented actor custody, not two keypairs.
+
+### M127 — Stage 5H disclosure tiers depend on incompletely checked reviewer facts
+
+Read the complete 617-line specification and 536-line plan, including all amendments and
+source comparisons. Compared core checks, builders, kernel/CLI, both ingest paths, Lane B,
+Python/browser, Lean, K7 and reproduction gates. The [nine-case VSD probe](vsd-verifier-probe.json)
+confirms that a host-signed unrelated output/identity can support the controlled tier, conflicting
+receipts are resolved by last entry, and a wrong receipt-wrapper digest passes. Baseline and
+unsigned-refusal controls work. It also records an empty-reference core census, empty method
+summary, unsigned browser corroboration and premature decimal truncation. These are local
+fixture probes, not new disclosure campaigns or model evaluations.
+
+Controlled-tier verification authenticates a host key against a supplied registry and binds
+receipt claim/inventory digests. It never compares `recomputed_output_digest` with the claim's
+committed output, checks `host_identity_digest` against the registry subject, or reopens
+`receipt_digest`. Duplicate receipts are not rejected: a final `reproduced` entry overrides a
+preceding `not_reproduced` entry for the same claim. Host/producer key distinctness is not a
+core requirement. Therefore “R1 is a rerun that happened” is too strong: R1 consumes a signed
+verdict without establishing the claimed rerun relation. The real-host ingest checks key
+separation from the verifier, but not from the producer, and inherits these receipt gaps.
+It writes output even when validation reports failure. A pin/host registry packaged beside
+real evidence requires an independent trust decision; the Lane C gate explicitly loads those
+pack-local files. A signature cannot prove that the project never possessed a private key.
+
+Public-tier CLI verification does execute the supplied aggregate recipe and compare its result.
+The pure core consumes a caller-supplied `matched` boolean without independently comparing its
+computed digest. That API requires trusted orchestration. The CLI executes the kernel and opens
+artifact paths before authenticating the bundle or validating recipe grammar. Paths are not
+contained to the evidence directory, and recipe decimals/row sizes are not bounded; malformed
+inputs may throw outside the safe wrapper. This is a local research verifier, not an appropriate
+untrusted upload service without additional isolation and validation. Unknown tiers use the
+public path. Stricter policy is an API option, not an exposed CLI flag; missing/invalid policy
+floor values are not rejected explicitly.
+
+Artifact accounting covers supplied recipe input IDs and the declared present/withheld lists,
+not every actual dependency or every claim in an original report. Duplicate IDs are not excluded.
+The audit census is reconstructed from claim/ref IDs; it does not read the separately emitted
+inventory-census file or require refs to equal all manifest-present artifacts. The probe removes
+all refs and signs a corresponding empty ref census while supplying bytes directly: core audit
+accepts it. That is an API limitation; the CLI, which loads bytes only through refs, would lack
+those inputs. Method/claim text are not reopened from their digests; an empty method-summary
+string suffices. Scope values are shallow declarations, not checkpoint measurements. Digest
+binding detects changed signed declarations, not a producer evaluating different real weights.
+Unknown nested fields and raw redaction content are not comprehensively excluded, so the promised
+metadata-only bundle is a producer discipline rather than a recursive schema guarantee.
+
+The sole aggregate interpreter reads every listed artifact but does not validate metric labels,
+unique case IDs, unique inputs or the actual relationship between a statistic and the claim.
+It truncates every value to the requested decimal precision before averaging/rounding. The
+probe's `0.00009` becomes `0.0000` at four places, whereas exact decimal half-up is `0.0001`.
+Negative values have additional JS/Python/browser formatting/division differences; input ranges
+are not enforced. Four-place rounding of the already-scaled nonnegative mean is narrower than
+arbitrary-precision decimal averaging. Recomputing six authored constant scores of 0.94 does
+not reproduce a HarmBench model run. The controlled fixture's method mentions 2,400 prompts,
+but its recipe averages four authored 0.90 values. These are illustrative claims, not measured
+Frontier-7B, CBRN or deployment-monitoring evidence.
+
+The spec's tier ordering is not a cumulative set of required predicates: R2 deliberately does
+not require R1's host receipt. Its introductory “cannot make a threshold-crossing claim on
+restricted evidence” concerns R0, while controlled R1 can structurally support C2 with qualified
+checkability. A negative receipt does not cap an otherwise matched public recomputation below
+R1. The Lean theorem correctly assumes both no reproduced receipt and no recomputation match;
+the broader spec sentence omits that condition. Lean's nested `needs` predicate and digest
+inequality models do not prove runtime tier monotonicity, hash collision resistance or actual
+checkpoint identity. The scope-swap runtime fixture fails 303 through a stale receipt, not a
+universal 304 checkpoint check. Codes are public 300–312, audit adds 313, policy 314, wrapper
+315; the spec's later tier subsection still has the obsolete 313/314 split. Environment guards
+can return 315 after authenticity gates and before 304, so “wrapper last” is not a complete
+execution-order description. Safe exceptions can report `record_authentic: true` before all
+authenticity checks completed; use the overall failure result.
+
+Lane B really launches a second Node process and reruns both recipes, but shares the filesystem,
+implementation and fixture keys. It verifies embedded signatures without an independent pin,
+does not invoke the full verifier, and unconditionally labels its controlled receipt reproduced.
+Its success condition compares that output with the existing receipt, not the claim's committed
+output or the public claim's match. It selects the first controlled claim/first receipt rather
+than validating arbitrary multi-claim correspondence. Thus successful ceremony execution does
+not close all R1 receipt/provenance gaps. The returned real-disclosure record is historically a
+review-host receipt, not automatic completion of the proposed foreign-producer inventory or
+real-risk-report pilot; M49's explicit external-report limits remain applicable.
+
+Python recomputes selected artifact/recipe/census digests and the table, not all six domains,
+signatures or the full validity contract. Browser code calls SHA-256 but never Ed25519 despite
+its header and spec claiming signature checks; all three invalid signatures still corroborate.
+Its inline module is blocked by its own CSP, as M34 records. K7's “every code reachable” test
+compares the code array, rather than executing each raw branch; other unit tests supply some
+mutation coverage, but this is not the promised full CLI tamper matrix/all-export guarantee.
+The byte-stability tool does compare two clean build manifests, including config, but never
+compares either with the committed tree. The separate Lane B step rewrites its transcript;
+reproduction is not wholly read-only and does not itself invoke Lean. The campaign gate does
+require an outcome and rejects completed-evidence/status inconsistency; `pending` is implemented
+despite omission from one plan enumeration.
+
+S50 corrects FMTI statistics, legal timing and the FrontierMath comparison. The tier taxonomy
+remains a cited research proposal, not an international or legally prescribed 2026 standard.
+S31/S40/S48 qualify the paper, RSP and Code framing. A bound scope label cannot make an actual
+model substitution impossible, and a holdout benchmark is not by itself a VSD signed host
+receipt. Broad absence/firstness claims and self-assigned scorecards remain unvalidated; they
+must not be presented as lab endorsement or proof of industry uniqueness.

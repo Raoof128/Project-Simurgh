@@ -4654,3 +4654,20 @@ Owner-requested work; implementation and review by Codex assistance.
   prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
   full E2E rerun; temporary probes preserve retained evidence and source bytes.
 - **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 894-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 894 of 919 baseline
+  candidates completely read, 25 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M126–M127 for complete Stage 5G/5H specifications and plans; correct
+  SECURITY guidance on foreign-capture anchoring and disclosure-tier reviewer facts.
+- **Findings:** Eight VFC and nine VSD local probe cases qualify corpus/census binding,
+  mock Sigstore identity, ceremony corroboration, receipt outputs and portable verification.
+- **Research:** S49–S50 compare official Sigstore requirements, Stanford FMTI figures,
+  Epoch benchmark methodology and Commission GPAI applicability/enforcement dates.
+- **Validation:** Check formatting, local links, baseline identities/read hashes, append-only
+  prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
+  full E2E rerun; temporary probes preserve retained evidence and source bytes.
+- **Remaining:** Complete every pending manual read and final correction verification.

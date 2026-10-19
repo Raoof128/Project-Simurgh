@@ -1,0 +1,301 @@
+{
+  "schema": "simurgh.documentation_audit.vsd_probe.v1",
+  "date": "2026-10-19",
+  "scope": "Local fixture copies, public fixture signing keys; no source/evidence mutation, outside ceremony or inference.",
+  "cases": [
+    {
+      "name": "baseline",
+      "result": {
+        "raw": 0,
+        "tier": "audit",
+        "record_authentic": true,
+        "attestation_valid": true,
+        "verdict_table": [
+          {
+            "claim_id": "frontier7b-cbrn-threshold",
+            "proven_tier": "controlled",
+            "support_quality": "qualified",
+            "max_consequence_warranted": "threshold_crossing",
+            "inverted": false,
+            "right_scaling_distance": 0
+          },
+          {
+            "claim_id": "frontier7b-harmbench-public",
+            "proven_tier": "public",
+            "support_quality": "full",
+            "max_consequence_warranted": "threshold_crossing",
+            "inverted": false,
+            "right_scaling_distance": 0
+          },
+          {
+            "claim_id": "frontier7b-monitoring-context",
+            "proven_tier": "restricted",
+            "support_quality": "descriptive",
+            "max_consequence_warranted": "contextual",
+            "inverted": false,
+            "right_scaling_distance": 0
+          }
+        ],
+        "inventory_census_verified": true,
+        "policy_evaluated": true,
+        "policy_accepted": true,
+        "trust_reason": "ok"
+      }
+    },
+    {
+      "name": "host-signed unrelated output and identity digests accepted as reproduced",
+      "result": {
+        "raw": 0,
+        "tier": "audit",
+        "record_authentic": true,
+        "attestation_valid": true,
+        "verdict_table": [
+          {
+            "claim_id": "frontier7b-cbrn-threshold",
+            "proven_tier": "controlled",
+            "support_quality": "qualified",
+            "max_consequence_warranted": "threshold_crossing",
+            "inverted": false,
+            "right_scaling_distance": 0
+          },
+          {
+            "claim_id": "frontier7b-harmbench-public",
+            "proven_tier": "public",
+            "support_quality": "full",
+            "max_consequence_warranted": "threshold_crossing",
+            "inverted": false,
+            "right_scaling_distance": 0
+          },
+          {
+            "claim_id": "frontier7b-monitoring-context",
+            "proven_tier": "restricted",
+            "support_quality": "descriptive",
+            "max_consequence_warranted": "contextual",
+            "inverted": false,
+            "right_scaling_distance": 0
+          }
+        ],
+        "inventory_census_verified": true,
+        "policy_evaluated": true,
+        "policy_accepted": true,
+        "trust_reason": "ok"
+      }
+    },
+    {
+      "name": "conflicting receipts accepted with last reproduced receipt winning",
+      "result": {
+        "raw": 0,
+        "tier": "audit",
+        "record_authentic": true,
+        "attestation_valid": true,
+        "verdict_table": [
+          {
+            "claim_id": "frontier7b-cbrn-threshold",
+            "proven_tier": "controlled",
+            "support_quality": "qualified",
+            "max_consequence_warranted": "threshold_crossing",
+            "inverted": false,
+            "right_scaling_distance": 0
+          },
+          {
+            "claim_id": "frontier7b-harmbench-public",
+            "proven_tier": "public",
+            "support_quality": "full",
+            "max_consequence_warranted": "threshold_crossing",
+            "inverted": false,
+            "right_scaling_distance": 0
+          },
+          {
+            "claim_id": "frontier7b-monitoring-context",
+            "proven_tier": "restricted",
+            "support_quality": "descriptive",
+            "max_consequence_warranted": "contextual",
+            "inverted": false,
+            "right_scaling_distance": 0
+          }
+        ],
+        "inventory_census_verified": true,
+        "policy_evaluated": true,
+        "policy_accepted": true,
+        "trust_reason": "ok"
+      }
+    },
+    {
+      "name": "core audit accepts empty artifact reference census with supplied bytes",
+      "result": {
+        "raw": 0,
+        "tier": "audit",
+        "record_authentic": true,
+        "attestation_valid": true,
+        "verdict_table": [
+          {
+            "claim_id": "frontier7b-cbrn-threshold",
+            "proven_tier": "controlled",
+            "support_quality": "qualified",
+            "max_consequence_warranted": "threshold_crossing",
+            "inverted": false,
+            "right_scaling_distance": 0
+          },
+          {
+            "claim_id": "frontier7b-harmbench-public",
+            "proven_tier": "public",
+            "support_quality": "full",
+            "max_consequence_warranted": "threshold_crossing",
+            "inverted": false,
+            "right_scaling_distance": 0
+          },
+          {
+            "claim_id": "frontier7b-monitoring-context",
+            "proven_tier": "restricted",
+            "support_quality": "descriptive",
+            "max_consequence_warranted": "contextual",
+            "inverted": false,
+            "right_scaling_distance": 0
+          }
+        ],
+        "inventory_census_verified": true,
+        "policy_evaluated": true,
+        "policy_accepted": true,
+        "trust_reason": "ok"
+      }
+    },
+    {
+      "name": "producer-signed empty method-summary digest accepted as public",
+      "result": {
+        "raw": 0,
+        "tier": "audit",
+        "record_authentic": true,
+        "attestation_valid": true,
+        "verdict_table": [
+          {
+            "claim_id": "frontier7b-cbrn-threshold",
+            "proven_tier": "controlled",
+            "support_quality": "qualified",
+            "max_consequence_warranted": "threshold_crossing",
+            "inverted": false,
+            "right_scaling_distance": 0
+          },
+          {
+            "claim_id": "frontier7b-harmbench-public",
+            "proven_tier": "public",
+            "support_quality": "full",
+            "max_consequence_warranted": "threshold_crossing",
+            "inverted": false,
+            "right_scaling_distance": 0
+          },
+          {
+            "claim_id": "frontier7b-monitoring-context",
+            "proven_tier": "restricted",
+            "support_quality": "descriptive",
+            "max_consequence_warranted": "contextual",
+            "inverted": false,
+            "right_scaling_distance": 0
+          }
+        ],
+        "inventory_census_verified": true,
+        "policy_evaluated": true,
+        "policy_accepted": true,
+        "trust_reason": "ok"
+      }
+    },
+    {
+      "name": "producer-signed wrong receipt wrapper digest accepted",
+      "result": {
+        "raw": 0,
+        "tier": "audit",
+        "record_authentic": true,
+        "attestation_valid": true,
+        "verdict_table": [
+          {
+            "claim_id": "frontier7b-cbrn-threshold",
+            "proven_tier": "controlled",
+            "support_quality": "qualified",
+            "max_consequence_warranted": "threshold_crossing",
+            "inverted": false,
+            "right_scaling_distance": 0
+          },
+          {
+            "claim_id": "frontier7b-harmbench-public",
+            "proven_tier": "public",
+            "support_quality": "full",
+            "max_consequence_warranted": "threshold_crossing",
+            "inverted": false,
+            "right_scaling_distance": 0
+          },
+          {
+            "claim_id": "frontier7b-monitoring-context",
+            "proven_tier": "restricted",
+            "support_quality": "descriptive",
+            "max_consequence_warranted": "contextual",
+            "inverted": false,
+            "right_scaling_distance": 0
+          }
+        ],
+        "inventory_census_verified": true,
+        "policy_evaluated": true,
+        "policy_accepted": true,
+        "trust_reason": "ok"
+      }
+    },
+    {
+      "name": "browser corroborates invalid signatures",
+      "result": {
+        "raw": null,
+        "corroborated": true,
+        "verdict_table": [
+          {
+            "claim_id": "frontier7b-cbrn-threshold",
+            "proven_tier": "controlled",
+            "support_quality": "qualified",
+            "max_consequence_warranted": "threshold_crossing",
+            "inverted": false,
+            "right_scaling_distance": 0
+          },
+          {
+            "claim_id": "frontier7b-harmbench-public",
+            "proven_tier": "public",
+            "support_quality": "full",
+            "max_consequence_warranted": "threshold_crossing",
+            "inverted": false,
+            "right_scaling_distance": 0
+          },
+          {
+            "claim_id": "frontier7b-monitoring-context",
+            "proven_tier": "restricted",
+            "support_quality": "descriptive",
+            "max_consequence_warranted": "contextual",
+            "inverted": false,
+            "right_scaling_distance": 0
+          }
+        ],
+        "mismatches": []
+      }
+    },
+    {
+      "name": "unsigned mutation refused control",
+      "result": {
+        "raw": 301,
+        "tier": "audit",
+        "record_authentic": false,
+        "attestation_valid": false,
+        "verdict_table": [],
+        "inventory_census_verified": null,
+        "policy_evaluated": false,
+        "policy_accepted": null,
+        "trust_reason": {
+          "raw": 301,
+          "reason": "attestation_signature_invalid"
+        }
+      }
+    },
+    {
+      "name": "decimal input truncation before mean rounding",
+      "result": {
+        "input": ["0.00009"],
+        "decimals": 4,
+        "observed": "0.0000",
+        "exact_decimal_half_up": "0.0001"
+      }
+    }
+  ]
+}

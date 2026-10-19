@@ -1,0 +1,134 @@
+{
+  "schema": "simurgh.documentation_audit.vfc_probe.v1",
+  "date": "2026-10-19",
+  "scope": "Local fixture copies and public fixture keys; no external actor, identity service, model inference or source/evidence mutation.",
+  "cases": [
+    {
+      "name": "baseline",
+      "result": {
+        "raw": 0,
+        "tier": "audit",
+        "record_authentic": true,
+        "attestation_valid": true,
+        "claimed_rung": "challenge_bound",
+        "proven_rung": "challenge_bound",
+        "minimum_required_rung": "challenge_bound",
+        "policy_evaluated": true,
+        "policy_accepted": true,
+        "audit_census_verified": true,
+        "rung2_anchor_verified": false,
+        "trust_reason": null
+      }
+    },
+    {
+      "name": "producer-signed unknown schema and nested field accepted",
+      "result": {
+        "raw": 0,
+        "tier": "audit",
+        "record_authentic": true,
+        "attestation_valid": true,
+        "claimed_rung": "challenge_bound",
+        "proven_rung": "challenge_bound",
+        "minimum_required_rung": "challenge_bound",
+        "policy_evaluated": true,
+        "policy_accepted": true,
+        "audit_census_verified": true,
+        "rung2_anchor_verified": false,
+        "trust_reason": null
+      }
+    },
+    {
+      "name": "producer-signed capture context contradicts signed challenge accepted",
+      "result": {
+        "raw": 0,
+        "tier": "audit",
+        "record_authentic": true,
+        "attestation_valid": true,
+        "claimed_rung": "challenge_bound",
+        "proven_rung": "challenge_bound",
+        "minimum_required_rung": "challenge_bound",
+        "policy_evaluated": true,
+        "policy_accepted": true,
+        "audit_census_verified": true,
+        "rung2_anchor_verified": false,
+        "trust_reason": null
+      }
+    },
+    {
+      "name": "producer-signed out-of-corpus capture and empty-attempt census accepted",
+      "result": {
+        "raw": 0,
+        "tier": "audit",
+        "record_authentic": true,
+        "attestation_valid": true,
+        "claimed_rung": "challenge_bound",
+        "proven_rung": "challenge_bound",
+        "minimum_required_rung": "challenge_bound",
+        "policy_evaluated": true,
+        "policy_accepted": true,
+        "audit_census_verified": true,
+        "rung2_anchor_verified": false,
+        "trust_reason": null
+      }
+    },
+    {
+      "name": "producer-signed duplicate capture cell accepted",
+      "result": {
+        "raw": 0,
+        "tier": "audit",
+        "record_authentic": true,
+        "attestation_valid": true,
+        "claimed_rung": "challenge_bound",
+        "proven_rung": "challenge_bound",
+        "minimum_required_rung": "challenge_bound",
+        "policy_evaluated": true,
+        "policy_accepted": true,
+        "audit_census_verified": true,
+        "rung2_anchor_verified": false,
+        "trust_reason": null
+      }
+    },
+    {
+      "name": "fixture anchored producer-signed identity metadata replacement accepted",
+      "result": {
+        "raw": 0,
+        "tier": "audit",
+        "record_authentic": true,
+        "attestation_valid": true,
+        "claimed_rung": "externally_anchored",
+        "proven_rung": "externally_anchored",
+        "minimum_required_rung": "challenge_bound",
+        "policy_evaluated": true,
+        "policy_accepted": true,
+        "audit_census_verified": true,
+        "rung2_anchor_verified": true,
+        "trust_reason": null
+      }
+    },
+    {
+      "name": "Lane B corroborates an overclaim-rejected bundle",
+      "result": {
+        "verifier": 296,
+        "corroborated": true,
+        "receiptValid": true
+      }
+    },
+    {
+      "name": "unsigned mutation refused control",
+      "result": {
+        "raw": 284,
+        "tier": "audit",
+        "record_authentic": false,
+        "attestation_valid": false,
+        "claimed_rung": "challenge_bound",
+        "proven_rung": null,
+        "minimum_required_rung": "challenge_bound",
+        "policy_evaluated": true,
+        "policy_accepted": null,
+        "audit_census_verified": false,
+        "rung2_anchor_verified": false,
+        "trust_reason": "attestation_signature_invalid"
+      }
+    }
+  ]
+}
