@@ -4162,3 +4162,11 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Files changed:** Conflict resolution in current navigation, both logs and overlapping maintenance gates; no frozen provider captures/protocols modified.
 - **Verification:** 40 merged-tree maintenance tests and 16 explorer tests pass; production build passes. No fresh provider inference or platform certification implied.
 - **Follow-ups:** Push combined branch without rewriting remote history. Earlier downloadable bundles remain snapshots of their recorded commits.
+
+## 2026-10-19 — Raouf: prepare professional reviewer README (Australia/Sydney)
+
+- **Scope:** Owner-requested README rewrite for a technical reviewer and reproducible handoff.
+- **Summary:** Lead with the measured control benefit and retained utility; keep the Luna zero-baseline result and unresolved live refusal explicit. Add an architecture diagram, complete result table, credential-free replay commands, dashboard/CLI scope, review routes and outstanding work. Link the completed local Phase 8 review without rewriting historical records.
+- **Files changed:** `README.md`, `AGENT.md`, `CHANGELOG.md`. Runtime, frozen inputs and evidence are unchanged.
+- **Verification:** README formatting and whitespace checks pass; all 34 local links/anchors resolve and no tracked Markdown links target removed root anchors. Corrected demo freshly replays all eight cases; complete transfer verification passes 288 comparison branches, original workflows and reliability storage checks. All five documented CLI examples execute and emit valid JSON. Used the existing pinned Python 3.12 environment; no fresh dependency install, model generation or platform validation is claimed.
+- **Follow-ups:** Commit and push this handoff, then run the owner's requested full E2E smoke workflow against the resulting revision. Independent reproduction and provider/production boundaries remain explicit.
