@@ -1,0 +1,49 @@
+{
+  "schema": "simurgh.documentation_probe.v1",
+  "date": "2026-10-19",
+  "scope": "Direct pure helper calls with synthetic inputs; no HTTP, AgentDojo run, model request or source edit. Does not establish a runtime route exploit or invalidate every saved benchmark result.",
+  "python": "3.12.14",
+  "verdicts": {
+    "missing": {
+      "blocked": false,
+      "sentinel": null
+    },
+    "unknown": {
+      "blocked": false,
+      "sentinel": null
+    },
+    "blocked": {
+      "blocked": true,
+      "sentinel": {
+        "simurgh_blocked": true,
+        "boundary": "input_firewall",
+        "reason_code": "blocked",
+        "receipt_id": "unknown"
+      }
+    }
+  },
+  "zero_denominator": {
+    "numerator": 0,
+    "denominator": 0,
+    "counts": "0/0",
+    "rate": 0
+  },
+  "missing_completion": {
+    "numerator": 1,
+    "denominator": 1,
+    "counts": "1/1",
+    "rate": 1
+  },
+  "source_sha256": {
+    "tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/mapping.py": "c2cc73ffc92fa5abf3757b4c802873fc9655018e33cf240906b37ed30924be67",
+    "tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/layer2_metrics.py": "2385df6612ee996782036ea605cc1bb65fdd05a8f60af1370f516a7c216ac3a6",
+    "tests/e2e/llm_shield_stage3h_metrics_lib.mjs": "1b08b8e0682cb9ad19ad97a0bcfdad755ecc8a3006e6e8cfac8fa2ecf3840d9b"
+  },
+  "node": "v24.19.0",
+  "empty_canary": {
+    "total_cases": 0,
+    "receipt_coverage_rate": 1,
+    "audit_verification_rate": 1,
+    "agentdojo_version_pinned": true
+  }
+}

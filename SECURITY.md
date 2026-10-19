@@ -52,6 +52,15 @@ These findings qualify historical risk, quota and timeout claims. The mounted le
 route remains retired; direct module use and old revisions retain the defects. No runtime
 repair or live-provider validation is claimed by this documentation update.
 
+## Retained AgentDojo helper limits
+
+The original adapter mapping treats missing and unknown gateway verdicts as not blocked.
+Its canary metrics helper also reports full receipt/audit coverage independently of result
+rows. These helpers must not be used as evidence of fail-closed response validation or
+measured coverage by themselves. The [manual correction and synthetic helper probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m73--agentdojo-core-harness-claims-need-their-canary-scope)
+distinguish these observations from actual benchmark runs and later adapter implementations.
+No HTTP exploit, benchmark rerun or runtime repair was performed for this finding.
+
 ## Archived browser-verifier limitation
 
 The frozen Stage 4M HTML verifier has duplicate top-level lexical declarations and fails to
@@ -322,3 +331,23 @@ command transcript. The verifier checks the supplied entries and, when present, 
 terminator. A successful result does not prove that the export is complete or that a key-holding
 operator could not rewrite it. Compare a separately retained trusted commitment for stronger
 history claims; do not disclose the key as part of public verification evidence.
+
+### Retained attestation canonicalization limits
+
+The custom attestation canonicalizer omits an own JSON `__proto__` member while serializing.
+A local probe confirmed that adding this synthetic member to a copy of a signed bundle leaves
+the canonical bytes and signature check unchanged. Do not interpret a signature check as proving
+that every raw JSON member is bound. This observation does not establish a complete verifier bypass.
+Use the retained tools with trusted local evidence packs; their CLI reads referenced paths before
+signature validation. The Stage 3M privacy-reproduction flag checks a declared zero rather than
+regenerating a complete privacy report. See [M79](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m79--attestation-plans-need-exact-canonicalization-and-verification-boundaries)
+and its bounded probe receipt. Frozen artifacts and runtime code were preserved during this audit.
+
+### Retained claim-ledger helper limits
+
+Stage 3N checks supplied registered claims against supplied source fields. Its helper does not
+independently enumerate the complete claim surface: an empty registry, or absent expected and
+resolved fields, can report complete. Its per-row hash-binding helper checks for map entries;
+actual file hashing belongs to the runner. These helper observations do not establish that the
+retained fixed runner or stored ledger supplies those inputs. See [M80](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m80--claim-ledger-scope-and-completeness-need-separate-evidence)
+for the exact scope and probe receipt.

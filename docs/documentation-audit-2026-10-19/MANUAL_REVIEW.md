@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **783 documents have complete manual reads; 136 remain
+SHA-256 values. At this checkpoint, **800 documents have complete manual reads; 119 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -2059,3 +2059,283 @@ are not API seeds. Case-cluster intervals describe this purposive suite, not a s
 hard account cap. Old capture authorization and key-handling instructions are not authorization to
 make another paid request during this docs-only review. Frozen plans/specs remain unchanged;
 M16 and the current entry-point guides describe subsequently completed work and external gaps.
+
+### M73 — AgentDojo core harness claims need their canary scope
+
+The full Stage 3H core plan/spec distinguish a CI canary from a real external run, but their
+introductory “benchmark-compatible” and in-loop claims are stronger than the shown stub. A
+`query(step)` alias tested against a fake client is not validation against AgentDojo's actual
+pipeline interface. The Node smoke drives canned scenarios directly; it does not execute the
+Python adapter or benchmark scorer. Its track-to-scenario mapping supplies a known mock output,
+not the proposed benchmark tool arguments or final answer for mediation. The closing plan
+claim that a Node test cannot drive Python is also false in general: it can spawn Python;
+this particular smoke simply does not. HTTP loopback traffic is network traffic even when no
+external provider is called. Later Layer-2 execution has a separate scope and evidence.
+
+The shown canary contexts omit fields required by the provenance guard, so the specimen benign
+requests are not valid evidence for their expected acceptance. One session for all cases also
+shares cumulative risk across cases. The plan's client suite has four tests, not three. Its
+health check proves that an origin responds, not that every gateway route is configured or
+that the response came from the intended launched process. The HTTP client follows urllib's
+default behavior and reads an unbounded response; the stub tests do not establish redirect,
+malformed-response or body-size guarantees.
+
+Both the draft and retained `mapping.py` treat any verdict other than literal `blocked` as not
+blocked, including a missing or unknown verdict. A direct synthetic helper call confirmed this;
+the [probe receipt](agentdojo-helper-probe.json) records the scope. The helper does not validate
+the receipt or translate Warning into the gateway's export semantics. A missing receipt identifier
+becomes `unknown`, and run IDs alone are not globally unique across sessions. This qualifies the
+claim that the transport wrapper always enforces a validated gateway decision.
+
+Both the draft and retained canary metrics helper hardcode receipt coverage and audit verification
+to one, context escalation and evidence leakage to zero. A zero-row helper call still reports
+full coverage and accepts an arbitrary nonempty version-pin string. This does not mean the separate
+30-case smoke was empty; it means the metrics function alone does not measure those properties.
+Its unauthorized-tool “rate” counts every `tool_called`, including permitted calls, and returns
+a count rather than a denominator-normalized rate. The output metric examines one attack track
+and reported verdicts, not independently observed exports. Final-chain verification in the smoke
+is distinct from coverage across all runs. The draft verify-only path checks just one stored
+invariant and forbidden-key strings; the consistency gate trusts declarations rather than
+installed-package/scorer hashes. Native metrics correctly remain external-run-only sentinels.
+
+### M74 — AgentDojo Layer-2 draft validation and metric semantics
+
+The complete Layer-2 spec/plan require an actual pinned baseline/defended run and explicitly reject
+claiming completion from the blocked stub. Retain that rule. The sample's lock flag and run-manifest
+booleans do not themselves prove pre-execution commitment, scorer immutability or installed version.
+The sample validator checks counts, uniqueness and ID existence, not pair compatibility or complete
+baseline/defended row identity. Its runner accepts externally supplied rows without proving they
+came from AgentDojo. The consistency example compares denominators and declarations; it does not
+reconcile exact row IDs, validate all numerator/rate relationships or require a nonempty complete
+run index. A present hash binds supplied bytes, not when they were committed.
+
+The draft sanitizer rejects `raw_prompt` before projection, contradicting the first test that
+expects that field to be silently stripped. Its allowlist omits gateway contact, receipt and audit
+fields, so the shown runner discards precisely the evidence needed by containment and run-index
+checks. The retained sanitizer now includes those fields; that particular draft omission is not
+attributed to the current implementation. Allowed key names still do not validate field types or
+make arbitrary nested values metadata-only. The multi-artifact writer can overwrite earlier files
+and is not an atomic publication transaction; its filename helper assumes trusted filenames.
+
+The retained metrics helper, like the draft, treats absent `completed` as completed. A synthetic
+one-row call confirmed 1/1 completion with no completion field. Absent adverse-event flags also
+count as no event; they are not explicit unknown observations. A `non_call_reason` contributes to
+“receipt coverage,” so that value is mapping coverage rather than actual receipt count. The
+`utility_preserved_rate` divides defended benign successes by baseline successes without matching
+which tasks succeeded in both arms; it is a ratio of totals, can exceed one, and is not paired
+preservation. Zero denominators become numeric zero rather than an undefined estimate. The
+[helper probe](agentdojo-helper-probe.json) records the bounded checks; it does not assert that all
+stored benchmark rows lack required fields or that every published result is invalid.
+
+The draft smoke sets `SIMURGH_PORT` instead of the earlier documented `PORT`, omits the explicit
+demo/secret setup, and can mistake an existing listener for its child. `npm test` alone does not
+start or validate the real gateway. The suggested spec CLI exposes flags absent from the initial
+runner skeleton; the plan explicitly requires inspecting and completing the real binding before
+closeout. Its malformed nested Markdown fences and prewritten successful closeout text are
+historical draft defects, not commands or outcomes to copy into a current handoff. Later stage
+records supply actual run outcomes; the frozen drafts remain unchanged.
+
+### M75 — Utility-recovery taxonomy is descriptive, not a causal proof
+
+The complete Stage 3I spec and phase-1 plan condition the proposed permit work on measured failure
+categories. Their proposed permits and broad containment statements are not evidence that the
+whole permit mechanism shipped. A task hash, a `model_authorised: false` field and a run-expiry flag
+alone do not authenticate authorization or bind specific recipient/resource values. The example
+permit spans several effects; calling it minimal requires a policy and enforcement argument.
+
+The sample taxonomy labels blocked rows before considering adapter or scorer errors, although an
+adapter error can itself cause a block. Unknown blocked boundaries become input-boundary failures;
+accepted failures default to model failure without establishing cause. Warning/export restrictions
+are not represented. Declared argument/effect classes are not produced by the shown mapping. Thus
+“never blamed” and precise causal attribution exceed this descriptive classifier. A plurality or
+order-dependent tie is not necessarily a majority. Routing every non-tool dominant category,
+including model, unknown or no failures, to a context fix does not establish the diagnosis.
+
+The example `receipt_hash` hashes an identifier rather than receipt bytes; run identifiers can
+repeat across sessions. Public task-ID hashes are linkable, not anonymity guarantees. Caller-supplied
+`kind` and reason strings also need value validation before being described as metadata-only. The
+strict audit hardcodes the earlier 10 benign failures and 20 security blocks; that is not a general
+completeness condition after utility recovery. Count comparisons and 64-character lengths do not
+validate exact row identities, hexadecimal digests, source binding or cryptographic audit validity.
+The fixture uses task IDs 0–9, including 4 and omitting frozen task 10. Its self-assigned verification
+flags and receipt identifiers are synthetic, not observations. Preserve the old fixture and results;
+do not follow the draft's overwrite instructions during a historical audit.
+
+The plan shows nine taxonomy tests where its prose expects ten, and later says three new tests
+despite the additional examples. Its integration instructions name one helper but place the hook
+in another runner. The developer-specific absolute checkout path is historical. These draft defects
+remain recorded here; no taxonomy or benchmark rerun was performed for this review.
+
+### M76 — Full-suite draft checks do not establish complete benchmark execution
+
+The complete Stage 3J plan/spec use deterministic ground-truth actions. That measures a bounded
+execution path; it does not establish resilience against an adaptive live model. A zero baseline
+attack-success rate provides no demonstrated reduction. The asserted explanation for the difference
+between the paper's 629 and the proposed 949 pairs needs provenance beyond aggregate counts.
+A manifest containing only counts cannot establish exact precommitted case identities, and
+self-reported scorer/version flags cannot prove those properties.
+
+The sample hard-gate aggregate omits gateway contact and inherits the metric limitations in M74.
+Its suite list is derived from defended rows, so a missing defended suite can disappear from the
+breakdown. Positional merging and matching counts do not establish case identity. Hashing task IDs
+without suite identity can collapse identically named tasks from different suites. A single gateway
+session also accumulates risk across cases. The proposed artifact builder does not itself emit all
+the promised manifest, receipt, environment and runtime evidence. The consistency check reconciles
+some counts and declarations, not every expected suite, pair, score and source digest. The optional
+real-run check requires 97 benign cases but only a positive security count. A top-level JSON privacy
+scan does not cover nested files or logs.
+
+The default smoke verifies stored artifacts; its all-pass development fixture is not a new benchmark
+measurement. The opt-in example's relative Python path becomes invalid after the wrapper changes
+directory, and an explicitly empty gateway environment variable can suppress the Python default.
+A version-only install is not an artifact-hash lock. A coverage exclusion does not prevent importing
+or unit-testing pure row-merging logic. These are historical plan limitations, not instructions to
+rerun paid inference or overwrite frozen results. M53 and later evidence records retain the actual
+historical outcomes and their narrower scope.
+
+### M77 — Adaptive-readiness plans distinguish descriptors from executed variants
+
+The complete Stage 3K spec and both plans limit the main lane to deterministic testing, but
+“regression / invariance guarantee” remains too broad for a finite corpus. A deterministic
+counterexample can also falsify a robustness claim; a real LLM attacker is not the only possible
+falsifier. “Structural rather than detection-based” overlooks the retained detector rules. The
+rate-versus-count error in `operator_asr_delta` is already corrected in M42: subtracting zero
+from a rate does not turn it into a count.
+
+Plan 1 generates hashes of identifiers and parameters, not mutated text or execution evidence.
+Its seed is recorded in a manifest but does not drive that generator. Repeated source/operator
+inputs are not rejected, and source IDs without suite identity can collide as logical identities.
+The action-open case hash includes suite identity, but its source hash does not. A hash of a
+public identifier is not an anonymity guarantee. The metrics consistency test requires consequence
+flags for every `attack_success` row, although the specification separately allows action-open
+attacker goals without such consequences; those fields must retain their distinct meanings.
+Per-operator `hard_gates_clean` only checks three consequence flags, not receipt/audit coverage.
+
+Plan 2 delegates the actual transformation and execution to a later runner extension. Tagging
+existing rows is insufficient evidence that each described variant was run. Its manifests are
+constructed after row collection, so they do not establish pre-execution commitment. The binding
+review fixes supersede the empty provenance map, omitted action-open count checks and informal
+row-tagging test; those corrected requirements must be read with the earlier examples. They still
+do not make aggregate counts an exact executed-case reconciliation. The catalogue-mode checks can
+pass without run metrics by design; deleting run metrics must not be described as a full-run pass.
+The shown audits do not independently verify every receipt, audit entry, suite sum, installed
+scorer or absence of network effects. Filename-pattern drift checks depend on the chosen Git base
+and path set; they are not a complete behavioral policy proof. Formatting failures are suppressed
+in the smoke example, and its final closeout step incorrectly labels the hard-gate-relevant
+operator value report-only. Frozen plans remain unchanged; later retained results have their own
+scope and must not inherit the draft's strongest language.
+
+### M78 — Reference-containment draft observations and later corrections
+
+The full Stage 3L plan/spec describe 180 deterministic cases, not 180 independent attacks or a
+live recreation of the reference incident. The five malicious family templates repeat payloads
+under different case IDs; a family named long-run softening does not itself execute multiple
+turns, memory persistence or subagents. The public-event framing is bounded by the verified
+provider account in M41; a news-site homepage alone is not article-level corroboration. A working
+URL also does not establish every factual claim attributed to it.
+
+The execution-corrections section supersedes the draft's invalid provenance enums, absent-tool
+call, direct-input validity omission and missing exact-boundary gate. Task 2's later reference to
+Task 4 remains stale: the corpus generator is Task 3. The implementation note permits selecting
+benign framings against the existing detector; that is fixture construction, not a held-out test.
+The plan's “do not quietly tune” rule should distinguish this disclosed construction from a
+post-freeze change. Its synthetic examples call guard functions in process rather than the full
+gateway, model, tool executor or export sink. Classification of a modeled consequence is not an
+independent observation that an external effect did or did not occur.
+
+The retained helper still returns `receipt_exported: true` and `audit_verified: true` directly.
+Those two aggregate counts do not measure per-case receipt publication or HMAC-chain verification.
+The sample audit artifact also declares validity; signing it later does not upgrade that evidence.
+Current context escalation no longer depends on the draft's expected-boundary condition, but
+output classification still uses fixture expectations. Current tool and output checks are separate
+`else if` branches, so a combined tool-plus-output fixture does not exercise both downstream steps.
+The shipped corpus routes its families separately; this observation is not a new failed corpus run.
+
+The draft read-only runner compares metrics and manifest, not every emitted artifact. Its privacy
+scan checks selected token patterns and files; it cannot prove arbitrary secret absence. The
+closing correction requires detector-digest presence, which is weaker than the spec's proposed
+current-source digest comparison. A branch diff is a separate check. Literal overclaim scans can
+also match explicit non-claims, and missing docs make the sample grep pass. Preserve the frozen
+record and use these qualifications when presenting its results.
+
+### M79 — Attestation plans need exact canonicalization and verification boundaries
+
+The full Stage 3M spec/plan correctly separate an Ed25519 run-set attestation from a full internal
+HMAC chain. “Nobody owns the proof” is unsupported industry positioning; established signed
+provenance mechanisms exist. A signature authenticates possession of the corresponding private
+key under an independently trusted public key, not organization identity, uncompromised execution
+or factual truth. Optional fingerprint matching must be anchored outside the supplied bundle.
+A signature does not by itself prove recomputability. M42 already qualifies “any edit fails” for
+canonical-equivalent formatting and distinguishes referenced-file byte hashes.
+
+There is an additional retained canonicalizer limitation: assigning sorted properties into `{}`
+drops an own JSON `__proto__` member from serialization by invoking the prototype setter. The
+[local probe](canonical-member-probe.json) added such a synthetic member to an in-memory copy of
+the retained signed bundle. Raw JSON changed, canonical bytes did not, and the existing signature
+still verified. This was a canonicalizer/signature check, not a claim that the entire CLI verifier
+accepted an attacker-controlled package. No frozen artifact, source or key was changed. Integer-like
+keys also follow JavaScript enumeration order, so “recursively lexicographic” is not an all-input
+serialization description. This custom format must not be described as universal RFC 8785
+conformance. Duplicate-key parsing and numeric representation need their own explicit contract.
+
+Several draft verifier defects were corrected in retained code: the portable tier no longer
+imports the Stage 3L producer, gate results are compared with recomputed gates, and the bundle
+itself is included in the leakage scan. The retained reproduction helper still sets its privacy
+match from the bundle's zero-valued leakage field; that is a declaration check, not regeneration
+of a complete privacy report. Hash-matching referenced files and recomputing metrics are distinct
+from validating every embedded field against its referenced source. The draft schema permits
+empty reference arrays and weak field types; its examples alone do not establish complete schema
+validation or all malformed-input behavior. Public-key parsing can throw outside the signature
+catch, and the CLI loads referenced paths before signature validation; use trusted local packs,
+not an unrestricted untrusted-file service.
+
+The key-generation draft does not enforce an outside-repository path or exclusive creation;
+`mode: 0600` does not reset permissions on an existing file. Its example omits creation of the
+private key's parent directory. The signer reads evidence more than once, assumes a matching
+public/private pair and publishes multiple files separately. These examples do not establish
+atomic snapshot/signing or safe key rotation. A PEM-marker scan covers selected tracked content,
+not all secret encodings, untracked files or Git history, and can match its own instructional text.
+The proposed whole-tree formatter, blanket staging and CHANGELOG prepend are obsolete for this
+audit: preserve frozen evidence and append-only logs. No signing or key generation was performed.
+
+### M80 — Claim-ledger scope and completeness need separate evidence
+
+The complete Stage 3N spec/plan correctly exclude the unfrozen pre-3I recovery baseline and refuse
+pooling across their different populations. Their registry checks JSON fields, not the truth of
+unregistered prose or the quality of the original measurement. Absence of a continuous tuning
+parameter does not mathematically preclude a Pareto frontier over discrete configurations; the
+accurate statement is that this stage did not measure a comparative frontier.
+
+The sample claim map lists four measured claims and one historical exclusion, while the proposed
+surface also includes panel, utility and pooling claims. The compiler loops only over claims it
+receives; it does not independently enumerate that larger surface or detect omitted claims. The
+retained helper likewise reports completeness for an empty registry and for a `verified` record
+whose expected and resolved fields are both absent. A [local helper probe](claim-helper-probe.json)
+confirms these narrow behaviors. This does not show that the retained fixed runner supplies an
+empty registry or that stored numeric claims fail their normal checks. Completeness here must not
+be advertised as proof that every possible generated numeric statement is registered.
+
+The binding review fixes supersede the draft's two-file-only replay, four-hash count and omitted
+attestation-source binding. Retained code implements per-row source listing, but its binding
+helper checks only that each listed file has a truthy entry in the supplied hash map; a synthetic
+non-digest string passes that helper. Actual file-byte hashing and comparison belong to the runner.
+Five rows or contract entries are not full schema validation. Missing fields can otherwise become
+undefined or non-finite derived values. The Layer-2 fixture places a utility field differently
+from the source table, and the shown normalizer does not consume that field. Its “utility intact”
+phrasing therefore needs the particular measured metric, not a general task-success inference.
+
+The pooling helper counts compatible pairs; it does not compute pooled outcomes. Its refusal flag
+accepts any refusal, including absent mutual permission with equal bases, rather than specifically
+proving denominator mismatch. The shipped fixed contract has distinct bases, so this is a helper
+semantics limitation. Its shallow array freezes do not make nested entries immutable. The sample
+policy guard suppresses Git errors and inspects a selected committed diff, not all worktree changes
+or all behavioral dependencies. The standalone consistency example checks declarations and file
+presence rather than recompiling every claim; the revised full runner has a separate role.
+
+Five case-sensitive privacy tokens are not a general metadata-only validator. Literal overclaim
+scans can reject the required non-claims themselves. The plan's proposed SHIPPED placeholder,
+prewritten all-green closeout and approximately-100% coverage expectation are not measurements;
+its coverage command sets no minimum threshold. Preserve the historical four non-passing checks
+already recorded in M42. The spec's malformed emphasis and superseded co-author command examples
+are frozen drafting defects, not current handoff instructions. No source or historical ledger was
+changed during this review.

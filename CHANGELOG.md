@@ -4387,3 +4387,23 @@ Owner-requested work; implementation and review by Codex assistance.
   capture, full E2E rerun, external ceremony or interactive browser/native test.
 - **Remaining:** Finish every pending manual read, resolve documentation findings and validate
   the final ledger before reporting the exhaustive review complete.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 800-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 800 of 919 baseline
+  candidates completely read, 119 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M73–M80 corrections for the complete Stage 3H core/Layer-2 and Stage 3I–3N
+  plans and specifications. Distinguish proposed checks, implemented helper behavior, finite
+  synthetic cases, retained outcomes and independently verified evidence.
+- **Findings:** Local synthetic helper probes confirm permissive unknown-verdict mapping,
+  default metric flags, omitted canonical `__proto__` members and limited claim-registry/hash-map
+  checks. These scoped observations do not assert complete verifier or runtime exploits.
+- **Guidance:** Update current security disclosures and preserve bounded probe receipts.
+  Frozen evidence, historical specifications, runtime source and signing keys remain unchanged.
+- **Validation:** Check formatting, local links, candidate identities, reviewed hashes,
+  append-only log prefixes and frozen-surface preservation. No new model inference, signing,
+  full E2E rerun, external ceremony or interactive browser/native execution.
+- **Remaining:** Complete all pending manual reads and final correction verification before
+  declaring the exhaustive documentation review complete.

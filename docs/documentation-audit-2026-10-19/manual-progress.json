@@ -171,7 +171,7 @@
       "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check. M70/M71 disclose retained risk mapping, SDK retry/abort behavior, raw context prefixes and caller receipt strings; runtime remains unchanged.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "9489b45cab8b24937e01ae42cf949e93faeb061b34a0bfdff2f28beaeadf2b2f"
+      "read_sha256": "2cb42b79cfc5aa57fc55e4f9e00c37f7b215c5b44ba31ef2b0abf37225cb44a9"
     },
     {
       "path": "docs/DECISIONS.md",
@@ -8084,11 +8084,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "4fe41d6c88fb61aaab84e1538dc832769702db7f3129a15b127186a5adeefa0d",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 1315-line plan read. M73 qualifies stub hook compatibility, scenario-driven canary rather than actual action mediation, invalid specimen contexts, shared risk state, hardcoded coverage, tool counts mislabeled rates, weak version/scorer checks and missing-verdict fail-open mapping. Current helpers inspected and probed locally; no HTTP or external benchmark run.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "4fe41d6c88fb61aaab84e1538dc832769702db7f3129a15b127186a5adeefa0d"
     },
     {
       "path": "docs/superpowers/plans/2026-06-19-stage-3h-layer2-agentdojo-external-run.md",
@@ -8097,11 +8097,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "4ad297761aef5c5b01409b4befd60d82b37590f458c9e55a6241a9a6202fc854",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 1903-line plan read. M74 records declared freeze/scorer flags versus provenance, count-only comparison, sanitizer test contradiction and lost containment fields, absent completion treated true, totals ratio not paired utility, non-call mapping counted receipts, weak run-index completeness and smoke env mismatch. Actual binding required before release; draft stub and prewritten closeout are not execution evidence.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "4ad297761aef5c5b01409b4befd60d82b37590f458c9e55a6241a9a6202fc854"
     },
     {
       "path": "docs/superpowers/plans/2026-06-20-stage-3i-phase-1-taxonomy.md",
@@ -8110,11 +8110,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "5a5f18f5230ebe407aa78edee621cc0496137672b4861937db07cfdc56961326",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 792 lines. Reviewed classifier precedence, unknown categories, identifier hashes, hardcoded audits, fixture task-ID mismatch, test counts and integration hook. M75 records corrections without altering frozen draft or rerunning evidence.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5a5f18f5230ebe407aa78edee621cc0496137672b4861937db07cfdc56961326"
     },
     {
       "path": "docs/superpowers/plans/2026-06-20-stage-3j-full-agentdojo-evaluation.md",
@@ -8123,11 +8123,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "458870e25fb08905f91079b8fa050488626cef0b81a654e8a2ea654c5c7d4b72",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 946 lines. Reviewed count-only checks, suite discovery, positional case mapping, session risk, metadata coverage, synthetic fixtures and opt-in command paths. M76 records draft limitations; no benchmark execution or frozen artifact replacement.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "458870e25fb08905f91079b8fa050488626cef0b81a654e8a2ea654c5c7d4b72"
     },
     {
       "path": "docs/superpowers/plans/2026-06-20-stage-3k-plan-1-claiming-core.md",
@@ -8136,11 +8136,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "b22c876a74031020bf343e739c65e41025c27bf06ff40a34052a944dcd36a7f9",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 780 lines. Reviewed manifest and descriptor generators, seed use, case identity, consequence flags and catalogue freeze. M77 distinguishes descriptors from executed mutations and counts from rates.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "b22c876a74031020bf343e739c65e41025c27bf06ff40a34052a944dcd36a7f9"
     },
     {
       "path": "docs/superpowers/plans/2026-06-20-stage-3k-plan-2-runner-audits-closeout.md",
@@ -8149,11 +8149,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "81458e7c9496b92b20e3437e58279f712d7a3a18d610f2bebaff010810129af0",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 786 lines, including binding five-review-fix addendum; reread the truncated privacy-audit transition. M77 records post-run manifest timing, delegated runner behavior, catalogue-mode limits and aggregate checks.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "81458e7c9496b92b20e3437e58279f712d7a3a18d610f2bebaff010810129af0"
     },
     {
       "path": "docs/superpowers/plans/2026-06-20-stage-3l-fable5-reference-containment.md",
@@ -8162,11 +8162,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "cfb1b4a9a162ba8f72b438850a11c48cafe321ea5a974b3e905b89c1c63b5849",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 1391 lines, including execution corrections. M78 distinguishes corrected draft enums/routing from retained hardcoded receipt/audit flags, repeated templates, isolated guard execution and limited artifact/privacy checks.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "cfb1b4a9a162ba8f72b438850a11c48cafe321ea5a974b3e905b89c1c63b5849"
     },
     {
       "path": "docs/superpowers/plans/2026-06-20-stage-3m-verifiable-containment-attestation.md",
@@ -8175,11 +8175,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "f9739bb4cb0df324fea8b3b1ac4823741919297ea3c72642aff275bac69502ba",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 1137 lines. Reviewed canonicalization, schemas, signing, key creation, verifier ordering, reproduction flags and audit scope. Checked retained fixes and recorded a bounded canonical-member signature probe in M79.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "f9739bb4cb0df324fea8b3b1ac4823741919297ea3c72642aff275bac69502ba"
     },
     {
       "path": "docs/superpowers/plans/2026-06-20-stage-3n-claim-checked-security-utility-ledger.md",
@@ -8188,11 +8188,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "270668330ad5e939523fb8f7f89c6387ed5a26d2be1601f2aa8bf4f9bdcc2f67",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 1478 lines including overriding review fixes. Reviewed source normalization, claim compiler, hash binding, pooling, audits and closeout instructions. M80 and the bounded retained-helper probe record exact limitations; historical failures preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "270668330ad5e939523fb8f7f89c6387ed5a26d2be1601f2aa8bf4f9bdcc2f67"
     },
     {
       "path": "docs/superpowers/plans/2026-06-20-stage-3o-byo-gateway-containment-benchmark.md",
@@ -9319,11 +9319,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "6d53652de86b08f1e6a5c14fe0db08cc460e3362c8cbb90d7a6ef8692257f955",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 503-line design read. Strong external compatibility and zero-unsafe-consequence claims need Layer-1 canary versus Layer-2 executed-run separation. Gate compliance differs from benchmark attack success; normal tools are not unauthorized solely because executed. No-provider-network differs loopback HTTP. M73 and prior M09 bound current adapter scope.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "6d53652de86b08f1e6a5c14fe0db08cc460e3362c8cbb90d7a6ef8692257f955"
     },
     {
       "path": "docs/superpowers/specs/2026-06-19-stage-3h-layer2-agentdojo-external-run-design.md",
@@ -9332,11 +9332,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "ecf882ace1be10e5b49a145b1242341adcecaceb548a17b1c76315fc365fb566",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 488-line design read. Actual pinned baseline/defended execution required; unavailable dependency must remain blocked. Same-condition intent and non-call exception must not weaken contact/receipt coverage. Metadata allowance does not authenticate authorship or independent observation. M74 separates intended guarantees from draft checks and later retained results.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "ecf882ace1be10e5b49a145b1242341adcecaceb548a17b1c76315fc365fb566"
     },
     {
       "path": "docs/superpowers/specs/2026-06-20-stage-3i-agentdojo-utility-recovery-design.md",
@@ -9345,11 +9345,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "4e9aa652f40f9a24abb4cd29249f67ca23a8307e38f434d720b7e118a3bd520e",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 570 lines. Conditional permit proposal distinguished from implementation; task hashes and flags do not establish authorization or exact effect scope. Taxonomy and causal attribution limits recorded in M75; frozen contract preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "4e9aa652f40f9a24abb4cd29249f67ca23a8307e38f434d720b7e118a3bd520e"
     },
     {
       "path": "docs/superpowers/specs/2026-06-20-stage-3j-full-agentdojo-evaluation-design.md",
@@ -9358,11 +9358,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "d15aa4939b7485b4b4af886f1577ce97254d6664cbdd5a483fb25c2988112566",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 153 lines. Reviewed deterministic-run scope, pair-count provenance, precommitment and intended artifacts. M76 distinguishes proposed validation from measured execution and refers to M53 historical outcomes.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "d15aa4939b7485b4b4af886f1577ce97254d6664cbdd5a483fb25c2988112566"
     },
     {
       "path": "docs/superpowers/specs/2026-06-20-stage-3k-adaptive-attack-readiness-design.md",
@@ -9371,11 +9371,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "69eea37a684ba23c66aa5d1921e3ab25051b412bcbb83c32b3e1115c7d367f26",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 487 lines. Reviewed finite invariance claims, deterministic falsification, attack-rate units and lane semantics. M77 records qualifications; M42 covers the retained count metric.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "69eea37a684ba23c66aa5d1921e3ab25051b412bcbb83c32b3e1115c7d367f26"
     },
     {
       "path": "docs/superpowers/specs/2026-06-20-stage-3l-fable5-reference-containment-design.md",
@@ -9384,11 +9384,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "d453a7bbec4d84c42350f6b77ab0994f3bf051befd3482eb929aabcbe02b8d75",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 356 lines. Reviewed reference-event citations, finite synthetic scope, input-miss validity, proposed receipt/audit claims and policy-digest requirements. M78 qualifies the measurements without changing frozen evidence.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "d453a7bbec4d84c42350f6b77ab0994f3bf051befd3482eb929aabcbe02b8d75"
     },
     {
       "path": "docs/superpowers/specs/2026-06-20-stage-3m-verifiable-containment-attestation-design.md",
@@ -9397,11 +9397,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "2ac76ebda7db3917fc518137e2c0a61fc3082acc78ee966ff9715db79870d859",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 290 lines. Reviewed key trust, canonical bytes, portable versus reproduction checks and sample-audit non-claim. M79 qualifies unsupported industry positioning and cryptographic versus measurement guarantees.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "2ac76ebda7db3917fc518137e2c0a61fc3082acc78ee966ff9715db79870d859"
     },
     {
       "path": "docs/superpowers/specs/2026-06-20-stage-3n-claim-checked-security-utility-ledger-design.md",
@@ -9410,11 +9410,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "a390c7cc40028a254a94cdd6326be1de7af24a8d2aa0828607e9fe398b91df21",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 352 lines. Reviewed ghost-baseline exclusion, metric populations, closed-world scope and frontier reasoning. M80 distinguishes field matching from independently established completeness and discrete tradeoff measurement.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "a390c7cc40028a254a94cdd6326be1de7af24a8d2aa0828607e9fe398b91df21"
     },
     {
       "path": "docs/superpowers/specs/2026-06-20-stage-3o-byo-gateway-containment-benchmark-design.md",

@@ -1,0 +1,13 @@
+{
+  "schema": "simurgh.documentation_probe.v1",
+  "date": "2026-10-19",
+  "node": "v24.19.0",
+  "scope": "Read-only retained canonicalizer and signature check; synthetic extra JSON member in memory; no signing, key access, artifact replacement or complete verifier bypass claim.",
+  "source_sha256": "f89efcb72d7a6c5588a198a10c525ec781e31301e30773d5a363d6c4c18c8738",
+  "source": "tools/simurgh-attestation/canonicalise.mjs",
+  "original_signature_valid": true,
+  "modified_has_own_proto_member": true,
+  "raw_json_changed": true,
+  "canonical_bytes_unchanged": true,
+  "signature_valid_after_extra_member": true
+}

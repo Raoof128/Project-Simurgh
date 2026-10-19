@@ -1,0 +1,25 @@
+{
+  "schema": "simurgh.documentation_probe.v1",
+  "date": "2026-10-19",
+  "node": "v24.19.0",
+  "scope": "Pure local helper calls with synthetic inputs; not a full runner or stored-ledger bypass.",
+  "source": "tests/e2e/llm_shield_stage3n_claim_ledger_lib.mjs",
+  "source_sha256": "916c5adfd1dac872deda1003586a0991bfab448968d58492180fa8d5889e19da",
+  "empty_registry": {
+    "report": [],
+    "unresolved_numeric_claim_conflicts": 0,
+    "claim_evidence_map_complete": true,
+    "prose_only_metric_claims_excluded": true
+  },
+  "missing_verified_fields": {
+    "report": [
+      {
+        "status": "verified"
+      }
+    ],
+    "unresolved_numeric_claim_conflicts": 0,
+    "claim_evidence_map_complete": true,
+    "prose_only_metric_claims_excluded": true
+  },
+  "non_digest_hash_binding": true
+}
