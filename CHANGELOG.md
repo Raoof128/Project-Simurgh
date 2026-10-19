@@ -3939,3 +3939,11 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Files changed:** Phase 17 declaration and both logs.
 - **Verification:** Minimal Chromium runs time out; diagnosis confirms managed navigation restriction. Existing Node 24 is outside `/usr/bin`.
 - **Follow-ups:** Implement and test discovery; retain managed-browser prerequisite and macOS limits in the handoff.
+
+## 2026-10-19 — Raouf: implement portable runtime prerequisites (Australia/Sydney)
+
+- **Scope:** P17-B01/P17-N01 under preceding authority `fdb2d047`.
+- **Summary:** Discover configured/platform browsers and real alternate Node; report managed file-navigation restriction explicitly. Fresh Stage 5R runner refuses overwrite and returns nonzero for unproven browser parity.
+- **Files changed:** Declared Phase 17 runtime helpers, runner and tests; both logs.
+- **Verification:** Regression tests RED→GREEN; 15 targeted checks pass with one explicit browser skip. Real Node 24 wrapper test passes. Fresh Stage 5R receipt establishes Node/portable/Python agreement and records three-runtime parity false (exit 1).
+- **Follow-ups:** Run browser/macOS checks on a permitted machine; build the owner-requested shared evidence explorer.

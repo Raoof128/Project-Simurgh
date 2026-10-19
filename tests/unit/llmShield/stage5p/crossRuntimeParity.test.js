@@ -11,7 +11,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { readFileSync, writeFileSync, existsSync, mkdtempSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdtempSync, rmSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
@@ -28,7 +28,10 @@ import { evidenceReplayIdentity } from "../../../../tools/simurgh-attestation/st
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../../..");
 const S5P = join(ROOT, "tools/simurgh-attestation/stage5p");
 const VECTORS = JSON.parse(readFileSync(join(S5P, "python/parity-vectors.json"), "utf8"));
-const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+import {
+  discoverBrowser,
+  managedBrowserBlockReason,
+} from "../../../../scripts/lib/runtimePrerequisites.mjs";
 
 test("the vector file was generated from the AUTHORITATIVE Node surface, and still matches it", () => {
   // Guards the whole lane: if the vectors drifted from Node, Python and the browser would agree
@@ -70,12 +73,14 @@ test("PARITY — stdlib Python reproduces every value byte for byte", () => {
 });
 
 test("PARITY — a REAL headless browser reproduces every value byte for byte", (t) => {
-  if (!existsSync(CHROME)) {
-    // Explicit skip. Never a silent pass, and never Node's WebCrypto standing in for a browser.
-    t.skip("no Chrome present — the browser lane is SKIPPED, not assumed");
+  const chrome = discoverBrowser();
+  const missing = chrome ? managedBrowserBlockReason(chrome) : "browser_unavailable";
+  if (missing) {
+    t.skip(`${missing} — browser parity remains UNPROVEN`);
     return;
   }
   const work = mkdtempSync(join(tmpdir(), "s5p-browser-"));
+  t.after(() => rmSync(work, { recursive: true, force: true }));
   // Inline the vectors: CSP forbids all egress, so the page must not fetch anything, not even
   // a sibling file. A verifier that can make a request is not offline by construction.
   const html = readFileSync(join(S5P, "browser/index.html"), "utf8").replace(
@@ -88,9 +93,10 @@ test("PARITY — a REAL headless browser reproduces every value byte for byte", 
   }
 
   const dom = execFileSync(
-    CHROME,
+    chrome,
     [
       "--headless",
+      `--user-data-dir=${join(work, "profile")}`,
       "--disable-gpu",
       "--no-sandbox",
       "--allow-file-access-from-files",
