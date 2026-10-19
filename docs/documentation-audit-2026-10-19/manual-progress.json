@@ -171,7 +171,7 @@
       "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check. M70/M71 disclose retained risk mapping, SDK retry/abort behavior, raw context prefixes and caller receipt strings; runtime remains unchanged.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "911762d1fed8b6634d8a27f0c65412224e5143fc02ceecad4ff19960f22ec425"
+      "read_sha256": "28da3cb61b73184f4d5b67f82bd297030539daf6b97674feda8e3c3f733a1699"
     },
     {
       "path": "docs/DECISIONS.md",
@@ -1107,7 +1107,7 @@
       "assessment": "Read all 13 primary-source applicability rows and limits. Correctly separates publication from review year, pinned SDK from living docs and alignment from compliance. Previous-turn fetch provenance retained; no fresh fetch claimed.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "d817693fa79669f5fb86643c4ff5135bb08809a38adf0499f2902da4af746e9c"
+      "read_sha256": "fca7b9ca82f7bf1e2e7253baea799d9fe8dede1526215d9612359d01f9ac0dc7"
     },
     {
       "path": "docs/documentation-audit-2026-10-19/VALIDATION.md",
@@ -8552,11 +8552,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "88fdf1a77a691b940902b32e449b54c6a02d3f114f709fd3967887f09f1116cc",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 2048-line plan read against actual Node/Python gates, builder/verifier, Lean model, capture adapter and E2E/reproduce. M108 and six temporary-copy probes demonstrate selective signature omission, unsigned supplied-chain acceptance, self-selected signer and unchecked metadata. Planned key modes, standalone corpus and complete coverage differ from implementation.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "88fdf1a77a691b940902b32e449b54c6a02d3f114f709fd3967887f09f1116cc"
     },
     {
       "path": "docs/superpowers/plans/2026-07-05-stage-4p-voca.md",
@@ -8565,11 +8565,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "02ebd8a2e56322c0bd2bc8310c8630c3d7ec5abcc1f86b7b7ad529862da1e114",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full manual read; M109 qualifies fixture signature booleans and embedded signer trust, input/output continuity, CPC entropy/privacy, synthetic bridge and Lane B, Lean absent-ghost branch, metrics and reproduction coverage; S33 corrects primary research sample scope. Frozen text preserved with additive errata.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "02ebd8a2e56322c0bd2bc8310c8630c3d7ec5abcc1f86b7b7ad529862da1e114"
     },
     {
       "path": "docs/superpowers/plans/2026-07-05-stage-4q-vfr.md",
@@ -9774,11 +9774,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "341f9268ca9c07c9e7260a02cff840559a5c837e2dd0e04339d1d5d0f6b82272",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 589-line design read including implementation addendum. M108 corrects selective approval authentication, supplied-chain and signer trust, action/receipt semantics, preorder/proof scope, timeline and privacy promises. S32 qualifies source statistics/incident attribution. Frozen publication retained with additive corrections.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "341f9268ca9c07c9e7260a02cff840559a5c837e2dd0e04339d1d5d0f6b82272"
     },
     {
       "path": "docs/superpowers/specs/2026-07-05-stage-4p-voca-design.md",
@@ -9787,11 +9787,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "44cbfa96e4cf333d722454ed2c5bef93cce9f8274c89ad6811bf7e7764f3cc2c",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full manual read; M109 qualifies fixture signature booleans and embedded signer trust, input/output continuity, CPC entropy/privacy, synthetic bridge and Lane B, Lean absent-ghost branch, metrics and reproduction coverage; S33 corrects primary research sample scope. Frozen text preserved with additive errata.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "44cbfa96e4cf333d722454ed2c5bef93cce9f8274c89ad6811bf7e7764f3cc2c"
     },
     {
       "path": "docs/superpowers/specs/2026-07-05-stage-4q-vfr-design.md",

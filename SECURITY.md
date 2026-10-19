@@ -479,3 +479,23 @@ checks authenticate the committed evidence only. The advertised four-bit bound a
 cover the CLI's accepted arbitrary string bands or other public fields. See
 [M107 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m107--stage-4n-cli-consistency-does-not-authenticate-a-feed-or-bound-all-public-disclosure).
 Do not treat CLI success as authenticated publication, complete telemetry or a general privacy bound.
+
+### Retained Stage 4O tool-surface verification
+
+Stage 4O's selective path verifies a supplied Merkle membership proof without authenticating
+the commitment or checking authorization. Its full verifier replays repository fixture arms;
+a local probe changed the supplied evidence clean-chain body/signatures without invalidating
+the result. The attestation signer is selected from the supplied bundle, not an external pin.
+See [M108 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m108--stage-4o-verifies-fixture-replay-selective-disclosure-does-not-authenticate-approval).
+The manifest gate relies on a trusted adapter to bind real action semantics to the receipt.
+Committed fixture keys, optional signer replacement and finite parity checks are research
+mechanisms, not independent operator identity or proof of remote execution.
+
+Stage 4P reconstructs its bundle from repository fixtures but uses stored custody-signature
+result booleans during arm replay. A temporary-copy probe replaced custody signatures while
+the unchanged signed bundle still passed. Its embedded signer has no external identity pin.
+The custody chain does not enforce adjacent input/output continuity; the extraction bridge's
+3T reference is a synthetic stand-in. See [M109 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m109--stage-4p-binds-fixture-verdicts-custody-authentication-and-physical-path-completeness-remain-separate).
+The Lean ghost theorem does not establish detection of an unrecorded intermediary. CPC kind
+buckets, public window separation and per-call caps do not establish measured entropy or
+cross-window privacy; failure-class content is not constrained to a closed vocabulary.

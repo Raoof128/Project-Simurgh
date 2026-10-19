@@ -3743,3 +3743,21 @@ Owner-requested work; implementation and review by Codex assistance.
   prefixes and frozen surfaces. No inference, external ceremony or full E2E rerun; runtime
   repairs remain separate. Local probes used temporary inputs and explicitly scoped keys.
 - **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 858-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 858 of 919 baseline
+  candidates completely read, 61 pending. Exhaustive review remains in progress.
+- **Changes:** Add M108–M109 for the complete Stage 4O/4P specifications and plans;
+  correct SECURITY guidance on selective membership, signer trust and custody replay.
+- **Findings:** Temporary local probes confirm unauthenticated selective inclusion and
+  clean-chain changes in 4O, and stored custody-signature booleans in 4P bundle replay.
+  Qualify action binding, Lean ghost detection, CPC privacy and synthetic bridge claims.
+- **Research:** S32–S33 distinguish primary research, samples and incident reporting
+  from Simurgh measurements, architectural conformance and novelty assertions.
+- **Validation:** Check formatting, local links, baseline identities/read hashes,
+  append-only prefixes and frozen surfaces. Probes used temporary inputs and ephemeral
+  keys; no retained source changes, inference, external ceremony or full E2E rerun.
+- **Remaining:** Complete every pending manual read and final correction verification.

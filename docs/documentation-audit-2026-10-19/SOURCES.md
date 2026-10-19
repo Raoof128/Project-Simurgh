@@ -203,3 +203,46 @@ The abstract proposes public, controlled and claim-restricted disclosure with sc
 The record identifies a preprint; it does not establish an adopted conference policy or
 endorse Simurgh's P/A/R mapping. This check covered bibliographic identity and abstract scope,
 not a full-paper review or implementation conformance assessment.
+
+### S32 — Tool-surface motivation, approval statistics and incident attribution
+
+Checked 19 October 2026 against these primary sources; scope was the identified passages
+and bibliographic records, not a complete prior-art survey or incident reconstruction:
+
+- [Anthropic, Trustworthy agents in practice](https://www.anthropic.com/research/trustworthy-agents)
+  (9 April 2026) describes model, harness, tools and environment, and shared responsibility.
+  It does not establish the spec's ranked “#1 threat” assertion or exclusive responsibility
+  assignment. Its linked [March 2026 NIST RFI response](https://www-cdn.anthropic.com/43ec7e770925deabc3f0bc1dbf0133769fd03812.pdf)
+  discusses agent risks and shared infrastructure. The reviewed PDF text did not substantiate
+  the spec's exact attribution of cryptographic-attestation/audit-trail requests. A company
+  submission is not an adopted NIST standard or endorsement of this implementation.
+- [Anthropic, How we built Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode)
+  (25 March 2026) reports 93% permission approval. That is not a measurement showing 93%
+  were unread, and it does not establish the effectiveness of delta-bound consent.
+- [Snyk, ToxicSkills](https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/)
+  (5 February 2026), findings table: 1,467 of 3,984 sampled skills (36.82%) had any security
+  issue; the category table reports 2.6% prompt-injection detection across ClawHub. Preserve
+  the sampling and detector scope; the headline must not substitute for the table's denominator.
+- [Bhatt, Narajala and Habler, ETDI](https://arxiv.org/abs/2506.01333v1) (2 June 2025)
+  proposes cryptographic identity, versioned definitions and permission/policy controls.
+  The abstract does not establish that the approach excludes verification or that no other
+  system implements verification-side mechanisms.
+- [RyotaK / GMO Flatt Security, Poisoning Claude Code](https://flatt.tech/research/posts/poisoning-claude-code-one-github-issue-to-break-the-supply-chain/)
+  is dated 1 June 2026. Its timeline reports a January GitHub Actions permission-bypass
+  disclosure/fix and later remediation. The located matching-title source does not support
+  the spec's May MCP-incident/2.1.128 attribution. Keep that attribution unverified rather
+  than inventing a concrete before/after tool-surface reconstruction.
+
+### S33 — Custody motivation and the shadow-API sample
+
+Checked 19 October 2026. [Zilan Qian's ChinaTalk article](https://www.chinatalk.media/p/how-to-buy-cheap-claude-tokens-in)
+is dated 5 May 2026; it is contextual reporting, not a Simurgh experiment or standard.
+The primary paper is Zhang, Jiang, Chen, Backes, Shen and Zhang,
+[Real Money, Fake Models: Deceptive Model Claims in Shadow APIs](https://arxiv.org/abs/2603.01919),
+first submitted 2 March 2026. Its [5 March version](https://arxiv.org/html/2603.01919v2)
+identifies 17 services but empirically audits three representative providers. The September
+revision uses more qualified behavioral/fingerprint language and reports CCS 2026 acceptance.
+Do not call all 17 empirically tested or adopt their results as this repository's measurements.
+The inspected source sections establish identity and sample scope, not a full independent
+replication. [RFC 9334](https://www.rfc-editor.org/rfc/rfc9334.html) supplies RATS architectural
+vocabulary; citation alone establishes no protocol conformance or trustworthy remote execution.

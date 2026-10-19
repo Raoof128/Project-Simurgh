@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **854 documents have complete manual reads; 65 remain
+SHA-256 values. At this checkpoint, **858 documents have complete manual reads; 61 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -3702,3 +3702,174 @@ Temporary setup and interpreter failures remain outside the universal exit-wrapp
 Historical commands also contain wrong relative imports, incomplete inventory/schema grep
 checks and assumptions about then-existing worktree failures; current source/receipts take
 precedence. Frozen records remain preserved with these explicit corrections.
+
+### M108 — Stage 4O verifies fixture replay; selective disclosure does not authenticate approval
+
+The entire 589-line VTSA design and 2048-line plan were read against both gate implementations,
+Node verifier/builder, drift/timeline/alignment/capture cores, Lean proof, reproduction and E2E
+paths. The four implementation deltas in the spec's closeout addendum are useful, but “shipped
+as specified” omits material gaps. `verifySelective` reads an entire repository arm and its
+`tools[]` body, chooses an entry and checks its Merkle path against the supplied root. It does
+not verify a signed envelope, ancestry, epoch, receipt semantics or the attestation. The
+[temporary-copy probe](vtsa-verifier-probe.json) accepted selective inclusion with invalid
+commitment signatures, an invalid action digest and an escalated receipt. This establishes
+membership relative to supplied data, not approval-time authentication or authorized execution.
+The CLI's selective branch ignores the supplied evidence directory.
+
+Full `verifyEvidence` replays the repository's fixture arms, not arbitrary arms in the supplied
+evidence directory. It does not authenticate or re-gate that directory's `clean-chain.json`;
+only a timeline root/epoch lookup consults it. The probe changed its tool body and removed its
+signatures while the original signed attestation/manifest remained untouched; full verification
+still passed. Attestation verification uses the key embedded in the supplied manifest with no
+external pin. Replacing that key and re-signing with an ephemeral self-selected key passed;
+this is not signature forgery. Unsigned manifest schema/fingerprint/advertised manifest-key
+changes also passed. The signed corpus has meaningful fixed-fixture replay checks, but success
+does not authenticate an independently selected operator or every supplied artifact.
+
+The current builder uses committed, explicitly insecure fixture keys by default. It accepts
+`--attestation-key`, but does not implement the plan's `--manifest-key` re-signing or `--ephemeral`
+mode. The committed evidence attestation public key also matches the public fixture key.
+Evidence commitments remain fixture-key signed; a custom attestation key does not replace
+that trust boundary. There is no standalone `decision-corpus.json` output: the corpus is embedded
+in the attestation. Neither the full verifier nor builder enforces every attestation schema,
+non-claim/limitation field, signer-role separation or matrix expectation. The probe removed
+non-claims/limitations and substituted another allowed alignment claim under an ephemeral
+self-selected attestation signer; verification passed. `checkAlignmentMap` binds each mechanism
+to its raw code but only checks global vocabulary membership for the accompanying claim. It
+does not require the intended claim-to-mechanism mapping or prove constitutional compliance.
+
+The Python entry point hashes the supplied Action and attaches it to output bindings. Neither
+gate compares that action's semantic authority, server or target with the receipt: `actionDigest`
+is checked for digest syntax, while receipt authority/sinks are checked against the manifest.
+The entry point also does not compose the earlier intent/provenance authorizers. A trusted
+adapter must construct a faithful dispatch receipt and enforce the resulting decision. No
+actual dispatch or complete logging is established by calling this function. There is no live
+server-identity field in the receipt, so raw 58's server-change promise is not implemented by
+that gate. It checks the head toolset root; ancestor roots are not all recomputed. A missing
+signature callback fails closed in Python, but the Python parity harness's `TAMPERED` sentinel
+is not real cryptographic verification. Arbitrary callback failure and malformed non-string
+digest values can raise rather than return the promised raw code; the CLI lacks a total catch
+around parse/read failures. Its negative artifact path generally maps to 29, not each gate code.
+
+The narrowing relation ignores server identity and risk class; sink order/duplicates also have
+set-like semantics while entry equality hashes their representation. On complete manifest/list
+representations it is a preorder, not the claimed antisymmetric partial order. A risk-only change
+can classify incomparable although both directions satisfy narrowing; a server-only change can
+classify equal. The Lean proof establishes reflexivity/transitivity and conditional acceptance
+properties of its own typed model, not JavaScript/Python refinement or remote tool behavior.
+Its umbrella theorem restates the delta-consent leg rather than conjoining all three legs.
+The actual drift unit tests use selected examples, not the promised generated property suite.
+The plan's claim that changing only the head `toolset_digest` necessarily breaks `delta_digest`
+is incorrect: the delta hashes entries, not that root field.
+
+The timeline hashes window ID, position and previous-record digest, not the entire referenced
+4N record or its current commitments. The builder binds genesis `cleanChain[0]`, not necessarily
+the active head; the checker accepts any matching epoch in the supplied chain and does not
+validate its schema/signature or the 4N signed feed. A backwards reference cannot prove the
+surface was approved while that earlier window was live or prevent a producer signing a new
+story later. M107's 4N authentication limits apply. The Merkle leaf/node domains are useful,
+but the custom construction is not RFC 6962/9162 conformance; paths omit the promised leaf-index
+and tree-size checks. Custom JSON and bounded Python/Node vector parity retain M79's limits,
+including numeric/Unicode/object-key edge cases outside the committed vectors.
+
+Lane B hashes names and input schemas, but omits tool descriptions. A description-only poisoning
+change therefore leaves that captured manifest unchanged. Authority is a name heuristic with
+unknown names defaulting to read-only, empty sinks and low risk; it is not verified permission
+metadata. Capturing one `tools/list` response without pagination, awaiting initialization or
+recording a pinned package version does not establish a complete reproducible live inventory.
+The retained captured tool count is an observation of that fixture. Child stderr is inherited,
+so the capture script alone cannot guarantee raw server text never reaches logs. No capture was
+rerun here. The withheld F1 fixture remains correctly marked as absent; do not convert it into
+a claim that the cited incident was reconstructed or would have been prevented.
+
+S32 corrects the motivation citations: approval frequency is not a measured unread fraction;
+Snyk's 36.82% is any security issue in its sampled skills, not the prompt-injection rate. The
+located Flatt disclosure is a June GitHub Actions permission-bypass account, with a different
+timeline from the claimed May MCP incident/version. ETDI is proposed research; the reviewed
+sources do not establish that nobody else ships verification or endorse this project. Internal
+novelty/benefit/constitution scores remain author judgments. Article-73 and audience-tier claims
+inherit M41/M47/M106's legal and verifier qualifications.
+
+Reproduction compares generated fixture JSON excluding test keys and Lane B; it does not perform
+the advertised complete temporary build/sign/verify/atomic replacement of evidence. Its four-key
+text grep is not a general privacy/egress check; a grep error can also appear clean under negation.
+The fixture-list process substitution can fail outside the loop's checked status. Final Git diff
+covers two paths relative to the index, not untracked/staged changes or the entire repository.
+Environment pins do not scrub credentials or enforce offline operation. The E2E net calls core
+functions and `verifyEvidence`, not every arm through the CLI; its five function-type assertions
+are not every-export coverage. The 4N invariant checks presence/schema rather than byte identity,
+and parity covers selected fixtures with a signature stub. Preserve historical counts, version
+plans and frozen records; current guidance must state these actual boundaries.
+
+### M109 — Stage 4P binds fixture verdicts; custody authentication and physical-path completeness remain separate
+
+Completely read the 787-line VOCA specification and 2,327-line implementation plan. Compared
+custody/chain/schema/digest/CPC/invention cores, bundle builder/verifier, Lane B capture,
+fixture invention construction, Lean model, reproduction script and E2E net. Preserve both
+frozen documents and use these corrections with the earlier Stage 4P guidance disposition.
+
+The offline verifier independently reconstructs the entire bundle body from repository fixtures,
+including non-claims, disclosure, metrics and invention fields. This is stronger than checking
+only a signature. However, arm replay passes stored `sig` booleans into `verifyCustody`; it does
+not cryptographically recheck the arm signatures. The [temporary-copy probe](voca-verifier-probe.json)
+replaced all custody signatures in the clean declared-relay fixture with invalid base64 bytes;
+the untouched signed evidence bundle still verified. Its arm ledger records verdict/reason,
+not the full input digest. Fixture generation and Lane B tests perform separate signature
+checks; those do not make this CLI authenticate arbitrary supplied custody material. The bundle
+signer is embedded, with no external pin: an ephemeral self-selected signer also passed. This
+is trust selection, not signature forgery. Read/JSON errors escape the CLI's promised raw-code
+wrapper; malformed outer core inputs can throw before producing a closed verdict.
+
+The chain checks indices, predecessor receipt digests, repeated content and terminal response.
+It does not compare the first hop's input to the request or each later input to the preceding
+output. A core-only probe rebuilt links around a disconnected first input and passed, explicitly
+retaining caller-provided signature results. Raw 76 compares the separate observed transform list,
+not each hop's transform. The envelope's tool-surface field is shape-checked but not compared to
+the observed/receipt/4O binding; receipt `relay_chain_digest` is not recomputed, and receipt trace
+custody is not compared to the separately supplied observation. Provider identity is not resolved
+against an external trust root. Missing/falsy pool observations bypass the pool check; the outer
+observation object lacks an exact schema. `no_trace_retained` accepts a `provider_only` observation,
+which does not demonstrate deletion. These are recorded consistency rules requiring a trusted
+adapter, not proof of actual provider execution, an exhaustive custody path or trace retention.
+
+CPC entropy is a fixed evidence-kind lookup, not measured conditional entropy. A known public
+SPKI can be guessed regardless of its key size. Public window separation changes tokens but
+cannot establish cross-window unlinkability against known candidates. The emission verifier
+correctly enforces the module's floor against the kind and compares the advertised budget to
+the supplied cap; do not describe it as accepting low-entropy kinds merely by lowering a signal
+floor. The standalone digest helper instead uses the caller's floor. Both failure-class fields
+lack value/type vocabulary validation; the probe accepted arbitrary plaintext in `failure_class`.
+Counting matchable signals per supplied anchor in one call is not a cross-publication or per-real-
+operator privacy budget; degraded outputs are not capped. Membership in a supplied anchor set
+is not verification of the signed 4N feed, and the public commitment cannot prove the private
+input's provenance or entropy.
+
+Pincer matching compares two digests; it does not establish independent operators or authenticate
+the enforcement signature. Contest validation compares a supplied signer digest and checks
+base64 syntax, not a signature itself. The extraction bridge checks two caller-supplied known
+sets; the shipped 3T digest is explicitly a hash of `stage3t-attestation-stand-in-task8`, not a
+verified 3T artifact. Forward compatibility with 4L is array shape; old 4L evidence remains empty.
+Lane B is six locally constructed, signed arms around `mockStage4oExchange`, which returns a
+committed surface digest. It is not a live MCP/provider relay exchange. Recomputing a 4O digest
+and schema-checking/hashing two 4N records in E2E does not authenticate those upstream bundles.
+
+The Lean theorem's absent-ghost branch states only that no recorded hop names the ghost; it does
+not conclude refusal or ledgering. Empty chains are accepted by this Lean model, unlike the JS
+core. `signatureSound` quantifies equality of every pair of natural-number relay IDs, is not a
+sound cryptographic assumption as written, and is not a premise used by `ghostTrilemma` at all.
+`noSilentThirdPath` is case analysis over a three-constructor decision type; it does not prove
+complete logging of real dispatches. The six theorems concern their explicit model, not refinement
+of the implementation or detectability of an omitted intermediary. The closeout's “pilot only”
+gap and internal novelty scores therefore overstate established assurance.
+
+Bundle metrics include a raw-code set containing success as well as failures, so the displayed
+coverage fraction is not itself a count of the thirteen negative codes. `first_failure_determinism`
+is a literal `pass`; five CPC representatives are constructed, but bundle replay does not execute
+the budget rejection arm. Separate tests supply those checks. Export inventory asserts names and
+presence, not execution coverage. The reproduction script rebuilds fixtures in place, verifies the
+retained bundle and runs stage tests/audits; it does not compile Lean or scrub credentials. Its
+four-key grep is a finite content scan, not network isolation, and Git diff against the index
+excludes untracked/staged drift. Preserve historical counts and runs without calling them current
+head validation. S33 distinguishes the 17-provider inventory from the three-provider empirical
+audit; neither that research nor attestation architecture documents validate Simurgh's novelty,
+constitutional compliance or deployment effectiveness.
