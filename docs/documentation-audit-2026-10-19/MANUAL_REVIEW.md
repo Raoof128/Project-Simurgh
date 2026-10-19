@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **840 documents have complete manual reads; 79 remain
+SHA-256 values. At this checkpoint, **850 documents have complete manual reads; 69 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -3304,3 +3304,256 @@ reason remapping is described in M98/M99; it is not an observation of nine indep
 The eight named mutations are finite cases, not an exhaustive single-field neighborhood or
 multi-field collusion closure. Preserve frozen evidence and correct current handover/security
 wording; implementation repair and new cryptographic/privacy validation are separate work.
+
+### M101 — Stage 4H hermeticity attestation is signed metadata, not a recomputed CLI prerequisite
+
+The entire 4H.4/4H.5 spec and plan were read against the retained offline harness, audit script,
+manifest binding, verifier and reproduce shell. The signed manifest binds the supplied hermeticity
+digest, but the CLI neither loads the attestation nor recomputes a fresh offline report and compares
+its digest. This contradicts the stated “never trusts ... without recomputation” guarantee. The
+fixture builder computes a report and signs its digest; the separate audit can overwrite report
+and attestation files without updating a manifest. These are distinct operations. Its recorded
+Node major is machine-dependent, so regenerated attestations/signatures are not cross-version byte
+identical. The two-build comparison establishes stability only under the same environment.
+
+Q3's clean report runs the diagnostic tamper matrix and separate privacy helper, rather than the
+complete cryptographic CLI. It counts interception hits and the nine egress-double result codes;
+it does not require the returned tamper/clean-privacy results to be semantically successful.
+The main CLI has its own runtime wrapper, but the report's workload and signed metadata are not a
+record of that exact invocation. Later code correctly runs egress probes sequentially, repairing
+the draft's concurrent global monkey-patching/restoration race. The draft's double-escaped regex
+literals also differ from the retained working scanner. The scan still has the finite dependency
+and capability limits described in M97; it cannot make arbitrary captured imports authoritative.
+
+The narrowed 4H.4 spec explicitly excludes kernel isolation, improving on broader master-design
+wording. The nine denied test surfaces remain selected entry points, not all APIs in those
+capability classes. Denials are installed before the callback but after normal CLI imports.
+Partial installation failure occurs before `runOffline` enters its restoration `try/finally`;
+global patches are not a robust concurrency or adversarial-code isolation boundary. The optional
+network namespace surrounds only the separate offline audit, not all eight reproduce steps.
+Its skip is printed in a log, not bound as an explicit OS-isolation result in the attestation.
+
+The raw-code map has expanded for later stages; the twelve-entry table is a historical 4H subset.
+Its object-key lookup coerces strings and other property keys, so string `"0"` maps to success;
+it is not an integer-only total validator for every JavaScript value. Normal CLI normalization
+checks integers first. The shell's numeric conversion is separate. Preserve those distinctions
+when describing “unknown values fail closed.” The designated numeric unknown probe remains 999.
+
+The reproduce wrapper assigns a raw category per failed step and does not preserve each child's
+raw failure. Failures in setup, summary writing or the wrapper process itself can exit outside
+that mapping. Functions called through a conditional can also continue after an intermediate
+failure unless they check it explicitly: the two-build helper relies on its final diff status,
+so failed build/copy commands can leave earlier files available for comparison. Its final summary
+has the unconditional pass-label issue in M97. Selected JSON comparisons and formatting checks
+must not be described as independent verification of every artifact or of every Q6/Q7 guarantee.
+The proof-deletion CLI test is meaningful bounded evidence; the proposed T6 “capacity budget”
+check is a typed-value negative, since no total capacity-budget threshold exists in the helper.
+M100 supplies the privacy and cryptographic-matrix limits that a broad closeout label cannot erase.
+
+### M102 — The Stage 4H full-chain audit plan is an unmerged addendum
+
+Both full-chain audit documents were read in full. Their proposed runner
+`scripts/e2e-llm-shield-stage4h-full-chain.sh`, `fullFunctionCoverage.test.js`, standalone
+`STAGE_4H_FULL_E2E_AUDIT.md` and `full-e2e-audit/` outputs are absent from this checkout's tracked
+files. The retained Stage 4H closeout explicitly identifies this as a separate unmerged addendum.
+The plan's proposed PASS statements, command transcript, runtime-change flag and function-coverage
+summary are not completed evidence here. The existing core reproduce/E2E paths and their prior
+smoke receipts are separate. Do not claim the planned command ran or that this audit is included
+in the historical tag merely because the spec names that tag and commit.
+
+The illustrative function test has multiple API mismatches: premises are an object, not an array;
+`recomputeGraph` exposes a `nodeLabel` Map; `buildDerivation` returns a derivation wrapper;
+validation helpers include code fields; the lattice comparison needs the pack's consequence-lattice
+digest; privacy returns `covert_capacity_bits`/`auxiliaryFlags`; the tamper matrix is an object;
+`runOffline` returns a caught-violation result rather than rejecting on the expected denial;
+the deletion builder returns paths; and the verifier core returns a numeric code. The draft's
+raw-28 constant is also looked up on the wrong code object. The plan anticipates API correction,
+but its full code block is not a runnable current test suite. “Bad flow or unsound derivation ->
+24” must distinguish unsafe semantic flow (24) from structurally unsound proof material (26).
+
+The proposed export inventory checks names, not call/branch exhaustiveness. Named function coverage
+and a generated PASS summary do not establish measured line/branch coverage or complete security
+validation. The proposed shell executes current working-tree code while hardcoding a released
+base identity; it does not independently establish that every executed source byte matches that
+tag. Its drift check compares Git status with the current checkout/index and ignores the audit
+subdirectory, not the exact released tree. Reproduction can write and restore bytes before that
+check. The displayed standalone status pipeline ends with `|| true`, so its status alone is not
+a failure gate. It also checks a narrower evidence surface than fixtures/runtime source.
+
+The proposed summary copies expected raw-code fields and several typed constants, while actual
+command/test executions are the distinct supporting checks. Its generic unshare note does not
+record whether the namespace ran on that attempt. Formatting/diff checks precede final summary
+writes, and command transcripts can contain nondeterministic timing. Even a future implementation
+of this runner would inherit M97–M101 unless those boundaries were deliberately repaired and
+validated. Preserve these frozen proposals as history rather than fabricate missing audit outputs.
+
+### M103 — Stage 4J's CLI does not enforce every advertised authorization binding
+
+The complete PCTA spec and implementation plan were read against the retained proof, authority,
+CLI, fixture-builder, evidence-emitter and reproduction code and tests. The current design uses
+an additional signed PCTA manifest referencing the 4H root, rather than modifying the signed 4H
+manifest as one spec passage suggests. However, `runPctaCore` never calls `verifyPctaManifest` or
+reads `pcta_manifest`. The independent manifest helper and its unit tests do not close that CLI
+gap. The [isolated probe](pcta-verifier-probe.json) returned raw/typed 0 after deleting or replacing
+the manifest, without changing the retained proof or its pinned public key. Thus root/manifest
+binding is not a prerequisite of this entry point. The 4H precheck verifies the base pack and
+runs `diagnose`; it does not call the complete 4H CLI's signed-manifest verification. M97's
+signature-boolean distinction applies here too.
+
+P7 compares policy and DFI digests, but only validates the syntax of `user_intent_digest`.
+`resolveP4` accepts `agent_derived` with a safe sink claim without requiring the higher-ranked
+proof specified by `canCarry`; that latter helper is not used in the verifier. P5 compares the
+three action digests but does not compare the proof's tool name or either declared action class
+with the receipt. P6 is conditional on producer-supplied `enforcement.required`, which need not
+be true. The same local probe accepted independently signed inputs changing the intent digest,
+using agent-derived authority without another proof, changing the tool and action classes,
+setting both required/applied false, or adding an unknown payload field. These cases used a new
+ephemeral key explicitly supplied as the pinned producer key; they demonstrate missing semantic
+checks for an authorized producer, not forgery of the committed key. No external tool ran.
+
+Shape validation allows unknown fields and has no tool/nonce/overall input-size bounds. The
+fixed epoch anchor and default ten-year window are fixture freshness rules, not current-time
+freshness; nonce uniqueness is structural for one proof, with multi-proof uniqueness deferred.
+The builder's intent digest is a repeated-digit placeholder without a corresponding intent
+artifact. A signature authenticates that declaration; it cannot establish the user's actual
+approval or authorize a policy on the user's behalf. The custom canonicalization and tree limits
+in M79/M93 also qualify the plan's RFC/JCS wording. Proof digests cover the payload, not the
+whole signature envelope.
+
+Later code repairs several draft defects: the matrix contains ten rows including P8, separates
+dirty-DFI rejection (24) from untrusted declared authority (34), and prioritizes under-declaration
+(38) before missing-claim rejection (34) with a missing-receipt guard. Current tests distinguish
+unsigned digest tampering (32) from a re-signed mismatch (35), assert exact matrix verdicts, and
+regenerate into a temporary directory. The byte comparison covers the deterministic expected
+matrix; fresh random keys make complete proof/signature bytes different. Evidence emission now
+runs and checks the matrix. These improvements do not exercise every missing semantic binding
+above, and named gate/function coverage is not exhaustive branch or adversarial coverage.
+
+The reproduce shell's `env -u ... true` only scrubs that short-lived child, not subsequent commands.
+Its deletion check uses a shared fixed temporary filename, and cleanup is not protected on every
+failure path. The offline harness has M97/M101's finite scope. Emitted fixture paths and caught
+error messages also preclude a blanket no-path-disclosure guarantee. The grep-based wording
+check tolerates scanner failure and broad line exemptions; document correctness still needs
+manual review. The proof-carrying and attested-admission references are relevant comparisons,
+not evidence that every competitor lacks a capability or that this fixture study fills an
+industry-wide empty category; S29 verifies only the accessible primary-source identities and
+stated research scope. Preserve the frozen proposal and correct current assurance wording.
+
+### M104 — Stage 4K recomputes supplied counts, not deployment enforcement or every attestation field
+
+The full EBA spec and K1–K7 plan were read against the retained ledger, budget, manifest, verifier,
+builder, emitter and shell. This is synthetic, post-hoc accounting over supplied event metadata.
+It has no independent observation of served responses, completeness proof, live throttle,
+cryptographic consumer-identity binding or measured capability-transfer bound. The event classes
+and weights are declarations. A signed budget policy is not evidence that a deployment enforced
+it, and `denied_over_budget` names a reported condition rather than an observed denied response.
+The primary spec's careful synthetic/pseudonymous non-claims should qualify its broader claims
+about dishonest producers and every competing defense. SLSA/in-toto are not limited to a single
+fixed application, and this comparison is not an exhaustive novelty result or compliance standard.
+
+The verifier rebuilds the ledger and checks the EBA signature and digest chain. It does **not**
+rebuild and compare the attestation's semantic fields, despite the plan's frozen gate-order
+requirement. The [temporary-input probe](eba-verifier-probe.json) accepted a producer-signed
+attestation with false per-consumer totals/verdicts and a false denied list while the actual
+under-budget ledger remained unchanged. This does not bypass Q8 on an actually over-budget
+rebuilt ledger; it shows that accepted attestation prose/data can contradict the recomputed
+result. The ephemeral test key was explicitly supplied as the trusted producer key, with no
+forgery of the retained fixture signer.
+
+Neither `checkBudgets` nor the core compares `policy.window` with ledger-entry windows. A changed
+policy with a stale attestation digest was correctly rejected (22); rebuilding that digest chain
+allowed the unrelated policy window. A correctly signed empty event stream/ledger also passed:
+there is no required-consumer or event-completeness expectation. Response digests and event IDs
+are used for input validation/order/duplicate handling but are absent from the aggregated ledger
+and signed manifest. Changing one well-formed response digest without re-signing passed the
+probe. The signature therefore authenticates aggregate accounting, not the exact source stream
+or correspondence to actual responses. The fixed DFI digest references the separate clean 4H
+fixture rather than a proved mapping from each exposure event to a receipt.
+
+“Ledger leaks nothing” is too broad. `window` is an unrestricted nonempty string copied in
+plaintext into both ledger and attestation; a synthetic raw-text window was accepted in the
+probe. Arbitrary policy keys and other unsigned-by-schema declarations also require contextual
+review. Counts, digests and equality patterns are metadata with disclosure capacity; a fixed
+public salt does not anonymize guessable identifiers. Unknown event keys are rejected, but
+that is not a full output privacy schema. No input/event/string bounds precede parsing/sorting.
+The duplicate key concatenates unrestricted fields with `|`, permitting ambiguous tuple
+encodings and false duplicate rejection; string comparison uses JavaScript code-unit order,
+not general UTF-8 byte order. The standalone budget helper assumes valid ledger entries and
+checks integer rather than safe-integer budgets; the core's rebuilt ledger narrows that input.
+
+The 4H precheck uses base-pack verification plus `diagnose`, inheriting M97/M100/M101's limits;
+it is not full Q0–Q7 CLI verification. Current shell code repairs the draft's bare test-directory
+invocation and compares emitted evidence with Git instead of formatting canonical fixtures.
+It still assumes repository-root execution, prepends a machine-specific Homebrew path, accepts
+Node majors at least 26 rather than exactly 26, and does not scrub provider variables despite
+the spec's first step. Fixture rebuilds compare deterministic payloads, not fresh-key signatures.
+The second-build comparison covers a smaller selected set; Git's working-tree check is relative
+to the index, not an independently pinned release. Setup/cleanup and unexpected errors can exit
+outside the advertised wrapper. The under-budget failure branch can continue if a failing child
+leaves a report claiming raw 0; the shell does not cross-check every status/report pair.
+
+The emitter verifies supplied matrix verdicts before normal writes, but does not independently
+validate a fixed matrix schema or expected reason strings, and writes are not transactional.
+Missing required matrix rows can fail after some files are copied. Static keyword checks and
+named all-functions composition tests do not prove universal privacy, adversarial coverage or
+all helper preconditions. The planned T2 inline temporary-path assignment does not retain the
+path for a later `cmp`; use the corrected current reviewer commands. Raw 39 remains reserved; the historical exit-map subset is not the complete expanded map. Preserve these
+frozen design/implementation records and read their results with the current security limits.
+
+### M105 — Stage 4L's cluster calculation does not authenticate every narrative or upstream verifier
+
+The entire CCB spec and plan were read against the retained commitment, ledger, budget,
+attestation, CLI, reproduction and E2E paths. M46's mathematical correction remains necessary:
+nonnegative fixed exposure and non-inflating budgets are required for breach persistence under
+merges. A provider's singleton partition is not proof of independent real-world actors; a later
+merge may reflect newly learned information. Neither arithmetic nor a signed histogram establishes
+a knowing past lie, complete observation, truthful clustering, deployed prevention or an empty
+evasion strategy set. A hash chain alone does not make a producer-declared time impossible to
+backdate; independent timestamp/witness assumptions matter. The proposed heartbeat and respondent
+lanes in this historical spec are not themselves shipped 4L capabilities. M41/M47 and S16 qualify
+the combined Article-55/73 and August-2026 legal framing. S30 confirms the cited research identities,
+not the unsupported claim that no other governance system offers independently checkable artifacts.
+
+The implemented commitment hashes selected cluster fields, excluding the consumer and commitment
+itself. This allows members to share a cluster digest; the spec's “assignment payload minus
+signatures” description would not. The implemented policy uses `class_weights` and a digest-keyed
+budget object, not the spec's `weights_digest` and budget-row array. Its opaque basis and graph
+version digests are declarations without source-artifact recomputation. Cluster-basis order and
+duplicates are not normalized/forbidden, so equivalent basis lists can yield different commitments.
+The assignment validator checks allowed keys, but `window` is arbitrary plaintext; regex digest
+checks coerce values rather than requiring strings. Exact-key/privacy claims should be limited to
+the actual validated surfaces, not the whole pack or all nested values.
+
+`runCcbCore` rebuilds exposure/assignments/cardinality and verifies CCB signature/digest bindings,
+but it neither runs `runEbaCore` nor verifies the referenced 4K manifest. It hashes that local file.
+The CCB stream is separately authored; the reference is not proof that its events are the same
+4K events. Q0–Q8 replay happens in separate reproduction/tests, with M97–M104's limits. The CCB
+core also does not rebuild/compare attestation totals, `q9_status`, per-account rows, non-claims,
+known limitations or the required-empty corroboration slot. The [isolated probe](ccb-verifier-probe.json)
+correctly rejected unsigned attestation tampering (22), but accepted producer-signed false status
+and totals, removed non-claims/limitations, and nonempty reserved corroborating commitments.
+The signed cases used an explicitly pinned ephemeral producer key; Q9 still checks the rebuilt
+cluster totals. This is not forgery or evidence that an actually over-budget rebuilt cluster passes.
+Changing a well-formed response digest without re-signing also passed because the aggregate omits
+that reference, as in M104.
+
+The budget helper does not enforce a policy-window/assignment-window match or an exact policy
+schema. Assignment completeness is relative to the supplied rebuilt exposure set, not independent
+observation. Cardinality uses the first entry's window while counting all supplied assignments;
+a single-window input constraint is not enforced there. Standalone helpers assume valid ledgers;
+core reconstruction narrows those assumptions. The builder's signed attestation includes the
+non-claims, but signature authenticity does not supply their missing verifier checks. Empty or
+omitted populations, opaque digest slots and arbitrary window labels must remain explicit limits.
+
+Current reproduction does not rebuild 4K fixtures, scrub credentials, execute the full-chain E2E
+file, or verify an entirely clean Git tree as the spec/plan prescribe. It runs separate Q8 CLIs
+and checks fixture diffs only. Selected deterministic outputs are compared; fresh-key signatures
+are not byte-stable. The verdict helper discards child exit status and reads a report. Its matrix
+mismatch branch routes the unexpected raw value through the wrapper; an unexpected raw 0 can
+therefore continue instead of failing the harness. The explicit structuring/falsifier checks
+correctly map their mismatch to 29. Temporary setup/cleanup and wrapper failures still sit outside
+the universal wrapper claim. The E2E test retains broad allowed-code sets for some mutations,
+and its export-name inventory is not exhaustive function/branch coverage. Its source-drift check
+uses an available base ref and silently omits that check when neither ref exists; it does not
+report a test skip. Later code correctly updates mapped 43–46 while retaining 39 as reserved.
+The historical all-green counts, branch/tag workflow and proposed code are not current validation.

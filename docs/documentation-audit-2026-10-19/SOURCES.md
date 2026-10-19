@@ -170,3 +170,26 @@ Checked 19 October 2026 against the primary arXiv records:
 The identifiers match the cited titles; the first paper's lead author is Tramèr, not Carlini.
 These research references support evaluation context, not a claim that Simurgh implements their
 methods or that deterministic signed fixtures demonstrate adaptive robustness (M96).
+
+### S29 — PCTA prior-art scope
+
+Checked 19 October 2026 against the primary arXiv records for
+[Metere, Attested Tool-Server Admission (2026)](https://arxiv.org/abs/2605.24248) and
+[Costa et al., Securing AI Agents with Information-Flow Control (2025)](https://arxiv.org/abs/2505.23643).
+Metere describes signed server clearance, tool allowlists and host enforcement. Costa et al.
+describe Fides and its confidentiality/integrity tracking and formal planner model. These are
+research proposals and evaluations, not a common 2026 compliance standard or an exhaustive
+survey proving Simurgh's novelty. The cited SSRN abstract 5688982 failed to load and was not
+verified in this check. M103's implementation findings come from local source and temporary
+probes, independently of those papers.
+
+### S30 — CCB research references
+
+Checked 19 October 2026 against the primary arXiv records:
+[Brundage et al., Toward Trustworthy AI Development (2020)](https://arxiv.org/abs/2004.07213),
+[Xu et al., Antidistillation Fingerprinting (2026)](https://arxiv.org/abs/2602.03812), and
+[AEX: Non-Intrusive Multi-Hop Attestation and Provenance for LLM APIs (2026)](https://arxiv.org/abs/2603.14283).
+The records match the cited research identities. Brundage et al. discuss multiple institutional,
+software and hardware mechanisms; the fingerprinting work reports statistical detection
+experiments. Neither establishes Simurgh's novelty, deployed enforcement, legal applicability
+or an absence of other verifiable evidence systems. M105 uses these as context, not standards.

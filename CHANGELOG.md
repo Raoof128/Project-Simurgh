@@ -4475,3 +4475,21 @@ Owner-requested work; implementation and review by Codex assistance.
 - **Validation:** Check formatting, local links, ledger identities/hashes, append-only prefixes
   and frozen-surface preservation. No signing, inference, external ceremony or full E2E rerun.
 - **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 850-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 850 of 919 baseline
+  candidates completely read, 69 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M101–M105 for Stage 4H.4/4H.5, the unmerged full-chain addendum, and
+  Stage 4J/4K/4L complete specs/plans; qualify manifest, accounting and reproduction claims.
+- **Findings:** Temporary probes confirm ignored PCTA manifests and accepted producer-signed
+  semantic discrepancies in PCTA/EBA/CCB. Correct current SECURITY guidance; retain probe
+  receipts and distinguish missing semantic checks from signature forgery or deployed effects.
+- **Research:** Check accessible PCTA/CCB primary research identities (S29–S30); preserve
+  frozen records, captures, signatures and runtime source. Implementation repair is separate.
+- **Validation:** Check formatting, local links, all baseline identities/read hashes, append-only
+  prefixes and frozen-surface preservation. Probes used temporary inputs and ephemeral local
+  test keys only; no inference, external ceremony, production signing or full E2E rerun.
+- **Remaining:** Complete every pending manual read and final correction verification.

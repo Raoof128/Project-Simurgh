@@ -171,7 +171,7 @@
       "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check. M70/M71 disclose retained risk mapping, SDK retry/abort behavior, raw context prefixes and caller receipt strings; runtime remains unchanged.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "67c2acbe2c6ec65c8aeb4a264c23d87b919bd2a21a74c944287b83be9ce00921"
+      "read_sha256": "cc28ee5360fd6e4edca704b8aca9a33a1f31db8e76fcad302d7649b6b187305e"
     },
     {
       "path": "docs/DECISIONS.md",
@@ -1107,7 +1107,7 @@
       "assessment": "Read all 13 primary-source applicability rows and limits. Correctly separates publication from review year, pinned SDK from living docs and alignment from compliance. Previous-turn fetch provenance retained; no fresh fetch claimed.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "6abbe3524d45019d1e73a49ca64373cf81e7145d2bc75c989a13b43d44cf52f5"
+      "read_sha256": "1d96091b004cbcbf685506661d3fc0326d908dc63567d82fd55fe9e3b4dfcc8f"
     },
     {
       "path": "docs/documentation-audit-2026-10-19/VALIDATION.md",
@@ -8461,11 +8461,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "a44125796f88ba997393f91f5c4f5cc2eae94f0235618b657799a1c97e3c11d0",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read: M101 corrects unrecomputed CLI attestation claim, diagnostic workload versus CLI, runtime-dependent digest, finite interception and scan scope, fixed sequential probes, coercive/versioned exit map and conditional-shell/summary limits. Frozen historical documents preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "a44125796f88ba997393f91f5c4f5cc2eae94f0235618b657799a1c97e3c11d0"
     },
     {
       "path": "docs/superpowers/plans/2026-07-01-stage-4h-full-chain-e2e-audit.md",
@@ -8474,11 +8474,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "2dec7b3c28aebc5b6ead02fdb07081c99869534bdf9ae93c4e745f4eb5f17440",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read: M102 confirms proposed full-chain runner/test/docs/evidence absent and existing closeout labels addendum unmerged; records draft API mismatches, expected versus observed summary data, export-name versus execution coverage, tag/drift and transcript limits. No missing evidence fabricated.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "2dec7b3c28aebc5b6ead02fdb07081c99869534bdf9ae93c4e745f4eb5f17440"
     },
     {
       "path": "docs/superpowers/plans/2026-07-02-stage-4j-pcta.md",
@@ -8487,11 +8487,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "c6e688851bb3fd7dbaec029b7d123f3b1f205c26d034fca2d03336eea6def236",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read complete frozen PCTA implementation plan. M103: CLI ignores PCTA manifest; intent, authority-rank, tool/class and required-enforcement semantics incomplete; local producer-signed probes distinguish missing checks from signature forgery. Current ten-row matrix, P8 precedence, dirty-DFI code and temporary regeneration repair draft defects; whole-artifact byte stability and full 4H verification claims need qualification. S29 checks accessible primary prior art.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "c6e688851bb3fd7dbaec029b7d123f3b1f205c26d034fca2d03336eea6def236"
     },
     {
       "path": "docs/superpowers/plans/2026-07-02-stage-4k-eba.md",
@@ -8500,11 +8500,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "6e5a4520fdd42511f604cdba31695b733ace6dadb596f027503162b7b5cd7a33",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read complete frozen EBA document. M104: synthetic supplied-event accounting is not deployed enforcement/completeness; core verifies aggregate ledger but not all attestation semantics, policy window or exact response stream. Temporary probes confirm accepted semantic discrepancies and raw-text window; valid stale-digest rejection distinguished. Reproduction/determinism, Q0-Q7, privacy, runtime/version and historic code-map claims qualified against retained source.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "6e5a4520fdd42511f604cdba31695b733ace6dadb596f027503162b7b5cd7a33"
     },
     {
       "path": "docs/superpowers/plans/2026-07-03-stage-4l-ccb.md",
@@ -8513,11 +8513,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "9d6b37139046825acd7414714e8555e6ee7bf0aacad71670590983c45ef385ff",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read complete frozen CCB document. M105: conditional monotonicity and declared partitions do not prove identity, deployment enforcement or prior lies; actual commitment/policy schemas differ from spec; core hashes upstream 4K manifest without verifying it and omits semantic attestation/non-claim/reserved-slot checks. Temporary signed-producer probes confirm gaps; unsigned tamper rejects. Reproduce/E2E scope and shell mismatch handling qualified; S30 primary research identities checked.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "9d6b37139046825acd7414714e8555e6ee7bf0aacad71670590983c45ef385ff"
     },
     {
       "path": "docs/superpowers/plans/2026-07-03-stage-4m-vxd.md",
@@ -9683,11 +9683,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "1cd6a7c991b5f8169e804f44ccdfd608734a61b906beab319e9a244b73b74e76",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read: M101 corrects unrecomputed CLI attestation claim, diagnostic workload versus CLI, runtime-dependent digest, finite interception and scan scope, fixed sequential probes, coercive/versioned exit map and conditional-shell/summary limits. Frozen historical documents preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "1cd6a7c991b5f8169e804f44ccdfd608734a61b906beab319e9a244b73b74e76"
     },
     {
       "path": "docs/superpowers/specs/2026-07-01-stage-4h-full-chain-e2e-audit.md",
@@ -9696,11 +9696,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "c5139642cec0e74b0568347502af3755030202a180e1edde52214dc13083bd79",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read: M102 confirms proposed full-chain runner/test/docs/evidence absent and existing closeout labels addendum unmerged; records draft API mismatches, expected versus observed summary data, export-name versus execution coverage, tag/drift and transcript limits. No missing evidence fabricated.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "c5139642cec0e74b0568347502af3755030202a180e1edde52214dc13083bd79"
     },
     {
       "path": "docs/superpowers/specs/2026-07-02-stage-4j-pcta-design.md",
@@ -9709,11 +9709,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "7f6370ab05d195c13fac16370fcfc080ac3ac64f407c6cbc0648ac661c1b58cb",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read complete frozen PCTA specification. M103: CLI ignores PCTA manifest; intent, authority-rank, tool/class and required-enforcement semantics incomplete; local producer-signed probes distinguish missing checks from signature forgery. Current ten-row matrix, P8 precedence, dirty-DFI code and temporary regeneration repair draft defects; whole-artifact byte stability and full 4H verification claims need qualification. S29 checks accessible primary prior art.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "7f6370ab05d195c13fac16370fcfc080ac3ac64f407c6cbc0648ac661c1b58cb"
     },
     {
       "path": "docs/superpowers/specs/2026-07-02-stage-4k-eba-design.md",
@@ -9722,11 +9722,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "2dad3cd59f04d11ccf957f2448adc0f817d970d29327c5d1ab2620a53a03c493",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read complete frozen EBA document. M104: synthetic supplied-event accounting is not deployed enforcement/completeness; core verifies aggregate ledger but not all attestation semantics, policy window or exact response stream. Temporary probes confirm accepted semantic discrepancies and raw-text window; valid stale-digest rejection distinguished. Reproduction/determinism, Q0-Q7, privacy, runtime/version and historic code-map claims qualified against retained source.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "2dad3cd59f04d11ccf957f2448adc0f817d970d29327c5d1ab2620a53a03c493"
     },
     {
       "path": "docs/superpowers/specs/2026-07-03-stage-4l-ccb-design.md",
@@ -9735,11 +9735,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "3cd3f19756bda44bcbca53251a2ec90544b15c31c7ad3219f77a1b9eedad07c4",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read complete frozen CCB document. M105: conditional monotonicity and declared partitions do not prove identity, deployment enforcement or prior lies; actual commitment/policy schemas differ from spec; core hashes upstream 4K manifest without verifying it and omits semantic attestation/non-claim/reserved-slot checks. Temporary signed-producer probes confirm gaps; unsigned tamper rejects. Reproduce/E2E scope and shell mismatch handling qualified; S30 primary research identities checked.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "3cd3f19756bda44bcbca53251a2ec90544b15c31c7ad3219f77a1b9eedad07c4"
     },
     {
       "path": "docs/superpowers/specs/2026-07-03-stage-4m-vxd-design.md",

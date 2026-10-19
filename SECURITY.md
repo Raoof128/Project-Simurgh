@@ -428,3 +428,33 @@ additional bounded checks. See
 and [M100](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m100--stage-4h-q6q7-summaries-do-not-establish-the-promised-cli-privacy-boundary).
 Use trusted local fixtures; do not treat these reports as a general privacy or dishonest-producer
 assurance boundary. Frozen artifacts and runtime source remain unchanged by this documentation audit.
+
+### Retained Stage 4J authorization checks
+
+The Stage 4J CLI does not verify its PCTA manifest, compare the user-intent digest with an
+expected intent artifact, or enforce all documented authority-rank, tool/class and enforcement
+requirements. Isolated local probes accepted a deleted manifest and selected producer-signed
+semantic changes. The latter used an explicitly pinned ephemeral producer key, not a forged
+retained signature. Treat the ten-row fixture matrix as bounded evidence. See
+[M103 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m103--stage-4js-cli-does-not-enforce-every-advertised-authorization-binding)
+for the tested entry point and limits; the standalone manifest helper is not invoked by that CLI.
+
+### Retained Stage 4K exposure accounting
+
+Stage 4K verifies aggregate counts from supplied synthetic events and a signed digest chain.
+It does not independently observe deployed enforcement or event completeness, compare policy
+and event windows, or recompute every semantic attestation field. Temporary checks accepted
+producer-signed false attestation totals and unrestricted plaintext window labels; changing a
+response digest also preserved acceptance without re-signing because the aggregate omits it.
+See [M104 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m104--stage-4k-recomputes-supplied-counts-not-deployment-enforcement-or-every-attestation-field).
+A passing Q8 result is bounded accounting evidence, not a general privacy or distillation guarantee.
+
+### Retained Stage 4L cluster accounting
+
+The Stage 4L core recomputes cluster totals and cardinality, but hashes its referenced 4K
+manifest without running the 4K verifier. It does not recompute every signed attestation field
+or enforce required non-claims and an empty corroboration slot. Local producer-signed probes
+confirmed these gaps while unsigned attestation tampering was rejected. See
+[M105 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m105--stage-4ls-cluster-calculation-does-not-authenticate-every-narrative-or-upstream-verifier).
+A provider's declared partition does not establish real-world identity, complete observation
+or deployed enforcement. A later merge can reflect new knowledge rather than a prior falsehood.

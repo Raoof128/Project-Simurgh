@@ -1,0 +1,57 @@
+{
+  "schema": "simurgh.documentation_audit.eba_probe.v1",
+  "date": "2026-10-19",
+  "scope": "Temporary fixture copies and explicitly pinned ephemeral producer key for signed cases. No retained artifact/source changes, inference, external tool execution or deployed budget enforcement.",
+  "entrypoint": "runEbaCore",
+  "cases": [
+    {
+      "name": "unchanged committed bundle",
+      "producer_resigned": false,
+      "rawCode": 0,
+      "typed": 0,
+      "reason": null
+    },
+    {
+      "name": "response digest changed without re-signing",
+      "producer_resigned": false,
+      "rawCode": 0,
+      "typed": 0,
+      "reason": null
+    },
+    {
+      "name": "signed attestation has false per-consumer totals and verdicts",
+      "producer_resigned": true,
+      "rawCode": 0,
+      "typed": 0,
+      "reason": null
+    },
+    {
+      "name": "policy window changed with stale attestation policy digest",
+      "producer_resigned": true,
+      "rawCode": 22,
+      "typed": 1,
+      "reason": "attestation_chain_mismatch"
+    },
+    {
+      "name": "policy window differs from every event window with rebuilt attestation",
+      "producer_resigned": true,
+      "rawCode": 0,
+      "typed": 0,
+      "reason": null
+    },
+    {
+      "name": "unrestricted window text copied to ledger and attestation",
+      "producer_resigned": true,
+      "rawCode": 0,
+      "typed": 0,
+      "reason": null
+    },
+    {
+      "name": "empty event stream with regenerated empty ledger",
+      "producer_resigned": true,
+      "rawCode": 0,
+      "typed": 0,
+      "reason": null
+    }
+  ]
+}
