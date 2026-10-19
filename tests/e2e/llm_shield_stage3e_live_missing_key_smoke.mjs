@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// Live enabled + provider + model, but no ANTHROPIC_API_KEY -> fail closed,
-// no network. Boots its own server with the scenario env.
+// Maintained retirement check. Historical flags cannot reactivate the live HTTP route.
 import { startServer, newSession, ok } from "./_live_server.mjs";
-
 const { base, stop } = await startServer({
   SIMURGH_GATEWAY_PROVIDER_MODE: "live",
   SIMURGH_LIVE_PROVIDER_ENABLED: "true",
@@ -12,19 +10,18 @@ const { base, stop } = await startServer({
 });
 try {
   const { api, sessionId, auth } = await newSession(base);
-  const r = await (
-    await fetch(`${api}/${sessionId}/run`, {
-      method: "POST",
-      headers: auth,
-      body: JSON.stringify({ provider_mode: "live", input: "hi" }),
-    })
-  ).json();
+  const response = await fetch(`${api}/${sessionId}/run`, {
+    method: "POST",
+    headers: auth,
+    body: JSON.stringify({ provider_mode: "live", input: "hi" }),
+  });
+  const body = await response.json();
   ok(
-    r.ok === false && r.error === "gateway_provider_key_missing",
-    "missing key must fail closed",
-    r
+    response.status === 410 && body.error === "legacy_live_gateway_retired",
+    "retired live contract",
+    body
   );
-  console.log("[PASS] stage3e live missing-key smoke");
+  console.log("[PASS] retired live route: missing_key");
 } finally {
   stop();
 }

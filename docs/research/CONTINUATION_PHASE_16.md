@@ -56,3 +56,11 @@ The original seven inventory tests yielded six passes and one failure naming onl
 `reproduce-llm-shield-stage5l-strict.sh`. The original gateway smoke failed because
 the server returned `legacy_live_gateway_retired`. Raw logs are retained in the
 continuation work directory. Final outcomes will be appended after verification.
+
+## Verification
+
+Authority commit `8af9d15a` precedes implementation. The 15 inventory tests pass,
+including independent drift and frozen-byte negative controls. Both gateway smoke
+suites pass (72 core and 40 historical live fixture cases); all 14 security-audit
+checks pass. The maintained set contains 51 identities and the frozen pin remains 50. Smokes ran in a disposable clone to contain historical generated-file writes.
+Consolidated end-to-end verification follows the remaining maintenance.

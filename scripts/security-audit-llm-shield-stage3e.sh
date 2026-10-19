@@ -72,10 +72,13 @@ SID=$(echo "$S" | node -e "process.stdin.on('data',d=>console.log(JSON.parse(d).
 TOK=$(echo "$S" | node -e "process.stdin.on('data',d=>console.log(JSON.parse(d).token))")
 post() { curl -s -X POST "$BASE/api/llm-shield/gateway/$SID/run" -H "Content-Type: application/json" -H "Authorization: Bearer $TOK" -d "$1"; }
 
-# Stage 3E-live: live is disabled by default (this audit's server runs without the
-# live env), so the fail-closed reason is now gateway_live_provider_disabled.
-echo "$(post '{"input":"x","provider_mode":"live","provider":"anthropic"}')" | grep -q "gateway_live_provider_disabled" &&
-  ok "live fails closed (disabled by default)" || no "live not fail-closed"
+# P16-G01: retirement is an exact HTTP contract, independent of legacy provider flags.
+LIVE_RESPONSE=$(curl -s -w '\n%{http_code}' -X POST "$BASE/api/llm-shield/gateway/$SID/run" -H "Content-Type: application/json" -H "Authorization: Bearer $TOK" -d '{"input":"x","provider_mode":"live","provider":"anthropic"}')
+if printf '%s' "$LIVE_RESPONSE" | node --input-type=module -e '
+let text=""; for await (const chunk of process.stdin) text+=chunk;
+const split=text.lastIndexOf("\n");
+if (text.slice(split+1)!=="410" || JSON.parse(text.slice(0,split)).error!=="legacy_live_gateway_retired") process.exit(1);
+'; then ok "live route retired (HTTP 410)"; else no "retired live contract failed"; fi
 echo "$(post '{"input":"x","provider_mode":"mock","api_key":"sk-x"}')" | grep -q "gateway_forbidden_field" &&
   ok "api_key rejected" || no "api_key not rejected"
 echo "$(post '{"input":"x","provider_mode":"mock","provider_response_body":"y"}')" | grep -q "gateway_forbidden_field" &&

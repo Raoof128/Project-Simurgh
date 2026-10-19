@@ -19,8 +19,8 @@ const res = await fetch(`${api}/${s.session_id}/run`, {
 });
 const r = await res.json();
 ok(
-  r.ok === false && r.error === "gateway_live_provider_disabled",
-  "live must fail closed when SIMURGH_LIVE_PROVIDER_ENABLED is unset",
+  res.status === 410 && r.error === "legacy_live_gateway_retired",
+  "retired live route must return HTTP 410",
   r
 );
-console.log("[PASS] stage3e live-disabled smoke");
+console.log("[PASS] stage3e retired-route smoke");

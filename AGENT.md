@@ -3147,3 +3147,11 @@ one machine's local agent configuration:
 - **Files changed:** `docs/research/CONTINUATION_PHASE_16.md`, `AGENT.md`, `CHANGELOG.md`.
 - **Verification:** Original inventory test fails on the strict Stage 5L addition; original gateway smoke fails on the already-retired response.
 - **Follow-ups:** Implement declared maintenance, test negative controls and run the affected gates before the Phase 8 review.
+
+## 2026-10-19 — Raouf: migrate maintained legacy gates (Australia/Sydney)
+
+- **Scope:** P16-G01/P16-G02 under preceding authority commit `8af9d15a`.
+- **Summary:** HTTP smokes require retirement regardless of historical flags; maintained reproduce inventory adds the strict Stage 5L successor beside the unchanged historical pin.
+- **Files changed:** Exact Phase 16 maintenance surface; shared inventory validator, versioned manifest and eight behavioral regression tests.
+- **Verification:** 15 inventory tests pass; core smoke (72 fixtures), retirement smoke (40 fixtures), and 14 security-audit checks pass in a disposable checkout. Historical pin hash matches. Added/removed, equal-count substitution, duplicate, path, empty-set and changed-pin controls refuse.
+- **Follow-ups:** Run consolidated end-to-end checks after the Phase 8 review and portability work. No aggregate-green claim yet.
