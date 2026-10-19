@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **500 documents have complete manual reads; 419 remain
+SHA-256 values. At this checkpoint, **600 documents have complete manual reads; 319 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -1113,6 +1113,262 @@ with executed results. Apply these additional corrections:
   to each swap. The one-hop orchestration budget does not prove absence of SDK-internal retries
   or enforcement of a second live-call ledger gate. M43 and the existing scoped security review
   qualify its mock-fixture and function-coverage claims.
+
+### M45 — Stage 3S–4H evidence and release checks have narrower boundaries
+
+The Stage 3S–3X and 4H closeouts, checklists, threat models and validation matrices were
+read in full. Apply these corrections to the preserved records:
+
+- Stage 3S's source-bound report establishes equality with its supplied evidence, not the
+  truth of that evidence. Its default slots are recorded fixtures. Its verify-only smoke
+  and gateway E2E have different scopes, and the broad fallback claims inherit M43.
+- Stage 3T's benign-silence finding covers eleven chosen fixtures. Stage 3U explicitly
+  retains benign collisions involving two strong families and opaque valid-shaped hash
+  slots. Stage 3V-A's harness hashing closes an adapter-input gap; it does not close every
+  signed limitation. External misses and overblocking are measured outcomes, not necessarily
+  rejected bundles. Branch coverage in 3U is reported, not gated.
+- Stage 3V-B's “raw output never exported” wording applies only to derived evidence. The
+  committed replay source `evidence/stage-3v-b/capture-replay/lg4-frozen-capture.json`
+  deliberately contains `raw_lg4_output`. A live flag, valid timestamp and digest shape do
+  not independently establish GPU origin. CI replays the capture; it does not rerun the model.
+- Stage 3W's `gh run list --limit 1` can select a successful run unrelated to the release
+  under review. Check the exact workflow, ref, commit and attestation subject. The preserved
+  workflow uses mutable action tags (`checkout@v4`, `setup-node@v4`,
+  `attest-build-provenance@v3`); this audit did not pin actions or run hosted CI. OIDC
+  provenance witnesses workflow identity, not the truth of the original GPU capture.
+- Stage 3X's twelve rungs include ten roots, five deep walks, three reproductions and two
+  index-only entries. These are overlapping scopes, not additive independent experiments.
+  Fetching tags is online setup and does not guarantee a shallow clone has every ancestor.
+- Stage 4H checks explicit declared flows in its interpreter/process boundary. It is not
+  host-wide network isolation, kernel confinement or proof of actual execution. Q3 needs
+  both the clean zero-hit observation and the caught test double. Its proof-deletion arm
+  should reach raw 24/26, not merely invalidate a signature at 25.
+
+### M46 — Stage 4J–4M positioning, reproduction and budget proofs need qualification
+
+- Stage 4J's opening claim that the agent “never acted” exceeds its recorded authorization
+  contract. `applied` means `recorded_allowed`; pack epochs are not trusted wall-clock
+  freshness. Equal error codes alone do not establish absence of a timing oracle. The
+  positioning brief's “nothing to jailbreak”, zero-cost and classifier-only comparisons
+  are unsupported generalizations. Its future-J5/pre-build passages are superseded by its
+  completed J5 results; those results remain local fixtures, not production measurements.
+- Anthropic's [June 30 redeployment account](https://www.anthropic.com/news/redeploying-fable-5)
+  reports June 9 launch, June 12 suspension, June 26 limited Mythos restoration and July 1
+  Fable availability. Its over-99% figure concerns a specific reported technique, and its
+  four-criterion jailbreak framework was a proposal. Attribute these statements to the
+  provider; they do not establish Simurgh's incident-prevention ability or current access.
+- Stage 4K's Q8 weights and budget are declared policy, not measured information leakage,
+  capability transfer or prevention of distillation. Raw 39 is reserved in v0; proposed
+  EBA+ v1/v2 controls are not shipped v0 behavior. Synthetic `events.json` includes raw
+  consumer labels while the derived extraction ledger excludes them.
+- The Stage 4K T2 environment assignment lasts only for the builder command. Use a separate
+  variable, then pass it explicitly, in a disposable reproduction checkout with Node 26:
+
+  ```bash
+  stage4k_review_dir=$(mktemp -d)
+  STAGE4K_FIXTURE_OUT="$stage4k_review_dir" node tools/simurgh-attestation/stage4k/build-stage4k-fixtures.mjs
+  cmp "$stage4k_review_dir/bundles/under-budget/extraction-ledger.json" \
+    tests/fixtures/llmShield/stage4k/bundles/under-budget/extraction-ledger.json
+  ```
+
+  Commands ending with `; echo $?` display the prior status but make the compound command
+  succeed if `echo` succeeds. Capture and assert the verifier's status in automated checks.
+  Replace literal `<tmp>` shell placeholders with an actual quoted path. A no-match `grep`
+  returns 1; that is the expected privacy-scan result, not a verifier error.
+
+- Stage 4L's anti-monotonicity statement requires nonnegative fixed exposures **and
+  non-inflating budgets**, as Stage 4M explicitly specifies. Coarsening alone is insufficient.
+  A histogram records the provider's partition; it does not prove that singleton accounts
+  are independent actors. A later merge can reflect new knowledge rather than a knowingly
+  false earlier statement. The proof does not eliminate evasion through withholding merges,
+  omitted events or consistently false source data.
+- Stage 4M's “empty evasion strategy set” and comparisons claiming that other systems cannot
+  provide these properties exceed the conditional arithmetic theorem. A contest receipt is
+  neither adjudication nor proof of legally sufficient due process. The whole-repository
+  check scripts do not verify every prose claim. Internal novelty/usefulness scores throughout
+  these closeouts are author judgments, not validated metrics or endorsements.
+
+### M47 — Stage 4N conflates two legal reporting regimes
+
+`STAGE_4N_C9_ARTICLE73_PROJECTION.md` incorrectly attributes GPAI systemic-risk reporting to
+Article 73. The Commission's [4 November 2025 template announcement](https://digital-strategy.ec.europa.eu/en/library/ai-act-commission-publishes-reporting-template-serious-incidents-involving-general-purpose-ai)
+expressly identifies **Article 55** and GPAI Code **Commitment 9**, and separately identifies
+high-risk-system incident guidance. [Article 73](https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-73)
+concerns high-risk AI systems. Its general 15-day limit and specified 2-day/10-day exceptions
+must not be presented as the draft's combined “2 / 5 / 10 / 15” GPAI/Article-73 tiers.
+
+The [GPAI Code](https://digital-strategy.ec.europa.eu/en/policies/contents-code-gpai) is a
+voluntary compliance tool, not the legislation itself. A single August 2026 date is not a
+complete account of the Act's application schedule; use the current Article 113 and the
+applicable regime, as explained in M41. The later Stage 4T capsule correctly keeps the two
+pinned template snapshots separate. It still does not determine legal applicability,
+classify an actual serious incident, establish awareness time, submit a report or prove
+regulatory acceptance.
+
+A synthetic reporting cadence and an `as_of_window` are declared verifier inputs. They
+cannot establish that a real legal deadline was met. The heartbeat's silence detection is
+relative to the supplied policy and boundary; fork detection needs a second artifact.
+Stage 4N's SHA-256 commitment is **computationally binding under hash assumptions**, not
+“unconditionally binding”. Its deterministic low-entropy salt permits guessing. Deterministic
+fixtures and fresh random deployment salts need not be mutually exclusive design choices.
+
+### M48 — Stage 4O–4V integrity does not supply observation or independent custody
+
+- Stage 4O applies to calls routed through its manifest-aware entry point. A verified
+  recorded decision does not witness every real tool execution. Delta binding does not
+  prove human reading; its timeline binds at attestation time. Lane B's digests do not
+  authenticate actual tool authority. Its numbered scorecard is an internal assessment.
+- Stage 4P checks supplied custody records. It cannot identify an entirely hidden real
+  hop or turn a missing attestation into proof of wrongdoing. Embedded public keys require
+  an independently chosen trust policy. Canonical-equivalent JSON edits need not invalidate
+  signatures. Its actual `digest.mjs` and `cpcCore.mjs` derive the entropy floor from an
+  `evidence_kind` lookup, not a measurement of the secret input's entropy. A public window
+  anchor changes digests across windows but does not prove cryptographic unlinkability.
+  The reproduce script rebuilds committed fixtures before diffing them: run it in a
+  disposable checkout, preserving the original evidence.
+- Stage 4Q's “human at terminal” arm uses `STAGE4Q_HUMAN_CONFIRM=y`; it is not proof that
+  a human attended a ceremony. Its display digest binds declared rendering bytes, not an
+  independently witnessed display. The census covers the supplied chain. The BYO key
+  example should use a fresh `mktemp -d` directory, `umask 077` and an explicit file mode
+  of `0o600`, rather than a predictable `/tmp/my-approver.pem` with default permissions.
+- Stage 4R's actual 4P/4N bindings and full 4Q receipt integration are expressly deferred
+  in its closeout. A DLEQ proof establishes algebraic consistency for supplied values, not
+  truthful custody-class membership. Colluding parties can choose the same invented class
+  without breaking Fiat–Shamir assumptions. RFC 8032 vector checks do not constitute a
+  cryptographic audit of the custom reference protocol. Historical reviewer identity and
+  independence claims need provenance beyond a fresh key and a signed challenge.
+- Stage 4S's assertion that content addressing makes cycles mathematically impossible because
+  a hash has no fixed point is incorrect. Such construction is treated as computationally
+  infeasible under hash assumptions; it is not excluded as a mathematical property of every
+  finite hash function. Raw 104/118 are defensive unit paths, not full corpus attack arms.
+  A supplied public-key index does not independently authenticate its participants.
+- Stage 4U's 58-item corpus includes eight benign differential cases. Preserve the recorded
+  0/58 ledger result, but do not describe it as 58 distinct hostile attempts. Most cases
+  rewrap the predecessor's own case table. They test regression resistance, not discovery
+  by an independent adversary, and signatures alone do not prove pre-run chronology.
+- Stage 4V's conflict map, mirror self-agreement and “subpoena” metaphor are mechanical
+  properties, not legal compulsion, truth adjudication or a general absence-of-bias proof.
+  A separate process and minimal environment do not prevent shared-user filesystem access.
+  Binding the exact capsule does not prove that it was filed with a regulator.
+
+### M49 — Stage 4W–5L closeouts overstate several measurements and completion labels
+
+- Stage 4W's leakage gate covers its frozen English-centric patterns, not every factual
+  claim, citation fabrication or quotation error. Its reported incident figures remain
+  dated secondary-source motivations until checked against primary records. An in-toto
+  subject projection is not C2PA conformance or semantic truth verification.
+- Stage 4X's 6/6 to 1/6 and Stage 4Y's 15 to 2 slips measure chosen corpora/transforms.
+  The remaining misses are observed residue, not a demonstrated irreducible semantic
+  lower bound. Authors still choose seeds, transformations and ground-truth labels.
+  A public map can reveal lengths and geometry while withholding text; public acceptance
+  does not establish that the withheld document was correctly analyzed.
+- Stage 4Z's capture harness was not executed there; Stage 5B completed the elided lens
+  and reports a real 1B capture. Stage 5A's external export and real constitution slice
+  were also unexecuted. “Paid at mechanism scope” is not completion of these data runs.
+  M34 qualifies Stage 5A's browser-verifier claims with retained negative-case results.
+- Stage 5B's 0/46 is largely signature/structural mutation coverage. Its two identical CPU
+  captures do not establish arbitrary cross-hardware bitwise reproduction. Stage 5C's
+  nine slips are among 54 grid cells, including 26 degenerate cells and 19 catches; this
+  is not 54 meaningful attack attempts. Its “first non-zero slip” wording must be scoped
+  to that ledger, since 4X/4Y already reported non-zero residue. Digest-bound blind severity
+  does not establish substantive severity correctness.
+- Stage 5D's three rounds and 18 slips concern six bases and a declared normalizer lattice.
+  They do not prove a universal normalization impossibility. Its own limitation correctly
+  says a consistently omitted round can remain absent. Model provenance is self-reported;
+  model corroboration is not independent organizational review.
+- Stage 5E has four of eight bases flagged, four flagged bases slipping, and four baseline
+  misses. Its external **verify-only** reproduction rebuilds arithmetic over committed
+  scores; it does not independently rerun the detector on another architecture. The
+  Desktop-only log path is not a repository receipt. Its “five sibling stages” sentence
+  lists six stages: 4Y, 4Z and 5A–5D.
+- Stage 5F's real two-case panel uses PG2 86M and **Llama Guard 3 1B**, while its nominal
+  synthetic panel uses Llama Guard 4 12B. Different label semantics are retained; disagreement
+  is not an accuracy ranking. A universe equal to the roster yields an omission bound of
+  zero without proving representativeness.
+- Stages 5G–5J retain historical outside-party reports. Their computed key/challenge rungs
+  establish only the checked bindings; hashes alone do not prove affiliation, honest custody
+  or that another operator lacks a key. Stage 5H's producer-side `0.94` was placeholder data
+  and failed 311; its completed review-host result covers a specific aggregate recipe.
+  Stage 5I covers 37 public section headings with modeled affiliation, not the confidential
+  report or the provider's actual review panel. The “Next: pending → completed” paragraphs
+  in 5H/5I are stale relative to their own completed sections.
+- Stage 5K's OTS witness binds the `ANCHOR_ME.txt` bytes and publication evidence, not actual
+  decision time or a new distinct-verifier ceremony. Its tree-size 1–9 checks are finite
+  implementation tests, not a general proof of that implementation. Stage 5L's real TSA/OTS
+  captures were not yet consumed as a real confirmed quorum bundle there; 5M is the later
+  integration. “Cryptographically impossible access” is limited to the declared release
+  gate and does not exclude out-of-band copies.
+
+### M50 — Stage 5M–5P temporal and identity claims require explicit assumptions
+
+- The Stage 5M outside reproduction recorded **raw 372** on the earlier pending bundle;
+  do not relabel it as reproduction of the later confirmed raw-0 bundle. More seriously,
+  Stage 5Q's signed **F002** falsifies the six-attack local containment headline: five
+  arms measured pristine input because mutations were absent or silently ineffective.
+  Preserve both records and cite the later finding whenever describing that campaign.
+  F003 also records the evidence-writing import side effect. These findings do not by
+  themselves invalidate the separate three-root anchor verification.
+- Stage 5N computes 90,000 ms by subtracting declared one-second uncertainties from the
+  92-second token interval. [RFC 3161 §2.4.2](https://www.rfc-editor.org/rfc/rfc3161.html#section-2.4.2)
+  allows absent token accuracy to be supplied through another source such as the TSA policy;
+  it does **not** prescribe a one-second default. Thus “conservative physical lower bound”
+  is conditional on justification of those uncertainty values. `Accuracy: unspecified`
+  alone supplies no such justification. The frozen arithmetic remains reproducible.
+- A final hash commitment depending on a start token is not proof that the underlying
+  human/model decision was first formed after that token. The 5N charter's “pre-decided
+  verdict” label and prior-art map's broader claim must be narrowed to **pre-input final
+  commitment**. The closeout's decision-formation-time non-claim is the correct limit.
+- Stage 5N's prior-art map overstates an exponential evaluation/verification gap as a
+  universal VDF definition. Efficient verification is the relevant distinction. RFC 3161
+  itself discusses token ordering and accuracy, so it is incorrect to say it has no notion
+  of relationships between token times. Broad claims that all provenance systems only carry
+  self-asserted times overlook compositions with trusted timestamps and transparency receipts.
+- Stage 5O's exact rational floor is conditional on the sampling model, not calibrated
+  detection effectiveness. Earlier stages already implement semantic decision parity, so
+  “every earlier lane proved only hashing” is inaccurate. Its “only CI-gated stage” statement
+  is a dated infrastructure finding superseded by later integration; 210/210 export references
+  remain distinct from branch/path/behavioral coverage.
+- Stage 5P executed a self-managed-key Rekor ceremony, **not Fulcio/OIDC keyless signing**.
+  [Sigstore's signing guide](https://docs.sigstore.dev/cosign/signing/overview/#identity-tokens)
+  supports automated OIDC identity tokens and CI/service identities; interactive login is
+  not universally required. Offline replay and online issuance are different operations.
+  Lane C2 was unexecuted under the project's profile; “unreachable as a fact about the world”
+  is unsupported. A finite LEI snapshot is not a live registry signature or durable legal
+  authority. Its 3,631/3,639 count with zero failures leaves eight non-passing outcomes;
+  it must not be summarized as all 3,639 passing.
+
+### M51 — Stage 5Q–5S completion and coverage remain explicitly bounded
+
+Stage 5Q froze 1,438 of 23,332 obligated cells (6.2%), nine of 2,531 members with a
+coverage status, twelve findings and a separate F013 closeout addendum. It did not authorize
+Q1 or complete the stage. A green reproduction verifies that frozen incomplete record;
+it does not increase its coverage. Later documentation authority is separate from Q1.
+
+Stage 5R attempted eight of 55 families; 47 were not attempted. Its 2,406 selected cells
+contain **210 `probed_not_discharged` and 2,196 `unprobed`** terminal states. The sentence
+“All 2,406 ... were probed” is therefore wrong. New discharge remains zero, with 15,301
+under-supported cells and 23,332 inherited obligations kept as separate measures. Judging
+older families inadmissible under a later contract does not rewrite their original record.
+
+Stage 5S's historical total is 5,424 passes out of 5,425 tests with one skip. Its
+“Repository: none outstanding” line conflicts with its own two open 5Q findings; read it
+as closure of the repairs it enumerates, not closure of every repository issue. Its atomic
+writer comparison supports a measured race mechanism, not a universal zero-failure claim.
+All witnesses remained one operator with several keys. No real browser ran in its browser
+lane. Current smoke counts are separately recorded and must not replace these historical
+measurements.
+
+### M52 — The early live-AgentDojo overview is a small, dated experiment
+
+`evidence/stage-1-live/README.md` reports 5/5 benign utility, 0/30 `injecagent` and
+0/42 `important_instructions` for selected workspace tasks. Its committed slice is
+29/30 utility under attack; “25–42 / case” is not a usable denominator and must not be
+quoted as a rate. These observations do not establish resistance to all stock attacks or
+validity for every current model. The later-listed Llama 10→8 attack successes and
+8→6 benign successes need their actual denominators and study design; “within noise”
+is an interpretation without a reported uncertainty analysis. Its final statement that a
+nonzero live baseline remains future work is superseded by the Llama result already listed
+above it. Historical paid-run commands are not part of this documentation audit.
 
 ## Primary sources rechecked during this continuation
 

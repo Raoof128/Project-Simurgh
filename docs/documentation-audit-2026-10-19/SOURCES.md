@@ -38,6 +38,39 @@ certification assessment. The project interpretations in the last two columns ar
 - Recognize existing runtime-control and evaluation tooling, including ACS and vendor SDK controls.
   A stronger novelty claim needs a systematic comparison and empirical evidence, not a list of links.
 
+## Additional checks during the manual continuation
+
+Checked 19 October 2026. These checks qualify historical claims; they do not update frozen
+experiments or establish compatibility with a current service.
+
+- **S14 — [Anthropic distillation defences](https://www.anthropic.com/research/distillation-defenses),
+  12 October 2026, provider research report.** The provider describes reasoning-context controls,
+  a two-stage classifier, rate limits and account bans, and reports a 90–99% reduction in
+  harvested reasoning data on its own platform. It also reports integration costs, false
+  positives and uncertainty about durability against future attacks. The older EBA/CCB
+  positioning cannot treat prevention or cross-platform abuse controls as absent. These are
+  provider-reported results, not independent Simurgh measurements. The narrower project question
+  is whether declared enforcement evidence can be recomputed under stated trust assumptions.
+- **S15 — [NIST agent-security RFI announcement](https://www.nist.gov/news-events/news/2026/01/caisi-issues-request-information-about-securing-ai-agent-systems),
+  12 January 2026.** It solicited input on measuring and improving agent security, including
+  deployment access constraints. Its stated comment deadline was 9 March 2026. An RFI is not
+  an adopted technical standard, certification, endorsement or currently open submission call.
+- **S16 — [Commission GPAI incident-template announcement](https://digital-strategy.ec.europa.eu/en/library/ai-act-commission-publishes-reporting-template-serious-incidents-involving-general-purpose-ai),
+  4 November 2025, and [GPAI Code overview](https://digital-strategy.ec.europa.eu/en/policies/contents-code-gpai),
+  updated 7 October 2026.** The announcement explicitly maps systemic-risk GPAI reporting to
+  Article 55 and Commitment 9; Article 73 addresses high-risk systems separately. The Code is
+  voluntary. See M47 for the correction to Stage 4N's combined legal mapping. Synthetic cadence
+  and pinned template structure do not prove filing, timeliness or legal compliance.
+- **S17 — [RFC 3161 §2.4.2](https://www.rfc-editor.org/rfc/rfc3161.html#section-2.4.2),
+  August 2001 standards-track protocol.** Accuracy bounds can come from the token or another
+  source such as its policy. An absent Accuracy field does not establish a one-second default.
+  Stage 5N's elapsed-time arithmetic is conditional on the committed uncertainty assumptions;
+  it does not independently measure human attention or TSA clock correctness.
+- **S18 — [Sigstore identity-token guidance](https://docs.sigstore.dev/cosign/signing/overview/#identity-tokens),
+  living implementation documentation.** Automated OIDC tokens and supported workload identities
+  can enable keyless signing without an interactive human login. Stage 5P's retained Rekor
+  ceremony uses a self-managed key; it must not be relabeled as Fulcio/OIDC identity evidence.
+
 ## Verification and limits
 
 This review checked the named pages and relevant passages; it did not certify every external URL

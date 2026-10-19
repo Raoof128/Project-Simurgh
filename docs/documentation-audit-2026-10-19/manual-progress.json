@@ -1107,7 +1107,7 @@
       "assessment": "Read all 13 primary-source applicability rows and limits. Correctly separates publication from review year, pinned SDK from living docs and alignment from compliance. Previous-turn fetch provenance retained; no fresh fetch claimed.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "19b3217a71faeeb7dbb89d0e78aa09c0a930dd0acf97b264a53e3c2dcf51c88c"
+      "read_sha256": "37f14a58f7e8b2dd42e8b730685c92c068148d82319012f869e4ba8bf513c6ba"
     },
     {
       "path": "docs/documentation-audit-2026-10-19/VALIDATION.md",
@@ -3833,11 +3833,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "fd16973f41ab135abf09938b1c74e7de9757a5ab72bc63310bccbf104abf34ab",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete closeout: seven gates and real HTTP gateway use recorded slots, not a live drafting model. The letter-fully-redeemed claim inherits M43 fallback limits and the finite 3L reference experiment. Historical outreach proposal is not current authorization. Source-bound rendering is not source truth.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "fd16973f41ab135abf09938b1c74e7de9757a5ab72bc63310bccbf104abf34ab"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3S_REVIEWER_CHECKLIST.md",
@@ -3846,11 +3846,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "ffb2530d1725b85ae872e5412e09f04428f8c4bf8e15b512497b3b52fa273a68",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete checklist distinguishes verify-only smoke from gateway E2E. Literal ellipsis secret is a placeholder. Cannot-lie heading exceeds field-equality assurance: consistent false sources remain possible. Dedicated key and output-hash binding do not establish independent human review.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "ffb2530d1725b85ae872e5412e09f04428f8c4bf8e15b512497b3b52fa273a68"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3S_THREAT_MODEL.md",
@@ -3859,11 +3859,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "e0640745e7e417a5c47acc3bbd984020ba2558d3ac3ea6f516d72aa7f6ca9adb",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete model. Source hashes detect alteration relative to the bound input, not an already-forged source; hardcoded false privacy fields are not collection detectors. Function coverage is not proof of every input. The recorded fixture, not live model output, supplies default slots.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "e0640745e7e417a5c47acc3bbd984020ba2558d3ac3ea6f516d72aa7f6ca9adb"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3S_VALIDATION_MATRIX.md",
@@ -3872,11 +3872,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "c68e95b1cebbaaf25ca295eeff8c3f4bbaa5374d74921041fc9f213625d16665",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete invariant map. Evidence derivation, slot equality, receipt binding and artifact signatures are distinct checks. Verify-only smoke does not rerun gateway generation; dedicated E2E does. No fresh live drafting, caching or human-review receipt inferred.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "c68e95b1cebbaaf25ca295eeff8c3f4bbaa5374d74921041fc9f213625d16665"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3T_CLOSEOUT.md",
@@ -3885,11 +3885,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "0577955ef85ca7e0580e670668cb270cffb5e97f028a87b41b53300203234818",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete offline synthetic detector closeout: 11 benign-silence fixtures, three matched families, dedicated key. No live telemetry, general FP/FN benchmark or attribution. Subsequent 3U findings constrain benign-heavy and metadata-only assertions in this frozen version.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "0577955ef85ca7e0580e670668cb270cffb5e97f028a87b41b53300203234818"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3T_REVIEWER_CHECKLIST.md",
@@ -3898,11 +3898,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "9ef9ca873f601341e91d46eee1722b0ec4cf8b3d3cfbade8dddeee803e26b610",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete checklist. Benign-heavy silence covers selected fixtures and is contradicted as a universal claim by 3U volume findings. No .pem is not equivalent to no private keys; PEM can contain public material. Frozen identity and distinct-family count are not statistical independence.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "9ef9ca873f601341e91d46eee1722b0ec4cf8b3d3cfbade8dddeee803e26b610"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3T_THREAT_MODEL.md",
@@ -3911,11 +3911,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "24dc83c5742d8c58c8ee51c1644d128ee67886f84bacd7743f303598c73e5951",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete detector-overclaim model and named reference allegations. Privacy field allowlists and eleven fixtures do not close arbitrary metadata smuggling or benign combinations; 3U preserves and repairs those limits separately. Provider report is not project attribution.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "24dc83c5742d8c58c8ee51c1644d128ee67886f84bacd7743f303598c73e5951"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3T_VALIDATION_MATRIX.md",
@@ -3924,11 +3924,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "c4e23dc6bab3cfbe3e189b49f5972e0dd67d4ce558d0de23deb2f2399bcba9ff",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete digest, family freeze, version and signature map. Threshold identity locks are representation checks, not independent proof of pre-run timing. Function coverage and subprocess checks correctly avoid full pipeline E2E label. Later 3U weaknesses remain relevant.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "c4e23dc6bab3cfbe3e189b49f5972e0dd67d4ce558d0de23deb2f2399bcba9ff"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3U_CLOSEOUT.md",
@@ -3937,11 +3937,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "c3a381e5d3c72b51555acb452b86422ec4137a50b7e4cbbe0c23baa768d0a3f9",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete additive v2 closeout: volume contextual, two strong families required, both main/regression digests bound, 3T preserved. No general accuracy or adaptive-evasion claim. Stage 3V-A later used synthetic recorded signal; actual OSS capture arrived 3V-B.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "c3a381e5d3c72b51555acb452b86422ec4137a50b7e4cbbe0c23baa768d0a3f9"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3U_REVIEWER_CHECKLIST.md",
@@ -3950,11 +3950,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "cc9ddc5089c0de9da9d2126b6aec187582cf1c1b9c0c34f48064605b22240482",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete checklist includes intentional benign-collision fixture and grammar/version locks. Invalid hashes means wrong shape, not arbitrary valid-shaped 256-bit contents. No .pem is not a general private-key exclusion. Full suite claim historical.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "cc9ddc5089c0de9da9d2126b6aec187582cf1c1b9c0c34f48064605b22240482"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3U_THREAT_MODEL.md",
@@ -3963,11 +3963,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "3aa096b8d2316a0dbde5b93ff935ff2690935b177d21b8df2d87f0db1a90a518",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete second-round limitations: any two strong families can occur benignly; valid-shaped hashes are opaque slots. Grammar closes raw tag strings, not semantic privacy or trusted digest origin. Frozen v1 preserved; finite adversarial failures not universal crypto proof.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "3aa096b8d2316a0dbde5b93ff935ff2690935b177d21b8df2d87f0db1a90a518"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3U_VALIDATION_MATRIX.md",
@@ -3976,11 +3976,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "985fda795ec66f741d04001b797ed848b61b2de22181c8e747c9b0ae39a38a31",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete matrix binds two results and explicit accepted false-positive limitation. Branch coverage is reported, not gated; targeted grammar throw tests do not imply all branches covered. Deep freeze and new identity protect declared config, not external chronology.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "985fda795ec66f741d04001b797ed848b61b2de22181c8e747c9b0ae39a38a31"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3V_A_CLOSEOUT.md",
@@ -3989,11 +3989,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "ca2660eae7341ad1b2a1db01555e3d23af56c39a53a39cda4605ffec81606967",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 22-gate synthetic instrument closeout. Closes-last-signed-limitation wording overstates scope: harness hashing addresses adapter-supplied digests, while 3U benign strong-family collisions and other trust limitations remain. 3V-B capture is separate.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "ca2660eae7341ad1b2a1db01555e3d23af56c39a53a39cda4605ffec81606967"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3V_A_REVIEWER_CHECKLIST.md",
@@ -4002,11 +4002,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "afcb3dbf788da340d5d5304569075a82149b355d1cb31f81c8d992a840fa3840",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete recorded-fixture checklist: no live defense, four harness hashes and corpus recomputation, eight tamper cases. Target-name schema compatibility is not executed Llama Guard integration. Malformed-input no-throw claim bounded tested API inputs.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "afcb3dbf788da340d5d5304569075a82149b355d1cb31f81c8d992a840fa3840"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3V_A_THREAT_MODEL.md",
@@ -4015,11 +4015,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "bee386a91df579a6293758628ac55fa98fe1b88604b359e73b287fdd94b06ded",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete advisory threat model. Misses/overblocking are measured outcomes, not every in-scope item necessarily rejected as final sentence suggests. Advisory invariance ignores external verdict structurally. Key permission statement is intended custody, not independent inspection of private environment.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "bee386a91df579a6293758628ac55fa98fe1b88604b359e73b287fdd94b06ded"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3V_A_VALIDATION_MATRIX.md",
@@ -4028,11 +4028,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "c83671130229d796a5af69d28e480179ebc8500cbcc6df418570e3e8ced8010a",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 22-check mapping. Harness recomputes four external hashes; no raw outputs in generated evidence does not exclude explicitly committed source fixture. Generic target compatibility does not prove live provider behavior or all historical metadata provenance.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "c83671130229d796a5af69d28e480179ebc8500cbcc6df418570e3e8ced8010a"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3V_B_CLOSEOUT.md",
@@ -4041,11 +4041,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "22193c5b621a259f1917786ed4bc49422a6543974b093a0daafb9c51bbaf3672",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete captured LG4 closeout: 168 allowed, 12 blocked, 138 missed/contained, 180 cases. Raw-output-never-exported wording conflicts with deliberately committed raw_lg4_output replay source; derived bundle is metadata-only. Shipped header and next-tag-after-capture footer are historical status inconsistency.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "22193c5b621a259f1917786ed4bc49422a6543974b093a0daafb9c51bbaf3672"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3V_B_REVIEWER_CHECKLIST.md",
@@ -4054,11 +4054,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "08ba91da6672b6c8601fa4af398b0a2eae1f7a1c2069ccd6664309a6ddae4165",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete replay checklist explicitly names raw_lg4_output in frozen capture. Live flag, digest shape and non-1970 timestamp do not independently prove GPU execution. No model rerun in CI; origin self-reported retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "08ba91da6672b6c8601fa4af398b0a2eae1f7a1c2069ccd6664309a6ddae4165"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3V_B_THREAT_MODEL.md",
@@ -4067,11 +4067,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "5ee12ffa4835ff75ba20a9dbc66b614951f2e67ce2540ff2a1d53aa2a8cb0786",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete threat model clearly excludes authentic weights and execution-origin proof. Canonical signature and provenance hashes bind claims, not actual runtime. Negative key/edited-file cases need independently pinned trust; no new live run inferred.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5ee12ffa4835ff75ba20a9dbc66b614951f2e67ce2540ff2a1d53aa2a8cb0786"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3V_B_VALIDATION_MATRIX.md",
@@ -4080,11 +4080,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "a559ed79bdda4c6a8675a7fcf0c3c9e38de13f763f0c36a4f8de77315da4c597",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete parser/adapter/hash/capture mapping. Recorded script/config supports declared decode setup but does not independently witness rented hardware. At least nine tamper cases and pure-library coverage are scoped; freeze replay is distinct from model rerun.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "a559ed79bdda4c6a8675a7fcf0c3c9e38de13f763f0c36a4f8de77315da4c597"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3W_CLOSEOUT.md",
@@ -4093,11 +4093,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "b351282b131a23c0e2096f0e65cfc1c5597baaa129731f8aec864590a7b96a51",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete release witness closeout: pinned 3V-B release, offline Ed25519 and additive online OIDC. Mutable @v3 action recommendation needs current workflow inspection; no new workflow run claimed. Two roots are not two independent experiment operators.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "b351282b131a23c0e2096f0e65cfc1c5597baaa129731f8aec864590a7b96a51"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3W_REVIEWER_CHECKLIST.md",
@@ -4106,11 +4106,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "78c273b88d2c251e86efd5daad98e71229135062e64503c30c90debe0bb0b059",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete offline/online checklist. gh run list --limit 1 success need not be the pinned release/commit being reviewed; bind exact workflow/ref/SHA and attested subject. Offline verification expressly does not require online Sigstore validation.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "78c273b88d2c251e86efd5daad98e71229135062e64503c30c90debe0bb0b059"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3W_THREAT_MODEL.md",
@@ -4119,11 +4119,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "57cf153ddf43f7bc1457a297bc1a6422d7b70c5e1ff830fa2dab12a982714351",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete sealed-subject model. OIDC identity and command-exit observation do not prove truthful original GPU capture or uncompromised workflow. Online attestation properties cannot be inferred solely from offline bundle. Nonclaim explicitly preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "57cf153ddf43f7bc1457a297bc1a6422d7b70c5e1ff830fa2dab12a982714351"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3W_VALIDATION_MATRIX.md",
@@ -4132,11 +4132,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "5043531a7c8a0156b2964eb00a99f39244ba1303a9fb4035974c0f296db1df63",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete subject/verdict/bundle and workflow mapping. Recomputed expected verdict differs from actual online workflow receipt; source assertion alone not hosted run. No-network offline checks cannot establish online layer availability or current action identity.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5043531a7c8a0156b2964eb00a99f39244ba1303a9fb4035974c0f296db1df63"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3X_CLOSEOUT.md",
@@ -4145,11 +4145,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "937db99f96baa43dc78ce2c4ead729fcdd3207513a8e7fb8d6d28021a7bcf9bc",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 12-rung closeout: ten roots, five deep walks, three reproductions, two index-only entries. Counts overlap by tier and must not be summed as independent stages. Manifest-root integrity not deep file validation. Historical outreach next-step is not current authorization.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "937db99f96baa43dc78ce2c4ead729fcdd3207513a8e7fb8d6d28021a7bcf9bc"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3X_REVIEWER_CHECKLIST.md",
@@ -4158,11 +4158,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "c92e3161113d5edcb7e41b2184c99cfc6ca8e95a5bd73c2c2373d2357e9f227b",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete clone/tag prerequisites and separate summaries.12rungs_passed includes index-only and hash tiers, not twelve full replays. git fetch --tags requires network setup before offline verification and may not supply every needed ancestor in a shallow clone.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "c92e3161113d5edcb7e41b2184c99cfc6ca8e95a5bd73c2c2373d2357e9f227b"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3X_THREAT_MODEL.md",
@@ -4171,11 +4171,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "198aced833a509cb7ccecc483232aca687c5ec49406a94e70c6e983b0a62bb19",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete tiered threat model. Current-format deep walk excludes legacy and cross-stage formats by design. Listed tamper classes and paths not proof every filesystem escape is covered; no model-origin upgrade. Pin tags/commits independently from locally movable refs.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "198aced833a509cb7ccecc483232aca687c5ec49406a94e70c6e983b0a62bb19"
     },
     {
       "path": "docs/research/llm-shield/STAGE_3X_VALIDATION_MATRIX.md",
@@ -4184,11 +4184,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "99fdb45535d9cba2fa316a3a97d8269f2c4815114702ce398a0b18630eae025b",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 12/12/10/5/3/2 map. Eleven-case suite count distinct from threat-table row count. Portable verification, full delegated reproduction and deep hashing are different scopes. Function coverage not arbitrary malformed input or symlink proof.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "99fdb45535d9cba2fa316a3a97d8269f2c4815114702ce398a0b18630eae025b"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4H_CLOSEOUT.md",
@@ -4197,11 +4197,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "5e653a00792259e2bbb0ab20bc564a57d388559a707784f04f4fa5f4e1db1218",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 4H.0\u20134H.5 ledger. Core release and later full-chain addendum are separate historical records. Q3 requires zero clean hits and a caught test double. Explicit limits exclude execution truth, kernel isolation and implicit flows.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5e653a00792259e2bbb0ab20bc564a57d388559a707784f04f4fa5f4e1db1218"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4H_REVIEWER_CHECKLIST.md",
@@ -4210,11 +4210,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "b6c0b9a76415952d5c14185cd37c073ed376b5dc7455e42d3d43e1e401be0e5e",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete T1\u2013T6 mapping: clean 0; premise 22, signature 25, proof 24/26 and privacy 27 map to typed 1; egress 28 maps to typed 2. Proof deletion must reach its intended proof check. No new run claimed.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "b6c0b9a76415952d5c14185cd37c073ed376b5dc7455e42d3d43e1e401be0e5e"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4H_THREAT_MODEL.md",
@@ -4223,11 +4223,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "f7d877b00919f2aeef682af8ac2cc518c555e432ccf40810204327bb10659452",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete explicit-flow model. Interpreter/process preflight is not a host network sandbox. Unknown raw values map to typed 3; environment breach to 2, rejection to 1 and success to 0. Proposed future isolation is not current evidence.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "f7d877b00919f2aeef682af8ac2cc518c555e432ccf40810204327bb10659452"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4H_VALIDATION_MATRIX.md",
@@ -4236,11 +4236,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "ea69f0f9971b114d11593f29d6303419dcadbd1fdcb84a5cb1307bc50b5c7015",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete Q0\u2013Q7 matrix and eight named artifacts. Single-delta tamper arms do not prove resistance to coordinated edits or future inputs. Zero egress hits and a caught test double are checker-path observations.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "ea69f0f9971b114d11593f29d6303419dcadbd1fdcb84a5cb1307bc50b5c7015"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4J_CLOSEOUT.md",
@@ -4249,11 +4249,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "7a03e75be47d3a424ee8732ca2932d71ac7096eda3e6b8230fe7a33712671d86",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete closeout: P0\u2013P8 includes P4-pre and proves declared flow/authorization consistency, not execution truth. Applied means recorded_allowed. Historical Node-26 counts and unrun shellcheck remain dated; no new external validation inferred.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "7a03e75be47d3a424ee8732ca2932d71ac7096eda3e6b8230fe7a33712671d86"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4J_POSITIONING_BRIEF.md",
@@ -4262,11 +4262,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "4e6be46b6960684f990744e910cf0b9468d03f5e35ee82c44798c5d3a95d9b92",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete draft, including reread truncated passages. Opening never-acted, zero-cost, nothing-to-jailbreak and classifier-only claims exceed the bounded declared-flow verifier. Pre-build/J5-future wording conflicts with completed J5. Provider primary source confirms reported June chronology and scoped classifier metric, not independent incident adjudication or current model access.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "4e6be46b6960684f990744e910cf0b9468d03f5e35ee82c44798c5d3a95d9b92"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4J_REVIEWER_CHECKLIST.md",
@@ -4275,11 +4275,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "e6768cf3069281e1129dab8bab84c64d54fd9028a66fc0488cb2a5f06e623a63",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete checklist: Node-26 prerequisite; Homebrew PATH is machine-specific. Bash word-split command variable is not portable shell-array syntax. P4-pre precedes receipt checks; proof deletion must reach its intended gate. Frozen expectations retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "e6768cf3069281e1129dab8bab84c64d54fd9028a66fc0488cb2a5f06e623a63"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4J_THREAT_MODEL.md",
@@ -4288,11 +4288,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "fe31d7808c5c3922c1573433dd2c315036d38489222f6a0732d8f09fda888331",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete model with malicious producer holding the key. Pack-local epochs are not wall-clock freshness; nonce uniqueness is deferred. Equal signature-error codes alone do not prove absence of timing or other oracles. No real execution guarantee.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "fe31d7808c5c3922c1573433dd2c315036d38489222f6a0732d8f09fda888331"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4J_VALIDATION_MATRIX.md",
@@ -4301,11 +4301,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "a0c06bf000dce0340624b69139c29bd8df2e10aa29b8f7f1b6d4eb95371afa96",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete ten-row matrix: P0\u2013P8 plus P4-pre. P8 membership check precedes P4; missing receipt can fail 34 without P8. Raw 24 and 31\u201338 map to typed rejection. Recorded allowed is not a witnessed action.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "a0c06bf000dce0340624b69139c29bd8df2e10aa29b8f7f1b6d4eb95371afa96"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4K_CLOSEOUT.md",
@@ -4314,11 +4314,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "5acfef16a7ae1d2c8c5bd5c3614b35e071bdc14b8dcb90bc13d56bd3357e76b1",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete v0 closeout. Q8 enforces declared exposure policy, not measured capability transfer or distillation prevention. Raw 30 is over-budget, 29 harness/schema, 39 reserved. Weights 1/2/3/4 and a synthetic window are not empirical information bounds. Historical suite count retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5acfef16a7ae1d2c8c5bd5c3614b35e071bdc14b8dcb90bc13d56bd3357e76b1"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4K_EBA_PLUS_ARCHITECTURE.md",
@@ -4327,11 +4327,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "31be20059c7564f198e504ce993f41f26098ce75ecd00bf1bdf315b9df42f5c9",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 333-line v1/v2 draft including truncated middle reread. Future scope/cluster/control receipts and raw 39 are not shipped v0. Provider reports and controls need source attribution; pseudonymous digests are not anonymity, weights are not QIF, reported measures are not independently observed. OpenAI Evals lifecycle is superseded by dated current deprecations.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "31be20059c7564f198e504ce993f41f26098ce75ecd00bf1bdf315b9df42f5c9"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4K_REVIEWER_CHECKLIST.md",
@@ -4340,11 +4340,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "43eee9ef85770549c617441157241148eedd9e89b0921c9f539fdc19bd314fe0",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete checklist. T2 temporary environment assignment does not persist for following cmp; assign the directory separately. Echoing $? after a verifier loses its failing compound-command status. Grep no-match exit 1 is expected. Synthetic source consumer IDs differ from derived ledger privacy.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "43eee9ef85770549c617441157241148eedd9e89b0921c9f539fdc19bd314fe0"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4L_CLOSEOUT.md",
@@ -4353,11 +4353,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "68f2b627d929c277e869960b79d6607f98f9b705c990c8d713e9744e7b429a21",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete Q9 closeout. Twelve table rows include expected-green per-account and singleton-evasion controls. Proof needs nonnegative exposures and non-inflating budgets, made explicit in 4M; merge-only partitions alone are insufficient. Graph commitments do not establish identity truth or real enforcement.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "68f2b627d929c277e869960b79d6607f98f9b705c990c8d713e9744e7b429a21"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4L_REVIEWER_CHECKLIST.md",
@@ -4366,11 +4366,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "49cff81882362fc196a554e47d950b8e7abc5e62b4d4f714f62d84b8d9608302",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete reproduction checklist and matrix. Whole-repository formatting and main...HEAD guards are historical context-dependent commands. F9 intentionally passes and records singleton choices. Artifact completeness is relative to the supplied 4K ledger; no detection completeness or raw-identity secrecy inferred.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "49cff81882362fc196a554e47d950b8e7abc5e62b4d4f714f62d84b8d9608302"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4L_THREAT_MODEL.md",
@@ -4379,11 +4379,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "b89717dc70b02a0436c0763b824ee55b592bd2b0e04c090c322121c08602aec3",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete threat model. Cluster histogram states the declared partition, not proof that accounts are independent actors; a later merge alone need not prove a knowingly false earlier statement. Anti-monotonicity additionally requires non-inflating budgets. Broad competitor cannot-do claims and current citation assertions require qualification.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "b89717dc70b02a0436c0763b824ee55b592bd2b0e04c090c322121c08602aec3"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4M_CLOSEOUT.md",
@@ -4392,11 +4392,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "2b1fee9ef428fb9543d38500c15db4d78f831d801b1ed1c6bb6730a75d7c2c50",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete closeout including reread first 26 lines. Latest-tag requirement is historical. Lean proves a model, with seeded property tests bridging implementation; not implementation soundness. Tier-P checks can return not_in_tier. Browser parity is not full browser security or fresh CI evidence.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "2b1fee9ef428fb9543d38500c15db4d78f831d801b1ed1c6bb6730a75d7c2c50"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4M_REVIEWER_CHECKLIST.md",
@@ -4405,11 +4405,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "fe2e3f54529a9d8c66400eb533e1ffafed80d28bab65b5d9b5753cbba4ca4391",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete gate table. Check/check-e2e cannot establish every prose claim; tests cover implemented assertions. Lean CI, source guards and counts must bind the actual revision. Full-chain and tier scope remain distinct; no new run claimed.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "fe2e3f54529a9d8c66400eb533e1ffafed80d28bab65b5d9b5753cbba4ca4391"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4M_THREAT_MODEL.md",
@@ -4418,11 +4418,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "9e10ef8930ee834fd7b1ef06398bf1e63b3e17bf4c5f56ec8695df395b98a43b",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 134-line model. Arithmetic lemma is conditional on nonnegative fixed exposure and non-inflating coarsening. Empty-evasion-strategy and no-existing-system claims exceed it: withholding merges or false input remains allowed. Contest integrity is not due-process sufficiency or adjudication; cluster joins and aggregate shape remain disclosure.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "9e10ef8930ee834fd7b1ef06398bf1e63b3e17bf4c5f56ec8695df395b98a43b"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4N_C9_ARTICLE73_PROJECTION.md",
@@ -4431,11 +4431,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "0861fa457eea938319f18bca0056951435d6e6ad18d3052807ee5d2d827890c7",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete legal projection. Incorrectly merges Article 73 high-risk-system regime with Article 55 GPAI systemic-risk and Commitment 9. The 2025-11-04 Commission template expressly cites Article 55. 2/5/10/15 cannot be attributed as Article-73 tiers; synthetic overdue cadence is not incident awareness timing, filing or deadline evidence.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "0861fa457eea938319f18bca0056951435d6e6ad18d3052807ee5d2d827890c7"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4N_CLOSEOUT.md",
@@ -4444,11 +4444,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "c263ec8c752fe36fa14e4fe6c0ebea27f601d4a749c01a0555b95165a42994c7",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete heartbeat closeout. Completeness depends on genesis and committed as-of boundary, not external current time or telemetry truth. SHA-256 commitment is computationally binding, not unconditionally binding. Deterministic low-entropy salts permit guessing; random deployment salts and deterministic fixtures need not be mutually exclusive.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "c263ec8c752fe36fa14e4fe6c0ebea27f601d4a749c01a0555b95165a42994c7"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4N_REVIEWER_CHECKLIST.md",
@@ -4457,11 +4457,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "3ab98aee25b579a58dbfbdd6a23f1faf1297e5623e5889267e9b04b26d7fc333",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete three-command checklist. Direct feed command checks declared data/as-of and does not itself establish externally trusted current boundary. Total/fail-closed pertains handled verifier paths, not every OS/process failure. Node prerequisite and raw/typed exit distinction retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "3ab98aee25b579a58dbfbdd6a23f1faf1297e5623e5889267e9b04b26d7fc333"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4N_THREAT_MODEL.md",
@@ -4470,11 +4470,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "b8e78d1108cbe6cbe7d4c0dc97b820f42fe3978662bf78f62cb530d34a163370",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete Q10\u2013Q17 model. Two-artifact requirement correctly limits fork detection; silence visibility depends on expected-window policy and supplied as-of, not knowledge of withheld whole feeds. Public feed is verification input, not automatically truthful telemetry. Low-entropy disclosure and provenance assumptions remain.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "b8e78d1108cbe6cbe7d4c0dc97b820f42fe3978662bf78f62cb530d34a163370"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4N_VALIDATION_MATRIX.md",
@@ -4483,11 +4483,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "02630522f50a9a1add1e8356dd09af2120411cfb2cb9e2709d3f1b51a1427a23",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete T0\u2013T13 mapping. T0\u2013T11 are twelve matrix arms, with T12 unit and T13 E2E separate. Cover-up mutations correctly recompute links to reach intended gate. T8 raw 50 occurs at Q13, distinct from raw 52 reveal timing. Tests demonstrate finite falsifiers, not arbitrary omissions.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "02630522f50a9a1add1e8356dd09af2120411cfb2cb9e2709d3f1b51a1427a23"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4O_CLOSEOUT.md",
@@ -4496,11 +4496,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "92ec72dad2970ddb0ddcd835d1292fb996cfb04ce397cc78bf448db3cc60e3fb",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 18-arm surface-attestation closeout. Numeric novelty/alignment ratings are author opinion, not external measurement. Lane-B capture is not proof of actual tool authority, human consent or host enforcement. F1 retro fixture honestly withheld; proposed dogfood is not shipped evidence.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "92ec72dad2970ddb0ddcd835d1292fb996cfb04ce397cc78bf448db3cc60e3fb"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4O_REVIEWER_CHECKLIST.md",
@@ -4509,11 +4509,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "7f322955fac1012bd6585276f7fcd6223e6c9ee8caec6faa8ffb2e51c29a06ca",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete checklist. Every-claim/no-trust wording overstates trust in code, keys, supplied facts and formal-model bridge. Selective membership is not full bundle validation. Digest/enums in committed Lane-B artifact do not establish that capture tooling never retained stderr or used pinned package versions.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "7f322955fac1012bd6585276f7fcd6223e6c9ee8caec6faa8ffb2e51c29a06ca"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4O_THREAT_MODEL.md",
@@ -4522,11 +4522,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "38658c6aadf44f68953d571f13bc0a9c358035d48b21f318b0886216bf23326c",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete boundary and raw-code table. Applies to calls routed through authorise_with_manifest; integrity of recorded decisions does not witness all real tool execution. Delta-bound approval is not proof of human reading, and timeline is attestation-time, not real-time. Dictionary inference remains explicit.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "38658c6aadf44f68953d571f13bc0a9c358035d48b21f318b0886216bf23326c"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4O_VALIDATION_MATRIX.md",
@@ -4535,11 +4535,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "55bfbb35a87561fb4fbe3207fdac76aa32c3ba98b27c73f83a2783e7da3741db",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete nonnumeric gate-order matrix. Three green arms establish finite non-reject-all behavior, not benign utility in deployment. Node/Python gate parity excludes timeline raw 66, which is attestation-only. Formal theorem, parity vectors and execution evidence remain separate.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "55bfbb35a87561fb4fbe3207fdac76aa32c3ba98b27c73f83a2783e7da3741db"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4P_CLOSEOUT.md",
@@ -4548,11 +4548,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "6fc04386bda9a66a2493b9581bb691d744d0856fc6cfe63aa2f530adb1f67a84",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete custody closeout. Matching recorded digests does not prove real upstream identity or independent provider corroboration. Cross-window token inequality is not cryptographic unlinkability with a public anchor. Scorecard is author judgment; historical aggregate RED remains disclosed, not a current blanket exemption.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "6fc04386bda9a66a2493b9581bb691d744d0856fc6cfe63aa2f530adb1f67a84"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4P_REVIEWER_CHECKLIST.md",
@@ -4561,11 +4561,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "2115bed7df93abca610693d34975efb8e6e3a9c06f8c97e184c5e7a033b40678",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete checklist including full reread of truncated 16-row mapping. Source confirms reproduce rewrites committed fixtures, so use disposable checkout. Embedded key is not an external trust pin; canonical-equivalent edits need not fail. Entropy floor is an evidence-kind lookup, not measured entropy. No raw text in output does not establish capture secrecy.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "2115bed7df93abca610693d34975efb8e6e3a9c06f8c97e184c5e7a033b40678"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4P_THREAT_MODEL.md",
@@ -4574,11 +4574,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "0576f46ff3d63d57a829d7372591219c41d029076b801badad8fca62f45515e0",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete model. Per-arm signature result can be injected; distinguish supplied signature facts from outer attestation cryptography. Missing attestation is absence of evidence, not misconduct. Offline recorded path checks cannot reveal wholly omitted real hops. Current source drift does not invalidate dated zero-src result.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "0576f46ff3d63d57a829d7372591219c41d029076b801badad8fca62f45515e0"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4P_VALIDATION_MATRIX.md",
@@ -4587,11 +4587,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "00d06de93b199acc5b0135a726ee5fe2239c7ca1397645999173f7cb1057681a",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete counts and nine-step reproduce. Lane A 25 includes boundary green cases beyond the two named green arms; B six/C one/CPC five/invention seven have separate denominators. Replays are finite fixture outcomes, not proxy-detection rates. Cross-window digest difference does not prove unlinkability.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "00d06de93b199acc5b0135a726ee5fe2239c7ca1397645999173f7cb1057681a"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4Q_CLOSEOUT.md",
@@ -4600,11 +4600,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "4d76af8a88772b3e9eba26051bdba212b9653d3a2e1332618f1ee06160c1ffc9",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete VFR closeout. Human-at-terminal capture uses environment confirmation, not independently observed human intent. Census equals supplied chain by construction, not all real crossings. Distinct keys and OS processes remain same-operator. Historical RED and future tag notes are dated.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "4d76af8a88772b3e9eba26051bdba212b9653d3a2e1332618f1ee06160c1ffc9"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4Q_REVIEWER_CHECKLIST.md",
@@ -4613,11 +4613,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "0505be79d65c516bdac2e8ea8366c886f21a945b72ad7ced7964fe4000e62173",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete checklist. BYO private-key example writes a predictable /tmp path with default mode; corrected guidance should use mktemp directory and restrictive umask. Decision equivalence is not byte identity or organizational independence. Python cryptography environment prerequisite retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "0505be79d65c516bdac2e8ea8366c886f21a945b72ad7ced7964fe4000e62173"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4Q_THREAT_MODEL.md",
@@ -4626,11 +4626,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "7aed6dc2ce081813f7f77d5e6ed6f0166bc9a2fef14cb654d1dfb79fdb59fbac",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete recorded-order model. Rendering digest binds claimed bytes, not independently witnessed display or comprehension. Harness census cannot discover wholly unrecorded crossings. No Silent Exemption is policy-falsifiable declaration. Standards mapping is evidence-format alignment, not compliance.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "7aed6dc2ce081813f7f77d5e6ed6f0166bc9a2fef14cb654d1dfb79fdb59fbac"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4Q_VALIDATION_MATRIX.md",
@@ -4639,11 +4639,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "bc343f5d2851b7477f70fa5e06e1e469500a5c2023c1c4e753afdb874eaf0242",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 15-case Lane A and ten-arm Lane B. Per-claim checklist 16-arm pincer count is a different test surface and needs no silent denominator merge. Separate-process approver and confirmation do not prove human presence. Signature parity and model theorem remain separate assurances.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "bc343f5d2851b7477f70fa5e06e1e469500a5c2023c1c4e753afdb874eaf0242"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4R_CLOSEOUT.md",
@@ -4652,11 +4652,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "d9c06f64913ac8bb5a325d375ed65c56181dfcfa9c168d2f7e8a49975c78d2b8",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete PCCC closeout. Actual 4P corpus/4N anchor and full 4Q receipt integration are explicitly deferred despite opening names. Fixture attestation key is public test material. RFC-6979-style nonce is not conformance. Historical independent-review claim needs provenance beyond a self-signed key/challenge.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "d9c06f64913ac8bb5a325d375ed65c56181dfcfa9c168d2f7e8a49975c78d2b8"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4R_REVIEWER_CHECKLIST.md",
@@ -4665,11 +4665,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "62d31dc910b838bd7ca53b82193b819a5c9ae0e731e026a7373bbe879bde9b0a",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete checklist. RFC8032 basepoint/key vector checks do not certify the custom DLEQ protocol or constant-time implementation. Python parity is a second implementation, not independent institutional audit. Lane B verify-only and staged CERA remain distinct from completed external countersignature.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "62d31dc910b838bd7ca53b82193b819a5c9ae0e731e026a7373bbe879bde9b0a"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4R_THREAT_MODEL.md",
@@ -4678,11 +4678,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "1e7e15b63534747ae6f2ad066487627bc2ca532fb565ec2f182f27caf2ed5f12",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete model. DLEQ proves algebraic consistency for supplied class inputs, not truthful real class membership. Colluders can choose identical invented inputs without breaking Fiat-Shamir assumptions. Epoch-domain separation does not eliminate all metadata correlation. Full 4Q integration deferred in closeout.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "1e7e15b63534747ae6f2ad066487627bc2ca532fb565ec2f182f27caf2ed5f12"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4R_VALIDATION_MATRIX.md",
@@ -4691,11 +4691,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "58ccba5cabbb787cfa91cff568531621323cd5b89ef97f4f316d6cf09f3efd29",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 19-row corpus and three Lane-B arms. Raw 90/93/96 have multiple subreasons; per-code coverage is finite fixture reachability. Match/no-match/refusal are process-level outputs, not real two-organization evidence. No new cryptographic review inferred.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "58ccba5cabbb787cfa91cff568531621323cd5b89ef97f4f316d6cf09f3efd29"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4S_CLOSEOUT.md",
@@ -4704,11 +4704,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "ab92509842812d65c61939017b35948d9d5de9c8309fcae8afd10673097c9e97",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 18-fixture delegation closeout. Content-addressed cycles are computationally difficult under hash assumptions, not mathematically impossible because hashes have no fixed points. 104 and 118 are defensive unit paths, not full corpus reachability. Public key index does not authenticate external participants; completeness is declared-boundary-relative.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "ab92509842812d65c61939017b35948d9d5de9c8309fcae8afd10673097c9e97"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4T_CLOSEOUT.md",
@@ -4717,11 +4717,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "3177dee2481ccf9e52e5762a9c6709e23c607d044c68f6c67126189fa4a35881",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete incident closeout. Separates pinned Article55 and draft Article73 templates, but first-ever/automatic-law-timing claims exceed evidence. Six of22 sections are machine projections, not complete legal answers. Synthetic beat anchoring is not actual incident awareness or filing. Browser/public-tier parity excludes signature and engine rerun.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "3177dee2481ccf9e52e5762a9c6709e23c607d044c68f6c67126189fa4a35881"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4U_CLOSEOUT.md",
@@ -4730,11 +4730,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "deba74d65cf309a3bcf9de14a4f2a6407cb31c5b700f9288bb42a48ed88d2618",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete red-team closeout. The 58 items include eight benign differential fixtures; 0/58 is not 58 hostile attempts. Rewrapped predecessor cases demonstrate regression resistance, not novel attack discovery. Signature binding does not independently establish pre-run chronology. M48 qualifies the cycle claim.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "deba74d65cf309a3bcf9de14a4f2a6407cb31c5b700f9288bb42a48ed88d2618"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4V_CLOSEOUT.md",
@@ -4743,11 +4743,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "d7fe3ce8922f84f5f69dc6de6167e82fab7ad32e63f7a2e4783b4078a62a0c29",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete counter-capsule closeout. Conflict status and mirror symmetry do not adjudicate truth or legally compel disclosure. Six recomputation sections and16 judgment-only are registry-scoped. Respondent-blindness booleans/minimal env are not OS access isolation. Firstness and internal scorecard are not external findings.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "d7fe3ce8922f84f5f69dc6de6167e82fab7ad32e63f7a2e4783b4078a62a0c29"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4V_REVIEWER_CHECKLIST.md",
@@ -4756,11 +4756,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "eddf33503c6e72ca835fc08d7afd71d38a9fb48ab9e84f7db9bc358a1f849d7d",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete checklist. Same Rules and locality apply to frozen derivation; browser/Python public parity excludes signatures/subpoena. Binding tuple prevents version substitution but does not prove a regulator filing occurred. Source-drift command is historical and changes with HEAD.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "eddf33503c6e72ca835fc08d7afd71d38a9fb48ab9e84f7db9bc358a1f849d7d"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4V_THREAT_MODEL.md",
@@ -4769,11 +4769,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "93dfb5e7e00d6a501676ce361c5ea83ed0c671f8a20b456445beade52520687a",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete model. Separate process/minimal environment does not prevent shared-user filesystem access to operator state. Mirror self-agreement is a symmetry check, not full absence-of-bias proof. Digest-only judgment is recorded, not substantively assessed. Contest/subpoena terminology is mechanical, not legal.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "93dfb5e7e00d6a501676ce361c5ea83ed0c671f8a20b456445beade52520687a"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4W_CLOSEOUT.md",
@@ -4782,11 +4782,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "08a196d164804bd93cc75abbaca6af9b8d60b21cb5890ab127856e0934e033d9",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete lexical narrative closeout. Claim-lookalike coverage is bounded to frozen English-centric rules, not every factual statement or fabricated citation. C2PA/in-toto subject bridge is not format-wide conformance or semantic truth. Reported secondary-source figures remain unverified; legal date and browser-parity qualifications apply.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "08a196d164804bd93cc75abbaca6af9b8d60b21cb5890ab127856e0934e033d9"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4X_CLOSEOUT.md",
@@ -4795,11 +4795,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "bab5615ea8cc21f81c8a8394dd428fa72023b79494959f91d3684c7a1fb21e75",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete six-item residue closeout. One-of-six remaining miss is observed corpus residue, not a proved irreducible semantic floor. Author chooses seeds and transform table; deterministic residue does not remove selection bias. v2 union makes monotonicity by construction. Lane B is process-separated, not independent implementation/operator.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "bab5615ea8cc21f81c8a8394dd428fa72023b79494959f91d3684c7a1fb21e75"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4Y_CLOSEOUT.md",
@@ -4808,11 +4808,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "0eae5f2f7e3776fd9ea505e0d31a5e08cc7a6cdb57c3b8d68f2e3c8e0c9561c0",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete ten-fixture document residue closeout. Counts18regions34applicable15/2slips are shadow-transform observations, not document truth or all possible slips. Public map reveals lengths/geometry and cannot establish withheld text analysis. Any-UTF8 needs canonical/size/runtime scope. Claimed regulatory deadline/secondary incident figures not fresh verified facts.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "0eae5f2f7e3776fd9ea505e0d31a5e08cc7a6cdb57c3b8d68f2e3c8e0c9561c0"
     },
     {
       "path": "docs/research/llm-shield/STAGE_4Z_CLOSEOUT.md",
@@ -4821,11 +4821,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "d2c5c726a735830066a1cfa3f7f0127bc0773a793a68563c635feacf11324c8a",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete workspace closeout. Opening reference-monitor language must be read with explicit Lane-C not-executed caveat; elided lens was completed in5B. Declaration signature binds bytes, not external before-capture chronology. Public withheld-tensor verification is structural. Decimal-string exactness and model-scale limitations retained.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "d2c5c726a735830066a1cfa3f7f0127bc0773a793a68563c635feacf11324c8a"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5A_CLOSEOUT.md",
@@ -4834,11 +4834,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "226137c81d36879ade2ac9520a0c5593f8a8ada57a057180e461ee34b5d2d006",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete narrative/workspace closeout. No real 1B capture, Neuronpedia export or constitution slice ran in this stage. Mechanism-paid sockets are not completed data runs. M34 records four browser negative cases accepted by the archived page. Declared narrative/telemetry conflict is not faithful introspection.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "226137c81d36879ade2ac9520a0c5593f8a8ada57a057180e461ee34b5d2d006"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5B_CLOSEOUT.md",
@@ -4847,11 +4847,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "a4212603447d1d83c7cdf4e51dca14146012966068d54b133cbfe429be7d4e85",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete grounded 46-item closeout. The reported twice-identical 1B CPU capture is runtime-scoped. Most families test signature or structural tampering; 0/46 is not semantic robustness. A separate capture builder does not establish an independent operator. Browser assurance remains scoped.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "a4212603447d1d83c7cdf4e51dca14146012966068d54b133cbfe429be7d4e85"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5C_CLOSEOUT.md",
@@ -4860,11 +4860,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "3dcef7faa0259a84b17e39d3981d57d803520c65c7958af1937e5b96c4396cb9",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete semantic-bypass closeout. Nine slips among 54 grid cells coexist with 19 catches and 26 degenerate cells. Earlier 4X/4Y already report nonzero residue, so first-nonzero wording needs a narrower scope. Digest-bound severity does not prove severity correctness. Real-detector lane was not run.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "3dcef7faa0259a84b17e39d3981d57d803520c65c7958af1937e5b96c4396cb9"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5D_CLOSEOUT.md",
@@ -4873,11 +4873,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "cc14a1dfdea61b4f54fd57fe4d3628d4472bb04b08e791936e0d7de3fdac3671",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete three-round, 18-slip closeout. The trilemma concerns a finite declared lattice with an asserted third corner, not a universal impossibility. Consistently omitted rounds can remain undetected. Human labels and model provenance are declared; corroboration is not organizational independence.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "cc14a1dfdea61b4f54fd57fe4d3628d4472bb04b08e791936e0d7de3fdac3671"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5E_CLOSEOUT.md",
@@ -4886,11 +4886,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "ac9b71f72c6d74b6ad4d2e26257bd690582edc77c261cd9baec6fec43065ed52",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete pinned PG2 closeout. Four of eight bases flagged; all four flagged bases slipped; four were baseline misses. Foreign verify-only reproduction rebuilds score arithmetic, not model inference. Desktop-only log is not repository evidence. The five-sibling sentence lists six stages. Meaning equivalence remains human-adjudicated.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "ac9b71f72c6d74b6ad4d2e26257bd690582edc77c261cd9baec6fec43065ed52"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5F_CLOSEOUT.md",
@@ -4899,11 +4899,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "80151cc061c1b7c3e1850886ab641b4ff1db8638a221c859401aa811282c6b34",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete panel closeout. Synthetic PG2/LG4 roster differs from real PG2/LG3-1B two-case capture. Different semantics limit label comparisons. Universe equal to roster yields zero omission bound without representativeness. Foreign replay and new evidence generation remain separate; no external pilot means process-owner adoption.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "80151cc061c1b7c3e1850886ab641b4ff1db8638a221c859401aa811282c6b34"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5G_CLOSEOUT.md",
@@ -4912,11 +4912,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "e8330b7be3b58553fed0ee4da03b6702593d5a7717de23a87e23e94d098cd063",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete foreign-capture closeout. Distinct keys and challenge binding do not prove non-affiliation or key non-possession. Retain reported outside-party provenance without deriving identity from hashes. Real Sigstore rung 2 remained pending; July release status is historical. Capture participation differs from process-owner adoption.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "e8330b7be3b58553fed0ee4da03b6702593d5a7717de23a87e23e94d098cd063"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5H_CLOSEOUT.md",
@@ -4925,11 +4925,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "6761aad9a9227986a9fde16eb5645bf0a11fa1997387cd39ed4d89924c89db79",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete disclosure closeout. Review hosts replayed a specific aggregate recipe; producer-side 0.94 placeholder failed 311 and was not a real evaluation. Host pins do not prove honesty. Final pending-to-completed instruction is stale. Achieved separation and remaining affiliation requirements must be distinguished.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "6761aad9a9227986a9fde16eb5645bf0a11fa1997387cd39ed4d89924c89db79"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5I_CLOSEOUT.md",
@@ -4938,11 +4938,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "38119043de5572fd5fc3b381f612128a8253ccbd9fd0a3e5365eae7795bbbb5a",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete coverage closeout. The 37-section public-structure ceremony does not observe the confidential report or actual provider review panel. Affiliation is modeled; separation is challenge-bound. Final pending-to-completed instruction is stale. Bounded adequacy vocabulary and access receipts do not prove careful reading.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "38119043de5572fd5fc3b381f612128a8253ccbd9fd0a3e5365eae7795bbbb5a"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5J_CLOSEOUT.md",
@@ -4951,11 +4951,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "6ddf4c52de4ef850f047c824db7969dcab3e40ee864e03280035c6c23e78b0bb",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete contest closeout: 39 reviewer pairs, 37 sections and three divergences. Distinct-key-only is not externally anchored identity. Append-only completeness is relative to committed roots. Absence of a correctness field does not preclude all semantic overclaims. Keyless anchor remains pending in this record.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "6ddf4c52de4ef850f047c824db7969dcab3e40ee864e03280035c6c23e78b0bb"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5K_CLOSEOUT.md",
@@ -4964,11 +4964,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "47dfdfdf4ab8ebe0f17ff08c9b05ab1678dd5f173c71108abbce5fd61b6758b1",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete universe closeout. Tree-size 1\u20139 tests are finite; the formal theorem assumes collision resistance. OTS binds file bytes and publication evidence, not actual decision time or independent ceremony. The later confirmation supersedes the pending paragraph. Foreign replay did not create a distinct-verifier ceremony.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "47dfdfdf4ab8ebe0f17ff08c9b05ab1678dd5f173c71108abbce5fd61b6758b1"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5L_CLOSEOUT.md",
@@ -4977,11 +4977,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "daa89225bea162f8cd4580cbac6f9acf9c3700f2a1cb3ac7dad258b5cdf57609",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete temporal-quorum closeout. Real TSA/OTS material does not mean the verifier consumed a real confirmed quorum bundle; that integration remained pending here. Access guarantees cover declared release gates, not out-of-band copies. Eight Sonnet attacks and a Fable refusal are distinct historical captures. Browser checks the adapter statement.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "daa89225bea162f8cd4580cbac6f9acf9c3700f2a1cb3ac7dad258b5cdf57609"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5M_CLOSEOUT.md",
@@ -4990,11 +4990,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "deb535382b026b75d84caed4a13a10ce6d6aec76bdb354cbd82fb23440ea66fc",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete three-root quorum closeout. Earlier independent two-machine receipt was raw372 pending, not the later confirmed raw0 bundle. Stage5Q-F002 subsequently falsified the local six-attack containment claim: five arms measured pristine input. Separate real anchor verification from invalid adversarial coverage; browser adapter-attestation is not independent anchor crypto.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "deb535382b026b75d84caed4a13a10ce6d6aec76bdb354cbd82fb23440ea66fc"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5N_CLOSEOUT.md",
@@ -5003,11 +5003,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "385193d265ad9b286b00e466bc05dd1f7492d5a8b795ab1975b298d707efa47b",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete delay closeout. The 90,000 ms result assumes declared one-second uncertainty at each TSA endpoint; absent token Accuracy does not justify that default. Final commitment dependency does not establish decision-formation time. Chain replay, anchor verification and an outside full ceremony have distinct scopes. One external finding remains open.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "385193d265ad9b286b00e466bc05dd1f7492d5a8b795ab1975b298d707efa47b"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5N_FALSIFICATION_CHARTER.md",
@@ -5016,11 +5016,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "ba13535ef14ca03094a9967e4fbd7d3fa98bd9c13f604cf6c21941d33e324d7c",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete charter. False-green physical-time target is conditional on trusted clock/uncertainty, which charter explicitly excludes challenging. Pre-decided verdict is a misleading label for pre-input final commitment; a human can decide earlier. Typed-band claim needs upstream raw-code scope. Signed charter does not authorize new inference or external reporting.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "ba13535ef14ca03094a9967e4fbd7d3fa98bd9c13f604cf6c21941d33e324d7c"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5N_PRIOR_ART_MAP.md",
@@ -5029,11 +5029,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "77718fba4a3e377efc4556c1179bd349ea3900dcc65d7a5820df3510803b5928",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete seven-family map. VDF efficient verification is not universally an exponential evaluation/verification gap. RFC3161 explicitly discusses token ordering and accuracy; absent accuracy needs policy evidence. Broad claim that C2PA/in-toto/SCITT only carry asserted times omits trusted timestamp/receipt composition. Dependent output commitment does not exclude a previously made semantic decision.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "77718fba4a3e377efc4556c1179bd349ea3900dcc65d7a5820df3510803b5928"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5O_CLOSEOUT.md",
@@ -5042,11 +5042,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "5ccc74ced48b82964213c03bff234506b2afa0b527b145615f65a57094c51987",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete13-section release closeout. Exact rational probability is conditional on sampling/model assumptions, not empirical detection calibration.210/210 export references are not behavioural coverage. Earlier stages already had semantic decision parity, so first-arithmetic/every-earlier-only-hashing overstates distinction. Only-CI-gated-stage statement is a dated finding superseded by later workflow integration.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5ccc74ced48b82964213c03bff234506b2afa0b527b145615f65a57094c51987"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5P_CLOSEOUT.md",
@@ -5055,11 +5055,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "2213fa7dde3ccaeda72e8887f3d40e697de1fdb428a6d86071d2577168a5c1a7",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete identity closeout. The 3,631/3,639 result with zero failures leaves eight non-passing outcomes. Self-managed-key Rekor signing does not establish Fulcio/OIDC identity. Official Sigstore permits automated OIDC. Unexecuted C2 is a project limitation, not global impossibility. LEI snapshot hashing is not a live registry signature.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "2213fa7dde3ccaeda72e8887f3d40e697de1fdb428a6d86071d2577168a5c1a7"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5P_PRIOR_ART_MAP.md",
@@ -5068,11 +5068,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "9e6bd67a98ef2060e88e7e1608f738ab3a53dbe56f45ca3b4eafb429f7348765",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete six-family identity map. Signature validity duration is not the full lifetime of principal accountability; PKI is not inherently durable identity. Partial order describes declared axes, not statistical independence. W3C/CAWG ecosystem absence claims need scope; no conformance or legal Article18 fulfillment inferred. Earlier keys/source quotes retained as dated records.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "9e6bd67a98ef2060e88e7e1608f738ab3a53dbe56f45ca3b4eafb429f7348765"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5Q_CLOSEOUT.md",
@@ -5081,11 +5081,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "6e5deb12d869ebfd17ee2a52da55d338bf53de830b69240f960dd28341cf8d9d",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete Q0 closeout and F013 addendum. Coverage is 1,438/23,332 cells and nine of 2,531 members. Twelve frozen findings and the separate addendum must not be combined into a rewritten root. Q1 remains unauthorized in the frozen transition. F002/F003 qualify 5M containment and import safety; green reproduction is not completion.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "6e5deb12d869ebfd17ee2a52da55d338bf53de830b69240f960dd28341cf8d9d"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5R_CLOSEOUT.md",
@@ -5094,11 +5094,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "e37fc6b3340124b4d850a4419def47bb7a3631fbd969a1d7d06e9a4cdb8d0cfb",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete static-probe closeout. Eight families attempted, 47 not attempted, universe 55. Of 2,406 selected cells, 210 are probed-not-discharged and 2,196 unprobed; all-probed wording is wrong. Zero new discharge, 15,301 under-supported cells and 23,332 inherited obligations are distinct. Later inadmissibility does not erase earlier records.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "e37fc6b3340124b4d850a4419def47bb7a3631fbd969a1d7d06e9a4cdb8d0cfb"
     },
     {
       "path": "docs/research/llm-shield/STAGE_5S_CLOSEOUT.md",
@@ -5107,11 +5107,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "b92c6cd0a5faac0f91f27fa9b49a228c6f1e43cd2853dce90c9681c7a0537a8f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete witness closeout. Historical 5,424/5,425 passes include one skip. The 151-step run differs from current smoke. Same-operator witnesses and comparison-bounded findings remain explicit. Repository-none-outstanding conflicts with two open 5Q findings. Atomic-write observations do not prove zero future failures. No real browser ran.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "b92c6cd0a5faac0f91f27fa9b49a228c6f1e43cd2853dce90c9681c7a0537a8f"
     },
     {
       "path": "docs/research/llm-shield/anthropic-brief.html",
@@ -5133,11 +5133,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "ea13dc681b338eb82952a0990a62b1645014dd7f27f7706243d6bd7757abc812",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete live-AgentDojo overview. The 5/5 benign and 0/30, 0/42 attack observations concern selected stock tasks. Llama 10-to-8 attack successes and 8-to-6 benign successes lack reported uncertainty; within-noise is interpretation. Ambiguous 25\u201342/case must not replace committed 29/30. Nonzero-baseline future-work wording is stale.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "ea13dc681b338eb82952a0990a62b1645014dd7f27f7706243d6bd7757abc812"
     },
     {
       "path": "docs/research/llm-shield/evidence/stage-1-live/RUNPOD-LLAMA-RUNBOOK.md",

@@ -1,0 +1,30 @@
+{
+  "baseline": "15105bac03588d601a2961b3d6f61db72c3b37a4",
+  "prior_checkpoint": "b63b5328da101225c5a3b861c0c13b31aa504784",
+  "manual_read_count": 600,
+  "candidate_count": 919,
+  "complete": false,
+  "append_only_logs": true,
+  "checks": {
+    "changed_file_format": "pass",
+    "git_diff_check": "pass",
+    "local_links": {
+      "documents": 813,
+      "links": 1849,
+      "issues": 0
+    },
+    "candidate_identity": "919 unique baseline paths and hashes preserved; 600 complete reads, 319 pending; reviewed hashes current; scratch and tracked ledgers identical",
+    "preservation": "Prior HEAD AGENT.md and CHANGELOG.md bytes are exact prefixes; all other changes confined to audit records; frozen stage source, specs, captures and evidence unchanged",
+    "prior_authority": "4ca41a95 is a strict ancestor of prior_checkpoint",
+    "corrected_stage4k_command": {
+      "runtime": "Node 26",
+      "output": "fresh temporary directory outside repository",
+      "builder_exit": 0,
+      "ledger_cmp_exit": 0,
+      "committed_evidence_changed": false,
+      "scope": "Actual fixture builder and deterministic ledger comparison; temporary fresh key generated in memory; no new live capture or external ceremony"
+    }
+  },
+  "sources": "Fresh relevant passages from Commission GPAI/Article73 guidance, NIST agent-security RFI, RFC3161, Sigstore identity-token guide, Anthropic June30 redeployment and October12 distillation report; see SOURCES.md and M45\u2013M52.",
+  "scope": "Documentation checkpoint and one corrected local command; no runtime changes, inference, full E2E rerun, hosted CI run, external identity verification or interactive browser/desktop validation."
+}

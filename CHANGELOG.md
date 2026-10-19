@@ -4287,3 +4287,25 @@ Owner-requested work; implementation and review by Codex assistance.
   No new full E2E, independent custody or interactive browser/desktop validation is claimed.
 - **Remaining:** Continue all unread stage evidence, specifications, plans and large logs, then
   resolve outstanding source checks and validate the complete ledger before claiming completion.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 600-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under preceding declaration `4ca41a95`. Complete manual reads
+  now cover 600 of 919 baseline candidates; 319 remain unread. The exhaustive audit continues.
+- **Changes:** Add M45–M52 errata for Stage 3S–5S and the early live-AgentDojo overview.
+  Separate legal reporting regimes, conditional cryptographic claims, recorded consistency,
+  real observations, model runs and independent reproduction. Preserve all frozen records.
+- **Evidence:** Link Stage 5Q's later falsification of Stage 5M's six-attack containment claim.
+  Inspect the Stage 4P reproduce and CPC digest/emission code, the release-witness workflow,
+  and the Stage 4K fixture builder. The corrected Stage 4K temporary-output rebuild runs
+  under Node 26 and its deterministic ledger matches the committed bytes.
+- **Sources:** Recheck Commission GPAI/incident guidance, NIST's agent-security RFI, RFC 3161
+  accuracy semantics, Sigstore automated OIDC guidance and Anthropic's October 12 distillation
+  update. Record source dates and distinguish vendor reports from project measurements.
+- **Validation:** Record formatting, links, baseline identities, reviewed hashes and append-only
+  preservation in the checkpoint receipt. No runtime changes, new inference, external ceremony,
+  full E2E rerun or independent custody claim.
+- **Remaining:** Continue every pending evidence document, specification, plan and large log;
+  resolve remaining claim checks before marking the manual audit complete.
