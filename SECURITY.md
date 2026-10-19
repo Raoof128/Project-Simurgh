@@ -24,6 +24,22 @@ The separate exact-authority and transactional gateway successor has synthetic l
 credentials/effects, not production IAM. Its SQLite revocation ordering does not extend
 to arbitrary remote services. Demo-mode mock access remains intentionally public.
 
+## Historical provider fallback limitation
+
+The documentation audit reproduced an adapter/orchestrator mismatch in the preserved Stage 3R
+modules using an injected local SDK client. A provider response with `stop_reason: "refusal"`
+and empty `content` becomes `gateway_provider_empty_response`; orchestration classifies it as
+an availability failure and attempts fallback even when refusal fallback is disabled. The
+terminal Simurgh precheck still prevents a swap. The adapter also drops the original stop
+metadata and converts client/setup exceptions into generic provider errors, which can enter
+that availability path. These observations qualify historical claims that all provider refusals
+are opt-in and all setup errors are terminal configuration rejections.
+
+The current mounted legacy live route is already retired with HTTP 410. That restriction does
+not repair direct module use or old revisions. The [four-case local probe and correction](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m43--historical-provider-fallback-contract-does-not-match-all-response-shapes)
+record the scope; no live API or HTTP route was exercised. These modules need a separately
+reviewed implementation change before a successor can claim the historical refusal contract.
+
 ## OpenAI demonstration trust boundaries
 
 - Model output and retrieved context cannot grant permissions. A trusted local registry

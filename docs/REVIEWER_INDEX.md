@@ -72,6 +72,12 @@ misleading status/privacy copy and a verdict-rendering mismatch. See
 Use the maintained explorer for the current dashboard demonstration; the historical pages are
 not a current participant-study or working exam-interface handoff.
 
+Historical research briefs also require the [claim corrections](documentation-audit-2026-10-19/MANUAL_REVIEW.md#m40--historical-briefs-require-bounded-claims-and-complete-verification-inputs):
+distinct keys are not independent approval, a signature does not prove execution truth, and
+completeness is bounded by declared participants and instrumented boundaries. The preserved
+Stage 3R adapter has an [empty-refusal fallback mismatch](documentation-audit-2026-10-19/MANUAL_REVIEW.md#m43--historical-provider-fallback-contract-does-not-match-all-response-shapes);
+the current mounted legacy live route remains retired with HTTP 410.
+
 ## Historical and supporting material
 
 | Collection                                                                                              | How to read it                                                                                          |

@@ -4266,3 +4266,24 @@ Owner-requested work; implementation and review by Codex assistance.
   preservation checks. No inference, outreach, deployment, gate or runtime change.
 - **Remaining:** Continue the unread stage records, plans, specifications and large logs;
   preserve unresolved runtime defects and outside-validation limits as explicit findings.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 500-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under preceding declaration `4ca41a95`. Read 500 of 919
+  baseline candidates completely; 419 remain pending. This is a progress checkpoint.
+- **Changes:** Add M40–M44 corrections for historical briefs, regulatory projection, early-stage
+  measurements, reproduction commands and fallback claims. Preserve frozen stage files and
+  scientific evidence; update current security and reviewer guidance directly.
+- **Finding:** A local injected-client probe shows the preserved adapter converts an empty
+  provider refusal into an availability failure, allowing fallback with refusal fallback off.
+  Terminal local prechecks still prevent swaps. The mounted legacy live route is already
+  retired with HTTP 410; direct module use and old revisions retain the mismatch.
+- **Evidence:** Inspect committed AgentDojo metrics, adapter/orchestrator code and the Stage 3K
+  metric implementation. Recheck official EU Article 73/113, Anthropic refusal/reference-event
+  guidance and J-space monitoring limitations. No live provider call or runtime mutation.
+- **Validation:** Retain the four-case local probe and document checks in the checkpoint receipt.
+  No new full E2E, independent custody or interactive browser/desktop validation is claimed.
+- **Remaining:** Continue all unread stage evidence, specifications, plans and large logs, then
+  resolve outstanding source checks and validate the complete ledger before claiming completion.

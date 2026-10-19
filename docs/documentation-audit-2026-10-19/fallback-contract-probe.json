@@ -1,0 +1,62 @@
+{
+  "schema": "simurgh.documentation_audit.fallback_contract_probe.v1",
+  "checked_at": "2026-10-19",
+  "source_revision": "e7776ab8",
+  "scope": "Local injected SDK client plus actual adapter/normalizer/orchestrator. No HTTP route or live provider invocation. Local rejection precheck is passed to orchestration; its adapter invocation is synthetic setup, not a route call.",
+  "network_calls": 0,
+  "runtime_modified": false,
+  "cases": [
+    {
+      "id": "empty_refusal_flag_off",
+      "adapterCalls": 1,
+      "orchestratorAttempts": 2,
+      "normalisedKind": "error",
+      "errorCode": "gateway_provider_empty_response",
+      "normalisedStopReason": null,
+      "refusalRecognisedByMetadataHelper": false,
+      "fallbackUsed": true,
+      "trigger": "availability",
+      "terminalReason": null,
+      "finalVerdict": "warning"
+    },
+    {
+      "id": "text_refusal_flag_off",
+      "adapterCalls": 1,
+      "orchestratorAttempts": 1,
+      "normalisedKind": "refusal",
+      "errorCode": null,
+      "normalisedStopReason": null,
+      "refusalRecognisedByMetadataHelper": false,
+      "fallbackUsed": false,
+      "trigger": null,
+      "terminalReason": "refusal_fallback_disabled",
+      "finalVerdict": "accepted"
+    },
+    {
+      "id": "client_setup_error_flag_off",
+      "adapterCalls": 1,
+      "orchestratorAttempts": 2,
+      "normalisedKind": "error",
+      "errorCode": "gateway_provider_error",
+      "normalisedStopReason": null,
+      "refusalRecognisedByMetadataHelper": false,
+      "fallbackUsed": true,
+      "trigger": "availability",
+      "terminalReason": null,
+      "finalVerdict": "warning"
+    },
+    {
+      "id": "empty_refusal_terminal_precheck",
+      "adapterCalls": 1,
+      "orchestratorAttempts": 1,
+      "normalisedKind": "error",
+      "errorCode": "gateway_provider_empty_response",
+      "normalisedStopReason": null,
+      "refusalRecognisedByMetadataHelper": false,
+      "fallbackUsed": false,
+      "trigger": null,
+      "terminalReason": "simurgh_precheck_terminal",
+      "finalVerdict": "blocked"
+    }
+  ]
+}

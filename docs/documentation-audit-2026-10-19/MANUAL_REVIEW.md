@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **400 documents have complete manual reads; 519 remain
+SHA-256 values. At this checkpoint, **500 documents have complete manual reads; 419 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -932,6 +932,187 @@ Both remaining fixture READMEs were read with their implementation:
   check. Use the normal commitment rebuild for the declared full-tree check and retain its
   separate trust assumptions. This audit does not claim that arbitrary empty comparison
   directories are rejected or that a corpus hash proves independent authorship.
+
+### M40 — Historical briefs require bounded claims and complete verification inputs
+
+Full reads of `ANTHROPIC_BRIEF.md`, `ONE_PAGE_BRIEF.md`, both `NORTH_STAR_*` documents,
+`JLENS_COMPOSITION.md` and `NARRATIVE_WORKSPACE_CONFLICT.md` found claims that outrun their
+own later qualifications. Preserve their historical bytes and apply these corrections:
+
+- Completeness is over declared participants, supplied evidence and instrumented boundaries.
+  It does not establish that every real action was logged. Stage 5S compares the supplied views;
+  it does not prove that no conflicting view exists elsewhere. A dishonest signer can produce
+  internally consistent evidence about an unobserved execution. Do not repeat the one-page
+  brief's unqualified claim that an operator cannot fake a receipt.
+- Separate keys and processes do not prove separate people, credential custody or deliberation.
+  Stage 4Q establishes recorded-chain ordering under its trust assumptions, not physical time
+  or impossibility of same-operator approval. GitHub OIDC establishes a workflow provenance
+  root; it does not prove the originating GPU run or an independent human experiment.
+- Offline verification requires the relevant bundle, signature, key, referenced evidence and
+  executable verifier/dependencies. “Only a public key” means no private signing secret, not
+  that the key alone is sufficient. Independently pin the expected identity. Browser parity
+  and verifier completeness are stage-specific; M34 records counterexamples to a blanket claim.
+- The Anthropic brief says its worked example reproduces from a tag but omits checkout in the
+  clone command. For that historical example, explicitly select
+  `v2.26.0-stage-4q-vfr` before dependency installation and use its documented toolchain.
+  A default-branch clone does not select the stated release. The one-page brief is now a long
+  historical briefing, and its test/tag/release/file totals are dated snapshots.
+- “First”, “nobody owns the proof”, “every product trusts the writer”, and claims that all
+  competing mechanisms lack completeness are unverified positioning, not demonstrated results.
+  A finite source map and internal score do not prove absence of prior art. The previously
+  checked Sello discussion includes composition with agent traces (§8.3), so its characterization
+  needs that qualification. The June VCA direction links NIST AI 600-1, the Generative AI Profile;
+  the base AI RMF is AI 100-1. These are distinct publications, neither a certification.
+- The [primary J-space paper](https://transformer-circuits.pub/2026/workspace/index.html)
+  explicitly limits monitoring sufficiency. It does not establish that Simurgh's failures are
+  statistically uncorrelated with J-lens failures, or that external containment guarantees every
+  residual outcome. Signed readout consistency is not faithful access to internal cognition.
+  The claimed Zurvan source/digest locations are external federation references absent here.
+
+### M41 — Regulatory projection is not binding guidance or compliance
+
+The Anthropic brief and VDCC direction incorrectly describe Article 73 guidance as legally
+binding. The [Commission's Article 73 text](https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-73)
+addresses reporting by providers of high-risk systems; the guidance helps implement that duty.
+Its summary expressly distinguishes explanatory text from binding law. The
+[current Article 113](https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-113) gives the
+application schedule and exceptions, including amended high-risk dates. Do not turn a general
+August 2026 date into a claim that every AI duty applies to every system on that date.
+
+The retained Stage 4T capsule maps pinned Article 55 GPAI and draft Article 73 templates.
+Its six machine-derivable sections out of 22 do not discharge legal classification, notification,
+causation, recipient selection or reporting deadlines. An offline capsule is neither a filed
+report nor regulatory acceptance. Older third-party criticism is commentary, not the text of
+Article 73. Sources were checked on 19 October 2026; no legal compliance assessment is claimed.
+
+### M42 — Early-stage metrics and commands retain their original measurement scope
+
+The complete Stage 3A–3X narratives were read. In particular:
+
+- Stage 3C's 18/30 detection is **13 blocked plus five warned**, with the provider still called
+  on warnings. The 7/9 held-out detection is six blocked plus one warned. The nine-fold ratio
+  is the bounded change from 2/30 to 18/30, not evidence that general obfuscation is solved or
+  corpus overfitting has been ruled out by nine held-out attacks.
+- The Stage 3H-L2 narrative's defended utility 0/10, attacked utility 2/20 and over-defence
+  10/10 are not the frozen metrics in this checkout. Direct inspection of
+  `evidence/stage-3h-layer2/metrics.json` gives **10/10 benign utility, 20/20 utility under
+  attack, 0/20 targeted ASR and 0/10 over-defence** for the defended deterministic pipeline.
+  Stage 3I's recovery analysis likewise has zero benign failures. Stage 3N explicitly excludes
+  the transient collapse as prose history. Preserve that history but use the committed fields
+  for measured claims; do not manufacture a frozen before/after comparison.
+- Ground-truth AgentDojo and self-authored mutation runs are distinct from live-model runs.
+  Stage 3G's 180 default observations are not 180 live API calls. Stage 3V-A uses a synthetic
+  recorded fixture; 3V-B replays a captured classifier run without rerunning the GPU model.
+  Three matching greedy captures do not establish population robustness or independent custody.
+- Stage 3T's distinct signal families are declared categories, not statistically independent
+  corroboration. Stage 3U documents benign collisions even for two strong families and opaque
+  256-bit hash slots. Function coverage does not establish exhaustive branch/input correctness.
+  Stage 3V harness-computed hashes address adapter-supplied digest trust in that instrument,
+  not every historical metadata field or unknown input provenance.
+- Stage 3Q proves continuity against the supplied previous head; committed timestamps alone
+  are not trusted wall-clock anchors. Its genesis contains no actual longitudinal regression
+  history. Stage 3S's slot checker establishes equality to a digest, not the digest's truth;
+  prompt-cache-ready is not an observed cache hit, and human-review intent is not a review receipt.
+- Bracketed `[--reproduce]` in the Stage 3M command is optional-argument notation: omit it for
+  portable verification or supply `--reproduce` without brackets. Bare `<model>` and
+  `<server-side-key>` in Stage 3G are shell placeholders, not executable assignments. Do not
+  paste them literally or put real secrets into tracked examples. The Stage 3H `cd` command
+  must run in a subshell or return to the root before the following root-relative command.
+  Producer `--update-*` commands do not authorize overwriting frozen evidence in this audit.
+- The Stage 3E-live closeout reports 85 check steps passed and **two failed** on its macOS host;
+  those are retained failures, not an entirely green suite. Docker/provider skips do not
+  establish container execution or real provider validation. Old “next stage” names are
+  proposals, sometimes superseded by different shipped stages.
+
+Anthropic's [12 June suspension statement](https://www.anthropic.com/news/fable-mythos-access)
+supports the historical reference-event framing in `RELATED_WORK.md` and Stage 3L. It is the
+provider's account, not a Simurgh reproduction of the alleged technique or independent evidence
+of its efficacy. It also does not establish current access restrictions. The fixture register's
+[summer misalignment source](https://alignment.anthropic.com/2026/agentic-misalignment-summer-2026/)
+describes controlled simulations; proposed fixture mappings do not establish implementation.
+
+### M43 — Historical provider fallback contract does not match all response shapes
+
+Source inspection and a [four-case local probe](fallback-contract-probe.json) qualify
+`LLM_SHIELD_STAGE_3R_TRUST_PRESERVING_PROVIDER_FALLBACK.md` and related live-adapter documents:
+
+- The official [refusal guide](https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback)
+  shows HTTP 200 with `stop_reason: "refusal"` and empty content. In the preserved adapter,
+  `normaliseAnthropicResponse` classifies empty content as `gateway_provider_empty_response`
+  before checking refusal. `classifyProviderOutcome` treats that error as availability failure.
+  With a non-terminal local precheck and refusal fallback disabled, the probe still attempts
+  a second model through the availability path. This contradicts a universal opt-in-refusal claim.
+- A text-bearing refusal retains `provider_response_kind: "refusal"` and correctly stops when
+  refusal fallback is disabled. Both shapes lose original `stop_reason`/`stop_details` in the
+  adapter return value, so the router's `isRefusal(attemptRaw)` metadata helper returns false.
+  The historical claim that categories/explanations are always recorded or hashed is too broad.
+  The current provider guide also includes `general_harms`; the older four-category list is
+  not a complete current API enum. The helper itself accepts arbitrary string categories.
+- The adapter catches client construction/API exceptions and returns `gateway_provider_error`.
+  The injected setup-error case also entered availability fallback. The router comment that
+  genuine setup errors always propagate as configuration rejections does not cover this path.
+  `fallback_credit_observed` is derived from the refusal trigger, not a billing/token receipt;
+  `redeemed` remains false. Do not describe it as independently observed credit.
+- A terminal local precheck still prevented fallback in the probe. Its risk values were injected
+  for orchestration; the probe does not establish full HTTP route or consequence-gate behavior.
+  It used the actual adapter, normalizer and orchestrator with a local fake SDK client, no keys,
+  no network and no live model. Runtime and historical evidence were not modified.
+
+The current successor already retires the mounted legacy live route with HTTP 410. Direct
+module calls and old revisions retain these defects. `SECURITY.md` and the reviewer index now
+state this limit. Fixing the preserved runtime requires a separately reviewed implementation
+change; existing synthetic fallback self-proofs do not establish this adapter-response contract.
+
+### M44 — Early closeout checklists contain additional method and reproduction errors
+
+The full Stage 3D–3R closeout, reviewer, threat-model and validation documents were read,
+along with the completed Stage 3I calibration plan. Their requirements are not interchangeable
+with executed results. Apply these additional corrections:
+
+- Stage 3I's root-cause section names the correct provenance enums, but Task 1 Step 3 proposes
+  `agentdojo_benign_seed` / `agentdojo_untrusted_injection` as source types. Those are invalid
+  guard enums. The implemented adapter uses `system_seed` / `synthetic` / `task_data` for
+  authored benign hash metadata, and `tool_result` / `untrusted` / `reference` otherwise.
+  Do not implement the obsolete task instruction or reinterpret raw attacker content as synthetic.
+  The completed header and unchecked task boxes are historical planning state, not new work.
+- `scripts/smoke-llm-shield-stage3h-layer2.sh` invokes the runner and writes the retained output
+  directory directly. It does **not** test `SIMURGH_RUN_STAGE3H_LAYER2`; setting that variable
+  in a historical command does not make it an enforced opt-in. The plan's direct-run note is
+  accurate. Use a disposable reproduction checkout for this writer and preserve the original
+  evidence. A fixed `/tmp` venv path does not ensure a clean environment.
+- Stage 3H-L2's sample digest binds the manifest bytes, but does not by itself prove that the
+  manifest existed before execution. Stored `scorer_modified: false` and version-pin flags
+  likewise do not independently establish source/dependency identity. They need the retained
+  provenance and actual source/runner checks. The high-over-defence sentence repeated in its
+  closeout, checklist and threat model is the excluded history described in M42.
+- Stage 3K's prose defines `operator_asr_delta` as a rate difference, but the implemented
+  `stage3k_metrics.py` stores **integer attack-success counts per operator**, without division
+  by that operator's denominator. Zero has the same value in both representations; positive
+  values must not be reported as percentage-point changes. Preserve the frozen field name
+  and explain its actual units. Its validation table uses XOR for what the implementation
+  expresses as `not (positive_delta and gates_clean)`. Both can be false when an unrelated
+  gate fails, so exclusive-or is not the contract.
+- Stage 3M's “any edit fails” threat-table wording excludes canonical-equivalent JSON changes:
+  formatting and key order do not change the canonical bundle signature. Referenced evidence
+  file-byte hashes have a separate contract. Without an externally supplied expected key,
+  fingerprint agreement with the supplied sidecar establishes internal consistency, not an
+  independently trusted signer. An anchored PEM scan is not proof that no secret ever appeared
+  in any format or in Git history.
+- Stage 3N and 3O retain four non-passing check steps each, alongside 108 and 110 passes.
+  Preserve those failures. A macOS host alone does not prove that Rust formatting/linting or
+  secret-scan failures are unavoidable. Their original environment attribution is an author
+  explanation, not a new diagnosis. Old `main...HEAD` commands depend on branch history;
+  current drift checks must follow the applicable gate lifecycle and frozen baseline.
+- Stage 3Q's UTC validator rejects malformed dates; it cannot reject every fabricated but valid
+  wall-clock assertion. Its genesis has zero real diffs. Clean acceptance and expected
+  regression/improvement classifications are successes in the 12-case self-proof, not 12
+  attack rejections. A wording-audit exemption for fixtures does not establish that no semantic
+  overclaim could exist in them.
+- Stage 3R's threat table calls the swap event “Ed25519/HMAC-chained”. The actual
+  `recordGatewayFallbackSwap` uses the shared HMAC chain; it does not add an Ed25519 signature
+  to each swap. The one-hop orchestration budget does not prove absence of SDK-internal retries
+  or enforcement of a second live-call ledger gate. M43 and the existing scoped security review
+  qualify its mock-fixture and function-coverage claims.
 
 ## Primary sources rechecked during this continuation
 
