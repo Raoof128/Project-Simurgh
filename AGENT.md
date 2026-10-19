@@ -3464,3 +3464,16 @@ one machine's local agent configuration:
 - **Follow-ups:** Continue the remaining complete reads and final evidence checks. Native/browser,
   independent-operator and provider-lifecycle exclusions remain. This progress record must not
   be represented as completed manual review of all documentation.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation review checkpoint: 281/919
+
+Owner-requested work; implementation and review by Codex assistance.
+
+- Read 100 additional documents completely since checkpoint `e46fa0c2`, bringing the
+  continuation to 281 complete reads and 638 pending. This is not an exhaustive-review completion.
+- Added paper, pilot, bibliography and reproduction errata M23–M31. Preserved frozen
+  publication artifacts, evidence and existing log entries. Corrected current security guidance
+  using Apple's and Microsoft's documented capture-affinity limitations.
+- Verification is documentation-scoped: changed-file formatting, local links, exact baseline
+  candidate coverage and preservation checks are recorded in the dated audit checkpoint.
+  No new inference, human study, interactive desktop test or full E2E run is claimed.

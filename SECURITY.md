@@ -113,6 +113,12 @@ disclosure timing with the maintainer; attribution is optional and can be anonym
 - Server validation rejects forbidden raw local fields including process/window names, raw process/window fields, PIDs, usernames, home directories, file paths, serial numbers, MAC addresses, screenshots, pixels, audio, typed content, and pasted content.
 - `scanner_unavailable` and `permission_denied` are accepted as signed scanner states and treated as warning/manual-review context, not automatic findings.
 
+Apple now describes [`NSWindow.SharingType.none`](https://developer.apple.com/documentation/appkit/nswindow/sharingtype-swift.enum/none)
+as a legacy constant and explicitly says not to use it to hide content from capture. A reported
+sharing-state count is an observation about the scanner and OS version; it does not establish
+that a window is invisible to every capture API. Historical demonstrations require their exact
+OS and capture-path context.
+
 ### Stage 2.6 Windows scanner controls
 
 - Windows scanner fields are accepted only inside signed daemon proofs with `platform: "windows"` and `scanner_version: "2.6.0"`.
@@ -121,6 +127,12 @@ disclosure timing with the maintainer; attribution is optional and can be anonym
 - Tampered scanner counts invalidate the P-256 daemon proof signature; replayed proof challenges are rejected.
 - Raw HWNDs, PIDs, process names, window titles, executable paths, usernames, home directories, screenshots, pixels, webcam frames, microphone audio, typed content, and pasted content are forbidden and rejected recursively with the generic `forbidden_local_field` reason.
 - Real-device validation on Windows 10 Pro build 19045 confirmed normal scans, `WDA_MONITOR`, `WDA_EXCLUDEFROMCAPTURE`, signed proof acceptance, tamper/replay rejection, report/dashboard output, audit verification, and privacy audit.
+
+Microsoft documents [`GetWindowDisplayAffinity`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getwindowdisplayaffinity)
+as usable across processes, but successful retrieval requires a layered window and Desktop
+Window Manager composition. Display affinity is not a DRM or universal capture-protection
+guarantee. A signed count therefore describes successfully observed flags, not complete
+visibility into every window or capture mechanism.
 
 ### Stage 2 Windows Device Shield Security Posture
 

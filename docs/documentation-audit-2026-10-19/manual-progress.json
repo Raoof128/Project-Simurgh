@@ -171,7 +171,7 @@
       "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "8b2931d1c4312d1f2b159b659d579cc9f875af964554431b7a498f13067d6d9d"
+      "read_sha256": "0c4950e32a7ed5c28b2e02578b265659a96dad8faa066491780849529e99d451"
     },
     {
       "path": "docs/DECISIONS.md",
@@ -480,7 +480,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "3ba916e3ad192a5d329a1a67fd429dacaaed9ba8253b5fa3501ea30ff40dcb97",
       "status": "read_pending_final_verification",
-      "assessment": "Read encoded-length regression, 16-test final suite and historical census increment27; original sources/evidence preserved. Local replay and SIGKILL do not establish hardware persistence or outside custody.",
+      "assessment": "Read encoded-length regression, 16-test final suite and historical census increment 27; original sources/evidence preserved. Local replay and SIGKILL do not establish hardware persistence or outside custody.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "3ba916e3ad192a5d329a1a67fd429dacaaed9ba8253b5fa3501ea30ff40dcb97"
@@ -493,7 +493,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "64031adc828a7119f3984440aa10559bb510b98bf1d3f68e2cbd1f2d440318a3",
       "status": "read_pending_final_verification",
-      "assessment": "Read36-row network/utility/mailbox controls and syscall boundary. Eight observed attack deliveries vs denied channels retain mailbox failure; descriptor sanitation shared by controls is not credited to filter.",
+      "assessment": "Read 36-row network/utility/mailbox controls and syscall boundary. Eight observed attack deliveries vs denied channels retain mailbox failure; descriptor sanitation shared by controls is not credited to filter.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "64031adc828a7119f3984440aa10559bb510b98bf1d3f68e2cbd1f2d440318a3"
@@ -519,7 +519,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "87e023754b8d6cea9b175ef65af817679432a1d05ebb3cc28201f6733774426d",
       "status": "read_pending_final_verification",
-      "assessment": "Read20-test final receipt and observer accepted-stream timeout regression. Namespace restriction remains explicit; current-set census31 is not historical discharge. Same-host and unarchived temporary logs limits retained.",
+      "assessment": "Read 20-test final receipt and observer accepted-stream timeout regression. Namespace restriction remains explicit; current-set census31 is not historical discharge. Same-host and unarchived temporary logs limits retained.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "87e023754b8d6cea9b175ef65af817679432a1d05ebb3cc28201f6733774426d"
@@ -623,7 +623,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "5b9e75d77018f3496e9f8df7a685e5dbb6adbf7cfdb382fcc3c112e9d05f0c79",
       "status": "read_pending_final_verification",
-      "assessment": "Read57-row descriptor experiment. Twelve attack baselines, three useful tasks, two hygiene and two content-release negatives total19. Approved sockets/files remain communication channels; SO_PROTOCOL check is deferred.",
+      "assessment": "Read 57-row descriptor experiment. Twelve attack baselines, three useful tasks, two hygiene and two content-release negatives total 19. Approved sockets/files remain communication channels; SO_PROTOCOL check is deferred.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "5b9e75d77018f3496e9f8df7a685e5dbb6adbf7cfdb382fcc3c112e9d05f0c79"
@@ -649,7 +649,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "a4a56e01fe3a1cd5670518bf9b46156ff82ff68e0111f010b5edfe72223d0f1f",
       "status": "read_pending_final_verification",
-      "assessment": "Read26-test final result and malformed single-case-envelope fix; minor protocol-validation limitation explicitly retained. Kernel restrictions/fixture outcomes do not establish native launcher or deployment security.",
+      "assessment": "Read 26-test final result and malformed single-case-envelope fix; minor protocol-validation limitation explicitly retained. Kernel restrictions/fixture outcomes do not establish native launcher or deployment security.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "a4a56e01fe3a1cd5670518bf9b46156ff82ff68e0111f010b5edfe72223d0f1f"
@@ -792,7 +792,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "b7d62a12fd57f876c3630392bdfc6796d255de5c2da15d9cb36fad9f0ace0081",
       "status": "read_pending_final_verification",
-      "assessment": "Read full19-case Redis contract; GET-only absent pending intent stays unknown, RPUSH control has different semantics, and Unix-socket local service is not remote distributed exactly-once. Workflow successor separately linked.",
+      "assessment": "Read full 19-case Redis contract; GET-only absent pending intent stays unknown, RPUSH control has different semantics, and Unix-socket local service is not remote distributed exactly-once. Workflow successor separately linked.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "b7d62a12fd57f876c3630392bdfc6796d255de5c2da15d9cb36fad9f0ace0081"
@@ -818,7 +818,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "61abfae15aae797670654e297934d99fe23b8b99aca99226248a0d46b0f6ef5c",
       "status": "read_pending_final_verification",
-      "assessment": "Read14-test/19-case final validation and explicit pending-intent crash/race gap. Server SIGKILL and ordinary contention are not the combined missing fixture. Hosted-unrun and cloud-draft persistence are historical states.",
+      "assessment": "Read 14-test/19-case final validation and explicit pending-intent crash/race gap. Server SIGKILL and ordinary contention are not the combined missing fixture. Hosted-unrun and cloud-draft persistence are historical states.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "61abfae15aae797670654e297934d99fe23b8b99aca99226248a0d46b0f6ef5c"
@@ -948,7 +948,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "d4f8968e9a90865869d6642413d674f26c2f06bdd80f74f92bc7472565c1bdff",
       "status": "read_pending_final_verification",
-      "assessment": "Read18cases x3control result/integration tables. Approved-service relay is an explicit remaining unauthorized effect; scoped redirects differ from internal service egress. Pending intent and conservative stop cannot be misread as no effect.",
+      "assessment": "Read 18 cases \u00d7 3 controls result/integration tables. Approved-service relay is an explicit remaining unauthorized effect; scoped redirects differ from internal service egress. Pending intent and conservative stop cannot be misread as no effect.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "d4f8968e9a90865869d6642413d674f26c2f06bdd80f74f92bc7472565c1bdff"
@@ -961,7 +961,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "e68144c839a95af941542aef241d3705438a403d86abfc2a2ccf56ece96b60d0",
       "status": "read_pending_final_verification",
-      "assessment": "Read24-test receipt and failed durable-stop-write correction. Npm run predates Python-only fix, targeted full Python/replay rerun is disclosed. Temporary logs are not claimed bundled.",
+      "assessment": "Read 24-test receipt and failed durable-stop-write correction. Npm run predates Python-only fix, targeted full Python/replay rerun is disclosed. Temporary logs are not claimed bundled.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "e68144c839a95af941542aef241d3705438a403d86abfc2a2ccf56ece96b60d0"
@@ -974,7 +974,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "6ce5a9ea34c188fc9fffd2dbc7c3dbcb377a04a6a15bb71956aaf0265417a073",
       "status": "read_pending_final_verification",
-      "assessment": "Full 102-row/156-resume description read. Scripted proposals, unsupported OpenAI edit, 144 available vs12 unavailable pause observations and same-process state scope are explicit. Later executor/workflow restart is separate.",
+      "assessment": "Full 102-row/156-resume description read. Scripted proposals, unsupported OpenAI edit, 144 available versus 12 unavailable pause observations and same-process state scope are explicit. Later executor/workflow restart is separate.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "6ce5a9ea34c188fc9fffd2dbc7c3dbcb377a04a6a15bb71956aaf0265417a073"
@@ -1013,7 +1013,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "be0b965a85ef36960d290dec9be0eadb6067ec2538c252f37e7ae49efb8c52dc",
       "status": "read_pending_final_verification",
-      "assessment": "Read complete24-case native checkpoint recovery contract. SIGKILL approval boundary, post-effect callback replay and terminal cached readback are distinct. One approval/effect, trusted ledger, no arbitrary migration or distributed guarantee.",
+      "assessment": "Read complete 24-case native checkpoint recovery contract. SIGKILL approval boundary, post-effect callback replay and terminal cached readback are distinct. One approval/effect, trusted ledger, no arbitrary migration or distributed guarantee.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "be0b965a85ef36960d290dec9be0eadb6067ec2538c252f37e7ae49efb8c52dc"
@@ -1026,7 +1026,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "545fb54067150569f503634dd2c8fe0016cfc7d5d0dc4e9d8e4079fcb8266ceb",
       "status": "read_pending_final_verification",
-      "assessment": "Read pinned3.1.2 checkpointer and SDK guidance implications; trusted native deserialization and WAL checkpoint before retained bytes are explicit. Source hashes do not reconstruct absent responses.",
+      "assessment": "Read pinned 3.1.2 checkpointer and SDK guidance implications; trusted native deserialization and WAL checkpoint before retained bytes are explicit. Source hashes do not reconstruct absent responses.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "545fb54067150569f503634dd2c8fe0016cfc7d5d0dc4e9d8e4079fcb8266ceb"
@@ -1039,7 +1039,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "69ae953c4629e416ee905923bb641f6943ec2a90bf9aff31a6caacdc96bcb100",
       "status": "read_pending_final_verification",
-      "assessment": "Read15-test final receipt, cleanup regression, outage and cached-effectCreated correction. Native application crash is not the earlier Redis intent/receipt crash window; no new outside/hosted claim.",
+      "assessment": "Read 15-test final receipt, cleanup regression, outage and cached-effectCreated correction. Native application crash is not the earlier Redis intent/receipt crash window; no new outside/hosted claim.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "69ae953c4629e416ee905923bb641f6943ec2a90bf9aff31a6caacdc96bcb100"
@@ -1117,7 +1117,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "c8a83cd0e1605e59aab63f737ba807960e7c7919df5308a82a32736b4ce2d976",
       "status": "read_pending_final_verification",
-      "assessment": "Read complete earlier910-file receipt and selected commands. Explicit842 automated-only status and no full smoke rerun are honest; preserve as prior audit, distinct current 919-file manual continuation.",
+      "assessment": "Read complete earlier 910-file receipt and selected commands. Explicit 842 automated-only status and no full smoke rerun are honest; preserve as prior audit, distinct current 919-file manual continuation.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "c8a83cd0e1605e59aab63f737ba807960e7c7919df5308a82a32736b4ce2d976"
@@ -1169,7 +1169,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "e1f75c903d05adc598a7868584ac60189e6e4a28237bec2f7bdc050d03a92ea5",
       "status": "read_pending_final_verification",
-      "assessment": "Full field mapping/readiness/owner decisions read; submission is not authorized by draft. Historic form requirements require recheck; funding500/25000 is illustrative. Existing capture budget does not authorize proposed new campaign.",
+      "assessment": "Full field mapping/readiness/owner decisions read; submission is not authorized by draft. Historic form requirements require recheck; funding of $500/$25,000 is illustrative. Existing capture budget does not authorize proposed new campaign.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "683d668605df9f86d41716b544c582cfa50473fe06ab1640e9dd0f16842ed97c"
@@ -1182,7 +1182,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "a69a90b4863cb974a596e2a907d9911824e1b1869154ba33791ee9184e68cf9d",
       "status": "read_pending_final_verification",
-      "assessment": "Full C01-C08/O01-O05 tables and archive preservation read. Original no-live statement is instrument-specific; Stage5Q release-blocked/Q1 labels need later maintenance chronology, without changing frozen discharge denominator.",
+      "assessment": "Full C01-C08/O01-O05 tables and archive preservation read. Original no-live statement is instrument-specific; Stage 5Q release-blocked/Q1 labels need later maintenance chronology, without changing frozen discharge denominator.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "a69a90b4863cb974a596e2a907d9911824e1b1869154ba33791ee9184e68cf9d"
@@ -1767,7 +1767,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "380d91b5e9195cb365d700994de91e4ee6d0cf66894ccf052eb329b85ab99bc0",
       "status": "read_pending_final_verification",
-      "assessment": "Read all 41 gates and preliminary fixture scan; withdrawal retains audit/verify, sensitive values not echoed, selected cases only. Later43 gate count is separate B4B revision.",
+      "assessment": "Read all 41 gates and preliminary fixture scan; withdrawal retains audit/verify, sensitive values not echoed, selected cases only. Later 43 gate count is separate B4B revision.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "380d91b5e9195cb365d700994de91e4ee6d0cf66894ccf052eb329b85ab99bc0"
@@ -1793,7 +1793,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "321389385e05bbf8026fc560b4e1f54f65f10b148e38a063e8827147f1c281d7",
       "status": "read_pending_final_verification",
-      "assessment": "Read single payload-builder test receipt with pass1/fail0/skip0; no live Sonnet call or provider retention proof.",
+      "assessment": "Read single payload-builder test receipt with pass 1 / fail 0 / skip 0; no live Sonnet call or provider retention proof.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "321389385e05bbf8026fc560b4e1f54f65f10b148e38a063e8827147f1c281d7"
@@ -2105,7 +2105,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "505b6236d211eecb913b23b5f2ba3b911dbdbb477e60ae2e67bfcfc2454f8173",
       "status": "read_pending_final_verification",
-      "assessment": "Read complete frozen evidence pack and each gate row. Receipt flags are assertions, lexical network scan bounded, Phase B provenance discrepancies retained. Counts refer to the specific 92dabb4 freeze.",
+      "assessment": "Read complete frozen evidence pack and each gate row. Receipt flags are assertions, lexical network scan bounded, Phase B provenance discrepancies retained. Counts refer to specific 92dabb4 freeze.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "505b6236d211eecb913b23b5f2ba3b911dbdbb477e60ae2e67bfcfc2454f8173"
@@ -2235,7 +2235,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "6c0ca3ec6e1e1acf7fbb98882d4927b364a4a40d61304d9fe7e9c92e92957016",
       "status": "read_pending_final_verification",
-      "assessment": "Read complete prompt. Prompt requests five complete 150–250-word abstracts, but response log retains only five style descriptions; M22 records transcript gap.",
+      "assessment": "Read complete prompt. Prompt requests five complete 150\u2013250-word abstracts, but response log retains only five style descriptions; M22 records transcript gap.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "6c0ca3ec6e1e1acf7fbb98882d4927b364a4a40d61304d9fe7e9c92e92957016"
@@ -6849,11 +6849,11 @@
       "category": "scoped_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "f82d3947aebf7b1a2ddb05bbadf41d76e6f8a3fe770592c66a340c3b844d7b2b",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read complete local-only/researcher-only storage and ethics-approved retention claims. Keyed random codes are pseudonymous; approved retention period/reference not supplied here. Later Phase C addendum governs stated conflicts.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "f82d3947aebf7b1a2ddb05bbadf41d76e6f8a3fe770592c66a340c3b844d7b2b"
     },
     {
       "path": "docs/research/mq-voting-pilot/EXPERIMENT_MATRIX.md",
@@ -6862,11 +6862,11 @@
       "category": "scoped_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "54d11353da29df3a702f7175018cc7190b374cee5b7eb63d8d35e419e50bbe58",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read every functional/security/privacy/usability target. Expected statuses are plans, not execution receipts. Source-code scans and report flags do not prove universal absence of personal data.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "54d11353da29df3a702f7175018cc7190b374cee5b7eb63d8d35e419e50bbe58"
     },
     {
       "path": "docs/research/mq-voting-pilot/NON_CLAIMS.md",
@@ -6875,11 +6875,11 @@
       "category": "scoped_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "cc27695bbdcb0ecc6c877860ef2610b01fbc2fe17ad4c3bf44e9094b1de1b520",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read complete exclusion of public-election security, coercion prevention, eligibility, malware protection and hardware attestation; bounded voting-adjacent research posture appropriate.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "cc27695bbdcb0ecc6c877860ef2610b01fbc2fe17ad4c3bf44e9094b1de1b520"
     },
     {
       "path": "docs/research/mq-voting-pilot/PARTICIPANT_INFORMATION_AND_CONSENT.md",
@@ -6888,11 +6888,11 @@
       "category": "scoped_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "6977d557061784a34d6fe6514f118b63b255dfe297084cb30a80c727cb17075d",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read complete voluntary notice, no-ballot scope and withdrawal hard stop. Anonymous-code and no-data language need host/logging and pseudonymization bounds; HMAC hash is retained though raw code is not.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "6977d557061784a34d6fe6514f118b63b255dfe297084cb30a80c727cb17075d"
     },
     {
       "path": "docs/research/mq-voting-pilot/PHASE_A_CLOSEOUT.md",
@@ -6901,11 +6901,11 @@
       "category": "scoped_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "a4b99d1812dede7f1923c3eda010174cfac403a2f0ea7f84fbbbb28ca074bdfa",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all historical 357-test/9-persona claims. Cited pre-pilot privacy receipt actually scanned zero voting artifacts and one Linux fixture, not claimed nine. Proposed Phase B 1\u20133 conflicts with original 3\u20135.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "a4b99d1812dede7f1923c3eda010174cfac403a2f0ea7f84fbbbb28ca074bdfa"
     },
     {
       "path": "docs/research/mq-voting-pilot/PHASE_B_INTERNAL_HUMAN_DRY_RUN_CLOSEOUT.md",
@@ -6914,11 +6914,11 @@
       "category": "scoped_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "b3d00dc531d0884efc53e36d3803bd30f5896fec4aee7f8ba15f8f73c2b81d1e",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all nine scenario counts summing 34 artifacts, retained human labels and gates. Artifacts are not 34 distinct people; governance prerequisites still marked unmet at this historical point.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "b3d00dc531d0884efc53e36d3803bd30f5896fec4aee7f8ba15f8f73c2b81d1e"
     },
     {
       "path": "docs/research/mq-voting-pilot/PHASE_C_DATA_MANAGEMENT_ADDENDUM.md",
@@ -6927,11 +6927,11 @@
       "category": "scoped_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "20f85cf9abaf8e984fbc96d63af76b4a39bc81f8422b1182c31d916651e3b7b8",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all fields, retention placeholder, access/publication and breach rules. Blank deadline/unchecked prerequisites conflict GO record. HMAC/timestamps not universally unidentifiable; notification deferral not universal current advice.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "20f85cf9abaf8e984fbc96d63af76b4a39bc81f8422b1182c31d916651e3b7b8"
     },
     {
       "path": "docs/research/mq-voting-pilot/PHASE_C_EXECUTIVE_APPROVAL_REQUEST.md",
@@ -6940,11 +6940,11 @@
       "category": "scoped_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "bd04e680a9ba4bef26fd8f061dbce315ce03119154023a904e9e848151c5ffd4",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read full request and checked executive row. Header remains pending despite approved row; 19 synthetic artifact count is distinct from initial 9-persona run. No independent authenticity of signature asserted.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "bd04e680a9ba4bef26fd8f061dbce315ce03119154023a904e9e848151c5ffd4"
     },
     {
       "path": "docs/research/mq-voting-pilot/PHASE_C_GO_NO_GO_CHECKLIST.md",
@@ -6953,11 +6953,11 @@
       "category": "scoped_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "ced966ae9d306dfd1f37c7a414909a95bc6ceb6aa86ed05473a87048402d14d7",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all checked items and signoff. Project-reported rationale/executive endorsement is not independently verified institutional exemption. Claimed retention defined conflicts with blank addendum date; ceiling counts people not sessions.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "ced966ae9d306dfd1f37c7a414909a95bc6ceb6aa86ed05473a87048402d14d7"
     },
     {
       "path": "docs/research/mq-voting-pilot/PHASE_C_MEMBER_PILOT_CLOSEOUT.md",
@@ -6966,11 +6966,11 @@
       "category": "scoped_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "5d9f4a81ceba40ac66c164a9e61ae783df327c300d6afeea462c095df653ba51",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 31-consented/30-submitted/1-withdrawn claims and configuration-bound 410 closure. Public session artifact governance remains unresolved; old check.sh prerequisite failures are historical, not current smoke status.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5d9f4a81ceba40ac66c164a9e61ae783df327c300d6afeea462c095df653ba51"
     },
     {
       "path": "docs/research/mq-voting-pilot/PHASE_C_MEMBER_PILOT_PROTOCOL.md",
@@ -6979,11 +6979,11 @@
       "category": "scoped_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "b3d49aa69e0e65e6af7450411a6f6b4413752ada475010f1fd9b1e4ccf37f9c9",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read full pending-status protocol and thirty-person ceiling. Later 31-session closeout does not establish unique participant count; daemon tier and aggregate analysis promises need source/evidence scope.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "b3d49aa69e0e65e6af7450411a6f6b4413752ada475010f1fd9b1e4ccf37f9c9"
     },
     {
       "path": "docs/research/mq-voting-pilot/PHASE_C_PARTICIPANT_NOTICE.md",
@@ -6992,11 +6992,11 @@
       "category": "scoped_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "bdeefa166d45f06476f04f536237299a9e35ed0851c6d3ab4f8f1dab9977b90d",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read full draft notice. Acceptance-or-decline logging contradicts no-decline-record statement; HMAC validity overstates never-tampered guarantee; pseudoanonymous code and request logs require qualification.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "bdeefa166d45f06476f04f536237299a9e35ed0851c6d3ab4f8f1dab9977b90d"
     },
     {
       "path": "docs/research/mq-voting-pilot/VOTING_PILOT_PROTOCOL.md",
@@ -7005,11 +7005,11 @@
       "category": "scoped_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "e99592a2a13bc59f43e0fddfef128706929bcfd40cccba2150808600c6d7378c",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read full pre-pilot protocol. Phase B 3\u20135 members differs from 1\u20133 in the closeout; Phase C formal-approval requirement differs from later researcher exemption rationale. Browser-plus-daemon tier is proposed here, not proved by metadata labels.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "e99592a2a13bc59f43e0fddfef128706929bcfd40cccba2150808600c6d7378c"
     },
     {
       "path": "docs/research/mq-voting-pilot/evidence/phase-c-closeout/EVIDENCE_README.txt",
@@ -7018,11 +7018,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "abc2ce67133715b81462006bae61e940a59a57f10648bbaeac4708cfb8114d6f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read entire dated main-branch capture note and tag; claim of clean run is a project receipt, not independent custody.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "abc2ce67133715b81462006bae61e940a59a57f10648bbaeac4708cfb8114d6f"
     },
     {
       "path": "docs/research/mq-voting-pilot/evidence/phase-c-closeout/npm-audit.txt",
@@ -7031,11 +7031,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "a1164ef7539d5f8c25858cacdb6ab54f8cc0acce1007261d6fabf87bca05caaf",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read full two-moderate qs/Express advisory report; no high/critical does not mean no findings. Captured fix instruction not executed.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "a1164ef7539d5f8c25858cacdb6ab54f8cc0acce1007261d6fabf87bca05caaf"
     },
     {
       "path": "docs/research/mq-voting-pilot/evidence/phase-c-closeout/npm-test.txt",
@@ -7057,11 +7057,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "a0679ec25e65d961ea86bb160e1ee9e645fa845dd8aa59937c8efd4f0182ceef",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read complete receipt: 52 voting files plus 1 Linux fixture, two different scan counters. Preserve historical local path and content; no universal privacy certification.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "a0679ec25e65d961ea86bb160e1ee9e645fa845dd8aa59937c8efd4f0182ceef"
     },
     {
       "path": "docs/research/mq-voting-pilot/evidence/phase-c-closeout/security-audit-voting-pilot.txt",
@@ -7070,11 +7070,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "9eed10240aa90c805556d2179ecd939e2a7ba94e8ef1b74fbc74c41b09e18bac",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 10 gates and count. Decline test is unauthorized request returning 401, not interactive consent UX or proof of all infrastructure logs absent.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "9eed10240aa90c805556d2179ecd939e2a7ba94e8ef1b74fbc74c41b09e18bac"
     },
     {
       "path": "docs/research/mq-voting-pilot/evidence/phase-c-closeout/smoke-voting-pilot-closed.txt",
@@ -7083,11 +7083,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "30ba32707130fdb8aa980417e2f5feaa61316ebade685aea0b3f2e0425bb1f86",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read five closure gates; report endpoint checked via missing-token 401, not authenticated 200 success. No all-environment closure without configuration claim.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "30ba32707130fdb8aa980417e2f5feaa61316ebade685aea0b3f2e0425bb1f86"
     },
     {
       "path": "docs/research/mq-voting-pilot/evidence/phase-c-closeout/smoke-voting-pilot.txt",
@@ -7096,11 +7096,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "5feb52429f0c1598d2838c0d912d8ef362709dcf6d13c2a797ae9823b89d1bc1",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 8 gates and summary. Fixed privacy booleans/chain validation are application observations; no outside human execution attestation.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5feb52429f0c1598d2838c0d912d8ef362709dcf6d13c2a797ae9823b89d1bc1"
     },
     {
       "path": "docs/research/mq-voting-pilot/evidence/pre-pilot/check-sh.txt",
@@ -7122,11 +7122,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "a1164ef7539d5f8c25858cacdb6ab54f8cc0acce1007261d6fabf87bca05caaf",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read full retained two-moderate vulnerability report; preserve as dated dependency snapshot, do not run embedded audit fix.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "a1164ef7539d5f8c25858cacdb6ab54f8cc0acce1007261d6fabf87bca05caaf"
     },
     {
       "path": "docs/research/mq-voting-pilot/evidence/pre-pilot/npm-test.txt",
@@ -7148,11 +7148,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "95542a2fdbca170c3edb934c6f6e6bb007f1490c9d5102e698bca2977dd1e853",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read full receipt. Voting scan passed with 0 files, while separate scanner checked 1 Linux fixture; empty voting denominator cannot support Phase A 9-file privacy claim.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "95542a2fdbca170c3edb934c6f6e6bb007f1490c9d5102e698bca2977dd1e853"
     },
     {
       "path": "docs/research/mq-voting-pilot/evidence/pre-pilot/security-audit-voting-pilot.txt",
@@ -7161,11 +7161,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "9eed10240aa90c805556d2179ecd939e2a7ba94e8ef1b74fbc74c41b09e18bac",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read every one of the 10 PASS lines and final summary; passing privacy-scan gate inherits empty voting-scan limitation. Preserve raw receipt.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "9eed10240aa90c805556d2179ecd939e2a7ba94e8ef1b74fbc74c41b09e18bac"
     },
     {
       "path": "docs/research/mq-voting-pilot/evidence/pre-pilot/smoke-voting-pilot.txt",
@@ -7174,11 +7174,11 @@
       "category": "evidence_or_fixture",
       "extraction": "utf8_complete",
       "baseline_sha256": "5feb52429f0c1598d2838c0d912d8ef362709dcf6d13c2a797ae9823b89d1bc1",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read every one of the 8 PASS lines and summary; describes specific consent/submit/report/withdrawal API checks, not browser visual or human-study validation.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5feb52429f0c1598d2838c0d912d8ef362709dcf6d13c2a797ae9823b89d1bc1"
     },
     {
       "path": "docs/research/mq-voting-pilot/results/PAPER_FINDINGS_SUMMARY.md",
@@ -7187,11 +7187,11 @@
       "category": "scoped_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "34b14e5cb2509597ce5e227526ef4631695cada9d1847d3e4b6e5aaba113ebce",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read full abstract, all claims and proposed structure. False flags and 52-file scan support scoped checks, not independent proof every browser/host withheld content. Collection lock remains configuration-dependent; no official-election protection established.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "34b14e5cb2509597ce5e227526ef4631695cada9d1847d3e4b6e5aaba113ebce"
     },
     {
       "path": "docs/research/mq-voting-pilot/results/PHASE_C_RESULTS_ANALYSIS.md",
@@ -7200,11 +7200,11 @@
       "category": "scoped_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "480aeac9b3ec66fa44253016bd219eb9bbe9e243a1a6ad15ff7e34a5463cd7b0",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all seven sections/tables. Manuscript claims client-side exclusion in every session require actual observation scope beyond flags. Known-key guard not universal semantic privacy proof; preserve archived measurements.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "480aeac9b3ec66fa44253016bd219eb9bbe9e243a1a6ad15ff7e34a5463cd7b0"
     },
     {
       "path": "docs/research/mq-voting-pilot/results/PHASE_C_RESULTS_TABLES.md",
@@ -7213,11 +7213,11 @@
       "category": "scoped_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "b6a9add924adf3a1f8c27c350d8ac0a2a5b3be7d00850c2ba2a62ec3489f9048",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all five tables. Table 3 title of 30 submitted conflicts full 31-consented/withdrawal flow; npm zero-high/critical must retain moderate findings. Report 200 requires valid nonwithdrawn token/session.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "b6a9add924adf3a1f8c27c350d8ac0a2a5b3be7d00850c2ba2a62ec3489f9048"
     },
     {
       "path": "docs/research/presentation-phase-12/GAPS.md",
@@ -7409,7 +7409,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "816c4616cc38fb52a558b24a91e7a19a3a77f596dc6d7e02599e751fce0d67ad",
       "status": "read_pending_final_verification",
-      "assessment": "Read complete prior ancestor authority for launcher PATH/Xvfb repair, explicit paths and nonvacuity conditions. No authorization for changing production or browser policy.",
+      "assessment": "Read complete prior-ancestor authority for launcher PATH/Xvfb repair, explicit paths and nonvacuity conditions. No authorization for changing production or browser policy.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "816c4616cc38fb52a558b24a91e7a19a3a77f596dc6d7e02599e751fce0d67ad"
@@ -7422,7 +7422,7 @@
       "extraction": "utf8_complete",
       "baseline_sha256": "a01b6af341be4753273eecbd9f4be77107044c0bb6a054c27a38d785119f3441",
       "status": "read_pending_final_verification",
-      "assessment": "Read all results, failures, exact revisions and exclusions. 30 reproduction entries are29 unique scripts; counts overlap, browser blocked retained, actual native CI separated, no new-head smoke claimed.",
+      "assessment": "Read all results, failures, exact revisions and exclusions. 30 reproduction entries are 29 unique scripts; counts overlap, browser blocked retained, actual native CI separated, no new-head smoke claimed.",
       "read_complete": true,
       "reviewer": "Codex",
       "read_sha256": "a01b6af341be4753273eecbd9f4be77107044c0bb6a054c27a38d785119f3441"
@@ -10281,11 +10281,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "5cc4d5e9d3df2010615a1e8351253f4fd68630132a6f248608ab3a44f70e01f3",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full read. Absolute every-fact/zero-unverifiable verdict exceeds evidence; two HTTP 403s do not verify content. Bibliography has seventeen entries including later self-citation; four records have incorrect expanded author names despite historical all-verified claim. See M27/M28.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5cc4d5e9d3df2010615a1e8351253f4fd68630132a6f248608ab3a44f70e01f3"
     },
     {
       "path": "papers/banking-shield/README.md",
@@ -10294,11 +10294,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "48182a8bc9a0584b1cb8eea2b9bbb35eaf20641e5cc135e41f3b1878a2d3c821",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full read. main.pdf has six pages, not seven. Crossref-only verification claim excludes institutional URLs and DataCite self-citation. Build assumes package cwd; implementation gates require isolated repository root and can write fixtures. Historical counts remain freeze-specific. See M27/M28.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "48182a8bc9a0584b1cb8eea2b9bbb35eaf20641e5cc135e41f3b1878a2d3c821"
     },
     {
       "path": "papers/banking-shield/main.pdf",
@@ -10307,11 +10307,11 @@
       "category": "publication_or_personal_record",
       "extraction": "pdftotext_layout",
       "baseline_sha256": "20e44a6aff2f2de4ecec47b24cce2bdda80123a850412565eb0bfc03a870e5da",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All six pages extracted and read, including seventeen references. Page 4 visually checked: success arrow bypasses output firewall in diagram. Receipt scope, static egress language and source author-name defects need additive corrections; no external publication changed. See M27/M28.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "20e44a6aff2f2de4ecec47b24cce2bdda80123a850412565eb0bfc03a870e5da"
     },
     {
       "path": "papers/banking-shield/main.tex",
@@ -10320,11 +10320,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "0b40d1a85ebf17bed256221b0cd651e3b17f077b782f5814e29f083347bd205f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All 700 lines read. Success arrow originates at provider, although implementation checks output first. Every-response receipt claim excludes several HTTP errors at freeze and current source. Related-work static inability and unsupported industry-generalization claims remain too broad. See M27/M28.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "0b40d1a85ebf17bed256221b0cd651e3b17f077b782f5814e29f083347bd205f"
     },
     {
       "path": "papers/banking-shield/references.bib",
@@ -10333,11 +10333,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "02e13c3e7938d0e6b314ce698c8b681e089dea55eaf105bb00c1e93e1f790377",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All seventeen entries read. Fresh Crossref metadata for twelve academic DOIs and DataCite preprint record checked. Incorrect expanded names in Sree/Bhanu, Ali/Khan, Kim/Martel/Johnson and Manini entries. DOI existence does not verify interpretive claims or every institutional URL. See M28.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "02e13c3e7938d0e6b314ce698c8b681e089dea55eaf105bb00c1e93e1f790377"
     },
     {
       "path": "papers/banking-shield/source/banking-shield-paper-claim-audit.md",
@@ -10346,11 +10346,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "abdefe7f8dae3b0182d3c5b0b2213319935428d7907cea17beca84e80966c0db",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All revisions and command blocks read. Old paper paths moved; literal keyword scans miss semantic overclaims. Later issue-year and phrase-count corrections do not refresh old PDFs; readiness labels are historical. See M27/M28.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "abdefe7f8dae3b0182d3c5b0b2213319935428d7907cea17beca84e80966c0db"
     },
     {
       "path": "papers/banking-shield/source/banking-shield-paper-full-audit-2026-06-13.md",
@@ -10359,11 +10359,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "0c174c8759fac62478e60ac1a82d8c313f35cd1add66a479fdaab81f8e5ff478",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete audit and both addenda read. Internal evolving verdicts preserve previously missed phrase count and stale PDF; recommendations marked open are applied in later TeX but older PDF remains stale. No current security or citation clearance inferred. See M27/M28.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "0c174c8759fac62478e60ac1a82d8c313f35cd1add66a479fdaab81f8e5ff478"
     },
     {
       "path": "papers/banking-shield/source/banking-shield-paper-outline.md",
@@ -10372,11 +10372,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "2258999f856c643db8293f8e10e9fee35531af9e7a144d0379e723039355dfd4",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full table and contribution list read. Better-than-content-filtering thesis lacks comparative experiment; statically proven no-egress is broader than lexical scan. Page budget and citation placeholders are historical planning. See M27.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "2258999f856c643db8293f8e10e9fee35531af9e7a144d0379e723039355dfd4"
     },
     {
       "path": "papers/banking-shield/source/banking-shield-paper-v0.1.md",
@@ -10385,11 +10385,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "952c7d65edb0f06ad77b7d3a1952f32533642309a62a9099cc6212afece61c42",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire draft read. Forty-seven field names and twenty-eight phrases are incorrect versus corrected 46/29. Absolute absence/no-egress, comparative superiority, anonymity and receipt coverage are overstated. Deliberate citation placeholders remain historical. See M27.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "952c7d65edb0f06ad77b7d3a1952f32533642309a62a9099cc6212afece61c42"
     },
     {
       "path": "papers/banking-shield/source/banking-shield-paper-v1.0.md",
@@ -10398,11 +10398,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "4c5087a08807c46bd61ce3a767dd8db5ac41e6456737282524546c4f63b6ee69",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All 562 lines read. Corrected field count but stale phrase count, issue years and static-proof language remain. Broad comparative/industry claims lack comparison, old artifact paths are stale, receipt scope exceeds router outcomes. See M27/M28.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "4c5087a08807c46bd61ce3a767dd8db5ac41e6456737282524546c4f63b6ee69"
     },
     {
       "path": "papers/banking-shield/source/banking-shield-paper-v1.1.md",
@@ -10411,11 +10411,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "f01f4140b0cce878e3c047f629c1014568a39fff03676b9ab318daa03670cf35",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All 608 lines read. Improved mock-provider, small-cohort and static-scan limits conflict with remaining statically-provable and unable-to-egress prose; phrase count stays 28. Same unsupported superiority and receipt claims, old paths and issue years. See M27.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "f01f4140b0cce878e3c047f629c1014568a39fff03676b9ab318daa03670cf35"
     },
     {
       "path": "papers/banking-shield/source/banking-shield-paper-v1.1.pdf",
@@ -10424,11 +10424,11 @@
       "category": "publication_or_personal_record",
       "extraction": "pdftotext_layout",
       "baseline_sha256": "2c2ab9136281e121ce1767e52eaf3497c4b88224fc9fbd9ed8e5fedbe5b0dcaa",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete thirteen-page PDF text read including all references. Retains 28 phrases, old issue years, comparison claim, source-scan overstatement and old reproduction paths; numbering in limitations is awkward. Visual review of this PDF not yet complete. See M27.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "2c2ab9136281e121ce1767e52eaf3497c4b88224fc9fbd9ed8e5fedbe5b0dcaa"
     },
     {
       "path": "papers/banking-shield/source/banking-shield-paper-v1.2.md",
@@ -10437,11 +10437,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "af22c6a9ce5a4d36954adfabc0543fa55a7c3b393fef416f9e3b609cb186feb4",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All 652 lines read. Corrected 29 phrases and issue years plus narrowed mock/small-cohort claims, but related work still says statically unable to egress and every-response receipt is too broad. Allowlist refusal-logging limitation is not inherent. See M27/M28.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "af22c6a9ce5a4d36954adfabc0543fa55a7c3b393fef416f9e3b609cb186feb4"
     },
     {
       "path": "papers/banking-shield/source/banking-shield-paper-v1.2.pdf",
@@ -10450,11 +10450,11 @@
       "category": "publication_or_personal_record",
       "extraction": "pdftotext_layout",
       "baseline_sha256": "fedf0d9705b3a3dee3cd7c90856c28b04af6f7daa02a85eda631201de3cbbad2",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete fourteen-page PDF text read. Predates Markdown corrections: 28 phrases, v1.1 disclosure, older issue years, planning caption, old paths and stronger related-work claims. Page 13 visually checked and EPC URL clips at right edge. See M27.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "fedf0d9705b3a3dee3cd7c90856c28b04af6f7daa02a85eda631201de3cbbad2"
     },
     {
       "path": "papers/banking-shield/source/figures/README.md",
@@ -10463,11 +10463,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "0c32c2578f7d88a163b2ff451c4e967b936b4b69ce701ebb6675af06b0247717",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full four-figure specification read. Structural-guarantee caption must be bounded to source checks and tested fixtures; final success flow must pass output guard. Historical page-one planning instruction is not publication text. See M27.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "0c32c2578f7d88a163b2ff451c4e967b936b4b69ce701ebb6675af06b0247717"
     },
     {
       "path": "papers/banking-shield/source/review/author-response-to-review.md",
@@ -10476,11 +10476,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "42a2ebfd02393ef8285d81aed0abb857868ef51fbafebb20c1410056754f56f7",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full response read. Clearly model-assisted, not formal peer review. Claimed applied fixes do not cover residual wording and stale PDF identified in M27. Receipt and trust boundaries remain bounded.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "42a2ebfd02393ef8285d81aed0abb857868ef51fbafebb20c1410056754f56f7"
     },
     {
       "path": "papers/banking-shield/source/review/preprint-readiness-checklist.md",
@@ -10489,11 +10489,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "6b9ab3d318c63f303a30e606dbc4a03b6efd41cc4c5399426737f0cf8bac1b30",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full checklist and commands read. Dated checked boxes are not current publication clearance; stale paths and PDF mismatch remain. Forbidden-word check must distinguish negation. Gate counts are freeze-specific. See M27.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "6b9ab3d318c63f303a30e606dbc4a03b6efd41cc4c5399426737f0cf8bac1b30"
     },
     {
       "path": "papers/banking-shield/source/review/reviewer-1-privacy-security.md",
@@ -10502,11 +10502,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "df3c598a60b73266bf06af606ca48fc56efba5d503a82b49b8b9ff95e84357d4",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full simulated review read. Correctly narrows scope, operator trust and allowlist priority, but calls static proof defensible more strongly than lexical gate warrants. Not independent security validation. See M27.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "df3c598a60b73266bf06af606ca48fc56efba5d503a82b49b8b9ff95e84357d4"
     },
     {
       "path": "papers/banking-shield/source/review/reviewer-2-banking-governance.md",
@@ -10515,11 +10515,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "411f09e8a80a503559d4e9c9fc5fabaad9bf0eb55ba322f85aa9801e4565284e",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full simulated review read. Useful distinctions among fictional scoring, process integrity and actual payee matching; acceptance is a simulated recommendation, not external banking review. No fresh compliance conclusion.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "411f09e8a80a503559d4e9c9fc5fabaad9bf0eb55ba322f85aa9801e4565284e"
     },
     {
       "path": "papers/banking-shield/source/review/reviewer-3-hci-usability.md",
@@ -10528,11 +10528,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "7a9ca7e43dc7fc134a861b06de35ad787bed0971b1f7288c18c322cd9f8681bc",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full simulated review read. Preserves n=5 checklist/1-of-5 export weakness and noncausal rerun. Not-user-study wording is not institutional exemption; no representative-user outcome established. See M27.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "7a9ca7e43dc7fc134a861b06de35ad787bed0971b1f7288c18c322cd9f8681bc"
     },
     {
       "path": "papers/banking-shield/source/review/reviewer-4-ai-safety.md",
@@ -10541,11 +10541,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "5aa993e4624cd77b598a735abccad9bb0daa42719fa4bb8b0f86d07a83cb37af",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full simulated review read. Distinguishes mock contract, finite denylist and source scan from live-model safety/runtime egress. Future-provider requirements are proposals, not implemented guarantees.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5aa993e4624cd77b598a735abccad9bb0daa42719fa4bb8b0f86d07a83cb37af"
     },
     {
       "path": "papers/banking-shield/source/review/reviewer-5-hostile-review.md",
@@ -10554,11 +10554,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "8f3d65afb0746133c2f4c6473c8c9d5e1b9e43dde11bfcaa04e91d56eb82e288",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full simulated review read. Correctly flags novelty/evaluation bounds, project-authored gates and operator trust; reject/allow verdict is model-generated, not actual conference decision. No external validation established.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "8f3d65afb0746133c2f4c6473c8c9d5e1b9e43dde11bfcaa04e91d56eb82e288"
     },
     {
       "path": "papers/banking-shield/source/tables/README.md",
@@ -10567,11 +10567,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "2b58573c5ae383f71524b595a7da2adcded97ea71299d10a74b2c98597a805fa",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full five-table specification read. Sole-input-pack rule conflicts with T5 source naming Pass 5 log; treat as historical planning with explicit provenance per table. No new numerical claim.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "2b58573c5ae383f71524b595a7da2adcded97ea71299d10a74b2c98597a805fa"
     },
     {
       "path": "papers/llm-shield-aisec2026/README.md",
@@ -10580,11 +10580,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "e7b901c6698719ce1883f2041701f45b9ba30a6b50036a5abbeab6d8b23747a9",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Historical draft explicitly not submitted; venue remains TBD and deadlines have passed. Lowercase make path is current. Publication readiness remains unverified. See M25.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "e7b901c6698719ce1883f2041701f45b9ba30a6b50036a5abbeab6d8b23747a9"
     },
     {
       "path": "papers/llm-shield-aisec2026/artifact/README.md",
@@ -10593,11 +10593,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "416799c9b0edc423105caa6b0e54bf9bef6378f0af135b0a2616c718357481d6",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Reproduction description exceeds the wrapper: it checks stored fields and transcript strings, not fresh cryptographic verification or replay. Node 22 is a dated prerequisite. See M25.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "416799c9b0edc423105caa6b0e54bf9bef6378f0af135b0a2616c718357481d6"
     },
     {
       "path": "papers/llm-shield-aisec2026/audit/anonymisation-audit.md",
@@ -10606,11 +10606,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "5499499895e287982f4d31bcdefd4f28f5d19a639caac7c9193e3173a62011ea",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "June 24 identity and PDF metadata checks apply only to that revision; public identifying support files cannot be included verbatim in an anonymous submission. No current anonymity certification.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5499499895e287982f4d31bcdefd4f28f5d19a639caac7c9193e3173a62011ea"
     },
     {
       "path": "papers/llm-shield-aisec2026/audit/citation-audit.md",
@@ -10619,11 +10619,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "662c68a2bcf6b6c08fd6619d7740e7de834c06af1226eb204ca45cfa050f5909",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Eight listed citations do not cover all nine bibliography entries: CaMeL is omitted. Preserve historical checks; full current reference verification remains pending. See M25.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "662c68a2bcf6b6c08fd6619d7740e7de834c06af1226eb204ca45cfa050f5909"
     },
     {
       "path": "papers/llm-shield-aisec2026/audit/final-submission-checklist.md",
@@ -10632,11 +10632,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "02525dbab545fce8bba723b81d982c5bbc45e72ae8d365a4002f11231a7e3982",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "June 24 READY verdict and 989 tests/151 gates are historical, not fresh submission clearance. Uppercase Papers paths are stale and deadlines have passed. See M25.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "02525dbab545fce8bba723b81d982c5bbc45e72ae8d365a4002f11231a7e3982"
     },
     {
       "path": "papers/llm-shield-aisec2026/audit/nonclaim-audit.md",
@@ -10645,11 +10645,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "bb82069b502c0a0be03d1f2bca9fd13a3f009729d889901b17e2429b71870ea3",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Historical uppercase Papers scan path needs current lowercase interpretation. Keyword occurrences require context, including negated claims. Signature and tier limitations are appropriately explicit.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "bb82069b502c0a0be03d1f2bca9fd13a3f009729d889901b17e2429b71870ea3"
     },
     {
       "path": "papers/llm-shield-aisec2026/audit/repo-claim-audit.md",
@@ -10658,11 +10658,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "bd63b96a2415facd526f1198f0c784505075ee2febaff31b8f1c6f04997ff46f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All seventeen rows read with whitespace-normalized tables. Counts distinguish 180 total, 120 downstream, 150 malicious, 30 benign and 3/7/2 replay tiers. Stored counts are not fresh measurements; old 989-test claim not revalidated.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "bd63b96a2415facd526f1198f0c784505075ee2febaff31b8f1c6f04997ff46f"
     },
     {
       "path": "papers/llm-shield-aisec2026/audit/reproducibility-audit.md",
@@ -10671,11 +10671,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "f19330f6a9348da02950aba16975aa8cd85726eda220de7063c0a009dc4e80fa",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Stored receipt inspection is distinct from fresh reproduction. Uppercase paths and sequential repeated cd commands are invalid current instructions. Providers remain opt-in and were not invoked. See M25.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "f19330f6a9348da02950aba16975aa8cd85726eda220de7063c0a009dc4e80fa"
     },
     {
       "path": "papers/llm-shield-aisec2026/audit/venue-requirements.md",
@@ -10684,11 +10684,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "09a730a714881ced55d137f6e40a4a337661904b871218038d1bac7137374215",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "AISec official CFP checked October 19: ten content/twelve overall pages, GenAI-only thirteenth-page exception, deadlines passed. Backup-venue dates are historical and not freshly verified. See M25.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "09a730a714881ced55d137f6e40a4a337661904b871218038d1bac7137374215"
     },
     {
       "path": "papers/llm-shield-aisec2026/main.pdf",
@@ -10697,11 +10697,11 @@
       "category": "publication_or_personal_record",
       "extraction": "pdftotext_layout",
       "baseline_sha256": "6b6ade513ef7870cb36ff179d24dbc874eaa210fb0d36177b204c62e629b1cb4",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete eight-page extracted text read, including references and GenAI declaration; page 4 rendered and visually inspected. Attack-envelope list clips beyond right edge. Same scope, baseline and future-live-run contradictions as TeX; old five-page checklist is stale. See M26.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "6b6ade513ef7870cb36ff179d24dbc874eaa210fb0d36177b204c62e629b1cb4"
     },
     {
       "path": "papers/llm-shield-aisec2026/main.tex",
@@ -10710,11 +10710,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "e3c6b4df4caf606f65176265203adcb836eb4fb0e5c37a37fabdcb54146a0efa",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All 353 lines read. October/TBD venue metadata conflicts with official November 15 workshop; abstract corpus scope and future-live-run limitation conflict with added live and third-party sections. Finite differential tests do not prove universal equivalence; one benign regression cause is unverified. Witness independence and borrowed-template attack authorship need narrower wording. See forthcoming M26.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "e3c6b4df4caf606f65176265203adcb836eb4fb0e5c37a37fabdcb54146a0efa"
     },
     {
       "path": "papers/llm-shield-aisec2026/references.bib",
@@ -10723,11 +10723,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "f734b5af875e70ee8a9ab071bd3f9cf93b24476b5016c2bc39609d3d63f897a5",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All nine entries read; complete current primary-source bibliographic verification remains pending. CaMeL lacks a row in the historical citation audit; preserve frozen bibliography.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "f734b5af875e70ee8a9ab071bd3f9cf93b24476b5016c2bc39609d3d63f897a5"
     },
     {
       "path": "papers/llm-shield-aisec2026/source/abstract.md",
@@ -10736,11 +10736,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "bfe2dd988b44cdbd6b033bfd65a4f335b84cc6c1008265e1927da6b5bd09befe",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Short bounded claim summary has explicit limitations; no unsupported immunity or production assertion. Read completely.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "bfe2dd988b44cdbd6b033bfd65a4f335b84cc6c1008265e1927da6b5bd09befe"
     },
     {
       "path": "papers/llm-shield-aisec2026/source/contribution-map.md",
@@ -10749,11 +10749,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "cfaffe227a2d6fd584b69620d631edc6d17d253c9e3853ce3020c83e2a6d107e",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Five proposed contributions map to stage evidence; mapping does not independently establish novelty. Read completely.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "cfaffe227a2d6fd584b69620d631edc6d17d253c9e3853ce3020c83e2a6d107e"
     },
     {
       "path": "papers/llm-shield-aisec2026/source/ethics.md",
@@ -10762,11 +10762,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "c8f440827f3587997d106d21450cab122cf34c7dbf3f0c540f6c8a69e3f3ad17",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Synthetic/redacted artifact statements concern this paper package, not every later repository dataset. Vendor-neutral limits are explicit.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "c8f440827f3587997d106d21450cab122cf34c7dbf3f0c540f6c8a69e3f3ad17"
     },
     {
       "path": "papers/llm-shield-aisec2026/source/genai-disclosure.md",
@@ -10775,11 +10775,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "f73bf0e066ae7aa2a1539274c0b057bdaed87e0c466a75031bf9a1ba4b03757f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Attributes assistance and retains human responsibility; no independent review claim. Confidentiality sentence is an author declaration, not verified by this audit.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "f73bf0e066ae7aa2a1539274c0b057bdaed87e0c466a75031bf9a1ba4b03757f"
     },
     {
       "path": "papers/llm-shield-aisec2026/source/limitations.md",
@@ -10788,11 +10788,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "6ecbae33dd23d2334791f1dfdf21cccd5414f81c7e4b1bb5a6e2d404af50077c",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Self-reported GPU capture, signing trust and tiered reproduction limitations are explicit. Read completely.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "6ecbae33dd23d2334791f1dfdf21cccd5414f81c7e4b1bb5a6e2d404af50077c"
     },
     {
       "path": "papers/llm-shield-aisec2026/source/outline.md",
@@ -10801,11 +10801,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "2a1596380c58755a9f279fa98e03a360bece610e6f57bbc7a697ebc01b8cdd83",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Ten-section proposed outline is historical and subject to current venue requirements. Read completely.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "2a1596380c58755a9f279fa98e03a360bece610e6f57bbc7a697ebc01b8cdd83"
     },
     {
       "path": "papers/project-simurgh/README.md",
@@ -10814,11 +10814,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "0fbb4b3a1d12a9f2c338318b180c0e14d189b5d8ed540e6918b6ca31c963a486",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete package entry read. make assumes paper directory; companion DOI is historical version and requires version-aware registry check. Affiliation is author declaration, not verified here.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "0fbb4b3a1d12a9f2c338318b180c0e14d189b5d8ed540e6918b6ca31c963a486"
     },
     {
       "path": "papers/project-simurgh/ara/PAPER.md",
@@ -10827,11 +10827,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "99c10f3c1ed00359e35a67d03310cd9fc741027f663f98b6fd698b28e4a3e985",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full front matter and layer table read. DOI not-assigned is stale versus later main preprint; 379 combines executed Node results with native method counts. Blanket no-content and capture-exclusion claims need M18 and forthcoming M30 corrections.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "99c10f3c1ed00359e35a67d03310cd9fc741027f663f98b6fd698b28e4a3e985"
     },
     {
       "path": "papers/project-simurgh/ara/evidence/README.md",
@@ -10840,11 +10840,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "aa89c3c781a06704ce6dcf420d717004f45250a41550517283c02e913a7f3ac8",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete index read. All-table completeness is about extraction, not empirical verification; source grep for native tests is not a passing test execution. Claimed 379 pass total exceeds listed execution evidence. See M30.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "aa89c3c781a06704ce6dcf420d717004f45250a41550517283c02e913a7f3ac8"
     },
     {
       "path": "papers/project-simurgh/ara/evidence/figures/figure1_architecture.md",
@@ -10853,11 +10853,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "051e7aa62b3364ef7b91e86fecba717a94b5d65225e2b1ada497c5cc145f116b",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full diagram specification read. No-content scanner language must exclude helper capture behavior; paired Ed25519 and P-256 paths need separate routes. Read-only dashboard wording describes a scoped view, not every application action.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "051e7aa62b3364ef7b91e86fecba717a94b5d65225e2b1ada497c5cc145f116b"
     },
     {
       "path": "papers/project-simurgh/ara/evidence/figures/figure2_proof_sequence.md",
@@ -10866,11 +10866,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "a6e564f86c8758bdeb9a7298441588a4a5cbeb7c4f76d3d6db045cdfdbd42e41",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full sequence read. Pairing routes omit /api/integrity prefix and mix browser Ed25519 with daemon path. Not all reject outcomes are audited; capped chain stops appending. Manual-review text is scoped to academic scorer. See M30.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "a6e564f86c8758bdeb9a7298441588a4a5cbeb7c4f76d3d6db045cdfdbd42e41"
     },
     {
       "path": "papers/project-simurgh/ara/evidence/tables/table1_privacy_boundary.md",
@@ -10879,11 +10879,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "2f0ed84bdfc158ef41ec3af7260d477e0b896f870e7af2fd68348ee22bf30767",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full nine-row table read. Student identity uses HMAC, not unkeyed SHA; raw ID is received before hashing. Helper capture/identifier exception invalidates repository-wide never-collect wording. See M01/M18/M30.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "2f0ed84bdfc158ef41ec3af7260d477e0b896f870e7af2fd68348ee22bf30767"
     },
     {
       "path": "papers/project-simurgh/ara/evidence/tables/table2_validation_summary.md",
@@ -10892,11 +10892,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "9c471d6a73b2acfaac3e5d2c8b9d60ecb1e37b2b61a3779c390baa9d5df764eb",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full counts and notes read. Table labels native annotation counts as executed pass despite explicit inability to run locally; 379 total is not a test-pass receipt. Frozen counts and CI-only scenario need distinct statuses. See M30.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "9c471d6a73b2acfaac3e5d2c8b9d60ecb1e37b2b61a3779c390baa9d5df764eb"
     },
     {
       "path": "papers/project-simurgh/ara/evidence/tables/table3_platform_matrix.md",
@@ -10905,11 +10905,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "0d4ef975fded23d52a295d4cfb27f5b0b5b94fa506175da72b6585facdad6212",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full matrix read. Linux WM states correctly distinguished from Windows affinity; desktop evidence remains bounded. macOS sharing flag is legacy per current Apple docs; old unit tests do not certify current capture stacks. See M30.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "0d4ef975fded23d52a295d4cfb27f5b0b5b94fa506175da72b6585facdad6212"
     },
     {
       "path": "papers/project-simurgh/ara/logic/claims.md",
@@ -10918,11 +10918,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "af42e62b7a5056d7065eb2e5a13bc66f5ba3e92ce9a96a308e622c5892bbe9dc",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All four claims and falsification criteria read. Universal capture, any-layer no-content and all-native-pass claims overstate evidence. No config override for local scorer is narrower than no automated action in every integration. Uniform errors do not prove timing-oracle absence. See M30.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "af42e62b7a5056d7065eb2e5a13bc66f5ba3e92ce9a96a308e622c5892bbe9dc"
     },
     {
       "path": "papers/project-simurgh/ara/logic/concepts.md",
@@ -10931,11 +10931,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "621504b19cd49e13a38e8fc88d0e84019da829a998d6088f33b20305709dd8c3",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All six concepts read. Capture fidelity needs specified capture scope; click-through does not itself imply capture invisibility. Two envelopes should remain distinct. Chain interpretation must preserve pre-signature bytes, trusted key/history and cap/completeness limits. See M30.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "621504b19cd49e13a38e8fc88d0e84019da829a998d6088f33b20305709dd8c3"
     },
     {
       "path": "papers/project-simurgh/ara/logic/experiments.md",
@@ -10944,11 +10944,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "100c7fd1392b4c3838f268e176b8808c2f25d72ffca66d6d81a94e0a75a0b593",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All four experiment plans read. Proposed procedures/expected outcomes are not fresh receipts; SHA identity and broad privacy-audit description are wrong. Config/test paths and native setup need actual maintained instructions. See M30.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "100c7fd1392b4c3838f268e176b8808c2f25d72ffca66d6d81a94e0a75a0b593"
     },
     {
       "path": "papers/project-simurgh/ara/logic/problem.md",
@@ -10957,11 +10957,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "63ea73c40d586afcac3d4bca06cd23ede6267a3b1d78b9c5e5a3c02cfab669f8",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full observations/gaps/assumptions read. Universal OS exclusion and no-existing-alternative claims need bounded evidence; self-reported industry statistic is not independent population prevalence. Current Apple documentation contradicts platform-universal reading. See M30.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "63ea73c40d586afcac3d4bca06cd23ede6267a3b1d78b9c5e5a3c02cfab669f8"
     },
     {
       "path": "papers/project-simurgh/ara/logic/related_work.md",
@@ -10970,11 +10970,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "8334dcade84b33bc9b7c8d346cda05d571e9d87e8e2f6c794898acc2d5f3ca62",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All fourteen entries and supporting citations read. Typed deltas are interpretations, not proof of global novelty. WebAuthn does not by itself attest whole OS/capture state; legacy OS docs require version-aware interpretation. Full individual-reference verification pending.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "8334dcade84b33bc9b7c8d346cda05d571e9d87e8e2f6c794898acc2d5f3ca62"
     },
     {
       "path": "papers/project-simurgh/ara/logic/solution/algorithm.md",
@@ -10983,11 +10983,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "39a7d07ae9d63a0187cc51fbb319f592a07d78f12229b086cfc71dae180a4696",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full pseudocode and complexity table read. Daemon envelope has challenge but pseudocode reads nonce and posts to Ed25519 endpoint; route families conflated. Python json.dumps defaults differ from JS signing bytes. Listed weights sum to 1.05, not normalized 1.0. See M30.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "39a7d07ae9d63a0187cc51fbb319f592a07d78f12229b086cfc71dae180a4696"
     },
     {
       "path": "papers/project-simurgh/ara/logic/solution/architecture.md",
@@ -10996,11 +10996,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "44225980f0120b872dfade1289ad1cd5ff5e16a2b42cea88d55bdd676818ebf9",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full graph and nine-step flow read. Browser SDK actually uses /api/device/challenge and /api/device/pair with daemon proof on telemetry. Document mixes Ed25519 flow; weights total 1.05, audit cap limits every-event claim, privacy helper exceptions apply. See M30.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "44225980f0120b872dfade1289ad1cd5ff5e16a2b42cea88d55bdd676818ebf9"
     },
     {
       "path": "papers/project-simurgh/ara/logic/solution/constraints.md",
@@ -11009,11 +11009,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "67ce48a68265794d79cf7a903c74e9f8f7e28856a816126091a0b6f95be54cca",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All constraints/nonclaims/limits read. Scope proof-field exclusions separately from raw local API access and legacy helper. Five-minute nonce retention has periodic eviction and restart boundary; historical no-student-pilot claim predates separate voting/banking records. See M30.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "67ce48a68265794d79cf7a903c74e9f8f7e28856a816126091a0b6f95be54cca"
     },
     {
       "path": "papers/project-simurgh/ara/logic/solution/heuristics.md",
@@ -11022,11 +11022,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "fe57e4dac0011f4ac5625960eaecbc548ee96a8c28c76cfa0c9948dc58dc3fd9",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All six heuristics read. Paste/WPM/affinity are uncalibrated review signals, not reliable AI-origin detectors; confidence floor is not empirical certainty. Nonce paragraph incorrectly calls browser signature ECDSA and overstates replay after TTL despite timestamp validation. See M30.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "fe57e4dac0011f4ac5625960eaecbc548ee96a8c28c76cfa0c9948dc58dc3fd9"
     },
     {
       "path": "papers/project-simurgh/ara/src/configs/model.md",
@@ -11035,11 +11035,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "a31e41e6352ecbd8425b1902a9a3962c80c01f9189a11ff69a5ba2809bf8fca5",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All algorithm, envelope, capability, signal and storage tables read. Eleven/twelve are core field lists, not full maximum-field claims for extended daemon schemas. SPKI/DER and distinct hash prefixes matter; current platform support is schema-bound. See M30.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "a31e41e6352ecbd8425b1902a9a3962c80c01f9189a11ff69a5ba2809bf8fca5"
     },
     {
       "path": "papers/project-simurgh/ara/src/configs/training.md",
@@ -11048,11 +11048,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "7f1722a94e9b2703ed4f89696d0fb3bf0de910ab97fade9ad05eabf595a7b0db",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All weights/thresholds/formulas read. Sum equation is arithmetically wrong: listed weights total 1.05 and current JS uses same sum then rounding/clamping. Threshold rationale uncalibrated; no training occurred. See M30.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "7f1722a94e9b2703ed4f89696d0fb3bf0de910ab97fade9ad05eabf595a7b0db"
     },
     {
       "path": "papers/project-simurgh/ara/src/environment.md",
@@ -11061,11 +11061,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "2dce84389d48f457aa477d811f6cae787ae8ad78439e6b9ddeb112493ad098dd",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full environment and execution-status tables read. Correctly acknowledges native toolchain limits but conflicts with all-pass summaries. 61/63 is partial execution, not passing full gate suite; versions/counts are dated. See M30.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "2dce84389d48f457aa477d811f6cae787ae8ad78439e6b9ddeb112493ad098dd"
     },
     {
       "path": "papers/project-simurgh/artifact/README.md",
@@ -11074,11 +11074,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "a7e12515d987acf7c46e4926e4c3cb89bbf577f208d0599e234683a426e36f89",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full artifact guide read. 331 differs from paper 327 and no matching revision pinned; 61 passed/2 failed is not full success. Privacy tool scans JSON field names, not all source APIs. Current root guidance supersedes old runtimes/timings. See M30.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "a7e12515d987acf7c46e4926e4c3cb89bbf577f208d0599e234683a426e36f89"
     },
     {
       "path": "papers/project-simurgh/artifact/REPRODUCE_LINUX_CI.md",
@@ -11087,11 +11087,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "9d1fef18dc89bce6e787a4957c445240fa2cc01783efd57802097ae73478b783",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full commands and CI-only scenario notes read. Placeholder root requires substitution, Rust count historical; mandatory Xvfb distinction correct but no fresh result inferred. Use current locked toolchain recipe and scoped receipts.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "9d1fef18dc89bce6e787a4957c445240fa2cc01783efd57802097ae73478b783"
     },
     {
       "path": "papers/project-simurgh/artifact/REPRODUCE_PRIVACY_AUDIT.md",
@@ -11100,11 +11100,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "dc8a61bbc93eaa4f1578a98e555b9e9cc45d86c6dd759600568b02109dae7e9c",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full guide read. Seven advertised source/API/privacy checks exceed tools/privacy-audit.mjs JSON-field scanner; invalid/missing targets skipped and empty scan can pass. Listed greps are separate checks and do not establish all content absence. See M30.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "dc8a61bbc93eaa4f1578a98e555b9e9cc45d86c6dd759600568b02109dae7e9c"
     },
     {
       "path": "papers/project-simurgh/artifact/REPRODUCE_WINDOWS.md",
@@ -11113,11 +11113,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "768e6124e8bc5585f451adf52ad8fc5b9eceaedffb4611f68a8d788ef36f46c4",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Full guide read. cd then root-prefixed dotnet run is wrong cwd; daemon command does not launch affinity fixture; replay reason conflates nonce and daemon challenge paths. Preserve historical evidence, use maintained instructions. See M30.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "768e6124e8bc5585f451adf52ad8fc5b9eceaedffb4611f68a8d788ef36f46c4"
     },
     {
       "path": "papers/project-simurgh/main.bbl",
@@ -11126,11 +11126,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "b0e3465f368ead492c3641175181fc37c63ba76151a57dc3208ae3ca67be1d48",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read complete generated bibliography. RFC2104 surname Bellare is incorrectly accented; publication/source dates and primary-source applicability require care. Preserve generated artifact; M30/M31 record verified corrections, not blanket verification of all cited papers.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "b0e3465f368ead492c3641175181fc37c63ba76151a57dc3208ae3ca67be1d48"
     },
     {
       "path": "papers/project-simurgh/main.pdf",
@@ -11139,11 +11139,11 @@
       "category": "publication_or_personal_record",
       "extraction": "pdftotext_layout",
       "baseline_sha256": "7064e8b02318cded8ae3c5d2df8a5031a7f30952b06d08a5531788b74349a419",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read complete extracted text of all 12 pages; visually inspected page 5 only. Same substantive errata M30/M31 as source; stale VIII-F methodology and VIII-D clean-session references. This does not certify layout of every page.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "7064e8b02318cded8ae3c5d2df8a5031a7f30952b06d08a5531788b74349a419"
     },
     {
       "path": "papers/project-simurgh/main.tex",
@@ -11152,11 +11152,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "cdbdf78b2c294a1d7b15155d99bab00deb5bfb91872e81958daf1bbde8d909ea",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 724 lines. M30 corrects mixed endpoint/envelope families, 383 versus ARA379 counts, privacy and audit absolutes, heuristic calibration and stale cross-references. M31 narrows current OS capture claims. Preserve source as historical publication.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "cdbdf78b2c294a1d7b15155d99bab00deb5bfb91872e81958daf1bbde8d909ea"
     },
     {
       "path": "papers/project-simurgh/references.bib",
@@ -11165,11 +11165,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "0530344f6e3ccaed8d44b94161e4dcf0982aaa897645999867005dce487bcb30",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all entries. RFC2104 Bellare typo propagates into PDF; undated API access years do not establish publication dates. Current Apple/Microsoft documentation narrows historical capture claims; remaining cited full texts are not all independently verified.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "0530344f6e3ccaed8d44b94161e4dcf0982aaa897645999867005dce487bcb30"
     },
     {
       "path": "papers/simurgh-voting-pilot/PAPER_CLAIM_AUDIT.md",
@@ -11178,11 +11178,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "207f5ec2314a7dce6488979d95ed6db11aed5a59bbe78c30a283720b092f46e1",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire audit and all table rows read. Hardcoded false flags and finite key rejection are not universal privacy guarantees. Four-page build is stale versus five-page PDF; closure smoke only establishes unauthenticated report response. Institutional determination remains unverified. See M23/M24/M29.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "207f5ec2314a7dce6488979d95ed6db11aed5a59bbe78c30a283720b092f46e1"
     },
     {
       "path": "papers/simurgh-voting-pilot/main.bbl",
@@ -11191,11 +11191,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "a5360b9eb22671982654ce30a97869420991bfc76f707e2c3effdc613a67b5c2",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All generated bibliography text and macros read. Thirteen entries match source identities; generated citation text is not independent validation of claims or legal currency. No direct edit to generated frozen artifact.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "a5360b9eb22671982654ce30a97869420991bfc76f707e2c3effdc613a67b5c2"
     },
     {
       "path": "papers/simurgh-voting-pilot/main.pdf",
@@ -11204,11 +11204,11 @@
       "category": "publication_or_personal_record",
       "extraction": "pdftotext_layout",
       "baseline_sha256": "2e5b43d7aacce55aa929ade17c19162f19e997859bd62e43e5ffeca7099cd5dc",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete five-page PDF text read including all thirteen references. Page 3 rendered: consent-event label overlaps adjacent text column. Historical four-page audit is stale. Same privacy, HMAC and pseudonymity limits as source; M29 records corrections without altering publication.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "2e5b43d7aacce55aa929ade17c19162f19e997859bd62e43e5ffeca7099cd5dc"
     },
     {
       "path": "papers/simurgh-voting-pilot/main.tex",
@@ -11217,11 +11217,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "f5572fd9a340129955ebf7352c74da37e18a0a8e01a83cbed47e183394a8160b",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All 564 lines read. Hardcoded flag, top-level denylist and intended-client construction do not prove no ballot data can reach server. Sharing HMAC key permits forgery; anonymity and future radio-value safeguard claims too broad. Conditional closure and cleared-session limits need consistent wording. See M29.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "f5572fd9a340129955ebf7352c74da37e18a0a8e01a83cbed47e183394a8160b"
     },
     {
       "path": "papers/simurgh-voting-pilot/references.bib",
@@ -11230,11 +11230,11 @@
       "category": "publication_or_personal_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "5e204c53d0b44a668c66b635e6ae57c68b049ef374812ac4c58462ac5b651cd4",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "All thirteen entries read. NIST primary record confirms four authors/title/February 2011; official NSW search confirms November 2023 report; USENIX confirms STAR-Vote workshop record. Full current verification of every remaining entry and legal applicability pending. Preserve historical bibliography.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5e204c53d0b44a668c66b635e6ae57c68b049ef374812ac4c58462ac5b651cd4"
     },
     {
       "path": "proofs/README.md",
@@ -11951,13 +11951,5 @@
       "reviewer": "Codex",
       "read_sha256": "47104ea0719daa106e106c164b7ae04d0843c0a4c35234e1f678aa5dfa99885c"
     }
-  ],
-  "complete_read_count": 181,
-  "unread_count": 738,
-  "limits": [
-    "In progress: complete reading is not final claim verification or exhaustive scientific validation.",
-    "Pending rows have not been manually reviewed in full in this continuation.",
-    "PDF/DOCX extraction does not establish visual-layout review.",
-    "Hashes identify bytes; they do not establish independent custody or truth."
   ]
 }

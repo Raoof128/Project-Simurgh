@@ -1,0 +1,26 @@
+{
+  "baseline": "15105bac03588d601a2961b3d6f61db72c3b37a4",
+  "prior_checkpoint": "e46fa0c2",
+  "manual_read_count": 281,
+  "candidate_count": 919,
+  "complete": false,
+  "append_only_logs": true,
+  "changed_paths": [
+    "AGENT.md",
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md",
+    "docs/documentation-audit-2026-10-19/manual-progress.json"
+  ],
+  "checks": {
+    "changed_file_format": "pass",
+    "local_links": {
+      "documents": 813,
+      "links": 1835,
+      "issues": 0
+    },
+    "candidate_identity": "919 paths match continuation census; 281 complete reads",
+    "preservation": "existing AGENT.md and CHANGELOG.md bytes are exact prefixes; only mutable guidance and audit records otherwise changed"
+  },
+  "scope": "Documentation checkpoint; no fresh inference, full E2E rerun or interactive desktop validation."
+}

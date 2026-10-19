@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **181 documents have complete manual reads; 738 remain
+SHA-256 values. At this checkpoint, **281 documents have complete manual reads; 638 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -293,6 +293,318 @@ Apply these corrections to the recorded output:
   A generated draft and simulated reviewer acceptance do not establish citation completeness,
   submission, acceptance or external review. The later manuscript location is
   `papers/banking-shield/source/`; historical `paper/` references are not current runnable paths.
+
+### M23 — Voting-pilot record consistency and privacy limits
+
+All sixteen Markdown records in `docs/research/mq-voting-pilot/` and `results/`, plus the ten
+short gate receipts under `evidence/pre-pilot/` and `evidence/phase-c-closeout/`, were read
+completely. The two long npm test transcripts remain pending complete reading. Findings:
+
+- The original protocol specifies three to five Phase B members; Phase A closeout specifies
+  one to three. Phase B reports 34 artifacts, not a verified count of distinct people. Keep
+  artifacts, sessions and participants separate.
+- Phase C's protocol and notice still say pending/draft while its checklist says GO and its
+  closeout says complete. The executive request says pending at the top but records an approved
+  row below. These are inconsistent historical status fields, not evidence of a new approval.
+- The Phase C ceiling is thirty participants; closeout records thirty-one consented sessions,
+  thirty submissions and one withdrawal. Session counts alone do not establish whether the
+  participant ceiling was exceeded or whether a participant had multiple sessions. Do not
+  silently equate thirty submitted sessions with thirty unique participants.
+- The Phase C data-management addendum still has a blank retention-end date and unchecked
+  prerequisites. Its “local-only” and researcher-only access rules must be reconciled with
+  any publicly committed session artifacts before claiming adherence. This audit does not
+  invent a retention date, erase evidence or certify consent for publication.
+- Random codes, timestamps and stable keyed hashes are pseudonymous data; their absence of
+  names does not establish that they are unidentifiable in every context. Replace absolute
+  anonymity interpretations with the documented collection and access assumptions.
+- The participant notice says it records acceptance or decline, but also says decline creates
+  no record. The documented implementation creates a session on acceptance; distinguish that
+  from ordinary web-server/infrastructure request logs. Its HMAC validity statement is relative
+  to trusted keys/history, not proof that a key-holding operator never changed the record.
+- `PHASE_A_CLOSEOUT.md` reports nine evidence files scanned, while its retained pre-pilot
+  privacy log says **zero voting evidence files** and one separate Linux fixture. That empty
+  voting scan does not establish artifact coverage. The Phase C privacy log separately reports
+  fifty-two voting artifacts and one Linux fixture; do not mix those two counters.
+- `PHASE_C_RESULTS_TABLES.md` labels Table 3 as thirty submitted sessions but includes all
+  thirty-one consented sessions and the withdrawal. Interpret it as the full cohort flow.
+- Both npm advisory receipts retain two moderate findings. “Zero high/critical” must not be
+  shortened to zero vulnerabilities across all severities.
+- The closure smoke proves that an unauthenticated report request remains 401 rather than
+  410; it does not by itself demonstrate successful authenticated report export. All write-route
+  closure claims remain conditional on the collection-closed configuration.
+- False report flags and selected forbidden-field checks are bounded observations. They do
+  not independently prove that no ballot data was ever collected by any browser or host.
+
+### M24 — Voting ethics claims need their actual determination
+
+The original voting protocol requires formal ethics approval for Phase C, while later records
+state that a researcher rationale made a formal application unnecessary. The checked-in GO table
+and executive approval row do not themselves establish an institutional exemption or review.
+The exact determination and its scope remain unverified in this audit; do not label the pilot
+“HREC-approved” or infer wrongdoing solely from an incomplete public record.
+
+For current handover, [Macquarie's applications and approvals guidance](https://www.mq.edu.au/research/our-research/research-ethics-and-integrity/human-ethics/applications-and-approvals)
+uses a risk-assessment pathway even when researchers think a project may be exempt. Refer to the
+applicable institutional determination rather than treating internal, voluntary or aggregate-only
+work as automatically exempt. [NHMRC's dated version history](https://www.nhmrc.gov.au/about-us/publications/national-statement-ethical-conduct-human-research-2023)
+says the 2023 National Statement applied through 22 June 2026 and the 2025 version took effect
+on 23 June. The reported pilot closed on 4 June; current guidance must not be misrepresented as
+the exact rule in force at that earlier date. These sources were checked on 19 October 2026.
+
+The addendum's blanket instruction not to notify participants unless advised should not be reused
+as a universal breach-response rule. Any actual incident must follow the applicable institutional
+and legal notification process. No participant contact, new study, institutional submission or
+retroactive sign-off is performed by this documentation review.
+
+### M25 — AISec artifact checks are narrower than replay
+
+The AISec package README, artifact README, all seven audit documents, six short section notes
+and bibliography were read completely. Its wrapper `artifact/reproduce-paper-claims.sh`
+checks committed metric fields and searches the retained Stage 3M verifier transcript for PASS
+strings. It does not invoke the cryptographic verifier or re-execute the Stage 3X chain.
+The wrapper passes now, but that establishes only these stored-artifact checks. The artifact
+README's “what reviewers can reproduce” list must not be read as the wrapper's actual execution
+scope. Use the original stage verifiers for their stronger, separately documented checks.
+
+The historical reproducibility audit uses uppercase `Papers/` paths and repeated `cd` commands
+that are not a valid sequential recipe from the current tree. Use lowercase `papers/` and the
+root-based maintained guidance. Its dated Node prerequisite is not a repository-wide toolchain
+promise. The final checklist's upload-ready verdict and five-page/anonymity observations are
+specific to 24 June, not a current venue clearance or evidence of submission.
+
+The [official AISec 2026 CFP](https://aisec.cc/), checked on 19 October 2026, confirms that the
+July 24 submission deadline and September 16 camera-ready deadline have passed. It allows ten
+content pages and twelve overall, with its stated exception for a GenAI-only thirteenth page;
+it requires the GenAI statement after references/appendices. The current draft's venue metadata
+and identity handling still require revision-specific review before any future submission.
+Nothing in this audit authorizes uploading or contacting a venue. Citation audit coverage also
+omits the bibliography's CaMeL entry; a verified bibliography label is not evidence that every
+entry was independently checked in that historical audit.
+
+### M26 — AISec manuscript consistency and publication limits
+
+Both `papers/llm-shield-aisec2026/main.tex` and the complete eight-page PDF were read.
+Page 4 was also rendered and inspected: the long attack-envelope list extends beyond the
+right margin. The historical five-page checklist therefore does not describe this PDF.
+A future manuscript revision needs a fresh build and page-by-page visual review; the
+preserved publication artifact has not been overwritten.
+
+- The October/TBD conference metadata is obsolete. The official CFP places the workshop on
+  15 November 2026 in The Hague; this does not establish paper acceptance or publication rights.
+- The abstract's blanket synthetic/self-authored description needs to distinguish the Stage 3L
+  corpus, AgentDojo-derived component fixtures and the later live-agent runs. The limitations
+  section should describe additional live-agent replication as future work, because a live run
+  is already reported in the body.
+- Rendering published AgentDojo goals and attack templates into 175 combinations is a derived
+  evaluation. Attribute the upstream components and the local rendering separately; it is not
+  independent execution or third-party validation of Simurgh.
+- A finite differential test supports equivalence over its enumerated inputs. It does not prove
+  equivalence for every possible argument or transfer all properties of a live experiment.
+  The stated cause of the one benign regression remains a hypothesis unless supported by a
+  controlled rerun; do not replace the observed 7/10 to 6/10 utility result with that explanation.
+- The text says three defenses use the same baseline, but its table reports different
+  same-session baseline counts. Compare each defense with its reported paired baseline and
+  retain those denominators. The Stage 3Z witness is a local mechanism demonstration, not an
+  independently operated external validation. “Pass every check” is too broad when the same
+  paper demonstrates that an additional witness detects a dishonest signed receipt.
+- The adjacent literature matrix calls RFC 8785 and RFC 8032 Internet standards. The RFC
+  Editor classifies both as Informational: see [RFC 8785](https://www.rfc-editor.org/info/rfc8785/)
+  and [RFC 8032](https://www.rfc-editor.org/info/rfc8032/), checked 19 October 2026. Established
+  cryptographic specifications should not be confused with their formal RFC status.
+- The anonymous-archive builder copies a narrow package and checks selected identity strings.
+  This is not a comprehensive anonymity review. The retained tarball also contains AppleDouble
+  entries and extended metadata; a future anonymous release needs an explicit metadata review.
+  Its wrapper depends on repository evidence outside that archive, so the archive alone is not
+  a self-contained reproduction environment.
+
+### M27 — Banking manuscript revisions retain substantive defects
+
+All twenty-three baseline documents in `papers/banking-shield/` were read, including
+each draft, all three complete PDF text extractions, the bibliography and simulated reviews.
+The later prose improves the claim boundaries, but the historical “every factual claim verified
+true” verdict is not a complete or current assurance statement.
+
+- Draft v0.1 uses 47 forbidden field names; the later corrected count is 46. Drafts v0.1,
+  v1.0 and v1.1 use 28 claim phrases; the corrected count is 29. The v1.2 Markdown and main
+  LaTeX use 29, but the retained v1.2 draft PDF still uses 28, the v1.1 disclosure, old citation
+  years and the internal “page-one figure candidate” caption. That PDF predates those fixes.
+- The package README describes a seven-page main PDF; `pdfinfo` reports six. The draft PDFs
+  are separate thirteen- and fourteen-page artifacts. The v1.2 PDF's page 13 was visually
+  checked: its EPC URL extends past the page edge. Do not treat a successful text extraction
+  or historical export checkbox as proof of professional typesetting.
+- Figure 3's success arrow goes directly from the provider to the response, bypassing the
+  output guard in the drawing. The implementation checks the output before returning success.
+  A corrected diagram must connect the successful output-guard decision to the response.
+  This was checked in both LaTeX and the rendered main PDF's page 4.
+- “Every response” has a privacy receipt is too broad: at the frozen `92dabb4` revision and
+  in current `src/bankingPilot/index.js`, missing-session and not-yet-submitted errors return
+  without that receipt. Authentication middleware also precedes the explanation pipeline.
+  Receipt coverage concerns the documented explanation outcomes, not every HTTP rejection.
+- The later related-work paragraph still says the provider is “statically unable to egress,”
+  despite the limitations section's narrower source-scan scope. Apply M21 throughout. Output
+  equality checks a structured policy value; it does not prove every narrative sentence agrees
+  semantically. A receipt's false flags are application assertions, not independent sensors.
+- The outline and early drafts claim structural controls are better than content filtering
+  without a comparative experiment. Present that as a design hypothesis. The broad industry
+  statements about unpoliced overclaims, default leaks and the costliest failure mode need
+  specific evidence and scope; they are not established by this prototype's tests.
+- An allowlist validator can log rejected inputs. The paper's claim that allowlisting cannot
+  produce refusal evidence is not an inherent limitation of allowlists; it describes a local
+  design choice to record particular denied fields separately.
+- The five simulated review roles are explicitly model-assisted, not five independent experts.
+  “Not a user study” should not be reused as an institutional ethics determination: the records
+  still describe human participation and feedback. Preserve the n=5, checklist-only and
+  three-session-rerun limits rather than inferring population validity or an exemption.
+- The old `docs/research/banking-pilot/paper/` paths in drafts, audits and export commands now
+  map to `papers/banking-shield/source/`. Build the canonical paper from its package directory;
+  run implementation gates from an isolated repository root. Some privacy gates write fixtures,
+  so they are not read-only checks of the retained evidence pack.
+
+The revision-specific corrections above accompany the frozen papers; this review does not
+silently replace a deposited PDF, change its license or publish a new version.
+
+### M28 — Banking bibliography author names and verification scope
+
+On 19 October 2026, the twelve academic DOIs returned Crossref metadata and the preprint DOI
+returned DataCite metadata matching its title and author. This confirms registry records,
+not the accuracy of every cited interpretation. The bibliography contains seventeen entries,
+including four institutional URLs and the self-citation. Its blanket statement that every entry
+was verified through Crossref is therefore misleading; the historical audit itself lists URL
+checks separately and records two HTTP 403 responses. A 403 alone does not verify page content.
+
+The following expanded author names in `papers/banking-shield/references.bib` disagree with
+the publisher-supplied Crossref records. Use the registry names below in a corrected edition;
+the printed initial-only citations often conceal these errors.
+
+| Reference                         | Retained bibliography                         | Registry correction and source                                                                                             |
+| --------------------------------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Secure logging                    | T. Rajani Sree; S. Mary Saira Bhanu           | Thankaraja Raja Sree; Somasundaram Mary Saira Bhanu — [Crossref record](https://api.crossref.org/works/10.1002%2Fcpe.5143) |
+| BCALS                             | Aitizaz Ali; Abdullah Khan                    | Ahmad Ali; Abid Khan — [Crossref record](https://api.crossref.org/works/10.1002%2Fett.4272)                                |
+| Wireless Emergency Alert messages | Gerard Kim; Andrew Martel; Kotagal L. Johnson | Grace Kim; Andrea Martel; Kerri L. Johnson — [Crossref record](https://api.crossref.org/works/10.1111%2F1468-5973.12278)   |
+| Across the Pond                   | Rima Manini                                   | Raffaele Manini — [Crossref record](https://api.crossref.org/works/10.1111%2F1911-3846.12735)                              |
+
+The current source already uses the corrected issue years for several papers. An online-first
+date returned in a registry's general `published` field does not invalidate that issue-year choice;
+compare the specific online and print dates before changing it. The
+[DataCite record](https://api.datacite.org/dois/10.5281%2Fzenodo.20675513) establishes the cited
+preprint record, not peer review, affiliation verification or a license change authorization.
+
+### M29 — Voting paper privacy guarantees exceed the retained evidence
+
+All five baseline documents in `papers/simurgh-voting-pilot/` were read, including the complete
+five-page PDF and generated bibliography. The claim-audit's four-page build describes an older
+artifact. Rendering page 3 confirms that the lifecycle figure's consent-event label overlaps the
+adjacent text column; future publication needs a corrected layout and fresh visual review.
+
+The source at `v0.5.0-voting-pilot-phase-c-closeout` and the current router agree on the relevant
+behavior: submit checks a finite set of **top-level** forbidden keys, then records completion
+metadata. It does not recursively reject all possible encodings or reject every unknown field.
+The store does not retain arbitrary submitted values, but the server has already received and
+parsed the request before those checks. Therefore:
+
+- Replace “ballot data cannot reach the server” with the narrower statement that the intended
+  client omits ballot choice and the store records the defined lifecycle metadata. A malicious
+  client's request is outside what client-side JSON construction can constrain.
+- The hardcoded false privacy flag is an assertion about the intended data flow, not a detector
+  or independent proof of what every request, host or intermediary collected. The 52-file scan
+  excludes the cleared live sessions and cannot reconstruct their per-session history.
+- Zeroing radio values is a limited defense against accidentally serializing those values.
+  It cannot secure every future client change or exclude information encoded in field names,
+  selected state or other request fields. No formal adversarial-participant study was performed.
+- “Anonymous” should be read as pseudonymous under the disclosed small-cohort assumptions.
+  Excluding ballot-choice inference from scope does not establish that timestamps cannot be
+  correlated with other records. The broader prototype's helper exceptions also prevent the
+  voting notice's “never collects” wording from being reused repository-wide; see M06/M08/M19.
+- Sharing an HMAC verification key also grants the ability to create valid MACs. The conclusion's
+  proposed disclosed symmetric key is not equivalent to public-key, third-party verification.
+  Keep issuer authentication, independent observation and participant verification distinct.
+- Society approval remains a reported project record, not a verified institutional exemption;
+  see M24. A claim of structural separation from the official voting system is narrower than an
+  independently observed absence of every possible effect on participants or outcomes.
+- Closure is conditional on the environment flag. The retained closure smoke's unauthenticated
+  report result does not establish successful authenticated export after closure; see M23.
+
+The [NIST IR 7770 record](https://csrc.nist.gov/pubs/ir/7770/final), checked 19 October 2026,
+confirms the cited title, February 2011 date and four authors. The NSW Electoral Commission's
+[November 2023 review announcement](https://elections.nsw.gov.au/about-us/media-centre/news-and-media-releases/review-into-technology-assisted-voting-final-report)
+confirms a real review, not endorsement of this particular student-society pilot. The paper's
+claim that this makes small pilots the appropriate evaluation method is the author's inference.
+No voting-system certification or current legal-compliance conclusion follows from these citations.
+
+### M30 — Foundation paper, ARA and reproduction contract
+
+All 28 documents under `papers/project-simurgh/` were read completely, including the
+724-line LaTeX source, its bibliography and generated bibliography, all extracted text of the
+12-page PDF, the ARA, diagrams, tables and reproduction guides. PDF page 5 was also inspected
+visually; this is not a visual review of all 12 pages. Preserve these publication artifacts and
+apply the following corrections when citing or reproducing them:
+
+- **Scoring:** the eight weights in the ARA sum to **1.05**, not the stated 1.00.
+  `src/academic/riskScoring.js` uses those weights, rounds and clamps the result; it does not
+  renormalize them. The formula `0.5 + score / 200` is an uncalibrated heuristic, not an empirical
+  probability. Paste volume or typing speed alone does not establish AI use. No runtime weights
+  are changed by this erratum.
+- **Two protocols:** browser-paired Ed25519 uses `/api/integrity/pairing/challenge`,
+  `/api/integrity/pairing/complete` and `/api/integrity/proofs`. The device SDK uses
+  `/api/device/challenge`, local `/pair`, `/api/device/pair`, local `/proof` and then a
+  `daemon_proof` attached to `/api/telemetry`. The paper's `/api/pairing/*` routes and combined
+  sequence diagram are not executable endpoint documentation. Device challenges and browser
+  nonces are different fields. The browser nonce paragraph incorrectly says ECDSA; that
+  envelope uses Ed25519. Separate canonicalization functions and golden fixtures do not establish
+  byte identity across the two envelope types.
+- **Pseudocode:** the ARA Python sketch is not a working verifier. Default `json.dumps` spacing
+  differs from JavaScript's serialization; even its compact stub needs explicit Unicode,
+  number and rounding rules for byte parity, and signature verification is unimplemented.
+  A daemon envelope cannot be verified by looking for the browser envelope's `nonce`.
+- **Audit and privacy:** `src/audit/hmacChain.js` stops appending at the configured cap (default
+  5,000), so “every event” and “full history” require qualification. Verification needs the shared
+  HMAC key; a key holder can create replacement history, and an empty supplied chain does not
+  establish event coverage. Raw identity reaches ingress and is HMAC-pseudonymized (M01).
+  Transient native handles and the legacy helper (M10) contradict “never accessed at any layer.”
+  `tools/privacy-audit.mjs` scans JSON keys in configured data/fixture locations. It does not
+  perform the seven source/API/key-storage checks claimed by the paper and reproduction guide;
+  absent or unparsable files are skipped, so an empty scan can report PASS.
+- **Results:** 383 = 331 + 33 + 11 + 8 in the main paper, while the ARA's 379 uses 327 Node
+  tests. Historical annotation counts are not proof that each native suite executed successfully
+  (M18). The artifact guide's separate 61-pass/2-fail run is partial, not an all-pass receipt.
+  Twenty synthetic clean sessions, one affinity false positive and selected threshold variants
+  do not establish population false-positive rates or independence from tuning. Preserve the
+  measured numbers and their denominators; do not replace them with current suite counts.
+- **Reproduction:** after changing into the Windows daemon directory, use a project path relative
+  to that directory, not another repository-root prefix. Starting the daemon is different from
+  running the affinity fixture. Linux's supported invocation is corrected in its current README
+  (M06). The historical Node 22 timing measurements are not fresh performance measurements.
+- **Guarantees:** uniform error strings do not prove constant-time handling. Browser proof replay
+  resistance combines timestamp checks, session binding and the nonce guard; five-minute nonce
+  retention is periodically swept, not an exact erasure deadline. Signed environment values
+  establish key attribution, not trustworthy OS state. WebAuthn authenticators do not by
+  themselves attest whole-device capture visibility. Hardware-held keys alone would not solve
+  dishonest scanner inputs. The academic verdict policy is scoped to that application, not every
+  later enforcement integration.
+- **Presentation and sources:** the PDF is 12 pages. Its methodology cross-reference VIII-F is
+  stale; the rendered methodology subsection is VIII-K. The synthetic-session cross-reference
+  VIII-D points to Windows validation, not false-positive calibration (VIII-G). The RFC 2104
+  bibliography misspells Mihir Bellare as Belláre. Industry prevalence estimates and asserted
+  superiority over alternative architectures are not independently established by these artifacts.
+  Historical Stage 3/future-pilot language predates later work and must be dated when quoted.
+
+### M31 — Current OS documentation limits the capture claim
+
+Primary documentation was checked on 19 October 2026. Apple describes
+[`NSWindow.SharingType.none`](https://developer.apple.com/documentation/appkit/nswindow/sharingtype-swift.enum/none)
+as “A legacy constant that macOS no longer uses.” Its discussion explicitly says not to use
+this value to hide or omit content from capture. This is incompatible with treating that flag
+as a universal current macOS capture-exclusion guarantee. Historical observations may describe
+specific OS/capture combinations; they do not override current API limitations.
+
+Microsoft's [`GetWindowDisplayAffinity`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getwindowdisplayaffinity)
+documentation permits cross-process calls but requires a layered window and Desktop Window
+Manager composition for successful retrieval. Its remarks expressly decline a DRM guarantee.
+`SetWindowDisplayAffinity` additionally requires a top-level window owned by the calling process.
+“Any enumerable window,” “all capture pipelines” and unconditional current-platform exclusion
+claims in the foundation paper, ARA and older device-track prose must be narrowed accordingly.
+`SECURITY.md` now states these limits. This correction is not a fresh interactive desktop test
+and does not rewrite historical results or change scanner behavior.
 
 ## Primary sources rechecked during this continuation
 
