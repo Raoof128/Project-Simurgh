@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **874 documents have complete manual reads; 45 remain
+SHA-256 values. At this checkpoint, **878 documents have complete manual reads; 41 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -4480,3 +4480,169 @@ a few constants and source strings. Lean proves defined counts, assumed digest e
 functional equality; the miss theorem exhibits one zero-integrity-code example rather than
 proving every runtime miss is disjoint from every error. The proofs do not establish truthful
 labels, complete ledger coverage, independent provenance, semantic preservation or a lower bound.
+
+### M118 — Stage 4Y does not authenticate the supplied audit bundle or enforce complete replay
+
+Completely read the 564-line VDR specification and 625-line plan. Compared all core modules,
+fixture builder/verifier, Lane B, Python/browser implementations, Lean, parity/projection/K7
+checks and reproduction script. The accepted input is nonempty NFC UTF-8 text, not arbitrary
+PDF/Word bytes. A total partition accounts for submitted bytes; it cannot establish that the
+submitter supplied a complete original report, preserved its meaning or disclosed all sources.
+Literal marker detection covers two declared marker forms, not arbitrary visual redactions or
+PDF layers. Redaction precedence is classification, not removal of the underlying content.
+The public fixture's redacted `42%` remains literal text in its retained document. The withheld
+fixture's text is embedded in the builder source, so withholding its evidence file is a tier
+exercise, not confidentiality against a repository reader.
+
+The [seven-case in-memory probe](vdr-verifier-probe.json) retains a valid baseline and a wrong-salt
+refusal control. With the original signature unchanged, audit accepts an empty shadow-record
+list, a false document digest and false private redaction counts. It never compares the supplied
+`audit` object's digest with the signed `audit_digest`. Recompute compares only the rebuilt map,
+not the rebuilt audit data. Missing document bytes skip both intrinsic byte checks and map
+recompute; an empty shadow list then passes audit. Shadow replay requires six records per supplied
+line but not unique MR IDs or every caught line. Repeating nonapplicable records six times passes,
+leaving applicable transforms unrepresented. This does not alter the genuine map's headline when
+bytes are present, because map recomputation still checks that headline; it does invalidate the
+claim that every sealed audit record is authenticated and completely replayed.
+
+Reconciliation skips a missing counterpart, including the intended mismatch fixture. When
+provided, it compares class sequences only, not counterpart signatures, bytes, lengths or an
+authenticated public/private segment mapping. The clean public fixture's counterpart is copied
+from that same map rather than independently derived from its private counterpart. Every built
+map has a reconciliation summary, contrary to the proposed null unpaired representation.
+
+The public schema has no strict field allowlist: a producer-signed map with a `raw_document`
+extra field passes. Content-free output is a property of the builder, not a verifier guarantee.
+Shadow fields are optional in structural checking; zero-byte public maps and adjacent same-class
+regions are not excluded there. Shadow arithmetic does not require the promised relationship to
+caught-region counts, six transforms or v2/v1 monotonicity. The actual shadow unit is a caught
+line, including lines whose matches are redacted, not a colored span or a semantic sentence.
+Private caught-inside-redaction counts include fully contained matches, not every intersection.
+The default salt is `0`; fixture salts are deterministic and public. Neither construction proves
+privacy for low-entropy text or hides the disclosed lengths/classes. Edact-Ray motivates caution,
+not a security reduction for this format (S41).
+
+Frozen binding hashes four direct 4W/4X files and compares current digests. It does not cover all
+transitive imports, the VDR extractor or historical baseline authenticity. The oracle checks v1
+agreement line by line, not whole-document semantic equivalence, v2 agreement or every Unicode
+input. No textual label certifies factual truth. CLI verification is a fixture-index harness:
+expected negative codes count as passes, withheld audit fixtures are skipped, an empty index
+passes vacuously, unknown tiers follow public behavior, and there are no directory/key CLI flags.
+It calls the unsafe core and returns 0/1 rather than uniformly exposing the promised wrapper.
+
+Lane B uses the same builder under the same filesystem authority. Passing only PATH and a
+scratch document reduces explicit inputs but does not isolate access to repository evidence;
+three blindness flags are authored by the parent. The child checks four forbidden JSON keys
+and `OPERATOR_` names, not all equivalent paths, argv or bare `OPERATOR`. The ceremony is not
+independently signed/sealed into the main attestation, and temporary copies are not removed.
+Reproduce's purported scratch rebuild actually overwrites tracked fixtures; the allocated scratch
+directory is unused, and `git diff` is the comparison. Python and Lean type-checking may be skipped
+with disclosure; the Lean source scan still runs. No new ceremony or capture was run here.
+
+Python implements map construction and digest parity, not the claimed 183 intrinsic-byte checks,
+Ed25519 or the complete verifier. It hardcodes fixture provenance and uses Unicode regex rules
+that are not generally identical to JavaScript. Browser parity exercises one map plus a valid/
+invalid WebCrypto signature, not all fixtures or interactive rendering. Browser public verification
+omits Merkle-root consistency and attestation-schema checks; its partition check omits Node's
+integer/positive-length and shadow checks. Browser audit is only map reconstruction: no 183,
+186 or 187, no audit upload, no fatal byte decoding, and no signature prerequisite. The UI uses
+an empty manifest and a salt hint/default `0`, so normal salted/redacted fixtures cannot be
+reopened through that interface as designed. It renders unvalidated fields into HTML even on
+public failure, and dynamic style attributes conflict with its hash-only style policy. Static
+sink scans and VM tests do not establish a complete no-egress/framing or visual-browser guarantee.
+
+The OSCAL helper accepts any map without verification and emits an illustrative fragment. Its
+shape test is not NIST schema validation. Required v1.1.2 fields are absent: top-level `import-ap`,
+metadata `last-modified`, result `reviewed-controls` and observation `collected` (S41). The fixed
+1970 timestamp is not a measurement time. The unsigned map delta likewise relies on caller-side
+verification. Lean conservation defines document length as the sum being equated; agreement and
+slip containment assume the central property, and determinism is equality under equal inputs.
+These are abstract laws, not a refinement proof for runtime byte coverage. K7's export check only
+checks defined values, not that every function is exercised. Institutional uptake, novelty scores
+and a future external pilot are aspirations; an external pilot is not the only remaining gap.
+
+### M119 — Stage 4Z establishes consistency over producer declarations, not independent capture completeness
+
+Completely read the 573-line VWA specification and 543-line plan. Compared every core module,
+fixture/signing/verifier entry, Lane B/C, Python/browser, Lean, system-card and E2E checks. The
+[eight-case local probe](vwa-verifier-probe.json) confirms a valid baseline and the useful audit
+binding control: changing audit tensors without re-signing is refused at 191. Unlike 4Y, this
+stage binds supplied audit data when audit is actually evaluated. However, `{audit:null}` alone
+returns `{skipped:true,raw:0}` before schema or signature checking. Consumers must preserve SKIPPED
+as distinct from verified; it is not evidence of any valid withheld bundle. Other malformed inputs
+can throw during declaration dereference before schema 190; the safe wrapper then reports 198.
+
+The producer can shrink both declaration and capture token counts, remove matching cells, recount
+and re-sign; audit accepts it. Prompt counts are compared with another supplied count, not rerun
+through a pinned tokenizer over authenticated prompt bytes. The fixture prompt digest hashes its
+identifier, not actual text. `all_positions` is not enforced by the evaluator: equal unknown
+position-rule strings pass. Duplicate layers create duplicate expected cells, so a producer-signed
+grid with duplicate layers/cells also passes. Neither declaration uniqueness nor a nonempty,
+properly typed corpus/layer/token universe is comprehensively validated. Completeness is relative
+to this supplied declaration, not a guarantee against omitted prompts, positions or layers.
+
+A signed bundle with empty map/capture commitment tables, invalid model/lens digest strings and
+an unknown ceremony outcome passes audit while retaining tensors for score recomputation. Reopen
+iterates supplied commitments, without requiring one for every tensor consumed by the matrix.
+The whole audit object is still signature-bound; the narrower per-tensor completeness claim is
+what fails. `validOutcome`, `validateCeremony` and `stalenessReceipt` are separate helpers, not
+called by the evaluator. The latter merely copies labels: it cannot prove which model produced
+tensors or detect that a probe is no longer effective. The map has no capture digest field despite
+the proposed schema, although the top-level signature binds both objects. There is no separately
+signed pre-capture declaration or external chronological witness. The anti-post-hoc guarantee
+therefore needs stronger qualification than just an operator who backdates a timestamp.
+
+Score generation rejects nonfinite float32 values and unsafe rounded integers, but public checking
+does not enforce canonical decimal-string encoding: BigInt conversion accepts more than that
+wire grammar. Audit recomputes strings from supplied tensors, not the model, gradients or claimed
+capture method. Safe integer range avoids additional integer rounding; it does not confer genuine
+nanounit measurement precision on float32 inputs or arbitrary floating-point sums. Decoding allows
+empty equal-length vectors, and byte-array conversion is not strict validation of each JSON byte.
+The self-report defaults to the builder's own flag count, so agreement need not be an independent
+second signal. The signed body does not include the promised non-claims/limitations/socket arrays.
+
+The twelve retained bundles use synthetic two-component vectors, one two-position prompt, two
+layers and three tokens. They do not contain the proposed 20-prompt, six-layer, 40–60-token live
+capture or d=8 fixture tensors. No Stage 4Z frozen live-capture fixture is present. Lane C leaves
+the actual VJP/lens-row computation elided, does not use `out_dir`, and prints ceremony metadata
+and counts without persisting tensor/salt files. It can label that partial path `captured` without
+producing a usable lens. Seeds, versions and a pre-run signature are not enforced; loading is not
+explicitly assigned to GPU or restricted to local cached files. Reading configuration outside the
+try block also leaves some failures unsealed. Stage 5B's later completed capture must retain its
+own identity; it cannot retroactively make 4Z an executed independent replication (M49).
+
+The VSC projection has only three 4Z aggregate accessors, not the proposed 4T/4U/4X/4Y/4Z registry
+or pinned field mapping to the EU Model Documentation Form. Spans have no byte offsets tying them
+to narrative sentences; numbers are metadata alongside prose. `verifyVsc` hashes caller-supplied
+objects but does not verify their signatures, schemas, kinds or the WFM grid. A fabricated object
+containing only `aggregates.flag_total=999` verifies as evidence, and a schema-only card with no
+spans or narrative also passes. It does not invoke the complete 4W narrative evaluator, nor sign
+or bind a VSC into the VWA attestation. Its lexical prose scan inherits M116's scope. The socket's
+PAID constant is an internal bookkeeping decision, not delivery of the specified full transparency
+report or evidence that every displayed sentence recomputes.
+
+The browser now checks Merkle binding and three object digests, but omits schema 190 and public
+commitment-set equality 193. It has no file/drop handler despite its instructions, as M34 records.
+Tests exercise three clean maps, signature corruption and one flag flip in a Node VM, not every
+negative fixture, a headless page or request interception. There is no tensor/audit implementation
+there. Python implements map reconstruction, not a complete verifier; parity uses three clean
+fixtures, with the canonical torture case compared only between JS and Python. It does not prove
+arbitrary cross-runtime equivalence, and Python absence is a named skip.
+
+Lane B checks one synthetic fixture through the same implementation, inherits the environment
+and filesystem authority, and leaves its scratch copies. Input-key and `OPERATOR_` rejection do
+not prove host isolation, independent custody or blind human recomputation. Its ceremony is not
+included in the signed attestation. The CLI trusts index-supplied expected outcomes, permits an
+empty inventory and skips any expected SKIPPED row without loading its bundle. It has no directory/
+key flags, invokes the unsafe core and returns 0/1. Unknown tier handling differs between its
+expected-code selection and the core's audit gate. Reproduce rebuilds evidence in place despite
+verify-only wording and does not run Lean; separate CI proof checks have their own scope.
+
+Lean's grid conservation is definitional arithmetic, not uniqueness over runtime cells. Matrix
+rows copy a lexicon in an abstract model; threshold/monotonicity/conflict laws operate on natural
+numbers, not signed nano strings, tensors or authenticated captures. Code-list inclusion does
+not prove the runtime public/audit paths are equivalent or even executed on missing audit data.
+K7 checks fixture outcomes and constants rather than every export. Public scores and deterministic
+fixture commitments also have no proved confidentiality guarantee. S42 qualifies the research
+rationale; scores, first-in-field assertions, institutional adoption and a single remaining lab
+pilot blocker are unsupported as production/readiness conclusions.

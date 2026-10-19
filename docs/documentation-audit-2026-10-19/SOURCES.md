@@ -366,3 +366,54 @@ survey, regulatory endorsement or independent assessment of this implementation.
   that reviewers have no analysis tools or that VLR makes their safety cases machine-verifiable.
   ISO audit acceptability, AILuminate/institute adoption and benefit scores remain proposed
   positioning, not demonstrated conformance, partnership or independent validation.
+
+- **S41 — Stage 4Y review, redaction and OSCAL comparisons (checked 2026-10-19).**
+  [METR's 8 May review summary](https://metr.org/blog/2026-05-08-rd-section-anthropic-risk-report-feb-2026-review/),
+  by Jurkovic, Barnes and Wijk, identifies a missing survey response counted as negative and
+  broader evidentiary problems. It also agrees with the low-risk conclusion using additional
+  evidence. Neither that finding nor access to private materials demonstrates a Simurgh pilot,
+  that reviewers work without tools, or that a lexical residue map would detect the miscount.
+  [Barrett et al.](https://arxiv.org/abs/2604.21964), submitted 23 April 2026, describes external
+  Assurance 2.0 review of DeepMind's safety case; the primary abstract confirms that scope,
+  not the frozen design's precise quotations or person-month estimate. Those details were
+  not revalidated against the full paper in this check.
+  [Bland, Iyer and Levchenko's PoPETs 2023 paper](https://petsymposium.org/popets/2023/popets-2023-0069.pdf),
+  §4, printed page 47, reports 80,000 dictionary guesses/second on its specified laptop and
+  explains limits when the right candidate is absent. It studies PDF glyph geometry, not
+  Simurgh byte partitions or a proof that publishing those partitions preserves confidentiality.
+  The article's relevant section, rather than its entire text, was checked.
+  [Cilla Ugarte et al.](https://arxiv.org/abs/2604.13767), submitted 15 April 2026, proposes OSCAL
+  for AI governance and reports schema-validated native results in its own implementation.
+  This primary-abstract claim cannot be transferred to VDR's projection.
+  NIST's pinned v1.1.2 [assessment-results metaschema](https://github.com/usnistgov/OSCAL/blob/v1.1.2/src/metaschema/oscal_assessment-results_metaschema.xml),
+  [metadata metaschema](https://github.com/usnistgov/OSCAL/blob/v1.1.2/src/metaschema/oscal_metadata_metaschema.xml)
+  and [assessment-common metaschema](https://github.com/usnistgov/OSCAL/blob/v1.1.2/src/metaschema/oscal_assessment-common_metaschema.xml)
+  explicitly require the fields missing from VDR in M118. Relevant definitions were checked;
+  the repository's hand-written projection test does not validate against these schemas.
+  VDR is neither a complete OSCAL document nor evidence of FedRAMP/AI Act compliance.
+  Incident statistics remain qualified by S39; legal timing remains qualified by M41/M47.
+
+- **S42 — Stage 4Z interpretability rationale (checked 2026-10-19).**
+  The [Anthropic workspace paper](https://transformer-circuits.pub/2026/workspace/index.html)
+  is dated 6 July 2026. Its limitations explicitly reject assuming J-space monitoring is
+  sufficient; the method/data discussion describes a default thousand sequences and a lens
+  that incompletely captures the relevant structure. These sections support distinguishing
+  VWA's proposed restricted instrument from a replication of the complete paper. They do not
+  establish independent capture, statistically uncorrelated defenses or universal coverage.
+  [STATEWITNESS](https://arxiv.org/abs/2606.17478), Chen et al., submitted 16 June 2026, describes
+  an activation explainer evaluated on two reasoning models and seven deception datasets.
+  [Building Production-Ready Probes For Gemini](https://arxiv.org/abs/2601.11516), Kramár et al.,
+  submitted 16 January and revised 10 February 2026, reports deployment-informed probe research
+  and important distribution-shift limitations. These primary abstracts establish research
+  scope, not that either organization has no signatures, audit infrastructure or evidence
+  contract anywhere. A keyword absence in a paper cannot establish that industry-wide claim;
+  the historical PDF word-search results were not rerun as a comprehensive prior-art survey.
+  [Duan's monitor-staleness study](https://arxiv.org/abs/2606.15980), submitted 14 June and revised
+  18 June 2026, reports update- and monitor-dependent effects. A copied revision/lens digest
+  pair neither authenticates an execution nor measures this performance drift. Primary
+  metadata/abstracts and the specified workspace sections were checked, not all cited papers.
+  Futurium participant commentary is not binding EU guidance; M41/M47 govern the legal claims.
+  The MDF, Goodfire, Petri, FMTI, Mythos and other comparisons do not substantiate universal
+  absence of verification mechanisms, Simurgh adoption, complete MDF mapping or the design's
+  precise first-in-field and usefulness scores. Treat those assertions as historical positioning,
+  not independently established facts or regulatory approval.

@@ -564,3 +564,19 @@ exported core omits that binding. Coverage and transform metadata checks are inc
 [M117 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m117--stage-4xs-replay-omits-ledger-completeness-and-does-not-establish-a-semantic-lower-bound).
 The six-fixture result is reproducible research evidence, not field performance or an
 irreducible semantic lower bound; Lane B is not included in the signed attestation.
+
+Stage 4Y does not compare supplied audit data with its signed audit digest. Audit can pass
+with removed shadow records, false audit metadata or absent document bytes; missing counterparts
+skip reconciliation. Public schemas also accept arbitrary extra fields. See
+[M118 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m118--stage-4y-does-not-authenticate-the-supplied-audit-bundle-or-enforce-complete-replay).
+Its browser implements a narrower verification path, and its OSCAL output is an incomplete
+fragment. A pass does not establish authenticated audit contents, confidential redaction,
+complete source-document submission or OSCAL conformance.
+
+Stage 4Z binds supplied audit data but accepts jointly reduced declaration/capture counts,
+duplicate declared layers/cells and empty per-tensor commitment tables. Missing audit data
+returns SKIPPED before signature checks. Its system-card helper trusts caller-supplied aggregates
+and does not authenticate those artifacts. See
+[M119 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m119--stage-4z-establishes-consistency-over-producer-declarations-not-independent-capture-completeness).
+Neither its declared total grid nor copied model/lens digests establish actual capture coverage,
+pre-run chronology, model provenance or monitor effectiveness.

@@ -3815,3 +3815,21 @@ Owner-requested work; implementation and review by Codex assistance.
   prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
   full E2E rerun; temporary probes preserve retained evidence and source bytes.
 - **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 878-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 878 of 919 baseline
+  candidates completely read, 41 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M118–M119 for complete Stage 4Y/4Z specifications and plans; update
+  SECURITY guidance on audit binding, replay coverage and workspace declarations.
+- **Findings:** Seven VDR and eight VWA probe cases retain baseline/refusal controls while
+  demonstrating unbound audit data, duplicate grids, producer-relative coverage and VSC trust.
+  Qualify browser functionality, incomplete capture, symbolic proofs and finite parity.
+- **Research:** S41–S42 check primary review/interpretability sources and NIST OSCAL required
+  fields; distinguish incomplete projections and proposed adoption from verified conformance.
+- **Validation:** Check formatting, local links, baseline identities/read hashes, append-only
+  prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
+  full E2E rerun; temporary probes preserve retained evidence and source bytes.
+- **Remaining:** Complete every pending manual read and final correction verification.

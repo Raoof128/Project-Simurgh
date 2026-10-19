@@ -1,0 +1,51 @@
+{
+  "schema": "simurgh.documentation_audit.vdr_probe.v1",
+  "date": "2026-10-19",
+  "scope": "In-memory copies of retained fixtures; original signatures except one explicitly fixture-key-signed public-map case. No source/evidence mutation or inference.",
+  "cases": [
+    {
+      "name": "baseline",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "unchanged signature accepts empty shadow and false audit metadata",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "unchanged signature accepts audit without document bytes",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "unchanged signature accepts duplicate nonapplicable MR records",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "producer-signed public map accepts raw extra field",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "control wrong salt refused when document bytes supplied",
+      "result": {
+        "raw": 188,
+        "reason": "vdr_map_recompute_mismatch",
+        "detail": "commitment_does_not_reopen"
+      }
+    },
+    {
+      "name": "missing counterpart bypasses reconciliation refusal",
+      "result": {
+        "raw": 0
+      }
+    }
+  ]
+}
