@@ -3639,3 +3639,20 @@ Owner-requested work; implementation and review by Codex assistance.
   full E2E rerun, external ceremony or interactive browser/native execution.
 - **Remaining:** Complete all pending manual reads and final correction verification before
   declaring the exhaustive documentation review complete.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 810-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 810 of 919 baseline
+  candidates completely read, 109 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M81–M85 for the complete Stage 3O–3S specifications and plans, qualifying
+  oracle/replica coverage, temporal continuity, fallback budgets and narrative verification.
+- **Findings:** Bounded local probes demonstrate vacuous coverage, phrase exemptions, unbound
+  narrative wording and incomplete standalone slot/receipt binding. These do not establish
+  acceptance by the full campaign, smoke or hash/rebuild pipelines.
+- **Guidance:** Update current security disclosures and retain scoped probe receipts. Preserve
+  frozen plans, signatures, evidence and runtime source.
+- **Validation:** Formatting, links, ledger identities and hashes, append-only log prefixes and
+  frozen-surface preservation checked. No inference, signing, external ceremony or E2E rerun.
+- **Remaining:** Complete every pending manual read and final correction verification.

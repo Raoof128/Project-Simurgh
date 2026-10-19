@@ -351,3 +351,21 @@ resolved fields, can report complete. Its per-row hash-binding helper checks for
 actual file hashing belongs to the runner. These helper observations do not establish that the
 retained fixed runner or stored ledger supplies those inputs. See [M80](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m80--claim-ledger-scope-and-completeness-need-separate-evidence)
 for the exact scope and probe receipt.
+
+### Retained cross-defence coverage helpers
+
+The Stage 3P coverage helper treats unobserved cells as contained, and its full-coverage claim
+helper does not reject an empty cell map. The normal campaign supplies a fixed corpus; helper
+results alone are not proof of complete execution. Its wording check can also exempt additional
+text when an allowed non-claim sentence appears in the same string. See [M82](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m82--cross-defence-profiles-are-authored-replicas-with-bounded-validators)
+for the scoped local observations and distinction from the published campaign.
+
+### Retained defensive-narrative helpers
+
+Stage 3S validates field comparisons and allowed wording separately. A true comparison can
+therefore accompany an unrelated assertion in the rendered narrative. Empty surviving slots
+also produce a no-signal statement, and the privacy disclaimer is unconditional. The standalone
+signature verifier does not recompute slots or bind the complete gateway receipt; the full
+hash/rebuild pipeline has additional checks. Treat these retained artifacts as fixture evidence,
+not verified semantic truth or proof of a completed human review. See [M85](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m85--allowed-narrative-wording-is-not-bound-to-the-proposition-checked)
+for reproducible local observations and their scope.

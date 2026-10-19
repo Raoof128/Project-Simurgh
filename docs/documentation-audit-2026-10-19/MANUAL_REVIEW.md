@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **800 documents have complete manual reads; 119 remain
+SHA-256 values. At this checkpoint, **810 documents have complete manual reads; 109 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -2339,3 +2339,227 @@ its coverage command sets no minimum threshold. Preserve the historical four non
 already recorded in M42. The spec's malformed emphasis and superseded co-author command examples
 are frozen drafting defects, not current handoff instructions. No source or historical ledger was
 changed during this review.
+
+### M81 — BYO benchmark scores returned canaries, not all external consequences
+
+The complete Stage 3O spec/plan provide a useful bounded response contract. “Independent oracle”
+means a harness check separate from the returned decision field; it is not an independent operator
+or an observer of actual tool/network effects. `claim_conflict` detects a specified contradiction,
+not intent to lie. The reference clean target receives the class/oracle and returns predetermined
+answers, so its perfect score validates the harness path rather than a security product. A “first”
+claim requires a systematic prior-art comparison, not just working artifacts.
+
+All five malicious family labels use the same context-injection template in the draft and retained
+corpus. `multi_turn` is a label: the shown runner makes one request per case. Direct-input, tool and
+output labels therefore do not establish distinct executed boundary scenarios. Thirty benign rows
+repeat three tasks. The manifest hashes the marker list and records counts; it does not itself
+bind every task/context/action byte. Unique canaries are not independent attacks or proof of corpus
+coverage. The 11-cell table is a specified finite decision matrix, not exhaustive response/schema
+coverage; benign empty/refusal output adds behavior beyond its simplified “allowed, no leak” cell.
+
+The binding review fixes supersede absent schema checking, null-marker matching, hardcoded matrix
+coverage, generation-time signature claims and reuse of the Stage 3M key. In particular, never
+follow the obsolete instruction to regenerate the 3M public key to complete 3O. Retained code has
+those fixes, but result validation still checks schema and decision only, not case-ID equality,
+action structure or every required response field. A malformed response can be scored as no
+observed marker rather than the spec's explicit unknown. Exact marker/action-name checks do not
+cover arbitrary encoding, alternate effect channels or hidden execution. Benign usefulness remains
+a nonempty-text/refusal-pattern heuristic, not semantic task completion.
+
+The retained HTTP wrapper sends the supplied URL directly; it does not append `/run`. It does not
+set its own deadline, response-size cap, redirect policy or status-code check before JSON parsing.
+Module targets receive the full case, whereas HTTP targets receive a projection; these are not
+identical information conditions. In-process modules execute trusted local code and are not a
+sandbox for arbitrary adapters. Target invocation errors are caught, but exceptions raised later
+while scoring a malformed module result can still abort the run. The `run` path emits an unsigned
+result set; the shown signing workflow is for the fixed reference evidence pack, not automatic
+attestation of every external run.
+
+The draft signer omits the promised target descriptor and hardcodes some self-proof metadata;
+its verifier's schema-tag check alone is not full structural validation. Full-pack hash checks were
+added by the binding fix and must remain distinct from signature coverage and recomputation. M79's
+custom canonicalizer limitations also apply to reused primitives. A small forbidden-token scan
+cannot enforce all metadata-only values. The proposed all-green closeout does not supersede the
+four historical non-passing checks recorded in M42. Frozen plans and measurements remain unchanged;
+no external target was contacted or signed during this review.
+
+### M82 — Cross-defence profiles are authored replicas with bounded validators
+
+The complete Stage 3P spec/plan extend the attestation format across authored profiles; they do
+not establish generalization across actual deployed defence mechanisms. The retained replicas
+choose containment from case class and boundary/evasion labels. The full-gateway replica always
+contains malicious cases; it does not invoke the real gateway. The keyword, regex and LLM-judge
+replicas do not execute those named detector mechanisms. Their different profiles are constructed
+by predicates, not discovered by measuring those products. The examples also put every boundary's
+instruction in a context field and run one request per case; a multi-turn axis does not implement
+a multi-turn interaction. “Obfuscated” preserves the complete marker between delimiters. Corpus
+seed strings are deterministic identifiers, and its manifest binds marker/count metadata rather
+than every payload byte. These limits qualify the saturation and mechanism-fingerprinting claims.
+
+The retained coverage helper defaults an unobserved cell to contained. A [pure local probe](cross-defence-helper-probe.json)
+with zero scored cases returned 25 contained cells, full coverage and zero controls. Its claim
+checker also accepts a full-coverage claim over an empty cell map through vacuous `every` logic.
+This does not establish that the fixed campaign runner omitted cases: it normally supplies the
+frozen corpus. It means those helpers alone do not enforce six observations per cell or complete
+execution. The current response-invalidity helper checks a decision enum rather than the draft's
+schema-only rule; neither version validates all response fields and case identity. Benign utility
+is nonempty allowed text, without the prior stage's refusal-pattern check or semantic scoring.
+
+The draft's hyphenated-brand example conflicts with its unnormalized substring matcher; retained
+code now normalizes separators. A finite brand denylist, self-declared provenance and a signature
+still do not prove that a named product/version was actually executed. The draft's required
+product-superiority non-claim is absent from its initial allowlist; retained code adds it. The
+current wording helper nevertheless exempts an entire string if it contains an allowed sentence.
+The local probe confirmed that an allowed non-claim followed by an affirmative best-defence claim
+passes, while the affirmative phrase alone and a `rank` field fail. This is exact-phrase handling,
+not general negation understanding. Renamed guard fields also need explicit false-value checks;
+their names alone do not enforce that state.
+
+The target schema examples permit partial cell maps and only a digest prefix; shape agreement
+between targets and catalogue is not validation against the required complete matrix. Catalogue
+binding checks digest/corpus/shape agreement, while per-target signature verification is a separate
+smoke step. The standalone catalogue verifier does not verify each target sidecar. Its CLI uses
+fixed evidence paths despite positional examples in the spec, and loads planned target files even
+when an exclusion is permitted by the abstract contract. The silent-drop helper does not by itself
+reject duplicate IDs, overlapping listed/excluded sets or inconsistent target metadata. A dedicated
+key path and supplied-key fingerprint do not enforce that the key is distinct from every earlier
+stage or authenticate an external operator. M79's canonicalizer limitation applies here too.
+
+The self-proof dispatches authored malformed objects to selected helper gates; it is not an
+end-to-end hostile gateway run through signing and every verifier. Its unexpected-accept/rejection
+counts are initially hardcoded. The default evidence replay recomputes unsigned coverage bodies;
+that is distinct from checking their semantic equality with separately signed targets. The shown
+hash list omits public-key/fingerprint artifacts and does not make an unsigned hash list an
+independent trust anchor. The consistency script checks an algorithm label, not the signature
+identity promised by its comment. The security example invokes ranking checks but does not itself
+invoke the brand check; other verification stages must supply it.
+
+The spec's lexicographic summary ordering differs from the builder's input-order catalogue; the
+signer sorts directory IDs separately. A coverage command with a global 100% function threshold
+cannot simultaneously promise a pass while acknowledging uncovered CLI functions without an
+appropriate include scope. A stage smoke is not the entire LLM-Shield section. Reproduction flags
+shown in the spec are realized by the default evidence replay, not a separately implemented flag
+path. Historical tag-moving instructions, prewritten success text and draft naming/format defects
+are not current release instructions. Preserve all frozen signatures, plans and measurements;
+no campaign, signing, external target or source mutation was performed for these findings.
+
+### M83 — Temporal continuity requires a trusted prior head and verified inputs
+
+The complete Stage 3Q spec/plan describe a hash-linked registry and a finite transition table,
+not an independently witnessed timeline. A signed UTC string records the signer's declared time;
+it does not prove execution time, precommitment or chronological ordering. The strict timestamp
+helper accepts a seconds-only UTC subset of ISO 8601. Snapshot lineage equality does not establish
+version authenticity or that the selected before/after pair is chronologically ordered.
+
+A valid chain can prove prefix continuity against an independently trusted previous head under
+the stated hash and canonicalization assumptions. The shown verifier does not authenticate that
+head's signature, enforce its declared digest/signature fields, or require an authenticated prior
+head rather than the missing-head genesis default. Equal counts can pass without an append.
+Index, identifier, required non-claim and complete entry-shape checks also need separate validation.
+Field-name ranking checks do not reject every renamed affirmative guard, such as a true
+`cross_target_ranking_exported` value. M79's canonicalizer limitations apply to this chain too.
+
+The retained diff builder reads snapshot JSON and checks canonical digests; it does not verify
+Stage 3P signatures itself. Matching catalogue/target identifiers and corpus fields does not by
+itself prove signed catalogue membership or complete matrix agreement. The self-proof's
+`verification_failed` input simulates an integrity result rather than presenting a bad signature
+through the entire pipeline. Some unexpected-result counters are authored zeros. The reorder
+fixture changes an identifier without regenerating its digest; rejecting it does not separately
+test a consistently rehashed reorder. Missing cells become not-applicable, and equal unknown
+values can become unchanged without validating the input enums and complete cell set first.
+
+The retained standalone diff verifier checks the regressed/improved transitions but does not
+fully validate every other transition, recompute the summary or authenticate source snapshots.
+Its empty-diff success is appropriate for a genuine genesis registry, but proves no longitudinal
+regression exercise. The retained hash-file helper catches diff-building errors and substitutes
+an empty list; standalone hash verification can consequently omit dynamic diff files on that
+error path. The ordinary build path invokes diff construction earlier and is a separate gate.
+The directory reader likewise treats read failures as an empty diff set. These failure modes
+qualify individual verifier claims without asserting that the complete campaign passed bad data.
+
+The draft's genesis previous-head count conflicts with an earlier expected-output paragraph;
+the later genesis example controls that example. Parsing and reserializing JSON is not a raw-byte
+comparison. An unsigned hash list that omits key artifacts is not an independent trust anchor,
+and key-purpose labels do not enforce distinct keys or cryptographic domain separation. The
+fallback policy diff against `HEAD~1` checks one commit, not the full branch change set. Coverage
+thresholds need an explicit scope before claiming all CLI/signer functions are covered. Frozen
+plans, signatures and genesis evidence remain unchanged; no signing or external validation was
+performed for this review.
+
+### M84 — Fallback plans establish bounded orchestration, not universal resilience
+
+The complete Stage 3R spec/plan inherit M43's reproduced empty-refusal classification defect,
+metadata loss and synthetic credit flag, and M69–M72's SDK retry/budget qualifications. One
+orchestrator hop is not one network request when the SDK retries internally. `withinBudget`
+checks hop/call counters; it neither measures elapsed time nor enforces a monetary ceiling.
+Its timeout field is descriptive unless the caller enforces it. The current route is retired
+for legacy live use; these historical plans are not current deployment instructions.
+
+The draft's `allowed` input enum is inconsistent with the real gateway. Retained policy uses
+`safe` and explicitly admits accepted, absent and demoted context states. The policy fails
+closed for unknown precheck values, but the generic trust merge treats unknown verdicts as
+accepted, and unknown outcomes fall into the refusal branch. The orchestrator always invokes
+the primary callback before applying the fallback gate; the router must enforce the initial
+call gate. It does not itself enforce a terminal primary tool/output verdict before swapping.
+The draft's boundary fixture checks final text selection, not an actual streamed partial,
+malicious fallback payload, immutable request envelope or all tool/context/output boundaries.
+The router reuses approved input/context and rescans tool/output results; that is narrower than
+rerunning every boundary. The self-proof counts two terminal-precheck cases, not all possible
+bypasses. Function coverage does not turn these finite assertions into a universal proof.
+
+The draft accumulator uses final-attempt points plus swap risk; the maximum verdict merge is
+not accumulation of every attempt's numeric points. Its no-provider branch also drops some
+risk points; retained router computes run points separately. HMAC swap records provide shared-key
+chain integrity, not a public-key signature on the entire receipt or proof of a real provider
+swap. The shown router records the swap after the run record and returns the earlier run hash;
+that reference alone does not authenticate the later swap entry or the complete chain head.
+An actual chain verification and trusted head remain separate requirements. Prior successful
+CI, stale test-count expectations and rerunning a known flaky job are not fresh validation.
+Frozen plans and evidence remain unchanged, with these corrections additive.
+
+### M85 — Allowed narrative wording is not bound to the proposition checked
+
+The complete Stage 3S spec/plan overstate the claim checker's semantic guarantee. The retained
+checker validates a relation and a vocabulary entry independently. A [local synthetic probe](narrative-helper-probe.json)
+supplied a digest with an invalid audit chain and no fallback, then paired the true comparison
+`gateway.fallback_used == false` with `chain_valid`. The checker accepted it and the renderer
+asserted that the audit chain verified end to end. Thus “the narrative cannot lie” and “every
+rendered claim is evidence-bound” are not established by these helpers. The no-automatic-finding
+flag and fixed vocabulary do not repair a mismatch between a proposition and its prose.
+
+The renderer also emits “No integrity signals were observed” for zero surviving slots. That
+cannot distinguish absent signals from rejected, omitted or incomplete evidence. Its unconditional
+privacy disclaimer covers audio, process names and pasted content beyond the digest's three
+privacy booleans, and is not conditional on their values. `fallback_observed` adds containment,
+and `proof_replayed` adds rejection, without checking those extra propositions. Missing digest
+fields default to zeros/false, collapsing unknown into absence. Numeric relations allow JavaScript
+coercion; strict parsing of one JSON object is not full slot-schema validation. Duplicate keys,
+extra fields, null elements and duplicate slot identifiers need separate handling. Forbidden-word
+checks cover wording/severity and rendered text, not every model field. The probe also confirmed
+that `Object.freeze(new Set(...))` does not stop `add`; the draft immutability test is incorrect.
+
+The retained digest builder hashes the two source files but hardcodes audit-chain validity,
+attestation verification and other result fields. It does not derive those assertions by verifying
+the referenced signatures or a session chain. A signature over the final digest hash binds these
+assertions; it does not establish their truth. The proposed bounded context builder is absent from
+the implementation tasks and current CLI, and the recorded-fixture call does not send the digest
+as context. This is authored fixture replay, not measured AI drafting, prompt caching, real-time
+telemetry or a completed human review. M43 qualifies the suggested live fallback path.
+
+The standalone verifier authenticates the artifact and digest hash but compares only the two
+supplied output-hash fields for receipt binding. The local probe changed the in-memory slots and
+both matching output hashes while keeping the original signed artifact; the standalone verifier
+still passed. It does not recompute the slot digest, bind the full receipt digest or rerender claims.
+The full hash/rebuild/consistency pipeline has additional checks; this probe is not a claim that
+that entire pipeline accepted the altered pack. Signature/key agreement is not gateway HMAC
+verification or independent signer authentication. M79's canonicalization limitation applies.
+
+The draft reruns a gateway with fresh session/time fields before byte-comparing its receipt-derived
+slots; retained code separates one-time authoring from offline verification to avoid that drift.
+Its verify-only path therefore does not execute a fresh gateway request. The draft manual-review
+fixture's broad `misconduct` regex also matches the renderer's own negated disclaimer. Self-proof
+zero counters and fixture-name counts are not measurements of every unsafe rendered claim.
+The final implementer note says rejected slots prevent rendering, whereas the builder intentionally
+renders survivors and sets `claim_check_passed` true even when some fail; consult
+`all_slots_verified` and rejection/conflict counts. Preserve frozen signatures and historical text;
+these findings required no model calls, signing or runtime changes.

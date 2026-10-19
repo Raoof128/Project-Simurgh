@@ -171,7 +171,7 @@
       "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check. M70/M71 disclose retained risk mapping, SDK retry/abort behavior, raw context prefixes and caller receipt strings; runtime remains unchanged.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "2cb42b79cfc5aa57fc55e4f9e00c37f7b215c5b44ba31ef2b0abf37225cb44a9"
+      "read_sha256": "6ba830f633ffec877c09e1c7fdcd112026eeacdc6dc34ba7c8b3582fc0b7e0ef"
     },
     {
       "path": "docs/DECISIONS.md",
@@ -8201,11 +8201,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "67a9a0408596bc30b213837ba8d508cc7d71ca45d040d929530429cfec6d93a4",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 1527 lines including six overriding review fixes. M81 records repeated family templates, one-request execution, partial schema checks, HTTP/module information differences, reference signing and audit limits; retained sources checked.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "67a9a0408596bc30b213837ba8d508cc7d71ca45d040d929530429cfec6d93a4"
     },
     {
       "path": "docs/superpowers/plans/2026-06-21-stage-3p-cross-defence-containment-attestation.md",
@@ -8214,11 +8214,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "473c30370a4f7b31a5d2eddcdf92b8d118f2db05e45f0157958fbeb802fa85d9",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 2671 lines. Reviewed label-driven replicas, corpus hashing, coverage defaults, phrase exceptions, catalogue/verifier separation, key identity, self-proof dispatch, replay and audits. M82 records retained-helper probes and distinguishes current fixes from draft defects.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "473c30370a4f7b31a5d2eddcdf92b8d118f2db05e45f0157958fbeb802fa85d9"
     },
     {
       "path": "docs/superpowers/plans/2026-06-21-stage-3q-attestation-registry-regression-diff.md",
@@ -8227,11 +8227,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "eba3fb23931728404e8780abd162e038ba29710e491fbd9b9fc405c1a5e381fc",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire document manually read. M83 qualifies temporal head trust, timestamps, incomplete source authentication and diff validation, genesis-only evidence, error-to-empty paths, and draft consistency. M79 canonicalization qualification applies. Frozen historical text preserved with additive errata.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "eba3fb23931728404e8780abd162e038ba29710e491fbd9b9fc405c1a5e381fc"
     },
     {
       "path": "docs/superpowers/plans/2026-06-21-stage-3r-trust-preserving-provider-fallback.md",
@@ -8240,11 +8240,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "cfade55bf5c45c0627b00f91aac87e4340315b3f4174ceaf6df0bf46eeed344d",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire document manually read. M84 qualifies bounded fallback orchestration, budget/retry limits, draft enums and accumulator, synthetic streaming and incomplete invariant coverage, and HMAC/receipt distinction. M43 preserves reproduced adapter/refusal defects. Frozen historical text preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "cfade55bf5c45c0627b00f91aac87e4340315b3f4174ceaf6df0bf46eeed344d"
     },
     {
       "path": "docs/superpowers/plans/2026-06-21-stage-3s-verifiable-defensive-narrative.md",
@@ -8253,11 +8253,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "19f3a702da1414a7a36613a11b9808797e20d85960ba59aaef1e76291133bf22",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire document manually read. M85 records reproduced unbound wording and standalone receipt/slot validation limits, unsupported empty/ privacy prose, hardcoded source assertions, fixture-only generation, draft determinism/Set/test defects and current offline verification correction. Frozen historical text preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "19f3a702da1414a7a36613a11b9808797e20d85960ba59aaef1e76291133bf22"
     },
     {
       "path": "docs/superpowers/plans/2026-06-22-stage-3t-offline-capability-extraction-attestation.md",
@@ -9423,11 +9423,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "99e6def27a040c6bfaeebba3d0de500c156c39a0f91dd7c45bf0bc377b69ccf3",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 330 lines. Reviewed observable-response contract, canary scope, matrix, identity and signing claims. M81 bounds independent-oracle and first-prototype wording and distinguishes external results from reference attestations.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "99e6def27a040c6bfaeebba3d0de500c156c39a0f91dd7c45bf0bc377b69ccf3"
     },
     {
       "path": "docs/superpowers/specs/2026-06-21-stage-3p-cross-defence-containment-attestation-design.md",
@@ -9436,11 +9436,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "61fa535f7afdf44c03af3ffef02b4ef844f9807cfb8ad12829ff9ce9dafb0008",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read all 568 lines. Reviewed replica provenance, matrix claims, signing topology, catalogue scope, self-proof and overclaim rules. M82 bounds real-mechanism generalization, complete coverage and independently trusted execution.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "61fa535f7afdf44c03af3ffef02b4ef844f9807cfb8ad12829ff9ce9dafb0008"
     },
     {
       "path": "docs/superpowers/specs/2026-06-21-stage-3q-attestation-registry-regression-diff-design.md",
@@ -9449,11 +9449,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "5865c7c2969c06c99d9b3dde6177ef7b382cd2b58038ff36b48f140e60f0fb47",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire document manually read. M83 qualifies temporal head trust, timestamps, incomplete source authentication and diff validation, genesis-only evidence, error-to-empty paths, and draft consistency. M79 canonicalization qualification applies. Frozen historical text preserved with additive errata.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5865c7c2969c06c99d9b3dde6177ef7b382cd2b58038ff36b48f140e60f0fb47"
     },
     {
       "path": "docs/superpowers/specs/2026-06-21-stage-3r-trust-preserving-provider-fallback-design.md",
@@ -9462,11 +9462,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "74b9cdc52827a7b2819d7ddc3b832449b9d291ff027dd72a6b67761b6e0e05e6",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire document manually read. M84 qualifies bounded fallback orchestration, budget/retry limits, draft enums and accumulator, synthetic streaming and incomplete invariant coverage, and HMAC/receipt distinction. M43 preserves reproduced adapter/refusal defects. Frozen historical text preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "74b9cdc52827a7b2819d7ddc3b832449b9d291ff027dd72a6b67761b6e0e05e6"
     },
     {
       "path": "docs/superpowers/specs/2026-06-21-stage-3s-verifiable-defensive-narrative-design.md",
@@ -9475,11 +9475,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "1144542e1a8f59d12fb122ed6d17bd3acef0a759a8ac77eca54d338c0e9eb48e",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Entire document manually read. M85 records reproduced unbound wording and standalone receipt/slot validation limits, unsupported empty/ privacy prose, hardcoded source assertions, fixture-only generation, draft determinism/Set/test defects and current offline verification correction. Frozen historical text preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "1144542e1a8f59d12fb122ed6d17bd3acef0a759a8ac77eca54d338c0e9eb48e"
     },
     {
       "path": "docs/superpowers/specs/2026-06-22-stage-3t-offline-capability-extraction-attestation-design.md",
