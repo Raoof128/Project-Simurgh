@@ -4458,3 +4458,20 @@ Owner-requested work; implementation and review by Codex assistance.
 - **Validation:** Check formatting, links, ledger identities/hashes, append-only prefixes and
   frozen-surface preservation. No signing, inference, external ceremony or full E2E rerun.
 - **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 840-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 840 of 919 baseline
+  candidates completely read, 79 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M96–M100 for Stage 4G and Stage 4H foundation through 4H.3 specs/plans.
+  Distinguish declared campaign outcomes, historical milestones and current verifier behavior.
+- **Findings:** Stage 4G uses synthetic pack hashes and declared outcomes. Stage 4H's main CLI
+  omits its documented Q7/duplicate-key checks; selected enum counts do not bound total export
+  information. Q6 summaries exercise diagnostic helpers rather than every full crypto path.
+- **Guidance:** Update SECURITY and verify adaptive-attack bibliography identities (S28).
+  Preserve frozen plans, evidence, signatures and runtime code; implementation repair is separate.
+- **Validation:** Check formatting, local links, ledger identities/hashes, append-only prefixes
+  and frozen-surface preservation. No signing, inference, external ceremony or full E2E rerun.
+- **Remaining:** Complete every pending manual read and final correction verification.

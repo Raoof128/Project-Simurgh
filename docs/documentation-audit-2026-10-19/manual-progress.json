@@ -171,7 +171,7 @@
       "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check. M70/M71 disclose retained risk mapping, SDK retry/abort behavior, raw context prefixes and caller receipt strings; runtime remains unchanged.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "2fe8503775ecde8d2cf6b0280665f9886c3369b7f04895cc1ffe8ee0fd441266"
+      "read_sha256": "67c2acbe2c6ec65c8aeb4a264c23d87b919bd2a21a74c944287b83be9ce00921"
     },
     {
       "path": "docs/DECISIONS.md",
@@ -1107,7 +1107,7 @@
       "assessment": "Read all 13 primary-source applicability rows and limits. Correctly separates publication from review year, pinned SDK from living docs and alignment from compliance. Previous-turn fetch provenance retained; no fresh fetch claimed.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "8dfefaed3791caed361c769f391e179742119527494e268df63d2da09dadd65b"
+      "read_sha256": "6abbe3524d45019d1e73a49ca64373cf81e7145d2bc75c989a13b43d44cf52f5"
     },
     {
       "path": "docs/documentation-audit-2026-10-19/VALIDATION.md",
@@ -8396,11 +8396,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "46a468e5b11656cd2f22e27c361aad0cf1566ae1384d4dada5a8ecb8a882b0e9",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read and source comparison: M96 qualifies synthetic EP hashes, declared outcomes versus replay, fixed schedule versus adaptation, unbound configuration and key trust, post-parse limits, partial privacy, and evidence-replacing harness; frozen document preserved with additive errata.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "46a468e5b11656cd2f22e27c361aad0cf1566ae1384d4dada5a8ecb8a882b0e9"
     },
     {
       "path": "docs/superpowers/plans/2026-06-29-stage-4h-digest-binding-foundation.md",
@@ -8409,11 +8409,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "822e4e47511d6398a652b0914c336b14cc36d5c08f869eb8623408d9bf5b6c80",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read: M97 distinguishes historical 4H.0 from retained 4H.5 paths/schema/exit codes and qualifies projected edges, key/policy trust, helper versus CLI checks, missing bounds, offline restrictions and reproduce summaries. Frozen text preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "822e4e47511d6398a652b0914c336b14cc36d5c08f869eb8623408d9bf5b6c80"
     },
     {
       "path": "docs/superpowers/plans/2026-06-30-stage-4h-1-lattice-derivation-validator.md",
@@ -8422,11 +8422,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "d2977e019ee5a1cecba59923684aebc32b0873e51d82a160a2160cb2bbc5229f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read: M98 corrects meet/linear terminology, graph/default-source boundaries, public-fixture provenance, versioned diagnostics, broad draft versus exact current fixture expectations, and self-comparison stability limits; M97 supplies inherited trust/offline caveats.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "d2977e019ee5a1cecba59923684aebc32b0873e51d82a160a2160cb2bbc5229f"
     },
     {
       "path": "docs/superpowers/plans/2026-06-30-stage-4h-2-discrimination-q0-q4.md",
@@ -8435,11 +8435,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "67e5ce3ad3b8e6e0dee669b7d4fd98bba708d3f58fa859e3025d24e1d9f57319",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read: M99 qualifies finite clean/dirty discrimination, graph-only one-edge delta, changed action IDs/sorting, raw-24 wording, fixture signatures, limited privacy scans and historical log-insertion instructions; M97/M98 cover current CLI and trust boundary.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "67e5ce3ad3b8e6e0dee669b7d4fd98bba708d3f58fa859e3025d24e1d9f57319"
     },
     {
       "path": "docs/superpowers/plans/2026-07-01-stage-4h-3-tamper-closure-privacy.md",
@@ -8448,11 +8448,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "08c8dbe7d4ef5a50c6854726a5d44a1a7a4842a5b6c63c1d9a772219a77a1322",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read: M100 discloses missing Q7/duplicate-key CLI integration, selected-field capacity versus leakage bound, unsafe rejection-value echo, helper-simulated Q6 crypto arms versus full CLI, and finite mutation coverage. Current SECURITY corrected; frozen text preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "08c8dbe7d4ef5a50c6854726a5d44a1a7a4842a5b6c63c1d9a772219a77a1322"
     },
     {
       "path": "docs/superpowers/plans/2026-07-01-stage-4h-4-5-hermeticity-reproduce-closeout.md",
@@ -9618,11 +9618,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "a7c56293e5c98683c960a4c1d3ab856141dbb9effca540b2fe5a5cbfa471c708",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read and source comparison: M96 qualifies synthetic EP hashes, declared outcomes versus replay, fixed schedule versus adaptation, unbound configuration and key trust, post-parse limits, partial privacy, and evidence-replacing harness; frozen document preserved with additive errata.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "a7c56293e5c98683c960a4c1d3ab856141dbb9effca540b2fe5a5cbfa471c708"
     },
     {
       "path": "docs/superpowers/specs/2026-06-29-stage-4h-proof-carrying-dfi-design.md",
@@ -9631,11 +9631,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "b0b9a657254806c6cba798690fc9177713c7d78677f02ec646513d3c4002545f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read: M97 distinguishes historical 4H.0 from retained 4H.5 paths/schema/exit codes and qualifies projected edges, key/policy trust, helper versus CLI checks, missing bounds, offline restrictions and reproduce summaries. Frozen text preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "b0b9a657254806c6cba798690fc9177713c7d78677f02ec646513d3c4002545f"
     },
     {
       "path": "docs/superpowers/specs/2026-06-30-stage-4h-1-lattice-derivation-validator-design.md",
@@ -9644,11 +9644,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "bf543e9566c08c28f9d78dc2ff68e83ce92cf927d9ea3cbe9f12d0033abef55f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read: M98 corrects meet/linear terminology, graph/default-source boundaries, public-fixture provenance, versioned diagnostics, broad draft versus exact current fixture expectations, and self-comparison stability limits; M97 supplies inherited trust/offline caveats.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "bf543e9566c08c28f9d78dc2ff68e83ce92cf927d9ea3cbe9f12d0033abef55f"
     },
     {
       "path": "docs/superpowers/specs/2026-06-30-stage-4h-2-discrimination-q0-q4-design.md",
@@ -9657,11 +9657,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "3b2a8a7b4bb05fc6b3e581fbbcf34dbef74e21fe22aeff7c73597d790ced1af7",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read: M99 qualifies finite clean/dirty discrimination, graph-only one-edge delta, changed action IDs/sorting, raw-24 wording, fixture signatures, limited privacy scans and historical log-insertion instructions; M97/M98 cover current CLI and trust boundary.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "3b2a8a7b4bb05fc6b3e581fbbcf34dbef74e21fe22aeff7c73597d790ced1af7"
     },
     {
       "path": "docs/superpowers/specs/2026-07-01-stage-4h-3-tamper-closure-privacy-design.md",
@@ -9670,11 +9670,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "75feb028c0ec70b8017075b45ebf9d917b4f2227b6a08165426cf7643d9310c5",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read: M100 discloses missing Q7/duplicate-key CLI integration, selected-field capacity versus leakage bound, unsafe rejection-value echo, helper-simulated Q6 crypto arms versus full CLI, and finite mutation coverage. Current SECURITY corrected; frozen text preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "75feb028c0ec70b8017075b45ebf9d917b4f2227b6a08165426cf7643d9310c5"
     },
     {
       "path": "docs/superpowers/specs/2026-07-01-stage-4h-4-5-hermeticity-reproduce-closeout.md",

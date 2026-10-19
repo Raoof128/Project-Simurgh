@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **830 documents have complete manual reads; 89 remain
+SHA-256 values. At this checkpoint, **840 documents have complete manual reads; 79 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -3074,3 +3074,233 @@ although the shell's complete listing comparison detects added regular files. Us
 caller-owned paths for temporary-directory overrides because cleanup recursively removes them.
 The wrapper writes integration evidence and is not globally read-only. Preserve historical
 outputs, and qualify “proves the ladder” as orchestration of the exact bounded checks above.
+
+### M96 — Stage 4G authenticates declared campaign records, not adaptive attack execution
+
+The entire Stage 4G specification and plan were read against the retained campaign verifier,
+classifier, schedule, schemas, builder, Python library helper and reproduce script. The four
+scheduled fixtures are a deterministic signed-record demonstration: two declared caught, one
+out-of-scope and one declared escaped. There is no feedback-driven attack selection or execution
+of the referenced Stage 4D/4F attack surfaces. `recordFor` assigns outcomes from a class lookup;
+its evidence-pack hashes hash small synthetic labels, not actual evidence packs or signatures.
+`recomputeRecordOutcome` returns the supplied Class I/II class/verdict, while Class III/IV outcomes
+follow their declared target class. The verifier never calls `verifyEvidencePack`. Accordingly,
+“cannot falsely claim contained” is not established even within the scheduled campaign: signature
+integrity authenticates declarations, not their factual truth. The Class IV record does not itself
+execute or observe an environment escape. A successful verification with a disclosed escape is
+valid accounting, not successful containment.
+
+Current code improves on several draft omissions: it checks scheduled target classes and sealed
+schedule hashes, includes caught Class II records in recomputed counts, and verifies the golden
+digest. Campaign IDs use a structured canonical object, not ambiguous raw concatenation. However,
+the verifier does not recompute the canonical seed from the configuration, resolve the declared
+commit, or bind declared library/policy/driver digests to corresponding source bytes. The retained
+builder still uses placeholder-looking commit and repeated-character digests. The Python library
+builder is separate and its validator checks path confinement only; it does not verify fixture
+existence/content hashes, library hashes, class coverage or nonempty input. Its empty template list
+passes. These are not independently authenticated configuration provenance or anti-shopping.
+
+The CLI reads its public key from the same artifact directory and offers no external trust-key
+argument. The public fixture private key is deliberately reproducible, not an independent signing
+identity. Domain-separated Ed25519 signatures do exist here, unlike the Stage 4F frontier digest,
+but M79/M93's canonicalization and Merkle-tree limitations carry forward. Manifest record references
+are nonempty strings, not confined file paths, and are not dereferenced by this verifier. Several
+manifest/record metadata fields are not checked for mutual equality; schema enums alone do not
+supply those bindings. Class I/II CR records are not forbidden by the record validator, despite the
+full-claim EP requirement. No stronger external anchoring claim follows from this stage.
+
+The advertised size guards operate after CLI reads and JSON parsing. Attempt/reason/string limits
+are declared but not enforced; large signed per-class budgets can expand the schedule before its
+length mismatch is detected. Malformed API input can throw before structured failure reporting.
+Privacy uses a finite regex over JSON strings, not a complete field/value allowlist. Environment
+flags and removal of three credential variables do not disable networking. The shell compares two
+new builds, then replaces committed evidence; it does not compare a new build against the prior
+committed artifact before replacement. Its red-arm status lines are unconditional, though the
+builder does actually call the verifier for three mutations. Those lines alone do not assert the
+expected failure reason or prove every planned red arm ran. Temporary-directory overrides must be
+disposable because cleanup recursively deletes them. Preserve this frozen plan/evidence and use
+these qualifications when describing the implementation.
+
+S28 verifies the adaptive-attack citation identities; the 2020 paper should be attributed to
+Tramèr et al., with Carlini as a coauthor. Research recommendations are methodological context,
+not certification of this fixture campaign or an implemented 2026 standard.
+
+### M97 — Stage 4H foundation is historical; current checks have a narrower trust boundary
+
+The full Stage 4H design and 4H.0 implementation plan were read. The former's unimplemented
+status and latter's Q2/Q5-only scope describe their dated milestones, not today's 4H.5 code.
+Current verification lives in `verify-stage4h-digest-binding.mjs` and `dfiCertificate.mjs`, not
+the proposed `verifyDfiCertificate.mjs`. The retained manifest also binds a hermeticity-attestation
+digest, and the schema validates derivation entries; the early snippets omit both. Current CLI
+process exits use Stage 4 wrapper codes, while raw codes remain in result JSON. The plan's
+assertions of process status 22/25 and empty-derivation acceptance must not be reused as current
+invocation expectations. Its wrong-key fixture borrowed Stage 4G's key, which is the same public
+test identity as Stage 4D; retained code uses a distinct explicit wrong-key fixture instead.
+
+The non-claims about execution truth, unrecorded edges, implicit flow and policy correctness are
+essential. Projection synthesizes source-to-action edges from declared taint sources, not arbitrary
+runtime data-flow traces. Missing source lists become empty arrays; authority sinks derive from
+an explicit true flag, and registry entries alone do not become action sinks in the graph. The
+base-pack view is a selected subset of the pack, with other metadata excluded by design; ordinary
+Stage 4D signature verification remains a separate prerequisite. Standalone projection and
+`diagnose` are not signature verifiers: the latter defaults signature/Merkle booleans to true and
+permits an absent manifest. The CLI performs actual base-pack and manifest verification. Do not
+substitute a helper's acceptance for that full path.
+
+Certificate policy/lattice digests are compared with those recomputed from the supplied pack;
+the CLI has no independently pinned expected policy/lattice digest argument. Signed consistency
+is not an external policy-approval check. The graph's two-label propagation is local implemented
+logic, not a proof of arbitrary policies or whole-program non-interference. M79/M93's custom
+canonicalizer, Merkle algorithm and public test-key limitations also apply. The claim of RFC 8785
+JCS should be read with those errata. `run_id_hash` and three informational summary counts are not
+recomputed by `diagnose`; it does recompute violation counts. A valid signature authenticates
+these descriptive fields without independently establishing their correctness.
+
+The current certificate schema rejects unknown owned fields and validates nested entry shapes,
+but does not enforce the design's general string, array, depth or pre-parse file-size bounds.
+The CLI uses ordinary JSON parsing; the separate duplicate-key helper is not invoked there.
+Error output still includes exception messages, which can contain caller paths. Current base-pack
+failures map broadly to binding failure, rather than every proposed schema/privacy/replay code.
+The original failure-precedence list is therefore not an exact current API contract.
+
+The retained offline harness denies selected network and asynchronous subprocess primitives,
+but does not implement the design's clock/RNG restrictions, filesystem allowlist, or complete
+subprocess/native/worker isolation. Normal CLI static imports occur before denials are installed.
+Its source scanner skips tests and allowed files, follows recognizable literal local imports,
+and is not a complete dependency or computed-import analysis. Later reproduction optionally uses
+an OS network namespace for the offline-audit command only and explicitly falls back when that
+is unavailable. Neither successful fallback nor environment labels prove OS sandboxing.
+
+Current reproduction rebuilds committed fixtures/evidence and compares selected top-level JSON
+outputs from two builds. It is not read-only and does not establish byte stability of every
+artifact. The summary writer labels `q0_to_q7` as pass even when called with a failing raw code;
+read the actual exit/code and individual results. Its per-step raw categories are supplied by the
+wrapper rather than preserved child raw diagnostics. These are current limitations, distinct from
+the foundation plan's intentionally deferred gates. Preserve the frozen documents and use the
+current scripts plus these qualifications for handover.
+
+### M98 — The Stage 4H.1 derivation language is bounded and its validator is not strictly linear
+
+The complete 4H.1 spec and implementation plan were read against the retained lattice, graph,
+derivation, schema and fixture-builder code. The lattice operation is a greatest lower bound
+(meet), not a join under the stated untrusted-below-trusted order. Unknown raw source labels are
+conservatively normalized to untrusted here; this differs from the inherited Stage 4D handling
+noted in M93. An authority sink with no incoming recorded sources defaults to trusted, reflecting
+an empty recorded flow rather than establishing complete observation. An entirely empty graph
+has no required derivation entries; the section-deletion claim applies to the deliberately
+nonempty positive fixture, not every possible input.
+
+Source nodes merge matching source IDs across actions, but action labels are combined from their
+edge labels directly, not propagated from the merged source-node value. A shared ID with
+inconsistent per-action labels can therefore have an untrusted source node and a trusted action
+edge. This implementation checks its projected per-edge premises; it is not a general graph
+fixed-point algorithm or consistency proof for global source identity. Replay decision premises
+and registry-only sink premises are not mandatory derivation references. Receipt allow/block
+status does not determine the DFI verdict, so a policy-blocked action can still yield a dirty
+recorded flow. “Real dirty” refers to an inherited repository fixture, not a new live attack.
+
+“Linear validator” overstates worst-case complexity: graph construction and array comparisons
+sort incoming labels, while the builder sorts nodes/references. The checker independently
+recomputes the small derivation; this is useful verification but does not establish expensive
+proving with asymptotically cheap checking. The exported combine helper returns immediately on
+an untrusted input, so a later invalid label is not checked by that helper alone; certificate
+schema validation does check every supplied lattice input before the CLI reaches semantics.
+
+Current code checks exact node/step/sink coverage, duplicate entries and premise-reference sets.
+It distinguishes partial omissions from entirely stripped sections, unlike the early snippet.
+Retained diagnostic reason names and failure precedence have evolved; raw 26 is not exclusively
+a tamper gate, and raw 24 also represents an honest unsafe derivation. The fixed proof-system
+lattice digest constant is distinct from the certificate digest of the pack's consequence lattice.
+The latter does not itself bind the executable two-label propagation implementation.
+
+The draft fixture helper accepts any member of a broad result-code set for any case and does
+not restore `process.exitCode` after imported CLI calls. Current `runCliFixture` restores the
+previous code after a completed call and checks each exact expected code. The proposed stability
+test compares a freshly built certificate with current projection, not an independently pinned
+prior-version golden. Coverage-manifest function names and metadata-only booleans are declarations;
+actual CLI assertions and scans provide the bounded evidence. M97 covers current wrapper exits,
+public keys, missing general bounds and offline scope. Preserve the dated Q1/Q2/Q5-only scope as
+history, with later implemented gates described by their own documents.
+
+### M99 — Q0/Q4 establishes finite fixture discrimination, not general laundering closure
+
+The full 4H.2 spec/plan were read and compared with the current derivation verifier, fixture
+builder and discrimination tests. Clean acceptance rules out an unconditional reject-all checker
+on the exercised path, and dirty rejection rules out unconditional accept-all there. This finite
+matrix does not establish completeness, soundness on every input, resistance to fixture-specific
+logic, or a measured Fable-5/live-model attack. The documents correctly exclude the real browser
+replay from this milestone; keep that boundary explicit.
+
+“One-edge delta” describes the projected source-to-sink graph difference. Run/session identifiers,
+receipts, signatures, derived digests and mirrored source-summary fields also differ. The focused
+test compares edge projections, not equality of every other base-pack field. Current identifiers
+are `act_000`/`act_001`, whereas draft snippets use `a0`/`a1`; current tests sort projected edge
+triples explicitly, avoiding the draft's dependence on hash-sorted premise order. These are
+historical examples, not literal current fixture schemas.
+
+The sentence restricting raw 24 exclusively to `proof_accepts_bad_flow` applies to the specified
+Q4b mutation, not the whole verifier: honest unsafe derivations still return raw 24 with
+`explicit_flow_integrity_violation`. Partial omission returns raw 26; later diagnosis can rename
+its reason when manifest/summary conditions differ. Current failure precedence and CLI wrapper
+exits are covered in M97/M98. Matching re-signed manifests intentionally reach semantic checks;
+those local fixture signatures do not supply independent producer or operator identity.
+
+The plan's privacy grep is a finite token scan over named paths, and an expected-results object
+is not evidence of observed process outcomes by itself. Current builder code checks exact returned
+codes; child-process E2E assertions add a distinct CLI boundary check. Q3/Q6/Q7 were out of scope
+at this historical milestone and must not be inferred from Q0/Q4 success. The proposed insertion
+of logs at the top conflicts with the repository's current append-only preservation requirement;
+new corrections belong at the end and must retain prior bytes. Do not copy the proposed attribution
+or PASS claims without the actual actor and observed checks. Preserve the frozen plan as history.
+
+### M100 — Stage 4H Q6/Q7 summaries do not establish the promised CLI privacy boundary
+
+The complete 4H.3 spec/plan were read against the retained CLI, diagnosis, tamper helper, privacy
+gate, raw-key scanner, builder and standalone audit scripts. The promised raw duplicate-key check
+and Q7 gate are absent from the main CLI: it parses certificate/manifest JSON directly and never
+calls `privacyGate` or `validateJsonTextNoDuplicateKeys`. Strict nested schema checking remains,
+but it does not supply Q7's ID-length/grammar or summary-range checks. Direct CLI acceptance must
+not be described as enforcing the proposed nine-step privacy pipeline. Many Q7 negative values
+would already fail the full schema with raw 20, while standalone privacy tests deliberately call
+the privacy helper without that schema first and report 27. Their diagnostic lanes are different
+entry points, not proof of the stated end-to-end precedence.
+
+`covertCapacityBits` counts only derived-node labels plus sink labels. It is not a proven upper
+bound on exported information. A digest-shaped value still has capacity unless independently
+recomputed; `run_id_hash` and three summary counts are not checked against the replay by diagnosis
+(M97). Q7 checks shapes/ranges but does not recompute those values either. Node IDs permit arbitrary
+bounded identifier text; graph/array size has no general bound, and semantically permitted array
+orderings can encode choices. Hashing producer-controlled replay does not remove that information.
+Even when a value is bound to a signed input, a statement about extra choices conditional on that
+fixed input differs from total information exported. The reported number is a selected enum-field
+count, not zero leakage, a total-channel capacity bound, differential privacy, or proof that all
+producer-visible fields are semantically necessary.
+
+The privacy helper's unknown-key allowlist contributes auxiliary flags while allowing success;
+it relies on callers to run the authoritative schema. It omits a separate scope-value traversal
+and assumes much of the surrounding shape. Some rejection `where` fields copy the offending node
+or reference verbatim, so publishing the full rejection object can expose the very value rejected.
+The retained ID helper correctly handles suffixes over 64 characters, improving on the draft's
+mismatched 256-character check. Neither typed shapes nor finite grep scans prove the absence of
+private information in accepted identifier/digest fields. A raw-key scanner is a separate helper,
+not a canonical JSON parser or a check currently applied to every CLI input.
+
+Q6's eight-arm matrix is generated by `buildTamperMatrix` calling `diagnose`, not the full CLI.
+The signature and Merkle arms flip `signatureOk`/`merkleOk` booleans instead of changing and checking
+cryptographic bytes. Semantic arms repair selected manifest digest fields but do not re-sign or
+verify the full manifest. `passed_steps` is inferred from a returned code 26 rather than recording
+actual step execution. The builder writes this helper matrix into evidence, and the security
+audit invokes the same helper. These establish bounded diagnostic behavior, not a complete
+re-signed attack matrix through the cryptographic boundary. The separate proof-deletion fixture
+builder really does re-sign a mutated certificate for CLI testing; its additional evidence must
+not be generalized to every matrix arm. Exact expected-code/reason checks are stronger than merely
+requiring zero accepted mutations, but remain limited to the actually executed path.
+
+The draft's default fixed integrity-lattice digest comparison would conflate two different
+lattices; retained `checkLatticeDigest` instead receives the recomputed pack consequence-lattice
+digest explicitly. Some draft tests mutate a certificate without repairing its manifest and
+would fail binding before their intended deep semantic reason. The current helper's narrowed
+reason remapping is described in M98/M99; it is not an observation of nine independent steps.
+The eight named mutations are finite cases, not an exhaustive single-field neighborhood or
+multi-field collusion closure. Preserve frozen evidence and correct current handover/security
+wording; implementation repair and new cryptographic/privacy validation are separate work.

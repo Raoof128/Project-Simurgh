@@ -158,3 +158,15 @@ at the largest power of two below its length. Stage 4D instead uses an all-zero 
 duplicates an odd final node. Its domain prefixes are similar, but that is not the standard's
 complete tree construction. This source qualifies the historical “RFC 6962 / 9162 style” label;
 it does not certify repository conformance or change frozen roots.
+
+### S28 — Adaptive-attack bibliography identities
+
+Checked 19 October 2026 against the primary arXiv records:
+[Tramèr et al. (2020)](https://arxiv.org/abs/2002.08347),
+[Croce et al. (2022)](https://arxiv.org/abs/2202.13711),
+[Adaptive Attacks Break Defenses (2025)](https://arxiv.org/abs/2503.00061),
+[The Attacker Moves Second (2025)](https://arxiv.org/abs/2510.09023), and
+[Audit Trails for Accountability (2026)](https://arxiv.org/abs/2601.20727).
+The identifiers match the cited titles; the first paper's lead author is Tramèr, not Carlini.
+These research references support evaluation context, not a claim that Simurgh implements their
+methods or that deterministic signed fixtures demonstrate adaptive robustness (M96).

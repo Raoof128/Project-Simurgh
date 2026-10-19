@@ -406,3 +406,25 @@ as assurance against a dishonest frontier producer. See
 [M94](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m94--retained-stage-4f-frontier-is-unsigned-and-does-not-meet-the-dishonest-evaluator-claim)
 for the probe receipt, template/utility limitations and exact scope. Runtime repair remains separate
 from this documentation audit.
+
+### Retained Stage 4G campaign outcomes
+
+Stage 4G verifies signed campaign declarations. Its four-fixture builder assigns outcomes from
+class labels and uses synthetic evidence-pack hashes; the campaign verifier does not replay the
+referenced Stage 4D packs. It therefore does not independently establish that an attack was caught
+or that an environment escape occurred. Its local artifact key is a public test identity. See
+[M96](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m96--stage-4g-authenticates-declared-campaign-records-not-adaptive-attack-execution)
+for the schedule, configuration, input-bound and reproduction limitations.
+
+### Retained Stage 4H privacy and tamper checks
+
+The main Stage 4H CLI does not invoke the documented Q7 privacy helper or raw duplicate-key check.
+Its schema checks remain useful, but do not enforce all documented input bounds. The reported
+privacy capacity counts selected enum fields; it is not a bound on all information in an export.
+The Q6 summary uses diagnostic helpers, including simulated signature/Merkle failures, rather
+than exercising every arm through the full cryptographic CLI. Separate CLI fixture tests provide
+additional bounded checks. See
+[M97](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m97--stage-4h-foundation-is-historical-current-checks-have-a-narrower-trust-boundary)
+and [M100](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m100--stage-4h-q6q7-summaries-do-not-establish-the-promised-cli-privacy-boundary).
+Use trusted local fixtures; do not treat these reports as a general privacy or dishonest-producer
+assurance boundary. Frozen artifacts and runtime source remain unchanged by this documentation audit.
