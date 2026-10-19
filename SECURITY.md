@@ -580,3 +580,19 @@ and does not authenticate those artifacts. See
 [M119 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m119--stage-4z-establishes-consistency-over-producer-declarations-not-independent-capture-completeness).
 Neither its declared total grid nor copied model/lens digests establish actual capture coverage,
 pre-run chronology, model provenance or monitor effectiveness.
+
+Stage 5A permits duplicate unnarrated flags to inflate totals after producer re-signing.
+Removing an optional signed manifest can bypass its failed check; missing pilot bytes and
+VWA audit data silently reduce audit depth. Claim polarity/token validation and adapter binding
+are incomplete. See
+[M120 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m120--stage-5a-permits-evidence-omission-and-recounts-duplicate-flags-as-extra-observations).
+The browser's signature check does not authenticate its supplied input objects. The external
+export, constitution corpus and live narrative/readout pair proposed for this stage were not
+executed as described; synthetic fixtures do not establish those provenance claims.
+
+Stage 5B's audit path does not compare recorded codes with replayed codes for existing findings.
+Its signatures do not bind the supplied capture, and an empty substituted capture with a matching
+unsigned root passes. Floor obligations can also be omitted. See
+[M121 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m121--stage-5b-does-not-authenticate-its-capture-or-enforce-replayed-finding-truth).
+The retained 0/46 result primarily measures signature mutations; it does not demonstrate semantic
+attack resistance, independent capture custody or a complete no-omission guarantee.

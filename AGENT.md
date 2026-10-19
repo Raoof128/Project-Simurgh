@@ -3833,3 +3833,21 @@ Owner-requested work; implementation and review by Codex assistance.
   prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
   full E2E rerun; temporary probes preserve retained evidence and source bytes.
 - **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 882-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 882 of 919 baseline
+  candidates completely read, 37 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M120–M121 for complete Stage 5A/5B specifications and plans; update
+  SECURITY guidance on optional-evidence omission, capture binding and replay truthfulness.
+- **Findings:** Eight VNC and eight VAR probe cases demonstrate duplicate flag accounting,
+  silent audit-depth reduction, unbound capture/results and outcome-label suppression.
+  Baseline/refusal controls retained; no source or retained-evidence mutation.
+- **Research:** S43–S44 check primary introspection, monitorability and red-team measurements;
+  distinguish ablation effects, source publication dates and incompatible ASR denominators.
+- **Validation:** Check formatting, local links, baseline identities/read hashes, append-only
+  prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
+  full E2E rerun; temporary probes preserve retained evidence and source bytes.
+- **Remaining:** Complete every pending manual read and final correction verification.

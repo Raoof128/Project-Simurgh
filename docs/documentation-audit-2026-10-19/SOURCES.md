@@ -417,3 +417,47 @@ survey, regulatory endorsement or independent assessment of this implementation.
   absence of verification mechanisms, Simurgh adoption, complete MDF mapping or the design's
   precise first-in-field and usefulness scores. Treat those assertions as historical positioning,
   not independently established facts or regulatory approval.
+
+- **S43 — Stage 5A introspection and monitorability sources (checked 2026-10-19).**
+  [Singh, Linzen and Ravfogel](https://arxiv.org/abs/2605.26242), submitted 25 May and revised
+  21 August 2026, is now marked accepted at COLM 2026. Its abstract distinguishes privileged
+  internal access and second-order computation from input cues/task performance; it does not
+  validate VNC's author-supplied claim mapping. [Venkata](https://arxiv.org/abs/2605.27773),
+  submitted 26 May 2026, studies reasoning faithfulness under knowledge conflict. These
+  primary abstracts support the research motivation, not a universal absence of attestation
+  or a claim that the dispute has been settled by this repository.
+  The [J-lens paper's ablation passage](https://transformer-circuits.pub/2026/workspace/index.html)
+  reports 71% to 3% verbalized evaluation awareness under an intervention. That is not a
+  measured discrepancy rate for two simultaneous VNC witnesses, nor a result obtained here.
+  OpenAI's [Evaluating chain-of-thought monitorability](https://openai.com/index/evaluating-chain-of-thought-monitorability/)
+  is dated **18 December 2025**, not 2026. It introduces an evaluation framework and explicitly
+  discusses limits; the [23 April 2026 open-source release](https://alignment.openai.com/monitorability-evals/)
+  provides a subset of datasets and reference code, with an illustrative mocked scaffold and
+  named private-data omissions rather than a complete supported evaluation framework. Characterizing the entire research surface as
+  unreproducible provider prose overlooks those artifacts; they are not a VNC adoption.
+  The [official constitution page](https://www.anthropic.com/constitution) explicitly grants
+  CC0 1.0 reuse. That verifies the licensing statement, not the placeholder strings' provenance,
+  a retained January snapshot or the truth of training-example-to-principle assignments.
+  These were targeted abstract/metadata, method-passage and licensing checks, not complete
+  external-document reviews. S42 and M41/M47 continue to qualify institutional and legal claims.
+
+- **S44 — Stage 5B red-team measurements (checked 2026-10-19).**
+  [Erdem's 400-run study](https://arxiv.org/abs/2605.30096), submitted 28 May 2026, concerns
+  four models against a fixed penetration-testing target. Its primary abstract explicitly
+  corrects an earlier classification of upstream API overloads as safety refusals. It supports
+  distinguishing infrastructure failures from model decisions, not treating every nonzero
+  verifier result as a security success or validating VAR's repeated deterministic mutations.
+  [Zou et al.](https://arxiv.org/abs/2507.20526), submitted 28 July 2025, reports the public
+  challenge; [Table 1 and §2.2](https://arxiv.org/html/2507.20526v1) give 12.7% overall,
+  5.7% direct and 27.1% indirect values. Those are table averages with a user-session ASR
+  definition, not simply successes divided by the roughly 1.8 million attempts. They must
+  retain their denominators and must not be compared directly with VAR's fixture rate.
+  NIST's [17 January 2025 technical blog](https://www.nist.gov/news-events/news/2025/01/technical-blog-strengthening-ai-agent-hijacking-evaluations),
+  updated 19 December 2025, describes an experiment in which 25 attempts increased average
+  success across five injection tasks from 57% to 80%. This is not a 2026 competition result
+  or a universal attack probability. Its separate held-out attack comparison is 11% to 81%.
+  The blog publishes an evaluation-framework link; neither that artifact nor the February
+  2026 initiative establishes absence of signed evidence throughout the industry. These
+  checks covered primary metadata/abstracts, Table 1/§2.2 and the relevant NIST experiment
+  passages, not full external papers. Source validity does not establish VAR adoption,
+  regulatory conformance, novelty priority or independent validation.

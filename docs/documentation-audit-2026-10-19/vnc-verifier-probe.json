@@ -1,0 +1,145 @@
+{
+  "schema": "simurgh.documentation_audit.vnc_probe.v1",
+  "date": "2026-10-19",
+  "scope": "In-memory fixture copies, explicitly public fixture keys for producer-signed cases, original signatures for omission cases and refusal control. No runtime/evidence mutations or inference.",
+  "cases": [
+    {
+      "name": "baseline",
+      "result": {
+        "raw": 0,
+        "rcp": "absent",
+        "pilot": "absent"
+      },
+      "aggregates": {
+        "n_claims": 1,
+        "n_corroborated": 1,
+        "n_contradicted": 0,
+        "n_unreadable": 0,
+        "n_flags": 4,
+        "n_covered_flags": 0,
+        "n_unnarrated_flags": 4
+      }
+    },
+    {
+      "name": "producer-signed duplicate unnarrated flag inflates total",
+      "result": {
+        "raw": 0,
+        "rcp": "absent",
+        "pilot": "absent"
+      },
+      "aggregates": {
+        "n_claims": 1,
+        "n_corroborated": 1,
+        "n_contradicted": 0,
+        "n_unreadable": 0,
+        "n_flags": 5,
+        "n_covered_flags": 0,
+        "n_unnarrated_flags": 5
+      }
+    },
+    {
+      "name": "unknown polarity treated as asserts_flagged and corroborated",
+      "result": {
+        "raw": 0,
+        "rcp": "absent",
+        "pilot": "absent"
+      },
+      "aggregates": {
+        "n_claims": 1,
+        "n_corroborated": 1,
+        "n_contradicted": 0,
+        "n_unreadable": 0,
+        "n_flags": 4,
+        "n_covered_flags": 4,
+        "n_unnarrated_flags": 0
+      }
+    },
+    {
+      "name": "malformed token ID accepted as unreadable",
+      "result": {
+        "raw": 0,
+        "rcp": "absent",
+        "pilot": "absent"
+      },
+      "aggregates": {
+        "n_claims": 1,
+        "n_corroborated": 0,
+        "n_contradicted": 0,
+        "n_unreadable": 1,
+        "n_flags": 4,
+        "n_covered_flags": 0,
+        "n_unnarrated_flags": 4
+      }
+    },
+    {
+      "name": "unchanged signature accepts removed failing optional manifest",
+      "result": {
+        "raw": 0,
+        "rcp": "absent",
+        "pilot": "absent"
+      },
+      "aggregates": {
+        "n_claims": 1,
+        "n_contradicted": 0,
+        "n_corroborated": 1,
+        "n_covered_flags": 0,
+        "n_flags": 4,
+        "n_unnarrated_flags": 4,
+        "n_unreadable": 0
+      }
+    },
+    {
+      "name": "unchanged signature missing pilot raw and VWA audit silently downgrades depth",
+      "result": {
+        "raw": 0,
+        "rcp": "absent",
+        "pilot": "present"
+      },
+      "aggregates": {
+        "n_claims": 1,
+        "n_contradicted": 0,
+        "n_corroborated": 1,
+        "n_covered_flags": 0,
+        "n_flags": 4,
+        "n_unnarrated_flags": 4,
+        "n_unreadable": 0
+      }
+    },
+    {
+      "name": "producer-signed invalid pilot map binding and role accepted",
+      "result": {
+        "raw": 0,
+        "rcp": "absent",
+        "pilot": "present"
+      },
+      "aggregates": {
+        "n_claims": 1,
+        "n_contradicted": 0,
+        "n_corroborated": 1,
+        "n_covered_flags": 0,
+        "n_flags": 4,
+        "n_unnarrated_flags": 4,
+        "n_unreadable": 0
+      }
+    },
+    {
+      "name": "unsigned ledger mutation rejected control",
+      "result": {
+        "raw": 200,
+        "reason": "vnc_signature_invalid",
+        "detail": "ledger_signature",
+        "rcp": "absent",
+        "pilot": "absent"
+      },
+      "aggregates": {
+        "n_claims": 1,
+        "n_corroborated": 1,
+        "n_contradicted": 0,
+        "n_unreadable": 0,
+        "n_flags": 5,
+        "n_covered_flags": 0,
+        "n_unnarrated_flags": 4
+      }
+    }
+  ]
+}
