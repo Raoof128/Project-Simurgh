@@ -3410,3 +3410,11 @@ one machine's local agent configuration:
 - **Files changed:** Declaration and both logs only.
 - **Verification:** Root suite: 5,167 passed, zero failed, two Lean prerequisite skips. Reproduced Xvfb connection failures in a second four-case run. Current-commit native CI passes both macOS and Windows jobs; full E2E remains running.
 - **Follow-ups:** Add behavioral launcher regressions, repair the declared setup, rerun complete workflows and publish exact scope and remaining prerequisites.
+
+## 2026-10-19 — Raouf: stabilize full-smoke toolchain and display setup (Australia/Sydney)
+
+- **Scope:** Maintained harness repair under preceding declaration `53260051`.
+- **Summary:** Command steps now retain the caller's runtime PATH. Owned Xvfb fixtures disable reset after the readiness probe disconnects, preserving a stable display until explicit teardown. Scanner behavior and assertions are unchanged.
+- **Files changed:** `scripts/check.sh`, `tests/unit/maintenance/checkRuntimeEnvironment.test.js`, `tools/simurgh-daemon-linux/tests/xvfb_integration_tests.rs`, and both logs.
+- **Verification:** Both quiet/verbose launcher regressions fail before repair and pass after it. Rust formatting passes; ten consecutive real mandatory-Xvfb runs pass all four cases (40 executions, no skips). Initial failures remain retained.
+- **Follow-ups:** Run the complete base/E2E sequence on this repair with pytest and the real `origin/main` reference available; execute supplemental suites and publish scoped receipts. These checkout prerequisites do not change historical verifiers.

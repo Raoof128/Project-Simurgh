@@ -35,7 +35,17 @@ fn start_xvfb(display_num: u32) -> Option<XvfbGuard> {
     }
     let display = format!(":{display_num}");
     let mut child = Command::new("Xvfb")
-        .args([&display, "-screen", "0", "1024x768x24", "-nolisten", "tcp"])
+        // The readiness probe disconnects before the test client connects. Keep
+        // that disconnect from resetting the display in between the two clients.
+        .args([
+            &display,
+            "-screen",
+            "0",
+            "1024x768x24",
+            "-nolisten",
+            "tcp",
+            "-noreset",
+        ])
         .stdout(Stdio::null())
         .stderr(Stdio::null())
         .spawn()
