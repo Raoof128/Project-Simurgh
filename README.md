@@ -105,6 +105,9 @@ commands and logs. The [13-job hosted readiness run](https://github.com/Raoof128
 passed at `4afe9538`; these are recorded results for those revisions, not a claim that every
 check has run at the current branch head.
 
+The [19 October full smoke report](docs/research/smoke-validation-2026-10-19/RESULTS.md)
+records the maintained branch checks, harness repairs and explicit browser/platform exclusions.
+
 ## Replay the evidence
 
 **No API key, model download or paid inference is needed.** Use a full Git checkout,
