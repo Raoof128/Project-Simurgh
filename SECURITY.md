@@ -550,3 +550,17 @@ bundle with no Lane B capture passes audit. See
 [M115 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m115--stage-4v-derives-fixture-disputes-without-establishing-semantic-correctness-or-independent-due-process).
 The local respondent process is not isolated from the shared filesystem, and its recorded
 blindness flags do not establish an independent operator or a legal due-process guarantee.
+
+Stage 4W checks span metadata but does not bind displayed words to the verified value. A local
+probe passed contradictory numeric prose and counted the entire mixed narrative as evidence
+bytes. Its view check compares markers only, and its narrative evaluator does not authenticate
+the capsule. See [M116 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m116--stage-4w-verifies-span-metadata-without-binding-the-displayed-prose-to-that-metadata).
+Do not interpret evidence badges, density or the bridge JSON as proof of truthful prose, complete
+audit coverage or C2PA conformance. No live Stage 4W drafting capture is retained.
+
+Stage 4X's audit compares only supplied outcome rows, so a producer-signed ledger can omit
+corpus items and report zero slips. The file verifier binds corpus/ledger digests, but the
+exported core omits that binding. Coverage and transform metadata checks are incomplete. See
+[M117 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m117--stage-4xs-replay-omits-ledger-completeness-and-does-not-establish-a-semantic-lower-bound).
+The six-fixture result is reproducible research evidence, not field performance or an
+irreducible semantic lower bound; Lane B is not included in the signed attestation.

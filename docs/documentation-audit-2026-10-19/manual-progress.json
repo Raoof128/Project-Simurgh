@@ -171,7 +171,7 @@
       "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check. M70/M71 disclose retained risk mapping, SDK retry/abort behavior, raw context prefixes and caller receipt strings; runtime remains unchanged.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "58abc1d34da4079d856c839300c98853c0ad447b458555c15f77ff1d5fd214d5"
+      "read_sha256": "3cd4c27f7679f991e5300787d45a64eebd3e8977507bbc8b4da66fc30dbbc37d"
     },
     {
       "path": "docs/DECISIONS.md",
@@ -1107,7 +1107,7 @@
       "assessment": "Read all 13 primary-source applicability rows and limits. Correctly separates publication from review year, pinned SDK from living docs and alignment from compliance. Previous-turn fetch provenance retained; no fresh fetch claimed.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "97131a3f93450b0453e028e2be7abe1f2a35b2caf31bd70619792e4c83ed6f11"
+      "read_sha256": "34f8b94dacf95fb6f46948dd88f5d286f2c4a29894e6de04287431dcee99ce72"
     },
     {
       "path": "docs/documentation-audit-2026-10-19/VALIDATION.md",
@@ -8656,11 +8656,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "21b99ef2cc9cba076af7f7d63e3641f6cf26399a886a0e52eefa0068eea40c66",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read. M116 and seven-case VSN probe qualify unbound displayed prose, density inflation, capsule authentication, marker-only views, empty audit inventory, fixture-key Lane B and absent/unsigned Lane C. S39 corrects C2PA textual-region comparison and qualifies unverified incident statistics. Historical plan preserved; actual signing, capture/reproduce, limited parity and symbolic proof behavior supersede proposed snippets, tests and completeness claims.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "21b99ef2cc9cba076af7f7d63e3641f6cf26399a886a0e52eefa0068eea40c66"
     },
     {
       "path": "docs/superpowers/plans/2026-07-08-stage-4x-vlr-leakage-residue.md",
@@ -8669,11 +8669,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "9bb4af3609114d43da4f34b6318a908c365cbe3b6dc5dc077d13dd95edfe0756",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read. M117 and six-case VLR probe qualify omitted outcomes, unbound core versus CLI, unsupported coverage/MR metadata, six chosen pairs and non-irreducible residue. S40 distinguishes primary benchmark/policy sources from novelty and adoption claims. Historical plan preserved; actual corpus size, signed groups, Lane B, incomplete tests/parity and in-place reproduction supersede proposed scope and blind-process claims.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "9bb4af3609114d43da4f34b6318a908c365cbe3b6dc5dc077d13dd95edfe0756"
     },
     {
       "path": "docs/superpowers/plans/2026-07-08-stage-4y-vdr-document-residue.md",
@@ -9878,11 +9878,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "86a6afea0670e584a5d20b9f143d5f4f52ddaf040683cc79c57979c4a0a74d02",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read. M116 and seven-case VSN probe qualify unbound displayed prose, density inflation, capsule authentication, marker-only views, empty audit inventory, fixture-key Lane B and absent/unsigned Lane C. S39 corrects C2PA textual-region comparison and qualifies unverified incident statistics. Frozen design preserved; lexical/span metadata is not factual prose verification, regulator readiness or C2PA conformance.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "86a6afea0670e584a5d20b9f143d5f4f52ddaf040683cc79c57979c4a0a74d02"
     },
     {
       "path": "docs/superpowers/specs/2026-07-08-stage-4x-vlr-leakage-residue-design.md",
@@ -9891,11 +9891,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "c2872f5b3ad483d5c3a6f19a736ab0c40aa644e2682c550539bcde51becb0811",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read. M117 and six-case VLR probe qualify omitted outcomes, unbound core versus CLI, unsupported coverage/MR metadata, six chosen pairs and non-irreducible residue. S40 distinguishes primary benchmark/policy sources from novelty and adoption claims. Frozen specification preserved; source witnesses and deterministic rewrites do not prove semantic ground truth or independent incident provenance.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "c2872f5b3ad483d5c3a6f19a736ab0c40aa644e2682c550539bcde51becb0811"
     },
     {
       "path": "docs/superpowers/specs/2026-07-08-stage-4y-vdr-document-residue-design.md",

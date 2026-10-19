@@ -1,0 +1,75 @@
+{
+  "schema": "simurgh.documentation_audit.vsn_probe.v1",
+  "date": "2026-10-19",
+  "scope": "In-memory producer-signed inputs using explicitly insecure public fixture keys. No retained evidence or runtime source changes; no signature forgery or inference.",
+  "cases": [
+    {
+      "name": "baseline",
+      "result": {
+        "raw": 0,
+        "density": {
+          "slot_bound_bytes": 49,
+          "judgment_bytes": 55,
+          "voice_bytes": 149,
+          "total_bytes": 253
+        }
+      }
+    },
+    {
+      "name": "displayed numeric claim contradicts verified metadata",
+      "result": {
+        "raw": 0,
+        "density": {
+          "slot_bound_bytes": 49,
+          "judgment_bytes": 55,
+          "voice_bytes": 149,
+          "total_bytes": 253
+        }
+      }
+    },
+    {
+      "name": "entire mixed narrative becomes evidence density with one verified value",
+      "result": {
+        "raw": 0,
+        "density": {
+          "slot_bound_bytes": 253,
+          "judgment_bytes": 0,
+          "voice_bytes": 0,
+          "total_bytes": 253
+        }
+      }
+    },
+    {
+      "name": "capsule signature never reverified",
+      "result": {
+        "raw": 0,
+        "density": {
+          "slot_bound_bytes": 49,
+          "judgment_bytes": 55,
+          "voice_bytes": 149,
+          "total_bytes": 253
+        }
+      }
+    },
+    {
+      "name": "marker integrity accepts altered text density and render digest",
+      "result": null
+    },
+    {
+      "name": "producer-signed empty audit inventory and fabricated Lane C summary",
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "name": "control retained fixture digest falsification rejected",
+      "result": {
+        "ok": false,
+        "reason": "lane_a_fixture_falsified",
+        "detail": {
+          "name": "green-all-types"
+        }
+      }
+    }
+  ]
+}

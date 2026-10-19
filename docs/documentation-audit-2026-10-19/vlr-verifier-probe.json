@@ -1,0 +1,69 @@
+{
+  "schema": "simurgh.documentation_audit.vlr_probe.v1",
+  "date": "2026-10-19",
+  "scope": "Temporary bundle files and in-memory inputs, producer-signed using explicitly public fixture keys. One unchanged-attestation case compares core with CLI binding control. No retained evidence/source changes or inference.",
+  "cases": [
+    {
+      "name": "baseline",
+      "cli_verifier": {
+        "raw": 0
+      },
+      "core": {
+        "raw": 0
+      },
+      "slip_v2": "1/6"
+    },
+    {
+      "name": "producer-signed empty outcomes accepted despite nonempty corpus",
+      "cli_verifier": {
+        "raw": 0
+      },
+      "core": {
+        "raw": 0
+      },
+      "slip_v2": "0/0"
+    },
+    {
+      "name": "producer-signed omitted sole v2 residue reports zero slips",
+      "cli_verifier": {
+        "raw": 0
+      },
+      "core": {
+        "raw": 0
+      },
+      "slip_v2": "0/5"
+    },
+    {
+      "name": "producer-signed invalid transform and ruleset metadata plus fictitious coverage",
+      "cli_verifier": {
+        "raw": 0
+      },
+      "core": {
+        "raw": 0
+      },
+      "slip_v2": "1/6"
+    },
+    {
+      "name": "producer-signed no-op transforms and claim labels without catchable seeds",
+      "cli_verifier": {
+        "raw": 0
+      },
+      "core": {
+        "raw": 0
+      },
+      "slip_v2": "0/0"
+    },
+    {
+      "name": "unchanged signature core accepts replacement ledger while CLI rejects binding",
+      "cli_verifier": {
+        "raw": 178,
+        "reason": "vlr_ledger_mismatch",
+        "detail": "merkle_binding"
+      },
+      "core": {
+        "raw": 0
+      },
+      "slip_v2": "0/0"
+    }
+  ]
+}

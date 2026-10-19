@@ -4565,3 +4565,21 @@ Owner-requested work; implementation and review by Codex assistance.
   prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
   full E2E rerun; all temporary probes preserve retained evidence and signatures.
 - **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 874-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 874 of 919 baseline
+  candidates completely read, 45 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M116–M117 for complete Stage 4W/4X specifications and plans; update
+  SECURITY guidance on displayed narrative claims, density and leakage-ledger completeness.
+- **Findings:** Seven VSN probes and six VLR probes establish unbound prose, marker-only
+  checking, empty/omitted audit outcomes and core-versus-CLI binding differences. Retain
+  refusal controls and qualify symbolic proofs, local process boundaries and finite parity.
+- **Research:** S39–S40 correct the C2PA textual-region comparison and qualify incident,
+  benchmark, standards and institutional claims against primary sources.
+- **Validation:** Check formatting, local links, baseline identities/read hashes, append-only
+  prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
+  full E2E rerun; temporary probes preserve retained evidence and source bytes.
+- **Remaining:** Complete every pending manual read and final correction verification.

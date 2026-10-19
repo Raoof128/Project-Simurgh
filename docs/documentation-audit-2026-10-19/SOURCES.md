@@ -326,3 +326,43 @@ survey, regulatory endorsement or independent assessment of this implementation.
   does not establish that Simurgh's keys identify real accountable parties, certify its schema,
   or guarantee that future identity integration requires no schema changes. The source is an
   initiative announcement, not a final interoperability standard or implementation validation.
+
+- **S39 — Stage 4W provenance and incident comparisons (checked 2026-10-19).**
+  [C2PA 2.3 technical specification](https://spec.c2pa.org/specifications/specifications/2.3/specs/C2PA_Specification.html),
+  §§1.2–1.3, 2.3 and 18.2, describes signed claims, assertions and content binding; its regions
+  of interest include textual ranges and character offsets. Therefore “signs the file, never
+  the sentences” is an overbroad comparison. The supplied quotation about declaration truth
+  is not established here as a verbatim quotation from the specification. Provenance validation
+  does not adjudicate factual truth, and emitting an in-toto statement is not a C2PA integration.
+  This review inspected the relevant sections, not the complete external specification.
+  [NIST's 9 March 2026 AI 800-4 announcement](https://www.nist.gov/news-events/news/2026/03/new-report-challenges-monitoring-deployed-ai-systems)
+  identifies monitoring challenges using practitioner workshops and literature review; it is
+  neither a universal incident-reporting format nor validation of VSN. The [Oregon Judicial
+  Department's 5 June 2026 announcement](https://apps.oregon.gov/oregon-newsroom/OR/OJD/Posts/Post/Oregon-Supreme-Court-issues-first-AI-orders)
+  confirms separate state-court actions involving fabricated citations and quotations; it does
+  not verify the design's federal Brigandi sanction amounts/counts. The 1,313 proceedings,
+  106 countries, 11-fold escalation, April order/counts and dated KPMG withdrawal claims remain
+  unverified historical secondary-source claims in the frozen design. Do not republish them
+  as established statistics, exact primary-source quotations or proof VSN prevents those events.
+
+- **S40 — Stage 4X benchmark and institutional comparisons (checked 2026-10-19).**
+  [PADBen](https://arxiv.org/abs/2511.00416), Zha, Min and Sushmita, submitted 1 November 2025,
+  concerns AI-generated-text detection under paraphrasing, including authorship obfuscation;
+  it is not a benchmark of factual incident-claim truth. The primary abstract links code and
+  does not establish the design's blanket assertion that paraphrase benchmarks are impossible
+  to reproduce offline. Frozen labels can be replayed even when their creation used a model;
+  replay and independent semantic validation are different claims. [CheckList](https://aclanthology.org/2020.acl-main.442/),
+  Ribeiro, Wu, Guestrin and Singh, ACL 2020, provides behavioral test methodology and generation
+  tools. Its primary abstract does not prove that nobody has combined metamorphic tests with
+  signed reports, nor establish VLR's claimed novelty. These were metadata/abstract checks,
+  not complete reviews of the external papers.
+  [NIST's AI 800-2 draft announcement](https://www.nist.gov/news-events/news/2026/01/towards-best-practices-automated-benchmark-evaluations),
+  dated 30 January 2026, describes voluntary preliminary evaluation practices and a comment
+  period ending 31 March. It is not an endorsement or certification of VLR, and it does not
+  prove the claimed universal finite-guardrail impossibility result. No specific such theorem
+  is established by this citation. [Anthropic's RSP v3 announcement](https://www.anthropic.com/news/responsible-scaling-policy-v3)
+  describes periodic Risk Reports and external review in specified circumstances, not an
+  unconditional external-review requirement for every model/report. It does not establish
+  that reviewers have no analysis tools or that VLR makes their safety cases machine-verifiable.
+  ISO audit acceptability, AILuminate/institute adoption and benefit scores remain proposed
+  positioning, not demonstrated conformance, partnership or independent validation.

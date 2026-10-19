@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **870 documents have complete manual reads; 49 remain
+SHA-256 values. At this checkpoint, **874 documents have complete manual reads; 45 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -4318,3 +4318,165 @@ proofs. Reproduce rebuilds tracked fixtures/attestation in place, re-verifies re
 and skips Lean when unavailable. Historical command paths and incomplete plan snippets are not
 current run instructions. The later 4X work is leakage-residue analysis, not the roadmap's
 promised novel-attack discovery; retained closeout limitations supersede reserved-slot counts.
+
+### M116 — Stage 4W verifies span metadata without binding the displayed prose to that metadata
+
+Completely read the 496-line VSN specification and 2,981-line implementation plan. Compared
+narrative validation, binding, leakage, views, contest adapter, attestation, both drafting lanes,
+Lean, parity and reproduction tests. M49's lexical and standards qualifications remain necessary;
+the stronger “story cannot impersonate evidence” claim is not supported by the implementation.
+Preserve the frozen design, examples and evidence with these dated corrections.
+
+The [seven-case local probe](vsn-verifier-probe.json) changes displayed `participants recorded: 2`
+to `participants recorded: 9`, rebinds and signs it with the public fixture author key, and receives
+raw 0 while metadata still claims 2. The verifier never compares the selected text to the
+recomputed value or judgment digest. A single valid slot can cover the entire 253-byte mixed
+narrative, yielding 253 evidence bytes and zero judgment/voice bytes. Thus numeric false quotations
+and density inflation are possible without defeating a signature or the registry recomputation.
+The “Brigandi” tests change metadata, not contradictory prose inside an otherwise valid span;
+they do not demonstrate that fabricated legal citations or quotations are structurally unfileable.
+Density is typed-byte accounting and is not an independently verified measure of evidence content.
+
+The narrative evaluator does not reverify the capsule's signature, seal or census. The probe
+passes the unchanged narrative against a capsule whose signature is replaced with invalid text.
+Callers must establish the capsule's provenance separately, subject to M113. Author and judgment
+keys are embedded, with no external identity pin. Judgment digest/signature checks authenticate a
+record but do not link its text digest to the displayed judgment. Unreferenced reserved records
+skip inner-signature validation. The recursive payload check recognizes specified key names and
+an uppercase private-key substring; it does not detect arbitrary prompts, transcripts, secrets
+or destinations hidden under other names or in ordinary text. Structural allowlists do not fully
+validate all value types; malformed containers can reach wrapper 172 instead of schema 162.
+
+Leakage scanning applies to uncovered regions, excludes every declared span regardless of type,
+and reports the region start rather than the exact matching byte. It uses lowercase/ASCII word
+boundaries and the frozen English vocabulary, not full Unicode case folding or multilingual
+coverage. The capsule-value rule skips strings shorter than two characters; ISO dates are caught
+by their digits rather than a dedicated date parser. NFC plus trailing ASCII space/tab cleanup
+is narrower than all trailing Unicode whitespace. Cross-region words and semantic paraphrases
+remain outside the modeled coverage. A declaration is not a language-level evidence boundary.
+
+`checkMarkerIntegrity` checks only the marker sequence. Altered segment text, density and an
+invalid render digest all pass the probe. It does not establish span-ID/type/text agreement or
+authenticate the view. Render and density helpers accept content without calling the verifier.
+The contest adapter accepts a supplied span and delegates to 4V's status helper without validating
+its membership, narrative signature, respondent signature/census or complete counter-capsule
+binding. The prose helper simply records its arguments; it does not verify an existing span or
+a digest format. M115's agreement and target-kind limits apply. The socket is implemented as
+helpers, not a complete independent end-to-end contest protocol.
+
+The public attestation tier checks key/signature/root/seal only, not all structural narrative
+checks promised in the spec. Audit reconstructs named fixtures and rejects a changed retained
+fixture digest (the probe's negative control), but permits an empty supplied list. It accepts a
+producer-signed unknown-schema bundle with no Lane B, empty honesty/parity metadata and invented
+Lane C summary fields. Lane B replay checks the narrative and raw code only, not all component
+hashes, blindness flags, density or signer-profile consistency. Lane C summaries are not validated
+or matched to captures by the CLI. The separate bridge file is not authenticated or loaded there;
+only two internal subject digests are recomputed. The bridge is an unsigned in-toto-shaped JSON
+projection, not a C2PA manifest, interoperability result or proven Content Credentials support.
+Only `--audit` selects CLI audit behavior; the process exits 0/1 and has no custom-key flag.
+
+Lane B uses a committed fixture signing key delivered by the parent, not a fresh ephemeral key.
+It invokes the deterministic child twice, supplies the binding and shares filesystem authority;
+environment-name and `.pem` argument checks do not establish inability to read other state.
+There is no environment-value scan as promised. The child imports the shared canonicalizer,
+contrary to the plan's inline/no-import narrative. The reproduce script's “verify-only” header
+is inaccurate: both Lane B E2E tests rerun and overwrite the deterministic capture. Rebuilds are
+in-place, comparison uses `git diff`, and Lean is optional. No new ceremony was run for this audit.
+
+No Stage 4W Lane C capture directory is retained. The optional runner directly calls the Messages
+API, not the promised gateway/MCP path. It never signs a parseable narrative, so signature 163
+precedes the intended value/leakage experiment. Missing response content, including an API error,
+is classified as refusal without an HTTP-success check. It stores digests only and does not
+establish full output replay, token/cost accounting or adversarial success. The capture validator
+does not require model identity, narrative digest or exact fields, and cannot authenticate unseen
+prompt/completion content. These are unexecuted live-lane capabilities, not measured coverage.
+
+Python/browser parity excludes schema, judgment, payload and signature cases, not just Ed25519.
+The browser test obtains the expected attestation digest from the narrative under test; it does
+not test an independently supplied digest mismatch. VM core parity is not visual browser testing.
+Lean's no-smuggling and locality statements unfold assumptions; disjointness does not prove all
+promised bounds, voice filtering proves weight equality rather than evidence-set semantics, and
+the adapter theorem equates a locally defined identity wrapper with a copied table. None connects
+the runtime text to verified metadata. K7 checks function types and finite examples, skips the
+freeze guard if tag lookup fails, and does not execute every export or the promised 4V invariant.
+Internal scores, the 2026 reporting-window pitch and broad novelty claims are not external
+validation; S39 and M41/M47 supply the appropriate source and legal qualifications.
+
+### M117 — Stage 4X's replay omits ledger completeness and does not establish a semantic lower bound
+
+Completely read the 763-line VLR specification and 557-line plan, including the full tables.
+Compared corpus construction/validation, metamorphic transforms, both gates and ledger paths,
+attestation core/CLI, Lane B, Python, Lean and reproduction/E2E checks. The retained 6/6 to 1/6
+slip result is a measurement on six selected rewrite pairs, not the proposed 24–30-item corpus,
+a field rate, a representative adversary distribution or an irreducible semantic lower bound.
+The sole remaining phrase is `accounts were exposed`; an added lexical rule could recognize
+that phrase. This does not solve general semantics, but directly contradicts the assertion that
+no lexical extension can catch this particular residue. “Irreducible” is a historical field name,
+not an established impossibility result. There is no live-model lane, as the design discloses.
+
+Authors still select the seeds, transformation functions and labels. Deterministic rewriting
+makes the output reproducible, not independent of author choice or guaranteed to preserve a
+quantitative meaning. The implementation can apply a no-op transform to a nonmatching seed.
+The sole `incident_sourced` item carries the string `reported`, with no source URL, snapshot or
+signed source map linking it to a particular incident/Risk Report. The builder checks that the
+reference is a nonempty string, not that it is primary-pinned or explicitly qualified. Verification
+does not require that reference. The six rows contain no non-ASCII text; a separate smoke test
+only checks that a mixed-script string does not throw. Both provenances are present across the
+corpus, not in every family. M116 also invalidates the inherited claim that 4W makes fabricated
+quotations structurally unfileable. S39–S40 qualify the incident, benchmark and institutional pitch.
+
+The [six-case temporary-bundle probe](vlr-verifier-probe.json) demonstrates that producer-signed
+empty outcomes pass audit with a nonempty corpus and 0/0 slip rates. Omitting the sole v2 miss
+passes with 0/5. Audit reruns the corpus but compares only the supplied outcome rows; it does
+not require exactly one sorted row for every corpus ID. Duplicate rows are likewise not
+explicitly forbidden. Public arithmetic describes supplied booleans, not independently observed
+results, and outcome/ledger schemas lack the promised strict allowlists and types.
+
+A producer-signed corpus with unknown table/rubric/ruleset IDs, invalid MR/v2 digests and all
+coverage families pointing to the same seed passes audit. Coverage verifies only nonempty lists
+of existing IDs, not the claimed lexical family actually exercised. The first-hit v1 scanner
+means the digit in several canonical witness seeds masks later percent/month/quantifier rules.
+All six seeds replaced by `calm`, with unchanged true labels and no-op derived residues, also
+pass after rebuilding the ledger and signing. The denominator becomes zero. The verifier checks
+label equality to true and membership in family/MR lists, not semantic claimhood, matching family
+to MR, catchable seeds or actual transformation. Thus “machine-checkable ground truth” means a
+checked author label, and the coverage witness does not eliminate cherry-picking.
+
+The file-based verifier correctly binds the supplied corpus and ledger to signed digests/root;
+its binding-refusal control is retained. The exported `evaluateVlr` core omits that binding and
+accepts a replacement empty ledger with the original attestation. K7's public-green/audit-red
+mutation uses that unbound core without re-signing, so it does not demonstrate the plan's
+producer-signed swapped-pack path through the CLI. The CLI performs Merkle checks before schema
+and signature, departing from the stated global first-failure order. It uses the unsafe core,
+has no directory/key flags despite configurable function arguments, returns 0/1, and treats any
+tier string other than exact `audit` as public. The signed attestation's duplicate summary fields
+are not all cross-checked to the corpus/ledger; it carries only the parity non-claim, not the full
+promised signed nine-non-claim/limitations/socket ledger.
+
+Frozen-gate checking compares the v1 constant digest and two 4W file hashes to live checkout
+bytes. It does not authenticate all transitive dependencies (`textCore`, canonicalization), the
+v2 implementation or MR closures. The MR digest covers descriptive patterns, not executable
+function bytes, and its stored value is not verified here. A producer can regenerate the source
+witness after code changes; without an independently trusted baseline it is a declared-code
+binding, not proof of historical immutability. Aggregate family provenance uses the first item
+in the family and does not separate mixed-provenance counts. Monotonicity is checked on residue
+outcomes; no seed-v2 outcome is recorded. The imported-v1 union explains the intended monotonicity
+without proving general gate correctness or any reduction in false positives.
+
+Lane B reuses the same implementation in another process. It passes ruleset digests but the
+child does not check them; it omits argv/PEM checks, rejects only `OPERATOR_` names (not bare
+`OPERATOR`), and inherits the rest of the environment and filesystem authority. Recorded false
+flags are parent-authored assertions, not a filesystem isolation proof. The top-level attestation
+neither seals nor re-verifies the Lane B capture. Reproduce reruns and writes that capture despite
+its verify-only wording, rebuilds tracked artifacts in place, omits the K7/browser E2E suites,
+and conditionally skips Lean. Its fixed headline is not a new measured result on arbitrary input.
+
+Python parity covers the six MR/gate/ledger examples and silently returns when Python is absent;
+Unicode regex semantics differ from JavaScript outside that corpus. Browser VM parity checks
+two rates and a residue list, not all per-family rows, MR/schema/signature validation or interactive
+rendering. CSP hashes are checked, but `connect-src 'none'` is not a complete framing/no-exfiltration
+proof. K7 does not compare predecessor source bytes or all old exit blocks as promised; it checks
+a few constants and source strings. Lean proves defined counts, assumed digest equality and
+functional equality; the miss theorem exhibits one zero-integrity-code example rather than
+proving every runtime miss is disjoint from every error. The proofs do not establish truthful
+labels, complete ledger coverage, independent provenance, semantic preservation or a lower bound.
