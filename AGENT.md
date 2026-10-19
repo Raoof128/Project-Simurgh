@@ -3779,3 +3779,21 @@ Owner-requested work; implementation and review by Codex assistance.
   append-only prefixes and frozen surfaces. No runtime repairs, model inference, external
   ceremony or full E2E rerun; temporary probes leave retained evidence unchanged.
 - **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 870-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 870 of 919 baseline
+  candidates completely read, 49 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M113–M115 for complete Stage 4T/4U/4V specifications and plans; update
+  SECURITY guidance on capsule views, red-team findings and counter-capsule semantics.
+- **Findings:** Temporary fixture-key probes establish omitted fields, contradictory views,
+  unbound attack expectations, irrelevant recomputation and empty audit inventories. Qualify
+  reported anchors, legal timing, local-process blindness, parity and symbolic proof scope.
+- **Research:** S37–S38 qualify incident-reporting literature, California defenses and the
+  NIST agent initiative; distinguish primary-source claims from implementation validation.
+- **Validation:** Check formatting, local links, baseline identities/read hashes, append-only
+  prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
+  full E2E rerun; all temporary probes preserve retained evidence and signatures.
+- **Remaining:** Complete every pending manual read and final correction verification.

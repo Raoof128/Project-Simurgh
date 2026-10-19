@@ -525,3 +525,28 @@ MCP demonstration evaluates the chain after recording the task. See
 Offline fixture success does not establish complete observation, persistent replay prevention
 or enforcement before execution. Public-tier verification does not run the chain engine;
 unknown tier names currently take that weaker path.
+
+Stage 4T's capsule evaluator accepts producer-signed omissions of all projected sections and
+does not bind section commitments back to projected values. A local probe passed a capsule
+with a contradictory view even when that view was checked. The public attestation tier checks
+signature/root/seal only; audit accepts a producer-signed empty fixture list. See
+[M113 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m113--stage-4t-does-not-enforce-complete-fields-or-bind-view-commitments-to-capsule-values).
+The 4N anchor and block rows are authored fixture fields; 4O/4U replay and complete legal
+reporting are not established. The browser renders unescaped supplied fields and does not
+verify capsule signatures. Treat it as a research demonstration pending runtime repair.
+
+Stage 4U commits attack IDs and family counts, not pre-run payloads or expected outcomes.
+Its audit path does not bind each finding's expectation to its fixture and skips execution for
+self-declared refusal findings; a producer-signed probe passed with every finding excluded and
+0/0 ASR. Lane B entries are not fully verified by the attestation core, and no live capture is
+retained. See [M114 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m114--stage-4us-signed-schedule-does-not-precommit-payloads-or-independently-establish-attack-outcomes).
+The optional live driver does not account for spend or reserve complete request budgets.
+Treat its charter and cap fields as bounded research metadata pending implementation repair.
+
+Stage 4V does not bind recomputation kinds to the meaning of contested sections or require a
+temporal receipt for filing status. Its agreement path ignores the submitted claimed value;
+its prose filter does not cover nested binding/census fields. A producer-signed empty fixture
+bundle with no Lane B capture passes audit. See
+[M115 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m115--stage-4v-derives-fixture-disputes-without-establishing-semantic-correctness-or-independent-due-process).
+The local respondent process is not isolated from the shared filesystem, and its recorded
+blindness flags do not establish an independent operator or a legal due-process guarantee.

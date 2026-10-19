@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **864 documents have complete manual reads; 55 remain
+SHA-256 values. At this checkpoint, **870 documents have complete manual reads; 49 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -3987,7 +3987,7 @@ Proof context fields are included in each challenge but not all compared to the 
 transcript; a self-consistent proof is not the whole protocol binding. The local check does not
 establish an independent cryptographic audit. Even a correctly bound DLEQ proves algebra for
 chosen inputs, not truthful observed custody: colluding parties can choose the same invented
-class without forging a proof. M55's qualification remains necessary.
+class without forging a proof. M48's qualification remains necessary.
 
 Lane B launches separate subprocesses per phase, but reads the same committed scalar files,
 reuses them across slots, and routes phase output through one parent. It is not two persistent
@@ -4094,3 +4094,227 @@ It does not enforce network isolation, check untracked evidence completeness or 
 assertion itself. Its two inherited key audits are not a general privacy proof. S36 corrects
 the prior-art comparison; “unoccupied,” organization-benefit scores and the uncited 84% survey
 claim do not establish independently validated novelty or market demand.
+
+### M113 — Stage 4T does not enforce complete fields or bind view commitments to capsule values
+
+Completely read the 625-line VIC specification and 716-line plan. Compared template/census/
+projection/view/capsule cores, green builder, attestation CLI, Lane B, browser handlers/parity,
+Python parity, Lean and reproduction paths. The [five-case temporary-input probe](vic-verifier-probe.json)
+confirms producer-signed acceptance of no projected sections, an undeclared section class with
+unsupported prose, and view commitments that contradict the capsule's actual projected values.
+The last case passes even when that contradictory view is supplied for evaluation. These probes
+use explicitly public fixture keys and do not forge a retained signature. Preserve frozen records;
+the broad No Hearsay and No Two Stories claims exceed the implemented checks.
+
+Template validation checks partition keys against snapshot section IDs and rejects invented
+projected IDs, but never requires every section to be projected exactly once. Suppression skips
+missing projections. Schema checking does not restrict every section's class to the three
+states or forbid values on human/absence markers. Projection checks use each field's chosen
+recompute kind without enforcing the normative section-to-kind mapping. A signature binds what
+the producer asserts, not whether that assertion answers the section's actual reporting question.
+A chain verdict is not a chain-of-events narrative, participant count is not a measured number
+of affected users, and a count of authored block records is not a complete remedial-action report.
+The JSON snapshots are selected heading transcriptions, not full copies of Commission forms,
+all subfields or a legally sufficient machine-readable filing. The plan's illustrative headings
+were replaced in implementation; its sample lists are not the authoritative pinned lists.
+
+Capsule evaluation does not recompute section commitments from projected values or compare the
+capsule root to their root. The view helper compares the view only to the supplied commitment
+list; it does not authenticate that list or its issuer. It needs that full list, not just a root.
+Its set-union check does not require distinct disclosed/redacted sets, unique entries or exact
+redaction-commitment-array length. Disclosure keys are not independently compared to section
+identities. Deterministic Lane A salts are public; publishing the full regulator view also
+publishes openings. These constructions do not make contradictory publications impossible,
+provide anonymity or prove all audiences received the same authenticated commitment.
+
+The census seals a producer-declared set, not an independently observed universe. It checks
+manifest-item epochs, not every underlying artifact's epoch, kind or the manifest's own epoch.
+Duplicate artifacts collapse in the digest index; duplicate manifest entries are not explicitly
+forbidden. An author can omit an event before sealing both manifest and bundle. Only the 4S
+verifier is installed in `STAGE_VERIFIERS`; unknown/unconfigured artifact kinds are skipped.
+Default direct capsule evaluation uses stored chain verdicts when that verifier is absent.
+4O/4U references are not in the green builder's three-artifact census. The 4N anchor is an
+authored integer (42 in Lane A, 7 in Lane B), not an authenticated heartbeat inclusion proof or
+proof the sealed evidence existed at a public time. Consequently the claimed consent-IOU
+retirement, upstream replay and anchored legal deadline inputs are not established here.
+
+The attestation public tier checks its signature, group root and seal only; it does not perform
+the promised template/partition/census/section validation. Audit replays supplied Lane A entries
+against supplied expected labels, allows fixture `eval_opts` overrides, and does not require the
+18-case inventory. A producer-signed empty template/census/fixture attestation with an unknown
+schema passes audit. The builder's default Lane B group is null, so the normal attestation does
+not seal the separately retained capture. Neither tier verifies that capture or all reference
+artifacts. Unknown tier strings take the public path; the CLI does not expose a public-key flag
+and emits 0/1 rather than the specification's raw-code process contract. The default verifier
+reads a fixture private-key PEM to obtain verification material and hashes that PEM as its key
+label. This is a reproducible fixture convention, not public-only external-key provisioning.
+
+Lane B actually records a green 4S delegation, rather than the promised over-scope raw-108
+attempt, and authors a blocked-decision row beside it. It is a real local two-process exchange,
+not evidence that the capsule prevented an incident. Capture verification does not require the
+three named views, compare the top-level recorded verdict to the nested one, or require the
+human-input sections to exist before checking them with `every`. Capture is the direct script's
+default; only `--verify` preserves the retained capture. No fresh external ceremony was run here.
+
+The browser loads a capsule, recomputes its unkeyed seal and renders declared sections; it does
+not authenticate signatures, rerun the capsule engine or export the promised summary. It requires
+a capsule before checking a view. Raw fields enter `innerHTML` without escaping; the static CSP
+is not a substitute for safe rendering. Browser parity covers a digest example and two views,
+not the complete Lane A corpus or visual/browser behavior. Python parity excludes both 134 and
+146, not only the signature case; it also lacks all JS schema-list and pinned-digest checks.
+Finite parity is not implementation equivalence or a security verifier for arbitrary inputs.
+
+Lean's noHearsay law concerns one typed section; the runtime's unchecked class/coverage gaps
+are outside that model. Census exactness proves membership changes for a fresh list element,
+not Merkle collision resistance or all duplicate/multiset behavior. The view model directly
+assumes equality to the capsule value. K7 checks selected functions/types and examples; its
+wrapper test accepts either 150 or 133, and predecessor comparison may be vacuous at a moving
+merge base or skipped when no ref resolves. Reproduce rebuilds tracked Lane A files in place,
+uses fixed tamper cases, omits the browser parity gate and skips Lean when unavailable. Preserve
+these limits alongside the retained full-smoke receipt; neither is exhaustive correctness.
+S37 qualifies research and market claims; M41/M47 govern legal scope and dates. No regulator,
+insurer, named lab or standards organization has validated the internal benefit/novelty scores.
+
+### M114 — Stage 4U's signed schedule does not precommit payloads or independently establish attack outcomes
+
+Completely read the 470-line VRTA specification and 2,270-line plan. Compared charter, fixture,
+finding, dual-signal and main cores, corpus/attestation builders and CLI, both Lane B files,
+Lean, reproduction and E2E checks. Preserve the frozen records and their 0/58 result, while
+qualifying it as a regression ledger rather than demonstrated absence of bypasses. The corpus
+cycles 4S's own case table: eight differential rows are the honest tree, the four `fable_adaptive`
+rows are ordinary 4S cases without captured model provenance, and no generator invokes all six
+kernel entries, Python differential fuzzing, public/audit gap search or actual hash-cycle forging.
+A family label does not establish the promised attack technique was executed. M112's later
+probe findings do not retroactively change the signed historical measurement.
+
+The schedule root commits IDs and family counts, not payloads, expected outcomes or execution
+time. Charter signatures establish an assertion, not publication before a run. Fixture key names
+and endpoint labels are checked without tracing them to all keys/addresses in the nested payload;
+these checks are not a sandbox, an externally granted authorization or a no-harm guarantee.
+Schema gates admit extra fields and incompletely typed findings/caps. The CLI's engine always
+calls the 4S chain evaluator, even for an accepted kernel/parity payload kind or target label.
+
+The [four-case temporary-input probe](vrta-verifier-probe.json) uses producer signatures made
+with public fixture keys. Audit accepts altered schema/charter/corpus/manifest metadata, an empty
+per-fixture summary and a fabricated over-budget Lane B entry. It also accepts a fixture whose
+expected code is changed from zero to 111 while its finding still expects zero and labels the
+observed zero survived: findings are matched by ID, not bound to the fixture's expectation,
+family or payload digest. An all-`model_refused` set of signed findings, with unusable payloads
+and empty per-fixture summary, passes audit with 0/0 ASR. Refusal classification skips the engine
+by construction rather than independently proving a model refused. The unchanged charter alone
+therefore cannot prevent replacement or suppression of actual attacks under the same IDs.
+No retained signature was forged and no model call was made for these probes.
+
+The core recomputes supplied finding counts and rejects missing scheduled IDs, but checks ASR
+only when its field is truthy. The main attestation CLI does not validate all summary digests,
+schema/epoch, per-fixture completeness or consistency of all signed metadata. Only exact `audit`
+selects replay; other tier strings use public semantics. Three key parameters are available,
+but findings and attestation use the same fixture key by default: this is two signing identities,
+not three independent signers. The CLI's omitted finding-key flag defaults to the repository
+fixture path rather than following a custom `--pubkey` as the plan states. Parse/read failures
+and direct evaluator exceptions are not uniformly returned through the typed wrapper.
+
+The retained Lane B capture file is absent; successful verify-only execution reports zero
+verified entries. There is no completed live campaign or evidence of live refusal prevalence.
+The live driver has material limitations: it never increments spend, counts output tokens only,
+checks caps before a request without reserving its remaining budget, and does not recheck after
+completion. Missing caps are allowed. A cap exception breaks the loop and returns green without
+recording the promised breach; offline 123 depends on a caller-provided `capBreaches` list that
+the CLI does not derive. Inherited SDK retries may add requests. Thus “hard denial-of-wallet”
+should not be presented as implemented enforcement of every cost path.
+
+The prompt receives the attack-manifest root in a slot labeled charter digest, not the actual
+charter digest or full signed scope. Captures store a placeholder prompt and first text block,
+not the promised signed full provider transcript. Refusal detection uses a small English regex
+set instead of provider stop-reason semantics. Live results default to `survived` without local
+execution; replay without an expected code sets expected equal to observed, hiding false-green
+interpretation. Refusal/disabled entries and missing payloads are copied as outcomes. The capture
+wrapper neither signs findings nor automatically includes its file in the offline attestation,
+whose Lane B array remains empty unless explicitly populated. Its individual entries are not
+verified by the main attestation core. `laneBStats` also counts disabled entries as refusals;
+that differs from the spec's model-refusal-only numerator and is not an over-refusal measurement.
+
+Lean's `asrMonotone` proves numerator count monotonicity, with a separate denominator lemma;
+it does not prove monotonicity of the ratio. Its charter theorem assumes which gates fire,
+and the so-called completeness support checks one schema flag, not schedule/finding equality.
+The promised named outcome-disjointness lemma is absent. Python parity covers classification
+and rational-count calculations, not engine or signature equivalence. K7 reaches raw codes
+using supplied mutations/stubs, including injected cap and engine failures, rather than a live
+cap test or execution of every export. Its moving merge-base guard can be vacuous or skipped.
+Reproduce compares one rebuilt bundle in a temporary directory, checks index ASR and an epoch
+signature tamper, and skips Lean when unavailable; it does not enforce an offline sandbox or
+verify every file/index field. Cleanup occurs only on success. The builder's positional flag
+lookup can consume the first argument when a flag is absent; use its explicit documented flags.
+NIST/MITRE/OWASP references motivate bounded testing, not endorsement of this bespoke charter,
+verified compliance, novelty or proof that red teams elsewhere cannot publish reproducible work.
+
+### M115 — Stage 4V derives fixture disputes without establishing semantic correctness or independent due process
+
+Completely read the 730-line counter-capsule specification and 1,926-line plan. Compared the
+binding, census, conflict-map and contest cores, green builder, attestation builder/verifier,
+both Lane B files, Python parity, Lean and reproduction/E2E checks. Preserve these frozen
+records as research designs. Their named due-process laws describe a bounded symbolic model,
+not legal adjudication, independent identity, incident truth or proof of fault. The reference
+capsule comes from 4T's fixture builder; `reference_capsule_not_synthetic` does not make it a
+field incident. M113's omitted-field, view-binding, authored-anchor and upstream replay limits
+apply to the capsule recheck here. S38 qualifies the legal and standards rationale.
+
+The [six-case local probe](vdp-verifier-probe.json) includes the unchanged green baseline and
+producer-signed mutations using explicitly public fixture keys. An `agree` contest with claimed
+value 999 returns AGREED when its evidence recomputes the operator's value 2: this branch ignores
+the submitted claim. Replacing remedial-action evidence with participant-count evidence yields
+CONFLICT_PROVEN, because the registry kind is checked against the artifact kind but not against
+the target section's meaning. The same gap allows irrelevant evidence to rebut a declared
+absence. A participant-count contest supplied as `filed_at_beat` returns VERIFIED. Neither that
+field nor the anchor contest requires a temporal kind, fixed target or authenticated 4N receipt.
+These labels must not be described as independent proof of filing time or reporting timeliness.
+
+The top-level and contest allowlists do not recursively close the payload. Raw prose in binding
+and census objects passes the probe; artifact fields and nested claimed values are also outside
+that scan. Thus “prose by digest only” is a local field check, not a complete data-minimization
+boundary. Binding uses sorted structured tuples, not the specification's sorted slash-string
+construction, and hashes supplied PEM text rather than normalized SPKI DER. It inherits the
+4T fixture private-PEM label convention. Census checks declared item epochs but not every
+artifact/manifest epoch or kind. Referenced-digest checks run after root/epoch checks, so combined
+faults need not follow a globally ascending 155–158 priority. Completeness remains relative to
+the producer's declared set, not independently observed events.
+
+The conflict map takes normative partition classes even when a projected section carries a
+downgraded absence class. A recompute exception can fail the entire contest with 161, outside
+the pointwise locality theorem. `expectedConflictMap` compares only the map, not the full outcome
+envelope including filing status. The envelope is digestable output, not independently signed
+by the evaluator. Direct evaluation without configured stage verifiers uses stored verdicts;
+`capsuleEvalOpts` can override the capsule recheck options. Only 4S has a configured upstream
+verifier. “Same rules” therefore means reuse of selected census/registry functions, not identical
+validation of every operator and respondent assertion.
+
+The public attestation tier authenticates the producer's signature/root/seal without replaying
+the contest. Audit replays supplied cases against supplied expectations and options; it does
+not require the fixed inventory. A producer-signed unknown-schema bundle with empty fixtures,
+null Lane B, empty parity contract and empty honesty ledger passes audit. Lane B verification
+is conditional on a truthy capture. Unknown tier names select public behavior. The CLI has no
+public-key flag and returns 0/1, not the full raw-code process contract; its audit path generates
+the reference corpus using repository fixture-key builders.
+
+Lane B does create a separate respondent process and ephemeral key, but both processes retain
+the same user/filesystem authority. Random forbidden-path strings are sent over stdin; checking
+that those strings are absent from environment/arguments does not prove file-read isolation.
+The child authors a three-participant artifact with stored verdict 108, not an independently
+observed conflicting incident. Capture verification trusts embedded keys and recorded blindness
+booleans, omits the argv check, and compares the recomputed outcome to a stored hash without
+checking the supplied `contest_outcome` object against it. A separate PID is useful provenance,
+not proof of a blind external operator. Capture remains the script default; use `--verify` to
+preserve the retained ceremony.
+
+Python and browser parity exclude both signature-invalid and capsule-tampered cases. Python
+also omits the non-claims equality check and trusts the supplied fingerprint, whereas Node's
+public path still authenticates the capsule. Its eagerly evaluated check list and null-value
+handling differ from JS outside the fixtures. Browser parity runs an extracted core in Node's
+VM, not interactive visual or browser security testing. Lean models classes, booleans and list
+positions; it does not prove the JS implementation, signature/identity semantics or malformed
+input locality. K7's export-presence check is not exhaustive execution; its signature meta-test
+only constrains 152 and 153–160. Fixed-tag freeze checks are useful scope guards, not correctness
+proofs. Reproduce rebuilds tracked fixtures/attestation in place, re-verifies retained Lane B,
+and skips Lean when unavailable. Historical command paths and incomplete plan snippets are not
+current run instructions. The later 4X work is leakage-residue analysis, not the roadmap's
+promised novel-attack discovery; retained closeout limitations supersede reserved-slot counts.

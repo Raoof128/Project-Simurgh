@@ -171,7 +171,7 @@
       "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check. M70/M71 disclose retained risk mapping, SDK retry/abort behavior, raw context prefixes and caller receipt strings; runtime remains unchanged.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "b319d92296df6cca203b082b4f14f0ce52ef16760834e795166541e788e1ef71"
+      "read_sha256": "58abc1d34da4079d856c839300c98853c0ad447b458555c15f77ff1d5fd214d5"
     },
     {
       "path": "docs/DECISIONS.md",
@@ -1107,7 +1107,7 @@
       "assessment": "Read all 13 primary-source applicability rows and limits. Correctly separates publication from review year, pinned SDK from living docs and alignment from compliance. Previous-turn fetch provenance retained; no fresh fetch claimed.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "c8f46002f7740064528ad9d2988fcca8756232d570cc14dd67de858a3ff76f21"
+      "read_sha256": "97131a3f93450b0453e028e2be7abe1f2a35b2caf31bd70619792e4c83ed6f11"
     },
     {
       "path": "docs/documentation-audit-2026-10-19/VALIDATION.md",
@@ -8617,11 +8617,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "a3198ecc84f837246fc167aedc12dbba2926b6da569e134efab002c4c7e812ea",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read; M114 qualifies reused 58-case corpus and eight benign rows, ID-only precommitment, unbound expected outcomes and self-declared refusal skip, CLI metadata/capture gaps, absent live capture and incomplete cap/response accounting, symbolic count theorem and bounded parity/reproduce. Four-case producer-signed temporary probe. Frozen record preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "a3198ecc84f837246fc167aedc12dbba2926b6da569e134efab002c4c7e812ea"
     },
     {
       "path": "docs/superpowers/plans/2026-07-07-stage-4t-vic-incident-capsule.md",
@@ -8630,11 +8630,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "72d12fef8fce56b193311cb6a1080491a3fe74ac8edcb59ade02590ecfdf39b9",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read; M113 qualifies field completeness, normative kinds, contradictory commitment/view acceptance, census source and epoch bounds, incomplete upstream replay, authored anchor and green Lane B, public/audit verifier gaps, browser/rendering/parity, Lean and finite E2E scope. Five-case producer-signed temporary probe; S37 qualifies literature/legal/market claims. Frozen record preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "72d12fef8fce56b193311cb6a1080491a3fe74ac8edcb59ade02590ecfdf39b9"
     },
     {
       "path": "docs/superpowers/plans/2026-07-07-stage-4v-vdp-counter-capsule-contest.md",
@@ -8643,11 +8643,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "fe01ed72c2a12c474a86b7fad3e7d2393cb7ce20d8bef84720b7d5d8ba93d6c1",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read. M115 qualifies semantic recomputation/filing-time gaps, nonrecursive prose checks, declared census, attestation inventory and local-process blindness; six-case fixture-key probe retained. S38 qualifies legal/identity rationale. Historical implementation plan preserved; compare actual structured binding, public-key conventions, finite parity and reproduce behavior rather than executing stale snippets.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "fe01ed72c2a12c474a86b7fad3e7d2393cb7ce20d8bef84720b7d5d8ba93d6c1"
     },
     {
       "path": "docs/superpowers/plans/2026-07-07-stage-4w-vsn-slot-bound-narrative.md",
@@ -9839,11 +9839,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "7876f0d8c4a4581afd780e6bd09afb99b0ea20bd046af26a8f777fea1c62da4c",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read; M114 qualifies reused 58-case corpus and eight benign rows, ID-only precommitment, unbound expected outcomes and self-declared refusal skip, CLI metadata/capture gaps, absent live capture and incomplete cap/response accounting, symbolic count theorem and bounded parity/reproduce. Four-case producer-signed temporary probe. Frozen record preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "7876f0d8c4a4581afd780e6bd09afb99b0ea20bd046af26a8f777fea1c62da4c"
     },
     {
       "path": "docs/superpowers/specs/2026-07-07-stage-4t-vic-incident-capsule-design.md",
@@ -9852,11 +9852,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "58032075ce3246ae2477b68bdfa481742434305252f88cab11ddb0fdb5681ff3",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read; M113 qualifies field completeness, normative kinds, contradictory commitment/view acceptance, census source and epoch bounds, incomplete upstream replay, authored anchor and green Lane B, public/audit verifier gaps, browser/rendering/parity, Lean and finite E2E scope. Five-case producer-signed temporary probe; S37 qualifies literature/legal/market claims. Frozen record preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "58032075ce3246ae2477b68bdfa481742434305252f88cab11ddb0fdb5681ff3"
     },
     {
       "path": "docs/superpowers/specs/2026-07-07-stage-4v-vdp-counter-capsule-contest-design.md",
@@ -9865,11 +9865,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "8e30be763fb5daa9f741b742c80fc72bdeb16c0ff70afea669492e52d0228915",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read. M115 qualifies semantic recomputation/filing-time gaps, nonrecursive prose checks, declared census, attestation inventory and local-process blindness; six-case fixture-key probe retained. S38 qualifies legal/identity rationale. Frozen specification preserved; symbolic due process is not independent adjudication or deployment assurance.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "8e30be763fb5daa9f741b742c80fc72bdeb16c0ff70afea669492e52d0228915"
     },
     {
       "path": "docs/superpowers/specs/2026-07-07-stage-4w-vsn-slot-bound-narrative-design.md",

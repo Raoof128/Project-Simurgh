@@ -296,3 +296,33 @@ relevant overlap, not a complete feature audit or proof of either system's first
 proposal reference likewise does not establish an adopted standard; the frozen specification's
 84% survey statement lacks a traceable sample/method in that passage and should not be reused
 as verified industry prevalence.
+
+### S37 — Incident-report motivation does not establish report sufficiency
+
+Checked 19 October 2026. [Decision Evidence Maturity Model for Agentic AI](https://arxiv.org/abs/2605.04093),
+Oleg Solozobov, submitted 29 April 2026, names the container fallacy and explicitly labels its
+synthetic/public-incident exercise implementation behavior rather than external validation.
+It motivates property-specific evidence assessment; it does not validate VIC or establish that
+all incident tools lack comparable controls. [Transparency as Architecture](https://arxiv.org/abs/2603.26983),
+Schmitt, Kruse, Sahitaj and Schöning, submitted 27 March 2026, studies Article 50(2) marking
+and transparency. Its abstract and inspected legal/technical sections do not substantiate the
+frozen spec's attributed quotation about the Act's logging duty having no cryptographic integrity.
+Do not reuse that quotation with this citation as verified support. Use the Commission sources
+in S16 and the regime/schedule qualifications in M41/M47 for legal claims. Pinning a local heading
+transcription does not make it a current, complete official template or an accepted filing.
+The prior-art sweep and named-buyer framing remain author hypotheses, not an exhaustive market
+survey, regulatory endorsement or independent assessment of this implementation.
+
+- **S38 — Stage 4V legal and identity rationale (checked 2026-10-19).** The California
+  Assembly Judiciary Committee's [2025 bill summary](https://ajud.assembly.ca.gov/system/files/2025-10/2025-asm-jud-bill-summary.pdf),
+  printed page 14, identifies AB 316 as chapter 672 and describes a restriction on asserting
+  AI autonomy as the cause of alleged harm. It expressly preserves other defenses and evidence
+  concerning comparative fault, causation and foreseeability. This is not automatic liability,
+  a validation of Simurgh's allocation model or a mandate for its counter-capsule format.
+  The official enacted-text page returned 403; the committee PDF's relevant entry was read
+  locally, rather than treating a failed fetch as verification of the complete statute.
+  [NIST's 17 February 2026 initiative announcement](https://www.nist.gov/news-events/news/2026/02/announcing-ai-agent-standards-initiative-interoperable-and-secure)
+  includes research on agent security/identity and industry-led standards development. It
+  does not establish that Simurgh's keys identify real accountable parties, certify its schema,
+  or guarantee that future identity integration requires no schema changes. The source is an
+  initiative announcement, not a final interoperability standard or implementation validation.

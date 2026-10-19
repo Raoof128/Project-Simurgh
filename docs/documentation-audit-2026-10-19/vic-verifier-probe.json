@@ -1,0 +1,37 @@
+{
+  "schema": "simurgh.documentation_audit.vic_probe.v1",
+  "date": "2026-10-19",
+  "scope": "In-memory producer-signed mutations with explicitly insecure public fixture keys. No retained evidence/source changes and no signature forgery.",
+  "cases": [
+    {
+      "name": "baseline capsule",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "producer-signed capsule omits every projected section",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "producer-signed unknown class and unsupported marker values",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "producer-signed capsule with commitments to a contradicting view passes with that view",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "producer-signed empty fixtures templates and census passes audit",
+      "result": {
+        "ok": true
+      }
+    }
+  ]
+}
