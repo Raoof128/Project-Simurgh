@@ -171,7 +171,7 @@
       "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check. M70/M71 disclose retained risk mapping, SDK retry/abort behavior, raw context prefixes and caller receipt strings; runtime remains unchanged.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "28da3cb61b73184f4d5b67f82bd297030539daf6b97674feda8e3c3f733a1699"
+      "read_sha256": "b319d92296df6cca203b082b4f14f0ce52ef16760834e795166541e788e1ef71"
     },
     {
       "path": "docs/DECISIONS.md",
@@ -1107,7 +1107,7 @@
       "assessment": "Read all 13 primary-source applicability rows and limits. Correctly separates publication from review year, pinned SDK from living docs and alignment from compliance. Previous-turn fetch provenance retained; no fresh fetch claimed.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "fca7b9ca82f7bf1e2e7253baea799d9fe8dede1526215d9612359d01f9ac0dc7"
+      "read_sha256": "c8f46002f7740064528ad9d2988fcca8756232d570cc14dd67de858a3ff76f21"
     },
     {
       "path": "docs/documentation-audit-2026-10-19/VALIDATION.md",
@@ -8578,11 +8578,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "ddf05243408406cd135988d411583a2c993cd457fe8042691642db25152a08d5",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read; M110 and real-signature local probes qualify exemption checks, signer/schema trust, action and key binding, supplied-event census, automatic human flag, epoch anchoring, Lean coverage and actual reproduction/CLI/parity behavior. S34 qualifies novelty comparison. Frozen text preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "ddf05243408406cd135988d411583a2c993cd457fe8042691642db25152a08d5"
     },
     {
       "path": "docs/superpowers/plans/2026-07-06-stage-4r-pccc.md",
@@ -8591,11 +8591,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "d7d6b4ad3930f4a085ce06714bb818df986fa46f281cbb31f33b0792c60b1ef2",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read; M111 documents CLI root/corpus and public-record authentication gaps with temporary probes, duplicate mask-proof acceptance, fixture scalar reuse, local custom export approval, synthetic upstream bindings, symbolic Lean and limited parity/reproduce. S35 qualifies ecosystem/legal claims. Frozen records preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "d7d6b4ad3930f4a085ce06714bb818df986fa46f281cbb31f33b0792c60b1ef2"
     },
     {
       "path": "docs/superpowers/plans/2026-07-06-stage-4s-vdcc-core.md",
@@ -8604,11 +8604,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "51db94964fdc600136850b40c4703274fcbbedeeacf4dc0b2c31919319e5274f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read; M112 compares receipt/tree/fanout authority, Python action and signature binding, post-call Lane B evaluation, attestation tiers, numeric/replay/spine bounds, symbolic Lean and finite reproduction coverage. Five-case temporary probe confirms fanout and tier gaps; S36 corrects prior-art and survey claims. Frozen record preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "51db94964fdc600136850b40c4703274fcbbedeeacf4dc0b2c31919319e5274f"
     },
     {
       "path": "docs/superpowers/plans/2026-07-06-stage-4u-vrta.md",
@@ -9800,11 +9800,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "526c6f0818c7a1644ce958690572a0a0dd8b500d7586fa850259d44ee1d2bebd",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read; M110 and real-signature local probes qualify exemption checks, signer/schema trust, action and key binding, supplied-event census, automatic human flag, epoch anchoring, Lean coverage and actual reproduction/CLI/parity behavior. S34 qualifies novelty comparison. Frozen text preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "526c6f0818c7a1644ce958690572a0a0dd8b500d7586fa850259d44ee1d2bebd"
     },
     {
       "path": "docs/superpowers/specs/2026-07-06-stage-4r-pccc-design.md",
@@ -9813,11 +9813,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "634213e12aebb32b983e53b017179da6adeeb8eafc74023438454d1c7c71f48b",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read; M111 documents CLI root/corpus and public-record authentication gaps with temporary probes, duplicate mask-proof acceptance, fixture scalar reuse, local custom export approval, synthetic upstream bindings, symbolic Lean and limited parity/reproduce. S35 qualifies ecosystem/legal claims. Frozen records preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "634213e12aebb32b983e53b017179da6adeeb8eafc74023438454d1c7c71f48b"
     },
     {
       "path": "docs/superpowers/specs/2026-07-06-stage-4s-vdcc-core-design.md",
@@ -9826,11 +9826,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "5b4e8c4798eccb771331f45458081641fd03f750f8ff62e5e2d8cdd47dd40c31",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read; M112 compares receipt/tree/fanout authority, Python action and signature binding, post-call Lane B evaluation, attestation tiers, numeric/replay/spine bounds, symbolic Lean and finite reproduction coverage. Five-case temporary probe confirms fanout and tier gaps; S36 corrects prior-art and survey claims. Frozen record preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "5b4e8c4798eccb771331f45458081641fd03f750f8ff62e5e2d8cdd47dd40c31"
     },
     {
       "path": "docs/superpowers/specs/2026-07-06-stage-4u-vrta-red-team-design.md",

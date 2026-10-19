@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **858 documents have complete manual reads; 61 remain
+SHA-256 values. At this checkpoint, **864 documents have complete manual reads; 55 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -3873,3 +3873,224 @@ excludes untracked/staged drift. Preserve historical counts and runs without cal
 head validation. S33 distinguishes the 17-provider inventory from the three-provider empirical
 audit; neither that research nor attestation architecture documents validate Simurgh's novelty,
 constitutional compliance or deployment effectiveness.
+
+### M110 — Stage 4Q records approval fixtures but does not establish complete enforcement or human attendance
+
+Completely read the 628-line VFR specification and 2,777-line plan; checked the actual pincer,
+chain, digest and invention cores, bundle builder/verifier, signer/capture, fixture replay,
+Python entry point and parity test, Lean model, privacy scanner and reproduction/E2E wiring.
+This supplements M55's human-attendance and supplied-chain qualifications; frozen text remains
+unchanged. The final scope has eleven rails, six object schemas including exemptions and fifteen
+Lane A cases; the spec's “10 rails” and plan's final “12 cases” are stale. “No crossing without
+approval” is limited to the approval path: explicitly policy-admitted exemptions are accepted,
+including a frozen protected boundary kind, not only a separately defined non-protected kind.
+
+The [local probe](vfr-verifier-probe.json) used real signature verification with the retained
+signed exemption. `decide` accepted an exempt crossing with no chain entries/verdict, then with
+an invalid crossing signature, then with a mismatched envelope run ID and epoch 99999. The
+exemption branch checks its own signature and selected bindings, but not the crossing signature,
+crossing membership, envelope run equality or an expiry window. It defaults the chain verdict
+to success. The approval branch also trusts a caller's chain verdict; `positionsOf` finds the
+first matching digest without enforcing its entry kind. Its epoch difference has an upper bound
+but no nonnegative check, allowing a crossing earlier than receipt minting if inside the declared
+validity interval. The plan's worked crossing-12 example with validity ending at 11 fires the
+validity check before straddle; the separate straddle fixture correctly extends validity to 12.
+
+The receipt path verifies a crossing's claimed key, but does not require it to equal the policy's
+harness key. Public-key digests hash trimmed PEM text; replay resolves a supplied digest-to-PEM
+map without recomputing each key's digest. Distinct labels/serializations therefore are not a
+complete cryptographic key-distinctness proof without a validated key registry. Policy is a supplied
+unsigned envelope, not an independently authenticated configuration. The Python entry point does
+not recompute `action_digest(action)` or compose earlier authorizers: it returns a decision about
+the supplied crossing and decorates it with the unrelated Action's family/target. Integration
+must bind the real action, trusted policy, key registry and actual dispatch. This function neither
+dispatches nor guarantees every refusal is logged.
+
+Fixture replay reconstructs chains from supplied events and compares each root to that same
+reconstruction. Census is optional at the core boundary; the builder's aggregate counts only
+`crossing` entries, excluding schema-valid refusals, unlike the stated attempt census. Raw 80
+can also mean an invalid envelope with a valid crossing, so excluding every raw-80 refusal does
+not exactly implement the schema-valid-crossing definition. Lane B's “observed” count is derived
+from its own event list, not an independent counter of live MCP calls. Negative cases retain
+proposed crossing events with raw zero; the refusal-bearing arm inserts a synthetic refusal.
+An externally retained signed digest catches later fixture changes, but neither a self-consistent
+replacement chain nor this aggregate establishes that all actual attempts were recorded.
+
+Lane B really spawns a separate local signer process, but does not call a live 4O MCP server or
+bind its actual tool surface. The signer does not display a prompt/read terminal confirmation;
+`--interactive` tests an environment flag, which the capture script itself sets to `y` every
+regeneration. There is no one-time human-capture replay protocol as described. Display checking
+compares declared text and digest, not the executed action's semantics or an independently seen
+screen. Lane A hashes its display text directly while Lane B uses the domain-separated helper.
+Both the approval and display claims must retain these boundaries.
+
+The 4N anchor is a hash of the first raw feed line, while receipts use epochs 10/11; no feed-order
+epoch lookup or public commitment of genesis/final run roots is performed. This is a backwards
+reference to a retained feed, not evidence those events were published during that window.
+Run IDs are fixed label hashes rather than per-run genesis commitments. Nonces are bound fields,
+without a spent-receipt registry preventing repeat use across repeated calls.
+
+The bundle verifier checks real Ed25519 and fixed-fixture digests/replays but selects the signer
+from the bundle. It omits an exact top-level schema/stage check and does not rederive source-map,
+projection or reviewer-note contents beyond their permissive validators. An ephemeral self-signed
+probe with an invalid schema/stage, extra field and changed source/projection assertions passed.
+It did not forge a retained signature. Note/row validators check shape or a phrase, not factual
+accuracy, intended clause mapping or whether named machine-check arms exist. Signing a novelty
+map does not validate firstness; S34 supplies primary research identities and qualifies the blanket
+GitHub comparison. Internal constitution/benefit scores are author judgments, not an assessment
+by the named organizations. Null/parse/read/callback failures are not uniformly raw-coded.
+
+The Lean `frictionCoverage` theorem extracts census equality from its acceptance conjunction;
+it does not quantify over every actual crossing and prove receipt coverage. The other theorems
+similarly state properties of an abstract model with assumed signed/bound booleans and positions,
+not implementation refinement. Actual Python parity uses the optional `cryptography` package
+and can skip without it; it is not the plan's stdlib signature-boolean replay. `hashlib` in Python
+3.13 does not supply Ed25519 verification. BYO verifies only per-case ID/raw/reason equality,
+not all separately promised boundary/census/check-order fields, and leaves its temporary directory.
+The shell accepts a positional approver-key path, not the documented `--approver-key` pair.
+It generates a temporary key without cleanup and omits Lean compilation despite the spec's gate.
+
+The E2E inventory checks exported names, not execution coverage; its idempotency test runs each
+builder once, and it does not check the 3Q registry. Private-key audits and selected JSON regex
+scans are finite checks: non-JSON files outside selected paths and arbitrary plaintext strings
+are not categorically excluded, nor is public-key placement generally enforced. Environment pins
+do not impose network isolation. Keep original observations, signatures and source unchanged;
+these limitations correct current interpretation rather than claim runtime repairs.
+
+### M111 — Stage 4R's CLI does not bind its supplied corpus to the signed root
+
+Completely read the 809-line PCCC specification and 471-line plan. Checked the actual CLI,
+attestation/ceremony builders, pccc/schema/DLEQ/census cores, operator/orchestrator, BYO kit,
+Lean model, parity and E2E tests, and reproduction script. Preserve frozen history. The
+[temporary-copy probe](pccc-verifier-probe.json) confirmed both-tier success with an empty
+Lane A corpus and deleted Lane B directory while retaining the original signed attestation.
+It also accepted changed public match content, transcript digest and invalid public signatures
+with original signed transcripts and attestation. The CLI verifies an embedded-key signature
+but never compares `evidence_root_digest`, case rollup or census to its supplied corpus. It
+loads no Lane B capture. Its audit loop trusts each supplied expectation and accepts an empty
+case list. This is not authenticated completeness or an arbitrary-evidence verifier.
+
+Public records receive shape and finite forbidden-value checks, not signature, commitment,
+transcript or VFR binding verification. Builder “signatures” are truncated transcript-signature
+prefixes, not valid signatures over the public record. The public scan lacks token digests in
+its supplied private index and is not applied to every attestation field. The attestation schema
+checks a few types, not exact keys or frozen rail/limitation values. Signing uses a committed,
+explicitly insecure fixture key, rather than the proposed private external key. The CLI emits
+raw process codes and uncaught exceptions, not a universally wrapped stage verdict.
+
+`reconstructInput` defaults replay, reuse, herd, budget, VFR and cardinality checks to passing
+values; negative fixture overrides simulate failures. The CLI does not build those ledgers or
+run the full upstream gates. DLEQ arrays require two valid-shaped entries but not exactly one
+mask proof and one z proof per operator. A real-signature probe repeated the valid mask proof
+in both positions, re-signed using public fixture keys, and passed the core with no z proof.
+Proof context fields are included in each challenge but not all compared to the surrounding
+transcript; a self-consistent proof is not the whole protocol binding. The local check does not
+establish an independent cryptographic audit. Even a correctly bound DLEQ proves algebra for
+chosen inputs, not truthful observed custody: colluding parties can choose the same invented
+class without forging a proof. M55's qualification remains necessary.
+
+Lane B launches separate subprocesses per phase, but reads the same committed scalar files,
+reuses them across slots, and routes phase output through one parent. It is not two persistent
+independent parties with fresh memory-only scalars or a localhost exchange. The z phase returns
+commitment and opening together; the fixed phase-order vector does not witness commit-before-
+reveal interaction. Its export approver is an in-process harness-key signature over a custom
+object, not the separate 4Q signer/pincer. The distinct-key list omits a separate harness role
+because the harness itself approves. The raw-98 E2E checks retained fields (`exported:false`,
+null receipt and no record); it does not execute refusal through the composed gate. The ordinary
+CLI never checks these arms. Direct ceremony execution also writes output without enforcing the
+claimed refresh environment gate; only the reproduction script refuses that flag.
+
+The 4P class and 4N anchor bindings are synthetic digest-shaped constants, already acknowledged
+as deferred in closeout. K7 checks their syntax, not membership or signature provenance. “Sealed”
+packets are plain retained JSON containing class digests and public ephemeral points, not an
+encryption mechanism. Absence of one common public digest is narrower than unlinkability:
+metadata, small candidate sets and revealed class information can correlate records, while
+freshness/reuse enforcement is incomplete. The Lean law equates structured epoch/payload pairs;
+its match model defines the masked value to be the class itself. The phase/DLEQ theorems extract
+assumed properties, not DDH hardness, transcript completeness or the real arithmetic. Do not
+claim the herd token provably never exists or privacy follows solely from different hashes.
+
+The BYO kit exports helpers with transitive repository imports, not a standalone operator
+process/transport loop. Invitation validation does not verify a signature, invitee identity or
+full epoch policy; version/digest comparisons occur only when expected values are supplied.
+Its presence establishes tooling, not an external ceremony. Census derives slot terminals from
+stored expected labels and treats all negative cases as export refusals. It is a fixture rollup,
+not an independently measured window signal or a differential-privacy release.
+
+Actual parity exercises two token examples and one forged-proof example, not the full ten-code
+corpus. K7 inventories core exports, regenerates corpus/attestation once in place and checks two
+paths against the index; it does not exercise every export or promised upstream invariant. Reproduce
+re-signs Lane A evidence with fixture keys, verifies Lane B through separate tests, skips Lean when
+unavailable, and scans two known scalar strings rather than all possible secret material. Preserve
+this scope instead of describing immutable external signing or mandatory local proof compilation.
+S35 qualifies the ecosystem survey: public descriptions do not reveal every private implementation,
+and this prototype supplies no legal safe harbor or organization-endorsed constitution score.
+
+### M112 — Stage 4S validates a supplied tree without establishing complete delegation authority
+
+Completely read the 600-line VDCC specification and 733-line plan, and compared the chain,
+tree, fanout, flux and receipt cores, both Python surfaces, attestation CLI/builder, Lane B,
+Lean, parity, E2E and reproduction paths. Preserve these frozen design records; this correction
+qualifies their implementation claims. The [temporary-input probe](vdcc-verifier-probe.json)
+uses real signatures and public fixture keys. It accepts every fanout signed by an unrelated
+key with unrelated epoch/run fields, and a zero-count leaf commitment containing a nonempty
+child list and arbitrary set root. These are accepted inputs, not cryptographic forgeries.
+
+The core verifies each declared signer but never requires a child's delegator to equal its
+parent's delegatee, or a fanout signer to own the referenced node. Key-index labels are not
+recomputed from PEM bytes; the bundle supplies that index unless callers override it. Root
+self-delegation is a builder convention, not a verified identity constraint. Fanout maps overwrite
+duplicate node/window records, ignore unrelated-node commitments after signature checking, and
+check only the count for declared windows with no observed children. They do not authenticate
+window closure or compare commitment run/epoch to the bundle. Thus signed exact-set checks over
+observed nonempty windows do not prove all actual delegations were observed or authorized.
+Scope checks compare lowercase labels; they do not derive scope from the executed payload.
+
+Flux sums supplied spends and allocations, without a persistent spend registry or safe-integer
+bound. JS numbers are not unbounded Lean naturals. Replaying the same accepted bundle is not
+prevented by equality against its own epoch/run. Crossing run IDs and detached-receipt run/root
+fields are not all checked. Spine validation tests membership in a caller-supplied string index,
+not the signatures or meanings of 4P/4O/4Q evidence; the CLI ignores the proposed `--spine-dir`.
+The `win-` epoch prefix tested in K7 is not an authenticated 4N publication anchor.
+
+The Python boundary surface calls the injected verifier on receipts only, omitting fanout and
+crossing signature verification, and excludes bundle/spine integrity. Its default refuses
+receipts, but supplying a callback does not fill those missing checks. The separately supplied
+crossing is not required to be one of the bundle's evaluated crossings. `authorise_with_chain`
+does not bind its Action to that crossing or compose the previous authorization entries.
+Malformed inputs can throw instead of returning a typed refusal. The standalone parity kernel
+also intentionally skips Ed25519. Finite corpus agreement with a signature case excluded is not
+cross-language equivalence on all inputs or cryptographic verification by Python.
+
+Lane B genuinely exchanges JSON-RPC messages across two local processes with memory-only keys.
+The server co-signs and records the supplied task without validating the delegator signature or
+running the chain decision first; the parent evaluates the assembled bundle afterwards. This
+is a local protocol demonstration, not pre-execution enforcement, independent operator identity,
+remote service execution or proof of all-hop visibility. Root/run/window labels are fixed, no
+persistent anti-replay store is used, and the RPC promises have no request timeout.
+
+Public-tier attestation verification recomputes fixture digests, but copies the honest bundle's
+claimed Merkle root rather than reconstructing its leaves; engine replay belongs to audit tier.
+It uses a separately selected public key, defaulting to the explicitly insecure fixture key,
+which is stronger than selecting an embedded key but not an external operator identity.
+Unknown tier strings silently take the public path. A producer-signed probe with false observed
+outcomes and altered schema/epoch/rails/signer label passes that path; the audit control correctly
+rejects the outcomes. Exact top-level schema, claim arrays, epoch/signer label and surplus or
+duplicate per-fixture entries are not all validated. No retained signature was forged. CLI
+parse/read failures are not uniformly wrapped, and the bundle's own signature is an empty field.
+
+Lean proves implications over abstract booleans, sets and natural-number inequalities, not a
+refinement of the executable verifier. Its flux theorem is one local inequality under assumed
+child-spend bounds, rather than a formal induction over arbitrary receipt trees. The ghost
+trilemma assumes the observed predicates; it cannot discover an entirely omitted crossing.
+Raw 104 is exercised through a constructed index rather than an ordinary signed cyclic corpus;
+105 has an actual non-sentinel null-parent island fixture. Avoid the source comment's absolute
+claim that hash cycles have no fixed points: security rests on computational assumptions.
+
+K7 checks export presence, finite fixtures and selected invariants, not execution of every
+export or differential equality of every predecessor entry. Reproduce rebuilds Lane A in place
+and compares tracked changes to the index, separately tests Lane B and skips Lean when absent.
+It does not enforce network isolation, check untracked evidence completeness or run every K7
+assertion itself. Its two inherited key audits are not a general privacy proof. S36 corrects
+the prior-art comparison; “unoccupied,” organization-benefit scores and the uncited 84% survey
+claim do not establish independently validated novelty or market demand.

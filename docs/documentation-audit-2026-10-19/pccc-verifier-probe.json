@@ -1,0 +1,39 @@
+{
+  "schema": "simurgh.documentation_audit.pccc_probe.v1",
+  "date": "2026-10-19",
+  "scope": "Temporary evidence copies and in-memory core input only. CLI mutations preserve retained signed attestation and signed transcripts. Proof-coverage case uses the explicitly insecure public fixture signing keys; no retained source/fixture changes.",
+  "cases": [
+    {
+      "name": "retained evidence baseline",
+      "entrypoint": "CLI",
+      "tier": "both",
+      "exit": 0,
+      "stdout": "stage4r verify OK (both tier): 19 cases",
+      "stderr": ""
+    },
+    {
+      "name": "empty unsigned corpus and absent Lane B with unchanged signed attestation",
+      "entrypoint": "CLI",
+      "tier": "both",
+      "exit": 0,
+      "stdout": "stage4r verify OK (both tier): 0 cases",
+      "stderr": ""
+    },
+    {
+      "name": "public record content and signatures changed without changing attestation or signed transcript",
+      "entrypoint": "CLI",
+      "tier": "both",
+      "exit": 0,
+      "stdout": "stage4r verify OK (both tier): 19 cases",
+      "stderr": ""
+    },
+    {
+      "name": "two repeated mask proofs per role replace mandatory z proof, re-signed with explicit public fixture keys",
+      "entrypoint": "evaluateCeremony",
+      "result": {
+        "raw": 0,
+        "green": true
+      }
+    }
+  ]
+}

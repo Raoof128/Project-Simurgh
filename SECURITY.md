@@ -499,3 +499,29 @@ The custody chain does not enforce adjacent input/output continuity; the extract
 The Lean ghost theorem does not establish detection of an unrecorded intermediary. CPC kind
 buckets, public window separation and per-call caps do not establish measured entropy or
 cross-window privacy; failure-class content is not constrained to a closed vocabulary.
+
+Stage 4Q's exemption path verifies the exemption signature but omits crossing-signature,
+epoch and chain-membership checks; the chain verdict defaults to success. Its Python entry
+point does not bind the supplied Action to the crossing digest. The retained “human” arm is
+automatically environment-confirmed, and its census counts supplied events. See
+[M110 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m110--stage-4q-records-approval-fixtures-but-does-not-establish-complete-enforcement-or-human-attendance).
+The bundle checks signed fixture digests using an embedded signer; it does not establish
+external identity or validate every signed source-map, clause or schema assertion.
+
+Stage 4R's both-tier CLI accepts an empty supplied corpus with the original signed attestation
+and does not load Lane B or compare the signed evidence root to that corpus. Public-record
+signatures and bindings are not authenticated there. Its DLEQ array check also accepts two
+mask proofs in place of the required mask-plus-z pair. See
+[M111 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m111--stage-4rs-cli-does-not-bind-its-supplied-corpus-to-the-signed-root).
+Lane B uses committed fixture scalars and a custom harness approval; its 4P/4N/4Q integrations
+remain synthetic/deferred. These are reference research mechanisms requiring implementation
+repair and independent cryptographic review before deployment claims.
+
+Stage 4S validates supplied receipt trees but omits signer-to-parent/fanout-owner constraints
+and several epoch/run and empty-fanout bindings. Its Python boundary does not authenticate
+fanout/crossing signatures or bind the separate Action to the evaluated crossing. The local
+MCP demonstration evaluates the chain after recording the task. See
+[M112 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m112--stage-4s-validates-a-supplied-tree-without-establishing-complete-delegation-authority).
+Offline fixture success does not establish complete observation, persistent replay prevention
+or enforcement before execution. Public-tier verification does not run the chain engine;
+unknown tier names currently take that weaker path.

@@ -1,0 +1,135 @@
+{
+  "schema": "simurgh.documentation_audit.vdcc_probe.v1",
+  "date": "2026-10-19",
+  "scope": "In-memory copies; real signatures made using explicitly public fixture keys, not signature forgery or an external identity claim. No retained source or evidence modified.",
+  "cases": [
+    {
+      "name": "baseline chain",
+      "result": {
+        "raw": 0,
+        "reason": "green"
+      }
+    },
+    {
+      "name": "every fanout signed by unrelated key with mismatched epoch and run",
+      "result": {
+        "raw": 0,
+        "reason": "green"
+      }
+    },
+    {
+      "name": "zero-count leaf declares nonempty child set and arbitrary root",
+      "result": {
+        "raw": 0,
+        "reason": "green"
+      }
+    },
+    {
+      "name": "producer-signed invalid schema rails epoch signer label and observed outcomes, unknown tier",
+      "result": {
+        "ok": true,
+        "tier": "unknown",
+        "failures": []
+      }
+    },
+    {
+      "name": "same producer-signed record audit-tier control",
+      "result": {
+        "ok": false,
+        "tier": "audit",
+        "failures": [
+          {
+            "code": "observed_raw_mismatch",
+            "name": "honest-tree",
+            "observed": 0
+          },
+          {
+            "code": "observed_raw_mismatch",
+            "name": "missing-signature-field",
+            "observed": 100
+          },
+          {
+            "code": "observed_raw_mismatch",
+            "name": "single-signature-hop",
+            "observed": 101
+          },
+          {
+            "code": "observed_raw_mismatch",
+            "name": "dual-sentinel-root",
+            "observed": 102
+          },
+          {
+            "code": "observed_raw_mismatch",
+            "name": "parent-digest-mismatch",
+            "observed": 103
+          },
+          {
+            "code": "observed_raw_mismatch",
+            "name": "unreachable-island",
+            "observed": 105
+          },
+          {
+            "code": "observed_raw_mismatch",
+            "name": "hidden-child",
+            "observed": 106
+          },
+          {
+            "code": "observed_raw_mismatch",
+            "name": "fanout-set-swap",
+            "observed": 107
+          },
+          {
+            "code": "observed_raw_mismatch",
+            "name": "forged-attenuation",
+            "observed": 108
+          },
+          {
+            "code": "observed_raw_mismatch",
+            "name": "budget-amplification",
+            "observed": 109
+          },
+          {
+            "code": "observed_raw_mismatch",
+            "name": "local-overspend",
+            "observed": 110
+          },
+          {
+            "code": "observed_raw_mismatch",
+            "name": "orphan-crossing",
+            "observed": 111
+          },
+          {
+            "code": "observed_raw_mismatch",
+            "name": "receiptless-crossing",
+            "observed": 112
+          },
+          {
+            "code": "observed_raw_mismatch",
+            "name": "split-brain",
+            "observed": 113
+          },
+          {
+            "code": "observed_raw_mismatch",
+            "name": "epoch-replay",
+            "observed": 114
+          },
+          {
+            "code": "observed_raw_mismatch",
+            "name": "root-replay",
+            "observed": 115
+          },
+          {
+            "code": "observed_raw_mismatch",
+            "name": "spine-ref-mismatch",
+            "observed": 116
+          },
+          {
+            "code": "observed_raw_mismatch",
+            "name": "merkle-bundle-mismatch",
+            "observed": 117
+          }
+        ]
+      }
+    }
+  ]
+}

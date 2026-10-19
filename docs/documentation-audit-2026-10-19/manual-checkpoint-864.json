@@ -1,0 +1,22 @@
+{
+  "baseline": "15105bac03588d601a2961b3d6f61db72c3b37a4",
+  "prior_checkpoint": "eb201a27aabfb8e5222679e3a4375132830736eb",
+  "manual_read_count": 864,
+  "candidate_count": 919,
+  "complete": false,
+  "append_only_logs": true,
+  "checks": {
+    "changed_file_format": "pass",
+    "git_diff_check": "pass",
+    "local_links": {
+      "documents": 813,
+      "links": 1908,
+      "issues": 0
+    },
+    "candidate_identity": "919 unique baseline paths and hashes preserved; 864 complete reads, 55 pending; reviewed hashes match; scratch and tracked ledgers identical",
+    "preservation": "Prior HEAD log bytes preserved as exact prefixes; frozen specifications, source, captures and evidence unchanged",
+    "prior_authority": "4ca41a95 is a strict ancestor",
+    "local_probes": "VFR: five cases; PCCC: four cases; VDCC: five cases. Temporary copies and in-memory inputs with real signatures, explicitly public fixture keys or ephemeral self-selected keys. Audit-tier refusal control retained. No source/evidence mutations or inference."
+  },
+  "scope": "Manual documentation checkpoint; no runtime mutation, model inference, full E2E rerun or interactive browser/native execution."
+}

@@ -4529,3 +4529,21 @@ Owner-requested work; implementation and review by Codex assistance.
   append-only prefixes and frozen surfaces. Probes used temporary inputs and ephemeral
   keys; no retained source changes, inference, external ceremony or full E2E rerun.
 - **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 864-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 864 of 919 baseline
+  candidates completely read, 55 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M110–M112 for full Stage 4Q/4R/4S specifications and plans; update
+  SECURITY guidance on approval, private matching and delegation verification.
+- **Findings:** Temporary probes establish exemption omissions, unbound supplied corpora,
+  repeated mask-proof acceptance, fanout-owner gaps and unknown-tier fallback. Qualify
+  human attendance, external identity, action binding, symbolic proofs and finite test scope.
+- **Research:** S34–S36 distinguish primary prior art and official platform documentation
+  from novelty, standards, legal, privacy and market-prevalence assertions.
+- **Validation:** Check formatting, local links, baseline identities/read hashes,
+  append-only prefixes and frozen surfaces. No runtime repairs, model inference, external
+  ceremony or full E2E rerun; temporary probes leave retained evidence unchanged.
+- **Remaining:** Complete every pending manual read and final correction verification.

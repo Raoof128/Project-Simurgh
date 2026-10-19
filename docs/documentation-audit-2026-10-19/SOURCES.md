@@ -246,3 +246,53 @@ Do not call all 17 empirically tested or adopt their results as this repository'
 The inspected source sections establish identity and sample scope, not a full independent
 replication. [RFC 9334](https://www.rfc-editor.org/rfc/rfc9334.html) supplies RATS architectural
 vocabulary; citation alone establishes no protocol conformance or trustworthy remote execution.
+
+### S34 — Friction receipts and governance prior art
+
+Checked 19 October 2026 against primary abstracts and official GitHub documentation:
+
+- [Proof-Carrying Agent Actions](https://arxiv.org/abs/2606.04104), Zexun Wang,
+  2 June 2026, explicitly includes approval receipts and enforceability classes, not
+  solely non-execution proofs. Its bounded reference evaluation is not a standard.
+- [Notarized Agents](https://arxiv.org/abs/2606.04193), Juan Figuera, 2 June 2026,
+  proposes receiver-signed confidential receipts and a transparency log; its abstract
+  explicitly discusses suppression, collusion and adoption limits.
+- [Governing Actions, Not Agents](https://arxiv.org/abs/2606.26298), Jakob Salfeld-Nebgen,
+  24 June 2026, proposes separately attested preconditions bound to intent and deterministic
+  policy, with a proof of concept. These abstracts establish relevant prior art, not an
+  exhaustive firstness comparison or independent validation of Simurgh.
+- [GitHub protected branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
+  support required reviews before merging, stale-review invalidation and approval by someone
+  other than the latest pusher, subject to configured bypass rules. The frozen map's blanket
+  statement that GitHub evidence is not ordered or separated is too broad. Distinguish those
+  platform controls from a portable cryptographic receipt protocol without denying their
+  existing approval semantics or implying configuration has been checked for this repository.
+
+### S35 — Information sharing is a motivation, not proof of an unserved market
+
+Checked 19 October 2026. The [Frontier Model Forum information-sharing page](https://www.frontiermodelforum.org/information-sharing/)
+confirms a March 2025 agreement and lists a February 2026 progress update and May 2026 issue
+brief. Its public overview does not specify every internal verification or privacy mechanism;
+absence of implementation details is not evidence that members lack such controls or that
+Simurgh uniquely supplies them. [Nicholas Felstead's Enabling Frontier Lab Collaboration to
+Mitigate AI Safety Risks](https://arxiv.org/abs/2511.08631), submitted 9 November 2025, discusses
+antitrust concerns and possible reforms. The inspected abstract does not endorse this protocol
+or establish that digest-only sharing eliminates legal risk. Apply M41's jurisdiction/scope
+qualifications to the frozen SB 53, RAISE and Article 73 comparison, and S31's proposed-research
+status to the reproducibility position paper. Counts and match results can still disclose
+information; a protocol's disclosure vocabulary is not a legal or privacy certification.
+
+### S36 — Offline delegation verification already exists in prior art
+
+Checked 19 October 2026. The official [Eclipse Biscuit overview](https://www.biscuitsec.org/)
+describes public-key verification by a holder of the issuer's public key, offline attenuation
+and Datalog policy enforcement. Calling it merely “runtime trust” is misleading; distinguish
+its authorization-token semantics from a claimed complete execution census. The primary abstract
+of [AIP: Agent Identity Protocol for Verifiable Delegation Across MCP and A2A](https://arxiv.org/abs/2603.24775),
+Sunil Prakash, submitted 25 March 2026, describes IBCTs, chained Biscuit policies, provenance
+records and reference implementations. Its reported timings and attack results are the author's
+bounded evaluation, not Simurgh measurements or a standards endorsement. These sources establish
+relevant overlap, not a complete feature audit or proof of either system's firstness. An AAIF
+proposal reference likewise does not establish an adopted standard; the frozen specification's
+84% survey statement lacks a traceable sample/method in that passage and should not be reused
+as verified industry prevalence.
