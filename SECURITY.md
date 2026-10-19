@@ -610,3 +610,19 @@ producer-declared rule labels. See
 [M123 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m123--stage-5d-omits-required-audit-checks-and-classifies-declared-hardening-labels).
 The finite normalization examples and self-reported review/provenance do not establish general
 closure, independent human adjudication or complete historical ceremony capture.
+
+Stage 5E enforces an external signer fingerprint and requires an audit census, but its evasion
+records can reuse scores without reconciling their recipes to the selected score entry. Signed
+reviews are not matched to the reviewed base/variant, and empty curves or duplicate score rows
+can pass. See
+[M124 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m124--stage-5e-score-and-review-bindings-do-not-establish-the-full-claimed-provenance).
+The capture harness does not enforce the documented revision/offline loading controls. A valid
+fixture signature and internally consistent score table do not authenticate model execution.
+
+Stage 5F checks a declared member-by-case grid but trusts supplied adapter replay data and
+accepts census records whose semantic fields contradict public cells. The main verifier does
+not verify the ceremony receipt; reference-binding mode can pass strict policy without external
+reference checks. See
+[M125 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m125--stage-5f-verifies-a-declared-grid-with-incomplete-capture-and-ceremony-binding).
+For external directories, supply an independently trusted signer fingerprint; the default pin
+is read from the pack. Its completeness flags do not establish actual execution coverage.

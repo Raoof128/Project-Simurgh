@@ -500,3 +500,41 @@ survey, regulatory endorsement or independent assessment of this implementation.
   permanent robustness. These targeted primary-standard sections, not the entire reports,
   were checked. Neither standard establishes the proposed three-corner impossibility or
   certifies the repository's implementation; S45 retains the bounded guardrail prior art.
+
+- **S47 — Stage 5E detector and loading contracts (checked 2026-10-19).**
+  Meta's [Prompt Guard 2 86M model card](https://huggingface.co/meta-llama/Llama-Prompt-Guard-2-86M)
+  describes binary benign/malicious classification, a 512-token context, an argmax example,
+  adaptive-attack limitations and application-dependent performance. These support a local
+  reference threshold, not a vendor-prescribed universal 0.5000 operating point, calibrated
+  probabilities or a conclusion that every generic fixture is malicious under its scope.
+  The page requires gated access under the Llama 4 license: offline inference can avoid a
+  hosted API after acquisition, but “no key” must not imply anonymous unrestricted download.
+  The card links inference utilities and fine-tuning resources; it does not establish that
+  no reproducible evidence exists anywhere. Its current page is not a reconstruction of the
+  historical pinned snapshot, and the eight local sentences lack exact publication citations.
+  Hugging Face's [Auto-class loading documentation](https://huggingface.co/docs/transformers/main/en/model_doc/auto)
+  provides explicit `revision` and `local_files_only` controls. Omitting them from the capture
+  call is not equivalent to enforcing a pinned offline load. Targeted model-card scope,
+  usage/limitations and loading-parameter sections were checked, not the entire API reference.
+  S45 bounds the earlier Prompt Guard evasion study; S46 bounds normalization claims.
+
+### S48 — Stage 5F regulatory scope and extensible attestation formats
+
+Checked the [European Commission's Code overview](https://digital-strategy.ec.europa.eu/en/policies/contents-code-gpai)
+(current page updated 7 October 2026). The GPAI Code, published 10 July 2025, is voluntary;
+it helps demonstrate compliance with binding AI Act obligations. Its Safety and Security
+chapter concerns providers of GPAI models with systemic risk under Article 55. The frozen
+spec's blanket “Code mandates” wording conflates voluntary commitments, underlying statutory
+obligations and applicability. Do not generalize its proposed annual testing schedule to every
+AI provider or treat VMP as a regulatory conformance certificate. This check covers the overview,
+not a clause-by-clause legal opinion or full Safety and Security chapter review.
+
+The [in-toto Statement v1](https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md)
+binds subjects to a URI-identified predicate; its [predicate specification](https://raw.githubusercontent.com/in-toto/attestation/main/spec/v1/predicate.md)
+provides the extension mechanism. [C2PA 2.3](https://spec.c2pa.org/specifications/specifications/2.3/specs/C2PA_Specification.html),
+section 11.1.4.3, explicitly accommodates custom assertions. Therefore “structurally cannot
+express” detector-panel completeness is unsupported. A standard built-in panel predicate and
+an extensible envelope capable of carrying one are different questions. The older C2PA
+attestation section is not an exclusion applying to all C2PA assertions. These targeted sections
+do not establish absence of equivalent prior art, patent novelty, universal interoperability or
+SCITT incompatibility. The scorecard remains the author's assessment, without lab endorsement.

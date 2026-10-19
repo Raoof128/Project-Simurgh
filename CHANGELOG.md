@@ -4637,3 +4637,20 @@ Owner-requested work; implementation and review by Codex assistance.
   prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
   full E2E rerun; temporary probes preserve retained evidence and source bytes.
 - **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 890-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 890 of 919 baseline
+  candidates completely read, 29 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M124–M125 for complete Stage 5E/5F specifications and plans; correct
+  SECURITY guidance on score/review provenance and panel/capture/ceremony bindings.
+- **Findings:** Eight VDA and eight VMP local probe cases retain baseline/refusal controls;
+  qualify review equivalence, empty curves, adapter replay, census semantics and strict policy.
+- **Research:** S47–S48 check official model/loading contracts, the voluntary GPAI Code
+  and extensible in-toto/C2PA formats; remove unsupported scope and novelty inferences.
+- **Validation:** Check formatting, local links, baseline identities/read hashes, append-only
+  prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
+  full E2E rerun; temporary probes preserve retained evidence and source bytes.
+- **Remaining:** Complete every pending manual read and final correction verification.

@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **886 documents have complete manual reads; 33 remain
+SHA-256 values. At this checkpoint, **890 documents have complete manual reads; 29 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -4988,3 +4988,194 @@ set inclusion or the proposed interleaving argument. Its empty-rule durability d
 differs from JS. Reproduction compares only the rebuilt ledger hash, not every emitted file,
 and explicitly permits a Lean type-check skip while scanning sources. M49's bounded historical
 execution and external-validation qualifications remain applicable.
+
+### M124 — Stage 5E score and review bindings do not establish the full claimed provenance
+
+Read the complete 391-line specification and 387-line plan, including a repeated read of the
+truncated evidence-lane section. Compared the core, capture/build/verify paths, BYO adapter,
+Python, Lean, K7 and reproduction/conformance scripts. The
+[eight-case VDA probe](vda-verifier-probe.json) confirms working external-key-pin and missing-
+census refusal controls. It also shows accepted producer-signed recipe substitution, omitted
+curves/false census, malformed detector metadata, duplicate score rows and an unrelated signed
+review used for an equivalence claim. No capture or model call was performed for this review.
+
+The new external fingerprint is a useful verification boundary, but the retained key is a public
+fixture key and its pin is regenerated alongside evidence. Deployment requires an independently
+trusted pin; a checked-in fixture key does not establish human/operator identity. Score-table
+entries reopen their own generated text and carry runtime/snapshot equality checks. However,
+evasion records resolve scores by the first `(base_id, variant)` match, not their generated-text
+key. Their recipes/digests are not reconciled to that entry. Replacing an evasion recipe with an
+empty recipe passes audit while retaining its old low score and census digest. Base-text and
+recipe digest fields on score entries are not independently checked. Duplicate entries and
+unrecognized variants are not excluded; duplicate raw entries can inflate flagged counts while
+the attempted-base denominator still deduplicates IDs.
+
+The detector gate checks presence of several fields and the selected label's spelling, not a
+real model/commit, hash syntax, binary class count, exact precision, score field or complete
+runtime manifest. Empty revision/tokenizer strings and an invented model name pass when
+internal equality is preserved. The main verifier does not reopen weights, tokenizer files or
+capture-script bytes. The builder's sentinel test is an accidental-placeholder guard only;
+`captured_offline` remains a producer declaration. The optional BYO validator is not called by
+the core. Attester consistency establishes membership of a declared digest, not a provider
+request/response chain.
+
+Review signatures are checked against the supplied reviewer key, but their signed base/variant
+digests are not compared with the evasion, their wrapper digest is not recomputed, and schema,
+reviewer identity and criteria contents are not pinned. The probe signs an unrelated review
+with deliberately wrong text digests and selects it by an arbitrary alias; the strong claim
+passes. The retained fixture does not itself carry positive reviewed-equivalence claims, so
+this is a limitation of the proposed extension, not evidence that a real human review occurred.
+The structured enum limits vocabulary but does not bind every allowed summary claim to an
+observed result, and the public-completeness disclaimer can be changed to false without refusal.
+
+Audit correctly requires and hashes the census, but trusts each row's disposition and checks
+only membership of rows labelled `evasion_slip` in the public evasion-digest set. It does not
+rederive dispositions, compare complete base/recipe/score tuples, require a canonical schema
+or reject omitted rows before signing. The retained census has base/digest/disposition rows,
+not every attempted recipe and score reference promised by the plan. The independent baseline
+census is not recomputed at verification. Accordingly M49's measured headline remains four
+baseline misses plus four baseline-flagged cases that slip among eight attempted bases, not a
+population estimate or a no-selection-bias guarantee.
+
+Both threshold curves may be empty. Supplied points are checked against the table, but the
+frozen complete/unique grid, required ordering and reference-threshold inclusion are not
+enforced; the builder actually uses descending thresholds. False-positive probes are separately
+supplied scores without capture-input/provenance reopening. Five benign sentences do not
+establish a deployment FP rate or recommended threshold. The predicates are distinct but
+logically dependent: threshold crossing implies score inversion, so “independent booleans”
+must mean separately recorded, not logical/statistical independence. The computed inversion
+compares evasion with raw scores, not the de-obfuscated score. A score change alone is neither
+semantic equivalence nor downstream attack efficacy. The illustrative spec curves also use
+non-four-decimal, descending values and an extra Markdown table delimiter cell; they are
+historical pseudodata, not valid import examples. Their inconsistent requested-versus-resolved
+revision wording is superseded by the implementation's resolved-commit equality.
+
+The capture harness calls model/tokenizer loading and `snapshot_download` without `revision`
+or `local_files_only`; it can load moving defaults and resolve a separate snapshot afterward.
+It therefore does not enforce the promised pinned/offline run. The recorded commit is
+`a8ded8e697ce7c355e395a0df51f94adb4a2fd27`; that label alone does not prove the loaded bytes.
+The weight manifest checks two named files and silently skips missing ones, rather than all
+shards. Dependency hashes, CPU/backend details, tokenizer special-token policy and corpus hash
+are absent. The host class is a literal string. Positive-class selection is inferred from two
+probe outputs and its label map synthesized, not captured verbatim from configuration. This
+needs to remain explicit even though the retained selected class agrees with the documented
+binary interpretation. Four-decimal rounding and one thread do not themselves prove repeat-run
+or cross-hardware equality. Python normalization removes marks but not every JS default-ignorable
+character; parity is scoped to the retained CGJ recipes. Capture failure does not emit a sealed
+failure artifact.
+
+The base gate accepts arbitrary printable ASCII under its character limit, not an allowlist
+of published corpus strings with source citations. It rejects literal evasion ops outright
+rather than validating derivability; other replacement ops remain broadly configurable, and
+score-entry recipes are outside that gate. Generated scripts/NFKC constraints and token-length
+coverage are not fully checked. A 512-character bound is not a 512-token guarantee, so truncation
+can affect what the model saw. These are contract limits rather than evidence of a harmful
+payload in the retained benign fixture set.
+
+The shipped CLI names are `build-vda-evidence.mjs` and `verify-vda-attestation.mjs`; verification
+reads the fixed local bundle/pin/census and exits 0/1, with no arbitrary-path/reviewer-key options.
+Lane B remains a runbook. No Stage 5E browser verifier is shipped, despite the planned browser
+parity/manual smoke. Python checks a subset of recipe operations, score-table hashes and
+arithmetic over retained scores, not signatures, full type/range validation or census completeness.
+K7 mainly checks export types and representative mutations. Lean's curve examples use literal
+counts `[2,1]` and scores `[9,6,3]`, not the captured table; joint binding is a pair-equality lemma,
+not a cryptographic implementation proof. Reproduction rebuilds in place and checks only the
+attestation hash, not all emitted files; Lean type-check may be explicitly skipped. The nested
+conformance runner assumes an exported package layout and does not run directly from its
+repository subdirectory. M49 preserves the historical external verify-only report and missing
+repository receipt boundary: it is not independent detector recapture. S47 corrects the primary
+model-card and capture-contract interpretation.
+
+### M125 — Stage 5F verifies a declared grid, with incomplete capture and ceremony binding
+
+Read the complete 665-line specification and 422-line plan and compared all core modules,
+builders, CLIs, Lane B/C paths, Python/browser surfaces, Lean and reproduction tests. The
+[eight-case VMP probe](vmp-verifier-probe.json) retains baseline, signature-refusal and missing-
+replay controls. Producer-signed unrelated shared-input digests, contradictory census rows,
+a nonexistent ceremony receipt, an empty applicability matrix and an unsubstantiated reference
+binding all pass audit. These observations qualify `full_panel_completeness_verified`; that
+field does not establish the full specification's capture-completeness contract.
+
+The nonempty unique roster/corpus and exact member-by-case cell grid are checked, as are supplied
+plan digests, typed labels, declared completeness and the universe-relative omission count.
+This is useful structural validation. The universe is producer-selected, however; the placeholder
+third candidate is not an independently inventoried detector. Its omission count is neither a
+population coverage bound nor representativeness. Capability values and applicability coverage
+are not fully validated: an empty matrix passes, duplicate entries overwrite earlier entries,
+and only token-length unsupported cases are implemented. Language/type entailment remains absent.
+
+The schema gate is exact for several named objects, but not recursively exact for cells,
+decision evidence, precommit/closeout, bootstrap records, label maps or capture metadata. Only
+the four forbidden aggregate key names are recursively screened. Additional labels/fields can
+carry arbitrary content. Case IDs are checked, but a cell's `shared_input_digest` is not matched
+to that case's committed source digest. Attempted detector-input digests are compared with a
+supplied replay dictionary. The CLI reads that dictionary from disk; it does not invoke the
+planned pinned tokenizer replay, validate an environment manifest or reopen adapter bytes.
+The BYO builder copies cell digests into this dictionary and assigns every token count 10.
+Missing entries fail with 282; supplied agreement is not proof of actual input derivation.
+
+The chain implementation has exactly two records, precommit and closeout. There is no result
+record sequence or file manifest. The receipt reference need only be a string and correctly
+included in the closeout hash; the main verifier never opens/verifies the receipt. The separate
+Lane B verifier checks its signature, external pin and five recomputed bindings, but both
+construction and verification use JS; the planned independent Python ceremony is absent.
+Five acyclic bindings are intentional: adding the proposed sixth full-content digest would
+reintroduce the cycle through closeout. The real-capture builder discards the returned receipt,
+so its retained pack cannot be described as a verified two-key ceremony. Recorded precommit
+ordering remains a data structure, not evidence of physical pre-run commitment.
+
+Audit binds and compares the sets of terminal record IDs, but does not reconcile their member,
+case, input or status fields with public cells. It does not carry/check a separate complete
+attempt log, unique attempt IDs or retries. A signed census that calls every public evaluated
+cell `missing_capture`, with no attempt IDs, still reports audit/full completeness true. This
+is not a no-omission guarantee over actual execution. The softmax check uses exact four-place
+lexical comparison, but does not establish actual class probabilities or validate the entire
+binary label mapping. Categorical checks only constrain the normalized label and require digest
+strings; they do not reopen a pinned parser or raw output. Unknown status-specific fields and
+several promised forbidden fields are not excluded.
+
+Retained synthetic and real packs use `provenance_mode: none`. No Stage 5F historical-verifier
+runner, pinned source closure or vendored bootstrap directory is shipped. The historical core
+branch checks supplied runner result fields, not source/commit execution. The reference branch
+merely requires metadata keys; it does not compare external reference results and remains
+strict-policy accepted. Thus the plan's explicit strict rejection of weaker reference mode and
+historical-runner defaults are not implemented. The CLI accepts `--dir`, `--tier`,
+`--attestation-only` and `--pinned-fingerprint`; it does not accept the proposed positional file
+or ceremony fingerprint. With `--dir`, its default pin is inside that directory. Supply an
+independently trusted fingerprint when testing an external pack. The committed fixture keys
+establish neither producer identity nor independent custody. Unknown tier strings take the
+public path; file reads occur outside the safe wrapper and may throw without structured 282.
+Public verification still requires the census file to exist although it does not validate it.
+
+M49's retained real run is PG2 86M plus Llama Guard 3 1B over two shared cases, not the planned
+LG4 12B run. The synthetic LG4 revision is a placeholder. Capture scripts pin the PG2/LG3
+revision argument but do not enforce offline environment variables or validate acquisition
+manifests. They hash source text, not tokenized/chat-template input; roster adapter/tokenizer
+hashes are hashes of descriptive strings. PG2 records the already-truncated count; it cannot
+establish pre-truncation overflow. The merger compares case-ID sets, not source bytes, duplicate
+counts or complete fragment provenance. The real builder supplies hard-coded member metadata
+without checking the fragment's model/revision/runtime against it. LG3 selects MPS when present,
+uses fp16 and prints bounded generation excerpts; this is not an entirely transcript-free
+console. Its stale LG4 usage label is not the actual model. Both categorical parsers accept
+prefixes rather than exact output tokens. Exceptions abort rather than sealing every failed
+attempt. None of these scripts was run with models during this audit.
+
+Python verifies selected digests, omission arithmetic and softmax labels on the synthetic pack;
+it does not implement the planned raw-code precedence, signatures, adapter replay, historical
+execution, census bijection or complete policy checks. Browser verification checks schema ID,
+a few shapes and softmax labels only, explicitly returning `raw: null`; it does not authenticate
+signatures or full structure. Its HTML advertises dropping a file but supplies no file/drop
+handler, and its inline module is blocked by its own `script-src 'self'` CSP. Tests import the
+function into Node, not an interactive browser. K7 exercises named functions and one mutation
+per principal raw code, not every branch, arbitrary nested key or CLI/environment combination.
+Lean includes eight symbolic statements plus a ninth declaration called a lemma in prose;
+several are concrete lists or assumed equalities, not runtime proofs. Its output structure can
+hold an aggregate; the last theorem only proves the default constructor leaves it `none`.
+
+Reproduction rebuilds in place and compares tracked Git differences, not a clean-directory
+path/size/hash inventory. Its parity test rebuilds evidence before later verification; that is
+not verification of the original committed bytes alone. Untracked extras are outside the diff.
+Python is required by the earlier test even though a later standalone step says it may skip.
+Lean is not run by this stage script. The conformance kit runs repository checks, not the planned
+self-contained dependency-copy bundle. S48 corrects the regulatory and standards claims: VMP
+is a research contract, not proof that other extensible formats cannot express panel evidence.

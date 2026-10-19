@@ -1,0 +1,119 @@
+{
+  "schema": "simurgh.documentation_audit.vmp_probe.v1",
+  "date": "2026-10-19",
+  "scope": "Local synthetic copies; producer signatures use public fixture keys. No model call or retained evidence/source mutation.",
+  "cases": [
+    {
+      "name": "baseline",
+      "result": {
+        "raw": 0,
+        "attestation_valid": true,
+        "policy_accepted": true,
+        "tier": "audit",
+        "bootstrap_mode": "none",
+        "representation_complete": true,
+        "evaluation_complete": true,
+        "audit_census_verified": true,
+        "full_panel_completeness_verified": true
+      }
+    },
+    {
+      "name": "producer-signed unrelated shared input and unknown nested field accepted",
+      "result": {
+        "raw": 0,
+        "attestation_valid": true,
+        "policy_accepted": true,
+        "tier": "audit",
+        "bootstrap_mode": "none",
+        "representation_complete": true,
+        "evaluation_complete": true,
+        "audit_census_verified": true,
+        "full_panel_completeness_verified": true
+      }
+    },
+    {
+      "name": "producer-signed audit row semantics contradict public cells accepted",
+      "result": {
+        "raw": 0,
+        "attestation_valid": true,
+        "policy_accepted": true,
+        "tier": "audit",
+        "bootstrap_mode": "none",
+        "representation_complete": true,
+        "evaluation_complete": true,
+        "audit_census_verified": true,
+        "full_panel_completeness_verified": true
+      }
+    },
+    {
+      "name": "producer-signed nonexistent receipt binding accepted by main verifier",
+      "result": {
+        "raw": 0,
+        "attestation_valid": true,
+        "policy_accepted": true,
+        "tier": "audit",
+        "bootstrap_mode": "none",
+        "representation_complete": true,
+        "evaluation_complete": true,
+        "audit_census_verified": true,
+        "full_panel_completeness_verified": true
+      }
+    },
+    {
+      "name": "producer-signed reference binding with no external runner accepted under strict policy",
+      "result": {
+        "raw": 0,
+        "attestation_valid": true,
+        "policy_accepted": true,
+        "tier": "audit",
+        "bootstrap_mode": "reference_binding",
+        "representation_complete": true,
+        "evaluation_complete": true,
+        "audit_census_verified": true,
+        "full_panel_completeness_verified": true
+      }
+    },
+    {
+      "name": "producer-signed empty applicability matrix accepted",
+      "result": {
+        "raw": 0,
+        "attestation_valid": true,
+        "policy_accepted": true,
+        "tier": "audit",
+        "bootstrap_mode": "none",
+        "representation_complete": true,
+        "evaluation_complete": true,
+        "audit_census_verified": true,
+        "full_panel_completeness_verified": true
+      }
+    },
+    {
+      "name": "unsigned mutation refused control",
+      "result": {
+        "raw": 269,
+        "attestation_valid": false,
+        "policy_accepted": false,
+        "tier": "audit",
+        "bootstrap_mode": "none",
+        "representation_complete": true,
+        "evaluation_complete": true,
+        "audit_census_verified": false,
+        "full_panel_completeness_verified": false
+      }
+    },
+    {
+      "name": "missing replay refused control",
+      "result": {
+        "raw": 282,
+        "attestation_valid": false,
+        "policy_accepted": false,
+        "tier": "audit",
+        "bootstrap_mode": "none",
+        "representation_complete": true,
+        "evaluation_complete": true,
+        "audit_census_verified": false,
+        "full_panel_completeness_verified": false
+      }
+    }
+  ]
+}

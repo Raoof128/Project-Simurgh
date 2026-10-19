@@ -1,0 +1,63 @@
+{
+  "schema": "simurgh.documentation_audit.vda_probe.v1",
+  "date": "2026-10-19",
+  "scope": "Local fixture copies; public fixture key used for producer/reviewer-signed cases. No model calls or source/evidence mutation.",
+  "cases": [
+    {
+      "name": "baseline",
+      "result": {
+        "raw": 0,
+        "tier": "audit"
+      }
+    },
+    {
+      "name": "producer-signed evasion recipe borrows original score without digest reconciliation",
+      "result": {
+        "raw": 0,
+        "tier": "audit"
+      }
+    },
+    {
+      "name": "producer-signed omitted curves and false census/nonclaim accepted",
+      "result": {
+        "raw": 0,
+        "tier": "audit"
+      }
+    },
+    {
+      "name": "producer-signed malformed detector identity and precision accepted",
+      "result": {
+        "raw": 0,
+        "tier": "audit"
+      }
+    },
+    {
+      "name": "producer-signed duplicate raw observation inflates curve count",
+      "result": {
+        "raw": 0,
+        "tier": "audit"
+      }
+    },
+    {
+      "name": "producer-signed unrelated signed review accepted for this evasion",
+      "result": {
+        "raw": 0,
+        "tier": "audit"
+      }
+    },
+    {
+      "name": "missing census refused control",
+      "result": {
+        "raw": 266,
+        "tier": "audit"
+      }
+    },
+    {
+      "name": "wrong external key pin refused control",
+      "result": {
+        "raw": 256,
+        "tier": "audit"
+      }
+    }
+  ]
+}
