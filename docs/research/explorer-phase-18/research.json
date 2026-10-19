@@ -1,0 +1,120 @@
+{
+  "reviewed": "2026-10-19",
+  "method": "Scoped web search and selected primary-source sections; not an exhaustive market survey. Dates describe retrieval/review, not necessarily publication. Gap statements are Simurgh analysis.",
+  "sources": [
+    {
+      "id": "R18-01",
+      "title": "Demystifying evals for AI agents — Anthropic",
+      "url": "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents",
+      "published": "2026-01-09",
+      "reviewed": "2026-10-19",
+      "text": "Distinguishes transcripts from actual final environment state. Recommends inspecting failed transcripts, balanced tasks, repeated trials and checking grader validity. Simurgh implication: expose source outcomes and failures with denominators; do not equate completion claims with receiver effects."
+    },
+    {
+      "id": "R18-02",
+      "title": "Evaluate agent workflows — OpenAI documentation",
+      "url": "https://developers.openai.com/api/docs/guides/agent-evals",
+      "published": null,
+      "reviewed": "2026-10-19",
+      "text": "Trace grading covers model calls, tools, guardrails and handoffs; datasets and evaluation runs support repeated comparison. Simurgh implication: a trace dashboard is established functionality, not evidence of novelty. Our scope connects outcomes to authorization and observed effects."
+    },
+    {
+      "id": "R18-03",
+      "title": "Misalignment monitoring — OpenAI documentation",
+      "url": "https://developers.openai.com/api/docs/guides/safety-checks/misalignment-monitoring",
+      "published": null,
+      "reviewed": "2026-10-19",
+      "text": "A flag requires investigation; it does not establish wrongdoing. Coverage and automatic stopping depend on API/context. Blocked workflows must not automatically retry. Prior actions may already have completed; registering a block does not establish execution stopped. Simurgh implication: keep alerts, dispatch, acknowledgments and receiver effects distinct; actual provider integration remains unvalidated."
+    },
+    {
+      "id": "R18-04",
+      "title": "Security best practices — Model Context Protocol, 2026-07-28",
+      "url": "https://modelcontextprotocol.io/docs/2026-07-28/tutorials/security/security_best_practices",
+      "published": null,
+      "reviewed": "2026-10-19",
+      "text": "MCP guidance forbids token passthrough and explains audience-validation, confused-deputy and audit-trail risks. Simurgh implication: synthetic credentials do not prove interoperable real MCP/OAuth lifecycle behavior; owned-service validation is still needed."
+    },
+    {
+      "id": "R18-05",
+      "title": "Measurements for understanding the pace of AI development inside frontier labs — Anthropic",
+      "url": "https://www.anthropic.com/institute/measuring-pace-of-ai-development",
+      "published": null,
+      "reviewed": "2026-10-19",
+      "text": "Proposes monitoring coverage, review latency and escalation rate as reportable measures, and calls for third-party testing. Simurgh implication: bounded concurrent fixtures do not establish sustained deployment coverage, human review latency or independent observation."
+    }
+  ],
+  "gaps": [
+    {
+      "id": "G18-01",
+      "title": "Independent evidence custody",
+      "status": "open",
+      "evidence": "Source-bound archives and local replay are available; the owner will arrange a classmate.",
+      "remaining": "Author-operated records cannot prove honest-host completeness or outside observation.",
+      "next": "Classmate checks pinned archives independently and returns their own receipt and discrepancies.",
+      "sources": ["R18-01", "R18-05"]
+    },
+    {
+      "id": "G18-02",
+      "title": "Live provider alerts and identity lifecycle",
+      "status": "open",
+      "evidence": "Local signed alerts, stop/revoke ordering and authenticated owned-receiver fixtures exist.",
+      "remaining": "No entitled provider project has demonstrated real alert delivery, active-session revocation or OAuth/MCP interoperability.",
+      "next": "Use an owned project with alert-read/webhook and identity permissions; record benign lifecycle tests without inducing abuse.",
+      "sources": ["R18-03", "R18-04"]
+    },
+    {
+      "id": "G18-03",
+      "title": "Harder tasks across model families",
+      "status": "open",
+      "evidence": "Phase 10 retains 48 generations and 144 matched branches from one model setting.",
+      "remaining": "Short author-held tasks do not demonstrate transfer to independently held multi-turn tasks or other models.",
+      "next": "Preregister externally held tasks, matched baselines and a fixed model/spend budget before fresh inference.",
+      "sources": ["R18-01", "R18-02"]
+    },
+    {
+      "id": "G18-04",
+      "title": "Sustained operation and timing",
+      "status": "open",
+      "evidence": "Phase 13 covers 60 bounded concurrent/restart fixtures and 210 final calls.",
+      "remaining": "Logical-clock fixtures do not establish wall-clock monitor expiry, live queues, review latency or interruption of admitted work.",
+      "next": "Define a representative owned deployment and load/coverage/latency objectives, then retain failed and unknown outcomes.",
+      "sources": ["R18-05", "R18-03"]
+    },
+    {
+      "id": "G18-05",
+      "title": "Real-data evidence privacy",
+      "status": "open",
+      "evidence": "Phase 14 projects all 144 outcomes with explicit omissions and synthetic canary checks.",
+      "remaining": "This is not an access-control, retention/deletion or anonymity proof for real traces.",
+      "next": "Specify data owners and retention rules; independently review whether omissions conceal material failures.",
+      "sources": ["R18-01", "R18-03"]
+    },
+    {
+      "id": "G18-06",
+      "title": "Browser and native macOS measurements",
+      "status": "open",
+      "evidence": "Portable discovery and explicit managed-policy detection implemented; Node/Python parity passes.",
+      "remaining": "Managed Chromium blocks local pages; Linux cannot establish macOS/CryptoKit outcomes.",
+      "next": "Run fresh browser receipts and native checks on permitted matching machines.",
+      "sources": []
+    },
+    {
+      "id": "G18-07",
+      "title": "Legacy gate maintenance",
+      "status": "locally_addressed",
+      "evidence": "Phase 16 migrated retired HTTP 410 assertions and maintained exact reproduce inventory beside frozen pin.",
+      "remaining": "Historical artifacts retain original results. Current aggregate validation is recorded separately.",
+      "next": "Use the maintained inventory and preserve frozen evidence on future migrations.",
+      "sources": []
+    },
+    {
+      "id": "G18-08",
+      "title": "Phase 8 local review",
+      "status": "locally_addressed",
+      "evidence": "Full local source/test review completed; 24 tests and a separate 46-row/92-snapshot replay passed.",
+      "remaining": "Same-workspace manual review under the trusted-host model, not external certification.",
+      "next": "Include review scope and trust assumptions in classmate handoff.",
+      "sources": []
+    }
+  ]
+}

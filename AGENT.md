@@ -3187,3 +3187,11 @@ one machine's local agent configuration:
 - **Files changed:** Phase 18 declaration and both logs.
 - **Verification:** Reviewed public Phase 14 schema, Phase 10 capture/report and existing 29-source register; consulted current official evaluation, monitoring and MCP documentation.
 - **Follow-ups:** Build, test and prepare the independent-operator handoff; external custody remains with the owner/classmate.
+
+## 2026-10-19 — Raouf: implement human and agent evidence explorer (Australia/Sydney)
+
+- **Scope:** Additive Phase 18 under preceding authority `2569dae5`.
+- **Summary:** Shared versioned queries, React dashboard, JSON CLI, local import/export and selected full-detail joins. Indexed 144 retained outcomes and 48 research/source entries with eight gap records.
+- **Files changed:** Isolated `tools/simurgh-explorer` package, dated research/gap register, current navigation and both logs.
+- **Verification:** Behavioral tests pass for CLI/UI equivalence, complete outcomes, unknowns, invalid imports, read-only server and inert content; Vite production build passes. Runtime dependency audit reports zero known advisories. Browser layout remains unverified under managed navigation policy.
+- **Follow-ups:** Consolidated disposable-checkout gates and owner/classmate handoff; no production-readiness, live-provider or outside-custody claim.

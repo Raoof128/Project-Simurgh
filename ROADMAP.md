@@ -1,5 +1,13 @@
 # Research roadmap
 
+The new [human dashboard and agent CLI](tools/simurgh-explorer/README.md) share a local evidence index:
+144 retained outcomes, source-linked failure/unknown inspection, searchable 2026 research
+and an explicit [open-gap register](docs/research/explorer-phase-18/RESEARCH.md).
+[Phase 16](docs/research/CONTINUATION_PHASE_16.md) repairs legacy gates;
+[Phase 17](docs/research/CONTINUATION_PHASE_17.md) makes runtime prerequisites portable.
+The [Phase 8 local review](docs/research/PHASE_8_REVIEW_2026-10-19.md) is complete.
+Browser/macOS execution, real provider integration and independent custody remain open.
+
 The [Phase 13 reliability study](docs/research/reliability-phase-13/RESULTS.md) now adds
 60 repeated concurrent/restart fixtures: composed controls retain useful retries and
 produce zero new effects after queued stop or interrupted update. The
@@ -9,14 +17,15 @@ results leave sustained deployment load, live-provider behavior and outside cust
 
 See the [Phase 15 validation record](docs/research/validation-phase-15/RESULTS.md) and
 [current gaps](docs/research/validation-phase-15/GAPS.md) for test coverage, corrected setup
-issues and unresolved legacy gates. The complete repository is not yet fully green.
+issues and historical legacy findings. Phases 16–18 supersede the maintenance status;
+aggregate checks and platform limits remain separately reported.
 
 Use the [presentation guide](docs/research/presentation-phase-12/README.md),
 [portable handoff](docs/research/handoff-phase-11/README.md) and
 [Phase 12 gap map](docs/research/presentation-phase-12/GAPS.md) for the Phase 10–12 closeout.
 The clean-clone run and hosted Phase 10 verification both passed all 16 focused tests
 and the complete saved-proposal replay. Live provider integration, outside custody,
-broader model/task transfer and the interrupted Phase 8 review remain open.
+broader model/task transfer remain open. The October 19 local Phase 8 review is linked above.
 
 The [Phase 10 local Llama study](docs/research/model-composition-phase-10/RESULTS.md) retained 48 generated responses and
 144 matched control branches. Composed controls completed 22/24 active branches, matching
