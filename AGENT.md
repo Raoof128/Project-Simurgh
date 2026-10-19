@@ -3402,3 +3402,11 @@ one machine's local agent configuration:
 - **Files changed:** `README.md`, `AGENT.md`, `CHANGELOG.md`. Runtime, frozen inputs and evidence are unchanged.
 - **Verification:** README formatting and whitespace checks pass; all 34 local links/anchors resolve and no tracked Markdown links target removed root anchors. Corrected demo freshly replays all eight cases; complete transfer verification passes 288 comparison branches, original workflows and reliability storage checks. All five documented CLI examples execute and emit valid JSON. Used the existing pinned Python 3.12 environment; no fresh dependency install, model generation or platform validation is claimed.
 - **Follow-ups:** Commit and push this handoff, then run the owner's requested full E2E smoke workflow against the resulting revision. Independent reproduction and provider/production boundaries remain explicit.
+
+## 2026-10-19 — Raouf: declare full-smoke harness repairs (Australia/Sydney)
+
+- **Scope:** Owner-requested full validation; bounded maintenance declared in `docs/research/smoke-validation-2026-10-19/DESIGN.md` before implementation.
+- **Summary:** Preserve the initial 138-pass/four-failure aggregate. Repair login-shell PATH replacement and Xvfb reset-after-readiness setup; retain all substantive checks and frozen evidence. Diagnose fixed-port collisions without changing host network policy.
+- **Files changed:** Declaration and both logs only.
+- **Verification:** Root suite: 5,167 passed, zero failed, two Lean prerequisite skips. Reproduced Xvfb connection failures in a second four-case run. Current-commit native CI passes both macOS and Windows jobs; full E2E remains running.
+- **Follow-ups:** Add behavioral launcher regressions, repair the declared setup, rerun complete workflows and publish exact scope and remaining prerequisites.
