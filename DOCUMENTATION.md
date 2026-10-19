@@ -20,6 +20,11 @@ Start with [README](README.md) for the research question and runnable demonstrat
 | Reproduce a historical stage                   | [Historical replay guide](docs/HISTORICAL_REPLAY.md)                                                                                       |
 | Read old research or device plans              | [Exact research archive](RESEARCH_HISTORY.md), [exact device roadmap](DEVICE_ROADMAP.md)                                                   |
 
+The [manual review continuation](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md)
+records subsequent file-by-file findings. Its [progress ledger](docs/documentation-audit-2026-10-19/manual-progress.json)
+explicitly distinguishes complete reads, pending verification and unread files; the full review
+remains in progress. The earlier automated inventory is not an exhaustive manual audit.
+
 ## Current guidance versus historical evidence
 
 Current entry points describe the maintained branch. A study report describes its own source

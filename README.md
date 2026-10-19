@@ -127,12 +127,13 @@ git clone --branch openai-readiness https://github.com/Raoof128/Project-Simurgh.
 cd Project-Simurgh
 git rev-parse HEAD
 
-python3.12 -m venv /tmp/simurgh-review
-/tmp/simurgh-review/bin/python -m pip install --require-hashes --only-binary=:all: \
+simurgh_review_dir=$(mktemp -d "${TMPDIR:-/tmp}/simurgh-review.XXXXXX")
+python3.12 -m venv "$simurgh_review_dir/venv"
+"$simurgh_review_dir/venv/bin/python" -m pip install --require-hashes --only-binary=:all: \
   -r tools/assurance-sdk/requirements.lock \
   -r tools/assurance-workflow/requirements.lock
 
-/tmp/simurgh-review/bin/python -B tools/assurance-provider-role/corrected_roles.py demo \
+"$simurgh_review_dir/venv/bin/python" -B tools/assurance-provider-role/corrected_roles.py demo \
   --archive docs/research/provider-role-phase-17b/evidence.zip \
   --expected-root "$(cat docs/research/provider-role-phase-17b/ROOT.sha256)"
 ```
@@ -142,10 +143,10 @@ restricted declines**. The unknown-acknowledgement case also retains **one earli
 The command verifies the archive and freshly replays the captured corrected proposals; it
 does not make new model requests.
 
-For the complete comparative study:
+Keep `simurgh_review_dir` set in the same shell. For the complete comparative study:
 
 ```sh
-/tmp/simurgh-review/bin/python -B tools/assurance-transfer/transfer_study.py verify \
+"$simurgh_review_dir/venv/bin/python" -B tools/assurance-transfer/transfer_study.py verify \
   --archive docs/research/transfer-phase-17/evidence.zip \
   --expected-root "$(cat docs/research/transfer-phase-17/ROOT.sha256)"
 ```

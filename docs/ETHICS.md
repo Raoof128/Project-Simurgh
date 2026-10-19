@@ -23,7 +23,7 @@ messages are implemented in [`src/academic/riskScoring.js`](../src/academic/risk
 
 The academic/device collection policy excludes answer and media content. Its intended exclusions
 are listed below; the [privacy policy](../PRIVACY.md) separately records the confirmed legacy-helper
-identifier exception. The policy excludes:
+identifier and local pixel-sampling exceptions. The policy excludes:
 
 - What a student typed
 - What a student pasted
@@ -42,7 +42,10 @@ The student exam page displays a privacy notice on load that must be acknowledge
 - What is not monitored (screen, camera, audio, content)
 - How risk scores are used (human review trigger, not automatic finding)
 
-Students must actively consent before the session starts.
+For joined exam sessions, the server requires the privacy-accepted lifecycle state before
+starting the exam. Anonymous demo sessions dismiss the notice client-side and do not establish
+a server-recorded consent event. A notice acknowledgment alone does not establish freely given
+consent or an institution's legal basis for collecting data.
 
 ### 4. Explainable Scores
 

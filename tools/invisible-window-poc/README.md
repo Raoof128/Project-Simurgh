@@ -45,7 +45,7 @@ the window appears. The label is fixture text, not proof of exclusion on the cur
 
 | Key  | Action                                                                      |
 | ---- | --------------------------------------------------------------------------- |
-| `⌘T` | Hide / show on the physical display (the window remains capture-invisible)  |
+| `⌘T` | Hide / show the window; capture exclusion remains OS/API-dependent          |
 | `⌘C` | Toggle click-through (`ignoresMouseEvents`) — demonstrates §VI-C blind spot |
 | `⌘Q` | Quit                                                                        |
 
@@ -69,7 +69,7 @@ visibility of every overlay.
 
 - It does not include or ship an LLM. The "cheat content" is a hard-coded
   example string about SYN floods.
-- It does not exfiltrate, log, or transmit anything. It only renders a
-  window.
+- It makes no network requests and does not collect exam content. It renders a window
+  and prints local status messages, including the native window number and click-through state.
 - It is not weaponised. The window is plainly labelled "INVISIBLE TO SCREEN
   CAPTURE" and includes a citation to the disclosure paper. It is a demo.

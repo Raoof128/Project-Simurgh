@@ -111,7 +111,7 @@ and pasted text content are excluded from that pipeline.
 | Raw pairing challenge bytes (Stage 2.2)              | ❌ Never (only the SHA-256 hash enters audit)                                               |
 | Raw process names, window titles, HWNDs, or PIDs     | Rejected in modern daemon proofs; legacy helper names/PIDs are a documented exception above |
 | macOS node private key                               | ❌ Never leaves the local machine (stored at `~/.simurgh/node-key`, 0600)                   |
-| Daemon private key                                   | ❌ Never leaves the local machine (stored in macOS Keychain)                                |
+| Daemon private key                                   | Not included in proof payloads; storage is platform-specific (see below)                    |
 | Usernames, serial numbers, MAC addresses, file paths | ❌ Never                                                                                    |
 | LaunchAgent system inventory or device identifiers   | ❌ Never                                                                                    |
 
@@ -119,7 +119,29 @@ and pasted text content are excluded from that pipeline.
 
 ## Student Identity
 
-Student identifiers are hashed with **SHA-256** before any storage or processing. The raw identifier is never written to disk, logged, or transmitted to third-party services.
+The exam join route receives the raw identifier and transforms it with **HMAC-SHA256** before
+placing it in the session record. [`hashStudentId`](src/privacy/hashIdentity.js) selects
+`SIMURGH_STUDENT_ID_PEPPER`, otherwise `SIMURGH_AUDIT_SECRET`, otherwise a known development
+fallback, and emits `v1:<digest>`. Configure a dedicated secret pepper for non-demo use.
+
+This is deterministic pseudonymization, not anonymity: values remain linkable under the same
+key, and the known development fallback does not protect guessable identifiers. The join handler
+does not intentionally persist or forward the raw identifier; browser, proxy, request logging
+and operator infrastructure require their own data-handling review.
+
+Daemon identity storage also depends on the component:
+
+- [macOS daemon](tools/simurgh-daemon-macos/Sources/SimurghDaemon/KeychainIdentity.swift):
+  P-256 key bytes in a Keychain generic-password item, with a device-only accessibility setting.
+- [Windows daemon](tools/simurgh-daemon-windows/src/SimurghDaemon.Windows/WindowsIdentityStore.cs):
+  an ephemeral P-256 identity created for the process; no persistent identity store is implemented.
+- [Linux daemon](tools/simurgh-daemon-linux/src/identity.rs):
+  `simurgh/daemon-identity.pem` beneath `XDG_STATE_HOME`, falling back to
+  `$HOME/.local/state`. Creation sets the file to 0600 and directory to 0700.
+
+These implementations sign locally and expose public keys/signatures, not private keys, through
+the proof protocol. They do not establish hardware-backed protection or protection against a
+compromised account or host.
 
 ---
 
@@ -133,11 +155,14 @@ Risk scores are produced by **local deterministic heuristics**. When a session r
 
 ## Data Retention
 
-| Data type                   | Retention                            |
-| --------------------------- | ------------------------------------ |
-| In-memory session telemetry | 4 hours of inactivity (auto-evicted) |
-| Audit chain (in-memory)     | Session lifetime                     |
-| Exported reports            | Operator-controlled                  |
+| Data type                   | Retention                                                     |
+| --------------------------- | ------------------------------------------------------------- |
+| In-memory session telemetry | 4-hour inactivity threshold; eviction checked every 5 minutes |
+| Audit chain (in-memory)     | Session lifetime                                              |
+| Exported reports            | Operator-controlled                                           |
+
+Associated session registries are cleaned by a separate periodic sweep. Scheduling and process
+state affect actual cleanup time; four hours is not an exact deletion deadline.
 
 This retention table concerns the historical in-memory academic server. Research tools separately
 write SQLite/Redis state, archives and exported reports; restarting the academic server does not

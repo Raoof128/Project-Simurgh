@@ -149,11 +149,12 @@ The Windows Device Shield path is protected by:
 | Native helper          | **Authenticated**   | `x-simurgh-helper-secret` shared-secret header + per-helper rate limit                         |
 | Instructor dashboard   | **Authenticated**   | Bearer token (`SIMURGH_INSTRUCTOR_TOKEN`) — query-string token stripped from URL after capture |
 | Claude API             | **Trusted service** | Receives sanitised behavioural metadata only, never raw content                                |
-| Audit chain            | **Tamper-evident**  | HMAC-SHA256 linked entries; any modification invalidates downstream signatures                 |
+| Audit chain            | **Tamper-evident**  | HMAC-SHA256 linked entries; integrity is relative to the key and trusted retained chain state  |
 
 ### Secret Separation
 
-The historical server configuration uses four separate secrets outside demo mode. Reuse is not permitted.
+The historical server configuration requires four secret settings outside demo mode. Operators
+should provision distinct values; the bootstrap checks presence but does not reject reused values.
 
 | Secret                           | Purpose                                             |
 | -------------------------------- | --------------------------------------------------- |
@@ -172,7 +173,7 @@ The historical academic/device telemetry pipeline is designed around data minimi
 - Webcam frames or microphone audio
 - Typed answer content
 - Paste content (only paste length and count are recorded)
-- Raw student names or email addresses (SHA-256 hashed at ingress only)
+- Raw student identifiers in stored session records (HMAC-SHA256 pseudonymized at ingress; raw input reaches the join handler)
 - Biometric identifiers
 - Raw process names or window titles in modern daemon proofs (rejected as `forbidden_local_field`). The legacy helper collected/transmitted identifiers and sampled capture pixels; its server routes are retired. See [PRIVACY.md](PRIVACY.md) for this historical exception.
 
@@ -210,7 +211,10 @@ Mitigations:
 - The historical device roadmap proposes hardware-rooted attestation and on-device verification
   for GPU-layer overlays. These remain proposals; see [DEVICE_ROADMAP.md](DEVICE_ROADMAP.md).
 
-These limitations are documented openly. The system is **privacy-preserving, tamper-evident, hardened, and auditable against the Stage 1 threat model** — it is not unbreakable, and Simurgh's value proposition does not rely on the claim that it is.
+The named validation paths provide bounded controls under the stated trust assumptions. Their
+existence does not establish repository-wide privacy enforcement, complete audit history or
+protection against an operator holding the signing keys. Retained historical defects and the
+legacy-helper exception remain relevant when evaluating old revisions.
 
 ## Dependency Security
 
@@ -242,5 +246,12 @@ See [`docs/STAGE_2_8_LINUX_TECHNICAL_BRIEF.md`](docs/stages/STAGE_2_8_LINUX_TECH
 ```bash
 npm test                                       # full unit suite
 node tools/privacy-audit.mjs                   # scan generated data for forbidden fields
-node tools/verify-audit.mjs <chain.json>       # verify an exported HMAC audit chain
+node tools/verify-audit.mjs ./audit-export.json # requires original SIMURGH_AUDIT_SECRET
 ```
+
+Replace `./audit-export.json` with the exported chain file. Provide the original audit key
+through a protected environment; never include it in a shared
+command transcript. The verifier checks the supplied entries and, when present, their supplied
+terminator. A successful result does not prove that the export is complete or that a key-holding
+operator could not rewrite it. Compare a separately retained trusted commitment for stronger
+history claims; do not disclose the key as part of public verification evidence.

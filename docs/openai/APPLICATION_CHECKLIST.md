@@ -2,10 +2,10 @@
 
 **Evidence update — 19 October 2026.** The [current brief](OPENAI_BRIEF.md) now includes
 separately recorded live transfer and role-correction results. The form-field mapping below
-was checked on 15 October and must still be rechecked before submission. Completed local
+was rechecked against the official form on 19 October and must still be rechecked before submission. Completed local
 captures do not authorize a new paid campaign or resolve applicant identity/budget decisions.
 
-**Status: prepared for owner review, not submitted.** Requirements below reflect the [official form](https://openai.com/form/cybersecurity-grant-program/) retrieved on **15 October 2026 (Australia/Sydney)**. The applicant must recheck the form and terms before submission. This document identifies remaining decisions; it does not authorize API expenditure, publishing, or submitting.
+**Status: prepared for owner review, not submitted.** Requirements below reflect the [official form](https://openai.com/form/cybersecurity-grant-program/) rechecked on **19 October 2026 (Australia/Sydney)**. The applicant must recheck the form and terms before submission. This document identifies remaining decisions; it does not authorize API expenditure, publishing, or submitting.
 
 ## Map the form fields
 

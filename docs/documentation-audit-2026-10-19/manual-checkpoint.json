@@ -1,0 +1,44 @@
+{
+  "baseline": "15105bac03588d601a2961b3d6f61db72c3b37a4",
+  "manual_read_count": 181,
+  "candidate_count": 919,
+  "complete": false,
+  "append_only_logs": true,
+  "changed_paths": [
+    "AGENT.md",
+    "CHANGELOG.md",
+    "DOCUMENTATION.md",
+    "PRIVACY.md",
+    "README.md",
+    "SECURITY.md",
+    "docs/ETHICS.md",
+    "docs/documentation-audit-2026-10-19/ERRATA.md",
+    "docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md",
+    "docs/documentation-audit-2026-10-19/manual-progress.json",
+    "docs/openai/APPLICATION_CHECKLIST.md",
+    "docs/openai/OPENAI_BRIEF.md",
+    "docs/research/CONTINUATION_HANDOFF_2026-10-19.md",
+    "tools/agentdojo-simurgh-adapter/README.md",
+    "tools/invisible-window-poc/README.md",
+    "tools/simurgh-daemon-linux/README.md",
+    "tools/simurgh-node-macos/README.md"
+  ],
+  "checks": {
+    "format_check": "pass before log append; appended logs formatted separately",
+    "local_links": {
+      "documents": 813,
+      "links": 1835,
+      "issues": 0
+    },
+    "edited_shell_examples": {
+      "blocks": 19,
+      "syntax_failures": 0
+    },
+    "linux_daemon": {
+      "build": "pass",
+      "health_http": 200
+    },
+    "stored_response_diagnostics": "both match documented outcomes"
+  },
+  "scope": "Documentation checkpoint; no full E2E rerun or fresh inference."
+}

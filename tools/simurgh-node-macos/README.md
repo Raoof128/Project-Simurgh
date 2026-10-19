@@ -28,7 +28,7 @@ This is a CLI scaffold. The local private key stored at `~/.simurgh/node-key` is
 ```bash
 cd tools/simurgh-node-macos
 swift build
-swift run SimurghNode --session <SESSION_ID>
+swift run SimurghNode --session sess_abc
 ```
 
 Or pass the session via env:
@@ -48,16 +48,17 @@ curl -s http://localhost:3030/api/integrity/proofs \
   --data @/tmp/simurgh-proof.json | jq
 ```
 
-Expected response: `status: 202` with `signature_status: "unregistered_node"`.
+Expected: HTTP 202 with `signature_status: "unregistered_node"` for a valid unpaired session.
+Use an existing joined session and its matching token; the example session name is illustrative.
 
 ## CLI options
 
-| Flag                | Description                                           |
-| ------------------- | ----------------------------------------------------- |
-| `--session <ID>`    | Session ID (required unless `SIMURGH_SESSION_ID` set) |
-| `--key-path <path>` | Override the default `~/.simurgh/node-key` location   |
-| `--print-key-info`  | Print `node_id_hash` and `node_public_key` only       |
-| `--help`            | Show usage                                            |
+| Flag                | Description                                                  |
+| ------------------- | ------------------------------------------------------------ |
+| `--session <ID>`    | Session ID (required unless `SIMURGH_SESSION_ID` set)        |
+| `--key-path <path>` | Override the default `~/.simurgh/node-key` location          |
+| `--print-key-info`  | Print `node_id_hash`, `node_public_key` and local `key_path` |
+| `--help`            | Show usage                                                   |
 
 ## Exit codes
 
@@ -72,7 +73,9 @@ Expected response: `status: 202` with `signature_status: "unregistered_node"`.
 
 ## Privacy notice for screenshots
 
-The `--print-key-info` output and the proof JSON show `key_path`, which contains your local username. **Redact `key_path` before sharing screenshots or logs publicly.**
+The `--print-key-info` output includes `key_path`, which can reveal a local username. Normal
+proof and pairing envelopes do not contain that field. Key-loading warnings/errors can also
+contain paths. **Review and redact diagnostic output before sharing it publicly.**
 
 ## First-run behaviour
 

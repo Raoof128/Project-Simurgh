@@ -3442,3 +3442,25 @@ one machine's local agent configuration:
 - **Files changed:** Current root/reviewer/application/component guidance, wiki navigation/log, new `docs/documentation-audit-2026-10-19/` records and audit tooling, and both root logs. The ledger names every baseline path and its exact review scope.
 - **Verification:** 910/910 candidates accounted for; 881 unchanged and 29 changed including these two append-only logs. Parsed local links/anchors resolve; repository Prettier and diff checks pass. Original Node instrument: 31 tests, fresh offline report and verification pass. Corrected eight-case demo and six explorer CLI examples pass. Inspect: five tests and seven-sample mock smoke pass, retaining its intended execution failure. Auditor controls detect empty/missing inputs and broken links; pipeline controls preserve exit 73 with pipefail. Headline counts checked against raw reports; no paid inference.
 - **Follow-ups:** Coverage is not universal semantic validation: 27 editorial updates, 37 selected-claim/scope reviews, two log reviews, two exact-archive checks and 842 automated-only candidates are explicitly distinguished. Historical scientific/citation review, independent custody, browser/accessibility, interactive platforms and real provider/deployment evidence retain their stated limits. Commit and push the audited documentation without rewriting history.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation review checkpoint
+
+**Owner-requested work; implementation and review by Codex assistance.**
+
+- **Scope:** Continue the documentation audit under preceding authority `4ca41a95`, from
+  baseline `15105bac`. This checkpoint records 181 complete manual reads out of 919 document
+  candidates; 738 remain unread in this continuation. Reading and final claim verification
+  are separate states. The exhaustive review is not complete.
+- **Summary:** Correct HMAC student pseudonymization, platform key storage, periodic retention,
+  audit-key prerequisites and trust limits, Linux startup, macOS CLI diagnostics, fixture
+  logging/capture claims, adapter boundaries, consent wording and portable replay paths.
+  Add 22 dated findings and exact per-file progress. Preserve historical paper/test/evidence
+  defects with additive errata, including banking protocol/approval and scanner-scope gaps.
+- **Verification:** Corrected Linux daemon builds and starts with health HTTP 200; owned process
+  stopped. Both stored-response diagnostic scripts reproduce documented counts. All 19 shell
+  blocks in edited guidance pass bash syntax checks. Local link checker reports 1,835 links in
+  813 documents, zero issues. Official grant form, Evals dates and three related-work sources
+  rechecked. No new model inference, human study, external outreach or production change.
+- **Follow-ups:** Continue the remaining complete reads and final evidence checks. Native/browser,
+  independent-operator and provider-lifecycle exclusions remain. This progress record must not
+  be represented as completed manual review of all documentation.

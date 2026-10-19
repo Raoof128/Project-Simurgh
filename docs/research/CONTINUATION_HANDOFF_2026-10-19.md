@@ -59,15 +59,16 @@ content, inference origin, receiver effects or omission honesty. For the stronge
 install the frozen dependencies and verify against the source pack:
 
 ```sh
-python3.12 -m venv .review-venv
-.review-venv/bin/python -m pip install --require-hashes --only-binary=:all: \
+simurgh_handoff_dir=$(mktemp -d "${TMPDIR:-/tmp}/simurgh-handoff.XXXXXX")
+python3.12 -m venv "$simurgh_handoff_dir/venv"
+"$simurgh_handoff_dir/venv/bin/python" -m pip install --require-hashes --only-binary=:all: \
   -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock
-PYTHONDONTWRITEBYTECODE=1 .review-venv/bin/python tools/assurance-export/export_evidence.py verify \
+PYTHONDONTWRITEBYTECODE=1 "$simurgh_handoff_dir/venv/bin/python" tools/assurance-export/export_evidence.py verify \
   docs/research/export-phase-14/public.zip \
   --expected-root f71802a1906178da56c7ebc7dd19227716d65a2d99901910611f022490a8eb12 \
   --source-pack docs/research/model-composition-phase-10/evidence.zip \
   --source-root 3a63db0052b42c284b9feba94b82aa0b236e31530837c2caf42d927e2f008a96
-PYTHONDONTWRITEBYTECODE=1 .review-venv/bin/python tools/assurance-reliability/reliability_evidence.py verify \
+PYTHONDONTWRITEBYTECODE=1 "$simurgh_handoff_dir/venv/bin/python" tools/assurance-reliability/reliability_evidence.py verify \
   docs/research/reliability-phase-13/evidence.zip \
   --expected-root 4fbe9f50dc2dcb23c3f89c86d1dcbd8f010995bdbe809895e31978c2ed70e3cd
 ```
@@ -75,7 +76,9 @@ PYTHONDONTWRITEBYTECODE=1 .review-venv/bin/python tools/assurance-reliability/re
 The source verifier replays saved proposals; it is not a fresh model generation experiment.
 Use Linux for the supported isolation/workflow dependencies. Report unavailable platform
 features instead of changing fixtures to pass. Preserve stdout, stderr, exit codes and
-versions in a directory you control. Return the receipt template with discrepancies and
+versions in a directory you control. Keep `simurgh_handoff_dir` set in the same shell;
+retain its logs before removing the temporary environment. Return the
+[receipt template](explorer-phase-18/independent-receipt-template.json) with discrepancies and
 limits, even if every executable check passed. Independent replay establishes independent
 reproduction of supplied records, not independent custody of the original experiment.
 

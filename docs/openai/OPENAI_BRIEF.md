@@ -20,8 +20,8 @@ incremental protection is established for Luna. All controls retain prior effect
 acknowledgement fixtures. The small, known-family corpus and different model interfaces do not
 support a model ranking or general safety conclusion.
 
-A separate live Responses workflow initially declined all eight cases because host updates
-were supplied in the user role. The separately frozen developer-role correction completes
+A separate live Responses workflow initially declined all eight cases with host updates
+supplied in the user role. The separately frozen developer-role correction completes
 **2/3 authorized cases** and declines **5/5 restricted cases**. One active refusal remains;
 all original outcomes are retained. Only host-authored lifecycle state belongs in the developer
 update. A model decline is not an attempted call stopped by the enforcement boundary.
