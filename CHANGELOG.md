@@ -4326,3 +4326,23 @@ Owner-requested work; implementation and review by Codex assistance.
   fresh full E2E or interactive browser validation is claimed.
 - **Remaining:** Read every pending specification, plan, evidence document and large log,
   resolve findings and validate the final ledger before claiming completion.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 735-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under preceding declaration `4ca41a95`; 735 of 919 baseline
+  documents completely read, 184 pending. The exhaustive review remains in progress.
+- **Changes:** Add M57–M62 corrections for reconstructed logs, the Stage 5P standalone verifier,
+  publication versions, static architecture diagrams and early implementation plans. Disclose
+  the Linux manifest/source license metadata conflict in the README without changing licensing.
+- **Finding:** In temporary copies, the exact archived Stage 5P standalone verifier exits 0
+  with missing auxiliary manifests, an invalid checkpoint signature or an incomplete pair census.
+  Preserve the original; qualify security and reviewer guidance and retain the probe receipt.
+- **Sources:** Check Rekor's checkpoint/trust-key requirements, RFC 9943's statement limits,
+  arXiv citation versions, Cargo target selection and the XDG ScreenCast lifecycle.
+- **Validation:** Record formatting, links, exact baseline identities, refreshed read hashes
+  and append-only preservation in the checkpoint receipt. Frozen code and evidence remain intact.
+  No new model inference, external ceremony, full E2E or interactive native/browser run.
+- **Remaining:** Finish every pending plan, specification and large log, resolve remaining
+  documentation findings and validate the final ledger before claiming completion.

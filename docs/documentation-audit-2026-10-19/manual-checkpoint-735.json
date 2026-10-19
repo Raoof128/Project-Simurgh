@@ -1,0 +1,26 @@
+{
+  "baseline": "15105bac03588d601a2961b3d6f61db72c3b37a4",
+  "prior_checkpoint": "121ed800890d50e2c7cde54fa3952731572eb690",
+  "manual_read_count": 735,
+  "candidate_count": 919,
+  "complete": false,
+  "append_only_logs": true,
+  "checks": {
+    "changed_file_format": "pass",
+    "git_diff_check": "pass",
+    "local_links": {
+      "documents": 813,
+      "links": 1856,
+      "issues": 0
+    },
+    "candidate_identity": "919 unique baseline paths and hashes preserved; 735 complete reads, 184 pending; current reviewed hashes match; scratch and tracked ledgers identical",
+    "preservation": "Prior HEAD log bytes preserved as exact prefixes; frozen specifications, source, captures and evidence unchanged",
+    "prior_authority": "4ca41a95 is a strict ancestor",
+    "stage5p_standalone_probe": {
+      "cases": 4,
+      "result": "Baseline and three modified copies exit 0; missing manifests, invalid checkpoint signature and incomplete pair census are not rejected",
+      "receipt": "stage5p-standalone-probe.json"
+    }
+  },
+  "scope": "Manual documentation checkpoint with bounded standalone-verifier diagnostic; no runtime changes, full E2E rerun, model inference, external ceremony or interactive browser/native execution."
+}

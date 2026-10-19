@@ -246,7 +246,10 @@ boundary and record actual checks, failures and skips. Report vulnerabilities pr
 [SECURITY.md](SECURITY.md). Review [PRIVACY.md](PRIVACY.md) and [ethics guidance](docs/ETHICS.md)
 before collecting or publishing data.
 
-Licensed under [AGPL-3.0-or-later](LICENSE), as declared by the package. Upstream contributions
+The root package and [LICENSE](LICENSE) declare AGPL-3.0-or-later. The Linux daemon manifest
+still declares MIT while its source SPDX headers declare AGPL-3.0-or-later; this unresolved
+[metadata conflict](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m62--linux-implementation-sketches-and-test-scope)
+needs reconciliation before redistribution relying on that manifest. Upstream contributions
 to differently licensed projects require a separate license review. This is a research
 prototype; production readiness, provider endorsement and independent certification are not
 established. OpenAI-related materials are technical review drafts, with no submission implied.

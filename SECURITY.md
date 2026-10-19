@@ -48,6 +48,15 @@ stage's authoritative CLI within its declared scope; the archived page is not an
 verification surface. The [syntax-check receipt and correction](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m54--the-archived-stage-4m-browser-verifier-cannot-parse)
 distinguish this finding from interactive browser testing and from CLI behavior.
 
+## Archived standalone-verifier limitation
+
+The Stage 5P independent-verification bundle can report success with missing manifests, an
+invalid checkpoint-signature line or an incomplete comparison corpus. Its root-text comparison
+does not authenticate the checkpoint signature. See the [local diagnostic and bounded correction](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m58--stage-5ps-standalone-bundle-checks-less-than-its-guide-promises).
+These omissions remain in the frozen standalone implementation; its exit zero is insufficient
+for the complete artifact/inclusion-verification claim. This finding does not establish that
+the genuine captured log entry is false or that the separate main-stage CLI has the same behavior.
+
 ## OpenAI demonstration trust boundaries
 
 - Model output and retrieved context cannot grant permissions. A trusted local registry

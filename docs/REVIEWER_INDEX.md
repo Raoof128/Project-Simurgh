@@ -80,6 +80,10 @@ completeness is bounded by declared participants and instrumented boundaries. Th
 Stage 3R adapter has an [empty-refusal fallback mismatch](documentation-audit-2026-10-19/MANUAL_REVIEW.md#m43--historical-provider-fallback-contract-does-not-match-all-response-shapes);
 the current mounted legacy live route remains retired with HTTP 410.
 
+The archived Stage 5P independent bundle also needs the [standalone-verifier corrections](documentation-audit-2026-10-19/MANUAL_REVIEW.md#m58--stage-5ps-standalone-bundle-checks-less-than-its-guide-promises):
+its passing result does not enforce manifest presence, the full pair census or checkpoint-signature
+authentication. Preserve these limits when interpreting its historical reproduction receipt.
+
 ## Historical and supporting material
 
 | Collection                                                                                              | How to read it                                                                                          |

@@ -79,3 +79,45 @@ claims about grant eligibility, venue deadlines, publication acceptance or the o
 were inferred. Old source registers remain dated snapshots and are not overwritten by this file.
 The explorer's bundled index is also unchanged; its `--year` filter means review year and performs
 local search, not current web research.
+
+### S19 — Sigstore Rekor verification contract
+
+Checked 19 October 2026: [Rekor architecture specification](https://github.com/sigstore/architecture-docs/blob/main/rekor-spec.md),
+particularly §§4, 8.1 and 9.2–9.6. A Signed Entry Timestamp is an inclusion promise over entry
+metadata. Verification of inclusion also requires authenticating the checkpoint, and log trust
+keys require independent distribution. M58 compares these requirements with the archived
+standalone verifier's actual behavior. This is a documentation/implementation comparison, not a
+new public-log ceremony or certification of the project.
+
+### S20 — SCITT statement accuracy and participation
+
+Checked 19 October 2026: [RFC 9943 §§9.1–9.3](https://www.rfc-editor.org/rfc/rfc9943.html#section-9.1).
+Registration order need not establish issuance order; authenticated statements can be false,
+and issuers may selectively omit statements. These primary-source limits support the distinction
+between authenticity, accuracy and completeness in M58. Relevant passages were read; this is
+not a full RFC conformance assessment.
+
+### S21 — Early detector-paper citation versions
+
+Checked 19 October 2026: the abstract records for [PromptSleuth](https://arxiv.org/abs/2508.20890),
+[WAInjectBench v1](https://arxiv.org/abs/2510.01354v1), [WAInjectBench v2](https://arxiv.org/abs/2510.01354v2)
+and [AlignSentinel](https://arxiv.org/abs/2602.13597). Titles, author lists, dates and abstract-level
+scope were read. WAInjectBench's September 2026 revision changes the Wang/Xu author order;
+version pinning preserves the original June citation correctly. No full-paper review or
+independent reproduction of their results is claimed by this metadata check.
+
+### S22 — Cargo test selection
+
+Checked 19 October 2026: [Cargo test command reference](https://doc.rust-lang.org/cargo/commands/cargo-test.html),
+including test-name filtering, integration-target selection and locked dependencies. A positional
+filter matches test names; `--test NAME` selects an integration-test target. This supports M62's
+correction to historical commands. Successful compilation or an empty filtered run does not
+establish execution of the intended cases.
+
+### S23 — XDG ScreenCast properties and session lifecycle
+
+Checked 19 October 2026: [XDG Desktop Portal ScreenCast reference](https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.ScreenCast.html),
+particularly the lifecycle and `AvailableSourceTypes` property. The property reports a source-type
+bitmask; session creation, source selection, starting and PipeWire access are separate operations.
+The reference says starting typically presents a user dialog. This qualifies the C/D plan's
+portal-active and consent wording in M62; no compositor interaction was performed for this check.

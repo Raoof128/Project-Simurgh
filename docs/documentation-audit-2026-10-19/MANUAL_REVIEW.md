@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **700 documents have complete manual reads; 219 remain
+SHA-256 values. At this checkpoint, **735 documents have complete manual reads; 184 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -1479,3 +1479,221 @@ file, not automatically the represented 32-byte digest. Its file hash must not b
 equal to the commitment hex. Lane D's local/cloud runs exercise the core and stub quorum
 packs; they do not establish independent-party custody or a newly integrated real quorum.
 The historical `StrictHostKeyChecking=no` command is a captured action, not current SSH guidance.
+
+### M57 — Stage 5E's reconstructed transcript is not an original receipt
+
+The complete `stage-5e-independent-verification/RAW_RESULTS.md` contains a provenance note
+stating that its initial content was reconstructed from a session transcript after accidental
+deletion, is not guaranteed byte-identical and should not be treated as a primary artifact.
+That explicit qualification takes precedence over the adjacent README's blanket “operator's
+own record, committed verbatim” and “primary artifact” descriptions. The original remote log
+is referenced but was not obtained in this audit. Later appended runs retain their own stated
+provenance; the note does not establish that every later section was reconstructed.
+
+Several historical run commands pipe through `tee` without showing `pipefail` or explicit
+upstream-status capture. A shell's pipeline exit alone can therefore reflect `tee` rather than
+the verifier. Preserve recorded failure output and distinguish it from independently captured
+process status. The same qualification applies to the Stage 5P reproduction receipt's suggested
+`python3 verify.py | tee result.txt` command.
+
+### M58 — Stage 5P's standalone bundle checks less than its guide promises
+
+The independent-verification bundle's README, closeout, reproduction receipt and full frozen
+specification were read alongside its actual `verify.py` and browser entry point. All 29 files
+listed in `SHA256SUMS.txt` match their recorded hashes. That establishes the archive's current
+internal byte agreement, not the completeness of its verifier or an independently trusted root.
+
+A [four-case local diagnostic](stage5p-standalone-probe.json) ran the exact standalone Python
+verifier in temporary copies. The baseline and all three deliberately changed copies returned
+exit 0 and `RESULT: ALL CHECKS PASSED`:
+
+| Copy                         | Change                                                                                             | What the result limits                                                           |
+| ---------------------------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Missing manifests            | Remove both capture manifests                                                                      | Their absence becomes a note; “every evidence file matches” is not enforced      |
+| Invalid checkpoint signature | Replace the checkpoint signature line, retaining its root and updating the unsigned local manifest | Root-text equality is checked, but the checkpoint signature is not authenticated |
+| Incomplete pair census       | Remove one parity pair                                                                             | 575 rows pass; the claimed complete 576-pair census is not required              |
+
+The verifier authenticates the Signed Entry Timestamp using a bundled key, but that signature
+covers entry metadata, not the checkpoint root. Sigstore's [Rekor specification](https://github.com/sigstore/architecture-docs/blob/main/rekor-spec.md)
+separates inclusion promises from signed checkpoints and requires checkpoint verification with
+the inclusion proof. It also requires an independently distributed trust key. Accordingly,
+this standalone script's “root the log SIGNED” message is stronger than its implementation.
+These findings do not show that the genuine captured entry was fabricated, and no live log query
+or main-stage CLI execution was performed by this diagnostic. A separately authenticated
+checkpoint and complete artifact binding remain necessary before relying on the advertised claim.
+
+Other handoff qualifications:
+
+- `verify.py` does not enforce the bundle-wide `SHA256SUMS.txt`. Its separate Python implementation
+  is not evidence that an independently attributable author wrote it. Bundled signer/log keys
+  require independently selected trust anchors. A second HTTP request is not independent custody.
+- The archived browser `index.html` has no `vectors` element, while `parity-run.mjs` immediately
+  reads that element. The test harness injects it separately. Opening the raw page is not the
+  advertised standalone browser verification flow. Its CSP permits same-origin scripts, so
+  “forbids ALL egress” is too broad. No interactive browser run is claimed here.
+- Python and a suitable OpenSSL are prerequisites to check, not tools guaranteed preinstalled on
+  every macOS/Linux system. Different versions do not establish independently authored crypto
+  implementations; matching canonicalization on this corpus is not universal RFC 8785 conformance.
+- The spec's initial draft/unbuilt labels are historical and are superseded by its freeze records
+  and annexes. A3 forbids joining principals via delegation despite the earlier remedy table.
+  A5 adds two coverage outcomes outside the six-row attack matrix; C1 corrects its namespace to
+  `gleif.lei.subject.v1`. The deferred table's “five” Section 1 Lean targets is stale; there are six.
+- `C2` remains unexecuted in this project. Claims that no suitable identity infrastructure exists
+  anywhere are not established. Keyless signing also supports automated OIDC, as M50 records.
+  Novelty scores and claims about every existing system are author assessments, not established
+  comparative findings. Four separate axes do not establish statistically independent evidence.
+- RFC 9943 §§9.1–9.3 explicitly distinguish registration order, statement accuracy and selective
+  participation. Those limits support the spec's bounded interpretation; citing them does not
+  establish SCITT implementation conformance. A signature on a named operator's log still needs
+  credible identity and key-custody attribution before it discharges party independence.
+
+Frozen bundle bytes and implementations remain unchanged. The known standalone omissions must be
+repaired and independently challenged in a successor before presenting this package as a complete
+verification handoff.
+
+### M59 — Early writeups need versioned citations and bounded detection claims
+
+All seven files in `docs/research/llm-shield/writeup/` were read, including both complete
+Markdown and LaTeX technical-note sources. Their Stage 3C result is **13 blocks plus five
+warnings**, not 18 prevented attacks; a warning can still reach the provider. The benign
+false-positive definition counts blocking only, so zero blocked hard negatives does not mean
+zero friction. The nine held-out attacks support a small follow-up observation, not proof of
+an intrinsic capability ceiling or absence of overfitting. Freezing a corpus does not make
+same-author evaluation independent. HMAC integrity remains conditional on secret custody.
+
+The three arXiv abstract records were freshly checked. WAInjectBench's June citation correctly
+matches [v1](https://arxiv.org/abs/2510.01354v1): Liu, Xu, Wang, Jia and Gong. Its unversioned
+URL now resolves to [v2](https://arxiv.org/abs/2510.01354v2), revised 23 September 2026 with
+Wang before Xu. Pin v1 when preserving the original attribution; use v2's metadata for a new
+citation. The inventor-directory link is not a precise primary patent-publication reference.
+Abstract metadata checks do not establish full-paper verification, peer review or publication
+of Simurgh's own “arXiv-style” note. A `.tex` source is not itself a compiled document.
+
+Stage 3F's 240-case results are synthetic consequence checks under declared scoring rules.
+Claims that unsafe consequences cannot escape or that this is categorically stronger than all
+jailbreak prevention exceed that scope. Its Stage 3G “next” paragraph is historical.
+
+The complete `one-page-brief.html` repeats the key-custody, uniform-replay and temporal
+claims qualified by M40–M58. In particular, benign live utility declined from seven to six;
+“held” is too strong, and noise attribution remains unproven. Stage 5M's earlier success must
+be read with Stage 5Q's later falsification. The complete `vca-architecture.html` places the
+provider after the tool/output gates; actual provider-response checks belong after the provider
+response and before execution/export. Its stage chips omit 3F/3G, and its fixed-width board
+has no responsive rule. Both HTML logo paths resolve correctly to the existing `docs/` asset.
+These are source/prose findings, not rendered-layout or browser validation.
+
+### M60 — Early implementation plans are not runnable current guidance
+
+The 13 May Academic Shield plan contains draft inconsistencies that its self-review misses:
+`claudeOnSafe: ... !== "true"` reverses the stated default, while current `src/config/env.js`
+correctly uses `=== "true"`. Its weights sum to 1.05 (M30); its example paste-only scores do
+not reach the asserted Warning/Critical thresholds. The lifecycle example starts a session
+in `exam_started` but does not wire the transition to `active` required by its submit route.
+The report example labels absent observations Safe; that cannot establish an observed clean
+session. Its HMAC helper accepts an authentic supplied prefix, including an empty chain,
+without proving completeness (M03). The privacy modal hides before the request succeeds;
+the UI sketch alone is not server-enforced consent. Raw template interpolation and tokens
+in query strings are historical sketches, not recommended UI/authentication patterns.
+
+The 14 May Stage 2.1 plan describes nonce uniqueness across the store's lifetime, but its
+code and current `src/integrity/nonceGuard.js` expire entries after five minutes with a
+one-minute cleanup sweep. Separate signed-timestamp validation remains necessary; this
+observation does not demonstrate acceptance of an expired envelope. Its single golden
+fixture checks one byte sequence, not universal Node/Swift interoperability. Moreover,
+the proposed Swift fixture test uses `JSONSerialization`, while the production sketch
+uses `JSONEncoder`. The instruction to change the Node format to match Foundation must
+not be used as authority to change a frozen signed format. A digest generated from the
+implementation under test is a regression anchor, not an independent correctness oracle.
+
+The 16 May Stage 2.2/2.3 and 2.4/2.5 smoke plans use mock daemon signatures and API flows;
+SDK imports, source references, doctor/help checks and installation dry-runs do not prove
+interactive browser or native scanner behavior. The checked boxes in the Stage 2.6 Windows
+plan likewise do not replace actual platform receipts. Across these plans, expected output,
+prewritten successful changelog entries, author-specific absolute paths and historical push
+targets are planning material. Shell pipelines ending in `tail` need exit-status preservation
+when used for real verification; skipped platform checks must stay visible. Use the current
+reviewer commands and dated smoke receipt rather than copying these plans into a fresh run.
+
+### M61 — Pairing and cross-platform plan contradictions
+
+The 14 May Stage 2.2 pairing plan's `verified` label establishes a signature against the
+session's registered software key, not physical-device identity or trustworthy sensor output.
+Its key binding disappears with in-memory state. The strict pairing shape rejects extra
+fields, but its proposed `unknown_field:${k}` reason also propagates the submitted key name
+into the rejection audit; calling every such payload privacy-safe is too broad. This is a
+finding about the historical sketch, not a newly executed exploit against the current route.
+The example `swift run ... | head -2; echo "exit=$?"` does not reliably report the CLI's
+expected exit 64. Preserve the producing command's status. The claimed five new gates list
+only four new round-trip checks; an expanded existing fixture-sync check is not automatically
+a fifth new gate. Proposed counts and prewritten all-pass entries need actual receipts.
+
+The 17 May Stage 2.7 plan repeatedly calls its changes behavior-preserving while expanding
+the forbidden-name set, changing the default platform and adding a report property. Those
+are observable contract changes. A field name ending in `_hash` does not establish that its
+value is hashed, private or non-identifying; the described name scan is not a content/privacy
+proof. Default `healthy` or Safe wording for absent scanner evidence is not a measured clean
+scan. Its Scenario D bans the substring “automatic misconduct” while requiring wording
+containing “No automatic misconduct finding.” Checks must distinguish an allegation from
+its explicit denial. Scenario G's raw numeric substring search can match a digest by chance;
+that alone does not prove a leaked process identifier.
+
+The platform-tamper examples also need to respect validator ordering: changing a platform
+without its scanner version, or increasing counts without consistent aggregate counts, can
+fail schema checks before signature verification. Such rejection is not evidence that the
+signature check was reached. The health probe's `curl -s` treats HTTP error responses as a
+successful transfer unless status is checked. Finally, Git stores executable mode in the
+index; `.gitattributes` does not record `chmod +x`. These corrections qualify the historical
+plan's “no inconsistencies” and all-green prose; they do not authorize replaying its release
+commands or copying its fixed co-author attribution into new work.
+
+### M62 — Linux implementation sketches and test scope
+
+The 17 May Stage 2.8A plan uses `cargo test ... proof_tests`, `session_detector` and
+`headless_tests` as if they selected integration-test files. They filter test names; the
+shown functions do not match those file-name filters. Select the target with
+`--test proof_tests`, `--test session_detector_tests` or `--test headless_tests`, and check
+that the expected cases actually ran (S22). The Stage 2.8B privacy-filter command repeats
+this error with `x11_scanner`. Its later Xvfb command correctly uses `--test`.
+
+Stage 2.8A's environment detector labels a local-looking `DISPLAY` as `healthy/x11_full`
+before connecting or scanning; that is scaffold classification, not observed coverage.
+The lock factory is not live-route enforcement: the C/D plan explicitly identifies and
+wires that missing integration. The A-plan canonicalizer recursively removes `signature`
+keys; the current Rust implementation removes the top-level key. Do not transplant the
+old sketch into the frozen wire contract. Its example README's unsupported `--port` option
+is corrected in the current daemon guide (M06). The plan and current Linux `Cargo.toml`
+still say `MIT`, while the root license/package and Rust source SPDX headers declare
+AGPL-3.0-or-later. This unresolved metadata conflict is now disclosed in the current README;
+this documentation audit does not relicense code or mutate the frozen manifest.
+
+The Stage 2.8B plan's date-conversion sketch subtracts 60 days after the caller already
+applies the civil-calendar epoch shift. Current
+`tools/simurgh-daemon-linux/src/http.rs` explicitly removes that subtraction; do not copy the erroneous sketch. Its `/proof` test checks presence/type of a
+signature, not cryptographic verification or equality with a measured scanner result.
+The report test expects no anomaly with `x11_above_window_count_max = 1`, contradicting
+its own `linuxAnomaly` implementation and Warning policy. The Xvfb examples create synthetic
+windows and set EWMH properties themselves; they do not establish real-desktop accuracy.
+The plan's `visible_window_count = managed + override_redirect` is a counting convention,
+not a visibility/occlusion test. Early-return Xvfb cases appear as successful Rust tests,
+so a pass count alone can conceal missing execution. Later C/D mandatory-Xvfb handling and
+the current full-smoke receipt must be read separately. The B-plan closing two-Xvfb-test
+count is stale relative to its four-case test block.
+
+In the 18 May C/D plan, `portal_active` means a successful `AvailableSourceTypes` property
+read, not active screen capture (S23). A returned zero bitmask still satisfies its `is_some`
+check. The property probe does not establish compositor enumeration or capture readiness.
+Its claim that each listed ScreenCast method necessarily triggers a consent dialog is too
+broad: the documented lifecycle distinguishes creation, selection, starting and stream
+access; `Start` typically presents the dialog. Literal-source searches are regression
+checks, not proof that no alternate call path can start a session. The sketch creates and
+blocks on another Tokio runtime from a synchronous helper called by async handlers; its
+panic fallback is not a demonstrated successful live probe or a timeout guarantee.
+
+The browser packaging hints are untrusted user-agent guesses; ordinary page code cannot
+read process environment or privileged browser pages. Source checks for absence of a field
+name do not prove all data flows. Likewise, user-unit text and dry-runs do not prove service
+startup or installed isolation. The “16 scenarios” include a locally skipped CI scenario
+and Scenario P delegated to other scripts; they are not 16 unconditional executions in one
+smoke. Redacting a signature produces a non-verifiable copy, which must remain distinct
+from the preserved signed original. These are additive corrections to plans, not new native
+runtime measurements.

@@ -1,0 +1,49 @@
+{
+  "verifier": "docs/research/llm-shield/evidence/stage-5p/independent-verification/verify.py",
+  "sha256": "e3e607de466526344cfadc12f0484d6755042d48dba29152a66ca5db3b13cbcb",
+  "scope": "Exact frozen standalone verifier in temporary copies; no network, signatures generated, original files changed or main-stage CLI exercised. Checkpoint signature mutation preserves root text and adjusts only unsigned local manifest. Pair census mutation removes one row.",
+  "cases": [
+    {
+      "case": "baseline",
+      "exit": 0,
+      "result_lines": [
+        "PASS  the root the log SIGNED equals the proof's root",
+        "PASS  all 576 ordered pairs agree (order, join, relation)",
+        "RESULT: ALL CHECKS PASSED"
+      ],
+      "stderr": ""
+    },
+    {
+      "case": "missing_manifests",
+      "exit": 0,
+      "result_lines": [
+        "PASS  the root the log SIGNED equals the proof's root",
+        "PASS  all 576 ordered pairs agree (order, join, relation)",
+        "RESULT: ALL CHECKS PASSED",
+        "note: rekor-ceremony has no manifest",
+        "note: gleif-capture has no manifest"
+      ],
+      "stderr": ""
+    },
+    {
+      "case": "invalid_checkpoint_signature",
+      "exit": 0,
+      "result_lines": [
+        "PASS  the root the log SIGNED equals the proof's root",
+        "PASS  all 576 ordered pairs agree (order, join, relation)",
+        "RESULT: ALL CHECKS PASSED"
+      ],
+      "stderr": ""
+    },
+    {
+      "case": "incomplete_pair_census",
+      "exit": 0,
+      "result_lines": [
+        "PASS  the root the log SIGNED equals the proof's root",
+        "PASS  all 575 ordered pairs agree (order, join, relation)",
+        "RESULT: ALL CHECKS PASSED"
+      ],
+      "stderr": ""
+    }
+  ]
+}
