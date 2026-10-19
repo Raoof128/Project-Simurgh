@@ -4194,3 +4194,11 @@ Stage 2.6A is implementation-complete and pending real Windows laptop validation
 - **Files changed:** Fresh `docs/research/smoke-validation-2026-10-19/RESULTS.md`, `validation.json`, `logs.zip`; README validation link and both logs. No historical source, protocol, archive or evidence pin changed.
 - **Verification:** Base 142/142 steps; E2E 32/32 steps and 580/580 tests. Root 5,171/5,171 tests with zero skips; Rust 34/34, explorer 16/16 plus production build and built-app HTTP/CLI agreement; 473 unittest cases across 29 research suites and 181 adapter pytest cases, without skips. Native CI at `2cf8ad69` passes 10 macOS and 11 Windows tests plus Windows fixture compilation; affected native paths are unchanged by the repair. Strict browser parity exits 1 with managed navigation blocked. All 358 recorded log/receipt files pass ZIP readback and per-file SHA-256 checks; original failures and focused red/green runs remain included.
 - **Follow-ups:** Push repairs and documentation. Outside reproduction, real browser rendering/parity, opt-in provider campaigns and interactive platform/deployment checks remain explicitly unverified. Earlier delivery bundles retain their recorded snapshot revisions; no paid inference or outreach occurred.
+
+## 2026-10-19 — Raouf: declare repository documentation audit (Australia/Sydney)
+
+- **Scope:** Owner-authorized documentation audit and push from baseline `8d47bbbf`.
+- **Summary:** Inventory every tracked document candidate; correct current guidance against implementation and primary sources. Preserve historical and frozen bytes with additive errata. Record manual review separately from automated coverage.
+- **Files changed:** `docs/documentation-audit-2026-10-19/DESIGN.md` and both root logs.
+- **Verification:** Remote branch matches baseline; initial inventory identifies 910 candidates across prose, rendered papers, evidence text and executable HTML. Standing gate-lifecycle invariants checked.
+- **Follow-ups:** Complete source research, per-file ledger, corrections and documentation verification; no runtime or frozen-surface edits declared.
