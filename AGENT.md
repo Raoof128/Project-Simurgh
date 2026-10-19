@@ -3163,3 +3163,11 @@ one machine's local agent configuration:
 - **Files changed:** `docs/research/PHASE_8_REVIEW_2026-10-19.md`, `AGENT.md`, `CHANGELOG.md`.
 - **Verification:** 24 tests passed in 21.659 seconds; separate fresh archive replay verified 46 rows, 92 snapshots and all 50 frozen bindings.
 - **Follow-ups:** External review/custody and production identity/TLS remain separate. Browser portability is next.
+
+## 2026-10-19 — Raouf: declare portable runtime maintenance (Australia/Sydney)
+
+- **Scope:** P17-B01 browser prerequisites and P17-N01 alternate Node selection.
+- **Summary:** Replace machine-specific discovery; preserve explicit skips and refuse false browser parity. Add a fresh-output Stage 5R command without changing the frozen receipt.
+- **Files changed:** Phase 17 declaration and both logs.
+- **Verification:** Minimal Chromium runs time out; diagnosis confirms managed navigation restriction. Existing Node 24 is outside `/usr/bin`.
+- **Follow-ups:** Implement and test discovery; retain managed-browser prerequisite and macOS limits in the handoff.
