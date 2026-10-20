@@ -21,7 +21,7 @@ test("dashboard interactions: shared filter, source record, research, gaps and i
   globalThis.document = dom.window.document;
   globalThis.IS_REACT_ACT_ENVIRONMENT = true;
   const root = createRoot(document.getElementById("root")),
-    bundle = buildIndex();
+    bundle = buildIndex({ study: "phase10" });
   try {
     await act(() => root.render(React.createElement(App, { initial: bundle })));
     const button = (text) =>
@@ -105,7 +105,7 @@ test("hostile text remains inert and unsafe external links are removed", async (
   globalThis.window = dom.window;
   globalThis.document = dom.window.document;
   globalThis.IS_REACT_ACT_ENVIRONMENT = true;
-  const b = buildIndex();
+  const b = buildIndex({ study: "phase10" });
   b.records[0].title = "<img src=x onerror=alert(1)>";
   b.documents[0].url = "javascript:alert(1)";
   const root = createRoot(document.getElementById("root"));
@@ -116,6 +116,44 @@ test("hostile text remains inert and unsafe external links are removed", async (
     await act(() => document.querySelectorAll("nav button")[2].click());
     await act(() => document.querySelector(".research-result").click());
     assert.equal(document.querySelectorAll('a[href^="javascript:"]').length, 0);
+  } finally {
+    await act(() => root.unmount());
+    dom.window.close();
+    delete globalThis.window;
+    delete globalThis.document;
+    delete globalThis.IS_REACT_ACT_ENVIRONMENT;
+  }
+});
+
+test("current study UI separates model filters and matched controls", async () => {
+  const dom = new JSDOM('<!doctype html><div id="root"></div>');
+  globalThis.window = dom.window;
+  globalThis.document = dom.window.document;
+  globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+  const root = createRoot(document.getElementById("root"));
+  try {
+    await act(() => root.render(React.createElement(App, { initial: buildIndex() })));
+    assert.equal(document.querySelectorAll("tbody tr").length, 288);
+    const model = document.querySelector('[aria-label="Filter model"]');
+    await act(() => {
+      model.value = "luna";
+      model.dispatchEvent(new dom.window.Event("change", { bubbles: true }));
+    });
+    assert.equal(document.querySelectorAll("tbody tr").length, 144);
+    assert.ok(
+      [...document.querySelectorAll("tbody tr")].every((r) => r.textContent.includes("luna"))
+    );
+    assert.equal(document.querySelectorAll("details div").length, 3);
+    const malformed = [...document.querySelectorAll("button")].find(
+      (b) => b.textContent === "Malformed"
+    );
+    await act(() => malformed.click());
+    assert.equal(document.querySelectorAll("tbody tr").length, 0);
+    await act(() => {
+      model.value = "llama";
+      model.dispatchEvent(new dom.window.Event("change", { bubbles: true }));
+    });
+    assert.equal(document.querySelectorAll("tbody tr").length, 3);
   } finally {
     await act(() => root.unmount());
     dom.window.close();

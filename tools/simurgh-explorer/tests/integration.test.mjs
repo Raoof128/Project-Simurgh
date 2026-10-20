@@ -10,11 +10,20 @@ import { queryRecords, searchDocuments, parseBundle } from "../core.mjs";
 import { createExplorerServer } from "../serve.mjs";
 const cli = new URL("../cli.mjs", import.meta.url);
 test("real CLI and browser query layer agree exactly", () => {
-  const b = buildIndex();
+  const b = buildIndex({ study: "phase10" });
   const result = JSON.parse(
     execFileSync(
       process.execPath,
-      [cli.pathname, "records", "--kind", "unauthorized", "--control", "credential_only"],
+      [
+        cli.pathname,
+        "records",
+        "--study",
+        "phase10",
+        "--kind",
+        "unauthorized",
+        "--control",
+        "credential_only",
+      ],
       { encoding: "utf8" }
     )
   );
@@ -26,8 +35,8 @@ test("real CLI and browser query layer agree exactly", () => {
   assert.equal(b.gaps.length, 8);
 });
 test("detail joins every record with its captured generation and preserves public outcomes", () => {
-  const b = buildIndex({ detail: true }),
-    p = buildIndex();
+  const b = buildIndex({ detail: true, study: "phase10" }),
+    p = buildIndex({ study: "phase10" });
   assert.equal(b.mode, "local_detail");
   assert.ok(b.records.every((r) => r.detail.source.pointer && r.detail.model_output !== undefined));
   assert.deepEqual(
@@ -36,9 +45,13 @@ test("detail joins every record with its captured generation and preserves publi
   );
 });
 test("filtered JSON round-trips and retains selection denominator", () => {
-  const text = execFileSync(process.execPath, [cli.pathname, "export", "--kind", "unknown"], {
-    encoding: "utf8",
-  });
+  const text = execFileSync(
+    process.execPath,
+    [cli.pathname, "export", "--study", "phase10", "--kind", "unknown"],
+    {
+      encoding: "utf8",
+    }
+  );
   const b = parseBundle(text);
   assert.equal(b.records.length, 12);
   assert.equal(b.selection.total, 144);

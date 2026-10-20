@@ -54,7 +54,7 @@ for b in $BUNDLES; do
   OBSERVED="$(verify_raw "$FIX/bundles/$b" "$T1/$b-report.json")"
   if [ "$OBSERVED" != "$EXPECTED" ]; then
     echo "reproduce: $b verdict raw=$OBSERVED, expected $EXPECTED" >&2
-    RAW="$OBSERVED"; exit_via_wrapper "$RAW"
+    RAW=29; exit_via_wrapper "$RAW"
   fi
 done
 

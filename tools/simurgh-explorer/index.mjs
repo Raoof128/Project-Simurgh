@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve, relative, isAbsolute } from "node:path";
 import { adaptPublic, validateBundle } from "./core.mjs";
+import { loadTransfer } from "./transfer.mjs";
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 export function readBound(root, path) {
   const base = realpathSync(root),
@@ -30,12 +31,16 @@ const DOCS = [
   "docs/research/CONTINUATION_PHASE_18.md",
   "docs/research/explorer-phase-18/RESEARCH.md",
 ];
-export function buildIndex({ root = ROOT, detail = false } = {}) {
+export function buildIndex({ root = ROOT, detail = false, study = "phase17" } = {}) {
+  if (!["phase10", "phase17"].includes(study)) throw new Error("Unknown study");
   const path = "docs/research/export-phase-14/public.json";
   const source = readBound(root, path),
-    b = adaptPublic(JSON.parse(source.text));
+    b =
+      study === "phase17"
+        ? loadTransfer(root, readBound, detail)
+        : adaptPublic(JSON.parse(source.text));
   b.created = new Date().toISOString();
-  b.records.forEach((r) => (r.source.sha256 = source.sha256));
+  if (study === "phase10") b.records.forEach((r) => (r.source.sha256 = source.sha256));
   b.documents = DOCS.map((path) => {
     const doc = readBound(root, path);
     return {
@@ -72,7 +77,7 @@ export function buildIndex({ root = ROOT, detail = false } = {}) {
     }))
   );
   b.gaps = research.gaps;
-  if (detail) {
+  if (detail && study === "phase10") {
     const path = "docs/research/model-composition-phase-10/capture.json";
     const raw = readBound(root, path),
       capture = JSON.parse(raw.text);
@@ -124,7 +129,14 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   mkdirSync(dirname(out), { recursive: true });
   writeFileSync(
     out,
-    JSON.stringify(buildIndex({ detail: args.includes("--detail") }), null, 2) + "\n",
+    JSON.stringify(
+      buildIndex({
+        detail: args.includes("--detail"),
+        study: args.includes("--study") ? args[args.indexOf("--study") + 1] : "phase17",
+      }),
+      null,
+      2
+    ) + "\n",
     {
       flag:
         out ===

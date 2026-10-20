@@ -2,7 +2,7 @@
 // Shared, browser-safe interpretation. No I/O, inference, HTML or code execution.
 export const SCHEMA = "simurgh.explorer.v1";
 export const LIMIT = 12 * 1024 * 1024;
-const statuses = ["observed", "blocked", "denied", "declined", "unknown", "error"];
+const statuses = ["observed", "blocked", "denied", "declined", "unknown", "error", "invalid"];
 const controls = ["credential_only", "composed", "deny_all"];
 const states = [
   "active",
@@ -42,7 +42,7 @@ function validateOutcome(r) {
     r.initial_status === null || statuses.includes(r.initial_status),
     "Invalid initial status"
   );
-  ensure(["call", "declined", "error"].includes(r.proposal), "Invalid proposal");
+  ensure(["call", "declined", "error", "invalid"].includes(r.proposal), "Invalid proposal");
   for (const k of [
     "task_index",
     "generation_index",
@@ -77,6 +77,7 @@ export function flagsFor(r) {
     [r.status, r.initial_status, ...Object.values(r.leaf_status)].includes("unknown") && "unknown",
     [r.status, r.initial_status, ...Object.values(r.leaf_status)].includes("error") && "error",
     r.status === "blocked" && "blocked",
+    r.proposal === "invalid" && "invalid",
   ].filter(Boolean);
 }
 export function adaptPublic(pub) {
@@ -88,6 +89,8 @@ export function adaptPublic(pub) {
   );
   const records = pub.rows.map((outcome, i) => ({
     id: `p10:g${outcome.generation_index}:${outcome.control}`,
+    study: "phase10",
+    model: "llama",
     title: `Task ${String(outcome.task_index).padStart(2, "0")}`,
     outcome,
     source: {
@@ -100,6 +103,7 @@ export function adaptPublic(pub) {
   return validateBundle({
     schema: SCHEMA,
     title: "Model composition · Phase 10",
+    study: "phase10",
     mode: "public",
     created: null,
     verification: "not_verified_by_explorer",
@@ -121,15 +125,24 @@ export function validateBundle(b) {
   b.records = b.records.map((r) => {
     string(r.id, "record ID");
     ensure(
-      /^p10:g[1-9][0-9]*:(credential_only|composed|deny_all)$/.test(r.id),
+      /^(p10|p17:(llama|luna)):g[1-9][0-9]*:(credential_only|composed|deny_all)$/.test(r.id),
       "Invalid record ID"
     );
     ensure(!ids.has(r.id), "duplicate record ID");
     ids.add(r.id);
+    if (r.id.startsWith("p10:")) {
+      r.study ??= "phase10";
+      r.model ??= "llama";
+    }
+    ensure(
+      ["phase10", "phase17"].includes(r.study) && ["llama", "luna"].includes(r.model),
+      "Invalid study/model"
+    );
     string(r.title, "record title");
     validateOutcome(r.outcome);
     ensure(
-      r.id === `p10:g${r.outcome.generation_index}:${r.outcome.control}`,
+      r.id ===
+        `${r.study === "phase17" ? `p17:${r.model}` : "p10"}:g${r.outcome.generation_index}:${r.outcome.control}`,
       "Record identity mismatch"
     );
     ensure(r.source && typeof r.source === "object", "Missing source");
@@ -147,6 +160,26 @@ export function validateBundle(b) {
     }
     return { ...r, flags: flagsFor(r.outcome) };
   });
+  if (b.selection)
+    ensure(
+      Number.isSafeInteger(b.selection.total) &&
+        b.selection.total >= b.records.length &&
+        b.selection.retained === b.records.length,
+      "Invalid selection"
+    );
+  if (b.study === "phase17" && !b.selection) {
+    const expected = new Set(
+      ["llama", "luna"].flatMap((m) =>
+        Array.from({ length: 48 }, (_, i) =>
+          ["credential_only", "composed", "deny_all"].map((c) => `p17:${m}:g${i + 1}:${c}`)
+        ).flat()
+      )
+    );
+    ensure(
+      ids.size === expected.size && [...ids].every((id) => expected.has(id)),
+      "Incomplete transfer inventory"
+    );
+  }
   for (const key of ["documents", "gaps", "omissions"])
     ensure(Array.isArray(b[key]) && b[key].length <= 10000, `Invalid ${key}`);
   for (const d of b.documents) {
@@ -182,20 +215,31 @@ const matches = (text, query) =>
     .split(/\s+/)
     .filter(Boolean)
     .every((t) => text.toLowerCase().includes(t));
-export function queryRecords(b, { q = "", kind = "all", control = "all" } = {}) {
+export function queryRecords(b, { q = "", kind = "all", control = "all", model = "all" } = {}) {
   ensure(
-    ["all", "failure", "unauthorized", "active_incomplete", "unknown", "error", "blocked"].includes(
-      kind
-    ),
+    [
+      "all",
+      "failure",
+      "unauthorized",
+      "active_incomplete",
+      "unknown",
+      "error",
+      "blocked",
+      "invalid",
+    ].includes(kind),
     "Unknown filter"
   );
   ensure(control === "all" || controls.includes(control), "Unknown control");
+  ensure(["all", "llama", "luna"].includes(model), "Unknown model");
   return b.records.filter(
     (r) =>
+      (model === "all" || r.model === model) &&
       (control === "all" || r.outcome.control === control) &&
       (kind === "all" ||
         (kind === "failure"
-          ? r.flags.some((f) => ["unauthorized", "active_incomplete", "error"].includes(f))
+          ? r.flags.some((f) =>
+              ["unauthorized", "active_incomplete", "error", "invalid"].includes(f)
+            )
           : r.flags.includes(kind))) &&
       matches(JSON.stringify(r), q)
   );
@@ -217,7 +261,9 @@ export function summary(b) {
   return {
     records: b.records.length,
     controls: [...new Set(b.records.map((r) => r.outcome.control))].length,
-    generations: new Set(b.records.map((r) => r.outcome.generation_index)).size,
+    generations: new Set(
+      b.records.map((r) => `${r.study}:${r.model}:${r.outcome.generation_index}`)
+    ).size,
     unauthorized: queryRecords(b, { kind: "unauthorized" }).length,
     active_incomplete: queryRecords(b, { kind: "active_incomplete" }).length,
     unknown: queryRecords(b, { kind: "unknown" }).length,

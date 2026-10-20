@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { LIMIT, parseBundle, queryRecords, searchDocuments, summary, safeUrl } from "../core.mjs";
 const labels = {
+  invalid: "Malformed proposal",
   unauthorized: "Unauthorized effect",
   active_incomplete: "Active task incomplete",
   unknown: "Unknown acknowledgment",
@@ -8,6 +9,8 @@ const labels = {
   blocked: "Blocked",
 };
 const explanations = {
+  invalid:
+    "The captured proposal did not meet the tool-call contract. It remains in the denominator.",
   unauthorized:
     "The source reports a new effect outside the approved scope. This is an observed boundary failure in this fixture.",
   active_incomplete:
@@ -56,6 +59,7 @@ export function App({ initial }) {
     [q, setQ] = useState(""),
     [kind, setKind] = useState("all"),
     [control, setControl] = useState("all"),
+    [model, setModel] = useState("all"),
     [selected, setSelected] = useState(null),
     [docId, setDocId] = useState(null),
     [year, setYear] = useState("2026"),
@@ -64,7 +68,7 @@ export function App({ initial }) {
     [raw, setRaw] = useState(false);
   const file = useRef(null),
     stats = summary(bundle),
-    rows = queryRecords(bundle, { q: page === "failures" ? q : "", kind, control });
+    rows = queryRecords(bundle, { q: page === "failures" ? q : "", kind, control, model });
   const chosen = rows.find((r) => r.id === selected) || rows[0];
   const docs = searchDocuments(bundle, page === "research" ? q : "", year),
     doc = docs.find((d) => d.id === docId);
@@ -84,6 +88,7 @@ export function App({ initial }) {
       setSelected(null);
       setKind("all");
       setControl("all");
+      setModel("all");
       setQ("");
       setError("");
       setNotice(
@@ -99,12 +104,16 @@ export function App({ initial }) {
     setSelected(null);
     setKind("all");
     setControl("all");
+    setModel("all");
     setQ("");
     setError("");
     setNotice("Repository evidence restored.");
   }
   async function copyCommand() {
-    const fileOption = bundle !== initial ? " --file '/path/to/loaded-bundle.json'" : "";
+    const fileOption =
+      bundle !== initial
+        ? " --file '/path/to/loaded-bundle.json'"
+        : ` --study ${bundle.study || "phase10"}`;
     const command = `node tools/simurgh-explorer/cli.mjs inspect --id '${chosen.id}'${fileOption}`;
     try {
       await navigator.clipboard.writeText(command);
@@ -124,7 +133,7 @@ export function App({ initial }) {
       "One record, shared by humans and agents.",
     ],
     failures: [
-      "FAILURE EXPLORER / PHASE 10",
+      `FAILURE EXPLORER / ${bundle.title}`,
       "Understand where it broke.",
       "Trace an outcome back to its control, effect and source.",
     ],
@@ -260,6 +269,21 @@ export function App({ initial }) {
                   />
                 </label>
                 <label className="select">
+                  Model
+                  <select
+                    aria-label="Filter model"
+                    value={model}
+                    onChange={(e) => setModel(e.target.value)}
+                  >
+                    <option value="all">All models</option>
+                    {[...new Set(bundle.records.map((r) => r.model))].map((m) => (
+                      <option key={m} value={m}>
+                        {m}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="select">
                   Control
                   <select
                     aria-label="Filter control"
@@ -281,6 +305,7 @@ export function App({ initial }) {
                   ["active_incomplete", "Incomplete"],
                   ["blocked", "Blocked"],
                   ["unknown", "Unknown"],
+                  ["invalid", "Malformed"],
                 ].map(([id, name]) => (
                   <button key={id} aria-pressed={kind === id} onClick={() => setKind(id)}>
                     {name}
@@ -313,7 +338,8 @@ export function App({ initial }) {
                               >
                                 {r.title}
                                 <small>
-                                  g{r.outcome.generation_index} · trial {r.outcome.trial}
+                                  {r.model} · g{r.outcome.generation_index} · trial{" "}
+                                  {r.outcome.trial}
                                 </small>
                               </button>
                             </td>
@@ -343,6 +369,7 @@ export function App({ initial }) {
                             setQ("");
                             setKind("all");
                             setControl("all");
+                            setModel("all");
                           }}
                         >
                           Reset filters
@@ -411,7 +438,10 @@ export function App({ initial }) {
                         <summary>Compare matched controls</summary>
                         {bundle.records
                           .filter(
-                            (r) => r.outcome.generation_index === chosen.outcome.generation_index
+                            (r) =>
+                              r.study === chosen.study &&
+                              r.model === chosen.model &&
+                              r.outcome.generation_index === chosen.outcome.generation_index
                           )
                           .map((r) => (
                             <div key={r.id}>

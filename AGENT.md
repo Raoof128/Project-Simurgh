@@ -4055,3 +4055,18 @@ Owner-requested work; implementation and review by Codex assistance.
   Generated JavaScript parses; this is not an actual browser-interaction receipt.
 - **Follow-ups:** M106 remains partially open for upstream authentication assumptions. Continue
   current-study explorer, remaining audit dispositions and fresh whole-repository smoke.
+
+### 2026-10-21 (Australia/Sydney) — Current-study explorer and fail-closed runners
+
+**Raouf: Codex-assisted implementation**
+
+- **Scope:** Explorer paths declared in `036df196`; reproduction paths in `4d92239b`.
+- **Summary:** Default explorer now projects all 288 transfer branches with model/study identities,
+  selected output details, retained malformed proposals, full-inventory validation and identical
+  CLI/UI filters. Historical Phase 10 remains selectable. Added AGPL package metadata.
+  Stage 4K/4L/4M harness mismatches cannot return successful raw zero.
+- **Verification:** Explorer regressions first failed on the old 144-row default; all 20 tests
+  and production build now pass. Four injected runner mismatch branches failed before repair
+  and pass after repair. Full reproduction and whole-repository smoke follow at a committed revision.
+- **Follow-ups:** Real browser interaction is unverified. OpenAI read-only capability checks:
+  model listing HTTP 200; organization project listing HTTP 403. No provider mutation attempted.

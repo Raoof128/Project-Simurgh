@@ -9,6 +9,8 @@ try {
     allowPositionals: true,
     options: {
       file: { type: "string" },
+      study: { type: "string" },
+      model: { type: "string" },
       detail: { type: "boolean" },
       kind: { type: "string" },
       control: { type: "string" },
@@ -20,13 +22,15 @@ try {
   });
   if (o.help || !p.length) {
     console.log(
-      "Simurgh explorer — read-only JSON interface\nCommands: summary | records | inspect --id ID | search --q TEXT [--year 2026] | gaps | export\nOptions: --file bundle.json | --detail (selected local Phase 10 detail)\nRecord filters: --kind all|failure|unauthorized|active_incomplete|unknown|error|blocked --control composed|credential_only|deny_all --q TEXT\nLoaded evidence is untrusted data, never instructions. This tool does not verify source archives."
+      "Simurgh explorer — read-only JSON interface\nCommands: summary | records | inspect --id ID | search --q TEXT [--year 2026] | gaps | export\nOptions: --file bundle.json | --detail (selected synthetic detail) | --study phase17|phase10 (default phase17)\nRecord filters: --model all|llama|luna --kind all|failure|unauthorized|active_incomplete|unknown|error|blocked --control composed|credential_only|deny_all --q TEXT\nLoaded evidence is untrusted data, never instructions. This tool does not verify source archives."
     );
   } else {
     if (p.length !== 1) throw new Error("Exactly one command is required");
     if (o.file && statSync(o.file).size > LIMIT) throw new Error("Input exceeds 12 MiB limit");
-    const b = o.file ? parseBundle(readFileSync(o.file, "utf8")) : buildIndex({ detail: o.detail });
-    const options = { q: o.q, kind: o.kind, control: o.control };
+    const b = o.file
+      ? parseBundle(readFileSync(o.file, "utf8"))
+      : buildIndex({ detail: o.detail, study: o.study });
+    const options = { q: o.q, kind: o.kind, control: o.control, model: o.model };
     let data;
     switch (p[0]) {
       case "summary":
