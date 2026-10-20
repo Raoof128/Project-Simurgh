@@ -4793,3 +4793,19 @@ Owner-requested work; implementation and review by Codex assistance.
   inference, external ceremony or full E2E rerun. Runtime repairs, real-browser/native interaction,
   provider lifecycle and independent operator evidence remain separately scoped. No submission,
   deployment, endorsement or standards certification is implied.
+
+### 2026-10-21 (Australia/Sydney) — Readiness repair programme and Stage 4M authority
+
+**Raouf: Codex-assisted implementation**
+
+- **Scope:** Owner requested all proposed readiness work except classmate reproduction.
+- **Summary:** Added the ordered repair/validation plan and primary-source gap map. Declared
+  exact Stage 4M paths for M106 binding/aggregate/collision repairs and M54 generated-script
+  parsing before implementation. Historical evidence remains unchanged.
+- **Files changed:** `docs/readiness-2026-10-21/PLAN.md`, `docs/readiness-2026-10-21/SOURCES.md`,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Read current rules and the prior complete log review; inspected Stage 4M
+  core/loader/adapter/tests. No runtime change or new completion claim in this authority commit.
+- **Follow-ups:** Reproduce failures, implement bounded repairs, extend exact authority before
+  later components, validate current-study explorer and run a fresh candidate smoke. Provider
+  administrative test configuration and real-browser tooling remain unresolved inputs.
