@@ -4100,3 +4100,16 @@ Owner-requested work; implementation and review by Codex assistance.
   result, provider admin operation or independent validation claimed. Project listing returned 403.
 - **Follow-ups:** Full candidate smoke and publication. Original active refusal, additional historic
   verifier limitations, actual browser/accessibility and provider lifecycle evidence remain open.
+
+### 2026-10-21 (Australia/Sydney) — Transfer import denominator hardening
+
+**Raouf: Codex-assisted implementation**
+
+- **Scope:** Existing explorer R02 authority `036df196`; core and transfer regression tests.
+- **Summary:** Infer a missing study label from validated record identities, reject a contradictory
+  label or mixed studies, and require transfer selections to retain the original denominator.
+- **Verification:** New mutation test failed before repair. All 21 explorer tests and production
+  build pass afterward. This isolated follow-up is validated separately from the complete smoke
+  running at `333a990d`; root runtime and stage verifier sources do not change in this follow-up.
+- **Follow-ups:** Publish exact tested revisions and complete smoke receipts without merging
+  their provenance. External acceptance gaps remain explicit.

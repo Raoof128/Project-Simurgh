@@ -11,7 +11,7 @@ remaining verifier and external-validation gaps explicitly retained.
   Six new regression/control tests; full Stage 4M suite 54/54; reproduction 12/12 steps.
 - Explorer: 288 branches, 96 distinct model generations, 17 retained Llama unauthorized-effect
   branches and three malformed-proposal branches. Model filters and matched-control isolation
-  agree between CLI and dashboard. Historical Phase 10 remains selectable. Twenty tests pass;
+  agree between CLI and dashboard. Historical Phase 10 remains selectable. Twenty-one tests pass;
   production build succeeds. Imports remain `not_verified_by_explorer`.
 - Reproduction harness: unexpected raw-zero negative results fail closed in Stage 4K/4L/4M.
   Four injected branches return exact mapped failure status and cannot print final success.

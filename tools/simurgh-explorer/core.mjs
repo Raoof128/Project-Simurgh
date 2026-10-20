@@ -160,6 +160,12 @@ export function validateBundle(b) {
     }
     return { ...r, flags: flagsFor(r.outcome) };
   });
+  const studies = new Set(b.records.map((r) => r.study));
+  ensure(studies.size === 1, "Mixed study inventory");
+  b.study ??= b.records[0].study;
+  ensure(studies.has(b.study), "Bundle study mismatch");
+  if (b.study === "phase17" && b.selection)
+    ensure(b.selection.total === 288, "Invalid transfer selection denominator");
   if (b.selection)
     ensure(
       Number.isSafeInteger(b.selection.total) &&

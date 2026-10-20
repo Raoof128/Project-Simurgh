@@ -44,3 +44,16 @@ test("CLI model filter agrees with browser interpretation, and legacy study stay
   assert.throws(() => buildIndex({ study: "invented" }), /study/);
   assert.throws(() => queryRecords(b, { model: "invented" }), /model/);
 });
+
+test("transfer imports cannot evade inventory checks by dropping the study label", () => {
+  const b = buildIndex();
+  b.records.pop();
+  delete b.study;
+  assert.throws(() => parseBundle(JSON.stringify(b)), /inventory/);
+  b.study = "phase10";
+  assert.throws(() => parseBundle(JSON.stringify(b)), /study/);
+  const c = buildIndex();
+  c.records = c.records.slice(0, 3);
+  c.selection = { total: 3, retained: 3 };
+  assert.throws(() => parseBundle(JSON.stringify(c)), /selection/);
+});

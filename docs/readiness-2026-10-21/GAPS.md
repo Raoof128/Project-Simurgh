@@ -156,7 +156,7 @@ Read each original numbered section in [MANUAL_REVIEW.md](../documentation-audit
 | ID  | Work                                                           | Status / evidence                                                                                                      |
 | --- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | R01 | Stage 4M signed public evidence and aggregate/collision checks | Repaired subset; 54 tests and 12 reproduction steps passed.                                                            |
-| R02 | Current-study explorer                                         | Implemented: 288 branches, 96 model generations, 20 tests and production build.                                        |
+| R02 | Current-study explorer                                         | Implemented: 288 branches, 96 model generations, 21 tests and production build.                                        |
 | R03 | Explorer license metadata                                      | AGPL-3.0-or-later declared in package and lock.                                                                        |
 | R04 | Unexpected-success reproduction mismatch                       | Four injected branches return exact failure status; full reproduction in candidate smoke.                              |
 | R05 | Documentation counts misclassified as Stage 5P code literals   | Exact documentation additions; unapproved runtime literal remains rejected.                                            |
