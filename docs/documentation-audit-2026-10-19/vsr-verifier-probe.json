@@ -1,0 +1,53 @@
+{
+  "scope": "Offline synthetic direct-module observations; no production artifact altered; not a full campaign replay.",
+  "results": [
+    {
+      "name": "empty coverage universe certifies",
+      "observed": true
+    },
+    {
+      "name": "single supplied cell without admissibility certifies",
+      "observed": true
+    },
+    {
+      "name": "explicit inadmissibility rejects",
+      "observed": false
+    },
+    {
+      "name": "asserted signature premise passes",
+      "observed": true
+    },
+    {
+      "name": "changed receipt identity and digest pass",
+      "observed": true
+    },
+    {
+      "name": "changed fixture bytes reject",
+      "observed": false
+    },
+    {
+      "name": "arbitrary detector and noncryptographic mutation digest admit R1",
+      "observed": true
+    },
+    {
+      "name": "suffix matching hides second proof path",
+      "observed": false
+    },
+    {
+      "name": "discovery token in comment classifies step",
+      "observed": "self_extending"
+    },
+    {
+      "name": "asserted transition and one unrelated command authorize",
+      "observed": true
+    },
+    {
+      "name": "injected verification key need not equal presented key",
+      "observed": true
+    },
+    {
+      "name": "bad attestation signature rejects",
+      "observed": false
+    }
+  ]
+}

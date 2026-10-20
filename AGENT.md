@@ -3987,3 +3987,13 @@ Owner-requested work; implementation and review by Codex assistance.
   append-only log entries have extra-blank-line warnings. Their original bytes are preserved.
 - **Remaining:** Complete every pending manual read and final correction verification. No runtime
   changes, model inference, external ceremony or full E2E rerun in this checkpoint.
+
+### 2026-10-20 (Australia/Sydney) — Manual documentation audit: 913 of 919
+
+- Read both Stage 5Q and 5R specifications and plans in full; added M136–M137 and S59.
+- Recorded twelve VSR and fourteen VPF offline observations with reproducible audit scripts.
+- Preserved frozen campaign results: Stage 5Q incomplete, Stage 5R zero new discharge.
+- Checks: reviewed hashes, 919 baseline identities, mutable scope and append-only prefixes;
+  audit-file formatting and local links checked in checkpoint 913. Existing log spacing warnings
+  from checkpoint 907 remain preserved. No runtime change, inference or full E2E rerun.
+- Six documents remain; the manual audit continues.

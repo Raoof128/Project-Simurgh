@@ -746,3 +746,27 @@ role credential or Simurgh resolver is available, certified or integrated. Direc
 AI Act's English OJ page returned an anti-bot page in this pass; no new quotation-verification claim
 is made for Articles 18/22. The earlier source pin and the separation of provider/representative
 obligations remain historical evidence, not a universal compliance guarantee.
+
+### S59 — Probe validity, mutation evidence and JavaScript ordering (checked 2026-10-20)
+
+[Just et al., FSE 2014](https://homes.cs.washington.edu/~mernst/pubs/mutation-effectiveness-fse2014-abstract.html)
+reports a statistically significant mutant/real-fault detection correlation in 357 faults across
+five applications, with limitations. It supports studying mutation adequacy; it does not establish
+that one mutant validates every security role, nor prove the absence of role-oriented prior art.
+The project's universal literature and novelty claims are unverified hypotheses.
+
+[Oxford's research summary](https://syntheticsociety.oii.ox.ac.uk/research/measuring-what-matters/)
+describes a review of 445 conference benchmarks, with roughly half justifying whether they measure
+the intended construct. This is a sampled literature result, not a census of all deployed evaluation
+systems. [The JRC meta-review](https://publications.jrc.ec.europa.eu/repository/handle/JRC141127)
+identifies construct validity and gaming among broader problems; it does not endorse Simurgh or
+prescribe this exact triad as a sufficient remedy. “Nobody ships one mechanically” is unsupported.
+
+[ECMAScript CompareArrayElements](https://tc39.es/ecma262/multipage/indexed-collections.html#sec-comparearrayelements)
+uses string conversion and relational comparison when no comparator is provided. For ordinary
+string keys, default sorting and the explicit `<`/`>` comparator in F8 implement the same ordering.
+The living page currently labels itself the 2027 draft; it is not a claimed final 2026 edition.
+The F8 specimens therefore do not demonstrate a locale-dependent difference.
+[RFC 8785 §3.1](https://www.rfc-editor.org/rfc/rfc8785.html#section-3.1)
+requires preservation of Unicode string data for JCS processing; adding NFC is not a universal
+canonicalization repair. F1 needs an independently specified subject-equivalence contract.

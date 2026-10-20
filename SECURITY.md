@@ -698,3 +698,17 @@ checks signatures and linkage without requiring the full claim schema. See
 [M135 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m135--stage-5p-implements-an-identity-order-but-does-not-authenticate-resolver-envelopes).
 The product order, synthetic authority rejection and captured Rekor/GLEIF checks establish narrower
 properties than a deployed identity, delegation or lifecycle service.
+
+Stage 5Q's signed campaign remains incomplete and does not certify function-wide security coverage.
+Its exported coverage, premise and transition helpers depend on trusted caller validation; its child
+process runner does not enforce filesystem or network isolation. The attestation driver re-derives
+three roots and reads seven from other artifact fields/sidecars, with additional checks in the full
+reproduction path. See [M136 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m136--stage-5q-freezes-an-incomplete-campaign-its-exported-checks-require-trusted-orchestration).
+Do not interpret the reproduction script's green result as a completed campaign or permission to
+execute untrusted modules with repository credentials and filesystem access.
+
+Stage 5R's static probes produce syntactic observations and a zero coverage delta. Its F8 control
+pair does not demonstrate the claimed locale-dependent sort difference, and several exported
+admission/discharge helpers trust supplied validation flags. See [M137 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m137--stage-5r-demonstrates-bounded-syntactic-discrimination-not-full-control-validity).
+Do not promote family admission or candidate signal detection into confirmed vulnerabilities,
+dynamic member execution, or complete construct validity.

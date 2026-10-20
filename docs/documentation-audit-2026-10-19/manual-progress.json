@@ -171,7 +171,7 @@
       "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check. M70/M71 disclose retained risk mapping, SDK retry/abort behavior, raw context prefixes and caller receipt strings; runtime remains unchanged.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "7786ec36819bab71a1136f6e442aa68d641bc6212fc32c9f1e1649306086b78f"
+      "read_sha256": "6dee0d40d3ff3708006f2b4511417099ec40abf8d6ca35afbc5f52c1e36f561f"
     },
     {
       "path": "docs/DECISIONS.md",
@@ -1107,7 +1107,7 @@
       "assessment": "Read all 13 primary-source applicability rows and limits. Correctly separates publication from review year, pinned SDK from living docs and alignment from compliance. Previous-turn fetch provenance retained; no fresh fetch claimed.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "1f78f587f04505a494fc66b9c8c35ca52e98d6c79b4ad1ddd260a04a42597b38"
+      "read_sha256": "568949e09b711e0f1f1f1a9051dde5910de52309cc7db780c9054d463ebb3588"
     },
     {
       "path": "docs/documentation-audit-2026-10-19/VALIDATION.md",
@@ -8903,11 +8903,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "3fb5c0a3f0d0764f708163a1a05a5dc2db71f525e9ffdcd6022641a993395033",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "M136: full semantic read, implementation cross-check and twelve offline API observations; historical documents preserved with dated errata.",
+      "read_complete": true,
+      "reviewer": "primary agent",
+      "read_sha256": "3fb5c0a3f0d0764f708163a1a05a5dc2db71f525e9ffdcd6022641a993395033"
     },
     {
       "path": "docs/superpowers/plans/2026-07-27-stage-5r-vpf-implementation-plan.md",
@@ -8916,11 +8916,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "8fa60e14727bcab6d882992415c6b34c5cebbf9e752851819b75117f9032ea15",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "M137 and S59: full semantic read, runtime/source cross-checks, fourteen offline observations and primary-source review; frozen documents preserved.",
+      "read_complete": true,
+      "reviewer": "primary agent",
+      "read_sha256": "8fa60e14727bcab6d882992415c6b34c5cebbf9e752851819b75117f9032ea15"
     },
     {
       "path": "docs/superpowers/plans/2026-07-29-stage-5s-vwq-implementation-plan.md",
@@ -10138,11 +10138,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "0028d24027101d2e2154e1fc956e394eb39ac137b324dd8d00f9e861bf61d81d",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "M136: full semantic read, implementation cross-check and twelve offline API observations; historical documents preserved with dated errata.",
+      "read_complete": true,
+      "reviewer": "primary agent",
+      "read_sha256": "0028d24027101d2e2154e1fc956e394eb39ac137b324dd8d00f9e861bf61d81d"
     },
     {
       "path": "docs/superpowers/specs/2026-07-27-stage-5r-vpf-verifiable-probe-families-design.md",
@@ -10151,11 +10151,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "0d5b45539dd28039264931b5b0ebcff9583b34346b58c90df4b84a9d362d460c",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "M137 and S59: full semantic read, runtime/source cross-checks, fourteen offline observations and primary-source review; frozen documents preserved.",
+      "read_complete": true,
+      "reviewer": "primary agent",
+      "read_sha256": "0d5b45539dd28039264931b5b0ebcff9583b34346b58c90df4b84a9d362d460c"
     },
     {
       "path": "docs/superpowers/specs/2026-07-28-stage-5s-vwq-verifiable-witness-quorum-design.md",

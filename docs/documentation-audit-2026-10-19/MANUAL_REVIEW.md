@@ -6116,3 +6116,172 @@ The role-authority identifier also differs between the frozen underscore spellin
 hyphen spelling; runtime uses the latter. Founder scores and projected lab benefit are internal
 judgments, not endorsements or validated maturity grades. S58 bounds registry, Sigstore and EUDI
 claims; existing M50 legal qualifications remain in force.
+
+### M136 — Stage 5Q freezes an incomplete campaign; its exported checks require trusted orchestration
+
+Read the entire 1,491-line Stage 5Q specification and 2,515-line Q0 implementation plan,
+including all annexes, task amendments and both matrices. Cross-checked the coverage, premise,
+harness, gate census, attestation and transition implementations and their drivers. The twelve
+[offline observations](vsr-verifier-probe.json), with [reproducer](vsr-verifier-probe.mjs), use
+synthetic inputs and temporary in-memory keys; they change no frozen artifact or runtime source.
+
+The committed result is explicitly incomplete: 1,438 of 23,332 obligated cells discharged;
+2,522 of 2,531 members without a status; nine `finding_frozen`, zero `attacked_pass` members;
+R5/R7 inadmissible; sixteen historical tags unreproduced under the campaign's dependency policy.
+Neither the signed freeze nor the reproduction runner's terminal green means Stage 5Q is released,
+L1 is certified, Q1 transition is authorized, or all historical vulnerabilities were retested.
+Annex A5 authorizes a bounded maintenance repair separately from Q1. The historical lockfile
+mismatch is a reproducibility-policy refusal, not proof that those tags are impossible to reproduce
+with their original dependencies. Six probe families cover five distinct classes (two are R8),
+despite the source comment saying six classes. Generic argument mutation, determinism and malformed
+input observations require function-specific interpretation; a legitimate mutator or random source
+is not automatically a defect. Stage 5R addresses this validity problem separately.
+
+`buildCoverageLedger` checks several useful invariants, but assumes an authenticated, already
+validated matrix and discharge set. An empty universe certifies at this exported boundary. One
+caller-supplied R1 cell and a passing discharge also certify without an admissibility argument;
+passing explicit empty admissibility correctly blocks that pass. The function does not itself
+rebuild all sixteen cells per member, verify finding IDs against a frozen ledger, authenticate
+premise receipts, or execute the delegation validator. An arbitrary nonempty finding ID determines
+member `finding_frozen`; the separate L1 obligated-cell count still prevents undisclosed obligations
+from becoming full coverage in the shipped dataset. Non-delegated omission reason strings derive
+`mechanically_unreachable` without a reachability computation at this boundary. The measurement
+driver supplies additional admission/delegation logic; neither a caller-provided map nor a semantic
+reason label alone proves actual unreachability. Preserve the shipped false L1 result.
+
+The premise verifier rehashes fixture bytes and evaluates its closed predicates, but does not
+recompute `receipt_digest` or compare receipt pack/target/closure IDs with expected values. Changing
+those fields while retaining the fixture passes. Several predicates evaluate assertions inside the
+fixture: `signature_valid`, `verified`, `accepted_in`, `verifies`, and lists of execution records.
+The synthetic `signatureValidWrongObject` case passes without any signature or object bytes. This
+proves a relationship among supplied claims, not independent execution or cryptographic verification.
+Fixture tampering does fail its digest control. Likewise mutation admissibility checks claimed
+exits/flags and a nonempty detector ID/digest, but does not validate the detector's actual primary
+class, logs, source delta or digest format. An unrelated detector label and arbitrary mutation-digest
+string admit R1 in the probe. Actual scratch execution receipts provide additional evidence; the
+standalone shape checker does not establish that execution happened.
+
+The tray driver uses a child, environment allowlist, temporary working directory, timeout and output
+limits. These are process controls, not a filesystem/network sandbox. It imports absolute repository
+modules with ordinary Node privileges; its input path allowlist does not restrict an imported
+module's transitive imports, filesystem writes, credential-file reads or network access. Do not run
+untrusted code under a claim of read-only isolation. The default `parseFixture` operation records
+`fixture_parsed` without parsing fixture bytes. `invokeExport` does not await an asynchronous result;
+a return or caught synchronous throw is an observation, not an asserted expected outcome. Two other
+operations explicitly report unimplemented. Harness publication checks exit completion and class
+admissibility, not an authenticated premise or expected semantic result. A tray can exit zero with
+non-refused failed/precondition-unmet results. The separate stage-pack runner and its bounded probe
+families must not be conflated with this general tray interface.
+
+Gate classification uses textual tokens, not a complete Actions/shell interpreter: `# find` can
+classify a step as self-extending. Drift's suffix matching treats one `A.lean` entry as covering
+both `one/A.lean` and `two/A.lean`. This is narrower than exact filesystem/executed-set equality.
+Task 1.3's old `-n` test of a count string also treats `0` as nonempty; it is historical scaffolding,
+not the maintained proof gate. The separate repaired repository proof-discovery gate has its own
+negative witnesses and lifecycle authority. An AST census plus explicit unresolved edges improves
+visibility but does not establish that every dynamic runtime behavior has been resolved.
+
+The attestation driver re-derives three roots, while seven are read from sidecars or embedded root
+fields and some cross-checked against a commitment receipt. Its own header acknowledges this; the
+plan's blanket “ten roots recomputed” is too broad for this driver alone. Separate reproduction
+steps rebuild coverage and finding ledgers and verify other frozen bindings. Describe the combined
+checks explicitly instead of attributing them all to signature verification. The exported verifier
+also trusts injected roots and a separate `publicKey`: a signature verified with that key can pass
+while the envelope presents a different key whose digest matches the bundle. The driver constructs
+its key from the envelope and checks its repository profile, so this is an exported API boundary
+limitation, not evidence that the shipped envelope is forged. The negative signature control fails.
+Schema names/non-claim membership are checked, but the standalone verifier does not enforce the
+plan's entire exact-key schema, metadata, timestamp/profile agreement or full closure semantics.
+
+Transition evaluation similarly consumes assertions. Supplied true verification/chain flags,
+matching one-member counts and one unrelated successful manifest command authorize the synthetic
+case; manifest set equality and real execution belong to the caller. `stage_release_blocked` there
+reports inadmissible classes only, not every release condition. It can be false with T3/T7 failing.
+The driver/runner reports the real incomplete state separately. Never use that one field as a full
+release certificate. Frozen plan forward references, old task ordering, optimistic expected green
+commands and drafted mutant targets are historical intent. The implementation's undetected M5/M7,
+unrun tags and incomplete cells remain the controlling execution record. Scores and claimed novelty
+are internal judgments, not independent security assurance or external review endorsements.
+
+### M137 — Stage 5R demonstrates bounded syntactic discrimination, not full control validity
+
+Read all 1,242 specification lines and 1,207 plan lines, including the freeze procedure, amended
+mutant census, release ceremony and matrices. Cross-checked signal predicates, control runner,
+family admission, campaign orchestration, delta accounting, inheritance, attestation, parity and
+Lean's orthogonal-soundness model. [Fourteen offline cases](vpf-verifier-probe.json), with
+[reproducer](vpf-verifier-probe.mjs), establish the following boundaries without rerunning a campaign.
+
+Preserve the actual result: eight admissible families out of eight attempted and 55 in the universe;
+2,406 cells examined, 2,196 unprobed (1,652 premise-not-applicable and 544 unsupported shape),
+210 probed without discharge (192 signal absent and 18 class outcome not demonstrated), zero newly
+discharged cells. The eighteen candidates are not eighteen confirmed vulnerabilities. Both inherited
+5Q coverage and 5R cumulative coverage remain 1,438/23,332, rounded to 6.2%. The code deliberately
+withholds the class-specific outcome for static target reads; do not replace that limitation with
+an implication that every member was executed or dynamically attacked.
+
+The F8 control pair does not establish the defect its signal names. `Object.keys(o).sort()` is
+specified string ordering, not locale-sensitive ordering; its supposedly repaired `<`/`>` comparator
+produces the same result for ordinary string keys. The signal detects the first syntax and clears the
+second. This demonstrates syntactic discrimination without the claimed runtime disagreement. F1
+likewise treats absent Unicode normalization as a defect without knowing the subject-equivalence
+policy. JCS preserves strings rather than normalizing them. S59 supplies the primary-source basis.
+F4 can be cleared simply by adding an unrelated `TRUSTED_ROOTS` token to vulnerable source. Other
+signals use narrow token shapes rather than control/data flow: presence of a separator token is not
+proof that the relevant digest is domain-separated, a profile selection can be appropriately bounded
+by caller policy, and a theorem's `False` occurrence requires logical interpretation. These are
+candidate-producing heuristics. The comment/string stripper is not a full JavaScript/Lean parser;
+its conservative intention does not prove absence of false positives or negatives.
+
+`assessFamily` evaluates supplied verdicts, role labels, premise/restoration booleans and membership
+in a supplied set. It does not execute an orthogonal failure, verify a receipt, establish source
+comparability or enforce suppression by itself. The synthetic asserted triad passes without an
+actual orthogonal failure. The separate comparability helper accepts missing category/name/arity/
+role descriptors when both sides agree by being undefined, provided spans and the asserted path flag
+are present. The campaign's actual admission path does not call that helper: it reads source into a
+static detector, labels safe/orthogonal premises true, checks the vulnerable span binding, and sets
+restoration true because the child is intended only to scan stdin. Its closure set is constructed
+from the family's own model ID; preceding corpus/commitment checks provide the broader binding.
+The triad's source snippets are not executed to demonstrate their vulnerable/safe behavior or an
+orthogonal throw. Interpret its eight admissions at that implemented strength.
+
+Suppression genuinely transforms the six supplied surrogate fields, including all-at-once, but the
+campaign detector receives only `source` and the declared signal; suppressing unused observation
+fields cannot establish all causal independence claimed in the broad prose. Lean's result is correct
+within a model whose entire observation consists of one declared Boolean plus those six fields and
+whose invariance assumption quantifies over every observation. A finite run over source strings does
+not discharge that universal premise. Lane B hides top-level labels but excludes `source` from its
+label scan and does not recursively reject nested metadata. The child can identify distinctive
+source patterns; blindness is not information-theoretic independence from the author's labels.
+The receipt is an unkeyed digest, so it detects an inconsistent edit, not a parent that edits fields
+and recomputes it. A self-hashed receipt with only `verdict` passes the standalone verifier. Pinning
+child code, inputs and signed campaign records supplies a different, additional integrity boundary.
+
+`recomputePremise` rehashes source but trusts `current.holds`; it can accept a recorded false premise
+when the caller supplies true. `dischargeCell` consumes asserted validation flags, and absent observed
+and committed signal fields compare equal. The probe can therefore discharge an entirely synthetic
+asserted cell. `buildDeltaLedger` checks duplicates and reason enums but does not itself validate IDs
+against the inherited universe or prohibit an overlarge delta; the separate set validator rejects
+the probe's outside ID. These helpers require trusted, complete orchestration. They do not invalidate
+the shipped zero delta, which remains the correct constrained result.
+
+Inheritance checks fixed canonical file pins and the pinned signed bundle instead of independently
+reimplementing every predecessor projection. That choice is explicit in `inherit.mjs` and is narrower
+than the frozen demand to recompute all seven roots. Its canonical file pins normalize line endings;
+whole-tree byte preservation is a separate check. The public attestation verifier relies on supplied
+rebuilt roots and an injected signature verifier; the Node driver pins the presented key and performs
+real signature verification. Signature checks do not prove semantic control validity or independent
+authorship. The parity manifest contains five deterministic helper surfaces; it is not parity of the
+entire detector, admissibility, discharge or source parsing behavior. K7 export invocation and five
+Lean model families are useful bounded checks, not every execution path.
+
+The plan's seven-mutant heading/definition-of-done and Matrix 1's old full-spec digest are stale after
+the N7 amendment; eight mutants and the header's later pin describe the final plan state. The three
+planned cell states were extended to include `probed_not_discharged`; the result ledger uses
+`admissible` and `not_attempted_in_this_tranche`, differing from the draft spellings. Some planned
+commands, including `node/runFamily.mjs`, are absent; use the maintained reproduction entry point,
+not unexecuted scaffolding. The blanket worktree-count assertion would reject unrelated legitimate
+worktrees, and a tag-equals-current-main assertion is meaningful only at that historical release
+moment. The old score reward for the inevitable historical-contract audit was explicitly withdrawn
+by the later plan. Preserve I7/I8 as historical open obligations at 5R, not an assertion that later
+5S never ran. S59 bounds the construct-validity literature and novelty claims; the triad remains a
+research instrument with unvalidated generalization, not a universal benchmark-validity certificate.
