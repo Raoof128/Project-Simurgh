@@ -1,0 +1,41 @@
+{
+  "schema": "simurgh.manual_document_review_validation.v1",
+  "baseline": "15105bac03588d601a2961b3d6f61db72c3b37a4",
+  "prior_checkpoint": "cb35e30e0d55315c126c7916368c77dd770cc2a4",
+  "authority": "4ca41a9538a387fe05263c596d538e3bb1d32e16",
+  "completed_date": "2026-10-20",
+  "candidate_count": 919,
+  "complete_content_reads": 919,
+  "unread_candidates": 0,
+  "documentation_dispositions_complete": 919,
+  "manual_findings": 141,
+  "checks": {
+    "unique_baseline_identities_and_hashes": "pass",
+    "read_hashes_match_current_bytes": "pass",
+    "nonempty_individual_assessments": "pass",
+    "frozen_or_unedited_baseline_documents_preserved": 898,
+    "source_tests_gates_specs_captures_publications_archives_unchanged": "pass: full Git diff since manual baseline is restricted to named mutable documentation and audit deliverables",
+    "append_only_logs": "pass: exact baseline and prior-checkpoint prefixes",
+    "authority_strict_ancestor": "pass",
+    "git_diff_check": "pass",
+    "local_links": {
+      "documents": 814,
+      "links": 1980,
+      "issues": []
+    },
+    "stage5s_probe": {
+      "cases": 16,
+      "matches_retained_json": true,
+      "scope": "Offline temporary public fixture keys; expected acceptance gaps and refusal control, not repaired verifier conformance"
+    },
+    "audit_json_parse_count": 87,
+    "format": "Scoped Prettier check recorded in FINAL_VALIDATION.md; published append-only log whitespace excluded"
+  },
+  "limits": [
+    "Documentation completion is not independent scientific validation or closure of runtime findings.",
+    "Complete extracted PDF/Word text does not establish full visual-layout review.",
+    "Not every historical citation, personal assertion, legal applicability or institutional approval independently verified.",
+    "No new full E2E run; ebf2a752 remains the implementation smoke receipt.",
+    "Real-browser, interactive native, provider IAM/alerts, deployment load and outside custody remain separately scoped or open."
+  ]
+}

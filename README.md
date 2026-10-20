@@ -111,8 +111,10 @@ The [19 October full smoke report](docs/research/smoke-validation-2026-10-19/RES
 records the maintained branch checks, harness repairs and explicit browser/platform exclusions:
 142/142 base steps, 32/32 E2E steps and 5,171 root tests at implementation `ebf2a752`.
 The strict browser-parity command remains blocked by managed navigation policy. The
-[documentation audit](docs/documentation-audit-2026-10-19/README.md) separately records current
-guidance corrections, per-file coverage and [primary sources reviewed in 2026](docs/documentation-audit-2026-10-19/SOURCES.md).
+[documentation audit](docs/documentation-audit-2026-10-19/README.md) separately records
+the completed **919-document content review**, 141 dated findings and
+[final documentation checks](docs/documentation-audit-2026-10-19/FINAL_VALIDATION.md), alongside
+[primary sources reviewed in 2026](docs/documentation-audit-2026-10-19/SOURCES.md).
 These documentation checks do not refresh implementation test receipts or establish standards compliance.
 
 ## Replay the evidence
@@ -228,6 +230,12 @@ files without changes to the signed attestation. See the
 before relying on public-tier verification. These runtime gaps remain open.
 The Stage 4N heartbeat CLI also omits manifest authentication and accepts inputs beyond its
 advertised disclosure bound; see the [verification limits and probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m107--stage-4n-cli-consistency-does-not-authenticate-a-feed-or-bound-all-public-disclosure).
+
+The full [manual finding register](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md)
+also records later-stage verifier limits, including Stage 5S witness authentication and comparison
+scope. Documentation corrections preserve these open runtime findings. Read the
+[archive and activity-log corrections](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m139--activity-logs-preserve-claims-not-independent-validation)
+alongside historical summaries.
 
 Frozen documents describe their publication-time status. The later local review above and
 [continuation validation](docs/research/continuation-validation-2026-10-19/RESULTS.md) are additive

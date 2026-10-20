@@ -21,9 +21,10 @@ Start with [README](README.md) for the research question and runnable demonstrat
 | Read old research or device plans              | [Exact research archive](RESEARCH_HISTORY.md), [exact device roadmap](DEVICE_ROADMAP.md)                                                   |
 
 The [manual review continuation](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md)
-records subsequent file-by-file findings. Its [progress ledger](docs/documentation-audit-2026-10-19/manual-progress.json)
-explicitly distinguishes complete reads, pending verification and unread files; the full review
-remains in progress. The earlier automated inventory is not an exhaustive manual audit.
+records the completed 919-candidate content review and 141 dated findings. Its
+[per-file ledger](docs/documentation-audit-2026-10-19/manual-progress.json) records exact reviewed
+bytes and individual assessments; [final validation](docs/documentation-audit-2026-10-19/FINAL_VALIDATION.md)
+states verification limits. The earlier automated inventory remains a separate historical record.
 
 ## Current guidance versus historical evidence
 

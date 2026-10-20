@@ -770,3 +770,38 @@ The F8 specimens therefore do not demonstrate a locale-dependent difference.
 [RFC 8785 §3.1](https://www.rfc-editor.org/rfc/rfc8785.html#section-3.1)
 requires preservation of Unicode string data for JCS processing; adding NFC is not a universal
 canonicalization repair. F1 needs an independently specified subject-equivalence contract.
+
+### S60 — Witness consistency and timestamp verification are different obligations
+
+Checked 20 October 2026. Transparency.dev's [witness implementation](https://github.com/transparency-dev/witness)
+tracks signed checkpoints and verifies consistency before updating and countersigning. Its
+[2024 explanation](https://blog.transparency.dev/can-i-get-a-witness-network) distinguishes that
+operation from inspecting log-leaf legitimacy. The [2026 summit abstract](https://transparency.dev/summit2026/talks/witness-cosigning/)
+explicitly considers malicious and unavailable witnesses. These sources support separating
+consistency, witness trust and semantic content review; they do not validate Simurgh's asserted
+signature flags or prove a one-operator quorum independent. The initially tried `/articles/witnesses/`
+URL was inaccessible; the primary implementation and published article supplied the evidence.
+
+[RFC 3161 §2.2](https://www.rfc-editor.org/rfc/rfc3161.html#section-2.2) requires verification of the
+token signature, requested imprint, hash algorithm, certificate identifier and timeliness, with
+certificate status and policy considerations. A DER-like first byte and length cannot fulfill those
+checks. [OpenTimestamps](https://opentimestamps.org/) describes independently verifiable timestamp
+proofs and a verification protocol; hashing the submitted text alone does not verify such a proof.
+These requirements explain M138's bounded capture-check result. They establish neither that the
+shipped tokens are invalid nor that another stage's stronger verifier was invoked by Stage 5S.
+
+### S61 — Historical platform and model-lifecycle statements
+
+Checked 20 October 2026. The official [Safe Exam Browser overview](https://safeexambrowser.org/about_overview_en.html)
+describes Windows, macOS and iOS implementations. This contradicts the old Windows-only
+comparison, without establishing any relative security or usability advantage for Simurgh.
+
+The official [OpenAI deprecation schedule](https://developers.openai.com/api/docs/deprecations)
+distinguishes legacy status from announced shutdown. Its April notice lists specific older
+snapshots/aliases for 23 October 2026, including GPT-4-0613 and GPT-4-turbo; its 14 October notice
+lists selected GPT-4o, GPT-4o-mini and GPT-4.1 snapshots for 14 January 2027. The old blanket
+GPT-4-family retirement statement is therefore unsuitable as current model-selection guidance.
+These dated schedules do not alter the identity or validity of a retained historical capture.
+GNU FAQ/selling-page retrieval was unavailable during this check; no new legal conclusion is
+based on that retrieval. The repository's LICENSE and conflicting package metadata remain the
+local primary records for its declared licensing terms.

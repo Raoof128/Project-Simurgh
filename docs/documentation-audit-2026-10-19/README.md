@@ -1,5 +1,13 @@
 # Repository documentation audit — 19 October 2026
 
+**Manual continuation completed 20 October 2026:** all **919 candidates** in the later baseline
+received complete content review. Start with the [manual findings](MANUAL_REVIEW.md),
+[per-file assessments](manual-progress.json) and [final validation](FINAL_VALIDATION.md).
+The report below preserves the initial 910-file scan's scope; its automated-only codes are
+historical, not the final manual dispositions. Frozen records retain dated errors with linked
+corrections rather than rewritten evidence. Runtime repairs and independent validation remain
+separate work.
+
 This audit corrects current reviewer, contributor, integration and component guidance and records
 an individual disposition for **all 910 document candidates** at baseline
 `8d47bbbfd2bc2e351fa334fa3a61acc7ac108ef5`. The inventory includes Markdown, plain text, HTML,
@@ -24,7 +32,7 @@ Frozen evidence, historical specifications, papers and exact archival copies are
 - Updated the technical brief, problem statement, proposal context and research-fit discussion
   with actual evidence and retained failures. Applicant identity, eligibility and submission
   decisions remain unresolved; none were inferred from repository text.
-- Added a [13-entry primary-source applicability map](SOURCES.md),
+- Added a [primary-source applicability map](SOURCES.md),
   [20-item correction register](ERRATA.md) and [documentation maintenance guide](../../DOCUMENTATION.md).
   Sources cover official OpenAI, MCP, IETF, NIST, OWASP, SLSA, W3C and LangGraph material.
 

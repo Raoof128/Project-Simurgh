@@ -712,3 +712,12 @@ pair does not demonstrate the claimed locale-dependent sort difference, and seve
 admission/discharge helpers trust supplied validation flags. See [M137 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m137--stage-5r-demonstrates-bounded-syntactic-discrimination-not-full-control-validity).
 Do not promote family admission or candidate signal detection into confirmed vulnerabilities,
 dynamic member execution, or complete construct validity.
+
+Stage 5S authenticates producer signatures but accepts supplied witness/receiver verification flags,
+compares only the first two views, and trusts asserted ancestry records. Its clean evaluator does not
+recompute the presented producer-key digest; its offline capture checker does not fully validate TSA,
+OTS or Rekor proofs. The attestation's audit tier does not rebuild those evidence claims. See
+[M138 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m138--stage-5s-separates-statuses-but-does-not-authenticate-every-witness-capture-or-compared-view).
+Use the fixed research artifacts within their stated scope, with independently trusted keys and
+inputs; do not treat a green result as set-wide consistency, independently witnessed custody or a
+complete external timestamp verification service.

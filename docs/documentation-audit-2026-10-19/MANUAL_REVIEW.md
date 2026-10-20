@@ -20,16 +20,17 @@ because they occur in a document. Documentation corrections do not authorize new
 outreach, runtime changes or changes to scientific measurements.
 
 The prior [report](README.md), [inventory](inventory.json) and [validation](VALIDATION.md)
-remain records of their own scope. This continuation is **in progress** until every candidate
-has a complete manual disposition and all identified documentation corrections are resolved.
+remain records of their own scope. The manual content review is complete on 20 October 2026;
+[final validation](FINAL_VALIDATION.md) states the checks and remaining evidence limits.
 
-## Coverage checkpoint
+## Completed coverage
 
-The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **906 documents have complete manual reads; 13 remain
-unread in this continuation**. A complete read is separate from final claim verification and
-correction validation. Each read has a file-specific assessment; pending rows remain pending.
-This is a progress checkpoint, not completion of the owner's exhaustive-review request.
+The [per-file ledger](manual-progress.json) retains all **919 baseline identities and hashes**.
+All 919 candidates have complete content reads and file-specific assessments. Corrections are
+recorded as M01–M141, with direct edits to current guidance and dated errata for frozen records.
+Review completion does not mean every claim is true or every runtime defect has been repaired.
+The final ledger distinguishes documentation disposition from independent verification; extracted
+publication text and deduplicated historical paragraphs have the explicit limits in M141.
 
 ## Findings confirmed against implementation
 
@@ -6285,3 +6286,187 @@ moment. The old score reward for the inevitable historical-contract audit was ex
 by the later plan. Preserve I7/I8 as historical open obligations at 5R, not an assertion that later
 5S never ran. S59 bounds the construct-validity literature and novelty claims; the triad remains a
 research instrument with unvalidated generalization, not a universal benchmark-validity certificate.
+
+### M138 — Stage 5S separates statuses but does not authenticate every witness, capture or compared view
+
+Read the complete 1,316-line specification and 942-line plan, including all rulings, annexes,
+allowlist amendments and release instructions. Checked the ordered evaluator, policy validators,
+quorum/intake, ancestry, equivocation artifact, ceremony, capture checker, attestation and parity
+manifest. [Sixteen offline observations](vwq-verifier-probe.json), with
+[reproducer](vwq-verifier-probe.mjs), delimit the implemented checks; no live ceremony was performed.
+
+Preserve the actual signed result: two compared digests, both with witnessed-quorum status,
+`equivocation_detected`, an artifact present, intake complete, witness independence unproven,
+Lane C captured but external corroboration not satisfied. The capture record contains OTS and TSA
+artifacts; Rekor returned no entry for the digest. A successful raw exit reports successful evaluation,
+not absence of a fork. A quorum shortfall alone is a status; code 496 rejects a falsely claimed
+threshold. The five statuses answer separate questions, and anchors carry no witness weight.
+
+The exported evaluator authenticates producer signatures with the supplied PEM, but compares the
+policy's producer-key digest only with another supplied digest label. Replacing the producer PEM
+and signatures while retaining the old matching digest labels passes a clean bundle. The standalone
+equivocation-artifact verifier additionally hashes the presented PEM against the artifact binding;
+that stronger check is not the evaluator's clean-bundle path. Optional C1 roots, protocol version
+and committed producer-key digest can be removed without refusal. Policy digest strings are checked
+for equality, not recomputed from the full policy. History-root presence is checked, not the underlying
+history. These inputs require independently trusted construction.
+
+Witness quorum and receiver intake consume `signature_verified` assertions; the fixture signatures
+are placeholder strings. The positive control reaches witnessed quorum with those placeholders.
+Removing statement/receipt envelope-digest fields also passes the clean evaluator because its
+binding check runs only for nonempty strings, and structural validation does not cover every presented
+artifact type. The artifact verifier checks receiver roster/key labels, tuple bindings and receipt
+roots, but does not cryptographically authenticate receiver signatures. Actual producer signature
+rejection is demonstrated by the negative control. Do not describe all these distinct checks as
+uniform authentication of every signed artifact. Within-check precedence also depends on which
+refusals helpers emit: `tally` rejects a bad signature flag before testing an absent roster seat,
+so the evaluator cannot select an earlier roster code that was never emitted.
+
+Only the first two supplied views are compared; additional views are authenticated/tallied but do
+not enter the relation or the two-entry status map. A third signed conflicting view included in the
+manifest still yields `no_conflict_in_committed_comparison_set`. A clean pair also passes with unrelated
+manifest membership. The exported evaluator therefore does not establish a set-wide no-conflict
+claim for arbitrary caller bundles. Its ancestry walk validates supplied digest labels, decreasing
+epochs, cycles, gaps and transition records, but does not reconstruct/authenticate chain records or
+bind their predecessor fields to the signed checkpoints. An invented chain overriding the later
+checkpoint's signed predecessor produces `compatible`. These are trust-boundary observations, not
+claims that the fixed two-view shipped artifact was secretly altered.
+
+The corroboration status helper accepts caller assertions, including an invented ecology class
+when the supplied policy permits it; it does not invoke the separate taxonomy validator or enforce
+freshness/cryptographic proof. The offline capture checker checks OTS file-content hashing but never
+parses the timestamp proof or establishes Bitcoin finality. Its TSA test requires only at least 256
+bytes starting with `0x30`; Rekor and unknown ecology classes need only an existing artifact and a
+known outcome. All four fabricated capture probes pass. The comment assigning full TSA chain
+validation to Task 30 is unsupported by that task's attestation implementation: `verifyAttestation`
+checks body/root/signature/key consistency, required binding presence, non-claim membership and map
+membership, but does not re-derive the underlying capture evidence. Its `tier` parameter is reported
+without a separate audit verification branch. A signed assertion-only body with no compared digests
+passes the audit tier. The CLI reads a key beside the supplied bundle; trusting that pair requires an
+independent expected key/revision. A real signature binds assertions without proving those assertions.
+
+Lane B runs four processes using deterministic public test seeds. Each receives its own key path;
+this is not operating-system isolation, independently held secret custody or a multi-operator
+ceremony. `checkManifests` checks declared field names and rejects unexpected consumed names, but
+accepts empty consumption maps and does not recompute reported input digests. Seven declared parity
+surfaces exclude signature verification, the ordered evaluator, ceremony and filesystem I/O.
+Browser-vector execution is not evidence of a real browser session. The formal results are conditional
+models; they do not establish that these runtime trust assumptions have been discharged.
+
+Read older plan commands as historical intent. The later seven-row authority amendments govern their
+specified maintenance surfaces; older three-row summaries are incomplete. The 38-code band is not
+the repository's largest (5O has 44). Signed receiver-unavailable records can complete intake without
+all views having arrived, so the non-claim's intake-complete exception must not imply universal
+receipt. Equal history roots alone do not establish identical checkpoint bodies. Historical repair
+lists, stage-local claims of no outstanding work, old proof floors, reset/tag ceremonies and repeated
+section numbering are not current instructions or a repository-wide closure statement. S60 gives the
+primary-source context; it does not confer standards compliance or independence on this prototype.
+
+### M139 — Activity logs preserve claims, not independent validation
+
+The complete `AGENT.md` and `CHANGELOG.md` histories were read, including the standing
+invariants, repeated release sections and every later audit checkpoint. Their order is not
+strictly chronological; repeated version headings and separate application/research version
+lines must not be treated as one release series. The following dated corrections apply to
+both logs without rewriting their earlier bytes:
+
+- Early “global ethics standard,” first-mover, patent-quality, institutional replacement,
+  universal-device and public-health language describes ambition, not demonstrated outcomes.
+  Browser/native processing also contradicts “zero client-side compute.” The May comparison
+  calling Safe Exam Browser Windows-only is incorrect: its official overview describes Windows,
+  macOS and iOS (S61). No comparative efficacy follows from this platform correction.
+- “All claims verified,” “100% audit,” internal grades and fresh AI-reviewer scores describe
+  particular local reviews. They do not establish scientific peer review, outside custody,
+  institutional endorsement or correctness of every assertion. Citation existence is distinct
+  from support for a claim. The later M01–M138 findings qualify those earlier assurances.
+- Legacy no-identifier/no-image statements require the helper exception in PRIVACY. Local
+  enumeration, captured buffers, transmitted fields and retained aggregates are different
+  boundaries. Declared privacy flags are not measurements of collection behavior. Voting UI
+  closure alone did not enforce server closure; subsequent server behavior is configuration-bound.
+  Thirty retained aggregate completions are not thirty retained individual session transcripts.
+  The small banking pilot and synthetic/model-assisted reruns are separate evidence (M20–M30).
+- The live egress/authority counts are corpus- and control-specific. A benign regression cannot
+  be attributed to nondeterminism solely from a rerun, and overlapping intervals alone do not
+  establish equivalent paired performance. Deterministic AgentDojo 0/949 and fixture canaries
+  do not measure live-model resistance. The Stage 3V-A external-comparator retraction remains
+  operative. A zero-attack live result still needs its denominator and limitations; describing
+  it as degenerate does not justify discarding a negative result.
+- Successful direct unit tests or a later rerun do not establish that every earlier release
+  passed every reproduction gate. The logs themselves later record the stale Stage 5Q gate.
+  A failing/partial CI job remains such at its recorded revision. Native compilation and
+  headless tests do not establish interactive desktop behavior. Formal-model checks do not
+  establish equivalence with every runtime implementation.
+- Stage 5I's completed ceremony supersedes its stale follow-up, but distinct keys do not prove
+  separate unaffiliated operators (M128). Temporal anchors, witness labels, parity adapters and
+  producer signatures retain the component-specific limits in M130–M138 and SECURITY.
+- The June model-retirement generalization is too broad. The official deprecation schedule is
+  model/snapshot-specific; legacy status alone is not a shutdown date. S61 distinguishes the
+  listed October 2026 retirements from selected GPT-4-family January 2027 retirements. Open
+  weights do not imply free hosting or byte-identical output across hardware and batching.
+- Earlier Phase 8 interrupted-review wording is superseded by the scoped 19 October follow-up.
+  Local and provider tracks reuse phase numbers; cite full paths. Historical “pending” tasks
+  must be reconciled with subsequent records, not executed automatically. External operator,
+  real IAM/alert lifecycle, interactive-browser and deployment evidence remain open.
+- Audit checkpoints are progress reports. The initial 910-file scan was not the later 919-file
+  manual review. The checkpoint-907 whole-log formatting claim is corrected by checkpoint 909;
+  published blank lines remain preserved. Offline diagnostic signatures use temporary public
+  fixture seeds, not retained production keys or a new external ceremony.
+
+These corrections do not change historical measurements, personal attribution, license files
+or release tags. Current license metadata and its unresolved Linux manifest conflict are stated
+in README. A historical licensing rationale is not legal clearance for a downstream use.
+
+### M140 — The exact research archive needs the later implementation errata
+
+`RESEARCH_HISTORY.md` is the exact earlier README archive, now read in full. Preserve its bytes.
+Its research status, tag counts, test counts, “latest” stage and expected commands belong to that
+snapshot. Use the current README and HISTORICAL_REPLAY guide for setup and retained failures.
+Its stated three-command clone/install/replay sequence actually contains four shell commands
+including `cd`; neither that wording nor a zero exit certifies every claimed property.
+
+The archive's broad “independent,” “all fail-closed” and dishonest-producer language exceeds
+some implementations. A signed statement authenticates canonical content relative to a key;
+it does not independently observe execution, witness custody, receiver completeness or the
+truth of flags. Replay requires the stage-specific inputs and trust roots; a public key bundled
+with a statement is not an independently pinned identity. M40–M138 record the stage-specific
+corrections, including unsigned Stage 4F certificates, Stage 4M missing bindings/browser parse
+failure, Stage 4N unauthenticated feeds and Stage 5S's incomplete comparison/authentication.
+
+The archive's Stage 5R universe of 2,406 cells is not 2,406 executed probes: 210 were probed,
+2,196 were unprobed and zero cells discharged. Candidate refutations and F8's ordering example
+have the limitations in M137. The 5L access guarantee covers declared release gates, not all
+out-of-band copies. Stage 5M's adversarial denominator needs the later pristine-input finding.
+The Stage 5S success exit can accompany detected equivocation; it is not a universal clean bill.
+The shipped capture, witness-independence and corroboration fields remain separate (M138).
+
+The “irreducible” leakage floor is a finite fixture observation, not a proven lower bound.
+Uncorrelated failure modes are not established by diagrammatic separation. The Llama Guard
+capture's input/downstream denominators and repeated-run settings require M41/M89, rather than
+an unqualified “run once.” The deterministic full AgentDojo result is not live-model safety.
+The device no-raw-data paragraph requires PRIVACY's local-helper and ingress exceptions.
+Preprints, source artifacts and model-assisted reviews do not establish peer-reviewed acceptance.
+
+Retain the archive's explicit research-prototype/non-production status. Current external
+validation and all runtime findings remain visible in the current README, SECURITY and this
+register; completing documentation review does not repair those implementations.
+
+### M141 — Initial scan ledger and final manual coverage are different records
+
+Every introductory paragraph and all 910 data rows of `FILES.md` were read. Paths, categories,
+scopes, dispositions, signal counts and errata identifiers were retained. Its A/C/E/L/P codes
+accurately describe the initial baseline work; replacing A with “manual” retroactively would
+misstate that record. The final 919-candidate ledger includes the nine intervening documents
+and is the current source for manual-read coverage. Zero lexical signals never proved correctness.
+
+The last four large documents were read through a lossless paragraph map: identical paragraphs
+shared by the logs were read once with their original ordered occurrences retained. All 1,226
+unique paragraphs were covered. Each original document reconstructed byte-for-byte to its
+SHA-256 before editing; the ledger table was displayed with alignment padding removed, retaining
+every cell. This method removes duplicate reading, not distinct content. The final read receipt
+records the source hashes and counts. PDF/Word coverage elsewhere is complete extracted text;
+it does not claim visual inspection of every rendered page.
+
+Final disposition closes documentation review, not every open research question. Historical
+bibliographic crosschecks, legal applicability, personal assertions and unavailable independent
+execution remain explicitly limited where recorded. Findings are corrected in current guidance
+or by dated errata under the audit authority; frozen source and scientific records are preserved.

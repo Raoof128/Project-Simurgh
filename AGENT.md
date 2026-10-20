@@ -3997,3 +3997,31 @@ Owner-requested work; implementation and review by Codex assistance.
   audit-file formatting and local links checked in checkpoint 913. Existing log spacing warnings
   from checkpoint 907 remain preserved. No runtime change, inference or full E2E rerun.
 - Six documents remain; the manual audit continues.
+
+### 2026-10-20 (Australia/Sydney) — Manual documentation review completed: 919 candidates
+
+**Codex (owner-authorized continuation):**
+
+- **Scope:** Documentation and audit tooling under authority `4ca41a95`. Complete content
+  review of all 919 candidates; no unread rows. Baseline identities, hashes and individual
+  assessments remain in `docs/documentation-audit-2026-10-19/manual-progress.json`.
+- **Corrections:** M138 records Stage 5S witness/capture/comparison limits; M139–M141 correct
+  activity-log interpretation, the exact research archive and initial-scan scope. README,
+  DOCUMENTATION and the audit landing page now link completed coverage and final validation.
+  Historical records remain intact; these corrections do not close runtime findings.
+- **Method:** The final four large documents were read through a lossless paragraph map,
+  including every distinct paragraph and all 910 initial-ledger rows. Ordered duplicate
+  occurrences reconstructed to original hashes. Complete publication text is distinguished
+  from visual review; historical citation, personal/legal and external-validation limits remain.
+- **Verification:** All 919 reviewed hashes and original identities match; 898 non-audit,
+  unedited candidate documents retain baseline bytes. Full Git scope check preserves runtime,
+  tests, frozen specifications, captures and publications; both logs retain exact prior prefixes.
+  Local links: 814 Markdown documents, 1,980 links, zero issues before this appended entry.
+  The 16-case Stage 5S offline diagnostic reproduces retained JSON, including acceptance gaps
+  and its invalid-signature refusal control. New diff whitespace and scoped formatting checks
+  are recorded in `docs/documentation-audit-2026-10-19/FINAL_VALIDATION.md`; published checkpoint-907
+  log whitespace is retained and is not claimed to pass whole-file formatting.
+- **Evidence limits:** The existing full smoke remains implementation `ebf2a752`; no new paid
+  inference, external ceremony or full E2E rerun. Runtime repairs, real-browser/native interaction,
+  provider lifecycle and independent operator evidence remain separately scoped. No submission,
+  deployment, endorsement or standards certification is implied.

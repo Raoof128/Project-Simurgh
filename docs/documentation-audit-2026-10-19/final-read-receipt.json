@@ -1,0 +1,35 @@
+{
+  "method": "Complete content review of all 1226 unique paragraphs, preserving ordered duplicate occurrences. FILES table alignment padding removed only for display; every cell read. Reconstruction establishes extraction coverage, not semantic correctness.",
+  "source_commit": "cb35e30e0d55315c126c7916368c77dd770cc2a4",
+  "unique_paragraphs": 1226,
+  "documents": [
+    {
+      "path": "AGENT.md",
+      "source_sha256": "42318ddf688062e5d431396d41ed43004b66ae1779c0cbcb8b1366bcf3f38a8a",
+      "bytes": 403719,
+      "paragraph_occurrences": 767,
+      "reconstruction_matches_original": true
+    },
+    {
+      "path": "CHANGELOG.md",
+      "source_sha256": "a91ba18a258c7b89ae5e4440a8b96af78cf4a0a372fc47ef6652f308a85c2c0b",
+      "bytes": 388753,
+      "paragraph_occurrences": 1238,
+      "reconstruction_matches_original": true
+    },
+    {
+      "path": "RESEARCH_HISTORY.md",
+      "source_sha256": "220c4e97d1b25e8505011bdce17355851fe6d895d2a3e5b0cd93efeda4f27baf",
+      "bytes": 71527,
+      "paragraph_occurrences": 137,
+      "reconstruction_matches_original": true
+    },
+    {
+      "path": "docs/documentation-audit-2026-10-19/FILES.md",
+      "source_sha256": "370fb4b6cbab7b9f1a7405d3025e5ff99e3872d3baad9e0435560de085131a39",
+      "bytes": 290813,
+      "paragraph_occurrences": 5,
+      "reconstruction_matches_original": true
+    }
+  ]
+}
