@@ -4070,3 +4070,16 @@ Owner-requested work; implementation and review by Codex assistance.
   and pass after repair. Full reproduction and whole-repository smoke follow at a committed revision.
 - **Follow-ups:** Real browser interaction is unverified. OpenAI read-only capability checks:
   model listing HTTP 200; organization project listing HTTP 403. No provider mutation attempted.
+
+### 2026-10-21 (Australia/Sydney) — Tighten harness regression evidence
+
+**Raouf: Codex-assisted implementation**
+
+- **Scope:** Existing R04 test authority; no runner behavior change.
+- **Summary:** The Stage 4K injected branch gained a nested conditional during repair.
+  Corrected branch extraction to include its outer terminator and require the exact mapped
+  shell status 3 plus a reproduction diagnostic, excluding syntax-error false positives.
+- **Files changed:** `tests/unit/reproduceMismatch.test.js`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** All four complete mismatch branches return mapped raw-29 shell status 3;
+  none reaches the success marker. This supersedes the earlier less-specific nonzero assertion.
+- **Follow-ups:** Fresh full smoke at the committed repair revision.
