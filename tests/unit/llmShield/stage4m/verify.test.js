@@ -46,7 +46,8 @@ test("V19 tier-P: ledger files absent -> exit 0 with honest not_in_tier", async 
     assert.equal(r.rawCode, 0, `reason ${r.reason}`);
     const byName = Object.fromEntries(r.verdict.checks.map((c) => [c.name, c.status]));
     assert.equal(byName.windows_valid, "not_in_tier");
-    assert.equal(byName.attestation_roots, "not_in_tier");
+    assert.equal(byName.attestation_roots, "ok");
+    assert.equal(byName.attestation_aggregates, "not_in_tier");
     assert.equal(byName.manifest_signature, "ok");
     assert.equal(byName.disclosure_binding, "ok");
   } finally {

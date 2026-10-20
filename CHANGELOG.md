@@ -4809,3 +4809,17 @@ Owner-requested work; implementation and review by Codex assistance.
 - **Follow-ups:** Reproduce failures, implement bounded repairs, extend exact authority before
   later components, validate current-study explorer and run a fresh candidate smoke. Provider
   administrative test configuration and real-browser tooling remain unresolved inputs.
+
+### 2026-10-21 (Australia/Sydney) — Stage 4M authenticated public evidence repair
+
+**Raouf: Codex-assisted implementation**
+
+- **Scope:** The five exact implementation/test paths authorized by `1fbd03fd`.
+- **Summary:** Public verification checks signed public roots even without private ledgers;
+  audit verification recomputes aggregates; duplicate merge targets fail closed. Browser generation
+  preserves module-local scopes. Existing signed fixtures and captured HTML remain unchanged.
+- **Verification:** New regressions first reproduced five failures with one passing control.
+  After repair, all 54 Stage 4M tests and all 12 reproduction steps pass under Node 26.
+  Generated JavaScript parses; this is not an actual browser-interaction receipt.
+- **Follow-ups:** M106 remains partially open for upstream authentication assumptions. Continue
+  current-study explorer, remaining audit dispositions and fresh whole-repository smoke.

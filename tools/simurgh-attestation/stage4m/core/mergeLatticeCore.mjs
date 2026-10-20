@@ -152,7 +152,7 @@ export function validateMergeChain(events, genesis) {
     const nextBudgets = new Map();
     const newClusters = [];
     for (const m of event.merges) {
-      if (imageMap.has(m.new_cluster_commitment) || oldSet.has(m.new_cluster_commitment)) {
+      if (nextBudgets.has(m.new_cluster_commitment) || oldSet.has(m.new_cluster_commitment)) {
         // a new bucket id may not collide with another bucket or an old commitment
         return fail("schema_invalid", "new_cluster_collision");
       }
