@@ -657,3 +657,17 @@ root field. See
 [M129 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m129--stage-5j-compares-historical-cross-products-and-leaves-ledger-binding-incomplete).
 Treat history, independent-role and transparency-log claims as limited by these findings; portable
 raw-zero results are not signature verification.
+
+Stage 5K derives verified ordering from an anchor label and confirmed finality from any non-null
+object. It does not recompute its verification-context trust roots or bind configured policy to
+the signed policy. Several execution/projection/regression checks are narrower than the design.
+See [M130 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m130--stage-5k-authenticates-fixture-signatures-but-simulates-anchor-verification-states).
+The CLI authenticates a bundle under its pack-local pin; that does not turn these modeled anchor
+states into independently verified ordering, finality or fresh external execution.
+
+Stage 5L verifies fixture signatures but assumes OTS path validity and does not execute upstream
+VUC verification. Receipt bindings, release audiences, timestamp accuracy and checkpoint content
+are incompletely checked. Its capability records are not an enforced content-release service. See
+[M131 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m131--stage-5l-verifies-fixture-signatures-without-enforcing-a-real-temporal-release-quorum).
+The separate real TSA token check does not establish a complete same-commitment temporal quorum;
+portable implementations do not provide full signature/verdict parity.

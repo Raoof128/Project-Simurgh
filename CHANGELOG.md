@@ -4688,3 +4688,19 @@ Owner-requested work; implementation and review by Codex assistance.
   append-only prefixes and frozen surfaces. No runtime changes, model inference, external
   ceremony or full E2E rerun; retained source/evidence bytes are preserved.
 - **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-20 (Australia/Sydney) — Manual documentation audit: 902-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 902 of 919 baseline
+  candidates completely read, 17 pending. Exhaustive manual review remains in progress.
+- **Changes:** M130–M131 cover complete Stage 5K/5L specifications and plans; SECURITY qualifies
+  universe ordering and temporal release claims. Twelve VUC and eleven VTC-Q local probe cases
+  document binding, anchor, projection and portable-verification limits with refusal controls.
+- **Research:** S53–S54 check CT/PLANTS, ATT&CK census, SEC evidence, RFC 3161 accuracy,
+  OpenSSL validation time and C2PA version context against primary sources.
+- **Validation:** Check changed-file formatting, links, baseline identities/read hashes,
+  append-only prefixes and frozen surfaces. No runtime changes, model inference, external
+  ceremony or full E2E rerun; retained source/evidence bytes are preserved.
+- **Remaining:** Complete every pending manual read and final correction verification.

@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **898 documents have complete manual reads; 21 remain
+SHA-256 values. At this checkpoint, **902 documents have complete manual reads; 17 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -5535,3 +5535,187 @@ research note; external evaluation having no effect is not established by absenc
 Voluntary Code scope is as in S48. Existing general attestation formats can carry custom multi-party
 relations; absence of a built-in VRC predicate is not structural inability or a proved firstness claim.
 Historical scores are self-assessments, not independent validation or provider endorsement.
+
+### M130 — Stage 5K authenticates fixture signatures but simulates anchor verification states
+
+Read all 528 specification lines and 1,239 plan lines, including the precedence rules overriding
+older snippets. Compared core, adapter, builders, split attestations/CLI, Lane B/C, anchor tools,
+portable verifiers, Lean, K7 and reproduction. The [twelve-case VUC probe](vuc-verifier-probe.json)
+uses the real Node adapter on fixture copies. It confirms anchor-label and finality-presence
+acceptance, unrecomputed context, false displayed projections, incomplete execution/reference
+binding, unverified prior universes and duplicate wrong-universe omission claims. Baseline and
+Node signature-refusal controls work. These are core/API probes: the CLI's separate signed-bundle
+check would reject an unsigned change to a retained bundle. No retained evidence was rewritten.
+
+Ordering state is `verified_immediate` whenever the anchor type is one of four recognized strings;
+no Rekor signed entry, CT carrier/SCT, ordering ticket signature or checkpoint is verified there.
+Finality is `confirmed` for every non-null object, including `{}`. Finality subject/receipt is not
+checked, and raw OTS is labeled invalid rather than the specified pending-unverified state. A fixture
+relabeled `rekor` passes the release policy even while the producer's signed policy remains test.
+The required `verificationContext.mjs` module is absent: the six evidence/trust roots are not
+recomputed, and the signed policy digest is compared to another bundle field rather than the
+out-of-band configured policy. Unknown/missing policy profiles fall back to permissive behavior.
+The fixture's signatures therefore do not establish independent external ordering or finality.
+
+Starts bind real signer keys and assignment sets, and challenges bind commitment/receipt/ceremony,
+role and principal. However, challenge sequence numbers are sorted without contiguous-integer or
+positive-distance validation; the chain begins at a fixed zero digest rather than a verified
+sequencer-record head. Challenge obligation digests are not matched to start obligations. Start
+records' commitment fields and the producer's rating-obligation digest are not fully reconciled.
+Reviewer execution checks cover its start digest, assignment and recorded output digest lists, but
+omit its commitment/ceremony equality. Producer execution checks omit its start digest, identity,
+commitment and ceremony fields: a correctly signed unrelated binding passes. Full history means
+the currently supplied VRC history, with M129's preservation weaknesses. The VRC public attestation
+is represented by a digest of an unsigned builder object, not loaded and independently verified.
+VRC ledger/contest reference roots are ignored. Both upstream verifiers execute, but the standalone
+VPC config and the VPC embedded inside VRC are not explicitly required to be the same full artifact.
+
+Merkle leaf/root recomputation, proof census, duplicate committed IDs/digests and independent set
+inclusion checks are useful implemented boundaries. They use Simurgh's domain framing, not CT wire
+format. The builder/set-digest ordering uses JS string comparison while commitment verification
+requires UTF-8 byte order; astral/BMP IDs can diverge, unlike the ASCII fixture. Tree-profile text is
+not pinned to the supported algorithm; schema version is only a nonempty string. Digest syntax is
+strict in Merkle proof decoding, not universally before every hashing operation. NFC rejection is
+limited to leaf IDs. Set projections deduplicate source IDs, so these laws do not themselves count
+exactly-once source occurrences. Subject hashing includes the section ID and metadata, not section
+text; identical text under different IDs is not detected as a semantic alias. M128's literal source
+digest and unverified report provenance remain relevant. A schema-valid nested adequacy claim passes
+the top-level lexical screen. The plan's one-leaf wrong-index test uses the unchanged index, and a
+bare proof's wrong-size mutation is not always distinguishable on promoted odd levels; the full
+commitment/proof census supplies the size binding. Those snippets are not executable acceptance
+criteria as written.
+
+Audit compares only the stored projection root with the recomputed root, not every displayed
+projection field. A false equality flag or count beside the original root passes. Regression merely
+hash-matches an arbitrary prior object, extracts its IDs and ignores its signatures, anchor and other
+reference digests. An unsigned shell is accepted as a compared prior universe; missing prior input
+can be recorded as a matching error projection instead of rejecting. Omission claims are counted
+by signature facts keyed by claim ID, without uniqueness or current commitment/ordering binding.
+The invalid-digest list actually contains IDs. Two signed duplicate claims about another universe
+are counted valid. Recording a supplied list is not proof that an outside objection was never
+suppressed. Commit-first margin is min/max/count of challenge sequence numbers, not min/median
+distance from an authenticated ordering event. The adapter never sets `registryAnchorSigValid`, so
+any non-null registry bridge fails audit; a usable real in-toto/SCITT path has not shipped.
+
+The CLI does verify split signatures and public bundle/context/policy digests, unlike Stage 5J.
+However, the pin comes from the pack, and attestation fields such as public ordering state, root,
+verdict, checked range and document references are not all compared to recomputation. Audit does
+not check its bundle digest/finality field or explicitly require its tier string; projection checking
+is optional when called without context. The builder hardcodes public ordering state and retains
+`sha256:pending-*` document/Lean placeholders. The promised final source digest regeneration did not
+occur. Attestation failures return raw 1 outside the 348–363 allocation; file/adapter errors can
+escape before the core wrapper. Public CLI ingestion still opens the audit file, and unknown tiers
+select public behavior. Signed declarations authenticate their bytes, not the missing validations.
+
+The builder completes synthetic VPC/VRC outputs before the VUC commitment and then signs sidecars.
+It does not demonstrate fresh upstream issuance after starts. Lane B tests a single-process builder
+and distinct fixture key values, not child-process separation or a sequencer's inability to inspect
+content. Lane C reuses publicly committed fixture keys and the eight-section synthetic panel; it
+is not the specified 37-section external-principal ceremony. Its nonce changes session/ceremony
+records, not the universe commitment. It omits split-attestation files required by the CLI and does
+not exit nonzero on reported core failure. The campaign gate checks a different configured verifier
+fingerprint without requiring its attestation signature or the release profile. It returns neither
+all four promised state axes nor a verified Sigstore-chip state. `attachAnchor` adds config metadata;
+it does not attach authenticated ordering, recompute the verification context or re-sign attestations.
+The witness tool timestamps universe-digest text despite stale contest-root comments; its separate
+OTS output parsing does not validate the adapter's finality state. M129's injected-rung/witness and
+locator limitations apply. No live gerrymandering producer run follows from these tools or labels.
+
+Python/browser recompute Merkle/commitment/set digests without signatures, upstream validation,
+starts, bindings, proof validation or anchor verification. Browser returns zero on an invalid
+producer signature. Both collapse unequal sets to 357 rather than full per-component raw semantics;
+Python additionally checks the displayed bijection census, which Node's root-only check can ignore.
+The promised full 348–362 golden parity matrix is absent; tests compare a valid pack and a browser
+root mutation. Lean has eleven numbered themes plus auxiliary declarations, with equality/precedence
+assumed in several proofs. Execution uniqueness is a function property, audit monotonicity assumes
+the link, and the scope trilemma is enum case analysis—the very weaker form the plan disallows.
+It does not refine actual anchor verification or model the host wrapper. No concrete golden-vector
+bridge establishes the claimed full implementation conformance. K7 omits several raw arms and
+checks some exports only for type; reproduction compares four files, runs Python and optionally
+Lean, without Lane B/C/browser/full-matrix checks or an escape-hatch scan of its own.
+
+The design's distinction between declared scope and real-world adequacy is appropriate, but the
+current external-ordering/fresh-issuance claims exceed implementation. Preserve the plan's explicit
+review-v2 overrides over contradictory older key/profile/parity instructions; do not execute its
+historical reset/release workflow during this documentation audit. S53 qualifies CT, the evolving
+PLANTS draft and the ATT&CK census. S50 covers legal transition dates. Neither the cited law nor a
+Merkle primitive establishes VUC conformance, market firstness or readiness for a regulator to rely
+on the claimed complete protocol.
+
+### M131 — Stage 5L verifies fixture signatures without enforcing a real temporal release quorum
+
+Complete reads cover the 478-line VTC-Q design and 675-line implementation plan, checked against
+core, adapter, builder, timestamp adapter, CLI, attestation/projection logic, portable implementations,
+Lean, tests, capture tools and reproduction script. [Eleven local probe cases](vtcq-verifier-probe.json)
+confirm acceptance of an unrelated configured policy, ceremony identifier, receipt bindings,
+checkpoint content and release audience; ignored upstream verification and ESSv2 assertions; negative
+TSA accuracy; and added false projection fields. The valid fixture passes and an invalid gate receipt
+fails at 375. Re-signing uses only committed public fixture keys. These probes establish implementation
+limits, not an attack on an outside TSA or a production release gate.
+
+The Node adapter authenticates gate receipts, consumption records and timestamp-verifier statements.
+It does not parse the timestamp token: signature validity supplies `parseOk` and `canonicalDer`.
+The core checks the signed token label and message imprint but not ESSv2, the policy OID or the full
+specified certificate/status evidence. OTS state is unconditionally `verified_immediate`; its leaf
+is copied from the bundle. No OTS path, Bitcoin header, proof of work, network, freshness or reorg
+validation occurs there. A signed checkpoint with unrelated block/root/leaf content and stale time
+passes. The checkpoint signature is checked against the TSA-verifier key, while the allowed-witness
+comparison uses the declared fingerprint. Independent trust-domain labels do not establish independent
+operators. Only the first TSA/OTS anchor supplies the context, while domain/set census can include
+additional records without equivalent verification. The adapter sets upstream `vucVerified=true`,
+and the core ignores even an explicitly false value. The fixture embeds a root label, not a verified
+VUC bundle. M130 therefore cannot be assumed to have executed underneath this stage.
+
+Policy content hashes and session/imprint binding are implemented. The configured policy-digest
+string is not recomputed; fallback accuracy is not precommitted. Profile thresholds come from constants
+rather than all declared quorum-policy values. Ceremony ID and sequencer signature are not verified.
+Receipt checkpoint, quorum-policy and release-surface bindings are required to exist but not compared
+with their expected values. Capability derivation and slot uniqueness do execute, yet a newly signed
+release for another audience passes despite the original audience in the committed surface. Consumption
+record endpoint/ordinal fields are not fully matched to the outer record. These are structural records;
+there is no implemented content service enforcing single-use release or proving that content was
+unavailable before the window. “Cryptographically impossible” release-before-anchor claims exceed
+what these verifiers establish. Duplicate declared slots can collapse under set projection, and missing
+release/child failures do not always match the plan's 377/378 allocation.
+
+Timestamp numbers lack complete finite, nonnegative integer validation. A signed negative accuracy
+passes and reduces the upper bound. Window validation does not establish actual measured release time.
+Schema validation is shallow despite the totality claim; recursive adequacy-key scanning can throw on
+cyclic in-memory input before the guarded checks. Unknown properties and semantic synonyms are not
+excluded by the lexical claim screen. Projections compare their stored roots rather than every displayed
+field. The public-attestation builder does not first require core acceptance; the CLI does not verify
+its separate attestation files. It loads the committed fixture keys rather than a production trust
+configuration. A signed externally-anchored rung in a Lane-A file remains a fixture statement.
+
+The separate real-TSA helper does invoke OpenSSL token/digest verification. It extracts human-readable
+text, floors fractional time and maps current verification success to `certValidAtGenTime` without
+selecting `-attime`. It does not implement the full signed typed TSA result, policy enforcement, accuracy,
+LTV/status and ESSv2 contract. The Lane-B command checks a fixed token subject, not the complete ceremony.
+Its OTS target digest differs from the TSA message-imprint digest, so these captures cannot simply be
+combined into a same-commitment quorum. The retained `banks_externally_anchored:false` is the correct
+limited outcome. Optional OpenSSL tests can run when installed or skip when absent; that is not an
+explicitly opted-in external integration lane. Lane D does not supply the specified fresh independent
+full ceremony. Existing public captures remain unmodified.
+
+Lane C is a bounded synthetic mutation harness, not proof that all attacks on every exported surface
+were exercised. Empty attempt arrays can satisfy containment; malformed output is labeled refusal
+without checking a model refusal; any nonzero verifier result counts as containment without identifying
+the intended violated law. A zero result is labeled bypass without independently proving the attempted
+law violation. Output does not retain every patch/full request needed for exact replay, and a custom
+organization environment label does not establish API organization authorization. M69's retry/accounting
+limitations also apply. No inference was run during this audit.
+
+Browser code supplies commitment hashing only; its advertised adapter/structural verification claim
+exceeds that implementation. Python checks fixed-path commitment/capability roots, not token parsing,
+signatures, releases or the full raw-code matrix. Neither establishes cross-runtime verdict parity.
+Lean contains fourteen numbered themes plus auxiliaries, with several important equalities, anchored
+states and linkage hypotheses assumed. It does not refine actual token/path verification or an enforced
+release service. K7's raw-code fixtures and four attacks do not cover every exported surface or real
+wrong-chain proof. Reproduction rebuilds Lane A in place and compares files, runs selected tests/Python
+and optionally Lean; it does not complete external finality, the full real quorum or fresh Lane D.
+The plan's full byte-stability/parity workflow is not present as described. Its thirteen/fourteen-law
+and score discrepancies are historical planning inconsistencies, not measured results.
+
+S54 checks the SEC motivating example, RFC 3161 accuracy semantics and OpenSSL verification time.
+C2PA's timestamp provisions do not certify this prototype. Preserve frozen instructions and apply
+these dated qualifications wherever the stage is presented as implemented temporal-quorum enforcement.

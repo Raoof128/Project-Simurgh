@@ -611,3 +611,40 @@ rating pairs. The [2025 pilot announcement](https://alignment.anthropic.com/2025
 describes revision with internal and external reviewers; the broader assertion that external
 evaluation “does not bite” overstates what these sources establish. These checks do not establish
 whether every deployment decision was affected, nor a universal absence of postponements.
+
+### S53 — Universe commitments require real anchor evidence and a bounded taxonomy interpretation
+
+Checked 20 October 2026. [RFC 9162](https://www.rfc-editor.org/rfc/rfc9162.html) distinguishes a
+signed certificate timestamp's promise from later Merkle inclusion verification against a signed
+tree head, with a maximum merge delay. Neither an anchor type string nor a generic JSON object
+supplies those proofs. VUC's domain-separated Merkle profile borrows tree structure; it is not
+RFC 9162 certificate/carrier encoding. The [PLANTS document history](https://datatracker.ietf.org/doc/draft-ietf-plants-merkle-tree-certs/)
+now identifies revision **07**, an Internet-Draft. The frozen unversioned May reference is not a
+stable published standard or a complete prior-art exclusion.
+
+Anthropic's [ATT&CK analysis](https://www.anthropic.com/research/attack-navigator) and
+[companion navigator](https://red.anthropic.com/2026/attack-navigator/navigator) describe 832 banned
+accounts, 13,873 **technique observations**, all 14 tactics and 482 unique sub-techniques mapped
+to ATT&CK v18. Observed categories are not proof that every taxonomy item was evaluated, and v18
+is the analysis's historical version. These targeted source checks support the scope-versus-
+adequacy motivation; they do not authenticate Simurgh's commitments or imply vendor adoption.
+
+### S54 — Temporal evidence, timestamp accuracy and verification time
+
+Checked 20 October 2026 against primary sources for M131:
+
+- [SEC order 34-92361, 9 July 2021](https://www.sec.gov/files/litigation/admin/2021/34-92361.pdf),
+  especially the findings on late-prepared/backdated audit documentation, supports the motivating
+  problem. The order is accessible; an earlier access-block note is historical. It does not establish
+  that Simurgh prevents those acts or supplies regulatory compliance.
+- [RFC 3161, §2.4.2](https://www.rfc-editor.org/rfc/rfc3161.html) defines time accuracy and the interval
+  around `genTime`. Missing accuracy components differ from an absent complete accuracy field, whose
+  meaning may depend on the TSA policy. Absence does not justify silently assuming exact time.
+- [OpenSSL `ts`](https://docs.openssl.org/master/man1/openssl-ts/) and
+  [verification options](https://docs.openssl.org/4.0/man1/openssl-verification-options/) distinguish
+  token/digest verification from certificate validation at a selected reference time. `-attime` selects
+  a time other than the default current time; a successful current check is not by itself proof of
+  certificate validity at the token's generation time.
+- [C2PA Technical Specification 2.4](https://spec.c2pa.org/specifications/specifications/2.4/specs/C2PA_Specification.html)
+  is a published version, not an invented reference. Its timestamp/trust requirements are separate
+  from this fixture adapter and provide no conformance finding for Simurgh.
