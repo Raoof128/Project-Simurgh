@@ -718,3 +718,31 @@ paraphrase, not a byte-exact quotation. That paper does not establish the absenc
 executable audit floors or cumulative selective-disclosure mechanisms. The two Stage 5O novelty
 claims remain narrow research hypotheses requiring a broader comparative search, never release,
 patent or regulatory certifications. No new regulatory standard follows from these sources.
+
+### S58 — Identity infrastructure supplies bounded assertions
+
+Checked 2026-10-20. [Sigstore's security model](https://docs.sigstore.dev/about/security/)
+distinguishes OIDC-backed certificates, log evidence and monitoring, and explicitly supports
+workload identity for automated systems. A human-interactive OIDC flow is not a universal keyless
+requirement. Compromised identity providers and absent monitoring remain limitations. A self-managed
+Rekor signature does not establish Fulcio-certified identity or organizational authority.
+
+[RFC 9943 §§9.2–9.3](https://www.rfc-editor.org/rfc/rfc9943.html#section-9.2) distinguishes authentic
+issuance from statement truth and acknowledges selective issuer submission. Identity resolution
+alone cannot prove submission completeness. Its receipt and trust requirements are not fulfilled
+merely by setting a profile label or hashing an identity-bank object.
+
+[GLEIF's LEI-CDF 3.1 documentation](https://www.gleif.org/en/lei-data/access-and-use-lei-data/level-1-data-lei-cdf-3-1-format)
+and [LEI Search explanation](https://www.gleif.org/en/lei-data/lei-search/more-about-lei-search)
+separate entity status from registration status. LAPSED means overdue renewal/verification, not
+necessarily an inactive entity; RETIRED describes cessation without merger. The captured three-pair
+mapping is intentionally partial. Neither status authenticates a submitter's mandate or establishes
+the absence of residual legal responsibilities.
+
+The [Commission's EUDI Q&A](https://digital-strategy.ec.europa.eu/en/faqs/qa-digital-identity)
+describes wallet availability by end 2026; its [issuer guidance](https://ec.europa.eu/digital-building-blocks/sites/spaces/EUDIGITALIDENTITYWALLET/pages/881984686/Wallet+for+Issuers)
+relates timing to implementing acts. That rollout objective is not evidence that every legal-person
+role credential or Simurgh resolver is available, certified or integrated. Direct retrieval of the
+AI Act's English OJ page returned an anti-bot page in this pass; no new quotation-verification claim
+is made for Articles 18/22. The earlier source pin and the separation of provider/representative
+obligations remain historical evidence, not a universal compliance guarantee.

@@ -691,3 +691,10 @@ accept fabricated ACCEPT receipts and payload identifiers without the underlying
 [M134 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m134--stage-5o-verifies-component-relations-without-authenticating-the-complete-upstream-ceremony).
 Exact probability arithmetic, historical Bitcoin-header replay and object brands do not establish
 full hidden-universe equality, fresh external anchoring or authenticated cumulative disclosure.
+
+Stage 5P's core checks declared profile membership but does not authenticate resolver-envelope
+signatures or bind them to an independently expected submission. Its general attestation verifier
+checks signatures and linkage without requiring the full claim schema. See
+[M135 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m135--stage-5p-implements-an-identity-order-but-does-not-authenticate-resolver-envelopes).
+The product order, synthetic authority rejection and captured Rekor/GLEIF checks establish narrower
+properties than a deployed identity, delegation or lifecycle service.

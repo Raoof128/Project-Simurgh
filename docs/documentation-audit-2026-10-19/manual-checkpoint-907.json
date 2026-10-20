@@ -6,7 +6,7 @@
   "complete": false,
   "append_only_logs": true,
   "checks": {
-    "changed_file_format": "pass",
+    "changed_file_format": "Pass for changed audit files and SECURITY.md; Prettier flags extra blank lines in the newly appended AGENT.md/CHANGELOG.md entries. These already-published append-only bytes are preserved. The initial checkpoint incorrectly said pass; corrected in the next commit.",
     "git_diff_check": "pass",
     "local_links": {
       "documents": 813,

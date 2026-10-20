@@ -6011,3 +6011,108 @@ still says acceptance after the matrix changed it to rejection; accepted halves 
 some fixture-class labels. Placeholder profile/A37 hashes, stale seven/eight premise counts and
 resource-summary estimates are not authoritative constants. A successful freeze records historical
 acceptance, not resolution of these implementation gaps. S57 supplies the primary-source corrections.
+
+### M135 — Stage 5P implements an identity order but does not authenticate resolver envelopes
+
+Complete reads cover the 1,666-line specification, all annexes and the 368-line Lane A plan.
+The product order is meaningful: four axes yield 24 vectors, 576 ordered pairs and 276 incomparable
+ordered pairs. Exactly half of the 276 distinct unordered pairs are incomparable; this is geometry,
+not an empirical risk or security score. No evidence supports the universal claim that every other
+identity system collapses these questions, or that this product order was first invented here.
+[Eleven offline probe cases](vsi-verifier-probe.json) qualify the implemented trust boundary.
+
+The core accepts signature-shaped hex without authenticating a resolver signature. Its C2 branch
+rejects `e.signature_verified === false`, but `makeResolverEvidence` neither emits that field nor
+allows it in the exact-key input. The branch is unreachable for ordinary parsed evidence. A one-byte
+`00` signature passes the same accepted ancestor; supplying the adapter failure flag instead fails
+at grammar C1. Lane A uses `ab12`, not deterministic issuer/resolver signatures. No general adapter
+connects a successful signature verification under `trust_root_fpr` to these envelopes. Consequently
+C3 enforces membership of the declared profile ID in a trusted set, not proof that that profile
+issued the assertion. An attacker who can supply the envelope can name a trusted profile.
+
+`evidence_digest` is not recomputed from underlying bytes, and `submission_digest_binding` is not
+compared with an independently expected submission. Changed values pass. Different submissions can
+be pooled for one principal, and changing the binding avoids the supplied replay list even with the
+same evidence digest. C4 catches equal replay IDs within the current input or explicitly supplied
+history; it cannot establish persistent replay protection or a bound original submission. The proof
+of replay monotonicity assumes a fixed replay identity and returns the original grant by definition.
+The core has no binding to Stage 5M's verified submitter key despite the specification's consumption
+claim; optional I7 activation must not be read as an authenticated integration guarantee.
+
+C5 rejects all principal claims for different subjects in one verification call. The bank helper
+can hold multiple principals, but the verifier does not implement the advertised multiprincipal
+policy/delegation workflow. Delegation envelopes reach an attachment helper that only accepts
+principal claims; the separate edge helper validates structure and does not authenticate authority
+or execute an authority-to-act policy. C6 labels any incomparable asserted deltas contradictory.
+Two legitimate complementary claims from the same principal—continuity from a registry and role
+from a role authority—therefore reject at C6 despite fitting their separate ceilings. This is not a
+semantic contradiction inherent in the product order. The probe witnesses that limitation. Source
+code implements exact principal comparisons and monotone ceiling-limited attachment, but those
+properties do not repair missing issuer authentication or prove that asserted identity facts are true.
+
+Lifecycle is another supplied assertion. A continuity-capable profile can state `ceased`, but it is
+not reconciled against a verified registry response at the general core boundary. Ceased is tested
+only when the vector fails required strength; a qualifying vector can accept while carrying that
+lifecycle. There is no distinct present-accountability policy flag. Revocation comes from the
+caller-supplied revoked set, not an authenticated lifecycle service. The safe wrapper maps unexpected
+exceptions to `identity_unresolved` at C1 (470 through the allocator), contradicting the annex's
+claim that infrastructure faults consistently become internal code 29. The order is a prototype
+contract, not an operational identity-verification service.
+
+Lane B does real artifact signature, body binding, inclusion-root arithmetic and Rekor SET signature
+checks. It compares the checkpoint's textual root with the proof root but never verifies the
+checkpoint signature. Proof size/index completeness is not independently validated, and the proof
+index is not cross-checked with the SET-signed entry index. The second-fetch check compares UUID,
+body and logIndex only, not all bytes; it does not prove a separate operator or global log consistency.
+The log trust-root fingerprint is computed from the bundled PEM at import rather than matched to an
+external pin. `rekorEvidenceBundle` calls the ceremony verifier but does not require its `ok` result
+before returning an envelope. Its unresolved/ephemeral/self-managed-key limitations are appropriate.
+The original keyless Lane B release requirement was narrowed in Annex B, not fulfilled as originally
+specified: retirement applies only to the real Rekor anchoring task. Fulcio identity, expired-cert
+archaeology, C2 and the two-epoch Identity Heartbeat remain unexecuted/unimplemented here. Keyless
+issuance does not universally require a human-interactive flow (S58).
+
+Lane C1 rehashes three committed records against their co-located manifest; this proves consistency
+relative to the trusted capture, not GLEIF's signature or current registry state. The profile pins the
+manifest by a fingerprint computed at import. It maps exactly the observed entity/registration pairs;
+ACTIVE/ISSUED becomes durable under this capture profile, not under the unbuilt two-epoch heartbeat.
+The filename LEI is used to derive the principal without independently reconciling the identifier
+inside the response. A historical RETIRED record supports the profile's cessation classification,
+not the legal conclusion that no successor, liquidator or other accountable party can exist.
+
+Lane L hashes the captured text but constructs a fixed synthetic principal, maximal delta and
+untrusted profile around it; it does not parse and authenticate the model's proposed resolver JSON.
+The source-membership rejection is useful, but the same text labeled as a trusted source would
+encounter only the subsequent shape/ceiling checks. Three captured outputs are not a model failure
+rate or proof that labels themselves are authenticated. The loader computes the capture digest
+without comparing it to a separate expected capture pin; reproduction's signed public-payload
+comparison provides an additional repository-level consistency check.
+
+The attestation verifier checks two signatures, tier schema names, audit-to-public digest and a
+nonempty limitations list. It does not require the expected public fields, exact non-claim set,
+limitation count, successful censuses or equality with recomputed results. A minimal signed public
+schema plus an arbitrary one-item limitation list passes; a bad signature correctly fails. The
+reproduction script separately compares the public payload with the repository, so distinguish that
+stronger combined check from the exported verifier. The standalone discharge gate similarly checks
+supplied result strings, not a proof execution or signature: an unsigned `signed_non_claim` string
+can satisfy its reserved path. Generated fixture execution is the additional evidence, not the
+field's name. Missing/empty expected-outcome lists can make the standalone census vacuous.
+
+Python/browser parity covers the order and selected digest constructions, not the nine-check
+verifier, authenticated profiles, raw outcomes or complete bank behavior. Python's code-point key
+ordering is not general RFC 8785 UTF-16 ordering; current ASCII fixtures avoid that distinction.
+Browser order functions do not reject unknown values (`indexOf` returns -1), so malformed input
+behavior is not equivalent to the validated Node API. The Lean model proves order/attachment laws
+and simplified replay/principal statements, not concrete cryptographic authentication. Its replay
+identity omits the claim that runtime hashing includes. K7's callable-export exercise is not every
+behavioral path or all adversarial inputs. Reproduction does replay B/C1/L despite its stale header
+saying B never ran; it does not execute a fresh ceremony or require real-browser parity. Lean may
+explicitly skip locally. Preserve historical test totals as dated receipts, not current totals.
+
+The plan's unallocated codes, unchecked task boxes and draft Section 2 are historical. Final annexes
+supply 464–474, eleven outcomes and the later evidence lanes; frozen core paragraphs saying nine
+outcomes, unbuilt Lean/attestation/parity or unavailable C1 are superseded, not today's roadmap.
+The role-authority identifier also differs between the frozen underscore spelling and the shipped
+hyphen spelling; runtime uses the latter. Founder scores and projected lab benefit are internal
+judgments, not endorsements or validated maturity grades. S58 bounds registry, Sigstore and EUDI
+claims; existing M50 legal qualifications remain in force.

@@ -1,0 +1,109 @@
+{
+  "scope": "Direct exported-module probes, synthetic fixtures and ephemeral local attestation key; no external ceremony.",
+  "cases": [
+    {
+      "name": "ancestor_control",
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "name": "one_byte_unverified_signature",
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "name": "adapter_failure_flag_rejected_as_unknown_schema_key",
+      "result": {
+        "ok": false,
+        "check_id": "S2.C1",
+        "outcome": "identity_unresolved",
+        "detail": "resolver evidence: unknown key \"signature_verified\""
+      }
+    },
+    {
+      "name": "unrecomputed_evidence_and_submission_digests",
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "name": "unchanged_replay_control",
+      "result": {
+        "ok": false,
+        "check_id": "S2.C4",
+        "outcome": "identity_replay_upgrade_attempted",
+        "detail": "replay identity d639b11eedeb2a82 re-presented"
+      }
+    },
+    {
+      "name": "same_evidence_replay_renamed_by_submission_binding",
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "name": "two_evidences_for_unrelated_submissions",
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "name": "complementary_same_principal_claims_treated_as_contradictory",
+      "result": {
+        "ok": false,
+        "check_id": "S2.C6",
+        "outcome": "identity_claim_mismatch",
+        "detail": "contradictory assertions about one canonical principal"
+      }
+    },
+    {
+      "name": "signed_minimal_attestation_without_census_or_nonclaims",
+      "result": {
+        "checks": {
+          "public_present": true,
+          "public_schema": true,
+          "public_signature_valid": true,
+          "audit_present": true,
+          "audit_schema": true,
+          "audit_signature_valid": true,
+          "audit_binds_public": true,
+          "limitations_signed": true
+        },
+        "ok": true
+      }
+    },
+    {
+      "name": "invalid_attestation_signature_control",
+      "result": {
+        "checks": {
+          "public_present": true,
+          "public_schema": true,
+          "public_signature_valid": false,
+          "audit_present": true,
+          "audit_schema": true,
+          "audit_signature_valid": true,
+          "audit_binds_public": true,
+          "limitations_signed": true
+        },
+        "ok": false
+      }
+    },
+    {
+      "name": "standalone_discharge_gate_does_not_authenticate_signed_nonclaim",
+      "result": {
+        "ok": true,
+        "phase": "release",
+        "problems": [],
+        "counts": {
+          "witnessed": 0,
+          "mechanically_unreachable": 0,
+          "reserved": 1,
+          "pending": 0
+        },
+        "pending": []
+      }
+    }
+  ]
+}

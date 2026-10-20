@@ -4738,3 +4738,20 @@ Owner-requested work; implementation and review by Codex assistance.
   append-only prefixes and frozen surfaces. No runtime changes, inference, external ceremony
   or full E2E rerun; original specifications and evidence remain intact.
 - **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-20 (Australia/Sydney) — Manual documentation audit: 909-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 909 of 919 baseline
+  candidates completely read, 10 pending. Exhaustive manual review remains in progress.
+- **Changes:** M135 covers the complete Stage 5P specification/annexes and Lane A plan.
+  Eleven offline probes qualify resolver signatures, submission/replay binding, complementary
+  claims, attestation schema and discharge validation. SECURITY records these boundaries.
+- **Research:** S58 checks Sigstore, SCITT, GLEIF and EUDI primary sources; direct AI Act retrieval
+  was blocked and is not represented as fresh quotation verification.
+- **Validation:** Check audit-file formatting, links, baseline identities/read hashes, append-only
+  prefixes and frozen surfaces. The 907 checkpoint's formatting claim is corrected: published
+  append-only log entries have extra-blank-line warnings. Their original bytes are preserved.
+- **Remaining:** Complete every pending manual read and final correction verification. No runtime
+  changes, model inference, external ceremony or full E2E rerun in this checkpoint.
