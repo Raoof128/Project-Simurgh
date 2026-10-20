@@ -35,7 +35,9 @@ An activity-log follow-up is not necessarily still open.
 
 The provider-transfer track and local continuation reuse phase numbers. Cite a full path and
 revision, such as `docs/research/transfer-phase-17/RESULTS.md`, rather than “Phase 17” alone.
-The explorer's built-in 144-row Phase 10/14 dataset is distinct from the newer 288-branch study.
+The explorer defaults to the 288-branch transfer study; `--study phase10` selects the historical
+144-row dataset. [Readiness repairs and current blockers](docs/readiness-2026-10-21/RESULTS.md)
+are recorded separately from the original audit receipts.
 Likewise, the root package version, explorer version and research tags are distinct.
 
 ## Updating a document

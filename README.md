@@ -164,17 +164,19 @@ The local **React dashboard and JSON CLI share the same query layer**. Humans an
 inspect outcomes, compare controls, locate unauthorized effects and incomplete tasks, retain
 unknowns, follow source pointers and search the dated research index.
 
-**Viewer scope:** the bundled dataset contains the earlier Phase 10/14 snapshot's **144
-outcomes**, not the newer 288-branch comparison above. Its research index and gap register
-are dated snapshots; search is local, not live web search. Loading data does not verify it.
+**Viewer scope:** the default dataset contains all **288 transfer-study branches**, with separate
+model identities and 96 generations. `--study phase10` retains the earlier 144-outcome view.
+The research index and gap register are dated snapshots; search is local. Loading data does not
+verify the source archive. See the [21 October readiness work](docs/readiness-2026-10-21/RESULTS.md)
+for repairs, validation and remaining blockers.
 
-With Node.js 24 or 26, run the CLI from the repository root; no npm installation is required:
+With Node.js 24 or 26 and Python 3, run the CLI from the repository root; no npm installation is required:
 
 ```sh
 node tools/simurgh-explorer/cli.mjs summary
 node tools/simurgh-explorer/cli.mjs records --kind unauthorized --control credential_only
-node tools/simurgh-explorer/cli.mjs records --kind unknown
-node tools/simurgh-explorer/cli.mjs inspect --id 'p10:g1:composed' --detail
+node tools/simurgh-explorer/cli.mjs records --kind unauthorized --model llama
+node tools/simurgh-explorer/cli.mjs inspect --id 'p17:llama:g1:composed' --detail
 node tools/simurgh-explorer/cli.mjs search --q monitoring --year 2026
 ```
 
@@ -199,7 +201,7 @@ and document text as untrusted data when feeding CLI results to an agent.
 | Assess the experiment        | [Results](docs/research/transfer-phase-17/RESULTS.md) and [corpus](docs/research/transfer-phase-17/CORPUS.md)                                               | Denominators, matched controls, interface confounds and uncertainty          |
 | Verify reported behavior     | [Runbook](docs/research/transfer-phase-17/RUNBOOK.md) and [receipts](docs/research/transfer-phase-17/VALIDATION.md)                                         | Source bindings, raw receiver state and fresh replay                         |
 | Review the implementation    | [Composed gate](tools/assurance-composed/composition.py), [transfer study](tools/assurance-transfer/) and [role correction](tools/assurance-provider-role/) | Authority transitions, unknown outcomes and adapter trust                    |
-| Inspect earlier outcomes     | [Dashboard/CLI guide](tools/simurgh-explorer/README.md)                                                                                                     | Failure classification, matched controls and source provenance               |
+| Inspect current outcomes     | [Dashboard/CLI guide](tools/simurgh-explorer/README.md)                                                                                                     | Failure classification, matched controls and source provenance               |
 | Perform outside reproduction | [Operator handoff](docs/research/CONTINUATION_HANDOFF_2026-10-19.md)                                                                                        | Earlier viewer/export snapshot; use the current runbook for the latest study |
 | Trace prior work             | [Reviewer index](docs/REVIEWER_INDEX.md) and [research history](RESEARCH_HISTORY.md)                                                                        | Frozen stages, negative results and historical reproduction                  |
 

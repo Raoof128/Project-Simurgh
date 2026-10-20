@@ -24,3 +24,18 @@ or alert-lifecycle capability was identified. No credential value was read into 
 The Browser plugin instructions were loaded; no Browser `js` or CUA tool was exposed in this
 session's tool inventory. This does not establish real-browser validation. The existing strict
 parity runner must retain a failure if managed browser policy prevents execution.
+
+## Provider lifecycle follow-up
+
+[OpenAI's current API overview](https://developers.openai.com/api/reference/overview) distinguishes
+application credentials from Admin API keys. The
+[Admin APIs guide](https://developers.openai.com/api/docs/guides/admin-apis) lists project/key,
+audit, spend-alert and organization operations. These are provider capabilities, not evidence that
+this environment can invoke them. The current reference also describes authentication-cache
+propagation: a successful administrative mutation must be distinguished from observed downstream
+revocation. Real acceptance requires measured effect behavior after the change.
+
+Observed on 21 October (Sydney): model listing returned HTTP 200, project listing HTTP 403, and
+the first bounded Responses request HTTP 401. Model-list access therefore did not establish usable
+inference or administrative access. The probe stopped without retry and produced no new model result.
+See [capability observations](provider-capability.json) and [diagnostic attempt](refusal-attempt.json).

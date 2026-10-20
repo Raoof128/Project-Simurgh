@@ -4851,3 +4851,20 @@ Owner-requested work; implementation and review by Codex assistance.
 - **Verification:** All four complete mismatch branches return mapped raw-29 shell status 3;
   none reaches the success marker. This supersedes the earlier less-specific nonzero assertion.
 - **Follow-ups:** Fresh full smoke at the committed repair revision.
+
+### 2026-10-21 (Australia/Sydney) — Readiness documentation and smoke maintenance repairs
+
+**Raouf: Codex-assisted implementation**
+
+- **Scope:** R05/R06 authority `2068f1a6`; mutable reviewer routes and new readiness artifacts.
+- **Summary:** Updated current explorer routes and Stage 4M security boundaries; retained all
+  141 audit finding dispositions without treating documentation corrections as runtime closure.
+  Named exact audited documents in the Stage 5P census and preserved append-only log prefixes.
+- **Verification:** Stage 5P census passes and an injected unapproved runtime literal still fails.
+  Whole-repository formatting passes with historical logs explicitly excluded. Current repair
+  receipts retain Stage 4M/explorer tests, HTTP capability outcomes and local forced-call controls.
+- **Evaluation:** Four-arm protocol frozen at `61124a77`; first Responses request returned 401,
+  stopping the campaign after one attempt. Eight local forced controls complete; no new model
+  result, provider admin operation or independent validation claimed. Project listing returned 403.
+- **Follow-ups:** Full candidate smoke and publication. Original active refusal, additional historic
+  verifier limitations, actual browser/accessibility and provider lifecycle evidence remain open.

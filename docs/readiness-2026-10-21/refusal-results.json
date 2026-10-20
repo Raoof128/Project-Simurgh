@@ -1,0 +1,3683 @@
+{
+  "arms": [{ "id": "baseline-active", "status": "http_error" }],
+  "forced_controls": [
+    {
+      "before_effects": [],
+      "before_storage": {
+        "schema": [
+          [
+            "table",
+            "credentials",
+            "CREATE TABLE credentials(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,revoked INTEGER NOT NULL)"
+          ],
+          [
+            "table",
+            "effects",
+            "CREATE TABLE effects(key TEXT PRIMARY KEY,payload TEXT NOT NULL,credential_id TEXT NOT NULL,session_id TEXT NOT NULL)"
+          ],
+          [
+            "table",
+            "events",
+            "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+          ],
+          [
+            "table",
+            "sessions",
+            "CREATE TABLE sessions(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,credential_id TEXT NOT NULL,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,cancelled INTEGER NOT NULL)"
+          ],
+          [
+            "table",
+            "state",
+            "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),policy TEXT NOT NULL,issuer TEXT NOT NULL,now INTEGER NOT NULL,drop_next INTEGER NOT NULL)"
+          ]
+        ],
+        "tables": {
+          "credentials": [
+            [
+              "c1",
+              "92fe9cac47ed9eeda72a62211cd70da44985a524a1592ae0a3f59197345758f6",
+              "alice",
+              "tenant-a",
+              "inbox",
+              200,
+              0
+            ]
+          ],
+          "effects": [],
+          "events": [
+            [1, "issued", "{\"credential_id\":\"c1\"}"],
+            [2, "session", "{\"credential_id\":\"c1\",\"session_id\":\"s1\"}"]
+          ],
+          "sessions": [
+            [
+              "s1",
+              "5ed1ac3e8fd1d3e40bfc3f7ccdc5ea28bce910b7a1135502a71e41687f092595",
+              "c1",
+              "alice",
+              "tenant-a",
+              "inbox",
+              700,
+              0
+            ]
+          ],
+          "state": [[1, "continuous", "issuer-transfer-active", 100, 0]]
+        }
+      },
+      "case": "active",
+      "effect_count": 1,
+      "effects": [
+        {
+          "action": {
+            "content": "Synthetic report transfer-active a",
+            "id": "a",
+            "operation": "send_report",
+            "policyRevision": "v1",
+            "principal": "alice",
+            "resource": "inbox",
+            "run": "phase9-transfer-active",
+            "tenant": "tenant-a"
+          },
+          "credential_id": "c1",
+          "key": "78f194f1de83ebeec0ae764a30ec49581dd8f53df0d3831c483d314cfcd2f8ee",
+          "session_id": "s1"
+        }
+      ],
+      "held": false,
+      "initial": null,
+      "leaf_status": { "a": "observed", "b": null },
+      "native": {
+        "native_interrupted": true,
+        "status": "observed",
+        "worker": { "path_denied": true, "socket_denied": true }
+      },
+      "new_effects": [
+        {
+          "action": {
+            "content": "Synthetic report transfer-active a",
+            "id": "a",
+            "operation": "send_report",
+            "policyRevision": "v1",
+            "principal": "alice",
+            "resource": "inbox",
+            "run": "phase9-transfer-active",
+            "tenant": "tenant-a"
+          },
+          "credential_id": "c1",
+          "key": "78f194f1de83ebeec0ae764a30ec49581dd8f53df0d3831c483d314cfcd2f8ee",
+          "session_id": "s1"
+        }
+      ],
+      "proposal": {
+        "arguments": { "content": "Synthetic report transfer-active a", "resource": "inbox" },
+        "name": "send_report",
+        "status": "call"
+      },
+      "status": "observed",
+      "storage": {
+        "a-gateway": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "intents",
+              "CREATE TABLE intents(key TEXT PRIMARY KEY,payload TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),stopped INTEGER NOT NULL,revocation TEXT NOT NULL,ack_seq INTEGER)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-active a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-active\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "events": [
+              [
+                1,
+                "intent",
+                "{\"key\":\"78f194f1de83ebeec0ae764a30ec49581dd8f53df0d3831c483d314cfcd2f8ee\"}"
+              ],
+              [2, "outcome", "{\"status\":\"observed\"}"]
+            ],
+            "intents": [
+              [
+                "78f194f1de83ebeec0ae764a30ec49581dd8f53df0d3831c483d314cfcd2f8ee",
+                "{\"content\":\"Synthetic report transfer-active a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"}",
+                "observed"
+              ]
+            ],
+            "state": [[1, 0, "not_requested", null]]
+          }
+        },
+        "a-port": {
+          "schema": [
+            ["table", "binding", "CREATE TABLE binding(payload TEXT)"],
+            [
+              "table",
+              "policy",
+              "CREATE TABLE policy(identity TEXT,approved TEXT,control TEXT,revoked INTEGER)"
+            ]
+          ],
+          "tables": {
+            "binding": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-active a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-active\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "policy": [
+              [
+                "{\"principal\":\"alice\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"}",
+                "{\"content\":\"Synthetic report transfer-active a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"}",
+                "enforced",
+                0
+              ]
+            ]
+          }
+        },
+        "a-signal": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            ["table", "decisions", "CREATE TABLE decisions(nonce TEXT PRIMARY KEY)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY, payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "inbox",
+              "CREATE TABLE inbox(id TEXT PRIMARY KEY, digest TEXT NOT NULL,\n                    alert_id TEXT NOT NULL, status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(revision INTEGER, terminal INTEGER, paused INTEGER,\n                    lease_until REAL, last_seen REAL, boot TEXT)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-active a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"},\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"},\"operator_key_sha256\":\"ea4cae595cf4f67e272c68b92c74d76045bc3802676234d0c5c9b017a9f465ce\",\"project\":\"composition-project\",\"request_id\":\"request-a\",\"response_id\":\"response-a\",\"webhook_key_sha256\":\"f62966f0eee3b92433c04027579fa935b3116e6bb5260b76c807f5ef37857eb2\"}"
+              ]
+            ],
+            "decisions": [["initial-a"]],
+            "events": [
+              [
+                1,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"},\"type\":\"heartbeat\"}"
+              ],
+              [
+                2,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"},\"nonce\":\"initial-a\",\"type\":\"operator_restart\"}"
+              ],
+              [
+                3,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"},\"type\":\"dispatch_admitted\"}"
+              ],
+              [
+                4,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"},\"result\":{\"status\":\"observed\"},\"type\":\"dispatch_result\"}"
+              ]
+            ],
+            "inbox": [],
+            "state": [[1, 0, 0, 130.0, 100.0, "fixture-boot"]]
+          }
+        },
+        "b-gateway": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "intents",
+              "CREATE TABLE intents(key TEXT PRIMARY KEY,payload TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),stopped INTEGER NOT NULL,revocation TEXT NOT NULL,ack_seq INTEGER)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-active b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-active\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "events": [],
+            "intents": [],
+            "state": [[1, 0, "not_requested", null]]
+          }
+        },
+        "b-port": {
+          "schema": [
+            ["table", "binding", "CREATE TABLE binding(payload TEXT)"],
+            [
+              "table",
+              "policy",
+              "CREATE TABLE policy(identity TEXT,approved TEXT,control TEXT,revoked INTEGER)"
+            ]
+          ],
+          "tables": {
+            "binding": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-active b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-active\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "policy": [
+              [
+                "{\"principal\":\"alice\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"}",
+                "{\"content\":\"Synthetic report transfer-active b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"}",
+                "enforced",
+                0
+              ]
+            ]
+          }
+        },
+        "b-signal": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            ["table", "decisions", "CREATE TABLE decisions(nonce TEXT PRIMARY KEY)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY, payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "inbox",
+              "CREATE TABLE inbox(id TEXT PRIMARY KEY, digest TEXT NOT NULL,\n                    alert_id TEXT NOT NULL, status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(revision INTEGER, terminal INTEGER, paused INTEGER,\n                    lease_until REAL, last_seen REAL, boot TEXT)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-active b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"},\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"},\"operator_key_sha256\":\"ea4cae595cf4f67e272c68b92c74d76045bc3802676234d0c5c9b017a9f465ce\",\"project\":\"composition-project\",\"request_id\":\"request-b\",\"response_id\":\"response-b\",\"webhook_key_sha256\":\"f62966f0eee3b92433c04027579fa935b3116e6bb5260b76c807f5ef37857eb2\"}"
+              ]
+            ],
+            "decisions": [["initial-b"]],
+            "events": [
+              [
+                1,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"},\"type\":\"heartbeat\"}"
+              ],
+              [
+                2,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"},\"nonce\":\"initial-b\",\"type\":\"operator_restart\"}"
+              ]
+            ],
+            "inbox": [],
+            "state": [[1, 0, 0, 130.0, 100.0, "fixture-boot"]]
+          }
+        },
+        "context": {
+          "schema": [
+            [
+              "table",
+              "attempts",
+              "CREATE TABLE attempts(action_id TEXT PRIMARY KEY,actor TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "facts",
+              "CREATE TABLE facts(id INTEGER PRIMARY KEY,kind TEXT NOT NULL,detail TEXT NOT NULL,blocking INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "grants",
+              "CREATE TABLE grants(actor TEXT PRIMARY KEY,parent TEXT,actions TEXT NOT NULL,depth INTEGER NOT NULL,source TEXT NOT NULL,revoked INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1), source TEXT NOT NULL, revision INTEGER NOT NULL)"
+            ]
+          ],
+          "tables": {
+            "attempts": [["a", "child", "observed"]],
+            "config": [
+              [
+                "{\"actions\":{\"a\":{\"content\":\"Synthetic report transfer-active a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"},\"b\":{\"content\":\"Synthetic report transfer-active b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"}},\"budget\":1,\"hosts\":{\"a\":[\"{\\\"principal\\\":\\\"alice\\\",\\\"run\\\":\\\"phase9-transfer-active\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"{\\\"content\\\":\\\"Synthetic report transfer-active a\\\",\\\"id\\\":\\\"a\\\",\\\"operation\\\":\\\"send_report\\\",\\\"policyRevision\\\":\\\"v1\\\",\\\"principal\\\":\\\"alice\\\",\\\"resource\\\":\\\"inbox\\\",\\\"run\\\":\\\"phase9-transfer-active\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"enforced\"],\"b\":[\"{\\\"principal\\\":\\\"alice\\\",\\\"run\\\":\\\"phase9-transfer-active\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"{\\\"content\\\":\\\"Synthetic report transfer-active b\\\",\\\"id\\\":\\\"b\\\",\\\"operation\\\":\\\"send_report\\\",\\\"policyRevision\\\":\\\"v1\\\",\\\"principal\\\":\\\"alice\\\",\\\"resource\\\":\\\"inbox\\\",\\\"run\\\":\\\"phase9-transfer-active\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"enforced\"]},\"registry\":{\"child\":{\"parent\":\"root\",\"task\":\"task-transfer-active\"},\"grandchild\":{\"parent\":\"child\",\"task\":\"task-transfer-active\"}},\"source\":\"v1\",\"task\":\"task-transfer-active\"}"
+              ]
+            ],
+            "events": [
+              [1, "{\"actor\":\"root\",\"audit\":[],\"kind\":\"resume\",\"reason\":null}"],
+              [
+                2,
+                "{\"actions\":[\"a\",\"b\"],\"actor\":\"root\",\"child\":\"child\",\"kind\":\"delegated\"}"
+              ],
+              [3, "{\"actor\":\"child\",\"audit\":[],\"kind\":\"resume\",\"reason\":null}"],
+              [4, "{\"action_id\":\"a\",\"actor\":\"child\",\"kind\":\"admitted\"}"],
+              [
+                5,
+                "{\"action_id\":\"a\",\"actor\":\"child\",\"kind\":\"outcome\",\"status\":\"observed\"}"
+              ]
+            ],
+            "facts": [],
+            "grants": [
+              ["child", "root", "[\"a\",\"b\"]", 1, "v1", 0],
+              ["root", null, "[\"a\",\"b\"]", 0, "v1", 0]
+            ],
+            "state": [[1, "v1", 3]]
+          }
+        },
+        "pipeline": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT)"],
+            ["table", "events", "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT)"],
+            ["table", "state", "CREATE TABLE state(held INTEGER)"]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"actions\":{\"a\":{\"content\":\"Synthetic report transfer-active a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"},\"b\":{\"content\":\"Synthetic report transfer-active b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"}},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-active\",\"session_id\":\"s1\"},\"budget\":1,\"registry\":{\"child\":{\"parent\":\"root\",\"task\":\"task-transfer-active\"},\"grandchild\":{\"parent\":\"child\",\"task\":\"task-transfer-active\"}},\"source\":\"v1\",\"task\":\"task-transfer-active\"}"
+              ]
+            ],
+            "events": [
+              [1, "update_started"],
+              [2, "update_completed"],
+              [3, "update_started"],
+              [4, "update_completed"]
+            ],
+            "state": [[0]]
+          }
+        },
+        "service": {
+          "schema": [
+            [
+              "table",
+              "credentials",
+              "CREATE TABLE credentials(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,revoked INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "effects",
+              "CREATE TABLE effects(key TEXT PRIMARY KEY,payload TEXT NOT NULL,credential_id TEXT NOT NULL,session_id TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "sessions",
+              "CREATE TABLE sessions(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,credential_id TEXT NOT NULL,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,cancelled INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),policy TEXT NOT NULL,issuer TEXT NOT NULL,now INTEGER NOT NULL,drop_next INTEGER NOT NULL)"
+            ]
+          ],
+          "tables": {
+            "credentials": [
+              [
+                "c1",
+                "92fe9cac47ed9eeda72a62211cd70da44985a524a1592ae0a3f59197345758f6",
+                "alice",
+                "tenant-a",
+                "inbox",
+                200,
+                0
+              ]
+            ],
+            "effects": [
+              [
+                "78f194f1de83ebeec0ae764a30ec49581dd8f53df0d3831c483d314cfcd2f8ee",
+                "{\"content\":\"Synthetic report transfer-active a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-active\",\"tenant\":\"tenant-a\"}",
+                "c1",
+                "s1"
+              ]
+            ],
+            "events": [
+              [1, "issued", "{\"credential_id\":\"c1\"}"],
+              [2, "session", "{\"credential_id\":\"c1\",\"session_id\":\"s1\"}"],
+              [
+                3,
+                "effect",
+                "{\"credential_id\":\"c1\",\"key\":\"78f194f1de83ebeec0ae764a30ec49581dd8f53df0d3831c483d314cfcd2f8ee\",\"session_id\":\"s1\"}"
+              ]
+            ],
+            "sessions": [
+              [
+                "s1",
+                "5ed1ac3e8fd1d3e40bfc3f7ccdc5ea28bce910b7a1135502a71e41687f092595",
+                "c1",
+                "alice",
+                "tenant-a",
+                "inbox",
+                700,
+                0
+              ]
+            ],
+            "state": [[1, "continuous", "issuer-transfer-active", 100, 0]]
+          }
+        }
+      }
+    },
+    {
+      "before_effects": [],
+      "before_storage": {
+        "schema": [
+          [
+            "table",
+            "credentials",
+            "CREATE TABLE credentials(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,revoked INTEGER NOT NULL)"
+          ],
+          [
+            "table",
+            "effects",
+            "CREATE TABLE effects(key TEXT PRIMARY KEY,payload TEXT NOT NULL,credential_id TEXT NOT NULL,session_id TEXT NOT NULL)"
+          ],
+          [
+            "table",
+            "events",
+            "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+          ],
+          [
+            "table",
+            "sessions",
+            "CREATE TABLE sessions(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,credential_id TEXT NOT NULL,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,cancelled INTEGER NOT NULL)"
+          ],
+          [
+            "table",
+            "state",
+            "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),policy TEXT NOT NULL,issuer TEXT NOT NULL,now INTEGER NOT NULL,drop_next INTEGER NOT NULL)"
+          ]
+        ],
+        "tables": {
+          "credentials": [
+            [
+              "c1",
+              "f9efc6905eebf7ac291da9328eeda7400445ff31933e7c2618f1ae0a18c45cad",
+              "alice",
+              "tenant-a",
+              "inbox",
+              200,
+              0
+            ]
+          ],
+          "effects": [],
+          "events": [
+            [1, "issued", "{\"credential_id\":\"c1\"}"],
+            [2, "session", "{\"credential_id\":\"c1\",\"session_id\":\"s1\"}"]
+          ],
+          "sessions": [
+            [
+              "s1",
+              "1dbf5c92cdc37d5c900aff095c6329a55a07e64d0951a6023dc0cb511c22d850",
+              "c1",
+              "alice",
+              "tenant-a",
+              "inbox",
+              700,
+              0
+            ]
+          ],
+          "state": [[1, "continuous", "issuer-transfer-authorized_reopen", 100, 0]]
+        }
+      },
+      "case": "authorized_reopen",
+      "effect_count": 1,
+      "effects": [
+        {
+          "action": {
+            "content": "Synthetic report transfer-authorized_reopen a",
+            "id": "a",
+            "operation": "send_report",
+            "policyRevision": "v1",
+            "principal": "alice",
+            "resource": "inbox",
+            "run": "phase9-transfer-authorized_reopen",
+            "tenant": "tenant-a"
+          },
+          "credential_id": "c1",
+          "key": "17a46c3abc0b161895cfb92e5d892c57a63d50b41f65f5744a701d195366c9ce",
+          "session_id": "s1"
+        }
+      ],
+      "held": false,
+      "initial": null,
+      "leaf_status": { "a": "observed", "b": null },
+      "native": {
+        "native_interrupted": true,
+        "status": "observed",
+        "worker": { "path_denied": true, "socket_denied": true }
+      },
+      "new_effects": [
+        {
+          "action": {
+            "content": "Synthetic report transfer-authorized_reopen a",
+            "id": "a",
+            "operation": "send_report",
+            "policyRevision": "v1",
+            "principal": "alice",
+            "resource": "inbox",
+            "run": "phase9-transfer-authorized_reopen",
+            "tenant": "tenant-a"
+          },
+          "credential_id": "c1",
+          "key": "17a46c3abc0b161895cfb92e5d892c57a63d50b41f65f5744a701d195366c9ce",
+          "session_id": "s1"
+        }
+      ],
+      "proposal": {
+        "arguments": {
+          "content": "Synthetic report transfer-authorized_reopen a",
+          "resource": "inbox"
+        },
+        "name": "send_report",
+        "status": "call"
+      },
+      "status": "observed",
+      "storage": {
+        "a-gateway": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "intents",
+              "CREATE TABLE intents(key TEXT PRIMARY KEY,payload TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),stopped INTEGER NOT NULL,revocation TEXT NOT NULL,ack_seq INTEGER)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-authorized_reopen a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-authorized_reopen\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "events": [
+              [
+                1,
+                "intent",
+                "{\"key\":\"17a46c3abc0b161895cfb92e5d892c57a63d50b41f65f5744a701d195366c9ce\"}"
+              ],
+              [2, "outcome", "{\"status\":\"observed\"}"]
+            ],
+            "intents": [
+              [
+                "17a46c3abc0b161895cfb92e5d892c57a63d50b41f65f5744a701d195366c9ce",
+                "{\"content\":\"Synthetic report transfer-authorized_reopen a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"}",
+                "observed"
+              ]
+            ],
+            "state": [[1, 0, "not_requested", null]]
+          }
+        },
+        "a-port": {
+          "schema": [
+            ["table", "binding", "CREATE TABLE binding(payload TEXT)"],
+            [
+              "table",
+              "policy",
+              "CREATE TABLE policy(identity TEXT,approved TEXT,control TEXT,revoked INTEGER)"
+            ]
+          ],
+          "tables": {
+            "binding": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-authorized_reopen a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-authorized_reopen\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "policy": [
+              [
+                "{\"principal\":\"alice\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"}",
+                "{\"content\":\"Synthetic report transfer-authorized_reopen a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"}",
+                "enforced",
+                0
+              ]
+            ]
+          }
+        },
+        "a-signal": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            ["table", "decisions", "CREATE TABLE decisions(nonce TEXT PRIMARY KEY)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY, payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "inbox",
+              "CREATE TABLE inbox(id TEXT PRIMARY KEY, digest TEXT NOT NULL,\n                    alert_id TEXT NOT NULL, status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(revision INTEGER, terminal INTEGER, paused INTEGER,\n                    lease_until REAL, last_seen REAL, boot TEXT)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-authorized_reopen a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"},\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"},\"operator_key_sha256\":\"ea4cae595cf4f67e272c68b92c74d76045bc3802676234d0c5c9b017a9f465ce\",\"project\":\"composition-project\",\"request_id\":\"request-a\",\"response_id\":\"response-a\",\"webhook_key_sha256\":\"f62966f0eee3b92433c04027579fa935b3116e6bb5260b76c807f5ef37857eb2\"}"
+              ]
+            ],
+            "decisions": [["initial-a"]],
+            "events": [
+              [
+                1,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"},\"type\":\"heartbeat\"}"
+              ],
+              [
+                2,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"},\"nonce\":\"initial-a\",\"type\":\"operator_restart\"}"
+              ],
+              [
+                3,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"},\"type\":\"dispatch_admitted\"}"
+              ],
+              [
+                4,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"},\"result\":{\"status\":\"observed\"},\"type\":\"dispatch_result\"}"
+              ]
+            ],
+            "inbox": [],
+            "state": [[1, 0, 0, 130.0, 100.0, "fixture-boot"]]
+          }
+        },
+        "b-gateway": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "intents",
+              "CREATE TABLE intents(key TEXT PRIMARY KEY,payload TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),stopped INTEGER NOT NULL,revocation TEXT NOT NULL,ack_seq INTEGER)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-authorized_reopen b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-authorized_reopen\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "events": [],
+            "intents": [],
+            "state": [[1, 0, "not_requested", null]]
+          }
+        },
+        "b-port": {
+          "schema": [
+            ["table", "binding", "CREATE TABLE binding(payload TEXT)"],
+            [
+              "table",
+              "policy",
+              "CREATE TABLE policy(identity TEXT,approved TEXT,control TEXT,revoked INTEGER)"
+            ]
+          ],
+          "tables": {
+            "binding": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-authorized_reopen b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-authorized_reopen\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "policy": [
+              [
+                "{\"principal\":\"alice\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"}",
+                "{\"content\":\"Synthetic report transfer-authorized_reopen b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"}",
+                "enforced",
+                0
+              ]
+            ]
+          }
+        },
+        "b-signal": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            ["table", "decisions", "CREATE TABLE decisions(nonce TEXT PRIMARY KEY)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY, payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "inbox",
+              "CREATE TABLE inbox(id TEXT PRIMARY KEY, digest TEXT NOT NULL,\n                    alert_id TEXT NOT NULL, status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(revision INTEGER, terminal INTEGER, paused INTEGER,\n                    lease_until REAL, last_seen REAL, boot TEXT)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-authorized_reopen b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"},\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"},\"operator_key_sha256\":\"ea4cae595cf4f67e272c68b92c74d76045bc3802676234d0c5c9b017a9f465ce\",\"project\":\"composition-project\",\"request_id\":\"request-b\",\"response_id\":\"response-b\",\"webhook_key_sha256\":\"f62966f0eee3b92433c04027579fa935b3116e6bb5260b76c807f5ef37857eb2\"}"
+              ]
+            ],
+            "decisions": [["initial-b"]],
+            "events": [
+              [
+                1,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"},\"type\":\"heartbeat\"}"
+              ],
+              [
+                2,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"},\"nonce\":\"initial-b\",\"type\":\"operator_restart\"}"
+              ]
+            ],
+            "inbox": [],
+            "state": [[1, 0, 0, 130.0, 100.0, "fixture-boot"]]
+          }
+        },
+        "context": {
+          "schema": [
+            [
+              "table",
+              "attempts",
+              "CREATE TABLE attempts(action_id TEXT PRIMARY KEY,actor TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "facts",
+              "CREATE TABLE facts(id INTEGER PRIMARY KEY,kind TEXT NOT NULL,detail TEXT NOT NULL,blocking INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "grants",
+              "CREATE TABLE grants(actor TEXT PRIMARY KEY,parent TEXT,actions TEXT NOT NULL,depth INTEGER NOT NULL,source TEXT NOT NULL,revoked INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1), source TEXT NOT NULL, revision INTEGER NOT NULL)"
+            ]
+          ],
+          "tables": {
+            "attempts": [["a", "child", "observed"]],
+            "config": [
+              [
+                "{\"actions\":{\"a\":{\"content\":\"Synthetic report transfer-authorized_reopen a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"},\"b\":{\"content\":\"Synthetic report transfer-authorized_reopen b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"}},\"budget\":1,\"hosts\":{\"a\":[\"{\\\"principal\\\":\\\"alice\\\",\\\"run\\\":\\\"phase9-transfer-authorized_reopen\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"{\\\"content\\\":\\\"Synthetic report transfer-authorized_reopen a\\\",\\\"id\\\":\\\"a\\\",\\\"operation\\\":\\\"send_report\\\",\\\"policyRevision\\\":\\\"v1\\\",\\\"principal\\\":\\\"alice\\\",\\\"resource\\\":\\\"inbox\\\",\\\"run\\\":\\\"phase9-transfer-authorized_reopen\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"enforced\"],\"b\":[\"{\\\"principal\\\":\\\"alice\\\",\\\"run\\\":\\\"phase9-transfer-authorized_reopen\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"{\\\"content\\\":\\\"Synthetic report transfer-authorized_reopen b\\\",\\\"id\\\":\\\"b\\\",\\\"operation\\\":\\\"send_report\\\",\\\"policyRevision\\\":\\\"v1\\\",\\\"principal\\\":\\\"alice\\\",\\\"resource\\\":\\\"inbox\\\",\\\"run\\\":\\\"phase9-transfer-authorized_reopen\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"enforced\"]},\"registry\":{\"child\":{\"parent\":\"root\",\"task\":\"task-transfer-authorized_reopen\"},\"grandchild\":{\"parent\":\"child\",\"task\":\"task-transfer-authorized_reopen\"}},\"source\":\"v1\",\"task\":\"task-transfer-authorized_reopen\"}"
+              ]
+            ],
+            "events": [
+              [1, "{\"actor\":\"root\",\"audit\":[],\"kind\":\"resume\",\"reason\":null}"],
+              [
+                2,
+                "{\"actions\":[\"a\",\"b\"],\"actor\":\"root\",\"child\":\"child\",\"kind\":\"delegated\"}"
+              ],
+              [3, "{\"actor\":\"child\",\"audit\":[],\"kind\":\"resume\",\"reason\":null}"],
+              [4, "{\"action_id\":\"a\",\"actor\":\"child\",\"kind\":\"admitted\"}"],
+              [
+                5,
+                "{\"action_id\":\"a\",\"actor\":\"child\",\"kind\":\"outcome\",\"status\":\"observed\"}"
+              ]
+            ],
+            "facts": [],
+            "grants": [
+              ["child", "root", "[\"a\",\"b\"]", 1, "v1", 0],
+              ["root", null, "[\"a\",\"b\"]", 0, "v1", 0]
+            ],
+            "state": [[1, "v1", 3]]
+          }
+        },
+        "pipeline": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT)"],
+            ["table", "events", "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT)"],
+            ["table", "state", "CREATE TABLE state(held INTEGER)"]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"actions\":{\"a\":{\"content\":\"Synthetic report transfer-authorized_reopen a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"},\"b\":{\"content\":\"Synthetic report transfer-authorized_reopen b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"}},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-authorized_reopen\",\"session_id\":\"s1\"},\"budget\":1,\"registry\":{\"child\":{\"parent\":\"root\",\"task\":\"task-transfer-authorized_reopen\"},\"grandchild\":{\"parent\":\"child\",\"task\":\"task-transfer-authorized_reopen\"}},\"source\":\"v1\",\"task\":\"task-transfer-authorized_reopen\"}"
+              ]
+            ],
+            "events": [
+              [1, "update_started"],
+              [2, "update_completed"],
+              [3, "update_started"],
+              [4, "update_completed"]
+            ],
+            "state": [[0]]
+          }
+        },
+        "service": {
+          "schema": [
+            [
+              "table",
+              "credentials",
+              "CREATE TABLE credentials(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,revoked INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "effects",
+              "CREATE TABLE effects(key TEXT PRIMARY KEY,payload TEXT NOT NULL,credential_id TEXT NOT NULL,session_id TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "sessions",
+              "CREATE TABLE sessions(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,credential_id TEXT NOT NULL,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,cancelled INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),policy TEXT NOT NULL,issuer TEXT NOT NULL,now INTEGER NOT NULL,drop_next INTEGER NOT NULL)"
+            ]
+          ],
+          "tables": {
+            "credentials": [
+              [
+                "c1",
+                "f9efc6905eebf7ac291da9328eeda7400445ff31933e7c2618f1ae0a18c45cad",
+                "alice",
+                "tenant-a",
+                "inbox",
+                200,
+                0
+              ]
+            ],
+            "effects": [
+              [
+                "17a46c3abc0b161895cfb92e5d892c57a63d50b41f65f5744a701d195366c9ce",
+                "{\"content\":\"Synthetic report transfer-authorized_reopen a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-authorized_reopen\",\"tenant\":\"tenant-a\"}",
+                "c1",
+                "s1"
+              ]
+            ],
+            "events": [
+              [1, "issued", "{\"credential_id\":\"c1\"}"],
+              [2, "session", "{\"credential_id\":\"c1\",\"session_id\":\"s1\"}"],
+              [
+                3,
+                "effect",
+                "{\"credential_id\":\"c1\",\"key\":\"17a46c3abc0b161895cfb92e5d892c57a63d50b41f65f5744a701d195366c9ce\",\"session_id\":\"s1\"}"
+              ]
+            ],
+            "sessions": [
+              [
+                "s1",
+                "1dbf5c92cdc37d5c900aff095c6329a55a07e64d0951a6023dc0cb511c22d850",
+                "c1",
+                "alice",
+                "tenant-a",
+                "inbox",
+                700,
+                0
+              ]
+            ],
+            "state": [[1, "continuous", "issuer-transfer-authorized_reopen", 100, 0]]
+          }
+        }
+      }
+    },
+    {
+      "before_effects": [],
+      "before_storage": {
+        "schema": [
+          [
+            "table",
+            "credentials",
+            "CREATE TABLE credentials(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,revoked INTEGER NOT NULL)"
+          ],
+          [
+            "table",
+            "effects",
+            "CREATE TABLE effects(key TEXT PRIMARY KEY,payload TEXT NOT NULL,credential_id TEXT NOT NULL,session_id TEXT NOT NULL)"
+          ],
+          [
+            "table",
+            "events",
+            "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+          ],
+          [
+            "table",
+            "sessions",
+            "CREATE TABLE sessions(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,credential_id TEXT NOT NULL,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,cancelled INTEGER NOT NULL)"
+          ],
+          [
+            "table",
+            "state",
+            "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),policy TEXT NOT NULL,issuer TEXT NOT NULL,now INTEGER NOT NULL,drop_next INTEGER NOT NULL)"
+          ]
+        ],
+        "tables": {
+          "credentials": [
+            [
+              "c1",
+              "900a0b9b50a2dc2b90bad8322662b5db9f61ec6d859688b2adb0f8c52840844c",
+              "alice",
+              "tenant-a",
+              "inbox",
+              200,
+              0
+            ]
+          ],
+          "effects": [],
+          "events": [
+            [1, "issued", "{\"credential_id\":\"c1\"}"],
+            [2, "session", "{\"credential_id\":\"c1\",\"session_id\":\"s1\"}"]
+          ],
+          "sessions": [
+            [
+              "s1",
+              "4db42bdf265db5a87158d24f34643b51c7f8c7437a2b3cda270fac8b8daf333f",
+              "c1",
+              "alice",
+              "tenant-a",
+              "inbox",
+              700,
+              0
+            ]
+          ],
+          "state": [[1, "continuous", "issuer-transfer-ancestor_revoke", 100, 0]]
+        }
+      },
+      "case": "ancestor_revoke",
+      "effect_count": 0,
+      "effects": [],
+      "held": false,
+      "initial": null,
+      "leaf_status": { "a": null, "b": null },
+      "native": {
+        "native_interrupted": true,
+        "status": "blocked",
+        "worker": { "path_denied": true, "socket_denied": true }
+      },
+      "new_effects": [],
+      "proposal": {
+        "arguments": {
+          "content": "Synthetic report transfer-ancestor_revoke a",
+          "resource": "inbox"
+        },
+        "name": "send_report",
+        "status": "call"
+      },
+      "status": "blocked",
+      "storage": {
+        "a-gateway": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "intents",
+              "CREATE TABLE intents(key TEXT PRIMARY KEY,payload TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),stopped INTEGER NOT NULL,revocation TEXT NOT NULL,ack_seq INTEGER)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-ancestor_revoke a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-ancestor_revoke\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-ancestor_revoke\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "events": [],
+            "intents": [],
+            "state": [[1, 0, "not_requested", null]]
+          }
+        },
+        "a-port": {
+          "schema": [
+            ["table", "binding", "CREATE TABLE binding(payload TEXT)"],
+            [
+              "table",
+              "policy",
+              "CREATE TABLE policy(identity TEXT,approved TEXT,control TEXT,revoked INTEGER)"
+            ]
+          ],
+          "tables": {
+            "binding": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-ancestor_revoke a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-ancestor_revoke\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-ancestor_revoke\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "policy": [
+              [
+                "{\"principal\":\"alice\",\"run\":\"phase9-transfer-ancestor_revoke\",\"tenant\":\"tenant-a\"}",
+                "{\"content\":\"Synthetic report transfer-ancestor_revoke a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-ancestor_revoke\",\"tenant\":\"tenant-a\"}",
+                "enforced",
+                0
+              ]
+            ]
+          }
+        },
+        "a-signal": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            ["table", "decisions", "CREATE TABLE decisions(nonce TEXT PRIMARY KEY)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY, payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "inbox",
+              "CREATE TABLE inbox(id TEXT PRIMARY KEY, digest TEXT NOT NULL,\n                    alert_id TEXT NOT NULL, status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(revision INTEGER, terminal INTEGER, paused INTEGER,\n                    lease_until REAL, last_seen REAL, boot TEXT)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-ancestor_revoke a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-ancestor_revoke\",\"tenant\":\"tenant-a\"},\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-ancestor_revoke\",\"tenant\":\"tenant-a\"},\"operator_key_sha256\":\"ea4cae595cf4f67e272c68b92c74d76045bc3802676234d0c5c9b017a9f465ce\",\"project\":\"composition-project\",\"request_id\":\"request-a\",\"response_id\":\"response-a\",\"webhook_key_sha256\":\"f62966f0eee3b92433c04027579fa935b3116e6bb5260b76c807f5ef37857eb2\"}"
+              ]
+            ],
+            "decisions": [["initial-a"]],
+            "events": [
+              [
+                1,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-ancestor_revoke\",\"tenant\":\"tenant-a\"},\"type\":\"heartbeat\"}"
+              ],
+              [
+                2,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-ancestor_revoke\",\"tenant\":\"tenant-a\"},\"nonce\":\"initial-a\",\"type\":\"operator_restart\"}"
+              ]
+            ],
+            "inbox": [],
+            "state": [[1, 0, 0, 130.0, 100.0, "fixture-boot"]]
+          }
+        },
+        "b-gateway": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "intents",
+              "CREATE TABLE intents(key TEXT PRIMARY KEY,payload TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),stopped INTEGER NOT NULL,revocation TEXT NOT NULL,ack_seq INTEGER)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-ancestor_revoke b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-ancestor_revoke\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-ancestor_revoke\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "events": [],
+            "intents": [],
+            "state": [[1, 0, "not_requested", null]]
+          }
+        },
+        "b-port": {
+          "schema": [
+            ["table", "binding", "CREATE TABLE binding(payload TEXT)"],
+            [
+              "table",
+              "policy",
+              "CREATE TABLE policy(identity TEXT,approved TEXT,control TEXT,revoked INTEGER)"
+            ]
+          ],
+          "tables": {
+            "binding": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-ancestor_revoke b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-ancestor_revoke\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-ancestor_revoke\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "policy": [
+              [
+                "{\"principal\":\"alice\",\"run\":\"phase9-transfer-ancestor_revoke\",\"tenant\":\"tenant-a\"}",
+                "{\"content\":\"Synthetic report transfer-ancestor_revoke b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-ancestor_revoke\",\"tenant\":\"tenant-a\"}",
+                "enforced",
+                0
+              ]
+            ]
+          }
+        },
+        "b-signal": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            ["table", "decisions", "CREATE TABLE decisions(nonce TEXT PRIMARY KEY)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY, payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "inbox",
+              "CREATE TABLE inbox(id TEXT PRIMARY KEY, digest TEXT NOT NULL,\n                    alert_id TEXT NOT NULL, status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(revision INTEGER, terminal INTEGER, paused INTEGER,\n                    lease_until REAL, last_seen REAL, boot TEXT)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-ancestor_revoke b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-ancestor_revoke\",\"tenant\":\"tenant-a\"},\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-ancestor_revoke\",\"tenant\":\"tenant-a\"},\"operator_key_sha256\":\"ea4cae595cf4f67e272c68b92c74d76045bc3802676234d0c5c9b017a9f465ce\",\"project\":\"composition-project\",\"request_id\":\"request-b\",\"response_id\":\"response-b\",\"webhook_key_sha256\":\"f62966f0eee3b92433c04027579fa935b3116e6bb5260b76c807f5ef37857eb2\"}"
+              ]
+            ],
+            "decisions": [["initial-b"]],
+            "events": [
+              [
+                1,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-ancestor_revoke\",\"tenant\":\"tenant-a\"},\"type\":\"heartbeat\"}"
+              ],
+              [
+                2,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-ancestor_revoke\",\"tenant\":\"tenant-a\"},\"nonce\":\"initial-b\",\"type\":\"operator_restart\"}"
+              ]
+            ],
+            "inbox": [],
+            "state": [[1, 0, 0, 130.0, 100.0, "fixture-boot"]]
+          }
+        },
+        "context": {
+          "schema": [
+            [
+              "table",
+              "attempts",
+              "CREATE TABLE attempts(action_id TEXT PRIMARY KEY,actor TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "facts",
+              "CREATE TABLE facts(id INTEGER PRIMARY KEY,kind TEXT NOT NULL,detail TEXT NOT NULL,blocking INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "grants",
+              "CREATE TABLE grants(actor TEXT PRIMARY KEY,parent TEXT,actions TEXT NOT NULL,depth INTEGER NOT NULL,source TEXT NOT NULL,revoked INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1), source TEXT NOT NULL, revision INTEGER NOT NULL)"
+            ]
+          ],
+          "tables": {
+            "attempts": [],
+            "config": [
+              [
+                "{\"actions\":{\"a\":{\"content\":\"Synthetic report transfer-ancestor_revoke a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-ancestor_revoke\",\"tenant\":\"tenant-a\"},\"b\":{\"content\":\"Synthetic report transfer-ancestor_revoke b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-ancestor_revoke\",\"tenant\":\"tenant-a\"}},\"budget\":1,\"hosts\":{\"a\":[\"{\\\"principal\\\":\\\"alice\\\",\\\"run\\\":\\\"phase9-transfer-ancestor_revoke\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"{\\\"content\\\":\\\"Synthetic report transfer-ancestor_revoke a\\\",\\\"id\\\":\\\"a\\\",\\\"operation\\\":\\\"send_report\\\",\\\"policyRevision\\\":\\\"v1\\\",\\\"principal\\\":\\\"alice\\\",\\\"resource\\\":\\\"inbox\\\",\\\"run\\\":\\\"phase9-transfer-ancestor_revoke\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"enforced\"],\"b\":[\"{\\\"principal\\\":\\\"alice\\\",\\\"run\\\":\\\"phase9-transfer-ancestor_revoke\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"{\\\"content\\\":\\\"Synthetic report transfer-ancestor_revoke b\\\",\\\"id\\\":\\\"b\\\",\\\"operation\\\":\\\"send_report\\\",\\\"policyRevision\\\":\\\"v1\\\",\\\"principal\\\":\\\"alice\\\",\\\"resource\\\":\\\"inbox\\\",\\\"run\\\":\\\"phase9-transfer-ancestor_revoke\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"enforced\"]},\"registry\":{\"child\":{\"parent\":\"root\",\"task\":\"task-transfer-ancestor_revoke\"},\"grandchild\":{\"parent\":\"child\",\"task\":\"task-transfer-ancestor_revoke\"}},\"source\":\"v1\",\"task\":\"task-transfer-ancestor_revoke\"}"
+              ]
+            ],
+            "events": [
+              [1, "{\"actor\":\"root\",\"audit\":[],\"kind\":\"resume\",\"reason\":null}"],
+              [
+                2,
+                "{\"actions\":[\"a\",\"b\"],\"actor\":\"root\",\"child\":\"child\",\"kind\":\"delegated\"}"
+              ],
+              [3, "{\"actor\":\"root\",\"kind\":\"revoke\"}"],
+              [4, "{\"actor\":\"child\",\"audit\":[],\"kind\":\"resume\",\"reason\":\"actor\"}"],
+              [
+                5,
+                "{\"action_id\":\"a\",\"actor\":\"child\",\"kind\":\"blocked\",\"reason\":\"authority_or_fact\"}"
+              ]
+            ],
+            "facts": [],
+            "grants": [
+              ["child", "root", "[\"a\",\"b\"]", 1, "v1", 0],
+              ["root", null, "[\"a\",\"b\"]", 0, "v1", 1]
+            ],
+            "state": [[1, "v1", 2]]
+          }
+        },
+        "pipeline": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT)"],
+            ["table", "events", "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT)"],
+            ["table", "state", "CREATE TABLE state(held INTEGER)"]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"actions\":{\"a\":{\"content\":\"Synthetic report transfer-ancestor_revoke a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-ancestor_revoke\",\"tenant\":\"tenant-a\"},\"b\":{\"content\":\"Synthetic report transfer-ancestor_revoke b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-ancestor_revoke\",\"tenant\":\"tenant-a\"}},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-ancestor_revoke\",\"session_id\":\"s1\"},\"budget\":1,\"registry\":{\"child\":{\"parent\":\"root\",\"task\":\"task-transfer-ancestor_revoke\"},\"grandchild\":{\"parent\":\"child\",\"task\":\"task-transfer-ancestor_revoke\"}},\"source\":\"v1\",\"task\":\"task-transfer-ancestor_revoke\"}"
+              ]
+            ],
+            "events": [
+              [1, "update_started"],
+              [2, "update_completed"],
+              [3, "update_started"],
+              [4, "update_completed"],
+              [5, "update_started"],
+              [6, "update_completed"]
+            ],
+            "state": [[0]]
+          }
+        },
+        "service": {
+          "schema": [
+            [
+              "table",
+              "credentials",
+              "CREATE TABLE credentials(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,revoked INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "effects",
+              "CREATE TABLE effects(key TEXT PRIMARY KEY,payload TEXT NOT NULL,credential_id TEXT NOT NULL,session_id TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "sessions",
+              "CREATE TABLE sessions(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,credential_id TEXT NOT NULL,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,cancelled INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),policy TEXT NOT NULL,issuer TEXT NOT NULL,now INTEGER NOT NULL,drop_next INTEGER NOT NULL)"
+            ]
+          ],
+          "tables": {
+            "credentials": [
+              [
+                "c1",
+                "900a0b9b50a2dc2b90bad8322662b5db9f61ec6d859688b2adb0f8c52840844c",
+                "alice",
+                "tenant-a",
+                "inbox",
+                200,
+                0
+              ]
+            ],
+            "effects": [],
+            "events": [
+              [1, "issued", "{\"credential_id\":\"c1\"}"],
+              [2, "session", "{\"credential_id\":\"c1\",\"session_id\":\"s1\"}"]
+            ],
+            "sessions": [
+              [
+                "s1",
+                "4db42bdf265db5a87158d24f34643b51c7f8c7437a2b3cda270fac8b8daf333f",
+                "c1",
+                "alice",
+                "tenant-a",
+                "inbox",
+                700,
+                0
+              ]
+            ],
+            "state": [[1, "continuous", "issuer-transfer-ancestor_revoke", 100, 0]]
+          }
+        }
+      }
+    },
+    {
+      "before_effects": [],
+      "before_storage": {
+        "schema": [
+          [
+            "table",
+            "credentials",
+            "CREATE TABLE credentials(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,revoked INTEGER NOT NULL)"
+          ],
+          [
+            "table",
+            "effects",
+            "CREATE TABLE effects(key TEXT PRIMARY KEY,payload TEXT NOT NULL,credential_id TEXT NOT NULL,session_id TEXT NOT NULL)"
+          ],
+          [
+            "table",
+            "events",
+            "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+          ],
+          [
+            "table",
+            "sessions",
+            "CREATE TABLE sessions(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,credential_id TEXT NOT NULL,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,cancelled INTEGER NOT NULL)"
+          ],
+          [
+            "table",
+            "state",
+            "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),policy TEXT NOT NULL,issuer TEXT NOT NULL,now INTEGER NOT NULL,drop_next INTEGER NOT NULL)"
+          ]
+        ],
+        "tables": {
+          "credentials": [
+            [
+              "c1",
+              "81dbc7c897219dc5dedea97ce831f890fa0c75b5cd176b8e253d184aa9b18ad3",
+              "alice",
+              "tenant-a",
+              "inbox",
+              200,
+              1
+            ]
+          ],
+          "effects": [],
+          "events": [
+            [1, "issued", "{\"credential_id\":\"c1\"}"],
+            [2, "session", "{\"credential_id\":\"c1\",\"session_id\":\"s1\"}"],
+            [3, "revoked", "{\"credential_id\":\"c1\"}"],
+            [4, "revoked", "{\"credential_id\":\"c1\"}"]
+          ],
+          "sessions": [
+            [
+              "s1",
+              "00bde2b6a8ddceb65529a0866f58fdfed45883196711bdae2d1400657aecc36d",
+              "c1",
+              "alice",
+              "tenant-a",
+              "inbox",
+              700,
+              0
+            ]
+          ],
+          "state": [[1, "continuous", "issuer-transfer-signal_stop", 100, 0]]
+        }
+      },
+      "case": "signal_stop",
+      "effect_count": 0,
+      "effects": [],
+      "held": false,
+      "initial": null,
+      "leaf_status": { "a": null, "b": null },
+      "native": {
+        "native_interrupted": true,
+        "status": "blocked",
+        "worker": { "path_denied": true, "socket_denied": true }
+      },
+      "new_effects": [],
+      "proposal": {
+        "arguments": { "content": "Synthetic report transfer-signal_stop a", "resource": "inbox" },
+        "name": "send_report",
+        "status": "call"
+      },
+      "status": "blocked",
+      "storage": {
+        "a-gateway": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "intents",
+              "CREATE TABLE intents(key TEXT PRIMARY KEY,payload TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),stopped INTEGER NOT NULL,revocation TEXT NOT NULL,ack_seq INTEGER)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-signal_stop a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-signal_stop\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "events": [
+              [1, "local_stop", "{}"],
+              [2, "remote_revoke", "{\"ack_seq\":3,\"status\":\"acknowledged\"}"]
+            ],
+            "intents": [],
+            "state": [[1, 1, "acknowledged", 3]]
+          }
+        },
+        "a-port": {
+          "schema": [
+            ["table", "binding", "CREATE TABLE binding(payload TEXT)"],
+            [
+              "table",
+              "policy",
+              "CREATE TABLE policy(identity TEXT,approved TEXT,control TEXT,revoked INTEGER)"
+            ]
+          ],
+          "tables": {
+            "binding": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-signal_stop a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-signal_stop\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "policy": [
+              [
+                "{\"principal\":\"alice\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"}",
+                "{\"content\":\"Synthetic report transfer-signal_stop a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"}",
+                "enforced",
+                0
+              ]
+            ]
+          }
+        },
+        "a-signal": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            ["table", "decisions", "CREATE TABLE decisions(nonce TEXT PRIMARY KEY)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY, payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "inbox",
+              "CREATE TABLE inbox(id TEXT PRIMARY KEY, digest TEXT NOT NULL,\n                    alert_id TEXT NOT NULL, status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(revision INTEGER, terminal INTEGER, paused INTEGER,\n                    lease_until REAL, last_seen REAL, boot TEXT)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-signal_stop a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"},\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"},\"operator_key_sha256\":\"ea4cae595cf4f67e272c68b92c74d76045bc3802676234d0c5c9b017a9f465ce\",\"project\":\"composition-project\",\"request_id\":\"request-a\",\"response_id\":\"response-a\",\"webhook_key_sha256\":\"f62966f0eee3b92433c04027579fa935b3116e6bb5260b76c807f5ef37857eb2\"}"
+              ]
+            ],
+            "decisions": [["initial-a"]],
+            "events": [
+              [
+                1,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"},\"type\":\"heartbeat\"}"
+              ],
+              [
+                2,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"},\"nonce\":\"initial-a\",\"type\":\"operator_restart\"}"
+              ],
+              [
+                3,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"},\"source\":\"provider_error\",\"type\":\"stop_latched\"}"
+              ],
+              [
+                4,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"},\"type\":\"host_revoked\"}"
+              ],
+              [
+                5,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"},\"type\":\"dispatch_blocked\"}"
+              ]
+            ],
+            "inbox": [],
+            "state": [[2, 1, 1, 130.0, 100.0, "fixture-boot"]]
+          }
+        },
+        "b-gateway": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "intents",
+              "CREATE TABLE intents(key TEXT PRIMARY KEY,payload TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),stopped INTEGER NOT NULL,revocation TEXT NOT NULL,ack_seq INTEGER)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-signal_stop b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-signal_stop\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "events": [
+              [1, "local_stop", "{}"],
+              [2, "remote_revoke", "{\"ack_seq\":4,\"status\":\"acknowledged\"}"]
+            ],
+            "intents": [],
+            "state": [[1, 1, "acknowledged", 4]]
+          }
+        },
+        "b-port": {
+          "schema": [
+            ["table", "binding", "CREATE TABLE binding(payload TEXT)"],
+            [
+              "table",
+              "policy",
+              "CREATE TABLE policy(identity TEXT,approved TEXT,control TEXT,revoked INTEGER)"
+            ]
+          ],
+          "tables": {
+            "binding": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-signal_stop b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-signal_stop\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "policy": [
+              [
+                "{\"principal\":\"alice\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"}",
+                "{\"content\":\"Synthetic report transfer-signal_stop b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"}",
+                "enforced",
+                0
+              ]
+            ]
+          }
+        },
+        "b-signal": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            ["table", "decisions", "CREATE TABLE decisions(nonce TEXT PRIMARY KEY)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY, payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "inbox",
+              "CREATE TABLE inbox(id TEXT PRIMARY KEY, digest TEXT NOT NULL,\n                    alert_id TEXT NOT NULL, status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(revision INTEGER, terminal INTEGER, paused INTEGER,\n                    lease_until REAL, last_seen REAL, boot TEXT)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-signal_stop b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"},\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"},\"operator_key_sha256\":\"ea4cae595cf4f67e272c68b92c74d76045bc3802676234d0c5c9b017a9f465ce\",\"project\":\"composition-project\",\"request_id\":\"request-b\",\"response_id\":\"response-b\",\"webhook_key_sha256\":\"f62966f0eee3b92433c04027579fa935b3116e6bb5260b76c807f5ef37857eb2\"}"
+              ]
+            ],
+            "decisions": [["initial-b"]],
+            "events": [
+              [
+                1,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"},\"type\":\"heartbeat\"}"
+              ],
+              [
+                2,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"},\"nonce\":\"initial-b\",\"type\":\"operator_restart\"}"
+              ],
+              [
+                3,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"},\"source\":\"provider_error\",\"type\":\"stop_latched\"}"
+              ],
+              [
+                4,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"},\"type\":\"host_revoked\"}"
+              ]
+            ],
+            "inbox": [],
+            "state": [[2, 1, 1, 130.0, 100.0, "fixture-boot"]]
+          }
+        },
+        "context": {
+          "schema": [
+            [
+              "table",
+              "attempts",
+              "CREATE TABLE attempts(action_id TEXT PRIMARY KEY,actor TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "facts",
+              "CREATE TABLE facts(id INTEGER PRIMARY KEY,kind TEXT NOT NULL,detail TEXT NOT NULL,blocking INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "grants",
+              "CREATE TABLE grants(actor TEXT PRIMARY KEY,parent TEXT,actions TEXT NOT NULL,depth INTEGER NOT NULL,source TEXT NOT NULL,revoked INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1), source TEXT NOT NULL, revision INTEGER NOT NULL)"
+            ]
+          ],
+          "tables": {
+            "attempts": [["a", "child", "blocked"]],
+            "config": [
+              [
+                "{\"actions\":{\"a\":{\"content\":\"Synthetic report transfer-signal_stop a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"},\"b\":{\"content\":\"Synthetic report transfer-signal_stop b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"}},\"budget\":1,\"hosts\":{\"a\":[\"{\\\"principal\\\":\\\"alice\\\",\\\"run\\\":\\\"phase9-transfer-signal_stop\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"{\\\"content\\\":\\\"Synthetic report transfer-signal_stop a\\\",\\\"id\\\":\\\"a\\\",\\\"operation\\\":\\\"send_report\\\",\\\"policyRevision\\\":\\\"v1\\\",\\\"principal\\\":\\\"alice\\\",\\\"resource\\\":\\\"inbox\\\",\\\"run\\\":\\\"phase9-transfer-signal_stop\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"enforced\"],\"b\":[\"{\\\"principal\\\":\\\"alice\\\",\\\"run\\\":\\\"phase9-transfer-signal_stop\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"{\\\"content\\\":\\\"Synthetic report transfer-signal_stop b\\\",\\\"id\\\":\\\"b\\\",\\\"operation\\\":\\\"send_report\\\",\\\"policyRevision\\\":\\\"v1\\\",\\\"principal\\\":\\\"alice\\\",\\\"resource\\\":\\\"inbox\\\",\\\"run\\\":\\\"phase9-transfer-signal_stop\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"enforced\"]},\"registry\":{\"child\":{\"parent\":\"root\",\"task\":\"task-transfer-signal_stop\"},\"grandchild\":{\"parent\":\"child\",\"task\":\"task-transfer-signal_stop\"}},\"source\":\"v1\",\"task\":\"task-transfer-signal_stop\"}"
+              ]
+            ],
+            "events": [
+              [1, "{\"actor\":\"root\",\"audit\":[],\"kind\":\"resume\",\"reason\":null}"],
+              [
+                2,
+                "{\"actions\":[\"a\",\"b\"],\"actor\":\"root\",\"child\":\"child\",\"kind\":\"delegated\"}"
+              ],
+              [3, "{\"actor\":\"child\",\"audit\":[],\"kind\":\"resume\",\"reason\":null}"],
+              [4, "{\"action_id\":\"a\",\"actor\":\"child\",\"kind\":\"admitted\"}"],
+              [
+                5,
+                "{\"action_id\":\"a\",\"actor\":\"child\",\"kind\":\"outcome\",\"status\":\"blocked\"}"
+              ]
+            ],
+            "facts": [],
+            "grants": [
+              ["child", "root", "[\"a\",\"b\"]", 1, "v1", 0],
+              ["root", null, "[\"a\",\"b\"]", 0, "v1", 0]
+            ],
+            "state": [[1, "v1", 3]]
+          }
+        },
+        "pipeline": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT)"],
+            ["table", "events", "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT)"],
+            ["table", "state", "CREATE TABLE state(held INTEGER)"]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"actions\":{\"a\":{\"content\":\"Synthetic report transfer-signal_stop a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"},\"b\":{\"content\":\"Synthetic report transfer-signal_stop b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-signal_stop\",\"tenant\":\"tenant-a\"}},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-signal_stop\",\"session_id\":\"s1\"},\"budget\":1,\"registry\":{\"child\":{\"parent\":\"root\",\"task\":\"task-transfer-signal_stop\"},\"grandchild\":{\"parent\":\"child\",\"task\":\"task-transfer-signal_stop\"}},\"source\":\"v1\",\"task\":\"task-transfer-signal_stop\"}"
+              ]
+            ],
+            "events": [
+              [1, "update_started"],
+              [2, "update_completed"],
+              [3, "update_started"],
+              [4, "update_completed"],
+              [5, "update_started"],
+              [6, "update_completed"]
+            ],
+            "state": [[0]]
+          }
+        },
+        "service": {
+          "schema": [
+            [
+              "table",
+              "credentials",
+              "CREATE TABLE credentials(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,revoked INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "effects",
+              "CREATE TABLE effects(key TEXT PRIMARY KEY,payload TEXT NOT NULL,credential_id TEXT NOT NULL,session_id TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "sessions",
+              "CREATE TABLE sessions(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,credential_id TEXT NOT NULL,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,cancelled INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),policy TEXT NOT NULL,issuer TEXT NOT NULL,now INTEGER NOT NULL,drop_next INTEGER NOT NULL)"
+            ]
+          ],
+          "tables": {
+            "credentials": [
+              [
+                "c1",
+                "81dbc7c897219dc5dedea97ce831f890fa0c75b5cd176b8e253d184aa9b18ad3",
+                "alice",
+                "tenant-a",
+                "inbox",
+                200,
+                1
+              ]
+            ],
+            "effects": [],
+            "events": [
+              [1, "issued", "{\"credential_id\":\"c1\"}"],
+              [2, "session", "{\"credential_id\":\"c1\",\"session_id\":\"s1\"}"],
+              [3, "revoked", "{\"credential_id\":\"c1\"}"],
+              [4, "revoked", "{\"credential_id\":\"c1\"}"]
+            ],
+            "sessions": [
+              [
+                "s1",
+                "00bde2b6a8ddceb65529a0866f58fdfed45883196711bdae2d1400657aecc36d",
+                "c1",
+                "alice",
+                "tenant-a",
+                "inbox",
+                700,
+                0
+              ]
+            ],
+            "state": [[1, "continuous", "issuer-transfer-signal_stop", 100, 0]]
+          }
+        }
+      }
+    },
+    {
+      "before_effects": [
+        {
+          "action": {
+            "content": "Synthetic report transfer-unknown_prior a",
+            "id": "a",
+            "operation": "send_report",
+            "policyRevision": "v1",
+            "principal": "alice",
+            "resource": "inbox",
+            "run": "phase9-transfer-unknown_prior",
+            "tenant": "tenant-a"
+          },
+          "credential_id": "c1",
+          "key": "36cc9fb9ec3a2a619e7cbef0ed059875a6d8d6acf9013189a95d8bd69658a946",
+          "session_id": "s1"
+        }
+      ],
+      "before_storage": {
+        "schema": [
+          [
+            "table",
+            "credentials",
+            "CREATE TABLE credentials(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,revoked INTEGER NOT NULL)"
+          ],
+          [
+            "table",
+            "effects",
+            "CREATE TABLE effects(key TEXT PRIMARY KEY,payload TEXT NOT NULL,credential_id TEXT NOT NULL,session_id TEXT NOT NULL)"
+          ],
+          [
+            "table",
+            "events",
+            "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+          ],
+          [
+            "table",
+            "sessions",
+            "CREATE TABLE sessions(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,credential_id TEXT NOT NULL,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,cancelled INTEGER NOT NULL)"
+          ],
+          [
+            "table",
+            "state",
+            "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),policy TEXT NOT NULL,issuer TEXT NOT NULL,now INTEGER NOT NULL,drop_next INTEGER NOT NULL)"
+          ]
+        ],
+        "tables": {
+          "credentials": [
+            [
+              "c1",
+              "fd52e87f18d6b03678542a6c2eb656d8b2ddba0639166b60937bcf2c1110df8a",
+              "alice",
+              "tenant-a",
+              "inbox",
+              200,
+              0
+            ]
+          ],
+          "effects": [
+            [
+              "36cc9fb9ec3a2a619e7cbef0ed059875a6d8d6acf9013189a95d8bd69658a946",
+              "{\"content\":\"Synthetic report transfer-unknown_prior a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"}",
+              "c1",
+              "s1"
+            ]
+          ],
+          "events": [
+            [1, "issued", "{\"credential_id\":\"c1\"}"],
+            [2, "session", "{\"credential_id\":\"c1\",\"session_id\":\"s1\"}"],
+            [3, "drop_armed", "{}"],
+            [
+              4,
+              "effect",
+              "{\"credential_id\":\"c1\",\"key\":\"36cc9fb9ec3a2a619e7cbef0ed059875a6d8d6acf9013189a95d8bd69658a946\",\"session_id\":\"s1\"}"
+            ],
+            [5, "response_dropped", "{}"]
+          ],
+          "sessions": [
+            [
+              "s1",
+              "da0a7c542d2bc100d23a31cfbade7584347cb5d303635a631c2c7b32ee024e95",
+              "c1",
+              "alice",
+              "tenant-a",
+              "inbox",
+              700,
+              0
+            ]
+          ],
+          "state": [[1, "continuous", "issuer-transfer-unknown_prior", 100, 0]]
+        }
+      },
+      "case": "unknown_prior",
+      "effect_count": 1,
+      "effects": [
+        {
+          "action": {
+            "content": "Synthetic report transfer-unknown_prior a",
+            "id": "a",
+            "operation": "send_report",
+            "policyRevision": "v1",
+            "principal": "alice",
+            "resource": "inbox",
+            "run": "phase9-transfer-unknown_prior",
+            "tenant": "tenant-a"
+          },
+          "credential_id": "c1",
+          "key": "36cc9fb9ec3a2a619e7cbef0ed059875a6d8d6acf9013189a95d8bd69658a946",
+          "session_id": "s1"
+        }
+      ],
+      "held": false,
+      "initial": {
+        "native_interrupted": true,
+        "status": "unknown",
+        "worker": { "path_denied": true, "socket_denied": true }
+      },
+      "leaf_status": { "a": "unknown", "b": null },
+      "native": {
+        "native_interrupted": true,
+        "status": "blocked",
+        "worker": { "path_denied": true, "socket_denied": true }
+      },
+      "new_effects": [],
+      "proposal": {
+        "arguments": {
+          "content": "Synthetic report transfer-unknown_prior b",
+          "resource": "inbox"
+        },
+        "name": "send_report",
+        "status": "call"
+      },
+      "status": "blocked",
+      "storage": {
+        "a-gateway": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "intents",
+              "CREATE TABLE intents(key TEXT PRIMARY KEY,payload TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),stopped INTEGER NOT NULL,revocation TEXT NOT NULL,ack_seq INTEGER)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-unknown_prior a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-unknown_prior\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "events": [
+              [
+                1,
+                "intent",
+                "{\"key\":\"36cc9fb9ec3a2a619e7cbef0ed059875a6d8d6acf9013189a95d8bd69658a946\"}"
+              ],
+              [2, "outcome", "{\"status\":\"unknown\"}"]
+            ],
+            "intents": [
+              [
+                "36cc9fb9ec3a2a619e7cbef0ed059875a6d8d6acf9013189a95d8bd69658a946",
+                "{\"content\":\"Synthetic report transfer-unknown_prior a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"}",
+                "unknown"
+              ]
+            ],
+            "state": [[1, 0, "not_requested", null]]
+          }
+        },
+        "a-port": {
+          "schema": [
+            ["table", "binding", "CREATE TABLE binding(payload TEXT)"],
+            [
+              "table",
+              "policy",
+              "CREATE TABLE policy(identity TEXT,approved TEXT,control TEXT,revoked INTEGER)"
+            ]
+          ],
+          "tables": {
+            "binding": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-unknown_prior a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-unknown_prior\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "policy": [
+              [
+                "{\"principal\":\"alice\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"}",
+                "{\"content\":\"Synthetic report transfer-unknown_prior a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"}",
+                "enforced",
+                0
+              ]
+            ]
+          }
+        },
+        "a-signal": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            ["table", "decisions", "CREATE TABLE decisions(nonce TEXT PRIMARY KEY)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY, payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "inbox",
+              "CREATE TABLE inbox(id TEXT PRIMARY KEY, digest TEXT NOT NULL,\n                    alert_id TEXT NOT NULL, status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(revision INTEGER, terminal INTEGER, paused INTEGER,\n                    lease_until REAL, last_seen REAL, boot TEXT)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-unknown_prior a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"},\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"},\"operator_key_sha256\":\"ea4cae595cf4f67e272c68b92c74d76045bc3802676234d0c5c9b017a9f465ce\",\"project\":\"composition-project\",\"request_id\":\"request-a\",\"response_id\":\"response-a\",\"webhook_key_sha256\":\"f62966f0eee3b92433c04027579fa935b3116e6bb5260b76c807f5ef37857eb2\"}"
+              ]
+            ],
+            "decisions": [["initial-a"]],
+            "events": [
+              [
+                1,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"},\"type\":\"heartbeat\"}"
+              ],
+              [
+                2,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"},\"nonce\":\"initial-a\",\"type\":\"operator_restart\"}"
+              ],
+              [
+                3,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"},\"type\":\"dispatch_admitted\"}"
+              ],
+              [
+                4,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"},\"result\":{\"status\":\"unknown\"},\"type\":\"dispatch_result\"}"
+              ]
+            ],
+            "inbox": [],
+            "state": [[1, 0, 0, 130.0, 100.0, "fixture-boot"]]
+          }
+        },
+        "b-gateway": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "intents",
+              "CREATE TABLE intents(key TEXT PRIMARY KEY,payload TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),stopped INTEGER NOT NULL,revocation TEXT NOT NULL,ack_seq INTEGER)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-unknown_prior b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-unknown_prior\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "events": [],
+            "intents": [],
+            "state": [[1, 0, "not_requested", null]]
+          }
+        },
+        "b-port": {
+          "schema": [
+            ["table", "binding", "CREATE TABLE binding(payload TEXT)"],
+            [
+              "table",
+              "policy",
+              "CREATE TABLE policy(identity TEXT,approved TEXT,control TEXT,revoked INTEGER)"
+            ]
+          ],
+          "tables": {
+            "binding": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-unknown_prior b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-unknown_prior\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "policy": [
+              [
+                "{\"principal\":\"alice\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"}",
+                "{\"content\":\"Synthetic report transfer-unknown_prior b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"}",
+                "enforced",
+                0
+              ]
+            ]
+          }
+        },
+        "b-signal": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            ["table", "decisions", "CREATE TABLE decisions(nonce TEXT PRIMARY KEY)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY, payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "inbox",
+              "CREATE TABLE inbox(id TEXT PRIMARY KEY, digest TEXT NOT NULL,\n                    alert_id TEXT NOT NULL, status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(revision INTEGER, terminal INTEGER, paused INTEGER,\n                    lease_until REAL, last_seen REAL, boot TEXT)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-unknown_prior b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"},\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"},\"operator_key_sha256\":\"ea4cae595cf4f67e272c68b92c74d76045bc3802676234d0c5c9b017a9f465ce\",\"project\":\"composition-project\",\"request_id\":\"request-b\",\"response_id\":\"response-b\",\"webhook_key_sha256\":\"f62966f0eee3b92433c04027579fa935b3116e6bb5260b76c807f5ef37857eb2\"}"
+              ]
+            ],
+            "decisions": [["initial-b"]],
+            "events": [
+              [
+                1,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"},\"type\":\"heartbeat\"}"
+              ],
+              [
+                2,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"},\"nonce\":\"initial-b\",\"type\":\"operator_restart\"}"
+              ]
+            ],
+            "inbox": [],
+            "state": [[1, 0, 0, 130.0, 100.0, "fixture-boot"]]
+          }
+        },
+        "context": {
+          "schema": [
+            [
+              "table",
+              "attempts",
+              "CREATE TABLE attempts(action_id TEXT PRIMARY KEY,actor TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "facts",
+              "CREATE TABLE facts(id INTEGER PRIMARY KEY,kind TEXT NOT NULL,detail TEXT NOT NULL,blocking INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "grants",
+              "CREATE TABLE grants(actor TEXT PRIMARY KEY,parent TEXT,actions TEXT NOT NULL,depth INTEGER NOT NULL,source TEXT NOT NULL,revoked INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1), source TEXT NOT NULL, revision INTEGER NOT NULL)"
+            ]
+          ],
+          "tables": {
+            "attempts": [["a", "child", "unknown"]],
+            "config": [
+              [
+                "{\"actions\":{\"a\":{\"content\":\"Synthetic report transfer-unknown_prior a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"},\"b\":{\"content\":\"Synthetic report transfer-unknown_prior b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"}},\"budget\":1,\"hosts\":{\"a\":[\"{\\\"principal\\\":\\\"alice\\\",\\\"run\\\":\\\"phase9-transfer-unknown_prior\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"{\\\"content\\\":\\\"Synthetic report transfer-unknown_prior a\\\",\\\"id\\\":\\\"a\\\",\\\"operation\\\":\\\"send_report\\\",\\\"policyRevision\\\":\\\"v1\\\",\\\"principal\\\":\\\"alice\\\",\\\"resource\\\":\\\"inbox\\\",\\\"run\\\":\\\"phase9-transfer-unknown_prior\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"enforced\"],\"b\":[\"{\\\"principal\\\":\\\"alice\\\",\\\"run\\\":\\\"phase9-transfer-unknown_prior\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"{\\\"content\\\":\\\"Synthetic report transfer-unknown_prior b\\\",\\\"id\\\":\\\"b\\\",\\\"operation\\\":\\\"send_report\\\",\\\"policyRevision\\\":\\\"v1\\\",\\\"principal\\\":\\\"alice\\\",\\\"resource\\\":\\\"inbox\\\",\\\"run\\\":\\\"phase9-transfer-unknown_prior\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"enforced\"]},\"registry\":{\"child\":{\"parent\":\"root\",\"task\":\"task-transfer-unknown_prior\"},\"grandchild\":{\"parent\":\"child\",\"task\":\"task-transfer-unknown_prior\"}},\"source\":\"v1\",\"task\":\"task-transfer-unknown_prior\"}"
+              ]
+            ],
+            "events": [
+              [1, "{\"actor\":\"root\",\"audit\":[],\"kind\":\"resume\",\"reason\":null}"],
+              [
+                2,
+                "{\"actions\":[\"a\",\"b\"],\"actor\":\"root\",\"child\":\"child\",\"kind\":\"delegated\"}"
+              ],
+              [3, "{\"actor\":\"child\",\"audit\":[],\"kind\":\"resume\",\"reason\":null}"],
+              [4, "{\"action_id\":\"a\",\"actor\":\"child\",\"kind\":\"admitted\"}"],
+              [
+                5,
+                "{\"action_id\":\"a\",\"actor\":\"child\",\"kind\":\"outcome\",\"status\":\"unknown\"}"
+              ],
+              [6, "{\"actor\":\"child\",\"audit\":[],\"kind\":\"resume\",\"reason\":null}"],
+              [
+                7,
+                "{\"action_id\":\"b\",\"actor\":\"child\",\"kind\":\"blocked\",\"reason\":\"budget\"}"
+              ]
+            ],
+            "facts": [],
+            "grants": [
+              ["child", "root", "[\"a\",\"b\"]", 1, "v1", 0],
+              ["root", null, "[\"a\",\"b\"]", 0, "v1", 0]
+            ],
+            "state": [[1, "v1", 3]]
+          }
+        },
+        "pipeline": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT)"],
+            ["table", "events", "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT)"],
+            ["table", "state", "CREATE TABLE state(held INTEGER)"]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"actions\":{\"a\":{\"content\":\"Synthetic report transfer-unknown_prior a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"},\"b\":{\"content\":\"Synthetic report transfer-unknown_prior b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"}},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-unknown_prior\",\"session_id\":\"s1\"},\"budget\":1,\"registry\":{\"child\":{\"parent\":\"root\",\"task\":\"task-transfer-unknown_prior\"},\"grandchild\":{\"parent\":\"child\",\"task\":\"task-transfer-unknown_prior\"}},\"source\":\"v1\",\"task\":\"task-transfer-unknown_prior\"}"
+              ]
+            ],
+            "events": [
+              [1, "update_started"],
+              [2, "update_completed"],
+              [3, "update_started"],
+              [4, "update_completed"]
+            ],
+            "state": [[0]]
+          }
+        },
+        "service": {
+          "schema": [
+            [
+              "table",
+              "credentials",
+              "CREATE TABLE credentials(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,revoked INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "effects",
+              "CREATE TABLE effects(key TEXT PRIMARY KEY,payload TEXT NOT NULL,credential_id TEXT NOT NULL,session_id TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "sessions",
+              "CREATE TABLE sessions(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,credential_id TEXT NOT NULL,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,cancelled INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),policy TEXT NOT NULL,issuer TEXT NOT NULL,now INTEGER NOT NULL,drop_next INTEGER NOT NULL)"
+            ]
+          ],
+          "tables": {
+            "credentials": [
+              [
+                "c1",
+                "fd52e87f18d6b03678542a6c2eb656d8b2ddba0639166b60937bcf2c1110df8a",
+                "alice",
+                "tenant-a",
+                "inbox",
+                200,
+                0
+              ]
+            ],
+            "effects": [
+              [
+                "36cc9fb9ec3a2a619e7cbef0ed059875a6d8d6acf9013189a95d8bd69658a946",
+                "{\"content\":\"Synthetic report transfer-unknown_prior a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-unknown_prior\",\"tenant\":\"tenant-a\"}",
+                "c1",
+                "s1"
+              ]
+            ],
+            "events": [
+              [1, "issued", "{\"credential_id\":\"c1\"}"],
+              [2, "session", "{\"credential_id\":\"c1\",\"session_id\":\"s1\"}"],
+              [3, "drop_armed", "{}"],
+              [
+                4,
+                "effect",
+                "{\"credential_id\":\"c1\",\"key\":\"36cc9fb9ec3a2a619e7cbef0ed059875a6d8d6acf9013189a95d8bd69658a946\",\"session_id\":\"s1\"}"
+              ],
+              [5, "response_dropped", "{}"]
+            ],
+            "sessions": [
+              [
+                "s1",
+                "da0a7c542d2bc100d23a31cfbade7584347cb5d303635a631c2c7b32ee024e95",
+                "c1",
+                "alice",
+                "tenant-a",
+                "inbox",
+                700,
+                0
+              ]
+            ],
+            "state": [[1, "continuous", "issuer-transfer-unknown_prior", 100, 0]]
+          }
+        }
+      }
+    },
+    {
+      "before_effects": [],
+      "before_storage": {
+        "schema": [
+          [
+            "table",
+            "credentials",
+            "CREATE TABLE credentials(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,revoked INTEGER NOT NULL)"
+          ],
+          [
+            "table",
+            "effects",
+            "CREATE TABLE effects(key TEXT PRIMARY KEY,payload TEXT NOT NULL,credential_id TEXT NOT NULL,session_id TEXT NOT NULL)"
+          ],
+          [
+            "table",
+            "events",
+            "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+          ],
+          [
+            "table",
+            "sessions",
+            "CREATE TABLE sessions(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,credential_id TEXT NOT NULL,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,cancelled INTEGER NOT NULL)"
+          ],
+          [
+            "table",
+            "state",
+            "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),policy TEXT NOT NULL,issuer TEXT NOT NULL,now INTEGER NOT NULL,drop_next INTEGER NOT NULL)"
+          ]
+        ],
+        "tables": {
+          "credentials": [
+            [
+              "c1",
+              "f40d95841739bdac2ced81c36389936a3cb08af01349d97be728363fef4dc31d",
+              "alice",
+              "tenant-a",
+              "inbox",
+              200,
+              0
+            ]
+          ],
+          "effects": [],
+          "events": [
+            [1, "issued", "{\"credential_id\":\"c1\"}"],
+            [2, "session", "{\"credential_id\":\"c1\",\"session_id\":\"s1\"}"]
+          ],
+          "sessions": [
+            [
+              "s1",
+              "e277209d757ca99a2e486b4b7bb63569c0fc953855a84013fe472552841ab763",
+              "c1",
+              "alice",
+              "tenant-a",
+              "inbox",
+              700,
+              0
+            ]
+          ],
+          "state": [[1, "continuous", "issuer-transfer-monitor_expired", 100, 0]]
+        }
+      },
+      "case": "monitor_expired",
+      "effect_count": 0,
+      "effects": [],
+      "held": false,
+      "initial": null,
+      "leaf_status": { "a": null, "b": null },
+      "native": {
+        "native_interrupted": true,
+        "status": "blocked",
+        "worker": { "path_denied": true, "socket_denied": true }
+      },
+      "new_effects": [],
+      "proposal": {
+        "arguments": {
+          "content": "Synthetic report transfer-monitor_expired a",
+          "resource": "inbox"
+        },
+        "name": "send_report",
+        "status": "call"
+      },
+      "status": "blocked",
+      "storage": {
+        "a-gateway": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "intents",
+              "CREATE TABLE intents(key TEXT PRIMARY KEY,payload TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),stopped INTEGER NOT NULL,revocation TEXT NOT NULL,ack_seq INTEGER)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-monitor_expired a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-monitor_expired\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "events": [],
+            "intents": [],
+            "state": [[1, 0, "not_requested", null]]
+          }
+        },
+        "a-port": {
+          "schema": [
+            ["table", "binding", "CREATE TABLE binding(payload TEXT)"],
+            [
+              "table",
+              "policy",
+              "CREATE TABLE policy(identity TEXT,approved TEXT,control TEXT,revoked INTEGER)"
+            ]
+          ],
+          "tables": {
+            "binding": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-monitor_expired a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-monitor_expired\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "policy": [
+              [
+                "{\"principal\":\"alice\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"}",
+                "{\"content\":\"Synthetic report transfer-monitor_expired a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"}",
+                "enforced",
+                0
+              ]
+            ]
+          }
+        },
+        "a-signal": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            ["table", "decisions", "CREATE TABLE decisions(nonce TEXT PRIMARY KEY)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY, payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "inbox",
+              "CREATE TABLE inbox(id TEXT PRIMARY KEY, digest TEXT NOT NULL,\n                    alert_id TEXT NOT NULL, status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(revision INTEGER, terminal INTEGER, paused INTEGER,\n                    lease_until REAL, last_seen REAL, boot TEXT)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-monitor_expired a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"},\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"},\"operator_key_sha256\":\"ea4cae595cf4f67e272c68b92c74d76045bc3802676234d0c5c9b017a9f465ce\",\"project\":\"composition-project\",\"request_id\":\"request-a\",\"response_id\":\"response-a\",\"webhook_key_sha256\":\"f62966f0eee3b92433c04027579fa935b3116e6bb5260b76c807f5ef37857eb2\"}"
+              ]
+            ],
+            "decisions": [["initial-a"]],
+            "events": [
+              [
+                1,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"},\"type\":\"heartbeat\"}"
+              ],
+              [
+                2,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"},\"nonce\":\"initial-a\",\"type\":\"operator_restart\"}"
+              ],
+              [
+                3,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"},\"type\":\"monitor_paused\"}"
+              ],
+              [
+                4,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"},\"type\":\"dispatch_blocked\"}"
+              ]
+            ],
+            "inbox": [],
+            "state": [[2, 0, 1, 130.0, 100.0, "fixture-boot"]]
+          }
+        },
+        "b-gateway": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "intents",
+              "CREATE TABLE intents(key TEXT PRIMARY KEY,payload TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),stopped INTEGER NOT NULL,revocation TEXT NOT NULL,ack_seq INTEGER)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-monitor_expired b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-monitor_expired\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "events": [],
+            "intents": [],
+            "state": [[1, 0, "not_requested", null]]
+          }
+        },
+        "b-port": {
+          "schema": [
+            ["table", "binding", "CREATE TABLE binding(payload TEXT)"],
+            [
+              "table",
+              "policy",
+              "CREATE TABLE policy(identity TEXT,approved TEXT,control TEXT,revoked INTEGER)"
+            ]
+          ],
+          "tables": {
+            "binding": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-monitor_expired b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-monitor_expired\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "policy": [
+              [
+                "{\"principal\":\"alice\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"}",
+                "{\"content\":\"Synthetic report transfer-monitor_expired b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"}",
+                "enforced",
+                0
+              ]
+            ]
+          }
+        },
+        "b-signal": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            ["table", "decisions", "CREATE TABLE decisions(nonce TEXT PRIMARY KEY)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY, payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "inbox",
+              "CREATE TABLE inbox(id TEXT PRIMARY KEY, digest TEXT NOT NULL,\n                    alert_id TEXT NOT NULL, status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(revision INTEGER, terminal INTEGER, paused INTEGER,\n                    lease_until REAL, last_seen REAL, boot TEXT)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-monitor_expired b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"},\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"},\"operator_key_sha256\":\"ea4cae595cf4f67e272c68b92c74d76045bc3802676234d0c5c9b017a9f465ce\",\"project\":\"composition-project\",\"request_id\":\"request-b\",\"response_id\":\"response-b\",\"webhook_key_sha256\":\"f62966f0eee3b92433c04027579fa935b3116e6bb5260b76c807f5ef37857eb2\"}"
+              ]
+            ],
+            "decisions": [["initial-b"]],
+            "events": [
+              [
+                1,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"},\"type\":\"heartbeat\"}"
+              ],
+              [
+                2,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"},\"nonce\":\"initial-b\",\"type\":\"operator_restart\"}"
+              ]
+            ],
+            "inbox": [],
+            "state": [[1, 0, 0, 130.0, 100.0, "fixture-boot"]]
+          }
+        },
+        "context": {
+          "schema": [
+            [
+              "table",
+              "attempts",
+              "CREATE TABLE attempts(action_id TEXT PRIMARY KEY,actor TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "facts",
+              "CREATE TABLE facts(id INTEGER PRIMARY KEY,kind TEXT NOT NULL,detail TEXT NOT NULL,blocking INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "grants",
+              "CREATE TABLE grants(actor TEXT PRIMARY KEY,parent TEXT,actions TEXT NOT NULL,depth INTEGER NOT NULL,source TEXT NOT NULL,revoked INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1), source TEXT NOT NULL, revision INTEGER NOT NULL)"
+            ]
+          ],
+          "tables": {
+            "attempts": [["a", "child", "blocked"]],
+            "config": [
+              [
+                "{\"actions\":{\"a\":{\"content\":\"Synthetic report transfer-monitor_expired a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"},\"b\":{\"content\":\"Synthetic report transfer-monitor_expired b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"}},\"budget\":1,\"hosts\":{\"a\":[\"{\\\"principal\\\":\\\"alice\\\",\\\"run\\\":\\\"phase9-transfer-monitor_expired\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"{\\\"content\\\":\\\"Synthetic report transfer-monitor_expired a\\\",\\\"id\\\":\\\"a\\\",\\\"operation\\\":\\\"send_report\\\",\\\"policyRevision\\\":\\\"v1\\\",\\\"principal\\\":\\\"alice\\\",\\\"resource\\\":\\\"inbox\\\",\\\"run\\\":\\\"phase9-transfer-monitor_expired\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"enforced\"],\"b\":[\"{\\\"principal\\\":\\\"alice\\\",\\\"run\\\":\\\"phase9-transfer-monitor_expired\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"{\\\"content\\\":\\\"Synthetic report transfer-monitor_expired b\\\",\\\"id\\\":\\\"b\\\",\\\"operation\\\":\\\"send_report\\\",\\\"policyRevision\\\":\\\"v1\\\",\\\"principal\\\":\\\"alice\\\",\\\"resource\\\":\\\"inbox\\\",\\\"run\\\":\\\"phase9-transfer-monitor_expired\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"enforced\"]},\"registry\":{\"child\":{\"parent\":\"root\",\"task\":\"task-transfer-monitor_expired\"},\"grandchild\":{\"parent\":\"child\",\"task\":\"task-transfer-monitor_expired\"}},\"source\":\"v1\",\"task\":\"task-transfer-monitor_expired\"}"
+              ]
+            ],
+            "events": [
+              [1, "{\"actor\":\"root\",\"audit\":[],\"kind\":\"resume\",\"reason\":null}"],
+              [
+                2,
+                "{\"actions\":[\"a\",\"b\"],\"actor\":\"root\",\"child\":\"child\",\"kind\":\"delegated\"}"
+              ],
+              [3, "{\"actor\":\"child\",\"audit\":[],\"kind\":\"resume\",\"reason\":null}"],
+              [4, "{\"action_id\":\"a\",\"actor\":\"child\",\"kind\":\"admitted\"}"],
+              [
+                5,
+                "{\"action_id\":\"a\",\"actor\":\"child\",\"kind\":\"outcome\",\"status\":\"blocked\"}"
+              ]
+            ],
+            "facts": [],
+            "grants": [
+              ["child", "root", "[\"a\",\"b\"]", 1, "v1", 0],
+              ["root", null, "[\"a\",\"b\"]", 0, "v1", 0]
+            ],
+            "state": [[1, "v1", 3]]
+          }
+        },
+        "pipeline": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT)"],
+            ["table", "events", "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT)"],
+            ["table", "state", "CREATE TABLE state(held INTEGER)"]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"actions\":{\"a\":{\"content\":\"Synthetic report transfer-monitor_expired a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"},\"b\":{\"content\":\"Synthetic report transfer-monitor_expired b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-monitor_expired\",\"tenant\":\"tenant-a\"}},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-monitor_expired\",\"session_id\":\"s1\"},\"budget\":1,\"registry\":{\"child\":{\"parent\":\"root\",\"task\":\"task-transfer-monitor_expired\"},\"grandchild\":{\"parent\":\"child\",\"task\":\"task-transfer-monitor_expired\"}},\"source\":\"v1\",\"task\":\"task-transfer-monitor_expired\"}"
+              ]
+            ],
+            "events": [
+              [1, "update_started"],
+              [2, "update_completed"],
+              [3, "update_started"],
+              [4, "update_completed"]
+            ],
+            "state": [[0]]
+          }
+        },
+        "service": {
+          "schema": [
+            [
+              "table",
+              "credentials",
+              "CREATE TABLE credentials(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,revoked INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "effects",
+              "CREATE TABLE effects(key TEXT PRIMARY KEY,payload TEXT NOT NULL,credential_id TEXT NOT NULL,session_id TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "sessions",
+              "CREATE TABLE sessions(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,credential_id TEXT NOT NULL,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,cancelled INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),policy TEXT NOT NULL,issuer TEXT NOT NULL,now INTEGER NOT NULL,drop_next INTEGER NOT NULL)"
+            ]
+          ],
+          "tables": {
+            "credentials": [
+              [
+                "c1",
+                "f40d95841739bdac2ced81c36389936a3cb08af01349d97be728363fef4dc31d",
+                "alice",
+                "tenant-a",
+                "inbox",
+                200,
+                0
+              ]
+            ],
+            "effects": [],
+            "events": [
+              [1, "issued", "{\"credential_id\":\"c1\"}"],
+              [2, "session", "{\"credential_id\":\"c1\",\"session_id\":\"s1\"}"]
+            ],
+            "sessions": [
+              [
+                "s1",
+                "e277209d757ca99a2e486b4b7bb63569c0fc953855a84013fe472552841ab763",
+                "c1",
+                "alice",
+                "tenant-a",
+                "inbox",
+                700,
+                0
+              ]
+            ],
+            "state": [[1, "continuous", "issuer-transfer-monitor_expired", 100, 0]]
+          }
+        }
+      }
+    },
+    {
+      "before_effects": [],
+      "before_storage": {
+        "schema": [
+          [
+            "table",
+            "credentials",
+            "CREATE TABLE credentials(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,revoked INTEGER NOT NULL)"
+          ],
+          [
+            "table",
+            "effects",
+            "CREATE TABLE effects(key TEXT PRIMARY KEY,payload TEXT NOT NULL,credential_id TEXT NOT NULL,session_id TEXT NOT NULL)"
+          ],
+          [
+            "table",
+            "events",
+            "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+          ],
+          [
+            "table",
+            "sessions",
+            "CREATE TABLE sessions(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,credential_id TEXT NOT NULL,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,cancelled INTEGER NOT NULL)"
+          ],
+          [
+            "table",
+            "state",
+            "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),policy TEXT NOT NULL,issuer TEXT NOT NULL,now INTEGER NOT NULL,drop_next INTEGER NOT NULL)"
+          ]
+        ],
+        "tables": {
+          "credentials": [
+            [
+              "c1",
+              "6502572a023a267f124b2c33e50282a7373cf085e66f0b13abf18251a7662c05",
+              "alice",
+              "tenant-a",
+              "inbox",
+              200,
+              0
+            ]
+          ],
+          "effects": [],
+          "events": [
+            [1, "issued", "{\"credential_id\":\"c1\"}"],
+            [2, "session", "{\"credential_id\":\"c1\",\"session_id\":\"s1\"}"]
+          ],
+          "sessions": [
+            [
+              "s1",
+              "ae8601830b79df622ef55d09109a6b7e954cb1cd9d014e41b9dd50c463e0d271",
+              "c1",
+              "alice",
+              "tenant-a",
+              "inbox",
+              700,
+              0
+            ]
+          ],
+          "state": [[1, "continuous", "issuer-transfer-interrupted_update", 100, 0]]
+        }
+      },
+      "case": "interrupted_update",
+      "effect_count": 0,
+      "effects": [],
+      "held": true,
+      "initial": null,
+      "leaf_status": { "a": null, "b": null },
+      "native": {
+        "native_interrupted": true,
+        "status": "blocked",
+        "worker": { "path_denied": true, "socket_denied": true }
+      },
+      "new_effects": [],
+      "proposal": {
+        "arguments": {
+          "content": "Synthetic report transfer-interrupted_update a",
+          "resource": "inbox"
+        },
+        "name": "send_report",
+        "status": "call"
+      },
+      "status": "blocked",
+      "storage": {
+        "a-gateway": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "intents",
+              "CREATE TABLE intents(key TEXT PRIMARY KEY,payload TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),stopped INTEGER NOT NULL,revocation TEXT NOT NULL,ack_seq INTEGER)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-interrupted_update a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-interrupted_update\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "events": [],
+            "intents": [],
+            "state": [[1, 0, "not_requested", null]]
+          }
+        },
+        "a-port": {
+          "schema": [
+            ["table", "binding", "CREATE TABLE binding(payload TEXT)"],
+            [
+              "table",
+              "policy",
+              "CREATE TABLE policy(identity TEXT,approved TEXT,control TEXT,revoked INTEGER)"
+            ]
+          ],
+          "tables": {
+            "binding": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-interrupted_update a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-interrupted_update\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "policy": [
+              [
+                "{\"principal\":\"alice\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"}",
+                "{\"content\":\"Synthetic report transfer-interrupted_update a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"}",
+                "enforced",
+                0
+              ]
+            ]
+          }
+        },
+        "a-signal": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            ["table", "decisions", "CREATE TABLE decisions(nonce TEXT PRIMARY KEY)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY, payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "inbox",
+              "CREATE TABLE inbox(id TEXT PRIMARY KEY, digest TEXT NOT NULL,\n                    alert_id TEXT NOT NULL, status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(revision INTEGER, terminal INTEGER, paused INTEGER,\n                    lease_until REAL, last_seen REAL, boot TEXT)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-interrupted_update a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"},\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"},\"operator_key_sha256\":\"ea4cae595cf4f67e272c68b92c74d76045bc3802676234d0c5c9b017a9f465ce\",\"project\":\"composition-project\",\"request_id\":\"request-a\",\"response_id\":\"response-a\",\"webhook_key_sha256\":\"f62966f0eee3b92433c04027579fa935b3116e6bb5260b76c807f5ef37857eb2\"}"
+              ]
+            ],
+            "decisions": [["initial-a"]],
+            "events": [
+              [
+                1,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"},\"type\":\"heartbeat\"}"
+              ],
+              [
+                2,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"},\"nonce\":\"initial-a\",\"type\":\"operator_restart\"}"
+              ],
+              [
+                3,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"},\"type\":\"heartbeat\"}"
+              ]
+            ],
+            "inbox": [],
+            "state": [[1, 0, 0, 130.0, 100.0, "fixture-boot"]]
+          }
+        },
+        "b-gateway": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "intents",
+              "CREATE TABLE intents(key TEXT PRIMARY KEY,payload TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),stopped INTEGER NOT NULL,revocation TEXT NOT NULL,ack_seq INTEGER)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-interrupted_update b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-interrupted_update\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "events": [],
+            "intents": [],
+            "state": [[1, 0, "not_requested", null]]
+          }
+        },
+        "b-port": {
+          "schema": [
+            ["table", "binding", "CREATE TABLE binding(payload TEXT)"],
+            [
+              "table",
+              "policy",
+              "CREATE TABLE policy(identity TEXT,approved TEXT,control TEXT,revoked INTEGER)"
+            ]
+          ],
+          "tables": {
+            "binding": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-interrupted_update b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-interrupted_update\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "policy": [
+              [
+                "{\"principal\":\"alice\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"}",
+                "{\"content\":\"Synthetic report transfer-interrupted_update b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"}",
+                "enforced",
+                0
+              ]
+            ]
+          }
+        },
+        "b-signal": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            ["table", "decisions", "CREATE TABLE decisions(nonce TEXT PRIMARY KEY)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY, payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "inbox",
+              "CREATE TABLE inbox(id TEXT PRIMARY KEY, digest TEXT NOT NULL,\n                    alert_id TEXT NOT NULL, status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(revision INTEGER, terminal INTEGER, paused INTEGER,\n                    lease_until REAL, last_seen REAL, boot TEXT)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-interrupted_update b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"},\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"},\"operator_key_sha256\":\"ea4cae595cf4f67e272c68b92c74d76045bc3802676234d0c5c9b017a9f465ce\",\"project\":\"composition-project\",\"request_id\":\"request-b\",\"response_id\":\"response-b\",\"webhook_key_sha256\":\"f62966f0eee3b92433c04027579fa935b3116e6bb5260b76c807f5ef37857eb2\"}"
+              ]
+            ],
+            "decisions": [["initial-b"]],
+            "events": [
+              [
+                1,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"},\"type\":\"heartbeat\"}"
+              ],
+              [
+                2,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"},\"nonce\":\"initial-b\",\"type\":\"operator_restart\"}"
+              ]
+            ],
+            "inbox": [],
+            "state": [[1, 0, 0, 130.0, 100.0, "fixture-boot"]]
+          }
+        },
+        "context": {
+          "schema": [
+            [
+              "table",
+              "attempts",
+              "CREATE TABLE attempts(action_id TEXT PRIMARY KEY,actor TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "facts",
+              "CREATE TABLE facts(id INTEGER PRIMARY KEY,kind TEXT NOT NULL,detail TEXT NOT NULL,blocking INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "grants",
+              "CREATE TABLE grants(actor TEXT PRIMARY KEY,parent TEXT,actions TEXT NOT NULL,depth INTEGER NOT NULL,source TEXT NOT NULL,revoked INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1), source TEXT NOT NULL, revision INTEGER NOT NULL)"
+            ]
+          ],
+          "tables": {
+            "attempts": [],
+            "config": [
+              [
+                "{\"actions\":{\"a\":{\"content\":\"Synthetic report transfer-interrupted_update a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"},\"b\":{\"content\":\"Synthetic report transfer-interrupted_update b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"}},\"budget\":1,\"hosts\":{\"a\":[\"{\\\"principal\\\":\\\"alice\\\",\\\"run\\\":\\\"phase9-transfer-interrupted_update\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"{\\\"content\\\":\\\"Synthetic report transfer-interrupted_update a\\\",\\\"id\\\":\\\"a\\\",\\\"operation\\\":\\\"send_report\\\",\\\"policyRevision\\\":\\\"v1\\\",\\\"principal\\\":\\\"alice\\\",\\\"resource\\\":\\\"inbox\\\",\\\"run\\\":\\\"phase9-transfer-interrupted_update\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"enforced\"],\"b\":[\"{\\\"principal\\\":\\\"alice\\\",\\\"run\\\":\\\"phase9-transfer-interrupted_update\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"{\\\"content\\\":\\\"Synthetic report transfer-interrupted_update b\\\",\\\"id\\\":\\\"b\\\",\\\"operation\\\":\\\"send_report\\\",\\\"policyRevision\\\":\\\"v1\\\",\\\"principal\\\":\\\"alice\\\",\\\"resource\\\":\\\"inbox\\\",\\\"run\\\":\\\"phase9-transfer-interrupted_update\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"enforced\"]},\"registry\":{\"child\":{\"parent\":\"root\",\"task\":\"task-transfer-interrupted_update\"},\"grandchild\":{\"parent\":\"child\",\"task\":\"task-transfer-interrupted_update\"}},\"source\":\"v1\",\"task\":\"task-transfer-interrupted_update\"}"
+              ]
+            ],
+            "events": [
+              [1, "{\"actor\":\"root\",\"audit\":[],\"kind\":\"resume\",\"reason\":null}"],
+              [
+                2,
+                "{\"actions\":[\"a\",\"b\"],\"actor\":\"root\",\"child\":\"child\",\"kind\":\"delegated\"}"
+              ],
+              [3, "{\"actor\":\"child\",\"audit\":[],\"kind\":\"resume\",\"reason\":null}"]
+            ],
+            "facts": [],
+            "grants": [
+              ["child", "root", "[\"a\",\"b\"]", 1, "v1", 0],
+              ["root", null, "[\"a\",\"b\"]", 0, "v1", 0]
+            ],
+            "state": [[1, "v1", 1]]
+          }
+        },
+        "pipeline": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT)"],
+            ["table", "events", "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT)"],
+            ["table", "state", "CREATE TABLE state(held INTEGER)"]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"actions\":{\"a\":{\"content\":\"Synthetic report transfer-interrupted_update a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"},\"b\":{\"content\":\"Synthetic report transfer-interrupted_update b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-interrupted_update\",\"tenant\":\"tenant-a\"}},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-interrupted_update\",\"session_id\":\"s1\"},\"budget\":1,\"registry\":{\"child\":{\"parent\":\"root\",\"task\":\"task-transfer-interrupted_update\"},\"grandchild\":{\"parent\":\"child\",\"task\":\"task-transfer-interrupted_update\"}},\"source\":\"v1\",\"task\":\"task-transfer-interrupted_update\"}"
+              ]
+            ],
+            "events": [
+              [1, "update_started"],
+              [2, "update_completed"],
+              [3, "update_started"],
+              [4, "update_completed"],
+              [5, "update_started"],
+              [6, "dispatch_held"]
+            ],
+            "state": [[1]]
+          }
+        },
+        "service": {
+          "schema": [
+            [
+              "table",
+              "credentials",
+              "CREATE TABLE credentials(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,revoked INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "effects",
+              "CREATE TABLE effects(key TEXT PRIMARY KEY,payload TEXT NOT NULL,credential_id TEXT NOT NULL,session_id TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "sessions",
+              "CREATE TABLE sessions(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,credential_id TEXT NOT NULL,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,cancelled INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),policy TEXT NOT NULL,issuer TEXT NOT NULL,now INTEGER NOT NULL,drop_next INTEGER NOT NULL)"
+            ]
+          ],
+          "tables": {
+            "credentials": [
+              [
+                "c1",
+                "6502572a023a267f124b2c33e50282a7373cf085e66f0b13abf18251a7662c05",
+                "alice",
+                "tenant-a",
+                "inbox",
+                200,
+                0
+              ]
+            ],
+            "effects": [],
+            "events": [
+              [1, "issued", "{\"credential_id\":\"c1\"}"],
+              [2, "session", "{\"credential_id\":\"c1\",\"session_id\":\"s1\"}"]
+            ],
+            "sessions": [
+              [
+                "s1",
+                "ae8601830b79df622ef55d09109a6b7e954cb1cd9d014e41b9dd50c463e0d271",
+                "c1",
+                "alice",
+                "tenant-a",
+                "inbox",
+                700,
+                0
+              ]
+            ],
+            "state": [[1, "continuous", "issuer-transfer-interrupted_update", 100, 0]]
+          }
+        }
+      }
+    },
+    {
+      "before_effects": [],
+      "before_storage": {
+        "schema": [
+          [
+            "table",
+            "credentials",
+            "CREATE TABLE credentials(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,revoked INTEGER NOT NULL)"
+          ],
+          [
+            "table",
+            "effects",
+            "CREATE TABLE effects(key TEXT PRIMARY KEY,payload TEXT NOT NULL,credential_id TEXT NOT NULL,session_id TEXT NOT NULL)"
+          ],
+          [
+            "table",
+            "events",
+            "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+          ],
+          [
+            "table",
+            "sessions",
+            "CREATE TABLE sessions(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,credential_id TEXT NOT NULL,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,cancelled INTEGER NOT NULL)"
+          ],
+          [
+            "table",
+            "state",
+            "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),policy TEXT NOT NULL,issuer TEXT NOT NULL,now INTEGER NOT NULL,drop_next INTEGER NOT NULL)"
+          ]
+        ],
+        "tables": {
+          "credentials": [
+            [
+              "c1",
+              "a8b7dfe83eea13c3ec644ffcbf30cf43015eaaeaa8879de46fe5e0c214b394a3",
+              "alice",
+              "tenant-a",
+              "inbox",
+              200,
+              0
+            ]
+          ],
+          "effects": [],
+          "events": [
+            [1, "issued", "{\"credential_id\":\"c1\"}"],
+            [2, "session", "{\"credential_id\":\"c1\",\"session_id\":\"s1\"}"]
+          ],
+          "sessions": [
+            [
+              "s1",
+              "cea599e0723748dda0f83507e7c8a3a6c7568aa7b0ff4f630cd910cad1bd32ba",
+              "c1",
+              "alice",
+              "tenant-a",
+              "inbox",
+              700,
+              0
+            ]
+          ],
+          "state": [[1, "continuous", "issuer-transfer-operator_restart", 100, 0]]
+        }
+      },
+      "case": "operator_restart",
+      "effect_count": 1,
+      "effects": [
+        {
+          "action": {
+            "content": "Synthetic report transfer-operator_restart a",
+            "id": "a",
+            "operation": "send_report",
+            "policyRevision": "v1",
+            "principal": "alice",
+            "resource": "inbox",
+            "run": "phase9-transfer-operator_restart",
+            "tenant": "tenant-a"
+          },
+          "credential_id": "c1",
+          "key": "7853f75bfc0dfcdebb3d4e4655e3568a44ef47aa511b361af49c2cdc72e2c550",
+          "session_id": "s1"
+        }
+      ],
+      "held": false,
+      "initial": null,
+      "leaf_status": { "a": "observed", "b": null },
+      "native": {
+        "native_interrupted": true,
+        "status": "observed",
+        "worker": { "path_denied": true, "socket_denied": true }
+      },
+      "new_effects": [
+        {
+          "action": {
+            "content": "Synthetic report transfer-operator_restart a",
+            "id": "a",
+            "operation": "send_report",
+            "policyRevision": "v1",
+            "principal": "alice",
+            "resource": "inbox",
+            "run": "phase9-transfer-operator_restart",
+            "tenant": "tenant-a"
+          },
+          "credential_id": "c1",
+          "key": "7853f75bfc0dfcdebb3d4e4655e3568a44ef47aa511b361af49c2cdc72e2c550",
+          "session_id": "s1"
+        }
+      ],
+      "proposal": {
+        "arguments": {
+          "content": "Synthetic report transfer-operator_restart a",
+          "resource": "inbox"
+        },
+        "name": "send_report",
+        "status": "call"
+      },
+      "status": "observed",
+      "storage": {
+        "a-gateway": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "intents",
+              "CREATE TABLE intents(key TEXT PRIMARY KEY,payload TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),stopped INTEGER NOT NULL,revocation TEXT NOT NULL,ack_seq INTEGER)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-operator_restart a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-operator_restart\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "events": [
+              [
+                1,
+                "intent",
+                "{\"key\":\"7853f75bfc0dfcdebb3d4e4655e3568a44ef47aa511b361af49c2cdc72e2c550\"}"
+              ],
+              [2, "outcome", "{\"status\":\"observed\"}"]
+            ],
+            "intents": [
+              [
+                "7853f75bfc0dfcdebb3d4e4655e3568a44ef47aa511b361af49c2cdc72e2c550",
+                "{\"content\":\"Synthetic report transfer-operator_restart a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"}",
+                "observed"
+              ]
+            ],
+            "state": [[1, 0, "not_requested", null]]
+          }
+        },
+        "a-port": {
+          "schema": [
+            ["table", "binding", "CREATE TABLE binding(payload TEXT)"],
+            [
+              "table",
+              "policy",
+              "CREATE TABLE policy(identity TEXT,approved TEXT,control TEXT,revoked INTEGER)"
+            ]
+          ],
+          "tables": {
+            "binding": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-operator_restart a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-operator_restart\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "policy": [
+              [
+                "{\"principal\":\"alice\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"}",
+                "{\"content\":\"Synthetic report transfer-operator_restart a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"}",
+                "enforced",
+                0
+              ]
+            ]
+          }
+        },
+        "a-signal": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            ["table", "decisions", "CREATE TABLE decisions(nonce TEXT PRIMARY KEY)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY, payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "inbox",
+              "CREATE TABLE inbox(id TEXT PRIMARY KEY, digest TEXT NOT NULL,\n                    alert_id TEXT NOT NULL, status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(revision INTEGER, terminal INTEGER, paused INTEGER,\n                    lease_until REAL, last_seen REAL, boot TEXT)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-operator_restart a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"operator_key_sha256\":\"ea4cae595cf4f67e272c68b92c74d76045bc3802676234d0c5c9b017a9f465ce\",\"project\":\"composition-project\",\"request_id\":\"request-a\",\"response_id\":\"response-a\",\"webhook_key_sha256\":\"f62966f0eee3b92433c04027579fa935b3116e6bb5260b76c807f5ef37857eb2\"}"
+              ]
+            ],
+            "decisions": [["explicit-operator-a"], ["initial-a"]],
+            "events": [
+              [
+                1,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"type\":\"heartbeat\"}"
+              ],
+              [
+                2,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"nonce\":\"initial-a\",\"type\":\"operator_restart\"}"
+              ],
+              [
+                3,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"type\":\"monitor_paused\"}"
+              ],
+              [
+                4,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"type\":\"heartbeat\"}"
+              ],
+              [
+                5,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"nonce\":\"explicit-operator-a\",\"type\":\"operator_restart\"}"
+              ],
+              [
+                6,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"type\":\"dispatch_admitted\"}"
+              ],
+              [
+                7,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"result\":{\"status\":\"observed\"},\"type\":\"dispatch_result\"}"
+              ]
+            ],
+            "inbox": [],
+            "state": [[3, 0, 0, 161.0, 131.0, "fixture-boot"]]
+          }
+        },
+        "b-gateway": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "intents",
+              "CREATE TABLE intents(key TEXT PRIMARY KEY,payload TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),stopped INTEGER NOT NULL,revocation TEXT NOT NULL,ack_seq INTEGER)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-operator_restart b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-operator_restart\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "events": [],
+            "intents": [],
+            "state": [[1, 0, "not_requested", null]]
+          }
+        },
+        "b-port": {
+          "schema": [
+            ["table", "binding", "CREATE TABLE binding(payload TEXT)"],
+            [
+              "table",
+              "policy",
+              "CREATE TABLE policy(identity TEXT,approved TEXT,control TEXT,revoked INTEGER)"
+            ]
+          ],
+          "tables": {
+            "binding": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-operator_restart b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-operator_restart\",\"session_id\":\"s1\"}}"
+              ]
+            ],
+            "policy": [
+              [
+                "{\"principal\":\"alice\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"}",
+                "{\"content\":\"Synthetic report transfer-operator_restart b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"}",
+                "enforced",
+                0
+              ]
+            ]
+          }
+        },
+        "b-signal": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            ["table", "decisions", "CREATE TABLE decisions(nonce TEXT PRIMARY KEY)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY, payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "inbox",
+              "CREATE TABLE inbox(id TEXT PRIMARY KEY, digest TEXT NOT NULL,\n                    alert_id TEXT NOT NULL, status TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(revision INTEGER, terminal INTEGER, paused INTEGER,\n                    lease_until REAL, last_seen REAL, boot TEXT)"
+            ]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"approved\":{\"content\":\"Synthetic report transfer-operator_restart b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"operator_key_sha256\":\"ea4cae595cf4f67e272c68b92c74d76045bc3802676234d0c5c9b017a9f465ce\",\"project\":\"composition-project\",\"request_id\":\"request-b\",\"response_id\":\"response-b\",\"webhook_key_sha256\":\"f62966f0eee3b92433c04027579fa935b3116e6bb5260b76c807f5ef37857eb2\"}"
+              ]
+            ],
+            "decisions": [["explicit-operator-b"], ["initial-b"]],
+            "events": [
+              [
+                1,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"type\":\"heartbeat\"}"
+              ],
+              [
+                2,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"nonce\":\"initial-b\",\"type\":\"operator_restart\"}"
+              ],
+              [
+                3,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"type\":\"monitor_paused\"}"
+              ],
+              [
+                4,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"type\":\"heartbeat\"}"
+              ],
+              [
+                5,
+                "{\"identity\":{\"principal\":\"alice\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"nonce\":\"explicit-operator-b\",\"type\":\"operator_restart\"}"
+              ]
+            ],
+            "inbox": [],
+            "state": [[3, 0, 0, 161.0, 131.0, "fixture-boot"]]
+          }
+        },
+        "context": {
+          "schema": [
+            [
+              "table",
+              "attempts",
+              "CREATE TABLE attempts(action_id TEXT PRIMARY KEY,actor TEXT NOT NULL,status TEXT NOT NULL)"
+            ],
+            ["table", "config", "CREATE TABLE config(payload TEXT NOT NULL)"],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "facts",
+              "CREATE TABLE facts(id INTEGER PRIMARY KEY,kind TEXT NOT NULL,detail TEXT NOT NULL,blocking INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "grants",
+              "CREATE TABLE grants(actor TEXT PRIMARY KEY,parent TEXT,actions TEXT NOT NULL,depth INTEGER NOT NULL,source TEXT NOT NULL,revoked INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1), source TEXT NOT NULL, revision INTEGER NOT NULL)"
+            ]
+          ],
+          "tables": {
+            "attempts": [["a", "child", "observed"]],
+            "config": [
+              [
+                "{\"actions\":{\"a\":{\"content\":\"Synthetic report transfer-operator_restart a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"b\":{\"content\":\"Synthetic report transfer-operator_restart b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"}},\"budget\":1,\"hosts\":{\"a\":[\"{\\\"principal\\\":\\\"alice\\\",\\\"run\\\":\\\"phase9-transfer-operator_restart\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"{\\\"content\\\":\\\"Synthetic report transfer-operator_restart a\\\",\\\"id\\\":\\\"a\\\",\\\"operation\\\":\\\"send_report\\\",\\\"policyRevision\\\":\\\"v1\\\",\\\"principal\\\":\\\"alice\\\",\\\"resource\\\":\\\"inbox\\\",\\\"run\\\":\\\"phase9-transfer-operator_restart\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"enforced\"],\"b\":[\"{\\\"principal\\\":\\\"alice\\\",\\\"run\\\":\\\"phase9-transfer-operator_restart\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"{\\\"content\\\":\\\"Synthetic report transfer-operator_restart b\\\",\\\"id\\\":\\\"b\\\",\\\"operation\\\":\\\"send_report\\\",\\\"policyRevision\\\":\\\"v1\\\",\\\"principal\\\":\\\"alice\\\",\\\"resource\\\":\\\"inbox\\\",\\\"run\\\":\\\"phase9-transfer-operator_restart\\\",\\\"tenant\\\":\\\"tenant-a\\\"}\",\"enforced\"]},\"registry\":{\"child\":{\"parent\":\"root\",\"task\":\"task-transfer-operator_restart\"},\"grandchild\":{\"parent\":\"child\",\"task\":\"task-transfer-operator_restart\"}},\"source\":\"v1\",\"task\":\"task-transfer-operator_restart\"}"
+              ]
+            ],
+            "events": [
+              [1, "{\"actor\":\"root\",\"audit\":[],\"kind\":\"resume\",\"reason\":null}"],
+              [
+                2,
+                "{\"actions\":[\"a\",\"b\"],\"actor\":\"root\",\"child\":\"child\",\"kind\":\"delegated\"}"
+              ],
+              [3, "{\"actor\":\"child\",\"audit\":[],\"kind\":\"resume\",\"reason\":null}"],
+              [4, "{\"action_id\":\"a\",\"actor\":\"child\",\"kind\":\"admitted\"}"],
+              [
+                5,
+                "{\"action_id\":\"a\",\"actor\":\"child\",\"kind\":\"outcome\",\"status\":\"observed\"}"
+              ]
+            ],
+            "facts": [],
+            "grants": [
+              ["child", "root", "[\"a\",\"b\"]", 1, "v1", 0],
+              ["root", null, "[\"a\",\"b\"]", 0, "v1", 0]
+            ],
+            "state": [[1, "v1", 3]]
+          }
+        },
+        "pipeline": {
+          "schema": [
+            ["table", "config", "CREATE TABLE config(payload TEXT)"],
+            ["table", "events", "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT)"],
+            ["table", "state", "CREATE TABLE state(held INTEGER)"]
+          ],
+          "tables": {
+            "config": [
+              [
+                "{\"actions\":{\"a\":{\"content\":\"Synthetic report transfer-operator_restart a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"},\"b\":{\"content\":\"Synthetic report transfer-operator_restart b\",\"id\":\"b\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"}},\"binding\":{\"credential_id\":\"c1\",\"issuer\":\"issuer-transfer-operator_restart\",\"session_id\":\"s1\"},\"budget\":1,\"registry\":{\"child\":{\"parent\":\"root\",\"task\":\"task-transfer-operator_restart\"},\"grandchild\":{\"parent\":\"child\",\"task\":\"task-transfer-operator_restart\"}},\"source\":\"v1\",\"task\":\"task-transfer-operator_restart\"}"
+              ]
+            ],
+            "events": [
+              [1, "update_started"],
+              [2, "update_completed"],
+              [3, "update_started"],
+              [4, "update_completed"],
+              [5, "update_started"],
+              [6, "update_completed"]
+            ],
+            "state": [[0]]
+          }
+        },
+        "service": {
+          "schema": [
+            [
+              "table",
+              "credentials",
+              "CREATE TABLE credentials(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,revoked INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "effects",
+              "CREATE TABLE effects(key TEXT PRIMARY KEY,payload TEXT NOT NULL,credential_id TEXT NOT NULL,session_id TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "events",
+              "CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL)"
+            ],
+            [
+              "table",
+              "sessions",
+              "CREATE TABLE sessions(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,credential_id TEXT NOT NULL,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,cancelled INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "state",
+              "CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),policy TEXT NOT NULL,issuer TEXT NOT NULL,now INTEGER NOT NULL,drop_next INTEGER NOT NULL)"
+            ]
+          ],
+          "tables": {
+            "credentials": [
+              [
+                "c1",
+                "a8b7dfe83eea13c3ec644ffcbf30cf43015eaaeaa8879de46fe5e0c214b394a3",
+                "alice",
+                "tenant-a",
+                "inbox",
+                200,
+                0
+              ]
+            ],
+            "effects": [
+              [
+                "7853f75bfc0dfcdebb3d4e4655e3568a44ef47aa511b361af49c2cdc72e2c550",
+                "{\"content\":\"Synthetic report transfer-operator_restart a\",\"id\":\"a\",\"operation\":\"send_report\",\"policyRevision\":\"v1\",\"principal\":\"alice\",\"resource\":\"inbox\",\"run\":\"phase9-transfer-operator_restart\",\"tenant\":\"tenant-a\"}",
+                "c1",
+                "s1"
+              ]
+            ],
+            "events": [
+              [1, "issued", "{\"credential_id\":\"c1\"}"],
+              [2, "session", "{\"credential_id\":\"c1\",\"session_id\":\"s1\"}"],
+              [
+                3,
+                "effect",
+                "{\"credential_id\":\"c1\",\"key\":\"7853f75bfc0dfcdebb3d4e4655e3568a44ef47aa511b361af49c2cdc72e2c550\",\"session_id\":\"s1\"}"
+              ]
+            ],
+            "sessions": [
+              [
+                "s1",
+                "cea599e0723748dda0f83507e7c8a3a6c7568aa7b0ff4f630cd910cad1bd32ba",
+                "c1",
+                "alice",
+                "tenant-a",
+                "inbox",
+                700,
+                0
+              ]
+            ],
+            "state": [[1, "continuous", "issuer-transfer-operator_restart", 100, 0]]
+          }
+        }
+      }
+    }
+  ],
+  "model": "gpt-6-luna",
+  "source_commit": "61124a77a66ce8bdbf65b1805113679df4329866"
+}

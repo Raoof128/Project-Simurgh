@@ -461,14 +461,16 @@ or deployed enforcement. A later merge can reflect new knowledge rather than a p
 
 ### Retained Stage 4M public-tier disclosure verification
 
-The Tier-P path skips signed root and chain bindings. A local probe accepted a changed
-public disclosure and matching chain while the original signed attestation, manifest and pinned
-key remained unchanged; it also accepted removal of both public files. Signature success therefore
-does not authenticate those public-tier files. Tier A checks local roots but does not recompute
-all attestation totals or verify the referenced upstream/proof artifacts. See
-[M106 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m106--stage-4m-public-tier-verification-omits-signed-disclosure-and-chain-bindings).
-The retained browser page also has the parsing failure recorded in M54. Use these artifacts as
-bounded research fixtures pending runtime repair.
+The 21 October repair checks signed public roots and chain bindings in Tier P, including
+omitted public files. Tier A now recomputes signed aggregates; duplicate merge targets are
+rejected. The historical [M106 probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m106--stage-4m-public-tier-verification-omits-signed-disclosure-and-chain-bindings)
+records the earlier behavior and remains unchanged. New regression tests exercise tampering,
+omission and producer-signed aggregate changes. Upstream/proof artifact authentication remains
+outside this repaired subset; a passing fixture is not independent real-world evidence.
+
+Newly generated browser modules preserve module scopes and parse successfully. The retained
+historical browser page still has the M54 parsing defect; actual browser execution and accessibility
+remain unverified. See the [repair report](docs/readiness-2026-10-21/RESULTS.md).
 
 ### Retained Stage 4N heartbeat verification
 

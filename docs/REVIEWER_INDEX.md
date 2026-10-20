@@ -12,8 +12,9 @@ outcomes be checked against receiver state?
 2. Run the [credential-free replay](../README.md#replay-the-evidence) from a full-history checkout.
    Check expected archive roots through a trusted channel. Replay verifies supplied records under
    their declared source and trust model; it does not prove independent capture provenance.
-3. Use the [dashboard or CLI](../tools/simurgh-explorer/README.md) to inspect the **earlier**
-   144-outcome Phase 10/14 dataset. The newer 288-branch study has separate reports and verifiers.
+3. Use the [dashboard or CLI](../tools/simurgh-explorer/README.md) to inspect all **288 transfer-study branches**,
+   separated by model. `--study phase10` selects the earlier 144-outcome dataset. Source verification
+   remains separate. See the [21 October repair report](readiness-2026-10-21/RESULTS.md).
 4. Inspect [latest smoke validation](research/smoke-validation-2026-10-19/RESULTS.md), including
    original failures, repaired runs, exact source revisions and the strict browser-parity failure.
 5. Challenge the [integration boundaries](INTEGRATIONS.md), [security](../SECURITY.md),

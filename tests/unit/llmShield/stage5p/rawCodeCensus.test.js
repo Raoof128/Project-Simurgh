@@ -261,6 +261,15 @@ test("raw literals 464-474 occur ONLY in the allocator, the registry, goldens an
     "Historical README archive must retain the original approved bytes"
   );
   const APPROVED = [
+    // R05: exact documentation additions authorized by 2068f1a6.
+    "AGENT.md",
+    "CHANGELOG.md",
+    "docs/documentation-audit-2026-10-19/FILES.md",
+    "docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md",
+    "docs/documentation-audit-2026-10-19/SOURCES.md",
+    "docs/documentation-audit-2026-10-19/inventory.json",
+    "docs/documentation-audit-2026-10-19/manual-progress.json",
+    "docs/research/smoke-validation-2026-10-19/validation.json",
     "docs/research/LOCAL_MAINTENANCE_PHASE_16.md",
     "tools/simurgh-attestation/stage5p/core/rawCodeAllocator.mjs",
     "tools/simurgh-attestation/stage4h/exitCodes.mjs",

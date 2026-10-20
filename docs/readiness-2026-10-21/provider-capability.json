@@ -1,0 +1,19 @@
+[
+  {
+    "endpoint": "/v1/models",
+    "method": "GET",
+    "credential": "SIMURGH_OPENAI_API_KEY",
+    "time_utc": "2026-10-20T23:24:20.544755+00:00",
+    "http_status": 200,
+    "result": "accessible",
+    "returned_items": 139
+  },
+  {
+    "endpoint": "/v1/organization/projects?limit=1",
+    "method": "GET",
+    "credential": "SIMURGH_OPENAI_API_KEY",
+    "time_utc": "2026-10-20T23:24:21.703894+00:00",
+    "http_status": 403,
+    "error_type": "non_json_error"
+  }
+]
