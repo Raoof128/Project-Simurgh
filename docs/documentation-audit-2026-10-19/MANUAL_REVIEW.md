@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **902 documents have complete manual reads; 17 remain
+SHA-256 values. At this checkpoint, **906 documents have complete manual reads; 13 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -5719,3 +5719,183 @@ and score discrepancies are historical planning inconsistencies, not measured re
 S54 checks the SEC motivating example, RFC 3161 accuracy semantics and OpenSSL verification time.
 C2PA's timestamp provisions do not certify this prototype. Preserve frozen instructions and apply
 these dated qualifications wherever the stage is presented as implemented temporal-quorum enforcement.
+
+### M132 — Stage 5M adds real Rekor verification but does not recompute all three ecologies
+
+Complete reads cover the 254-line VTC-Quorum design and 218-line plan, with core, adapters,
+attestations, Python/browser, Lean, capture and test/reproduction checks. [Ten probe cases](vtc-quorum-verifier-probe.json)
+retain the real packet's raw-0 result and a raw-387 inclusion-tamper control. They also demonstrate
+ignored TSA/Bitcoin pins, an inconsistent expected-submitter PEM, masked error precedence,
+unbound public-attestation evidence and a null-marker downgrade. No capture or release key changed.
+
+The Rekor adapter executes a Merkle inclusion walk and verifies checkpoint, SET and submitter
+signatures. That is substantive implemented verification. It does not make the other two seats
+independently recomputed: `verifyVtcQuorum` reuses Stage 5L's fixture-style adapter, including assumed
+OTS path validity and lifted TSA assertions. It never opens the raw TSA token/OTS proof or validates
+Bitcoin headers. The configured TSA root and Bitcoin checkpoint/minimum-confirmation inputs are
+unused. M131's upstream, receipt, time and release limitations remain. Ecologies are assigned three
+constant class names once the Rekor checks pass; no cross-root analysis establishes organizational
+independence or prevents the same authority from occupying multiple roles. “Trust root: none” in
+the prior-art table is incorrect: this design trusts pinned keys and authorities, plus its adapter
+assertions. The declared N is a class count, not an independently measured rewrite cost or security level.
+
+Expected-submitter binding compares the entry fingerprint to a separately supplied fingerprint;
+the result computed from `expectedSubmitterPem` is ignored. Supplying another valid PEM with the
+original fingerprint still passes. Checkpoint verification authenticates a signed note but does not
+compare the origin/name/key hint and SET `logID` to an independently derived pinned identity.
+Submitter algorithm/curve and full hashedrekord version/hash-algorithm schema are not enforced as
+specified. UUID and redundant submitter fields are metadata, not all authenticated entry identity.
+Hex/base64 decoding is permissive; canonical-anchor decoding does not enforce exact lowercase,
+64-byte, no-newline text. With the log seat absent, uppercase input reaches the honest 393 floor.
+Malformed body/key/seat fields can throw while making facts and produce 395 instead of 384–390.
+Both adapters run before the frozen core, so a malformed Rekor body can mask an inherited schema
+failure. The pure dispatcher preserves precedence under already-formed facts; the full wrapper
+does not preserve it for every malformed packet.
+
+The projection whitelist protects known frozen fields, but unknown top-level claims are dropped
+and not screened by the extension; a nested `universe_adequate` assertion there passes. Required
+members are an ordered array, not merely the specified exact set. Null `envelope_schema` selects
+the v1 route and returns zero for the real bundle without the v2 ecology fields. This is not an
+anchored v2 result, but disproves the plan's rule that every present unknown marker reaches 384.
+Moreover the wrapper always constructs `vtc_quorum` configuration, so the claim that all historical
+v1 profiles are unchanged is broader than its behavior for original TSA-only `vtc_core` inputs.
+Pure fact APIs test booleans only against false and do not validate a complete typed fact schema;
+those APIs require a trusted adapter and must not ingest attacker-authored facts.
+
+Public attestations bind selected profile/commitment/log-position/verdict fields, not the promised
+packet manifest, token/proof/checkpoint/SET digests, canonical anchor, adapter-version digest and
+complete trust pins. Mutating an inclusion proof leaves the payload byte-identical. Audit adds
+supplied facts and a public-payload digest, but signature verification does not recompute evidence,
+validate verdict or enforce the audit/public relationship. Unknown tiers use the public domain.
+The browser does perform WebCrypto signature verification, separately from its extension-over-facts
+function. It does not join these operations into exact packet binding. Its extension and Python
+cover 385–394, not schema/outer failure or inherited full 364–383 behavior. Six parity vectors and
+a small browser matrix are not the full promised golden/refinement corpus.
+
+Python Lane D independently verifies the raw Rekor packet's inclusion, checkpoint, SET, artifact
+hash and signature. It does not check the expected submitter pin, TSA/OTS/capability core, full
+three-seat verdict, distinct-party identity or a newly signed audit. The test compares aggregate
+Rekor booleans, not the full decision/fingerprint set. M50 retains the outside party's earlier
+372 result; it is not reproduction of the later confirmed packet. The Lane-B unit test reads
+bundle/keys/anchor and checks the returned state; it neither pins/recomputes the entire manifest
+and capture continuity nor verifies a frozen release attestation. Its second “guard” has no
+assertion when the optional confirmed file exists. The original pre-spec block/entry and the later
+fresh capture are distinct records; the acceptance path uses the latter, not the design table's
+original block 957689. Do not conflate the incompatible early anchor-file and direct-digest OTS captures.
+
+Deterministic Lane C mutates injected facts with a stubbed successful 5L core, not frozen real
+packet cryptography. The live runner discards patches from the stored result, maps malformed output
+to no mutations and judges only whether anchoring occurred; a pristine accepted input is not a
+forgery. Its organization label does not independently establish authorization. M50/F002 separately
+records the local campaign's ineffective mutations. Neither campaign proves every claimed attack
+was exercised. K7's 395 case can fail in the earlier adapter before its intended injected throw;
+it establishes wrapper reachability, not that dependency path. “All functions” is not full behavioral
+coverage. No live run was performed here.
+
+Lean's eleven themes include auxiliaries and prove a symbolic facts model. Its equivocation theorem
+actually assumes the log seat is absent and derives incompleteness; it does not model changing one
+of three present seats while fixing the other two, as the design promises. Canonical round-trip is
+assumed, not proved for the concrete decoder. The reproduction script has a useful unconditional
+escape-hatch scan and optional Lean type-check, but omits planned Lane-A generation/cmp, full
+attestation validation, historical-stage reproduction and privacy/key-audit suite. Its shell
+`[ "$D_ALLOK" = "True" ] && echo ...` does not fail the script under `set -e` when false; earlier
+unit tests provide a separate check, not correctness of that standalone guard.
+
+S55 qualifies the prior-art comparison and GRAM example. “No such predicate exists” is an
+unsupported universal market claim; retain the narrower searched-source hypothesis. Signed
+non-claims in prose are not automatically fields in the emitted attestation. The frozen targets,
+release instructions and proposed IOU retirement are not evidence that every acceptance condition
+was implemented or independently met.
+
+### M133 — Stage 5N recomputes the chain but leaves critical external-time validation unwired
+
+Complete reads cover the 545-line VTC-Delay specification and 209-line plan. The plan deliberately
+narrows the child to the Stage 5M quorum extension; it supersedes the specification's full-child
+wording and its earlier start-subject, trilemma and publication instructions. Core, default adapter,
+endpoint/OTS/TSA code, attestations, census/projections, portable implementations, Lean/projection,
+Lane C and real-green/reproduction tests were checked. [Nine local probe cases](vtc-delay-verifier-probe.json)
+separate five injected-fact core checks from four OTS/real-endpoint checks. The original real start
+endpoint passes; so does one with a fabricated Bitcoin attestation and one with a changed TSA
+signature byte. The invalid final-envelope signature control returns 397. No full chain, model or
+external ceremony was rerun for these probes.
+
+The default path re-runs the declared dependent chain and checks terminal/checkpoint/decision/output
+bindings. However, it never recomputes `start_token_digest` from the supplied DER. The seed can
+therefore bind a declared digest without demonstrating dependency on the actual start token. Displayed
+`x0` and envelope endpoint-subject fields are also ignored. Final signatures authenticate those
+unchecked fields, not their truth. The start authorization does bind the producer signature in its
+subject, an improvement over the specification's earlier start-request-only formula.
+
+`runEndpointChild` calls `parseTsaReply`, not `verifyTsaAtGenTime`. The latter helper exists but is not
+wired into the production verification path. Changed TSA signature bytes still produce a green
+endpoint. Query nonce, signer chain, EKU, policy, revocation and historical certificate validity are
+not established there. `subject_extractable:true` can be returned after successful text extraction
+even when individual fields are null. Default facts assign `digicert-tsa` when no authority is derived,
+set accuracy to null and set `token_valid` from the whole child result. A failed OTS/Rekor child can
+thus surface as 405 instead of its intended 406; end parse errors are likewise not consistently
+mapped as the plan promises. The declared authority registry is not derived from a verified certificate.
+
+The OTS parser does execute supported operations from the leaf to a claimed root. It marks confirmed
+whenever it encounters any Bitcoin-tagged attestation. A minimal synthetic proof with the expected
+leaf and height 1, no operation path and no Bitcoin header is accepted, including by the real endpoint
+with its unchanged Rekor/TSA material. No canonical-chain pin, header hash/PoW, confirmation depth or
+external root comparison occurs. Version/hash-op fields and trailing data are not strictly validated;
+reader bounds/varint/resource handling are incomplete. The header comment's residual checkpoint
+requirement is not enforced by an input to this function. `allowPending` can also bypass the confirmation
+requirement in the exported child API. Endpoint Rekor/submitter keys come from the evidence argument,
+without matching the verifier configuration's declared roots/pins. M132's Rekor identity limitations
+remain. These gaps invalidate a claim that raw 0 independently establishes both external clock legs.
+
+Preflight uses strict UTF-8 and canonical equality to reject many malformed encodings. It canonicalizes
+before its recursive hostile-key/resource scan, contrary to the plan's ordering. Missing hard limits
+are accepted; limits are scanned after full JSON parsing. The expensive chain and child adapters run
+before core schema/signature/profile checks, using the untrusted declared T/cadence. Thus an invalid
+profile can consume unbounded work before its intended 400 rejection, and malformed nested fields can
+throw to 419 before an earlier semantic code. The schema is exact only at the top level, not every
+nested object. Policy resource comparisons omit several mandatory fields and can accept a declared
+maximum T below the actual profile T. This entry point is unsuitable for untrusted public uploads.
+
+The final signer PEM fingerprint is checked correctly. Issuer/producer checks compare declared labels
+to configured fingerprints but do not derive those fingerprints from the supplied PEMs. Freshness
+request input/policy/stage/run relationships are incomplete across all envelope objects; a signed
+challenge for another context is not comprehensively reconciled. Replay remains explicitly relative
+to the supplied prior census, but the result does not emit the planned `replay_scope`. The configured
+`expected_input_source` is included in attestations yet ignored by input checking; the separate
+`expectedInputCommitment` option is the load-bearing external comparison. Required TSA/Rekor/resource
+config fields can be absent in the core while it accepts trusted injected facts.
+
+Elapsed arithmetic correctly subtracts two uncertainties for well-formed values. Signed/typed
+provenance and nonnegative values are not fully enforced: negative supplied accuracy or synchronization
+bounds can enlarge the result, and intermediate safe-integer overflow is unchecked. A timestamp's
+second-level display granularity is not a justified one-second bound on clock error. M50's 90,000 ms
+qualification still applies. Even authentic separated timestamps prove when commitments were anchored,
+not that the decision first formed then or that all the interval was spent reviewing. Interpretability
+checks require run/output equality but do not authenticate telemetry or validate a full evidence schema.
+
+Public attestations hash the configuration but omit the complete endpoint evidence/DER and final
+signed-envelope digest; census scope is a supplied label rather than a recomputation of prior entries.
+Audit binds facts by digest rather than supplying the promised complete replay pack. The planned
+`portablePack.mjs` and signed self-contained pack verification are absent. Census functions accept
+already-verified summaries without verifying them or emitting the promised absence census. The
+oversight projection hardcodes `raw_0` and still emits `use_period` from commitment times, contrary
+to the plan's explicit system-use distinction. It must remain a template, not a compliance record.
+
+Python implements seed/hash-chain recomputation only, not independent full audit/raw-code parity.
+Browser honestly withholds normative raw 0 but checks only a digest subset and optionally the terminal;
+it omits policy acceptance, checkpoint ladder, uncertainty, signatures and full check order. No worker
+module supplies the promised off-main-thread execution, and its status string says verified even when
+`core_all_ok` is false. Lean proves a Boolean check-list model and conditional integer arithmetic;
+actual token dependency, concrete parser behavior and cryptography are not refined. The projection
+gate checks JSON against runtime constants, never reads Lean predicates or tests their execution;
+string-form raw ranges are skipped. It cannot enforce the advertised semantic correspondence.
+
+Lane C uses `buildValid` and `verifyCore` with injected fixture facts, not the full real verifier. The
+model chooses among five fixed mutations; a nonempty subset can count as all contained. Refusal is
+recorded as JSON, not the promised signed abort capsule. The current real-green tests use committed
+paths and check manifest contents and full-chain output, which corrects the earlier silent-skip defect;
+that does not cure their missing external trust verification. K7 raw-arm coverage remains distinct
+from every behavioral path. Reproduction runs a ten-step Python vector and tests plus retained outcome
+assertions; it does not execute the proposed independent Python anchor verification, portable-pack
+checks or all historical stages. Lean's local scan is conditional on tool availability. Preserve the
+three-machine digest record as deterministic equality, not complete independent audit. S56 qualifies
+regulatory/prior-art claims; none of those sources certifies these prototype guarantees.

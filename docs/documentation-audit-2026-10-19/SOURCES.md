@@ -648,3 +648,50 @@ Checked 20 October 2026 against primary sources for M131:
 - [C2PA Technical Specification 2.4](https://spec.c2pa.org/specifications/specifications/2.4/specs/C2PA_Specification.html)
   is a published version, not an invented reference. Its timestamp/trust requirements are separate
   from this fixture adapter and provide no conformance finding for Simurgh.
+
+### S55 — Three-ecology positioning and the GRAM example
+
+Checked 20 October 2026 for M132 against the cited primary papers and research report:
+
+- [Attestable Audits](https://arxiv.org/html/2506.23706v1) describes TEE execution, a public registry
+  and a Nitro prototype. Its different execution/confidentiality guarantees must accompany any
+  comparison of hardware trust and log architecture; an ecology count alone does not rank security.
+- [A Framework for Cryptographic Verifiability of End-to-End AI Pipelines](https://arxiv.org/abs/2503.22573)
+  is Balan, Learney and Wood's March 2025 framework spanning multiple cryptographic techniques.
+  Calling the whole work a single ZK pipeline with a universal “not offline” limitation is unsupported.
+- [Anthropic's GRAM report, 8 July 2026](https://www.anthropic.com/research/off-switch-dual-use)
+  explicitly describes preliminary AE Studio/Anthropic research, not a production Claude deployment.
+  Experiments span 50M–5B parameters and assess prediction performance; they do not certify a
+  deployed capability-state commitment or endorse Simurgh. The suggested timing application is
+  Simurgh's proposed use case, not an observed integration.
+
+These sources establish adjacent work and limitations, not exhaustive novelty or absence of all
+competing attestation predicates. Historical RSP/PF versions must retain their dates (see S51).
+
+### S56 — Delay-function and regulatory comparisons
+
+Checked 20 October 2026 for M133; these sources bound the historical design comparison, not legal
+advice or a certification of this implementation:
+
+- [Pietrzak, Simple Verifiable Delay Functions](https://drops.dagstuhl.de/storage/00lipics/lipics-vol124-itcs2019/LIPIcs.ITCS.2019.60/LIPIcs.ITCS.2019.60.pdf)
+  discusses efficient verification and class-group approaches avoiding trusted setup. Trusted setup
+  is not inherent to every VDF, and full hash-chain replay offers different guarantees.
+- [RTS 25, Regulation 2017/574](https://eur-lex.europa.eu/eli/reg_del/2017/574/oj/eng)
+  specifies different clock-divergence/granularity limits, including one-second categories for voice
+  and certain human-intervention trading. The design's 100 µs–1 ms summary is not the complete table.
+  This financial-market clock rule is a comparison, not a general mandate for AI review.
+- [eIDAS Article 41, consolidated text](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02014R0910-20241018)
+  attaches an accuracy/data-integrity presumption to qualified electronic timestamps. A producer's
+  `eidas_qualified` string does not establish qualification or transfer the presumption to Simurgh.
+- [Implementing Regulation 2025/1929](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX%3A32025R1929)
+  is a relevant later timestamp reference: its annex names ETSI EN 319 421 V1.3.1 and EN 319 422 V1.1.1
+  with adaptations. Indexed official text confirmed this reference; direct HTML retrieval was blocked
+  by the site's browser check. No full annex-conformance review is claimed.
+- [AI Act, Regulation 2024/1689](https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=OJ%3AL_202401689)
+  separates Article 12 logging requirements from provider/deployer retention duties and their
+  conditions. Do not merge the specific Annex III 1(a) record shape with an unconditional universal
+  six-month duty, or treat a commitment interval as the actual period of system use. The historical
+  record-shape comparison is not a finding of compliance or comprehensive applicability review.
+
+S54 and M50 supply RFC 3161's uncertainty distinction. No second-precision display, source-map
+score or committed policy alone proves a TSA's actual error bound.

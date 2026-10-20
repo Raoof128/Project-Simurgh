@@ -171,7 +171,7 @@
       "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check. M70/M71 disclose retained risk mapping, SDK retry/abort behavior, raw context prefixes and caller receipt strings; runtime remains unchanged.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "818d9f1040e4fff617e9cf23d1461c3ef712c9bc3cc1d1e7784f968d5fa3232e"
+      "read_sha256": "d84d18d4fd8e47a67390f1e94e08f5fd1d8ca3702c3946e3ae55bdc33b58c494"
     },
     {
       "path": "docs/DECISIONS.md",
@@ -1107,7 +1107,7 @@
       "assessment": "Read all 13 primary-source applicability rows and limits. Correctly separates publication from review year, pinned SDK from living docs and alignment from compliance. Previous-turn fetch provenance retained; no fresh fetch claimed.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "a693186353cb1e58c6a25e6a15b338a5657aa0d76c35457e56cfbdcd0535c3f6"
+      "read_sha256": "d7ea6a980a1357af78bd79a7538fcd6e9f3712b01f1d49a5787430f71d1a1554"
     },
     {
       "path": "docs/documentation-audit-2026-10-19/VALIDATION.md",
@@ -8864,11 +8864,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "51a861aa02463846b0212b1dcfdb3db1180c3fd2ce13e4f2e06f2eb0c6af1ad7",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read; M132/S55: genuine Rekor checks with inherited TSA/OTS assertion trust; public attestation omission, error precedence, partial parity, symbolic equivocation theorem and capture/reproduction limits. Ten offline probe cases. Frozen document preserved with dated errata.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "51a861aa02463846b0212b1dcfdb3db1180c3fd2ce13e4f2e06f2eb0c6af1ad7"
     },
     {
       "path": "docs/superpowers/plans/2026-07-14-stage-5n-vtc-delay.md",
@@ -8877,11 +8877,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "db102344a3b89c13a388f6a93b2b51cb72ce7d6856307fe3073da0c056bf1bdf",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read; M133/S56: unwired TSA signature and Bitcoin-header validation, unbound token seed, resource/trust/context limits, partial portable verification and theorem correspondence, fixture-only adversary and conditional elapsed arithmetic. Nine local probe cases. Frozen document preserved with dated errata.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "db102344a3b89c13a388f6a93b2b51cb72ce7d6856307fe3073da0c056bf1bdf"
     },
     {
       "path": "docs/superpowers/plans/2026-07-25-stage-5p-vsi-lane-a.md",
@@ -10086,11 +10086,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "fdc3cb45eacef345f9acde032b15e2a08dc70dcbb4d6333485904f2682c5bd8a",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read; M132/S55: genuine Rekor checks with inherited TSA/OTS assertion trust; public attestation omission, error precedence, partial parity, symbolic equivocation theorem and capture/reproduction limits. Ten offline probe cases. Frozen document preserved with dated errata.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "fdc3cb45eacef345f9acde032b15e2a08dc70dcbb4d6333485904f2682c5bd8a"
     },
     {
       "path": "docs/superpowers/specs/2026-07-14-stage-5n-vtc-delay-design.md",
@@ -10099,11 +10099,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "52303162714f5023c388b1817c2f74826b585201c74d2faa869d96c488c1aa61",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete manual read; M133/S56: unwired TSA signature and Bitcoin-header validation, unbound token seed, resource/trust/context limits, partial portable verification and theorem correspondence, fixture-only adversary and conditional elapsed arithmetic. Nine local probe cases. Frozen document preserved with dated errata.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "52303162714f5023c388b1817c2f74826b585201c74d2faa869d96c488c1aa61"
     },
     {
       "path": "docs/superpowers/specs/2026-07-15-stage-5o-vsc-hidden-universe-equality-design.md",

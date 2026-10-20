@@ -671,3 +671,16 @@ are incompletely checked. Its capability records are not an enforced content-rel
 [M131 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m131--stage-5l-verifies-fixture-signatures-without-enforcing-a-real-temporal-release-quorum).
 The separate real TSA token check does not establish a complete same-commitment temporal quorum;
 portable implementations do not provide full signature/verdict parity.
+
+Stage 5M adds genuine Rekor inclusion and signature checks, but inherits Stage 5L's TSA/OTS
+assertion trust. The public attestation omits several promised evidence digests, and its Python
+outside-reproduction adapter checks the Rekor packet rather than the complete three-seat protocol.
+See [M132 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m132--stage-5m-adds-real-rekor-verification-but-does-not-recompute-all-three-ecologies).
+A raw-0 fixture/capture result is conditional on these implemented trust boundaries.
+
+Stage 5N's main endpoint path parses TSA data without calling its signature-validation helper,
+and accepts a Bitcoin attestation tag without validating a pinned header/root. The start-token
+DER digest is not recomputed for chain seeding. Its preflight also performs expensive work before
+full policy acceptance. See [M133 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m133--stage-5n-recomputes-the-chain-but-leaves-critical-external-time-validation-unwired).
+Treat the elapsed result as conditional research arithmetic, not independently verified physical
+review duration; do not expose this verifier as an untrusted-upload service.

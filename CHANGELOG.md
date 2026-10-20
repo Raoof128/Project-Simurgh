@@ -4704,3 +4704,20 @@ Owner-requested work; implementation and review by Codex assistance.
   append-only prefixes and frozen surfaces. No runtime changes, model inference, external
   ceremony or full E2E rerun; retained source/evidence bytes are preserved.
 - **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-20 (Australia/Sydney) — Manual documentation audit: 906-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 906 of 919 baseline
+  candidates completely read, 13 pending. Exhaustive manual review remains in progress.
+- **Changes:** M132–M133 cover complete Stage 5M/5N specifications and plans. SECURITY qualifies
+  real Rekor checks, inherited anchor assumptions, unwired TSA signature/Bitcoin-header checks,
+  unbound token seeding and resource-validation order. Ten quorum and nine delay probe cases
+  use local copies and explicit fixture facts; original captures remain intact.
+- **Research:** S55–S56 check primary prior art, GRAM's preliminary scope, RTS 25 clock classes,
+  qualified timestamps and AI Act record/retention distinctions; retrieval limits are recorded.
+- **Validation:** Check changed-file formatting, links, baseline identities/read hashes,
+  append-only prefixes and frozen surfaces. No runtime changes, model inference, external
+  ceremony or full E2E rerun.
+- **Remaining:** Complete every pending manual read and final correction verification.
