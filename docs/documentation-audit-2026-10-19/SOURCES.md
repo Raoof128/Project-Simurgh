@@ -695,3 +695,26 @@ advice or a certification of this implementation:
 
 S54 and M50 supply RFC 3161's uncertainty distinction. No second-precision display, source-map
 score or committed policy alone proves a TSA's actual error bound.
+
+### S57 — Hidden-universe primitives and narrow novelty claims
+
+Checked 2026-10-20 against primary sources. [RFC 6962](https://www.rfc-editor.org/info/rfc6962/)
+is an Experimental RFC from June 2013, now obsoleted by RFC 9162. Its nonempty-tree recursion,
+strictly smaller power-of-two split and leaf/node domain prefixes match Stage 5O's construction;
+Simurgh additionally rejects an empty tree and supplies its own leaf values. The source comment
+saying “NOT RFC 6962” is inaccurate. Reusing that construction neither implements the entire CT
+protocol nor creates a new Merkle primitive.
+
+[RFC 5869](https://www.rfc-editor.org/info/rfc5869/) specifies HKDF's extract/expand construction.
+Its security guidance requires suitable input entropy and salt independence; extraction does not
+create entropy. Historical Bitcoin block hashes cannot establish a fresh unpredictable challenge
+for a subsequently selected subject. Simurgh's per-counter calls use the primitive within a custom
+challenge protocol; the RFC does not certify that protocol's sampling or anchor assumptions.
+
+[Kathy Dopp's 2009 paper](https://arxiv.org/abs/0907.3166) is correctly identified and discusses
+risk-limiting election audit sampling and sample-size methods. The stored “exact_quote” joins the
+abstract's introductory text and first bullet and normalizes spelling/punctuation; treat it as a
+paraphrase, not a byte-exact quotation. That paper does not establish the absence of earlier
+executable audit floors or cumulative selective-disclosure mechanisms. The two Stage 5O novelty
+claims remain narrow research hypotheses requiring a broader comparative search, never release,
+patent or regulatory certifications. No new regulatory standard follows from these sources.

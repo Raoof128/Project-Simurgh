@@ -5899,3 +5899,115 @@ assertions; it does not execute the proposed independent Python anchor verificat
 checks or all historical stages. Lean's local scan is conditional on tool availability. Preserve the
 three-machine digest record as deterministic equality, not complete independent audit. S56 qualifies
 regulatory/prior-art claims; none of those sources certifies these prototype guarantees.
+
+### M134 — Stage 5O verifies component relations without authenticating the complete upstream ceremony
+
+The complete 5,193-line hidden-universe specification was read, including all amendment history,
+thirteen sections, matrices, freeze receipts and closing ledgers. The 35 reading segments removed
+only formatting padding; no semantic passage was omitted. Its intended identity-equality claim is
+appropriately narrower than real execution, truthful results, adequate case selection, global
+closure uniqueness or complete disclosure history. Implementation review and [twelve local probe
+records](vsc-verifier-probe.json) qualify the claim that the entire frozen design is implemented.
+These are offline module probes with historical mainnet headers, not a new external ceremony.
+
+Three exported constructors accept caller-supplied fields: `mintSection6AcceptedContext`,
+`mintCommittedUniverseContext` and `mintCommittedProbabilityPolicyContext`. Their private WeakSet
+brands prevent object-copy forgery but do not authenticate the original input. The first checks
+shape, token grammar and bounds without verifying a closure signature, either anchor quorum,
+checkpoint witness authorization or prechallenge ordering. The latter two compare a recomputed
+policy digest with another caller-supplied digest; neither proves an anchored precommitment. No
+production upstream acceptance call was found in tools/scripts/source; fixtures invoke these
+constructors directly. Treat them as trusted integration seams, not externally authenticated
+capabilities. The downstream adapter runs the real Section 7 verifier, but joins its universe to
+the separately minted universe by cardinality only. The probability adapter similarly attaches a
+separately chosen policy without joining its digest to the challenge's anchored subject. This
+contradicts the specification's claim that a caller cannot assert these inputs into authority.
+
+The Section 7 production export genuinely verifies linked Bitcoin headers, same-period difficulty,
+proof of work, six descendants, the predeclared height/contract, HKDF seed, replayed indices and five
+root bindings. Its injectable test factory is also exported; the production export remains wired
+to the real validator. The checkpoint's trust is assumed from the constructor rather than verified
+through A26's witness-key intersection. The suffix validator rejects retarget crossings and does
+not implement full Bitcoin consensus, timestamp rules, chain selection or independent checkpoint
+publication. Genesis through block 8 are real historical data but were knowable long before the
+fixture's subject was chosen. Acceptance demonstrates deterministic replay, not fresh randomness
+or a prechallenge external anchor ceremony. The actual token check uses a suffix wildcard over
+fields rather than only the declared token census. The canonical aggregate counter omits the
+beacon-contract bytes, although the outer transport counter includes them and the contract shape
+still bounds that object. These are narrower facts than complete profile/size enforcement.
+
+Section 8 verifies case-link hashes, salted/index-bound leaf values, a supplied Merkle path and a
+unique-index union. It does not validate the frozen four-field case schema, forbid numeric case
+values, enforce the case-byte cap or apply a relational duplicate predicate. Its own accepted
+fixture uses `{i: number}` and only eight execution-census rows for N=256. There is no full scope /
+execution / result census equality check at this boundary. `verifyInclusion` takes neither N nor
+an expected position: it folds caller-supplied sibling directions. Index binding inside the leaf
+is useful but does not establish the tree's declared shape or vector position. The probe replaces
+the separately minted root with a single-leaf root, retains N=256 and supplies an empty path; the
+production Section 8 relation accepts. This is a composition/path-shape gap, not a SHA-256 collision.
+
+History entries contain only a digest and an index list. Check 10 validates token/range/uniqueness
+syntax; it does not reverify prior openings, authenticate receipts, bind a budget-key tuple, or
+validate epochs. A fabricated prior challenge with index zero passes. Repeating the exact current
+challenge rejects, contrary to the prose's exact idempotent replay promise; another challenge in
+the same epoch cannot be distinguished because entries carry no epoch. Reopening indices can be
+free in the arithmetic without authenticating a history. The history is parsed as part of the
+whole opening package before its own limits are checked; the separately declared history transport
+limit is not read. The total transport guard remains useful. No union over complete authenticated
+history, persistent global budget, or cross-root corpus reuse detection is established.
+
+Section 9 performs real exact rational arithmetic and verifies the presented claim and detection
+floor. That does not prove the sampled population has J defects or that Q/R detects the modeled
+defect. The pair probability is computed even though Section 8 supplies no corresponding relational
+predicate enforcement. Policy `k_derivation_version` need only be nonempty, and limits may exceed
+the documented defaults rather than only tighten them. A caller-minted policy with an unknown
+version and expanded limits passes. Claim numerals are converted to BigInt and GCD-checked before
+the per-field digit limit; only the caller-selected outer byte limits precede conversion. Policy
+parsing also converts operands before digit-limit enforcement. Product width is checked after each
+multiplication, not before allocation, and pair/fraction/floor cross-products lack the same width
+guard. These are implementation-specific resource bounds, not the full precomputation guarantee.
+The policy copy is shallow, so nested rationals are not deeply immutable; the subsequent digest
+comparison catches ordinary changes but does not make the captured context deeply frozen.
+
+Section 12 requires a six-key registry and recomputes a package root, but does not reexecute the
+three component verifiers or obtain sealed verifier-minted receipts. It hashes four identifiers
+copied into each payload and compares those hashes. It does not derive those identifiers from the
+actual artifact bodies. The probe removes every substantive artifact body and supplies fabricated
+ACCEPT receipts with unrelated, non-digest strings; the package is accepted. Receipt fields are
+presence-tested, not exact-schema, cryptographically verified or input-bound. Changing raw_code to
+425 correctly rejects, which is a status check rather than receipt authentication. Its authority
+context is an ordinary object, and omitted byte limits silently disable the comparisons. Payload
+`regime`/`section_id` fields can override the Stage 4T adapter's section identity after registry
+validation; an accepted probe emits a commitment under a different key.
+
+The implemented package-subject preimage length-frames a UTF-8 slot string rather than consuming
+the specification's raw 32-byte slot digest. The fixture uses `slot-0001`. Lane B checks salt shape,
+uniqueness and inequality with the known Lane A salts, but does not require the promised ceremony
+receipt or prevent cross-package reuse. Six predictable repeated-digit salts pass without a receipt.
+That illustrates the entropy limitation; it also shows the custody-evidence requirement is unwired.
+The actual Stage 4T commitment/view routines are reused, with their existing limitations (M113).
+There is no signed monotone non-claim envelope in these component outputs. Section 12 defines two
+new ceilings in prose while its final `added_non_claims` ledger remains empty.
+
+The fifteen Lean theorems cover a Boolean first-failure spine for 420–456, natural-number product
+identity, floor comparison and list-union accounting. They do not refine the concrete parsers,
+contexts, anchors, sampler, receipts or Section 12's 457–463 behavior. The list-union model preserves
+pre-existing duplicates unless its input is already unique. Cryptographic and arithmetic parity
+vectors are valuable component evidence, not complete hostile-input verdict parity or an
+independent full-protocol implementation. The retired-identifier gate is a line-based regex
+classifier: absence/history words take precedence over active syntax. Its injection test cannot
+prove semantic classification of every normative use. The source-map gate checks declared fields,
+not external quotation accuracy or novelty.
+
+The frozen text also needs this precedence record. Later amendments/section contracts supersede
+stale draft passages: Section 5's adopted case-link construction replaces its still-OPEN payload
+proposal; Section 6's closure preimage adds schema digest and slot to the earlier Section 5 formula;
+Section 7 uses pair-22 HKDF salt and the resolved byte-limit catalogue. All six requirement blocks
+are DISCHARGED in the final historical ledger, despite remaining PENDING/freeze-blocked prose in
+Sections 4–12. Final raw allocation is 420–463 plus inherited 148/149 and internal 29; 37-reason,
+457-reserved and single-golden passages describe an earlier state. The final scaffold paragraph
+incorrectly calls Sections 7–13 open and says no new ceilings were added. Section 5's S5.22 prose
+still says acceptance after the matrix changed it to rejection; accepted halves also conflict with
+some fixture-class labels. Placeholder profile/A37 hashes, stale seven/eight premise counts and
+resource-summary estimates are not authoritative constants. A successful freeze records historical
+acceptance, not resolution of these implementation gaps. S57 supplies the primary-source corrections.

@@ -4721,3 +4721,20 @@ Owner-requested work; implementation and review by Codex assistance.
   append-only prefixes and frozen surfaces. No runtime changes, model inference, external
   ceremony or full E2E rerun.
 - **Remaining:** Complete every pending manual read and final correction verification.
+
+
+### 2026-10-20 (Australia/Sydney) — Manual documentation audit: 907-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 907 of 919 baseline
+  candidates completely read, 12 pending. Exhaustive manual review remains in progress.
+- **Changes:** M134 covers all 5,193 lines of the Stage 5O specification and reconciles frozen
+  amendments with implemented context, history, probability and package checks. Twelve offline
+  probe records preserve positive controls and refusals; SECURITY states the composition limits.
+- **Research:** S57 checks RFC 6962 status/construction, RFC 5869 entropy assumptions and Dopp's
+  audit-sampling paper; novelty and quotation claims are bounded by the retrieved sources.
+- **Validation:** Check changed-file formatting, links, baseline identities/read hashes,
+  append-only prefixes and frozen surfaces. No runtime changes, inference, external ceremony
+  or full E2E rerun; original specifications and evidence remain intact.
+- **Remaining:** Complete every pending manual read and final correction verification.

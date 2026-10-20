@@ -171,7 +171,7 @@
       "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check. M70/M71 disclose retained risk mapping, SDK retry/abort behavior, raw context prefixes and caller receipt strings; runtime remains unchanged.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "d84d18d4fd8e47a67390f1e94e08f5fd1d8ca3702c3946e3ae55bdc33b58c494"
+      "read_sha256": "08026e29d0d9194292d3d357cbc456ed218b40c9ad2fd2f2c5dc7e263e9b93a0"
     },
     {
       "path": "docs/DECISIONS.md",
@@ -1107,7 +1107,7 @@
       "assessment": "Read all 13 primary-source applicability rows and limits. Correctly separates publication from review year, pinned SDK from living docs and alignment from compliance. Previous-turn fetch provenance retained; no fresh fetch claimed.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "d7ea6a980a1357af78bd79a7538fcd6e9f3712b01f1d49a5787430f71d1a1554"
+      "read_sha256": "da3079985bd7aa3ea1c9a65b5c660be8cb0033ddd5f7b04729e6276b4516b38f"
     },
     {
       "path": "docs/documentation-audit-2026-10-19/VALIDATION.md",
@@ -10112,11 +10112,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "b513c5cf4396e869a69f286f729819757c0017e7ae5e58c191a3bf401e280cd1",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Complete 5193-line read, all 35 segments. M134/S57 qualify exported context mints, missing upstream anchoring/census/relational checks, unauthenticated history, path shape, arithmetic guards, fabricated receipts, lane custody, symbolic Lean and stale frozen passages. Twelve offline probe records; frozen bytes preserved.",
+      "read_complete": true,
+      "reviewer": "Codex manual review",
+      "read_sha256": "b513c5cf4396e869a69f286f729819757c0017e7ae5e58c191a3bf401e280cd1"
     },
     {
       "path": "docs/superpowers/specs/2026-07-25-stage-5p-vsi-verifiable-submitter-identity-design.md",

@@ -684,3 +684,10 @@ DER digest is not recomputed for chain seeding. Its preflight also performs expe
 full policy acceptance. See [M133 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m133--stage-5n-recomputes-the-chain-but-leaves-critical-external-time-validation-unwired).
 Treat the elapsed result as conditional research arithmetic, not independently verified physical
 review duration; do not expose this verifier as an untrusted-upload service.
+
+Stage 5O's component verifiers accept caller-minted upstream contexts without validating a complete
+anchor ceremony. Presented-history lists are unauthenticated, and assembled-package checks can
+accept fabricated ACCEPT receipts and payload identifiers without the underlying artifacts. See
+[M134 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m134--stage-5o-verifies-component-relations-without-authenticating-the-complete-upstream-ceremony).
+Exact probability arithmetic, historical Bitcoin-header replay and object brands do not establish
+full hidden-universe equality, fresh external anchoring or authenticated cumulative disclosure.

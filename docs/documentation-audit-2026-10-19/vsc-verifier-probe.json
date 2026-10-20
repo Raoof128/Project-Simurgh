@@ -1,0 +1,221 @@
+{
+  "scope": "Offline direct-module probes using repository fixtures and committed historical headers. Accepted outputs are conditional on caller-created contexts; no full release or live anchor ceremony.",
+  "cases": [
+    {
+      "name": "section8_fixture_control",
+      "result": {
+        "accept": true
+      }
+    },
+    {
+      "name": "unauthenticated_history_accepted",
+      "result": {
+        "accept": true
+      }
+    },
+    {
+      "name": "exact_current_challenge_replay_rejected",
+      "result": {
+        "reject": "s8_presented_history_invalid"
+      }
+    },
+    {
+      "name": "accepted_fixture_does_not_validate_full_case_or_census_schema",
+      "result": {
+        "declared_N": 256,
+        "census_rows": 8,
+        "first_case_keys": ["i"]
+      }
+    },
+    {
+      "name": "N256_single_leaf_root_empty_path_caller_minted_context",
+      "result": {
+        "accept": true
+      }
+    },
+    {
+      "name": "section12_fixture_control",
+      "result": {
+        "accept": true,
+        "package_subject": "eff1a083c890e4ed2bb8a7741f583c2f6dec106650be3df2f18bacf7e766fa73",
+        "capsule_root": "sha256:ebad7bf9314aca685aa129f794a8110d981b3c150582c5aedb7d057eda506865",
+        "commitments": [
+          {
+            "key": "stage5o/census_closure",
+            "commitment": "sha256:94175172ca5da6741d3e62d96ad7b68ea5cebedddfb25a1d4179f52d6ce4f35f"
+          },
+          {
+            "key": "stage5o/challenge",
+            "commitment": "sha256:b21bb60d28287bdc50b534552ef6b5ac712d8a77d3a46581c0e32e42b9e1c566"
+          },
+          {
+            "key": "stage5o/openings",
+            "commitment": "sha256:536d6279d1c6be84f3aeb93f5e99dc9be2b27158fe9b927806c6878b732a4458"
+          },
+          {
+            "key": "stage5o/disclosure_ledger",
+            "commitment": "sha256:21777d3e9262a8200af59be708c749388dd30a9e00e9b8a78f7e6e788ed5c730"
+          },
+          {
+            "key": "stage5o/probability_claim",
+            "commitment": "sha256:6291edeabd33fd49081ac1b1fef82e3760bcee16049156f13e8db71442caa93b"
+          },
+          {
+            "key": "stage5o/verifier_receipts",
+            "commitment": "sha256:ecb24274ee38788e1405fd7b8fdf26e1cf8fe7a0ef4de7a2a1d5a1656b3d36ae"
+          }
+        ]
+      }
+    },
+    {
+      "name": "no_artifact_bodies_and_fabricated_receipts_accepted",
+      "result": {
+        "accept": true,
+        "package_subject": "eff1a083c890e4ed2bb8a7741f583c2f6dec106650be3df2f18bacf7e766fa73",
+        "capsule_root": "sha256:4d5d632313582d293992b605b9295ab59b6b7f5bab0252f52d43f53905a658d8",
+        "commitments": [
+          {
+            "key": "stage5o/census_closure",
+            "commitment": "sha256:4efd5c3c03147b240fe32030b9ee21d3051eec2a75cbdffbb801bd436dbefdc4"
+          },
+          {
+            "key": "stage5o/challenge",
+            "commitment": "sha256:a67dea0cca5fb0dbd22260bc35d85e9b9c8a4044e04def9e0304c44f1f2d54a9"
+          },
+          {
+            "key": "stage5o/openings",
+            "commitment": "sha256:532470d324daa92b9a382ba5c1b5bbb1bf8adb8dfee10d490edc066d99583a9c"
+          },
+          {
+            "key": "stage5o/disclosure_ledger",
+            "commitment": "sha256:a5e0ced9cfa1296e5bb478a37cd076fed7ecc91ee93e775e0c38fd68bac79b23"
+          },
+          {
+            "key": "stage5o/probability_claim",
+            "commitment": "sha256:8245361d0baaf08a79de5ebdf7990a1ca0fb09601836431f84eaab9b9cfd3e8a"
+          },
+          {
+            "key": "stage5o/verifier_receipts",
+            "commitment": "sha256:2394549ee851f7cf393b293a1d9edcc9aab6298a5df5aed7f09ed615f70f0cb7"
+          }
+        ]
+      }
+    },
+    {
+      "name": "authority_context_without_resource_limits_accepted",
+      "result": {
+        "accept": true,
+        "package_subject": "eff1a083c890e4ed2bb8a7741f583c2f6dec106650be3df2f18bacf7e766fa73",
+        "capsule_root": "sha256:4d5d632313582d293992b605b9295ab59b6b7f5bab0252f52d43f53905a658d8",
+        "commitments": [
+          {
+            "key": "stage5o/census_closure",
+            "commitment": "sha256:4efd5c3c03147b240fe32030b9ee21d3051eec2a75cbdffbb801bd436dbefdc4"
+          },
+          {
+            "key": "stage5o/challenge",
+            "commitment": "sha256:a67dea0cca5fb0dbd22260bc35d85e9b9c8a4044e04def9e0304c44f1f2d54a9"
+          },
+          {
+            "key": "stage5o/openings",
+            "commitment": "sha256:532470d324daa92b9a382ba5c1b5bbb1bf8adb8dfee10d490edc066d99583a9c"
+          },
+          {
+            "key": "stage5o/disclosure_ledger",
+            "commitment": "sha256:a5e0ced9cfa1296e5bb478a37cd076fed7ecc91ee93e775e0c38fd68bac79b23"
+          },
+          {
+            "key": "stage5o/probability_claim",
+            "commitment": "sha256:8245361d0baaf08a79de5ebdf7990a1ca0fb09601836431f84eaab9b9cfd3e8a"
+          },
+          {
+            "key": "stage5o/verifier_receipts",
+            "commitment": "sha256:2394549ee851f7cf393b293a1d9edcc9aab6298a5df5aed7f09ed615f70f0cb7"
+          }
+        ]
+      }
+    },
+    {
+      "name": "predictable_lane_b_salts_without_ceremony_receipt_accepted",
+      "result": {
+        "accept": true,
+        "package_subject": "eff1a083c890e4ed2bb8a7741f583c2f6dec106650be3df2f18bacf7e766fa73",
+        "capsule_root": "sha256:5df1ff971de96b0685e30da6bed8d46abc55eec88f1e74e369cb0ac954a4a106",
+        "commitments": [
+          {
+            "key": "stage5o/census_closure",
+            "commitment": "sha256:495fb8c462323f4bdc86d91d89aff7e3eae4f1edf36e9eb9cfafe18303c9d0b3"
+          },
+          {
+            "key": "stage5o/challenge",
+            "commitment": "sha256:d06cb00a65bea610bf0ed3acf61957231fc50608f7ae305a2ed499d9b546e64f"
+          },
+          {
+            "key": "stage5o/openings",
+            "commitment": "sha256:bccc50f3cafb2bb773dc512a7147f2f8d8284be14447cbb48c9b3532716c0b5f"
+          },
+          {
+            "key": "stage5o/disclosure_ledger",
+            "commitment": "sha256:12faf88fb01cf8abbc1a7efae1763ab5151bfa94eeaac817fd811487f4314f44"
+          },
+          {
+            "key": "stage5o/probability_claim",
+            "commitment": "sha256:8dd37ab6c7d833fe951e2f08cc39d525999ecaeebe2f6e361265298216fe95ba"
+          },
+          {
+            "key": "stage5o/verifier_receipts",
+            "commitment": "sha256:f2356999d9ece12a6173ec4cc699846cf8485127d49997bcbbe9d6d28cb2cb45"
+          }
+        ]
+      }
+    },
+    {
+      "name": "nonzero_receipt_control_rejected",
+      "result": {
+        "accept": false,
+        "reason": "s12_package_shape",
+        "check": 4
+      }
+    },
+    {
+      "name": "payload_can_override_stage4t_section_identity",
+      "result": {
+        "accept": true,
+        "package_subject": "eff1a083c890e4ed2bb8a7741f583c2f6dec106650be3df2f18bacf7e766fa73",
+        "capsule_root": "sha256:d62c9795a95ae73eb49d6fa26ed6ba63d9acb4473050762bd3b6dadca166b933",
+        "commitments": [
+          {
+            "key": "different/overridden",
+            "commitment": "sha256:95b4167dd6e754669b5740660f23474b90d77b38cebaa838e5bcef2a22e9c01e"
+          },
+          {
+            "key": "stage5o/challenge",
+            "commitment": "sha256:a67dea0cca5fb0dbd22260bc35d85e9b9c8a4044e04def9e0304c44f1f2d54a9"
+          },
+          {
+            "key": "stage5o/openings",
+            "commitment": "sha256:532470d324daa92b9a382ba5c1b5bbb1bf8adb8dfee10d490edc066d99583a9c"
+          },
+          {
+            "key": "stage5o/disclosure_ledger",
+            "commitment": "sha256:a5e0ced9cfa1296e5bb478a37cd076fed7ecc91ee93e775e0c38fd68bac79b23"
+          },
+          {
+            "key": "stage5o/probability_claim",
+            "commitment": "sha256:8245361d0baaf08a79de5ebdf7990a1ca0fb09601836431f84eaab9b9cfd3e8a"
+          },
+          {
+            "key": "stage5o/verifier_receipts",
+            "commitment": "sha256:2394549ee851f7cf393b293a1d9edcc9aab6298a5df5aed7f09ed615f70f0cb7"
+          }
+        ]
+      }
+    },
+    {
+      "name": "caller_minted_probability_policy_unknown_version_and_expanded_limits",
+      "result": {
+        "accept": true
+      }
+    }
+  ]
+}
