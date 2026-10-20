@@ -578,3 +578,36 @@ Article 50 system-transparency provisions are a separate scope; consult M41/M47 
 schedule. The guidelines and Code are not binding statutes themselves, and a model-documentation
 form or private/public reporting distinction does not mandate VSD's tier calculus. S48 retains
 the Code's systemic-risk applicability qualification.
+
+### S51 — Split external review is a policy commitment, not a cryptographic assurance standard
+
+Anthropic's [official RSP version history](https://www.anthropic.com/responsible-scaling-policy)
+identifies version 3.4 as effective **8 July 2026**. Its change summary permits multiple outside
+reviewers to cover different unredacted report sections if their combined review covers all
+parts. It also distinguishes report coverage date from publication date and requires visible
+redaction indications. That supports Stage 5I's coverage motivation. It does not prescribe VPC,
+certify its identities, or equate set coverage with diligence. The current page includes later
+updates; v3.4 is a historical policy version, not the current universal 2026 standard.
+
+The [2025 pilot announcement](https://alignment.anthropic.com/2025/sabotage-risk-report/)
+describes a practice exercise for potential future obligations and internal/external review.
+This historical review is not evidence that Simurgh's 2026 fixture panel had unredacted access.
+These were targeted checks of the publisher's policy history and pilot announcement, not a
+complete new review of the linked risk reports or a market-wide novelty search.
+
+### S52 — Contest recording, cross-evaluation and actual transparency receipts
+
+Checked 20 October 2026. [RFC 9943](https://www.rfc-editor.org/info/rfc9943/), published June 2026,
+describes SCITT signed statements, transparency services, verifiable data structures and receipts.
+A JSON field equaling a local root is not evidence of registration under that architecture. Its
+extensible content does not substantiate the frozen claim that general attestation systems are
+structurally unable to carry multi-party contest information. This was a targeted architecture
+check, not certification of the implementation or a complete novelty search.
+
+The [Anthropic pilot account](https://alignment.anthropic.com/2025/openai-findings/) confirms a
+2025 cross-evaluation of the parties' public models. [METR's risk-assessment index](https://metr.org/risk-assessment/)
+identifies its Opus 4.6 report review as 12 March 2026. Neither source authenticates Simurgh's
+rating pairs. The [2025 pilot announcement](https://alignment.anthropic.com/2025/sabotage-risk-report/)
+describes revision with internal and external reviewers; the broader assertion that external
+evaluation “does not bite” overstates what these sources establish. These checks do not establish
+whether every deployment decision was affected, nor a universal absence of postponements.

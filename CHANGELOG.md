@@ -4671,3 +4671,20 @@ Owner-requested work; implementation and review by Codex assistance.
   prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
   full E2E rerun; temporary probes preserve retained evidence and source bytes.
 - **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-20 (Australia/Sydney) — Manual documentation audit: 898-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 898 of 919 baseline
+  candidates completely read, 21 pending. Exhaustive manual review remains in progress.
+- **Changes:** M128–M129 cover complete Stage 5I/5J specifications and plans; SECURITY now
+  qualifies panel identities, coverage depth, contest history and attestation verification.
+- **Findings:** Eight VPC and eleven VRC fixture probes expose signer/separation gaps,
+  omitted epoch tickets, unchecked digest fields and partial portable verification.
+- **Research:** S51–S52 check official RSP history, SCITT architecture and cross-evaluation
+  context; historical policy versions and synthetic reviews remain explicitly bounded.
+- **Validation:** Check changed-file formatting, local links, baseline identities/read hashes,
+  append-only prefixes and frozen surfaces. No runtime changes, model inference, external
+  ceremony or full E2E rerun; retained source/evidence bytes are preserved.
+- **Remaining:** Complete every pending manual read and final correction verification.

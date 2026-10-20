@@ -26,7 +26,7 @@ has a complete manual disposition and all identified documentation corrections a
 ## Coverage checkpoint
 
 The [per-file progress ledger](manual-progress.json) retains all 919 baseline identities and
-SHA-256 values. At this checkpoint, **894 documents have complete manual reads; 25 remain
+SHA-256 values. At this checkpoint, **898 documents have complete manual reads; 21 remain
 unread in this continuation**. A complete read is separate from final claim verification and
 correction validation. Each read has a file-specific assessment; pending rows remain pending.
 This is a progress checkpoint, not completion of the owner's exhaustive-review request.
@@ -5369,3 +5369,169 @@ S31/S40/S48 qualify the paper, RSP and Code framing. A bound scope label cannot 
 model substitution impossible, and a holdout benchmark is not by itself a VSD signed host
 receipt. Broad absence/firstness claims and self-assigned scorecards remain unvalidated; they
 must not be presented as lab endorsement or proof of industry uniqueness.
+
+### M128 — Stage 5I panel coverage does not establish the claimed independent identities
+
+Read the complete 518-line specification and 581-line plan, including amendments; compared
+all core checks, Node builders/adapter/CLI, Lane B/C, portable verifiers, Lean and reproduction.
+The [eight-case VPC probe](vpc-verifier-probe.json) confirms an outer signer replacement,
+duplicate coverage-depth inflation, an extra adequacy assertion, empty reviewer/host registries,
+borrowed separation evidence and unsigned browser acceptance. The unchanged baseline passes;
+invalid signatures fail Node code 319. These are fixture experiments using public test keys,
+not a new outside review or a report-quality assessment.
+
+The adapter verifies the attestation under its embedded identity, but populates its verifier
+role fingerprint from the configured pin. The subsequent equality check compares that configured
+value to itself. Re-signing the outer attestation with the producer key while retaining the
+original external verifier pin passes audit, including the role-collision gate. Existing valid
+challenge receipts do not repair this missing outer-signer binding. The CLI also loads
+`external-config.json` from the supplied pack without an independent pin/config override.
+Policy, affiliation issuers and identities therefore require a separate trust decision.
+
+Reviewer/host registries contribute to the trust-context digest but do not resolve the runtime
+identities: both registries can be empty. Affiliation checks bind subject fingerprint, producer,
+partition, relationship and issuer fingerprint membership, but not the asserted subject identity
+digest or issuer registry subject. Host references are compared by fingerprint, not full identity.
+Separation checks do not require an evidence subject to equal the reviewer or host whose receipt
+references it. A second reviewer can reuse the first reviewer's and host's challenge evidence
+and still pass audit after updating its signed receipt and attestation. Distinct lineage strings
+are not independently verified organizational provenance. Host keys do not sign a proof of
+control. The adapter always supplies an empty anchored-digest set; the executable Node path
+cannot provide the advertised externally anchored rung through a real Sigstore backend.
+
+Coverage union and grant bounds use sets, while depth counts receipt section entries. Repeating
+one section in a single review raises its purported number of independent eyes. Schema checks
+do not enforce the claimed closed vocabulary, array uniqueness or complete path normalization.
+Only attestation annotations enforce flatness; the adequacy gate checks a short key list inside
+annotations, not arbitrary nested fields, values or standalone claims. A signed top-level
+`adequate: true` passes. Invalid policy types/rung names are not comprehensively rejected.
+Digest resolvers use maps that overwrite duplicate keys rather than count exact resolutions.
+Unreferenced separation/affiliation records are not generally excluded. An assigned-but-unreviewed
+section is a coverage gap and fails 327 before successful state projection; orphan grants fail 321. The successful verifier is not a complete status dashboard for non-returning reviewers.
+
+Lane A uses eight sections and two reviewers, not the introductory three-reviewer example.
+Lane B consists of a parent plus two reviewer children; all private keys originate in the parent
+and share its filesystem. Children receive a receipt and signing key, not the report/grant review
+workflow asserted by the comment. Separate processes do not establish independent review.
+Lane C generates all producer/coordinator/issuer/verifier/reviewer/host keys in one process and
+models two hosts/lineages. Its challenge nonce is deterministic, its campaign ID is fixed and its
+verifier is locally generated. The source digest remains the literal `sha256:src`. TOC derivation
+uses the committed list rather than parsing/hash-binding the report bytes, and the runner discards
+derived report metadata. The 37-section public-structure experiment is not access to an unredacted
+report or an actual METR review; M49's provenance limits remain applicable. The completed campaign
+gate verifies a bundle but returns campaign root/independent-party fingerprint without reconciling
+them to it. `pending` succeeds regardless of evidence presence; other promised outcome variants
+are not all supported by that gate.
+
+Browser verification checks coverage and five digest/projection fields, without signatures,
+identity/affiliation/policy checks, grant bounds, full schema, depth, states or trust-context
+recomputation. It nevertheless returns raw zero and presents VERIFIED. Python computes more
+projections but hardcodes challenge-bound/independence facts and also omits cryptographic checks.
+Neither has full 316–330 parity; first-failure/key-normalization behavior also differs. The browser
+has no CSP despite its no-egress description. Lean contains nine small theorems, including two
+T7 variants, rather than the full promised T1–T11/L1 contract; its rung theorem is ordinal
+injectivity, not runtime policy monotonicity. Missing affiliation/census/root/tiers obligations
+remain proof debt. Reproduction compares two fresh bundle/config files and runs selected Node
+checks/ceremonies, not every test, Python, browser or Lean obligation. Wrapper 331 maps to exit 1,
+not the spec's obsolete exit 3. CLI output is plain text, unknown tiers use public verification,
+and malformed-file/adapter exceptions can occur before the safe core wrapper.
+
+S51 supports the policy motivation for split external review, not a claim that VPC proves review
+quality, real independent custody, publication provenance, standards conformance or industry
+firstness. Frozen scorecards and hypothetical scandal comparisons are research framing, not
+validated security guarantees or findings about an actual organization.
+
+### M129 — Stage 5J compares historical cross-products and leaves ledger binding incomplete
+
+Read the entire 579-line specification and 735-line plan; compared core, adapter, builders,
+CLI/attestations, Lane B tests, Lane C runner/anchors, portable verifiers, Lean, K7 and reproduction.
+The [eleven-case VRC probe](vrc-verifier-probe.json), executed 20 October UTC, demonstrates empty
+epoch histories, unsigned event-content changes, wrong response wrapper digests, unknown schema
+and nested correctness fields, ignored reviewer policy, an unregistered anchor, reversed scale
+direction and producer/ledger role collision. Browser signature omission is confirmed alongside
+a Node code-340 refusal control. None is an external ceremony or live model evaluation.
+
+The runtime recomputes every producer/reviewer historical cross-product on a section, rather than
+contemporaneous active heads at each epoch transition. It ignores `severity_direction`, assumes
+lower rank is more favourable, and does not require compared dimension IDs to match each other.
+Ordinal labels/ranks and the scale authority are insufficiently constrained/pinned. The probe's
+signed reversed direction still accepts the original divergence ledger. This is not the specified
+logical-time contest relation and can invent comparisons between noncontemporaneous ratings.
+
+Epoch tickets are signature-checked and linked when present, but can all be removed. Their epochs,
+ledger IDs, entry types/digests and bijection to entries are not reconciled. Rating/response/ticket/
+statement wrapper digests and contest-event digests are not reopened from content. The probe changes
+an event's epoch and scale field without changing its digest or any signature; audit accepts it.
+Chain checks require contiguous revision numbers and one head, but do not enforce revision-to-parent
+order, graph reachability/acyclicity or a canonical relationship between chain subject and semantic
+section/reviewer. Presence uses all historical entries, not validated active heads. Thus contiguity
+is not proof that a complete prior history was retained; without a separately trusted prior root,
+a coherent rewritten or truncated history is not excluded by the advertised append-only law.
+
+Responses must reference a stored event and have a valid producer signature, with one response per
+event. They are not checked for temporal ordering or reopened response-body bytes. Concurrences and
+rebuttals bind the event/reviewer and exclude both kinds on one pair, but duplicate same-kind
+statements, claim vocabulary and their ordering relative to the response are not fully checked.
+Event maps can collapse duplicate tuples. Projections use the last producer and first reviewer
+array entries rather than chain heads/event-specific references; their denominators count historical
+rows. Concurrence numerator and denominator both equal the supplied concurrence count, not an
+independently committed census of every agreement claim. These outputs do not implement all
+promised derived-state/projection semantics.
+
+The adapter really re-verifies upstream VPC at audit tier; M128's upstream weaknesses still apply.
+The pure core instead trusts its caller's upstream-verdict fact, so it is not independently an
+upstream verifier. VRC role fingerprints are populated but never used to enforce separation, and
+its configured minimum-reviewer policy is ignored. The probe permits the producer to sign ledger
+tickets and a policy requiring 999 reviewers. Schema does not pin the version, close the artifact
+vocabulary, comprehensively validate arrays or require flat annotations; nested correctness claims
+pass. The Lean no-correctness theorem concerns an abstract function ignoring one boolean, not the
+ability of arbitrary accepted JSON to contain a correctness assertion.
+
+The CLI reads only bundle/config from the pack and does not load or verify the emitted public/audit
+attestations. Pack-local verifier pins are not an independent trust source. The separate attestation
+helper checks a supplied signature fact, selected roots and a public-object link, but omits the
+claimed bundle/upstream/obligation digests, verdict and checked-range consistency; its audit branch
+does not explicitly require `tier === "audit"`. The normal adapter does not supply its signature
+facts. Malformed input can fail in file loading/adapter work before the safe-core wrapper; unknown
+tiers take the public path. The promised full attestation-ingest contract is not implemented.
+
+Lane B is a same-process deterministic builder and tests, not the planned per-party child-process
+ceremony. Checking that ticket fields omit rating values does not prove the sequencer process never
+saw those values; that process builds all ratings and owns every test key. Lane C chooses the allowed
+fresh-VPC route, generates all roles together and assigns ratings from a fixed section-index recipe.
+These are authored synthetic ratings over public report structure, not independent substantive
+assessments or reused original-reviewer signatures. It does not execute the proposed live Fable-5
+producer demonstration. Completed status checks raw zero and a different configured fingerprint,
+but never authenticates a VRC verifier signature. Anchor/challenge/witness truth is supplied by the
+caller; highest rung can be reported from a matching root and boolean without the full identity
+validation helper. The attach tool only writes metadata/proof bytes. OpenTimestamps verification
+reconstructs the stamped root text and invokes `ots`; output regexes determine status, the recorded
+proof locator is not reconciled, and the tool does not implement Rekor verification despite accepting
+that label structurally. A timestamp supports existence of committed bytes, not independent authorship
+or completeness of the underlying review. Preserve M49's narrower retained-outcome description.
+
+The active registry bridge compares only `subject_digest` with the contest root. A one-field object
+without a signature, statement type, registration receipt or log proof passes audit. It therefore
+cannot establish in-toto/SCITT registration. S52 provides the actual architecture distinction.
+Python and browser independently copy selected root/census calculations; the browser does not import
+the same JS decision core as promised. Both omit most raw checks, upstream authentication and all
+signatures, and return raw zero on invalid reviewer signatures. They do not supply the full listed
+parity fields or derived-state census. Their small valid-fixture agreement is not semantic parity
+over all accepted inputs; Python/JS canonical ordering and numeric behavior also need separate bounds.
+
+Lean proves small predicates, not the full specified decision model: response existence is not
+unique existence, topology starts with a head count, statements lack the promised transition relation,
+and no host-exception boundary or cryptographic refinement is modeled. Eleven numbered themes include
+two first-failure theorem declarations. The plan's grep counts comment occurrences of `sorry` and its
+post-`cd` path is wrong; use the repository escape-hatch gate instead. K7 drives all raw codes through
+pure facts but does not import/call every export; negative evidence files were not emitted. The
+reproduction script verifies the committed bundle, runs Python, compares four regenerated files and
+performs the Lean source scan with an explicit type-check skip if unavailable. Despite its header,
+it does not run Lane B/C gates or browser checks. Fresh-build stability does not itself verify the
+committed tree; the separate four-file comparison supplies that narrower check.
+
+Keep source qualifications: v3.4 is historical; reported-until-pinned policy language remains a
+research note; external evaluation having no effect is not established by absence of public evidence.
+Voluntary Code scope is as in S48. Existing general attestation formats can carry custom multi-party
+relations; absence of a built-in VRC predicate is not structural inability or a proved firstness claim.
+Historical scores are self-assessments, not independent validation or provider endorsement.

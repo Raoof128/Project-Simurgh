@@ -1,0 +1,78 @@
+{
+  "schema": "simurgh.documentation_audit.vrc_probe.v1",
+  "date": "2026-10-20",
+  "scope": "Local fixture copies and public fixture signing keys; no source/evidence mutation, inference or external ceremony.",
+  "cases": [
+    {
+      "name": "baseline",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "all epoch tickets omitted without re-signing",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "unsigned event content changes while its claimed digest remains",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "response claimed digest replaced without re-signing signed content",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "unknown schema and nested correctness claim accepted",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "configured minimum reviewer count ignored",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "unsigned registry anchor with no registration receipt accepted",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "signed reversed severity direction retains original divergence acceptance",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "producer also acts as ledger authority",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "portable browser accepts invalid reviewer signatures",
+      "result": {
+        "raw": 0,
+        "rating_obligation_root": "sha256:faa568a8873d6366cf500719b6054aae2809011942a9d95c5de35843803770a0",
+        "rating_ledger_root": "sha256:3caa56cb47a0e8412b4e614e463315e505ac345dfe4cb7c9703c12dd01083771",
+        "contest_layer_root": "sha256:c50f331c7b2545b123e9031b740ebc108ed8829f824ec517fbb83e3e5c6ef881",
+        "projection_root": "sha256:b48f52cecbe0cd4d59bc80dc415281758750dd676236406edeeddcf31c373657"
+      }
+    },
+    {
+      "name": "Node invalid reviewer signature refusal control",
+      "result": {
+        "raw": 340,
+        "reason": "reviewer_rating_signature_invalid"
+      }
+    }
+  ]
+}

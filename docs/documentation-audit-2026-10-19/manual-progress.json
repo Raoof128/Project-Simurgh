@@ -171,7 +171,7 @@
       "assessment": "Full read and targeted source review found omitted audit-key prerequisite, overbroad assurance summary, unqualified secret-separation enforcement and plain-hash wording. M01/M03/M04 corrections applied; final diff verification pending. At checkpoint 757, added the M68 banking unknown-key rejection disclosure after current source inspection and a synthetic local helper check. M70/M71 disclose retained risk mapping, SDK retry/abort behavior, raw context prefixes and caller receipt strings; runtime remains unchanged.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "9e90a619878a96d2b76309c01e08e5bfc57d2fc4c4d13126970b64936b89a722"
+      "read_sha256": "d11f2dec95cce393d9fc30ec8ba400411540547408982f19c70ab05b59378617"
     },
     {
       "path": "docs/DECISIONS.md",
@@ -1107,7 +1107,7 @@
       "assessment": "Read all 13 primary-source applicability rows and limits. Correctly separates publication from review year, pinned SDK from living docs and alignment from compliance. Previous-turn fetch provenance retained; no fresh fetch claimed.",
       "read_complete": true,
       "reviewer": "Codex",
-      "read_sha256": "f8dda454ce54249efbc041da0f8dfdc26ae4daa324f9497d2a5ce83490e213ae"
+      "read_sha256": "df4e56b2ff67eb4a6803501975e8703702ce3b85fe0f1f63fd7b9ef9a1e89478"
     },
     {
       "path": "docs/documentation-audit-2026-10-19/VALIDATION.md",
@@ -8812,11 +8812,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "711b70427a4d7b9c263d9869f2be5be35270a70a88585a5148e1d2dd62d5fc0f",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read complete implementation plan including amendments. M128/S51 correct outer signer pin, identity/separation, coverage depth, modeled custody, portable/proof/reproduction scope; eight fixture probes. Frozen history preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "711b70427a4d7b9c263d9869f2be5be35270a70a88585a5148e1d2dd62d5fc0f"
     },
     {
       "path": "docs/superpowers/plans/2026-07-12-stage-5j-vrc-rating-contest.md",
@@ -8825,11 +8825,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "4e28da9c276c288548bca8462d9cacf560482a3617844ee7fb1f8dadde6a3f7b",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read complete implementation plan; M129/S52 correct historical cross-product versus temporal heads, missing digest/ticket bindings, role/attestation/bridge gaps, synthetic ceremony and portable/proof scope. Eleven local probes; frozen history preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "4e28da9c276c288548bca8462d9cacf560482a3617844ee7fb1f8dadde6a3f7b"
     },
     {
       "path": "docs/superpowers/plans/2026-07-12-stage-5k-vuc-universe-commitment.md",
@@ -10034,11 +10034,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "8c9003dcb3d94b1c1e5d542a4cab3c1353f7f9702292c29d7deeca08a013e1aa",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read complete specification including amendments. M128/S51 correct outer signer pin, identity/separation, coverage depth, modeled custody, portable/proof/reproduction scope; eight fixture probes. Frozen history preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "8c9003dcb3d94b1c1e5d542a4cab3c1353f7f9702292c29d7deeca08a013e1aa"
     },
     {
       "path": "docs/superpowers/specs/2026-07-12-stage-5j-vrc-rating-contest-design.md",
@@ -10047,11 +10047,11 @@
       "category": "stage_research_record",
       "extraction": "utf8_complete",
       "baseline_sha256": "13923f435ff26d5f68ad145b4326416bbe601186255efdd88c191198c3b80a2b",
-      "status": "pending",
-      "assessment": "",
-      "read_complete": false,
-      "reviewer": null,
-      "read_sha256": null
+      "status": "read_pending_final_verification",
+      "assessment": "Read complete specification; M129/S52 correct historical cross-product versus temporal heads, missing digest/ticket bindings, role/attestation/bridge gaps, synthetic ceremony and portable/proof scope. Eleven local probes; frozen history preserved.",
+      "read_complete": true,
+      "reviewer": "Codex",
+      "read_sha256": "13923f435ff26d5f68ad145b4326416bbe601186255efdd88c191198c3b80a2b"
     },
     {
       "path": "docs/superpowers/specs/2026-07-12-stage-5k-vuc-universe-commitment-design.md",

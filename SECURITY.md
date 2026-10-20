@@ -642,3 +642,18 @@ loads unconstrained artifact paths before full validation. See
 [M127 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m127--stage-5h-disclosure-tiers-depend-on-incompletely-checked-reviewer-facts).
 The portable browser check does not verify signatures. Tier/ceremony flags are not proof of
 independent model reproduction, and the current CLI should not serve untrusted uploads.
+
+Stage 5I verifies the outer attestation against its embedded key without correctly binding that
+key to the configured verifier pin. Reviewer/host registries may be empty, separation evidence
+can be borrowed across reviewers, and duplicate section entries inflate coverage depth. See
+[M128 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m128--stage-5i-panel-coverage-does-not-establish-the-claimed-independent-identities).
+Its browser verifier accepts invalid signatures. Treat panel coverage as a research fixture;
+the current result does not establish an independently authenticated panel or review quality.
+
+Stage 5J accepts a contest ledger with no epoch tickets, does not reopen several claimed digests,
+and compares all historical rating pairs while ignoring the signed severity direction. Its CLI
+does not verify the separate public/audit attestations, and its registry bridge checks only a
+root field. See
+[M129 and its probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m129--stage-5j-compares-historical-cross-products-and-leaves-ledger-binding-incomplete).
+Treat history, independent-role and transparency-log claims as limited by these findings; portable
+raw-zero results are not signature verification.
