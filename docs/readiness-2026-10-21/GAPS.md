@@ -166,6 +166,14 @@ Read each original numbered section in [MANUAL_REVIEW.md](../documentation-audit
 | R09 | Browser/accessibility                                          | Open: no callable browser interaction tool; strict parity prerequisite result reported separately.                     |
 | R10 | Independent reproduction                                       | Owner/classmates; explicitly excluded from agent work.                                                                 |
 
+## Final maintenance follow-up
+
+R11 repairs the Stage 4U preservation gate: only the exact audited adapter README is exempt;
+committed kernel-code changes still fail, and an absent baseline now fails explicitly.
+See [prior authority](KERNEL_GATE_AUTHORITY.md). The second bounded inference attempt also
+returned HTTP 401; [retry receipt](refusal-retry-2.json) retains that outcome. The OpenAI Platform
+connector requires reauthentication, so the owner-authorized replacement key has not been created.
+
 ## Remaining local research work
 
 The historical verifier series contains additional completeness, canonicalization and authentication

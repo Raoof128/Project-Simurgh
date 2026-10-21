@@ -18,6 +18,9 @@ remaining verifier and external-validation gaps explicitly retained.
 - Maintenance: the Stage 5P census explicitly admits the completed audit documents while still
   rejecting unapproved runtime literals. Append-only log prefixes remain unchanged; whole-file
   formatting excludes those historical logs. Explorer package/lock carry AGPL license metadata.
+- Kernel-change gate: the exact audited adapter README is admitted by path and content hash.
+  Other adapter/kernel changes remain forbidden; a missing main baseline now fails explicitly.
+  A committed kernel mutation in a disposable checkout fails for the intended reason.
 
 ## Evaluation and capability observations
 
@@ -25,6 +28,11 @@ The [frozen refusal diagnostic](REFUSAL_PROTOCOL.md) declared four requests and 
 Its first request returned HTTP 401, so it stopped after one reserved attempt (USD 0.25 reserved,
 not a claim of billed usage). There are **no new model observations** and the original active
 refusal remains unresolved. No failed or skipped arm is replaced by a favorable result.
+
+The owner-requested [credential retry](refusal-retry-2.json), with a separately declared
+four-request/USD 1 ceiling, also stopped on its first HTTP 401. The OpenAI Platform connector
+requires reauthentication, so the authorized replacement-key flow could not open. No new key
+was created, and no secret is included in these receipts.
 
 Eight forced-call local controls completed: active, authorized-reopen and operator-restart each
 produced one intended new effect; five restricted states produced no new effect. Unknown-prior
@@ -39,10 +47,37 @@ JavaScript parsing do not establish actual browser rendering, accessibility or t
 
 ## Full candidate validation
 
-The first fresh run at `b2bf7dc6` exposed a Stage 5P documentation-census failure and historic log
-formatting warnings. Those are retained as failures and repaired under prior declaration
-`2068f1a6`. A new complete candidate run is required after that repair; its exact revision and
-logs are recorded in the validation receipt alongside this report when complete.
+The [machine-readable receipt](validation.json) records exact commands, revisions, outcomes and
+limits. The [log archive](logs.zip) includes successful runs, earlier failed attempts and a
+SHA-256 manifest for each archived entry. Counts below belong to separate suites and must not
+be added together as unique tests.
+
+| Check                        | Tested revision | Result                                                                                                |
+| ---------------------------- | --------------- | ----------------------------------------------------------------------------------------------------- |
+| Complete base smoke          | `333a990d`      | 142/142 steps                                                                                         |
+| Root unit suite              | `8155106a`      | 5,181 passed; zero failed or skipped                                                                  |
+| Complete E2E smoke           | `8155106a`      | 32/32 gates; 580 E2E tests passed                                                                     |
+| Explorer                     | `8155106a`      | 21 tests, production build and built-asset HTTP checks passed                                         |
+| Supplemental Python and Rust | `333a990d`      | All 29 Python suites, adapter suite and Rust tests passed; detailed counts in receipt                 |
+| Hosted readiness             | `333a990d`      | [13/13 jobs passed](https://github.com/Raoof128/Project-Simurgh/actions/runs/39515726750)             |
+| Native validation            | `333a990d`      | [macOS and Windows jobs passed](https://github.com/Raoof128/Project-Simurgh/actions/runs/39515723845) |
+
+The receipt lists every change between these revisions. Final root, E2E and explorer checks
+cover the intervening code/test changes; native and Python implementation bytes are unchanged.
+Hosted job logs are retained. Native artifact download returned HTTP 403, so downloaded native
+artifact integrity is not claimed.
+
+The initial run at `b2bf7dc6` failed on the documentation census, historical log formatting,
+missing main reference and incomplete Python test environment. After repair and environment
+setup, the candidate at `333a990d` passed base/root checks but failed the adapter README scope
+gate in E2E. The final run at `8155106a` passed after the exact-hash gate repair. These failures
+remain in the archive; they are not relabeled as passes. Fresh disposable checkouts reused
+prepared dependencies and the documented Docker npm cache.
+
+Strict browser parity still reports two runtimes verified and the third blocked by managed
+browser file-navigation policy. HTTP checks and jsdom do not replace interactive browser or
+accessibility validation. Live inference, provider lifecycle and independent reproduction remain
+unverified; the successful local suites do not close the historical verifier findings in GAPS.md.
 
 ## Reviewer route
 

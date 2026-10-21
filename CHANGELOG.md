@@ -4898,3 +4898,23 @@ Owner-requested work; implementation and review by Codex assistance.
   401 on its first request, then stopped. No replacement key or new model result was produced.
 - **Follow-ups:** Execute the committed negative control and complete final E2E rerun; publish
   logs, tested revisions, explicit blocked browser/provider checks and all remaining findings.
+
+### 2026-10-21 (Australia/Sydney) — Readiness validation receipts and handoff
+
+**Raouf: Codex-assisted implementation**
+
+- **Scope:** Final readiness reports and complete retained validation archive; no additional
+  runtime change. Exact tested code revision `8155106a3a1790ca38e35781545a9bf987f31f9e`.
+- **Verification:** Final root suite 5,181 passed, full E2E 32/32 gates with 580 tests passed,
+  explorer 21 tests plus production build and built-asset HTTP/CLI agreement. Base smoke
+  142/142 steps at `333a990d`; all 29 Python suites (473 tests), adapter 181 tests and Rust
+  tests passed at that revision. Hosted readiness 13/13 jobs and both native jobs passed.
+  The receipt lists the intervening changes and separate provenance; counts are not additive.
+  A committed kernel mutation was rejected by the repaired Stage 4U gate in a disposable checkout.
+- **Evidence:** `docs/readiness-2026-10-21/validation.json`, `RESULTS.md` and `logs.zip` retain
+  exact commands/revisions, failed attempts, successful runs and an entry-level SHA-256 manifest.
+  Documentation corrections preserve all 141 prior audit dispositions and append-only prefixes.
+- **Limits:** Both bounded inference attempts stopped at their first HTTP 401. The connector
+  requires reauthentication; no replacement key was created. Provider administration/alerts,
+  actual browser/accessibility, independent classmate reproduction and other historical verifier
+  findings remain open. Native artifact download returned 403; hosted job logs are retained.

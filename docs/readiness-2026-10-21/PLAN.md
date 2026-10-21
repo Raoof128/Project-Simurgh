@@ -57,13 +57,13 @@ repository-wide blocking CI gate is introduced by this declaration.
 
 ## Acceptance ledger
 
-| Work                        | Status                                | Required receipt                                            |
-| --------------------------- | ------------------------------------- | ----------------------------------------------------------- |
-| Source-backed gap hunt      | In progress                           | Dated primary-source map, finding-level disposition         |
-| Verifier repairs            | In progress                           | Red/green regressions and preserved evidence hashes         |
-| Independent reproduction    | Owner/classmates                      | Outside operator receipt; excluded from this work           |
-| Browser validation          | Capability unresolved                 | Actual browser interaction/parity, or explicit blocker      |
-| Expanded evaluation         | Local controls complete; live blocked | Frozen new cases, controls and all outcomes                 |
-| Provider lifecycle          | Blocked: project 403, inference 401   | Real admin/alert capability and receiver observations       |
-| Current-study explorer      | Implemented                           | 288 rows, model separation, consistent CLI/UI queries       |
-| Candidate smoke and handoff | Planned                               | Exact revision, full logs, exclusions and clean publication |
+| Work                        | Status                                             | Required receipt                                            |
+| --------------------------- | -------------------------------------------------- | ----------------------------------------------------------- |
+| Source-backed gap hunt      | Dated source map and all findings retained         | Dated primary-source map, finding-level disposition         |
+| Verifier repairs            | Scoped repairs complete; other findings open       | Red/green regressions and preserved evidence hashes         |
+| Independent reproduction    | Owner/classmates                                   | Outside operator receipt; excluded from this work           |
+| Browser validation          | Blocked by managed navigation policy               | Actual browser interaction/parity, or explicit blocker      |
+| Expanded evaluation         | Local controls complete; live blocked              | Frozen new cases, controls and all outcomes                 |
+| Provider lifecycle          | Blocked: project 403, inference 401                | Real admin/alert capability and receiver observations       |
+| Current-study explorer      | Implemented                                        | 288 rows, model separation, consistent CLI/UI queries       |
+| Candidate smoke and handoff | Passed; receipts in RESULTS.md and validation.json | Exact revision, full logs, exclusions and clean publication |
