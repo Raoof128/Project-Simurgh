@@ -261,6 +261,8 @@ test("raw literals 464-474 occur ONLY in the allocator, the registry, goldens an
     "Historical README archive must retain the original approved bytes"
   );
   const APPROVED = [
+    // Structured readiness receipt authorized by 6bd4b2f5.
+    "docs/readiness-2026-10-21/validation.json",
     // R05: exact documentation additions authorized by 2068f1a6.
     "AGENT.md",
     "CHANGELOG.md",

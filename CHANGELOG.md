@@ -4881,3 +4881,20 @@ Owner-requested work; implementation and review by Codex assistance.
   running at `333a990d`; root runtime and stage verifier sources do not change in this follow-up.
 - **Follow-ups:** Publish exact tested revisions and complete smoke receipts without merging
   their provenance. External acceptance gaps remain explicit.
+
+### 2026-10-21 (Australia/Sydney) — Final E2E gate repair and credential retry
+
+**Raouf: Codex-assisted implementation**
+
+- **Scope:** R11 authority `c6ec4a63`; R05 receipt authority `6bd4b2f5`.
+- **Summary:** Stage 4U admits only the exact audited adapter README bytes while retaining
+  all adapter/kernel code protections; absent main baseline now fails explicitly. The current
+  validation receipt is named in the existing Stage 5P documentation allowlist.
+- **Verification:** Original full candidate: base 142/142, root 5,181/5,181; E2E 31/32 steps
+  with one README-scope failure among 580 tests. Focused repaired Stage 4U checks pass.
+  Hosted readiness 13/13 jobs and both macOS/Windows jobs pass at `333a990d`.
+- **Credentials:** Owner requested retry and authorized replacement-key setup. The connector
+  requires reauthentication; the separately budgeted environment-key retry again returned HTTP
+  401 on its first request, then stopped. No replacement key or new model result was produced.
+- **Follow-ups:** Execute the committed negative control and complete final E2E rerun; publish
+  logs, tested revisions, explicit blocked browser/provider checks and all remaining findings.
