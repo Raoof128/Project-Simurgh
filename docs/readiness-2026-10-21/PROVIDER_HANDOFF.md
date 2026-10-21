@@ -3,7 +3,9 @@
 Owner/classmates own independent reproduction. All artifacts below are local preparation, not an
 outside receipt. An OpenAI Admin credential must remain in the operator's credential manager or
 secret environment; never put it in a report. The current process cannot complete lifecycle testing:
-model listing returned 200, organization project listing 403, and bounded Responses inference 401.
+the original credential returned 403 for organization projects and 401 for bounded inference.
+The later [uploaded-credential diagnostic](REFUSAL_FOLLOWUP.md) established inference access,
+but did not test administration, revocation or alerts.
 
 For an owned disposable test project, retain these acceptance records:
 

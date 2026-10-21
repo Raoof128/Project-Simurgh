@@ -63,7 +63,7 @@ repository-wide blocking CI gate is introduced by this declaration.
 | Verifier repairs            | Scoped repairs complete; other findings open       | Red/green regressions and preserved evidence hashes         |
 | Independent reproduction    | Owner/classmates                                   | Outside operator receipt; excluded from this work           |
 | Browser validation          | Blocked by managed navigation policy               | Actual browser interaction/parity, or explicit blocker      |
-| Expanded evaluation         | Local controls complete; live blocked              | Frozen new cases, controls and all outcomes                 |
-| Provider lifecycle          | Blocked: project 403, inference 401                | Real admin/alert capability and receiver observations       |
+| Expanded evaluation         | Local controls and four live arms complete         | Frozen new cases, controls and all outcomes                 |
+| Provider lifecycle          | Admin/alert evidence absent; inference works       | Real admin/alert capability and receiver observations       |
 | Current-study explorer      | Implemented                                        | 288 rows, model separation, consistent CLI/UI queries       |
 | Candidate smoke and handoff | Passed; receipts in RESULTS.md and validation.json | Exact revision, full logs, exclusions and clean publication |

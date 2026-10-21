@@ -39,3 +39,7 @@ Observed on 21 October (Sydney): model listing returned HTTP 200, project listin
 the first bounded Responses request HTTP 401. Model-list access therefore did not establish usable
 inference or administrative access. The probe stopped without retry and produced no new model result.
 See [capability observations](provider-capability.json) and [diagnostic attempt](refusal-attempt.json).
+
+Subsequent observation: the owner supplied another credential, and the unchanged four-arm
+diagnostic completed with HTTP 200 for every request. See the [separate follow-up](REFUSAL_FOLLOWUP.md).
+This establishes inference access; the earlier administrative observations and lifecycle gap remain.

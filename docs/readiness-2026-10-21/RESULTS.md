@@ -26,13 +26,19 @@ remaining verifier and external-validation gaps explicitly retained.
 
 The [frozen refusal diagnostic](REFUSAL_PROTOCOL.md) declared four requests and a USD 1 ceiling.
 Its first request returned HTTP 401, so it stopped after one reserved attempt (USD 0.25 reserved,
-not a claim of billed usage). There are **no new model observations** and the original active
-refusal remains unresolved. No failed or skipped arm is replaced by a favorable result.
+not a claim of billed usage). That attempt produced no new model observations. No failed or
+skipped arm is replaced by a favorable result.
 
 The owner-requested [credential retry](refusal-retry-2.json), with a separately declared
 four-request/USD 1 ceiling, also stopped on its first HTTP 401. The OpenAI Platform connector
 requires reauthentication, so the authorized replacement-key flow could not open. No new key
 was created, and no secret is included in these receipts.
+
+The subsequent [owner-supplied credential run](REFUSAL_FOLLOWUP.md) completed all four frozen
+requests with HTTP 200: baseline and clarified active each produced one intended local effect;
+clarified stop and unknown-prior declined with no new effect. All eight forced controls completed
+again. This establishes usable inference with the supplied credential. Both active arms acted,
+so the single sample does not attribute the change to clarification or explain the earlier refusal.
 
 Eight forced-call local controls completed: active, authorized-reopen and operator-restart each
 produced one intended new effect; five restricted states produced no new effect. Unknown-prior
@@ -40,8 +46,8 @@ retained its earlier effect. These are internally authored, trusted-host control
 red-team campaign or provider-revocation test. [Full retained observations](refusal-results.json)
 include every control and the failed model attempt.
 
-Model listing returned HTTP 200; project listing returned HTTP 403. The available credential
-therefore did not establish usable inference or administration. No provider key was revoked and
+With the original credential, model listing returned HTTP 200 and project listing HTTP 403.
+The uploaded credential has established inference access only. No provider key was revoked and
 no alert-delivery test was completed. Browser interaction tooling was unavailable; jsdom and
 JavaScript parsing do not establish actual browser rendering, accessibility or three-runtime parity.
 
@@ -76,8 +82,9 @@ prepared dependencies and the documented Docker npm cache.
 
 Strict browser parity still reports two runtimes verified and the third blocked by managed
 browser file-navigation policy. HTTP checks and jsdom do not replace interactive browser or
-accessibility validation. Live inference, provider lifecycle and independent reproduction remain
-unverified; the successful local suites do not close the historical verifier findings in GAPS.md.
+accessibility validation. The later live-inference receipt is separate from this smoke snapshot;
+provider lifecycle and independent reproduction remain unverified. Successful local suites do not
+close the historical verifier findings in GAPS.md.
 
 ## Reviewer route
 

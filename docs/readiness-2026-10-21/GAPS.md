@@ -153,18 +153,18 @@ Read each original numbered section in [MANUAL_REVIEW.md](../documentation-audit
 
 ## New work and acceptance boundaries
 
-| ID  | Work                                                           | Status / evidence                                                                                                      |
-| --- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| R01 | Stage 4M signed public evidence and aggregate/collision checks | Repaired subset; 54 tests and 12 reproduction steps passed.                                                            |
-| R02 | Current-study explorer                                         | Implemented: 288 branches, 96 model generations, 21 tests and production build.                                        |
-| R03 | Explorer license metadata                                      | AGPL-3.0-or-later declared in package and lock.                                                                        |
-| R04 | Unexpected-success reproduction mismatch                       | Four injected branches return exact failure status; full reproduction in candidate smoke.                              |
-| R05 | Documentation counts misclassified as Stage 5P code literals   | Exact documentation additions; unapproved runtime literal remains rejected.                                            |
-| R06 | Formatter conflicts with append-only logs                      | Preserve historical bytes; exclude two logs from whole-file formatting and verify prefixes/diffs.                      |
-| R07 | Active-refusal investigation                                   | Frozen four-arm diagnostic stopped at first HTTP 401; no new model result. Eight local forced-call controls completed. |
-| R08 | Provider lifecycle                                             | Blocked: project listing HTTP 403; no usable admin or alert capability identified.                                     |
-| R09 | Browser/accessibility                                          | Open: no callable browser interaction tool; strict parity prerequisite result reported separately.                     |
-| R10 | Independent reproduction                                       | Owner/classmates; explicitly excluded from agent work.                                                                 |
+| ID  | Work                                                           | Status / evidence                                                                                               |
+| --- | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| R01 | Stage 4M signed public evidence and aggregate/collision checks | Repaired subset; 54 tests and 12 reproduction steps passed.                                                     |
+| R02 | Current-study explorer                                         | Implemented: 288 branches, 96 model generations, 21 tests and production build.                                 |
+| R03 | Explorer license metadata                                      | AGPL-3.0-or-later declared in package and lock.                                                                 |
+| R04 | Unexpected-success reproduction mismatch                       | Four injected branches return exact failure status; full reproduction in candidate smoke.                       |
+| R05 | Documentation counts misclassified as Stage 5P code literals   | Exact documentation additions; unapproved runtime literal remains rejected.                                     |
+| R06 | Formatter conflicts with append-only logs                      | Preserve historical bytes; exclude two logs from whole-file formatting and verify prefixes/diffs.               |
+| R07 | Active-refusal investigation                                   | Uploaded-key run completed all four arms; both active arms acted. Earlier refusal remains causally unexplained. |
+| R08 | Provider lifecycle                                             | Blocked: project listing HTTP 403; no usable admin or alert capability identified.                              |
+| R09 | Browser/accessibility                                          | Open: no callable browser interaction tool; strict parity prerequisite result reported separately.              |
+| R10 | Independent reproduction                                       | Owner/classmates; explicitly excluded from agent work.                                                          |
 
 ## Final maintenance follow-up
 
@@ -172,7 +172,9 @@ R11 repairs the Stage 4U preservation gate: only the exact audited adapter READM
 committed kernel-code changes still fail, and an absent baseline now fails explicitly.
 See [prior authority](KERNEL_GATE_AUTHORITY.md). The second bounded inference attempt also
 returned HTTP 401; [retry receipt](refusal-retry-2.json) retains that outcome. The OpenAI Platform
-connector requires reauthentication, so the owner-authorized replacement key has not been created.
+connector required reauthentication, so no replacement key was created through it. The owner then
+supplied a credential: the [four-arm follow-up](REFUSAL_FOLLOWUP.md) completed with HTTP 200 for
+every request. This closes the inference-access blocker, not the provider lifecycle evidence gap.
 
 ## Remaining local research work
 

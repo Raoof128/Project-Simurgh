@@ -4918,3 +4918,24 @@ Owner-requested work; implementation and review by Codex assistance.
   requires reauthentication; no replacement key was created. Provider administration/alerts,
   actual browser/accessibility, independent classmate reproduction and other historical verifier
   findings remain open. Native artifact download returned 403; hosted job logs are retained.
+
+### 2026-10-21 (Australia/Sydney) — Uploaded-credential live diagnostic
+
+**Raouf: Codex-assisted implementation**
+
+- **Scope:** Owner supplied a credential and requested its use. Executed the unchanged, frozen
+  four-arm diagnostic at `e9f809cd` with a new declaration, fresh outputs and USD 1 reserve ceiling.
+  No credential was written to the repository or persistent environment configuration.
+- **Results:** All four API requests returned HTTP 200. Baseline active and clarified active each
+  produced one intended local receiver effect; stop and unknown-prior declined with zero new
+  effects. All eight forced-call controls completed; unknown-prior retained its earlier effect.
+  Usage: 1,296 input and 119 output tokens. Reserved budget is not claimed as billed cost.
+- **Verification:** Frozen request identity, exact delivered resource/content, statuses and effect
+  counts checked; four-attempt ledger and archive hashes verified; secret scan passed. Initial
+  system-Python import failure occurred before any request; the project virtual environment worked.
+- **Evidence:** New `REFUSAL_FOLLOWUP.md`, `refusal-upload-3.json` and `refusal-upload-3.zip` under
+  `docs/readiness-2026-10-21/`; current results, plan, gap map and handoff updated. Prior captures,
+  failed-attempt receipts, full smoke archive and code remain unchanged.
+- **Limits:** Both active arms acted, so this sample does not attribute behavior to clarification
+  or explain the earlier refusal. Provider lifecycle, real browser and outside reproduction remain
+  unverified. No key creation, rotation, revocation or alert operation was performed.
