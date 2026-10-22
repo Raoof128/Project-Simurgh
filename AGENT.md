@@ -4171,3 +4171,18 @@ Owner-requested work; implementation and review by Codex assistance.
 - **Limits:** Both active arms acted, so this sample does not attribute behavior to clarification
   or explain the earlier refusal. Provider lifecycle, real browser and outside reproduction remain
   unverified. No key creation, rotation, revocation or alert operation was performed.
+
+### 2026-10-23 (Australia/Sydney) — CI and README maintenance authority
+
+**Raouf: Codex-assisted implementation**
+
+- **Scope:** Owner-requested CI repair and original-logo README header.
+- **Summary:** Declare exact maintenance paths before changing CI/logging behavior. Preserve
+  frozen evidence, verifier assertions and original logo bytes. Historical Stage 5S write
+  authority applies to its own branch; successor verification remains required.
+- **Files changed:** `docs/superpowers/specs/2026-10-23-ci-readme-maintenance.md`,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Read failed hosted run/job logs and annotations; local real-browser Stage 5P
+  parity passes all nine tests. Browser failure root cause remains unconfirmed.
+- **Follow-ups:** Add regression coverage, repair logs/scoping, insert original header image,
+  run local checks and inspect hosted CI before claiming resolution.
