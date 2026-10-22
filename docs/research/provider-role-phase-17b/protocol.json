@@ -1,0 +1,11 @@
+{
+  "base_protocol_sha256": "26992959d3e627ccf18ff19f933d7c381fdfcf5fadb3bd24bd927b0aff599034",
+  "maximum_new_attempts": 16,
+  "schema": "simurgh-host-role-v1",
+  "sources": {
+    "docs/research/provider-role-phase-17b/DESIGN.md": "12b557aead286f135044730cc6684ecc99d789cd970fef38373219a212bd7d0e",
+    "docs/research/provider-role-phase-17b/baseline.json": "e58f9e30f4ad4a83565604c552dd4bd89f3216c09a02fc699e2829a01b633b78",
+    "tools/assurance-provider-role/corrected_roles.py": "dca4824681f369875a7e5aa51bc55829c7374be01814f0bb252b69ad3cd9daa4",
+    "tools/assurance-provider-role/tests/test_roles.py": "4db61654f218811cd6310c9ccae5c52f0c3c0f5e770add484785614e757678cd"
+  }
+}

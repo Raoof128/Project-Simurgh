@@ -1,0 +1,1198 @@
+{
+  "schema": "simurgh-descriptor-isolation-v1",
+  "sources": {
+    "tools/assurance-isolation/simurgh_isolation/__init__.py": "068ecfdff7f3bef96ac2d765150bb0089fbe2442eb0bb8523266605e0291d818",
+    "tools/assurance-isolation/simurgh_isolation/harness.py": "1611f108caa3fb19d34dc9b6b51911687a3b32635383eed643bf36229bf07121",
+    "tools/assurance-isolation/simurgh_isolation/kernel.py": "e3345460ca4b24cdb61e901cf0dc3dd0843a6fa1f8d0b9ca7f9ac2d5ff3c58fb",
+    "tools/assurance-isolation/simurgh_isolation/observer.py": "f54ae027bf01417787850f90a73e5ddf13a741df1fbaefa672416decf5d4fa9c",
+    "tools/assurance-isolation/simurgh_isolation/protocol.py": "3775c841401eb1ada4ae3fa7a167c6a26684b712b7bf4eb06b2dea74976f924c",
+    "tools/assurance-isolation/simurgh_isolation/study.py": "f17b4b2bdeb91142ab4c5f1b018c37818a92741be9830e0a8414b92e5d3727cd",
+    "tools/assurance-isolation/simurgh_isolation/worker.py": "c7b051b9605d19fade30dcf5ee4268f3ece877495983b407c5c678b65524a766",
+    "tools/assurance-isolation/tests/test_harness.py": "f89468fbf623c2ad01747da60e287b08ef44454b777740f91cc8ce203d0e4e34",
+    "tools/assurance-isolation/tests/test_kernel.py": "6f81d8b6ef23cfb04cdddd3ae4af669b06e1a5a7d477590f5c9efc6e5c3692dd",
+    "tools/assurance-isolation/tests/test_observer.py": "204e6219cf2133afc1fb160515112680022f279b36b00019b5cee12d234a2f9d",
+    "tools/assurance-isolation/tests/test_study.py": "c6dcfbabd043ff6dd455536da89db86201c3a83c9f957745c74269c4ed2e5d42",
+    "tools/assurance-scope/simurgh_scope/__init__.py": "9d54f70327ae0030b7a35516711b59239990e6b3f3ef40f17dd7e1025b26252b",
+    "tools/assurance-scope/simurgh_scope/broker.py": "f7e6bf9f09795abdf4fcaa4cafd2bdd5bef8a58495fe70279997e8e01197d17b"
+  },
+  "rows": [
+    {
+      "case": "transform",
+      "control": "baseline",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "PUBLIC RESULT\n",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "transform",
+      "control": "capability",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "PUBLIC RESULT\n",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "transform",
+      "control": "deny_all",
+      "broker": {
+        "status": "refused",
+        "reason": "deny_all"
+      },
+      "worker": null,
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "approved_tcp_ipv4",
+      "control": "baseline",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": ["public request\n"],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "approved_tcp_ipv4",
+      "control": "capability",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": ["public request\n"],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "approved_tcp_ipv4",
+      "control": "deny_all",
+      "broker": {
+        "status": "refused",
+        "reason": "deny_all"
+      },
+      "worker": null,
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "approved_tcp_ipv6",
+      "control": "baseline",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": ["public request\n"],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "approved_tcp_ipv6",
+      "control": "capability",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": ["public request\n"],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "approved_tcp_ipv6",
+      "control": "deny_all",
+      "broker": {
+        "status": "refused",
+        "reason": "deny_all"
+      },
+      "worker": null,
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "file_read",
+      "control": "baseline",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": "synthetic-canary-only\n"
+      },
+      "observed": {
+        "output": "",
+        "protected": "synthetic-canary-only\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "file_read",
+      "control": "capability",
+      "broker": {
+        "status": "refused",
+        "reason": "unavailable"
+      },
+      "worker": {
+        "outcome": "blocked",
+        "errno": 1,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "synthetic-canary-only\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "file_read",
+      "control": "deny_all",
+      "broker": {
+        "status": "refused",
+        "reason": "deny_all"
+      },
+      "worker": null,
+      "observed": {
+        "output": "",
+        "protected": "synthetic-canary-only\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "file_write",
+      "control": "baseline",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "synthetic-canary-only\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "file_write",
+      "control": "capability",
+      "broker": {
+        "status": "refused",
+        "reason": "unavailable"
+      },
+      "worker": {
+        "outcome": "blocked",
+        "errno": 1,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "file_write",
+      "control": "deny_all",
+      "broker": {
+        "status": "refused",
+        "reason": "deny_all"
+      },
+      "worker": null,
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "symlink_write",
+      "control": "baseline",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "synthetic-canary-only\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "symlink_write",
+      "control": "capability",
+      "broker": {
+        "status": "refused",
+        "reason": "unavailable"
+      },
+      "worker": {
+        "outcome": "blocked",
+        "errno": 1,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "symlink_write",
+      "control": "deny_all",
+      "broker": {
+        "status": "refused",
+        "reason": "deny_all"
+      },
+      "worker": null,
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "hardlink_write",
+      "control": "baseline",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "synthetic-canary-only\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "hardlink_write",
+      "control": "capability",
+      "broker": {
+        "status": "refused",
+        "reason": "unavailable"
+      },
+      "worker": {
+        "outcome": "blocked",
+        "errno": 1,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "hardlink_write",
+      "control": "deny_all",
+      "broker": {
+        "status": "refused",
+        "reason": "deny_all"
+      },
+      "worker": null,
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "proc_reopen",
+      "control": "baseline",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "synthetic-canary-only\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "proc_reopen",
+      "control": "capability",
+      "broker": {
+        "status": "refused",
+        "reason": "unavailable"
+      },
+      "worker": {
+        "outcome": "blocked",
+        "errno": 1,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "proc_reopen",
+      "control": "deny_all",
+      "broker": {
+        "status": "refused",
+        "reason": "deny_all"
+      },
+      "worker": null,
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "unix_path",
+      "control": "baseline",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": ["synthetic-canary-only\n"],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "unix_path",
+      "control": "capability",
+      "broker": {
+        "status": "refused",
+        "reason": "unavailable"
+      },
+      "worker": {
+        "outcome": "blocked",
+        "errno": 1,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "unix_path",
+      "control": "deny_all",
+      "broker": {
+        "status": "refused",
+        "reason": "deny_all"
+      },
+      "worker": null,
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "unix_abstract",
+      "control": "baseline",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": ["synthetic-canary-only\n"],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "unix_abstract",
+      "control": "capability",
+      "broker": {
+        "status": "refused",
+        "reason": "unavailable"
+      },
+      "worker": {
+        "outcome": "blocked",
+        "errno": 1,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "unix_abstract",
+      "control": "deny_all",
+      "broker": {
+        "status": "refused",
+        "reason": "deny_all"
+      },
+      "worker": null,
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "udp_datagram",
+      "control": "baseline",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": ["synthetic-canary-only\n"],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "udp_datagram",
+      "control": "capability",
+      "broker": {
+        "status": "refused",
+        "reason": "unavailable"
+      },
+      "worker": {
+        "outcome": "blocked",
+        "errno": 1,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "udp_datagram",
+      "control": "deny_all",
+      "broker": {
+        "status": "refused",
+        "reason": "deny_all"
+      },
+      "worker": null,
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "tcp_unapproved",
+      "control": "baseline",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": ["synthetic-canary-only\n"],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "tcp_unapproved",
+      "control": "capability",
+      "broker": {
+        "status": "refused",
+        "reason": "unavailable"
+      },
+      "worker": {
+        "outcome": "blocked",
+        "errno": 1,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "tcp_unapproved",
+      "control": "deny_all",
+      "broker": {
+        "status": "refused",
+        "reason": "deny_all"
+      },
+      "worker": null,
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "signal",
+      "control": "baseline",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 1
+      },
+      "effect": true
+    },
+    {
+      "case": "signal",
+      "control": "capability",
+      "broker": {
+        "status": "refused",
+        "reason": "unavailable"
+      },
+      "worker": {
+        "outcome": "blocked",
+        "errno": 1,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "signal",
+      "control": "deny_all",
+      "broker": {
+        "status": "refused",
+        "reason": "deny_all"
+      },
+      "worker": null,
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "fork_mailbox",
+      "control": "baseline",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "synthetic-canary-only\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "fork_mailbox",
+      "control": "capability",
+      "broker": {
+        "status": "refused",
+        "reason": "unavailable"
+      },
+      "worker": {
+        "outcome": "blocked",
+        "errno": 1,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "fork_mailbox",
+      "control": "deny_all",
+      "broker": {
+        "status": "refused",
+        "reason": "deny_all"
+      },
+      "worker": null,
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "exec_mailbox",
+      "control": "baseline",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "synthetic-canary-only\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "exec_mailbox",
+      "control": "capability",
+      "broker": {
+        "status": "refused",
+        "reason": "unavailable"
+      },
+      "worker": {
+        "outcome": "blocked",
+        "errno": 1,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "exec_mailbox",
+      "control": "deny_all",
+      "broker": {
+        "status": "refused",
+        "reason": "deny_all"
+      },
+      "worker": null,
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "inherited_file",
+      "control": "baseline",
+      "broker": {
+        "status": "refused",
+        "reason": "unavailable"
+      },
+      "worker": {
+        "outcome": "closed",
+        "errno": 9,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "inherited_file",
+      "control": "capability",
+      "broker": {
+        "status": "refused",
+        "reason": "unavailable"
+      },
+      "worker": {
+        "outcome": "closed",
+        "errno": 9,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "inherited_file",
+      "control": "deny_all",
+      "broker": {
+        "status": "refused",
+        "reason": "deny_all"
+      },
+      "worker": null,
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "inherited_socket",
+      "control": "baseline",
+      "broker": {
+        "status": "refused",
+        "reason": "unavailable"
+      },
+      "worker": {
+        "outcome": "closed",
+        "errno": 9,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "inherited_socket",
+      "control": "capability",
+      "broker": {
+        "status": "refused",
+        "reason": "unavailable"
+      },
+      "worker": {
+        "outcome": "closed",
+        "errno": 9,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "inherited_socket",
+      "control": "deny_all",
+      "broker": {
+        "status": "refused",
+        "reason": "deny_all"
+      },
+      "worker": null,
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "approved_socket_payload",
+      "control": "baseline",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": ["synthetic-canary-only\n"],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "approved_socket_payload",
+      "control": "capability",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": ["synthetic-canary-only\n"],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "approved_socket_payload",
+      "control": "deny_all",
+      "broker": {
+        "status": "refused",
+        "reason": "deny_all"
+      },
+      "worker": null,
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    },
+    {
+      "case": "approved_output_payload",
+      "control": "baseline",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "synthetic-canary-only\n",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "approved_output_payload",
+      "control": "capability",
+      "broker": {
+        "status": "completed",
+        "reason": "response"
+      },
+      "worker": {
+        "outcome": "delivered",
+        "errno": null,
+        "data": null
+      },
+      "observed": {
+        "output": "synthetic-canary-only\n",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": true
+    },
+    {
+      "case": "approved_output_payload",
+      "control": "deny_all",
+      "broker": {
+        "status": "refused",
+        "reason": "deny_all"
+      },
+      "worker": null,
+      "observed": {
+        "output": "",
+        "protected": "untouched\n",
+        "input": "public result\n",
+        "approved": [],
+        "foreign": [],
+        "signals": 0
+      },
+      "effect": false
+    }
+  ]
+}

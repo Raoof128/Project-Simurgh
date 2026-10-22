@@ -1,27 +1,28 @@
-## Summary
+## Change and scope
 
--
+Describe the problem, resulting behavior and affected component or research question.
+Identify any stage-owned or frozen surfaces and the authority for changing them.
 
-## Validation
+## Evidence and validation
 
-- [ ] `./scripts/check.sh`
-- [ ] `npm test`
-- [ ] `node tools/privacy-audit.mjs`
-- [ ] `npm audit --audit-level=high`
-- [ ] `git diff --check`
+List the commands actually run, their results and material failures or skips. Use checks relevant
+to the change; explain omitted checks rather than marking them as passed.
 
-## Security / Privacy Impact
+- [ ] Applicable unit, integration, reproduction or documentation checks recorded
+- [ ] Positive and negative controls included where experimental behavior changes
+- [ ] `git diff --check` completed
+- [ ] Historical evidence, specifications and exact archives preserved, or an authorized change explained
 
-- [ ] No secrets, API keys, bearer tokens, or real private data added
-- [ ] No screen, webcam, audio, typed-content, or pasted-content collection added
-- [ ] Manual-review boundary preserved
+## Security, privacy and claims
 
-## Docs Updated
+- [ ] No credentials, private correspondence or sensitive capture data added
+- [ ] Changed data flows, authorization boundaries and remaining risks described
+- [ ] Claims distinguish fixtures, live captures, independent reproduction and proposed work
+- [ ] Failures, skips and limitations remain visible; no unsupported readiness claim
+- [ ] Relevant current documentation updated; dated historical results retained
 
-- [ ] README / relevant docs updated
-- [ ] AGENT.md and CHANGELOG.md updated with `Raouf:` entry
+## Attribution and review
 
-## Stage Boundary Check
-
-- [ ] No major Stage 2 runtime code added
-- [ ] Claims are evidence-backed and do not overstate readiness
+Identify contributors and assistance accurately. Do not write an entry under another person's
+name. Link any issue, review decision or relevant stage authority. Flag owner decisions needed
+for deployment, publication, spending or submission.

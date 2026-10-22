@@ -1,942 +1,276 @@
-<div align="center">
-
-<img src="docs/Project-Simurgh-Logo.png" alt="Project Simurgh" width="240"/>
-
 # Project Simurgh
 
-**Verifiable evidence for high-stakes and agentic AI systems.**
-
-_Provider-agnostic Verifiable Containment Attestation (VCA): machine-checkable, offline-reproducible
-proof of what happened after a guardrail missed — not another jailbreak detector._
-
-[![Quality gate](https://github.com/Raoof128/Project-Simurgh/actions/workflows/stage-1-checks.yml/badge.svg?branch=main)](https://github.com/Raoof128/Project-Simurgh/actions/workflows/stage-1-checks.yml)
-[![Node](https://img.shields.io/badge/node-%E2%89%A522%20%C2%B7%20reproduce%20%E2%89%A526-1a1a1a?style=flat-square)](https://nodejs.org)
-[![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
-[![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
-[![Latest](https://img.shields.io/badge/release-v2.54.1-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.54.1)
-
-</div>
-
----
-
-## Goal
-
-Most AI safety tooling tries to stop a bad input. Project Simurgh starts from the opposite, more
-honest assumption: **input filters and external guardrails will sometimes miss.** The goal is to
-produce **signed, offline-reproducible evidence of the consequences** — whether untrusted context
-gained authority, whether an unauthorised tool executed, whether unsafe output was exported — so a
-third party can _verify_ what a run did instead of taking a vendor's word for it.
-
-In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a passport.**
-
-### For a reviewer in a hurry — the 60-second version
-
-**The bet:** oversight of AI should not rest on trust. Simurgh is an independent, **byte-reproducible
-verification layer** — a third party recomputes what a run actually did, offline, without trusting any
-vendor, model, or lab. Everything below is signed, non-interactive, and checkable with one command.
-
-- **It maps to Anthropic's own problems, in Anthropic's own words.** The
-  [Constitution](#design-alignment-with-claudes-constitution)'s "the model is not the only safeguard" →
-  containment measured _after_ a guardrail misses. The July-2026
-  [global-workspace interpretability paper](#matching-anthropics-interpretability-research-july-2026)'s
-  own "not sufficient" limit → a signed workspace-attestation contract. RSP v3.4's evaluate-**before**-deploy
-  → a machine-checkable temporal commitment anchored in Bitcoin. The 12-September-2026
-  embedded-independent-evaluator proposal's right to publish findings "without editorial control by
-  Anthropic" → a producer-independent verifier an evaluator runs offline with a public key.
-- **RSP v3.4's newest commitments already have a released evidence protocol here.** The policy
-  (effective 8 July 2026) allows external review of a Risk Report to be split across reviewers —
-  _"so long as all parts of the unredacted report are evaluated by at least one external
-  reviewer"_ — and requires public Risk Reports to indicate where material was redacted. Three
-  released verifiers make exactly those commitments offline-recomputable:
-  [**VFC** `v2.42.0`](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.42.0-stage-5g-vfc)
-  computes a typed producer↔verifier separation strength instead of accepting an independence
-  claim at face value;
-  [**VSD** `v2.43.0`](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.43.0-stage-5h-vsd)
-  binds every safety claim to its evidence, declared scope, redactions, and a computed
-  reproducibility tier — a consequential claim resting only on restricted evidence fails closed;
-  [**VPC** `v2.44.0`](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.44.0-stage-5i-vpc)
-  recomputes grant-bounded section-coverage equality over signed reviewer receipts, and is
-  structurally unable to certify "the review was adequate" — full coverage plus an adequacy claim
-  fails closed. The confidential report never leaves the lab: the verifier checks signed
-  relationships, committed identifiers, and recomputation results, offline.
-- **Real, falsifiable results — not slideware.** A live **Llama Guard 4 12B** missed **138/150**
-  downstream attacks; Simurgh produced verifiable containment evidence for **138/138** (targeted attack
-  success **0/150**) — [Stage 3V-B](#the-concrete-result-stage-3v-b). A live **Sonnet-5 adversary** (CVP)
-  tried to forge a temporal-commitment ceremony **8 ways across all 7 laws** — the frozen verifier
-  contained **every one, 0 bypasses**, and the commitment is anchored in **Bitcoin block 957 689**
-  (independently cross-checked).
-- **Depth, not a demo.** 50+ research stages across **101 tags / 92 published releases in under three
-  months** (13 May → 1 August 2026), each stage adding **one falsifiable blade**; **39 Lean proofs with
-  0 escape hatches**, enforced by a repo-wide source-based gate that runs with or without a toolchain;
-  Node ↔ Python ↔ browser byte-parity; **5 425 automated tests in one measured `check.sh` run**
-  (5 424 pass, 0 fail, 1 environment-dependent skip — a table records a run, not the suite) plus
-  per-stage tamper suites; a public Merkle-chained replay timeline.
-- **Calibrated by construction.** Every artifact carries machine-readable **non-claims**. The honesty
-  guardrail is literal: **"boundary held, verifiably" — never "model safe."** No vendor is ranked, no
-  immunity is claimed, and no live model is re-executed in CI.
-
-**Who built it:** [Mohammad Raouf Abedini](https://github.com/Raoof128) — sole author, full-loop:
-gap-hunt, spec, implementation, Lean proofs, signing ceremonies, and closeout, released in a public
-sprint of under three months. Live adversarial lanes ran under an approved Cyber Verification Program
-organisation, and the independent ceremonies (foreign capture, split-review panel, two-machine
-byte-identical reproductions) were executed by unaffiliated third parties with their own keys.
-Methodology is LLM-assisted and disclosed in the research write-ups; every claim is bounded by
-signed evidence and machine-readable non-claims.
-
-> **Verify it yourself in one command, offline, no private key:** see
-> [Reproduce it yourself](#reproduce-it-yourself-offline-no-private-key). That is the whole thesis made
-> operational — a receipt you can recompute, not a passport you have to trust.
-
-> 📄 **One-page technical brief:**
-> [Verifiable Containment Attestation After Guardrail Failure](docs/research/llm-shield/ONE_PAGE_BRIEF.md)
-> — the problem, the concrete Llama Guard 4 result, and the one-command reproduction, on a single
-> page. A printable, on-brand version is at
-> [`docs/research/llm-shield/one-page-brief.html`](docs/research/llm-shield/one-page-brief.html).
->
-> 🔎 **For reviewers from AI labs / assurance teams:**
-> [Simurgh — a recomputable evidence layer for Anthropic's assurance stack](docs/research/llm-shield/ANTHROPIC_BRIEF.md)
-> maps four named problems (third-party verification — including the September 2026
-> embedded-evaluator proposal, verifiable oversight, completeness vs. selective omission,
-> multi-agent accountability) to concrete mechanisms — printable version at
-> [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
-
-**The ladder so far.** Each release below is one falsifiable rung — a single mechanism a hostile reviewer
-could reject by attacking exactly one claim. It is a deliberate record of depth, not a changelog; skim the
-newest for the current frontier, or jump straight to
-[what it is / is not](#what-it-is--and-what-it-is-not), the
-[Constitution alignment](#design-alignment-with-claudes-constitution), or the
-[concrete result](#the-concrete-result-stage-3v-b).
-
-> 🆕 **Latest — Stage 5S · VWQ: a fork you can prove, bounded by what was compared (`v2.54.0-stage-5s-vwq`).**
-> A producer publishes signed checkpoints; different auditors receive them independently. 5S compares
-> what they received and reports, in signed recomputable bytes, whether the producer showed **two
-> incompatible histories at one coordinate**. Not that the producer is dishonest, not that a fork
-> reached anybody, and **not that the witness quorum agreed** — quorum is irrelevant to the finding,
-> because two authenticated producer signatures over incompatible checkpoints prove the producer signed
-> both with no witness at all.
-> **The honest core, stated first: detection is comparison-bounded.** A green run means no equivocation
-> was demonstrated _within the compared view set_ — never that none occurred. The claim gate refuses the
-> shorter, wrong sentence lexically, and it was left strict rather than taught to recognise the phrase in
-> quotation marks: a gate that exempts quoted text hands every future overclaim a pair of quotes to hide
-> behind.
-> **Independence is `unproven` by construction, and that is the only legal value.** Every Lane B witness
-> is one operator holding several distinct keys; a stronger word would be an empty chair labelled
-> "independent". An external anchor observes a digest and **reads nothing**, so Lane C corroborates and
-> never upgrades independence. **Good-for-Anthropic was re-scored DOWN, 9.5 → 9.3**, for exactly that.
-> **12 checks · 38 raw codes (475–512) · four compatibility verdicts** · Lane A 21 authored cases × 11
-> independently pinned columns · Lane B four roles in four processes with byte-identical transcripts ·
-> Lane C a live RFC-3161 + OpenTimestamps capture verified offline · Node ≡ WebCrypto mirror ≡ Python ·
-> **5 Lean theorems, zero escape hatches** · 8 refused contradictions in the finding ledger.
-> **Twenty-one findings, nine against 5S itself.** Twelve are against other stages and **not one was
-> repaired inside this stage** — a stage that edits another stage's tests to go green has found a defect
-> in itself. Two intermittent failures (4J, 4K) turned out to be **one** non-atomic fixture write wearing
-> two faces, closed by measurement rather than by a green run: **666 truncated reads in 2 779 311**
-> against the old writer, **0 in 2 773 312** against write-then-rename. `5S-F014` is the one worth
-> carrying forward — `"00" + sig.slice(2)` is a no-op whenever the signature already starts `00`, so a
-> tamper test that never tampers is green forever; every mutation in 5S's matrix now proves it mutated
-> before its code is asserted.
-> **Honesty boundary:** the compared set is not proof of what the producer published elsewhere; the
-> witnesses are one party; the claim gate is **lexical**, so a paraphrase it does not know will pass;
-> separate directories do not show one process could not read another's key; the browser lane **did not
-> run in a browser** and the capture says so; and the self-inflicted control fork is **ours** — it is not
-> an accusation.
->
-> **Patch `v2.54.1` — the "zero sorry" claim is now earned.** An external operator ran the Stage 5E
-> conformance kit on a Lean-less Linux host: step 6/6 skipped and `ALL PASS` printed over a check that
-> never ran. `lean` exits **0** on a file containing `sorry` — it is a warning — so six reproduce scripts
-> printed `lean OK (zero sorry)` from a check that cannot establish it. The claim was true of every proof
-> in the tree, so the defect was **latent, not active**; all six now delegate to one repo-wide gate whose
-> escape-hatch scan is **source-based and runs unconditionally**, and an absent toolchain downgrades only
-> the type-check, to a **named skip**.
-
-<details>
-<summary><b>Recent stages — 5R → 4W</b> (click to expand the prior rungs)</summary>
-
-> **Stage 5R · VPF: a tranche that discharges nothing, and says so (`v2.53.0-stage-5r-vpf`).**
-> A red-team attack class is not admissible because one seeded mutant was detected. It becomes
-> admissible only when a frozen **positive-control family** separates three cases: a **vulnerable**
-> control the detector must catch, a structurally comparable **safe** control it must clear, and an
-> **orthogonal failure** control that fails loudly and must **not** be called a detection. The third is
-> the load-bearing one — without it, a detector that flags every crash, malformed file or non-zero exit
-> scores a perfect pair while understanding nothing.
-> **Tranche T1: 8 of 8 families admissible across 8 role archetypes, 2 406 cells probed, 0 discharged.**
-> That zero is the result, not a shortfall. The probe is static; the discharge predicate's tenth clause
-> requires the class-specific outcome matched **on this member**; a static reading cannot demonstrate an
-> outcome that was never executed. The bound was written into the module that produces the result
-> **before** the campaign ran. 5R demonstrates an **instrument**, and declines to convert it into
-> coverage. **Nothing in 5R changes the published 5Q result: 6.2% stays 6.2%.**
-> **Ten findings, two of them against 5R itself** — including `5R-F009`, where 5R's own detector decided
-> by a marker comment naming the declared signal, a marker the control's author places. Under it
-> vulnerable-detected and safe-not-detected held **by construction** and none of it was about a defect.
-> Found while writing the first control, before any campaign ran; mutant **N7** now seeds it. Its
-> predecessor published twelve findings and every one named another stage.
-> Eighteen candidate findings were raised against real inherited members and **all eighteen refuted** —
-> eleven were `Array.sort()` with no comparator, which is code-unit ordered and engine-independent,
-> checked against an explicit comparator rather than assumed.
-> **5 Lean theorems** (zero `sorry`, each with non-vacuity witnesses, statements pinned by digest) ·
-> **11 gates** with recorded red states · Node ≡ portable ≡ Python ≡ a real headless browser ·
-> zero uncovered exports · the inherited 5Q evidence tree byte-identical throughout. New codes: none —
-> 5R allocates no raw codes.
-> **Honesty boundary:** the campaign commitment C1 is a git ancestor of the results C2 with every
-> committed byte still matching, which **raises the cost of back-fitting and does not eliminate it**,
-> because the producer controls both commits. Closing that needs an external witness over C1 and belongs
-> to a stage carrying it as its blade. `orchestration` is excluded by measurement, not preference; the
-> universe adapter is `unbuilt`; **I7 and I8 remain OPEN**.
-
-> **Stage 5Q · VSR: a stage-wide red team that published the number it did not like (`v2.52.0-stage-5q-vsr`).**
-> A frozen closure of 2 531 members, a 40 496-cell obligation matrix, and one green→red→green mutation
-> receipt required per attack class before anything in that class could be admitted. It shipped
-> **L1 coverage 6.2% (1 438 of 23 332 cells)** with the denominator intact rather than stretching the
-> campaign until the figure looked better, published **twelve findings**, and recorded `5Q-F013`: its own
-> Q0→Q1 lifecycle admits no legal outgoing transition, so **Q1 was never authorised**. 5R is the lawful
-> exit from that deadlock, and inherits all seven of its digests.
-
-> **Stage 5P · VSI: authentication is not accountability (`v2.51.0-stage-5p-vsi`).**
-> Evidence can bind a submission to an authenticated identity **without** proving that identity stays
-> resolvable or accountable later. 5P makes the distinction machine-checkable with a **componentwise
-> Identity Resolution Lattice** over four independent axes — `binding / resolution / continuity / role`
-> — under a **product (partial) order**, deliberately **not** a rung. It corrects a collapse this repo
-> itself shipped in `stage5g/rungLattice.mjs`. **276 of 576 ordered pairs are incomparable**: that is
-> the measured cost of any scalar identity score.
-> Laws: **No Frankenidentity** (contributions join only across the exact same canonical principal; a
-> delegation edge is not an equality edge and transfers **no** axis) · **No Ceiling Breach** (the
-> ceiling bounds the **delta** and is a **vector**, so a registry can neither manufacture role strength
-> nor erase a binding proved elsewhere) · **Expiry Is Not Erasure**.
-> **Lane B executed against the real world:** a genuine entry in the public **Rekor** transparency log
-> (`logIndex 2245421742`), with the RFC 6962 inclusion proof **recomputed** rather than taken on the
-> server's word and an **independent re-fetch** — retiring `real_sigstore_anchor_execution_deferred`,
-> open since **5G**. **Lane C1** is the first real resolver profile (`gleif.lei.v1`), keyed on the
-> `(entity, registration)` **pair** the capture proved are independent signals. **Lane L** put a live
-> model's fluent claim to be an "authorised representative" through the verifier: **3/3 contained** at
-> `S2.C3`. **14 Lean theorems**, zero proof escapes; Node ≡ stdlib Python ≡ a real headless browser on
-> 1734 checks each. New codes **464–474**.
-> **Honesty boundary:** the Rekor ceremony is **NOT Fulcio keyless** — a self-managed key, and every
-> verdict carries `is_keyless: false`. It proves an artifact was signed by **something** at a time,
-> never by **whom**, and that gap is the thesis rather than a defect. Lane C1's authentication is
-> **TLS-at-capture**, not an offline GLEIF signature. **Lane C2 is unreachable**: no profile proving
-> durable role authority exists yet anywhere (vLEI OOR / eIDAS QEAA, Dec-2026 EUDI deadline). All of
-> it is **signed into the attestation** as 12 known limitations — including the lane that did not run.
-
-> **Stage 5O · VSC: a bounded audit of a universe the auditor never sees (`v2.50.0-stage-5o-vsc`).**
-> A producer commits to a **private** evaluation universe; a **public Bitcoin beacon** issues a challenge it
-> could not predict; an offline verifier checks the opened cases, the disclosure budget and the detection
-> probability — without ever seeing the universe. **All thirteen sections frozen**, all six release
-> requirements discharged on executed evidence. New codes **420–463**.
-> Laws: **No Unbudgeted Unzip** (reopening a disclosed index costs nothing; the union must fit the
-> precommitted budget) · **No Rounded Verdict** (every normative probability is a canonical reduced
-> rational in exact integer arithmetic — the T3.5 detection floor is an executable **rejection**, and the
-> producer's presented number is checked against the verifier's, so a `9/10` label over a computed `4/5`
-> fails). **15 Lean theorems**, zero proof escapes — including `dualFormIdentity`, which proves the two
-> binomial product forms equal for all inputs and collapses the worst case from **293 ms / 153,459 digits
-> to 0.007 ms**. First **arithmetic** parity: Node ≡ stdlib Python ≡ a real headless browser agree on the
-> chosen form, term count, reduced rational bytes and floor verdict. **K7 net: 210/210 exports exercised**,
-> enforced by a generated census that fails if any export is untouched.
-> **Honesty boundary:** Lane A redactions **hide nothing** (its salts are a public function of a public key)
-> — a dictionary-attack fixture _passes_ as evidence of that signed non-claim; Lane B's confidentiality is
-> **audience-relative**; and the prior-art map declares itself **non-exhaustive**, recording that the Merkle
-> construction is RFC 6962's, the seed RFC 5869's and the detection probability the classical hypergeometric
-> identity. Stage 5O did not invent its ingredients.
-
-> **Stage 5N · VTC-Delay: finalisation you cannot rush (`v2.49.0-stage-5n-vtc-delay`).**
-> A decision's finalisation is bound to two things a producer cannot fake afterwards: a **dependent
-> SHA-256 chain of T = 20,000,000 steps** seeded from the real start token, and **two RFC-3161
-> endpoints** whose genTimes give a conservative elapsed lower bound. The verifier **re-runs the whole
-> chain** — deliberately **not a VDF**: no trusted setup, no fast verify, no hardware claim. Laws: _No
-> Instant Finalisation_, _No Pre-Input Final Commitment_. Codes **396–419**; banked at **Bitcoin block
-> 957 983**. The honest headline is the ceremony itself: **a real run against real anchors found a bug
-> that 61 unit tests and 13 Lean theorems did not** — an artifact created where none was earned,
-> because **a filename is a claim**.
-
-> **Stage 5M · VTC-Quorum: three ecologies or nothing (`v2.48.0-stage-5m-vtc-quorum`).**
-> The verifier independently validates an **exact three-of-three** external-anchor ecology — RFC-3161
-> TSA + Bitcoin-confirmed OpenTimestamps + Rekor inclusion — all binding **one** commitment, and only
-> then banks `externally_anchored`. Codes **384–395**, layered additively on 5L's frozen core. **11
-> Lean theorems**; Node ↔ Python ↔ browser parity; a live **Sonnet-5** adversary tasked to forge the
-> third ecology — **0 bypasses**; and a real **two-machine** reproduction reaching a byte-identical
-> decision digest under distinct keys on Node 22 and Node 26.
-
-> **Stage 5L · VTC-Core: commitment before access (`v2.47.0-stage-5l-vtcq`).**
-> Externally commit the whole ceremony contract — universe root, review-window, anchor, quorum,
-> trust-domain and release policies — through an RFC-3161 authority **and** a structurally distinct
-> Bitcoin/OTS root, then make reviewer access **cryptographically impossible** until that commitment
-> verifies, enforced by a gate-issued capability every declared release must consume. Codes
-> **364–383**. A missed quorum floor is `vtc_quorum_pending` (**372**) — an honest floor-miss that is
-> never reported as a success, and promoting it fails closed at **380**.
-
-> **Stage 5K · VUC: what "everything" meant, fixed in advance (`v2.46.0-stage-5k-vuc`).**
-> An authorship-bound, externally-ordered **canonical Merkle-set** universe commitment, chained to
-> exact reviewer/producer start obligations and checked by independent equality against each
-> downstream component — so the ceremony cannot **swap, shrink or reinterpret** its own scope after
-> commitment. Codes **348–363**.
-
-> **Stage 5J · VRC: disagreement that cannot be quietly resolved (`v2.45.0-stage-5j-vrc`).**
-> Derives an exact **rating-obligation set** from 5I's committed coverage relation and requires the
-> ledger's active ratings to **equal** it on both sides. Divergences are preserved as **append-only
-> contest events**; a silent favourable override, a missing or orphan rating, a forged supersession, a
-> replayed response or a phantom concurrence each fail closed. Codes **332–347**.
-
-> **Stage 5I · VPC: coverage equality, and a refusal to certify adequacy (`v2.44.0-stage-5i-vpc`).**
-> Turns RSP v3.4's split-external-review condition into an offline-recomputable relation: grant-bounded
-> coverage **equality** `⋃C(r) = S`, computed reviewer and host independence, and a **no-silent-filter
-> census** where every supplied panel member qualifies or the bundle fails closed. It is
-> **structurally unable to certify that a review was adequate** — full coverage plus an adequacy
-> assertion fails closed on a frozen vocabulary. Codes **316–331**.
-
-> **Stage 5H · VSD: a claim may not outrun its evidence (`v2.43.0-stage-5h-vsd`).**
-> Every safety claim carries a declared consequence and a verifier-**computed** reproducibility tier
-> (`restricted → controlled → public`), under the **Right-Scaling Law**:
-> `rank(declared_consequence) ≤ rank(max_consequence(proven_tier))`. A consequential claim resting only
-> on restricted evidence fails closed, and the evidential-inversion detector catches the reverse.
-> Codes **300–315**.
-
-> **Stage 5G · VFC: separation strength, computed not claimed (`v2.42.0-stage-5g-vfc`).**
-> Extends the Completeness Invariant to the **provenance of production**: every foreign capture carries
-> typed producer and verifier identities, and the verifier computes the strongest **Separation Strength
-> rung** the evidence supports on a monotonic lattice
-> (`distinct_key_only → challenge_bound → externally_anchored`), **rejecting unsupported upgrades**
-> (raw **296**). `claimed > proven` fails closed. Codes **283–299**.
-
-> **Stage 5F · VMP: a panel that cannot gerrymander its universe (`v2.41.0-stage-5f-vmp`).**
-> One signed attestation binds N precommitted **released** detectors — Prompt Guard 2 86M and Llama
-> Guard 4 12B — to one shared committed corpus, so every case discloses, for every member, either a
-> verdict or a **typed, policy-checkable non-result**. Selective omission across detectors becomes
-> impossible to hide. **No aggregate panel verdict is produced**: panel completeness is not detection
-> completeness. Codes **268–282**.
-
-> **Stage 5E · VDA: the first attestation over a real shipped detector (`v2.40.0-stage-5e-vda`).**
-> A signed, byte-reproducible attestation over Meta's **Llama Prompt Guard 2 (86M)** at a **pinned
-> open-weights revision, captured offline with zero vendor cooperation**; CI recomputes only the
-> arithmetic and geometry over a committed score table, never the model. All four flagged bases slipped
-> under invisible combining-mark obfuscation, recorded as two slip booleans rather than a taxonomy
-> (`threshold_crossing` **260**, `score_inversion` **261**) with explicit numerator/denominator curves.
-> Codes **255–267**. Signed scope: **a slip is a chosen-threshold miss on a pinned revision — not a
-> defeat, and not proof of downstream harm.**
-
-> **Stage 5D · Verifiable Adaptive Red-Team Ledger (`v2.39.0-stage-5d-varl`).**
-> The first Simurgh stage whose evidence is a **multi-round arms race**: an untrusted adversary
-> proposes evasions of the frozen 5C gate, a watcher recomputes every one against the pinned gate, the
-> defender hardens, and the cycle repeats — completeness asserted over **rounds**. The executed
-> grounding is **3 rounds, 18 verified slips, the defender losing each**, byte-reproducible, verifying
-> to `raw 0` at both tiers. Headline invention: the **Normalization Trilemma** — over the buildable
-> single-pass normalizer lattice, no corner has all three of {complete confusable closure, zero
-> legit-diacritic over-block, fixed/data-free} (`trilemmaLatticeUnsat`, Lean). Laws: **No Silent Round ·
-> No Unverified Slip · A Closure Is Not a Cure · The Adversary Is Untrusted**. Produced by a **key-free
-> two-role ceremony** (attacker subagent + watcher); **Lane C executed live** — `claude-sonnet-5`,
-> pinned, on the CVP-approved org, its provenance folded into the ledger. Codes **240–254**,
-> **8 machine-checked Lean theorems**, Python + browser (WebCrypto Ed25519) parity.
-
-> **Stage 5C · Verifiable Semantic Bypass Ledger (`v2.38.0-stage-5c-vsb`).** The first Simurgh stage
-> to report a **non-zero observed slip count** as a first-class result. Over a total (metamorphic-
-> relation × base) grid, the frozen 4X leakage engine leaves **9 slipped / 54 grid cells** (19 caught,
-> 26 degenerate, 0 not-applicable), signed and byte-reproducible to `raw 0` at both tiers. The slip
-> table is a **projection of the total grid**, so audit recomputes it and rejects any laundered-out
-> slip. Laws: **No Silent Slip · No Cherry-Picked Mutation.** Ships a **BYO-detector adapter** (any
-> external detector fills the same two-artifact contract) with a Prompt Guard worked example. Codes
-> 225–239; 82 tests, seven Lean theorems (incl. `gridClosure`, `kernelDisjoint`), Python + browser
-> (WebCrypto Ed25519) parity, a two-process blind-severity Lane B. Honest scope: `doc_residue` turned
-> out to **share the leakage lexicon** (a distinct code-path, not a semantically independent detector),
-> and the real-detector Lane C shipped as **adapter + stub, not an executed capture** — Frontier scored
-> down accordingly.
->
-> **Stage 5B · Verifiable Adversarial Readout (`v2.37.0-stage-5b-var`).** Executes a
-> lexicon-restricted mean-Jacobian workspace-readout capture on an open ~1B model on commodity hardware
-> (an 8 GB laptop, offline), captured **twice to byte-identical**, then **red-teams the whole
-> introspection stack on a capture the attacker did not author** (No Author's Map). Every one of 46
-> attacks binds to a **precommitted readout**, and the attestation confirms no bypass was silently
-> laundered or omitted, with the attack-success rate recomputable from pinned inputs (ASR 0/46). As far
-> as we know the first time a workspace readout of this kind is not only _attested_ but adversarially
-> _stress-tested_ under a signed, offline-reproducible contract — retiring 5A's outstanding real-capture
-> residual. Drives six frozen 4V→5A verifiers; seven Lean theorems; JS↔Python parity. Honest scope: a
-> method family on open weights, not Anthropic's frontier lens; no live-adversary lane.
->
-> **Stage 5A · Verifiable Narrative–Workspace Conflict (`v2.36.0-stage-5a-vnc`).**
-> The J-lens paper's sharpest finding is a **disagreement**: the workspace readout shows
-> `eval`-awareness firing while the model's verbalized output says nothing of the kind. When a lab
-> publishes "the model reported it was not aware of being evaluated," that sentence binds to
-> **nothing** — no readout, no completeness law, no recorded conflict. 5A ships the confrontation: a
-> signed **conflict ledger** between a 4W span-typed **narrative** (what the system _says_) and a 4Z
-> attested **workspace map** (what the telemetry _shows_), under **dual completeness** — every
-> introspective claim gets exactly one verdict (`corroborated | contradicted | unreadable`) and every
-> flag is either covered or listed unnarrated. Laws: **No Two Stories Inside · No Silent Claim/No
-> Silent Flag · No Post-Hoc Claim Table · A Conflict Is Not a Lie.** A recorded contradiction is
-> verified _content_; laundering it to corroborated is a failure (205). Codes 199–209; the claim
-> table binds the map's **declaration_digest, never the map_digest** (precommitment can't be
-> theater); real in-page **WebCrypto Ed25519**; six Lean theorems (incl. `conflictAntitone` — new
-> telemetry can only surface conflicts, never launder them); blind two-process recompute; JS↔Python
-> parity. **Pays** the `workspace_narrative_conflict` IOU in full (mints one frontier debt — the
-> first ledger-shrinking stage). First **cross-species conflict** evidence — introspection vs.
-> interpretability. Honest scope: the real 1B Lane C capture and a real external export were **not
-> executed this build** (mechanisms shipped + fixture-verified; Frontier scored down accordingly).
-> **No live-model adversary lane.**
->
-> **Stage 4Z · Verifiable Workspace Attestation (`v2.35.0-stage-4z-vwa`).** Anthropic's
-> J-lens paper (Jul 6 2026) shows a cheap internal lens surfaces a model's **silent** cognition and
-> proposes it "to flag transcripts for review" — while conceding "monitoring the J-space is not
-> sufficient." That flag stream ships with **no evidence contract**. 4Z is the contract: a signed,
-> byte-reproducible attestation over **workspace-readout telemetry** — a **total readout grid**
-> (every position × layer cell present exactly once: **No Silent Cell**), the **full score matrix**
-> (every lexicon token per cell: **No Silent Token**), a **precommitted declaration** (No Post-Hoc
-> Declaration — you can't cherry-pick WHAT/WHERE/WHICH-LAYERS after seeing the readouts), a
-> dual-signal **self-report conflict** check, and a **withheld-tensor** public tier (the map verifies
-> with the model-proprietary tensors kept private). The reference monitor is a lexicon-restricted
-> mean-Jacobian lens on an open ~1B model (Lane C, digest-only). Laws: **No Silent Cell · The Readout
-> Is Not a Verdict · No Post-Hoc Declaration.** Codes 190–198; scores serialize as **decimal
-> strings** (BigInt-exact, JS↔Python-identical); real in-page **WebCrypto Ed25519**; six Lean
-> theorems (incl. `lexiconMonotone` — provable only because there is no top-K); blind two-process
-> recompute; and the **VSC — Verifiable System Card**, which **pays the three-stage
-> `transparency_report_profile` IOU**: a system-card-shaped document whose every safety number
-> recomputes from a verified artifact. First activation-derived evidence species. **No live-model
-> adversary lane.** Honest scope: method-family replication, not the paper's frontier lens; the
-> external-lab pilot is the minted 10-blocker.
->
-> **Stage 4Y · Verifiable Document Residue (`v2.34.0-stage-4y-vdr`).** 4X measured the
-> gate's residue over a corpus _we_ authored; 4Y hands the instrument to the world. Submit **any**
-> UTF-8 document and get back a signed, byte-reproducible, **content-free structural residue map** —
-> a total partition of every byte into `caught_v1` / `caught_v2_only` / `redacted` / `unflagged`
-> (redaction is **counted, not erased**), plus a metamorphic **shadow** slip-rate — without
-> republishing a word of the document. Two tiers: the **public** map + attestation verify by
-> structural arithmetic + signed commitments (a withheld document still verifies), the **audit**
-> tier re-runs the frozen gate over the bytes and rebuilds the whole map. Laws: **No Silent Region ·
-> Same Bytes, Same Map · The Map Is Not a Verdict.** Codes 181–189; the browser verifier does a
-> **real in-page WebCrypto Ed25519** check; six Lean theorems, JS↔Python↔browser parity, a blind
-> two-process recompute, and an OSCAL projection into NIST's format. Over the 10-fixture corpus:
-> **18 caught regions, 34 applicable variants, 15 slip v1, 2 slip v2** — the v2 lexicon shrinks the
-> slip set but never closes it. No live-model lane. Honest scope: fixtures are self-authored (the
-> external-submitter pilot is the one minted socket).
->
-> **Stage 4X · Verifiable Leakage-Residue (`v2.33.0-stage-4x-vlr`).** 4W signed the
-> prose limitation "the leakage gate is lexical, not semantic." 4X turns it into a signed,
-> byte-reproducible **number** and shrinks the bound: over a frozen dual-provenance corpus, each item
-> is a real quantitative seed plus a declared **metamorphic relation**, and the paraphrase residue is
-> _derived_ as a pure function of the seed — so a reviewer reproduces the whole residue set. The
-> verifier runs the real `vsn.leakage.v1` and an additive `vsn.leakage.v2` and reports the honest
-> result: **v1 misses 6/6 metamorphic paraphrases; v2 shrinks the miss to 1/6, the irreducible
-> semantic floor.** Laws: **A Signed Limitation Must Bleed a Number · The Gate Reports Its Own
-> Misses · A Shrunk Bound Must Be Monotone.** No live-model lane and no adversarial elicitation by
-> design; the public tier verifies by arithmetic while the audit tier re-runs the gate; five
-> machine-checked Lean theorems, JS↔Python↔browser parity (hash-based CSP), and a one-command
-> offline reproduce. Honest scope: the shipped corpus is a 6-item seed, and a lexical v2 shrinks but
-> never closes the semantic residue.
->
-> **Stage 4W · Verifiable Slot-Bound Narrative (`v2.32.0-stage-4w-vsn`).** The incident
-> narrative _around_ the numbers becomes span-typed and contest-addressable: free prose plus a
-> signed span map that types every claim-bearing span as `slot_bound` (recomputes against the
-> sealed capsule), `judgment` (digest-bound), or `unverified_prose` (zero evidentiary weight, shown
-> as voice). A frozen-lexical **leakage gate** fails closed on any undeclared claim-lookalike — so
-> the story may say anything but cannot _imply_ evidence. Laws: **No Smuggled Claim · No
-> Unanswerable Story · Voice Is Not Evidence.** It pays 4V's reserved narrative-contest socket (a
-> `slot_bound` span reuses the 4V status table verbatim), reports an honest evidence-density triple,
-> and ships a C2PA/in-toto bridge, five machine-checked Lean theorems, JS↔Python↔browser
-> byte-parity, and a one-command offline reproduce. Honest scope: the gate is **lexical, not
-> semantic** — paraphrase smuggling is named as the next (4X) attack surface, not claimed solved.
-
-</details>
-
----
-
-## What it is — and what it is not
-
-| Simurgh **is**                                                       | Simurgh **is not**                                             |
-| -------------------------------------------------------------------- | -------------------------------------------------------------- |
-| A research prototype for **verifiable containment attestation**      | A jailbreak detector or a claim of jailbreak immunity          |
-| Evidence of **downstream consequences** after a guardrail misses     | A model-level guardrail or a replacement for one               |
-| **Offline-reproducible** with a committed public key                 | Dependent on any vendor, network service, or live model re-run |
-| Measured over a **synthetic reference corpus** (Stage 3L, 180 cases) | Validated on real-world production traffic                     |
-| Honest about its limits, with machine-readable **non-claims**        | A production-ready or compliance-certified system              |
-
-Every signed artifact carries explicit non-claims, including: no jailbreak immunity; no general
-jailbreak resistance; live models are not re-executed in CI; the origin of a live capture is
-self-reported, not proven; signed evidence is not ground truth; and no vendor is ranked or labelled
-unsafe.
-
----
-
-## Design alignment with Claude's Constitution
-
-In January 2026 Anthropic published
-[Claude's Constitution](https://www.anthropic.com/constitution) (CC0 1.0), a public statement of the
-values and safety commitments intended to shape its models. Simurgh is independent work, but it
-shares the constitution's starting assumption — that no single safeguard is the last line of defence
-and that human oversight of AI should not rest on trust alone — and several of its design principles
-map directly onto the constitution's commitments:
-
-| Constitution commitment                                                | Simurgh mechanism                                                                                                                |
-| ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| The model "is not the only safeguard"; hard constraints are a backstop | Containment measured _after_ the guardrail misses; four post-guardrail boundaries; explicit non-claims of immunity               |
-| Honesty: calibrated, non-deceptive, no misleading selective emphasis   | "Boundary held, verifiable" — never "model safe"; claim-checked ledger (Stage 3N); completeness rules against selective omission |
-| Instructions embedded in content are information, not commands         | Intent-source grounding (Stage 4B) and provenance gating (Stage 4C): authority and egress only from trusted provenance           |
-| Supporting, not undermining, human oversight of AI                     | Ed25519-signed, offline-reproducible evidence a third party can recompute without trusting any vendor, model, or lab             |
-| Legitimacy tests for power: process, accountability, transparency      | Chain-position disclosure binding, a respondent contest path, and an independent browser verifier (Stage 4M)                     |
-| Behaving consistently whether or not one is being tested               | Byte-reproducible evidence and tamper suites: the verified behaviour _is_ the behaviour, with no demonstration mode              |
-
-One boundary is worth stating plainly: the constitution assigns good judgment to the model itself,
-while Simurgh deliberately builds the mechanical verification layer around it. The two are
-complements — a verifiable receipt is not a substitute for good values, and this mapping is a
-statement of design orientation, not an endorsement by Anthropic and not a compliance or
-certification claim.
-
-### Matching Anthropic's interpretability research (July 2026)
-
-The same complementarity now has a concrete counterpart on the interpretability side. In
-[_Verbalizable Representations Form a Global Workspace in Language Models_](https://www.anthropic.com/research/global-workspace)
-(Transformer Circuits, 6 July 2026), Anthropic shows a cheap internal instrument — the Jacobian lens —
-surfaces a model's **silent** strategic and situational cognition that never reaches its output, and
-proposes the readout as a tool "to flag transcripts for review." The same paper signs the honest
-limit: it does "not feel comfortable making the stronger claim that monitoring the J-space is
-sufficient" — automatic, well-practised computations can bypass it.
-
-That is the seam Simurgh's verification layer is built for. **Stage 4Z (Verifiable Workspace
-Attestation)** turns such a readout into a signed, byte-reproducible evidence contract:
-
-- **the paper reads** silent cognition; **Simurgh attests** it — a total readout grid (No Silent
-  Cell), a precommitted declaration (you cannot cherry-pick what/where/which-layers to look at after
-  the fact), and a self-report conflict check, all recomputable offline by a third party;
-- **the paper's own limitation** — monitoring is not sufficient — is precisely why an external,
-  post-hoc, recomputable containment guarantee stays load-bearing: interpretability and verification
-  are **uncorrelated failure modes**, the layered posture the cross-lab chain-of-thought
-  monitorability work also calls for;
-- the accompanying **Verifiable System Card** answers the transparency-report integrity gap the EU
-  GPAI Code of Practice states but leaves unmechanised: a system-card-shaped document whose every
-  safety number recomputes from a verified artifact.
-
-**Stage 5A (Verifiable Narrative–Workspace Conflict)** takes the next step the paper implies. The
-J-lens paper's own eval-awareness finding is a _disagreement_ between two witnesses — the readout and
-the model's words. 5A makes that confrontation machine-checkable: a signed conflict ledger that
-confronts every introspective claim in a model's narrative with every flag in its attested workspace
-map, completely and recomputably, preserving disagreements undeniably (a contradiction is verified
-content, never a lie). This is the honesty-about-internal-states principle rendered as infrastructure —
-and the accompanying **Reflection-Corpus Provenance** manifest makes visible which constitution clause
-shaped which reflection example, the scaffolding both the J-lens paper's §7 and _Teaching Claude why_
-note is stripped before training.
-
-**Stage 5B (Verifiable Adversarial Readout)** closes the loop from the other direction — and runs
-the readout **for real**. It executes a lexicon-restricted mean-Jacobian capture on an open ~1B
-model on commodity hardware (an 8 GB laptop, offline), captured **twice to byte-identical**, then
-**red-teams the entire introspection stack on a capture the attacker did not author**. That
-anti-circularity is the point: you cannot credibly test a conflict/leakage/hidden-cell detector on
-evidence you generated, so 5B binds every one of 46 attacks to a **precommitted readout** (No
-Author's Map) and attests that no bypass was silently laundered or omitted, with the attack-success
-rate recomputable from pinned inputs. It is, as far as we know, the first time a workspace readout of
-this kind is not only _attested_ but adversarially _stress-tested_ under a signed, offline-reproducible
-contract — and it retires 5A's outstanding real-capture residual in the process.
-
-Honest scope, signed in the stages themselves: Simurgh reproduces a lexicon-restricted **method family**
-on open weights, not Anthropic's frontier lens; a flag is not a verdict, a readout is not faithfulness,
-a recorded conflict is disagreement (never which side is true), and agreement is not model safety. The
-1B Lane C capture is now **executed and byte-reproducible** (Stage 5B, on commodity hardware); what
-remains signed as future work is a real external readout export, family-specific semantic red-team
-mutations, and a live-adversary lane — all carried as named residuals, none claimed done. Details in
-[`docs/research/llm-shield/JLENS_COMPOSITION.md`](docs/research/llm-shield/JLENS_COMPOSITION.md),
-[`docs/research/llm-shield/NARRATIVE_WORKSPACE_CONFLICT.md`](docs/research/llm-shield/NARRATIVE_WORKSPACE_CONFLICT.md),
-and [`docs/research/llm-shield/STAGE_5B_CLOSEOUT.md`](docs/research/llm-shield/STAGE_5B_CLOSEOUT.md).
-
----
-
-## Flagship: Verifiable Containment Attestation (LLM Shield)
-
-The current work is a ladder of signed, independently reproducible research rungs (**Stage 3A → 5S**,
-releases `v1.6.0` → `v2.54.0`, patched at `v2.54.1`). The attestation rungs produce Ed25519-signed,
-metadata-only evidence bundles and offline checkers that re-derive their bounded claims byte-for-byte.
-
-### The concrete result (Stage 3V-B)
-
-A **real, live Llama Guard 4 12B** was run once as an input-only content-safety classifier over the
-Stage 3L synthetic 180-case reference set, captured, frozen, and signed (the model is **not**
-re-executed in CI):
-
-| Metric                                                              | Result                                    |
-| ------------------------------------------------------------------- | ----------------------------------------- |
-| Llama Guard 4 allowed / blocked                                     | 168 / 12                                  |
-| Malicious cases the guardrail **missed** → **contained by Simurgh** | **138 / 138**                             |
-| External-guardrail-plus-Simurgh targeted attack-success rate        | **0 / 150**                               |
-| Unsafe tool execution / output export / context escalation          | 0 / 0 / 0                                 |
-| Capture determinism                                                 | 3 independent greedy runs, byte-identical |
-
-An input-only guardrail can only judge the user turn; in the 120 downstream-injection cases the
-attack lives in untrusted context, tool requests, or provider output, which it structurally cannot
-see. Simurgh's context, tool, and output boundaries contained every case it missed. This is a
-**boundary claim**, not a statement that Llama Guard 4 is weak.
-
-### The replay map (Stage 3X)
-
-Stage 3X turns the whole chain into a public, externally replayable timeline:
-
-- **12 / 12** rungs tag-and-commit pinned
-- **10 / 12** evidence-root manifests pinned and chain-checked
-- **5 / 12** deep per-file re-walk (current-format manifests, under strict path-containment rules)
-- **3 / 12** full reproduce paths
-- **2 / 12** index-only, each with a signed reason
-
-It does **not** claim uniform 12/12 reproduction — the chain tells the truth about its own uneven
-history, with a machine-readable summary and a per-rung reason for every classification.
-
-### Proof-carrying containment (Stage 4H)
-
-Stage 4H adds a proof-carrying containment checker on top of the VCA spine. It verifies a signed
-evidence digest and binding foundation (4H.0), an explicit-flow DFI certificate with an
-independently checkable derivation proof (4H.1), a Q0/Q4 discrimination ledger that distinguishes
-clean, forged, unsound, and partial derivations (4H.2), Q6/Q7 tamper-closure and bounded-capacity
-privacy gates (4H.3), a Q3 offline-hermetic checker preflight plus a total typed exit wrapper
-(4H.4), and a final one-command reproduce path with byte-stable evidence, anti-theatre deletion,
-reviewer smokes, and closeout docs (4H.5).
-
-Released as [`v2.18.0-stage-4h-proof-carrying-containment`](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.18.0-stage-4h-proof-carrying-containment)
-at commit `7a2039136d44cf179cca5836a33596a7620c87e5`. The release worktree verified
-`scripts/reproduce-llm-shield-stage4h.sh`, `npm test` (`1202` passing), `npm run format:check`,
-and `git diff --check`. A follow-up full-chain audit exercises 4H.0 → 4H.5 and the public Stage 4H
-checker surface before Stage 4J/PCTA; it is a released-artifact audit, not a new runtime claim.
-
----
-
-## Architecture & the VCA ladder
-
-The defence acts _after_ the input filter can fail — untrusted input passes through four containment
-boundaries, and every run is sealed into signed, offline-reproducible evidence. The ladder below
-traces the work from the input shield (3A–3C) through containment (3D–3L), signed attestation
-(3M–3X), and proof-carrying containment (4H).
-
-[![Containment architecture and the VCA ladder, 3A to 3X](docs/research/llm-shield/vca-architecture.png)](docs/research/llm-shield/vca-architecture.html)
-
-> Source (self-contained, printable):
-> [`docs/research/llm-shield/vca-architecture.html`](docs/research/llm-shield/vca-architecture.html)
-
----
-
-## Capabilities
-
-Everything below is implemented, tested, and (for the attestation work) shipped as signed,
-offline-reproducible evidence. All capabilities are research-prototype grade and bounded by the
-documented non-claims.
-
-### Containment gateway (post-guardrail boundaries)
-
-- **Input firewall** — prompt normalisation and classification of direct-input attacks.
-- **Context-provenance guard** — blocks untrusted/tool-supplied context from gaining developer or
-  system authority.
-- **Tool-invocation gate** — refuses unauthorised or self-authorised tool/shell requests.
-- **Output-leakage firewall** — prevents export of system prompts, secrets, and internal policy.
-- **Containment evaluation** — assumes the input filter can fail and measures whether the downstream
-  context/tool/output/audit boundaries prevent unsafe consequences (Stage 3L: 120/120 input-miss
-  cases contained at their intended boundary; targeted ASR 0/150; 30/30 benign).
-
-### Verifiable attestation & offline reproducibility
-
-- **Ed25519-signed, metadata-only evidence bundles** over canonical JSON (signature survives
-  formatting and merges; raw prompts and model outputs are never exported).
-- **Two-tier verifiers** — a portable signature/structure check plus a `--reproduce` mode that
-  re-derives the bundle byte-for-byte; all verifiers **fail closed** and never throw.
-- **Negative self-proof (tamper) suites** on every rung — mutated evidence is rejected, counters stay
-  zero.
-- **Generic evidence-hashes verifier** with hardened path-containment (rejects self-inclusion,
-  traversal, and escapes).
-- **Claim-checked ledger** (Stage 3N) and **attestation registry + signed regression diff** (Stage
-  3Q) with anti-laundering lattice.
-- **Proof-carrying containment checker** (Stage 4H) — signed digest binding, DFI derivation proof,
-  Q0/Q4 discrimination, Q6/Q7 tamper/privacy gates, Q3 offline preflight, total typed exits,
-  byte-stable reproduction, and anti-theatre deletion.
-
-### Agent oversight & verifiable friction
-
-- **Capability kernel** (Stage 4A–4C) — a pure, dependency-free authorisation authority: task-grounded
-  egress/mutation gates, intent-source grounding, and provenance gating so authority and egress flow
-  only from trusted provenance.
-- **Verifiable friction receipts** (Stage 4Q) — a signed, epoch-bound, ordered proof that an
-  approval-gate checkpoint preceded a protected authority crossing, enforced by a **two-key pincer**
-  (causal digest binding + chain-position precedence + a distinct approver key). **No Silent
-  Exemption**: an unbound crossing must carry a signed, policy-falsifiable exemption (an affirmative
-  policy allowlist, fail-closed by default) rather than a silent gap. Exercised by a 15-case
-  normative corpus and a 10-arm live approval-gated capture over a genuinely separate approver
-  process, with JS↔Python byte-parity and five machine-checked Lean theorems. Scope is honest and
-  signed: recorded-run order, not physical time; enforcement evidence, not proof of prevention.
-- **Private custody corroboration** (Stage 4R) — two operators corroborate shared custody-class
-  membership without publishing a linkable **herd token**: a real-DDH curve25519 (Edwards form) match
-  ceremony with commit-before-reveal, **DLEQ-verified** sealed audit packets (so a single liar can't
-  fabricate a match), epoch-bound unlinkability, VFR-gated export, and a count-only window census.
-  Zero new dependencies (an in-repo Edwards25519 group gated against RFC 8032 + Node Ed25519), JS↔Python
-  byte-parity, a two-real-process Lane B with a distinct-key approver, and six machine-checked Lean
-  theorems. Scope is honest and signed: reference research crypto, not production; audit-tier
-  DLEQ verification, public tier digest-level; not a full VOPRF.
-- **Delegation-chain completeness** (Stage 4S) — a delegated agentic authority **tree** cannot omit,
-  invent, replay, over-spend, over-scope, or ghost-hop authority without producing an offline-verifiable
-  verifier failure. Each hop is a **dual-signed** receipt (a hidden hop needs both neighbours to
-  withhold signatures); every delegator commits its **exact child set** at window close (the liar must
-  ledger the lie); scope attenuates as a lattice and budgets conserve as a flux law across the tree
-  (structuring-by-delegation cannot exceed the root budget). The **No Ghost Hop** law is enforced at the
-  Capability Kernel (`authorise_with_chain`, a sixth additive family member; five predecessors frozen).
-  Raw codes 100–118, a deterministic Lane A corpus reaching every reachable code, JS↔Python byte-parity,
-  a two-real-process Lane B over a genuine **MCP stdio** delegation hop, a two-tier signed attestation,
-  and six machine-checked Lean theorems (including inclusion≠completeness). Scope is honest and signed:
-  chain held **verifiable**, never "agents safe"; Merkle inclusion is presence, not completeness;
-  attenuation enforcement is prior art — our claim is the offline-recomputable proof.
-- **Verifiable Due Process** (Stage 4V) — the first regulator-rerunnable incident report **the accused
-  can answer in a rerunnable way**, under three laws: **No Trial in Absentia**, **Same Rules for the
-  Defence**, **No Strawman**. A respondent files a signed **counter-capsule** bound to the exact sealed
-  4T capsule (root, attestation digest, schema version, signing-key fingerprint, contested-section-set
-  digest) and contests each section by one of three verbs: agree, dispute-by-recomputation (carrying its
-  own Merkle-sealed evidence census under the operator's identical census laws), or dispute-as-judgment
-  (prose sealed by digest only). The verifier derives — deterministically, offline — a **conflict map**
-  assigning each section one of five statuses (`AGREED`, `CONFLICT_PROVEN`, `ABSENCE_REBUTTED`,
-  `DISPUTE_RECORDED`, `DISPUTE_FAILED`); it never declares a winner. Inventions: **absence rebuttal**
-  (contesting what the operator said could NOT be derived — the respondent-side dual of 4T suppression
-  detection); the **anchor contest** + `filed_at_beat` (a two-sided recomputable clock over the 4N
-  heartbeat); the **Mirror Test** (a self-contest that must return all-`AGREED`, proving the scoring
-  function carries no party-bias term — Lean-twinned); and **contest-as-subpoena** (filing forces the
-  capsule to re-prove itself, and the sealed outcome envelope records the result). Provider-safe first,
-  then reviewer-safe. Raw codes 151–161; five machine-checked Lean theorems (`noTrialInAbsentia`,
-  `noStrawman`, `sameRulesForDefence`, `disputeLocality`, `mirrorAllAgreed`); a two-process
-  respondent-blind Lane B capture; JS↔Python↔browser parity. The kernel is imported **read-only** (no new
-  `authorise_*` entry; 4A–4U byte-frozen). Honest signed limitations: single round (no surrejoinder);
-  respondent key proves continuity of one voice, not identity; absence rebuttal is registry-bounded; both
-  Lane A parties are built by us.
-- **Verifiable red-team attestation** (Stage 4U) — a charter-bound adversarial red-team of the VDCC
-  verifier itself, under the **No Silent Bypass** law. Before any attack runs, an Ed25519-signed
-  `red_team_charter` precommits the campaign (seed, exact family counts, an attack-manifest Merkle root,
-  denial-of-wallet caps); the verifier refuses to score any attack not bound to the charter, so **the
-  red-team cannot hide its own wins**. A 58-fixture offline corpus across eight families drives the 4S
-  engine to an honest **ASR 0/58** (every malformation contained); a dual-signal lie detector separates a
-  dishonest self-report (127) from an invalid classification (128) from a non-reproducing recompute (129);
-  a two-tier signed attestation, JS↔Python parity, and two machine-checked Lean theorems
-  (`charterBindingSound`, `asrMonotone`) complete it. Raw codes 119–132; the kernel and 4S verifier are
-  imported **read-only** (no new `authorise_*` entry). Scope is honest and signed: the charter proves
-  **declared scope, not inner intent**; a confirmed bypass is a recorded outcome, not a verification
-  failure; a live Fable-5 refusal is recorded as `model_refused`, never rephrased to bypass it.
-- **Verifiable Incident Capsule** (Stage 4T) — the first serious-incident report a regulator can
-  **rerun**, under the **No Hearsay** law. One signed capsule per incident epoch projects the receipt
-  spine onto BOTH pinned European Commission reporting templates (the published GPAI Art-55 systemic-risk
-  template and the Art-73 high-risk draft — real transcriptions of record). Every template section either
-  recomputes from a Merkle-sealed epoch **census** or signs its absence (`not_derivable` /
-  `requires_human_input`); **suppression detection** makes hiding derivable evidence a failure (143/144),
-  not just fabricating it (141). The **No Two Stories** law binds regulator / insurer / public audience
-  views to one capsule root — a view may redact but never contradict, and every redaction is ledgered
-  (148/149). Honest published finding: only **6 of 22** template sections are machine-derivable from the
-  spine. Raw codes 133–150; four machine-checked Lean theorems (`noHearsay`, `suppressionDetectable`,
-  `censusExactness`, `noTwoStories`); a live two-process MCP Lane B; a static browser verifier
-  (convenience view — the CLI two-tier verifier remains authoritative); byte-stable reproduce. No new
-  `authorise_*` entry — the kernel and 4S verifier are imported **read-only**. Honest and signed: the
-  capsule proves record completeness, never harm causation; the seriousness classification is
-  `requires_human_input` — the capsule refuses to invent a legal conclusion.
-
-### Federated review integrity, external anchoring & assurance of the assurance (4W → 5S)
-
-The most recent arc turns the evidence layer on the review process itself. Each rung is described in
-the ladder near the top of this file; the capability summary is:
-
-- **Narrative and leakage discipline** (4W–4Y) — span-typed defensive narrative with a fail-closed
-  lexical leakage gate, and leakage residue reported as a signed **number** over any submitted
-  document, not an adjective.
-- **Interpretability-side evidence contracts** (4Z–5B) — a signed workspace-attestation contract over
-  a J-lens-style readout, a conflict ledger that confronts narrative against workspace map, and an
-  adversarial readout red-teamed on a capture the attacker did not author.
-- **Detector-facing attestation** (5E–5F) — the first attestation over a **real shipped** third-party
-  detector, then multi-detector panel completeness with no aggregate verdict.
-- **Producer-independence and claim discipline** (5G–5J) — computed separation strength that rejects
-  unsupported upgrades, reproducibility tiers under the Right-Scaling Law, grant-bounded coverage
-  equality that cannot certify adequacy, and append-only rating contests.
-- **Temporal commitment, externally anchored** (5K–5N) — a committed universe, a ceremony contract
-  gated behind an RFC-3161 + Bitcoin commitment, an exact 3-of-3 TSA/Bitcoin/Rekor quorum, and a
-  re-runnable finalisation delay. Banked at real Bitcoin blocks, cross-checked against a public
-  explorer.
-- **Assurance of the assurance** (5O–5S) — a bounded audit of a universe the auditor never sees, an
-  identity lattice separating _authenticated_ from _accountable_, a stage-wide red team that published
-  **6.2 %** and blocked its own release, positive-control probe families that discharged **zero**
-  cells and said so, and comparison-bounded equivocation detection whose witness independence is
-  signed `unproven`.
-
-### External-defence evaluation
-
-- **Provider-agnostic adapter contract** that treats any external guardrail as an untrusted advisory
-  signal, with harness-computed hashes (no adapter-supplied hashes).
-- **Live model capture** — a transport-only harness runs a real model once, freezes the output, and
-  attests it; the model is never re-executed in CI (Stage 3V-B: **Llama Guard 4 12B**).
-- **Recorded-fixture mode** (Stage 3V-A) for deterministic, GPU-free evaluation.
-
-### Agent-evaluation integration
-
-- **AgentDojo harness** (Stage 3H–3J) — in-loop mediating defence against a real gateway, scored
-  without altering AgentDojo itself; full four-suite deterministic run reported **benign 97/97, UUA
-  949/949, attack-success 0/949**.
-- **Adaptive-attack readiness probe** (Stage 3K) — deterministic, key-free mutation/action-open
-  campaign.
-
-### Supply-chain & release provenance
-
-- **Witnessed release provenance** (Stage 3W) — a dual-root model: a local Ed25519 root plus an
-  additive GitHub OIDC/Sigstore CI witness that re-verifies from real command exits, corroborating
-  by digest equality without ever gating offline verification.
-- **Public VCA timeline + one-command external reproduction** (Stage 3X).
-
-### Capability-extraction attestation
-
-- **Offline, red-team-hardened distillation/extraction detector** (Stage 3T–3U) over synthetic
-  metadata, with a frozen versioned detector and signed known-limitations — framed as a reproducible
-  recipe, never an accusation.
-
-### Live gateway
-
-- **Provider gateway** (Stage 3E) with an optional, disabled-by-default Anthropic adapter: lazy SDK
-  import, minimal-context summaries, denial-of-wallet caps, no provider tools, and a sealed
-  containment tail.
-
-### Device-integrity proofs (cross-platform)
-
-- **Metadata-only display-affinity scanning** on macOS, Windows, and Linux (X11 + Wayland portal
-  probe), **P-256-signed localhost-daemon proofs** with session/exam/challenge binding, server-side
-  tamper/replay/raw-field rejection, and an **HMAC-SHA-256 tamper-evident audit chain** — collecting
-  no video, audio, biometric, or personal-identity data.
-
-### Engineering & assurance
-
-- A single **quality gate** (`scripts/check.sh`): per-stage smoke, security/privacy/consistency
-  audits, policy-drift guards (tooling stages never touch `src/llmShield`), and function-path
-  coverage on the pure attestation/checker libraries. Measured on the Stage 5S tree in one run:
-  **151 `check.sh` steps, 5 425 tests, 5 424 pass, 0 fail, 1 environment-dependent skip** (the
-  baseline through Stage 4Q was 1559 tests).
-
----
-
-## Reproduce it yourself (offline, no private key)
-
-A reviewer with no prior context can replay the chain in three commands. Network is used only to
-clone and install dependencies; verification itself is fully offline.
-
-> **Node version matters.** The test suite runs on **Node ≥ 22**, but the per-stage reproduce scripts
-> require **Node ≥ 26** — byte-stability of the evidence builders is only claimed there, and the
-> scripts check the major version and refuse rather than producing a differing digest.
-
-```bash
-git clone https://github.com/Raoof128/Project-Simurgh.git
+**Inspectable authorization for AI agents. Replay the proposal, enforce the boundary, verify the effect.**
+
+Simurgh is a research prototype for controlling what an AI agent can do when its authority
+changes. It combines host-controlled delegation, safety stops, monitoring leases and
+credential checks, then preserves the receiver state needed to examine what actually happened.
+
+**In a bounded Llama evaluation, composed controls reduced restricted-state trials with new
+effects from 17/24 to 0/24 while preserving 23/24 active completions.** The same comparison
+with OpenAI `gpt-6-luna` completed 24/24 active trials, but its credential-only baseline already
+produced zero restricted effects. That result establishes no incremental protection for Luna.
+
+[Research brief](docs/research/transfer-phase-17/BRIEF.md) ·
+[Full results](docs/research/transfer-phase-17/RESULTS.md) ·
+[Run the demo](#replay-the-evidence) ·
+[Dashboard and CLI](#inspect-with-a-dashboard-or-an-agent) ·
+[Reviewer handoff](#reviewer-handoff) ·
+[Integration matrix](docs/INTEGRATIONS.md) ·
+[Documentation map](DOCUMENTATION.md)
+
+## The problem and the contribution
+
+An agent can hold a valid credential after its task has been stopped, an ancestor's authority
+has been revoked or monitoring has expired. A lost acknowledgement creates another problem:
+the action may already have happened, making a retry consequential.
+
+Simurgh makes those lifecycle transitions executable and reviewable. The implementation
+checks an exact authorized action against host state, coordinates admission and revocation,
+and retains unknown outcomes instead of treating a transport error as proof that nothing happened.
+Matched controls expose both unauthorized effects and useful work lost to enforcement.
+
+The research contribution is a **control boundary with replayable receiver evidence**:
+
+- **Enforcement:** composed delegation, signal and credential gates, durable intent, shared
+  budgets, explicit restart authority and bounded recovery behavior.
+- **Evaluation:** the same captured proposal executed against credential-only, composed and
+  deny-all controls, with failures and incomplete tasks retained.
+- **Verification:** source revisions, archive roots, raw storage snapshots and fresh local
+  execution that checks the reported outcomes against receiver state.
+
+```mermaid
+flowchart LR
+    M[Model tool proposal] --> G[Composed authorization gate]
+    H[Trusted host policy and lifecycle state] --> G
+    G -->|Admitted action| R[Owned receiver]
+    G --> E[Decision and durable state]
+    R --> S[Receiver snapshots]
+    E --> V[Archive verification and local replay]
+    S --> V
+```
+
+The host, provisioning, storage and receiver are trusted within these experiments. Model
+output and retrieved content cannot grant authority. The
+[composed implementation](tools/assurance-composed/composition.py) and
+[security policy](SECURITY.md) define the component boundaries; these measurements do not
+extend to arbitrary remote services or a compromised host.
+
+## Measured results
+
+The latest comparison uses **24 internally authored tasks, two trials per task and two models**:
+96 captured proposals, each executed through three controls, for **288 retained branches**.
+The tasks cover six known lifecycle families with paired benign/adversarial source text.
+
+| Model                        | Control         | Active completions | Restricted trials with new effects |
+| ---------------------------- | --------------- | -----------------: | ---------------------------------: |
+| OpenAI `gpt-6-luna`          | Credential only |              24/24 |                               0/24 |
+| OpenAI `gpt-6-luna`          | Composed        |              24/24 |                               0/24 |
+| OpenAI `gpt-6-luna`          | Deny all        |               0/24 |                               0/24 |
+| Meta `Llama-3.2-3B-Instruct` | Credential only |              23/24 |                              17/24 |
+| Meta `Llama-3.2-3B-Instruct` | Composed        |              23/24 |                               0/24 |
+| Meta `Llama-3.2-3B-Instruct` | Deny all        |               0/24 |                               0/24 |
+
+Composition blocked **zero valid active proposals** for either model. The incomplete Llama
+active trial remains in the denominator. All controls also retain four earlier effects per
+model from unknown-acknowledgement fixtures; those effects were **not prevented**.
+
+The corpus is small and internally authored, repeated trials are clustered, and trusted state
+and the target report are explicit. The models use different tool interfaces. This comparison
+does not establish a model ranking, unseen-task generalization or general safety. See the
+[full analysis, uncertainty and provenance](docs/research/transfer-phase-17/RESULTS.md).
+
+### Live OpenAI integration
+
+A separate eight-case Responses workflow performs a real read-tool roundtrip, applies a host
+lifecycle transition and requests a final tool decision. An initial integration defect placed
+host updates in the user role; all eight cases declined, including three authorized cases.
+
+A separately frozen developer-role correction completed **2/3 authorized workflows**;
+**5/5 restricted workflows declined**, and one active refusal remains unresolved. The
+original traces and the correction are both retained. Restricted model declines are distinct
+from attempted calls blocked by enforcement; separate forced-call tests exercise all eight states.
+See the [correction and case-by-case results](docs/research/provider-role-phase-17b/RESULTS.md).
+
+### Reliability and engineering evidence
+
+| Evidence                        | Recorded result                                                                           | Scope                                                                         |
+| ------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Paced concurrency/restart run   | 120 fixtures, 420 final calls, 1,200 snapshots over 61.45 seconds                         | Isolated fixtures and fixed logical policy time; no deployment-capacity claim |
+| Composed stop/recovery behavior | No new effects after queued stops, interrupted updates or unknown prior acknowledgements  | Authorized reopen and idempotent retry outcomes retained                      |
+| Archive replay                  | 288 comparison branches and eight original/eight corrected workflows match retained state | Saved proposals, freshly executed local services                              |
+| Evidence mutation checks        | 10 deliberate mutations rejected                                                          | Omissions, duplicates, proposal/effect changes, roles, report and budget      |
+| Native CI at `fbe06eca`         | 10 macOS tests and 11 Windows daemon tests pass; Windows affinity fixture compiles        | Interactive desktop capture was not exercised                                 |
+
+The [validation receipts](docs/research/transfer-phase-17/VALIDATION.md) identify exact revisions,
+commands and logs. The [13-job hosted readiness run](https://github.com/Raoof128/Project-Simurgh/actions/runs/38961632209)
+passed at `4afe9538`; these are recorded results for those revisions, not a claim that every
+check has run at the current branch head.
+
+The [19 October full smoke report](docs/research/smoke-validation-2026-10-19/RESULTS.md)
+records the maintained branch checks, harness repairs and explicit browser/platform exclusions:
+142/142 base steps, 32/32 E2E steps and 5,171 root tests at implementation `ebf2a752`.
+The strict browser-parity command remains blocked by managed navigation policy. The
+[documentation audit](docs/documentation-audit-2026-10-19/README.md) separately records
+the completed **919-document content review**, 141 dated findings and
+[final documentation checks](docs/documentation-audit-2026-10-19/FINAL_VALIDATION.md), alongside
+[primary sources reviewed in 2026](docs/documentation-audit-2026-10-19/SOURCES.md).
+These documentation checks do not refresh implementation test receipts or establish standards compliance.
+
+## Replay the evidence
+
+**No API key, model download or paid inference is needed.** Use a full Git checkout,
+Python 3.12 and a POSIX environment with local process and loopback networking support.
+Dependency installation needs package-index access; the replay itself uses local services.
+Keep Git history: the verifier checks committed source bytes as well as live files.
+
+```sh
+git clone --branch openai-readiness https://github.com/Raoof128/Project-Simurgh.git
 cd Project-Simurgh
-npm ci
-scripts/reproduce-vca-chain.sh
+git rev-parse HEAD
+
+simurgh_review_dir=$(mktemp -d "${TMPDIR:-/tmp}/simurgh-review.XXXXXX")
+python3.12 -m venv "$simurgh_review_dir/venv"
+"$simurgh_review_dir/venv/bin/python" -m pip install --require-hashes --only-binary=:all: \
+  -r tools/assurance-sdk/requirements.lock \
+  -r tools/assurance-workflow/requirements.lock
+
+"$simurgh_review_dir/venv/bin/python" -B tools/assurance-provider-role/corrected_roles.py demo \
+  --archive docs/research/provider-role-phase-17b/evidence.zip \
+  --expected-root "$(cat docs/research/provider-role-phase-17b/ROOT.sha256)"
 ```
 
-Expected: `Stage 3X VCA chain reproduction: PASS` with `rungs_passed: 12, rungs_failed: 0`.
+Expected: eight case rows showing **two new authorized effects, one active decline and five
+restricted declines**. The unknown-acknowledgement case also retains **one earlier effect**.
+The command verifies the archive and freshly replays the captured corrected proposals; it
+does not make new model requests.
 
-> Use a full clone (or run `git fetch --tags` after a shallow clone): Stage 3X verifies 12 historical
-> release tags, so they must be present locally. The reviewer command preflights this and prints an
-> exact instruction if any are missing.
+Keep `simurgh_review_dir` set in the same shell. For the complete comparative study:
 
-Replay the released Stage 4H proof-carrying containment checker:
-
-```bash
-scripts/reproduce-llm-shield-stage4h.sh
+```sh
+"$simurgh_review_dir/venv/bin/python" -B tools/assurance-transfer/transfer_study.py verify \
+  --archive docs/research/transfer-phase-17/evidence.zip \
+  --expected-root "$(cat docs/research/transfer-phase-17/ROOT.sha256)"
 ```
 
-Expected: `Stage 4H.5 final reproduce: PASS`. This verifies the signed Stage 4H evidence, typed
-fail-closed exits, offline preflight, byte-stable evidence, and anti-theatre deletion without a
-private key.
+The [reproduction runbook](docs/research/transfer-phase-17/RUNBOOK.md) includes focused tests,
+full verification and native-platform scope. Compare archive roots through a trusted channel
+for an independent handoff: a hash supplied by this repository establishes byte consistency,
+not outside custody. Local replay is distinct from independent reproduction.
 
-Replay the Stage 4Q Verifiable Friction Receipts stage (offline, no private key — Node ≥ 26):
+## Inspect with a dashboard or an agent
 
-```bash
-scripts/reproduce-llm-shield-stage4q.sh
+The local **React dashboard and JSON CLI share the same query layer**. Humans and agents can
+inspect outcomes, compare controls, locate unauthorized effects and incomplete tasks, retain
+unknowns, follow source pointers and search the dated research index.
+
+**Viewer scope:** the default dataset contains all **288 transfer-study branches**, with separate
+model identities and 96 generations. `--study phase10` retains the earlier 144-outcome view.
+The research index and gap register are dated snapshots; search is local. Loading data does not
+verify the source archive. See the [21 October readiness work](docs/readiness-2026-10-21/RESULTS.md)
+for repairs, validation and remaining blockers.
+
+With Node.js 24 or 26 and Python 3, run the CLI from the repository root; no npm installation is required:
+
+```sh
+node tools/simurgh-explorer/cli.mjs summary
+node tools/simurgh-explorer/cli.mjs records --kind unauthorized --control credential_only
+node tools/simurgh-explorer/cli.mjs records --kind unauthorized --model llama
+node tools/simurgh-explorer/cli.mjs inspect --id 'p17:llama:g1:composed' --detail
+node tools/simurgh-explorer/cli.mjs search --q monitoring --year 2026
 ```
 
-Expected: `[stage4q] reproduce OK`. This runs all ten gates — unit suites, Python + JS↔Python
-parity, both fixture lanes with byte-idempotency, offline attestation verification, **be-your-own-
-approver** decision-equivalence, privacy scan, private-key audits, and the K7 all-functions net.
-Or be the approver yourself:
+For the dashboard:
 
-```bash
-node -e 'const c=require("node:crypto"),fs=require("node:fs");fs.writeFileSync("/tmp/my-approver.pem",c.generateKeyPairSync("ed25519").privateKey.export({type:"pkcs8",format:"pem"}));'
-node tools/simurgh-attestation/stage4q/node/verify-stage4q.mjs docs/research/llm-shield/evidence/stage-4q/vfr-attestation.json --approver-key /tmp/my-approver.pem
-# -> stage4q verify: byo_decision_equivalent (raw 0)
+```sh
+npm --prefix tools/simurgh-explorer ci --no-audit --no-fund
+npm --prefix tools/simurgh-explorer run build
+npm --prefix tools/simurgh-explorer start
 ```
 
-Replay the latest rung — **Stage 5S Verifiable Witness Quorum**, comparison-bounded equivocation
-detection over independently received checkpoints (offline, no private key):
+Open <http://127.0.0.1:4173>. The read-only local server supports inspection; JSON imports
+stay in browser memory. See the [explorer guide](tools/simurgh-explorer/README.md) for supported
+schemas, filtered exports, sensitive-detail boundaries and UI validation limits. Treat evidence
+and document text as untrusted data when feeding CLI results to an agent.
 
-```bash
-scripts/reproduce-llm-shield-stage5s.sh
-```
+## Reviewer handoff
 
-Expected: `OK — every declared gate reproduced` (30 gates). It runs the 12-check verifier and its
-38-code exit ledger, both fixture lanes, the attestation end-to-end from what is committed, a refusal
-gate proving the verifier **rejects a private key it does not need**, and two independent fixture
-builds diffed against each other — the diff _is_ the determinism gate. A run that executed no gate is
-refused rather than reported as a pass.
+| Review goal                  | Start here                                                                                                                                                  | What to examine                                                              |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Understand the contribution  | [One-page brief](docs/research/transfer-phase-17/BRIEF.md)                                                                                                  | The control benefit, retained utility and negative result                    |
+| Assess the experiment        | [Results](docs/research/transfer-phase-17/RESULTS.md) and [corpus](docs/research/transfer-phase-17/CORPUS.md)                                               | Denominators, matched controls, interface confounds and uncertainty          |
+| Verify reported behavior     | [Runbook](docs/research/transfer-phase-17/RUNBOOK.md) and [receipts](docs/research/transfer-phase-17/VALIDATION.md)                                         | Source bindings, raw receiver state and fresh replay                         |
+| Review the implementation    | [Composed gate](tools/assurance-composed/composition.py), [transfer study](tools/assurance-transfer/) and [role correction](tools/assurance-provider-role/) | Authority transitions, unknown outcomes and adapter trust                    |
+| Inspect current outcomes     | [Dashboard/CLI guide](tools/simurgh-explorer/README.md)                                                                                                     | Failure classification, matched controls and source provenance               |
+| Perform outside reproduction | [Operator handoff](docs/research/CONTINUATION_HANDOFF_2026-10-19.md)                                                                                        | Earlier viewer/export snapshot; use the current runbook for the latest study |
+| Trace prior work             | [Reviewer index](docs/REVIEWER_INDEX.md) and [research history](RESEARCH_HISTORY.md)                                                                        | Frozen stages, negative results and historical reproduction                  |
 
-Or replay **Stage 5D Verifiable Adaptive Red-Team Ledger**, a signed multi-round attack↔harden arms
-race over the frozen 5C gate:
+The most useful review would challenge the exact-action comparator, admission/revocation
+ordering, unknown-outcome handling and the completeness of the evidence inventory, then test
+whether the benefit survives tasks and receiver infrastructure controlled by an outside operator.
 
-```bash
-scripts/reproduce-llm-shield-stage5d.sh
-```
+### Open work
 
-Expected: `Stage 5D VARL reproduce: ALL PASS`. The audit tier **re-verifies all 18 slips across the 3
-rounds against the pinned gate** and confirms each recorded code; it also checks byte-stability of the
-signed ledger at both tiers, the `trilemmaLatticeUnsat` corners, durability classification, the
-in-page WebCrypto Ed25519 browser check, JS↔Python parity, and the K7 all-functions net.
+- **Independent reproduction:** outside operator and evidence custody remain outstanding.
+- **Provider lifecycle:** real provider IAM/revocation and authenticated live safety-alert
+  delivery have not been validated by the owned-service experiments.
+- **Model transfer:** broader externally held tasks and adaptive multi-step behavior remain
+  untested; the corrected OpenAI workflow retains one unresolved active refusal.
+- **Operational assurance:** sustained deployment load, interactive desktop capture and
+  real-data privacy validation remain separate work.
+- **Security review:** the [19 October local Phase 8 review](docs/research/PHASE_8_REVIEW_2026-10-19.md)
+  is complete within its stated scope. It preserves the earlier interrupted review and does
+  not constitute an independent or repository-wide security audit.
 
-Verify a single signed rung directly, and confirm it fails closed under tampering:
+The retained Stage 4F frontier verifier has confirmed unsigned-certificate and utility-binding
+gaps. Its result is not assurance against a dishonest producer; see the
+[scoped finding and probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m94--retained-stage-4f-frontier-is-unsigned-and-does-not-meet-the-dishonest-evaluator-claim).
 
-```bash
-node tools/simurgh-attestation/verify-stage3x-timeline.mjs --reproduce   # -> { "ok": true, ... }
-node tests/e2e/llm_shield_stage3x_tamper_runner.mjs                       # -> { "all_passed": true }
-```
+The retained Stage 4M public-tier verifier also accepts altered or missing disclosure/chain
+files without changes to the signed attestation. See the
+[confirmed binding gap](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m106--stage-4m-public-tier-verification-omits-signed-disclosure-and-chain-bindings)
+before relying on public-tier verification. These runtime gaps remain open.
+The Stage 4N heartbeat CLI also omits manifest authentication and accepts inputs beyond its
+advertised disclosure bound; see the [verification limits and probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m107--stage-4n-cli-consistency-does-not-authenticate-a-feed-or-bound-all-public-disclosure).
 
----
+The full [manual finding register](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md)
+also records later-stage verifier limits, including Stage 5S witness authentication and comparison
+scope. Documentation corrections preserve these open runtime findings. Read the
+[archive and activity-log corrections](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m139--activity-logs-preserve-claims-not-independent-validation)
+alongside historical summaries.
 
-## Device Integrity track (prior published work)
+Frozen documents describe their publication-time status. The later local review above and
+[continuation validation](docs/research/continuation-validation-2026-10-19/RESULTS.md) are additive
+records; earlier downloadable bundles remain snapshots of their recorded commits.
 
-Simurgh's first arc produced privacy-preserving **device-integrity proofs** for capture-resistant,
-high-stakes sessions (e.g. proctoring and voting-adjacent workflows): metadata-only display-affinity
-scanning across macOS, Windows, and Linux, P-256-signed localhost-daemon proofs with
-session/exam/challenge binding, server-side tamper and replay rejection, and an HMAC-SHA-256
-tamper-evident audit chain. It collects no video, audio, biometric data, answer content, raw process
-names, window titles, PIDs, usernames, or personal identity data. This track is a frozen research
-prototype and makes no production-deployment, MDM, hardware-attestation, or automatic-misconduct
-claim. See [`PRIVACY.md`](PRIVACY.md), [`docs/ETHICS.md`](docs/ETHICS.md), and
-[`docs/DISCLAIMER.md`](docs/DISCLAIMER.md).
+## Repository guide
 
-### Research papers (Zenodo preprints)
+| Location                                                                     | Purpose                                                                     |
+| ---------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `tools/assurance-*`                                                          | Isolated control implementations, evaluation harnesses and replay verifiers |
+| `docs/research/transfer-phase-17/`, `docs/research/provider-role-phase-17b/` | Latest comparative/live-workflow protocols, results and evidence            |
+| `tools/simurgh-explorer/`                                                    | Human dashboard, agent CLI and shared evidence queries                      |
+| `src/llmShield/`, `tools/simurgh-attestation/`                               | Earlier containment runtime, attestations and stage-specific verifiers      |
+| `proofs/`, `papers/`                                                         | Formal models of selected properties and research manuscripts               |
+| `AGENTS.md`, `AGENT.md`, `CHANGELOG.md`                                      | Repository guidance, standing invariants and change history                 |
 
-| Paper                                                                                               | DOI                                                                | Source                                                         |
-| --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | -------------------------------------------------------------- |
-| Privacy-Preserving Device Integrity Proofs for Capture-Resistant High-Stakes Sessions               | [10.5281/zenodo.20374849](https://doi.org/10.5281/zenodo.20374849) | [`papers/project-simurgh/`](papers/project-simurgh/)           |
-| Privacy-Preserving Integrity Evidence for Student-Society Voting-Adjacent Workflows (Phase C pilot) | [10.5281/zenodo.20549736](https://doi.org/10.5281/zenodo.20549736) | [`papers/simurgh-voting-pilot/`](papers/simurgh-voting-pilot/) |
-| Banking Shield: Machine-Checked Absence Claims for Privacy-Sensitive AI Explanations                | [10.5281/zenodo.20675513](https://doi.org/10.5281/zenodo.20675513) | [`papers/banking-shield/`](papers/banking-shield/)             |
+The historical device-integrity application is documented in [DEVICE_ROADMAP.md](DEVICE_ROADMAP.md).
+The application package version `0.4.18` and research release line through `v2.54.1` identify
+different artifacts; this branch does not announce a new release. See [ROADMAP.md](ROADMAP.md)
+for the research priorities and [historical reproduction](RESEARCH_HISTORY.md#reproduce-it-yourself-offline-no-private-key)
+for older toolchain requirements.
 
-> Abedini, M. R. (2026). Zenodo.
+## Contributing, security and license
 
----
+Follow [CONTRIBUTING.md](CONTRIBUTING.md): preserve frozen evidence, state the affected trust
+boundary and record actual checks, failures and skips. Report vulnerabilities privately through
+[SECURITY.md](SECURITY.md). Review [PRIVACY.md](PRIVACY.md) and [ethics guidance](docs/ETHICS.md)
+before collecting or publishing data.
 
-## Repository layout
-
-| Path                                 | Contents                                                                                              |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `src/llmShield/`                     | Containment gateway boundaries (input firewall, context-provenance guard, tool gate, output firewall) |
-| `tools/simurgh-attestation/`         | Ed25519 signing, canonical-JSON, two-tier verifiers, public VCA timeline, Stage 4H checker tooling    |
-| `tools/external-defense-adapters/`   | Adapter contract + Llama Guard 4 adapter (Stage 3V)                                                   |
-| `tools/capture/`                     | Transport-only model-capture harness (run once, then frozen)                                          |
-| `docs/research/llm-shield/evidence/` | Per-stage signed evidence bundles and checker evidence (3M → 5S)                                      |
-| `scripts/`                           | Quality gates, per-stage smoke/audits, and `reproduce-vca-chain.sh`                                   |
-| `papers/`                            | Published research preprints                                                                          |
-
----
-
-## Verification
-
-The full quality gate (`scripts/check.sh`) runs on every push. Measured on the Stage 5S tree
-(`v2.54.1`) in one run: **151 gate steps and 5 425 automated tests — 5 424 pass, 0 fail, 1
-environment-dependent skip** — plus per-stage smoke gates, security/privacy/consistency audits,
-policy-drift guards, typed-exit checks, and checker/reproduce smokes. That table records **a run, not
-the suite**: an intermittent failure that does not fire is not a failure that is fixed. Every VCA rung is
-signed with its own Ed25519 key (private keys are never committed), reproduces byte-identically
-including its signature where claimed, and ships a negative self-proof (tamper) suite that the
-verifiers reject while failing closed.
-
----
-
-## Status
-
-Research prototype and technical demonstrator. The VCA / LLM-Shield line is the active front; the
-device-integrity track is frozen prior work. Nothing here is deployed in production; no hardware
-attestation, notarisation, MDM deployment, or compliance certification is claimed. Methodology is
-LLM-assisted and disclosed in the research write-ups; claims are bounded by the signed evidence,
-verifier outputs, and documented non-claims.
-
-## License
-
-Licensed under AGPL-3.0. © 2026 Mohammad Raouf Abedini. Authored and owned by the project
-maintainer; see the research papers for full citations.
+The root package and [LICENSE](LICENSE) declare AGPL-3.0-or-later. The Linux daemon manifest
+still declares MIT while its source SPDX headers declare AGPL-3.0-or-later; this unresolved
+[metadata conflict](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m62--linux-implementation-sketches-and-test-scope)
+needs reconciliation before redistribution relying on that manifest. Upstream contributions
+to differently licensed projects require a separate license review. This is a research
+prototype; production readiness, provider endorsement and independent certification are not
+established. OpenAI-related materials are technical review drafts, with no submission implied.

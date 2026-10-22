@@ -1,0 +1,37 @@
+name: Assurance composed model study
+
+on:
+  push:
+    paths:
+      - ".github/workflows/assurance-model-composed.yml"
+      - "tools/assurance-model-composed/**"
+      - "docs/research/model-composition-phase-10/**"
+  pull_request:
+    paths:
+      - ".github/workflows/assurance-model-composed.yml"
+      - "tools/assurance-model-composed/**"
+      - "docs/research/model-composition-phase-10/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  composed-model:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate composed model evidence
+        run: |
+          python -m pip install --require-hashes --only-binary=:all: -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock
+          python -m pip check
+          python -m unittest discover -s tools/assurance-model-composed/tests -v
+          python tools/assurance-model-composed/evidence.py verify docs/research/model-composition-phase-10/evidence.zip --expected-root "$(cat docs/research/model-composition-phase-10/ROOT.sha256)"

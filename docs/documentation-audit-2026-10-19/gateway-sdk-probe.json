@@ -1,0 +1,28 @@
+{
+  "schema": "simurgh.documentation_probe.v1",
+  "date": "2026-10-19",
+  "scope": "Local SDK with injected fetch implementations; no socket, HTTP server, provider request, real credential or runtime edit. Router risk mapping inspected in source only.",
+  "node": "v24.19.0",
+  "sdk_version": "0.39.0",
+  "retry": {
+    "configured_max_retries": 2,
+    "synthetic_fetch_attempts": 3,
+    "error": "Error"
+  },
+  "adapter_abort": {
+    "error_code": "gateway_provider_error",
+    "latency_bucket": "unknown",
+    "provider_called": true,
+    "network_egress_used": true
+  },
+  "context": {
+    "fictional_source_reproduced_verbatim": true,
+    "summary_count": 1
+  },
+  "source_sha256": {
+    "src/llmShield/gateway/anthropicProviderAdapter.js": "926d5eb11ccaf78e933c732051e2a6239e91c31d991758614c77d35389dc68ef",
+    "src/llmShield/gateway/anthropicMessageBuild.js": "1cde1870a3b41a473ec3b279f2273418fbf508f874bd5df2c3ff4ecc1b0dc952",
+    "src/llmShield/gateway/gatewayRouter.js": "f57a89de5caaccb1211d3fdd5cde141c81a190c1b07675ca8d2d04472215bfcd",
+    "node_modules/@anthropic-ai/sdk/core.mjs": "9dafcf4b6f77d1c73922925256ba3ab830901a7ba16ae3776d421f39cea4658f"
+  }
+}

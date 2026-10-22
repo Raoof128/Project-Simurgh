@@ -1,0 +1,9 @@
+{
+  "tool_definition_rendered": true,
+  "generation_header": true,
+  "assistant_call_parameters_rendered": true,
+  "tool_result_ipython_header": true,
+  "parallel_tool_calls_rejected": true,
+  "validation_scope": "Jinja template rendering only; no model inference or weights downloaded",
+  "date_utc": "2026-10-15T05:22:52.623197+00:00"
+}

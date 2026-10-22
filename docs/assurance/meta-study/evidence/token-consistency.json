@@ -1,0 +1,10 @@
+{
+  "capture_sha256": "ad686cfeaf4825374a9294abfc0e3fbf721f6f614be0ab0a9c2b42dc721191f9",
+  "generated_rows_checked": 144,
+  "checks": [
+    "prompt to input token IDs",
+    "input IDs to rendered prompt",
+    "output IDs to completion"
+  ],
+  "scope": "same installed local tokenizer; consistency check, not independent generation attestation"
+}

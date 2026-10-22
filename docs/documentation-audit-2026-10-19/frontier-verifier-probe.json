@@ -1,0 +1,58 @@
+{
+  "schema": "simurgh.documentation_audit.stage4f_verifier_probe.v1",
+  "date": "2026-10-19",
+  "node": "v24.19.0",
+  "scope": "Direct Stage 4F verifier against public canary and disposable copies. Public-key and signed per-cell pack bytes unchanged. No key read, signing, model, network or release-harness execution. Does not claim acceptance by a golden-byte comparison harness.",
+  "source_sha256": {
+    "tools/simurgh-attestation/stage4f/verifyFrontier.mjs": "12adb4d8a5d90ede3443e27a8c5aa57c7f9b00fb1df9837ae2bac2a4d1ef8a4e",
+    "tools/simurgh-attestation/stage4f/stage4fDemo.mjs": "e4f7eba46adc1b0815366f2f3647c966575a4c83731a55015f8b2ccf0bd4bcd3",
+    "tools/simurgh-attestation/stage4f/metrics.mjs": "e0f7bdea72314135b1c3392003e9b455a2e8008c789d430a27e5fe11afcc688e"
+  },
+  "results": {
+    "baseline": {
+      "ok": true,
+      "exit_code": 0,
+      "verifier_version": "simurgh.stage4f.verify_frontier.v1",
+      "failed_layer": null,
+      "first_failure": null
+    },
+    "edited_certificate_with_recomputed_public_digest": {
+      "ok": true,
+      "exit_code": 0,
+      "verifier_version": "simurgh.stage4f.verify_frontier.v1",
+      "failed_layer": null,
+      "first_failure": null
+    },
+    "external_suite_fixture_hash_changed_without_updating_suite_hash": {
+      "ok": true,
+      "exit_code": 0,
+      "verifier_version": "simurgh.stage4f.verify_frontier.v1",
+      "failed_layer": null,
+      "first_failure": null
+    },
+    "changed_benign_utility_with_recomputed_unsigned_metadata": {
+      "edited_cells": 12,
+      "benign_utility_by_point": [
+        {
+          "point_id": "P0",
+          "benign_utility": 0
+        },
+        {
+          "point_id": "P2",
+          "benign_utility": 0
+        },
+        {
+          "point_id": "P4",
+          "benign_utility": 0
+        }
+      ],
+      "verification": {
+        "ok": true,
+        "exit_code": 0,
+        "verifier_version": "simurgh.stage4f.verify_frontier.v1",
+        "failed_layer": null,
+        "first_failure": null
+      }
+    }
+  }
+}

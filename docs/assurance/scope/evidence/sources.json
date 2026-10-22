@@ -1,0 +1,138 @@
+{
+  "reviewed_utc_date": "2026-10-15",
+  "scope": "Public source review; attributed claims; raw pages not bundled",
+  "sources": [
+    {
+      "id": "openai_hf",
+      "requested_url": "https://openai.com/index/hugging-face-incident-and-the-road-ahead/",
+      "effective_url": "https://openai.com/index/hugging-face-incident-and-the-road-ahead/",
+      "http_status": 200,
+      "curl_exit": 0,
+      "retrieved_utc": "2026-10-15T02:02:05.542653+00:00",
+      "sha256": "dcadca1af90f9f1b27f67145ef4f3803daa79551430f22549e15d42cc6a1a366",
+      "text_chars": 42838,
+      "review_note": "Developer primary account; coordination, indirect egress, monitoring and stopping. Not independent verification."
+    },
+    {
+      "id": "hf_victim",
+      "requested_url": "https://huggingface.co/blog/agent-intrusion-technical-timeline",
+      "effective_url": "https://huggingface.co/blog/agent-intrusion-technical-timeline",
+      "http_status": 200,
+      "curl_exit": 0,
+      "retrieved_utc": "2026-10-15T02:06:46.190541+00:00",
+      "sha256": "3015f70643795972f1f3d88ae14de58f2cb26ac43bdf238626415dc7dc1f6803",
+      "text_chars": 55429,
+      "review_note": "Victim primary technical timeline; intrusion and remediation account; inferred motivation differs from METR."
+    },
+    {
+      "id": "metr_hf",
+      "requested_url": "https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/",
+      "effective_url": "https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/",
+      "http_status": 200,
+      "curl_exit": 0,
+      "retrieved_utc": "2026-10-15T02:03:00.584428+00:00",
+      "sha256": "b48f1f528afca52f91fa868bdd9bfabc57b50f41e54b36ea53500f9c21fc6047",
+      "text_chars": 209088,
+      "review_note": "Independent scoped investigation of model coordination/behavior; did not evaluate remediation effectiveness."
+    },
+    {
+      "id": "openai_australia",
+      "requested_url": "https://openai.com/index/how-we-will-do-better-for-australia/",
+      "effective_url": "https://openai.com/index/how-we-will-do-better-for-australia/",
+      "http_status": 200,
+      "curl_exit": 0,
+      "retrieved_utc": "2026-10-15T02:04:47.746621+00:00",
+      "sha256": "94886d5a17ce781a21292d6a3d41e930fd47fe0ecd428fa888bbb943e8c680b7",
+      "text_chars": 13574,
+      "review_note": "Developer primary account of Medicare and other Australian activities; patient-record and AIHW statements attributed to OpenAI."
+    },
+    {
+      "id": "openai_dns",
+      "requested_url": "https://alignment.openai.com/misalignment-reports/an-agent-used-dns-to-reach-an-external-chatbot/",
+      "effective_url": "https://alignment.openai.com/misalignment-reports/an-agent-used-dns-to-reach-an-external-chatbot/",
+      "http_status": 200,
+      "curl_exit": 0,
+      "retrieved_utc": "2026-10-15T02:06:44.974331+00:00",
+      "sha256": "ed00ade83afc538b3782fbb63e5705aa7846f12941b775a1ae99b5284e219e64",
+      "text_chars": 11826,
+      "review_note": "DNS filtering gap and layered remediation; broker tests do not establish DNS containment."
+    },
+    {
+      "id": "openai_thirdparty",
+      "requested_url": "https://openai.com/index/third-party-cyber-evaluations-involving-openai-models/",
+      "effective_url": "https://openai.com/index/third-party-cyber-evaluations-involving-openai-models/",
+      "http_status": 200,
+      "curl_exit": 0,
+      "retrieved_utc": "2026-10-15T02:06:45.655677+00:00",
+      "sha256": "09e6a6ec7a23d018082cf59eb036793d8031e2378f5ed7eed3c987cdbb9dd722",
+      "text_chars": 10325,
+      "review_note": "Scope, credential handling, isolation and third-party evaluation failures."
+    },
+    {
+      "id": "openai_reset",
+      "requested_url": "https://alignment.openai.com/misalignment-reports/damaging-the-task-environment-to-trigger-a-reset/",
+      "effective_url": "https://alignment.openai.com/misalignment-reports/damaging-the-task-environment-to-trigger-a-reset/",
+      "http_status": 200,
+      "curl_exit": 0,
+      "retrieved_utc": "2026-10-15T02:12:15.224452+00:00",
+      "sha256": "abd29c82b959b5d3fa5dac30d4f406aa5d25e7017b35db2bea11aab95da20da5",
+      "text_chars": 10992,
+      "review_note": "9 October report; missing inputs, fabricated assessments and environment damage."
+    },
+    {
+      "id": "openai_statistics",
+      "requested_url": "https://alignment.openai.com/misalignment-reports/obtaining-public-statistics-with-disallowed-requests/",
+      "effective_url": "https://alignment.openai.com/misalignment-reports/obtaining-public-statistics-with-disallowed-requests/",
+      "http_status": 200,
+      "curl_exit": 0,
+      "retrieved_utc": "2026-10-15T02:12:15.061177+00:00",
+      "sha256": "bcde1e8d1673bff5549c6c307969e0b1ada14e66baa6073ddccc6ff9910d5e45",
+      "text_chars": 16858,
+      "review_note": "9 October report; prohibited methods for public statistics; names/currencies/numbers explicitly fictionalized."
+    },
+    {
+      "id": "openai_compaction",
+      "requested_url": "https://alignment.openai.com/misalignment-reports/self-generated-prompt-injections-in-compaction-summaries/",
+      "effective_url": "https://alignment.openai.com/misalignment-reports/self-generated-prompt-injections-in-compaction-summaries/",
+      "http_status": 200,
+      "curl_exit": 0,
+      "retrieved_utc": "2026-10-15T02:12:15.045135+00:00",
+      "sha256": "49c19d2b83f5b8739c30a78768aa996d00b3445afda486780dc8f36b14f4c397",
+      "text_chars": 9397,
+      "review_note": "Unauthorized instructions in summaries in an internal training run; no universal deployed-model claim."
+    },
+    {
+      "id": "openai_injection",
+      "requested_url": "https://openai.com/index/designing-agents-to-resist-prompt-injection/",
+      "effective_url": "https://openai.com/index/designing-agents-to-resist-prompt-injection/",
+      "http_status": 200,
+      "curl_exit": 0,
+      "retrieved_utc": "2026-10-15T02:02:04.220656+00:00",
+      "sha256": "a14e2ef7c212d248f0f4932f6cbd40de09c9cda83b76f83260fa389487e67005",
+      "text_chars": 11027,
+      "review_note": "Agent application design against prompt injection and unauthorized information transmission."
+    },
+    {
+      "id": "openai_distillation",
+      "requested_url": "https://openai.com/index/disrupting-a-coordinated-model-distillation-campaign/",
+      "effective_url": "https://openai.com/index/disrupting-a-coordinated-model-distillation-campaign/",
+      "http_status": 200,
+      "curl_exit": 0,
+      "retrieved_utc": "2026-10-15T02:02:05.982983+00:00",
+      "sha256": "8975484240473e486e56a147b657c1602317bebc1c0c7450a718059123b7c6c8",
+      "text_chars": 7689,
+      "review_note": "Coordinated cross-session protected-reasoning extraction; outside the implemented broker contract."
+    },
+    {
+      "id": "openai_factory",
+      "requested_url": "https://openai.com/the-defense-factory",
+      "effective_url": "https://openai.com/the-defense-factory/",
+      "http_status": 200,
+      "curl_exit": 0,
+      "retrieved_utc": "2026-10-15T02:02:03.629560+00:00",
+      "sha256": "e8bb86f1f5a1208b0075a88bb0dafd1a66f61571e1cc44dd546247dd3250454c",
+      "text_chars": 21903,
+      "review_note": "Continuous find/validate/fix/review and isolated validation; not customer demand evidence."
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "schema": "simurgh.readiness.inference-retry.v1",
+  "declaration": {
+    "authorized_by": "Owner: try now",
+    "declared_at_utc": "2026-10-21T00:13:13.880308+00:00",
+    "protocol": "docs/readiness-2026-10-21/REFUSAL_PROTOCOL.md",
+    "model": "gpt-6-luna",
+    "maximum_attempts": 4,
+    "maximum_reserved_usd": 1,
+    "stop_on_first_api_error": true,
+    "output": "refusal-retry-2"
+  },
+  "source_commit": "6bd4b2f5a8b05b50379a3b9d571c4e7ab0bcf81d",
+  "attempts": 1,
+  "http_status": 401,
+  "model_observations": 0,
+  "stopped_on_first_api_error": true,
+  "platform_connector": "UNAUTHORIZED: connection requires reauthentication",
+  "forced_controls": [
+    {
+      "case": "active",
+      "status": "observed",
+      "new_effects": 1,
+      "prior_effects": 0
+    },
+    {
+      "case": "authorized_reopen",
+      "status": "observed",
+      "new_effects": 1,
+      "prior_effects": 0
+    },
+    {
+      "case": "ancestor_revoke",
+      "status": "blocked",
+      "new_effects": 0,
+      "prior_effects": 0
+    },
+    {
+      "case": "signal_stop",
+      "status": "blocked",
+      "new_effects": 0,
+      "prior_effects": 0
+    },
+    {
+      "case": "unknown_prior",
+      "status": "blocked",
+      "new_effects": 0,
+      "prior_effects": 1
+    },
+    {
+      "case": "monitor_expired",
+      "status": "blocked",
+      "new_effects": 0,
+      "prior_effects": 0
+    },
+    {
+      "case": "interrupted_update",
+      "status": "blocked",
+      "new_effects": 0,
+      "prior_effects": 0
+    },
+    {
+      "case": "operator_restart",
+      "status": "observed",
+      "new_effects": 1,
+      "prior_effects": 0
+    }
+  ],
+  "raw_results_sha256": "93c5ed2f196e9e55acfb69bf4d94cb3d2668884137427c8ca615687e6b5c7d67"
+}

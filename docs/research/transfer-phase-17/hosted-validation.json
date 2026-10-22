@@ -1,0 +1,93 @@
+{
+  "schema": "simurgh-transfer-hosted-validation-v1",
+  "source_commit": "4afe9538a080991b32b5fd038580b06cfe835fd8",
+  "run_url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/38961632209",
+  "run_id": 38961632209,
+  "conclusion": "success",
+  "jobs": [
+    {
+      "name": "meta-study-replay",
+      "conclusion": "success",
+      "startedAt": "2026-10-16T20:21:24Z",
+      "completedAt": "2026-10-16T20:23:18Z"
+    },
+    {
+      "name": "workflow-recovery",
+      "conclusion": "success",
+      "startedAt": "2026-10-16T20:21:25Z",
+      "completedAt": "2026-10-16T20:39:50Z"
+    },
+    {
+      "name": "luna-comparison-replay",
+      "conclusion": "success",
+      "startedAt": "2026-10-16T20:21:25Z",
+      "completedAt": "2026-10-16T20:23:27Z"
+    },
+    {
+      "name": "descriptor-isolation",
+      "conclusion": "success",
+      "startedAt": "2026-10-16T20:21:25Z",
+      "completedAt": "2026-10-16T20:22:04Z"
+    },
+    {
+      "name": "local-meta-replay",
+      "conclusion": "success",
+      "startedAt": "2026-10-16T20:21:24Z",
+      "completedAt": "2026-10-16T20:21:33Z"
+    },
+    {
+      "name": "safety-study-replay",
+      "conclusion": "success",
+      "startedAt": "2026-10-16T20:21:25Z",
+      "completedAt": "2026-10-16T20:26:56Z"
+    },
+    {
+      "name": "sdk",
+      "conclusion": "success",
+      "startedAt": "2026-10-16T20:21:25Z",
+      "completedAt": "2026-10-16T20:24:51Z"
+    },
+    {
+      "name": "luna-native-replay",
+      "conclusion": "success",
+      "startedAt": "2026-10-16T20:21:25Z",
+      "completedAt": "2026-10-16T20:23:51Z"
+    },
+    {
+      "name": "hf-incident-replay",
+      "conclusion": "success",
+      "startedAt": "2026-10-16T20:21:24Z",
+      "completedAt": "2026-10-16T20:21:42Z"
+    },
+    {
+      "name": "incident-scope",
+      "conclusion": "success",
+      "startedAt": "2026-10-16T20:21:25Z",
+      "completedAt": "2026-10-16T20:21:55Z"
+    },
+    {
+      "name": "hf-containment-replay",
+      "conclusion": "success",
+      "startedAt": "2026-10-16T20:21:25Z",
+      "completedAt": "2026-10-16T20:22:11Z"
+    },
+    {
+      "name": "kernel-egress",
+      "conclusion": "success",
+      "startedAt": "2026-10-16T20:21:24Z",
+      "completedAt": "2026-10-16T20:22:02Z"
+    },
+    {
+      "name": "offline",
+      "conclusion": "success",
+      "startedAt": "2026-10-16T20:21:25Z",
+      "completedAt": "2026-10-16T20:21:55Z"
+    }
+  ],
+  "logs": {
+    "hosted-final.json": "aacbef3f1f625c41ae36ee97ec1a492ba80d8e84d6f6e9203853ee75bf5d9d55",
+    "hosted-final.log": "cc6413f6b0ee0a4689e1b921d587fe03bfe33a83935caffd82e144da21e22aec"
+  },
+  "archive_sha256": "4f20a80c3f3ccc0d69535b26ba2f43882344c8bdcb8f6797bbfe1edfabf1510f",
+  "scope": "Project-operated existing readiness workflow at the original implementation freeze; not independent reproduction or a complete security review."
+}

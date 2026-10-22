@@ -1,0 +1,45 @@
+{
+  "retrieved_utc": "2026-10-16",
+  "sources": [
+    {
+      "name": "function-calling",
+      "url": "https://developers.openai.com/api/docs/guides/function-calling",
+      "final_url": "https://developers.openai.com/api/docs/guides/function-calling",
+      "http_status": 200,
+      "sha256": "d412beb0e24acc7277dc9e33e42cb73e2abdefc458546876758c3c8c006bf737",
+      "bytes": 1478345
+    },
+    {
+      "name": "model",
+      "url": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+      "final_url": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+      "http_status": 200,
+      "sha256": "03453d6c15dc37351f0f57f82d34b7d8fcd77486430d183f5c459479685c12c3",
+      "bytes": 451887
+    },
+    {
+      "name": "pricing",
+      "url": "https://developers.openai.com/api/docs/pricing",
+      "final_url": "https://developers.openai.com/api/docs/pricing",
+      "http_status": 200,
+      "sha256": "a1782b03e928d00172fa0da621b8faf831a5cea8af9d35ccec07fff4d0d1f550",
+      "bytes": 600265
+    },
+    {
+      "name": "agent-safety",
+      "url": "https://developers.openai.com/api/docs/guides/agent-builder-safety",
+      "final_url": "https://developers.openai.com/api/docs/guides/agent-builder-safety",
+      "http_status": 200,
+      "sha256": "dd9253b6d2ebccbc6abcb4d116e5320227ed3a77460924ce6c8dd1618d64d2b5",
+      "bytes": 385193
+    },
+    {
+      "name": "evals",
+      "url": "https://developers.openai.com/api/docs/guides/evaluation-best-practices",
+      "final_url": "https://developers.openai.com/api/docs/guides/evaluation-best-practices",
+      "http_status": 200,
+      "sha256": "01857b85d53b463c4770f4beb8d0934dff99c4a153acd728dcdd3d72523e22e3",
+      "bytes": 444472
+    }
+  ]
+}

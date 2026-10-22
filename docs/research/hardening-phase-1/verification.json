@@ -1,0 +1,76 @@
+{
+  "schema": "simurgh-hardening-verification-v1",
+  "baseline_commit": "bdb737fd932ef44b2730337cbb1f5acf06cbc994",
+  "scope_commit": "f86f7723",
+  "date_utc": "2026-10-15",
+  "python": "3.12.14",
+  "node": "v24.19.0",
+  "npm_suite": {
+    "passed": 5122,
+    "failed": 0,
+    "skipped": 3,
+    "command": "PYTHONDONTWRITEBYTECODE=1 npm test",
+    "skips": [
+      "\ufe63 PARITY \u2014 a REAL headless browser reproduces every value byte for byte (0.308264ms) # no Chrome present \u2014 the browser lane is SKIPPED, not assumed",
+      "\ufe63 [5s-t26] the proof TYPE-CHECKS (0.085068ms) # lean is not on PATH \u2014 enforced by the CI jobs that install elan",
+      "\ufe63 [5s-t26] the repo-wide gate passes, and counts this directory (0.069885ms) # lean is not on PATH \u2014 enforced by the CI jobs that install elan"
+    ]
+  },
+  "successor_tests": {
+    "passed": 17,
+    "failed": 0,
+    "command": "PYTHONDONTWRITEBYTECODE=1 python -m unittest discover -s tools/assurance-hardening/tests -v"
+  },
+  "server_tests": {
+    "passed": 7,
+    "failed": 0,
+    "included_in_npm_suite": true,
+    "command": "node --test tests/unit/securityHardening.test.js"
+  },
+  "historical_focused_tests": {
+    "hf_containment": 13,
+    "hf_native": 2,
+    "failed": 0
+  },
+  "demonstration": {
+    "checks": 15,
+    "passed": 15,
+    "report_sha256": "fc0f705d024035bb97e3c9276d2999ac35cb3273d59e248a6cfa7b20a657dff8",
+    "fresh_replay": "passed"
+  },
+  "frozen_input_hashes": {
+    "safety-study": 94,
+    "hf-incident": 19,
+    "hf-containment": 27,
+    "hf-native": 34,
+    "all_match": true
+  },
+  "workflow_census": {
+    "current_identities": 39,
+    "baseline_unchanged": true,
+    "reclassification": "One existing step changed reason under the coarse parser; current set re-derived under its maintenance contract."
+  },
+  "review": {
+    "kind": "fresh read-only agent, not independent external audit",
+    "findings": [
+      "Repeated-slash session-auth bypass",
+      "Mutable direct-call request changes after authorization"
+    ],
+    "both_reproduced_red_then_green": true
+  },
+  "initial_failures": [
+    "Three server regressions failed before implementation",
+    "Successor tests failed before implementation existed",
+    "First full npm suite: one workflow census classification mismatch",
+    "Both fresh-review findings reproduced before final fixes"
+  ],
+  "limitations": [
+    "No paid inference or external target testing",
+    "No native-device validation",
+    "No new held-out model evaluation or independent operator receipt",
+    "Strict Stage 5L wrapper validated with injected command fixtures; historical Lean proofs not executed",
+    "SQLite transaction rollback tested; no new process-crash or power-loss study",
+    "Legacy quota implementation and frozen adapters remain unchanged"
+  ],
+  "hosted_ci": "pending after publication; consult the exact pushed revision in Actions"
+}

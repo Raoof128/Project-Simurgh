@@ -16,27 +16,12 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-PIN=docs/research/llm-shield/evidence/stage-5s/prior-reproduce-set.json
+# Phase 16 current inventory extends, and hash-binds, the historical Stage 5S pin.
 SELF=reproduce-llm-shield-stage5s.sh
-
-# `mapfile` is bash 4+; macOS ships 3.2 and the first version of this script died on line 22 having
-# run NOTHING. A sweep that cannot start must not look like a sweep that found nothing wrong, which
-# is why the anti-vacuity check at the end exists — it would have caught this even if the shell had
-# carried on.
 DISCOVERED_FILE=$(mktemp)
-PINNED_FILE=$(mktemp)
-trap 'rm -f "$DISCOVERED_FILE" "$PINNED_FILE"' EXIT
-
-(cd scripts && ls reproduce-*.sh 2>/dev/null | grep -v "^${SELF}$" | sort) > "$DISCOVERED_FILE"
-node -e 'JSON.parse(require("fs").readFileSync(process.argv[1],"utf8")).scripts.forEach(s=>console.log(s))' "$PIN" | sort > "$PINNED_FILE"
-
-ADDED=$(comm -13 "$PINNED_FILE" "$DISCOVERED_FILE" || true)
-REMOVED=$(comm -23 "$PINNED_FILE" "$DISCOVERED_FILE" || true)
-
-if [ -n "$ADDED" ] || [ -n "$REMOVED" ]; then
+trap 'rm -f "$DISCOVERED_FILE"' EXIT
+if ! node scripts/lib/currentReproduceSet.mjs > "$DISCOVERED_FILE"; then
   printf 'REFUSED — the prior set drifted from its pin\n'
-  [ -n "$ADDED" ]   && printf 'added:\n%s\n' "$ADDED"
-  [ -n "$REMOVED" ] && printf 'removed:\n%s\n' "$REMOVED"
   exit 1
 fi
 

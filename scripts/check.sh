@@ -102,16 +102,18 @@ run_step() {
   local command="$2"
   local log_file="$LOG_DIR/${name// /_}.log"
 
+  # Preserve the validation job's selected Node, Python and Lean executables.
+  # Login profiles can replace PATH and silently select a different toolchain.
   if [[ "$VERBOSE" == true ]]; then
     echo -e "${YELLOW}$command${NC}"
-    if bash -lc "$command" 2>&1 | tee "$log_file"; then
+    if bash -c "$command" 2>&1 | tee "$log_file"; then
       pass "$name"
     else
       fail "$name"
       echo -e "${YELLOW}Log: $log_file${NC}"
     fi
   else
-    if bash -lc "$command" > "$log_file" 2>&1; then
+    if bash -c "$command" > "$log_file" 2>&1; then
       pass "$name"
     else
       fail "$name"
@@ -282,6 +284,7 @@ if grep -RIEn \
   | grep -v "\.example:" \
   | grep -v "sk-ant-\\.\\.\\." \
   | grep -v "openssl rand" \
+  | grep -vE '^tools/(openai-native/tests/test_native|openai-comparison/tests/test_comparison)\.py:[0-9]+:[[:space:]]*key = "sk-test-secret-never-log"$' \
   >> "$SECRET_LOG"; then : ; fi
 
 # Detect SIMURGH_*_SECRET= or SIMURGH_INSTRUCTOR_TOKEN= with a non-empty,

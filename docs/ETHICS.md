@@ -2,30 +2,37 @@
 
 Project Simurgh is built on the principle that **integrity verification must not become surveillance**.
 
+This statement primarily describes the historical academic/device workflow. The current research
+track also studies agent authorization and evidence; its synthetic evaluation, optional live API
+transport and publication limits are documented in [PRIVACY.md](../PRIVACY.md) and the
+[current reviewer index](REVIEWER_INDEX.md).
+
 ---
 
 ## Core Commitments
 
 ### 1. No Automatic Misconduct Findings
 
-Simurgh produces risk scores and event timelines. It **never** automatically accuses, flags, or penalises a student. Every anomaly recommendation requires a human reviewer who applies institutional judgment and due process.
+Simurgh produces risk scores and event timelines. It emits review flags, but does not make automatic misconduct findings or impose penalties. Every anomaly recommendation requires a human reviewer who applies institutional judgment and due process.
 
-The system output language enforces this:
-
-> "Manual review recommended. No automatic misconduct finding."
-
-This wording is hard-coded into the scoring module and cannot be changed through configuration.
+The scoring module emits “Manual review recommended. No automatic misconduct finding.” for
+Warning and “Manual review required. No automatic misconduct finding.” for Critical. These
+messages are implemented in [`src/academic/riskScoring.js`](../src/academic/riskScoring.js).
 
 ### 2. Metadata Only
 
-Simurgh verifies behavioural integrity without ever seeing content. It does not capture:
+The academic/device collection policy excludes answer and media content. Its intended exclusions
+are listed below; the [privacy policy](../PRIVACY.md) separately records the confirmed legacy-helper
+identifier and local pixel-sampling exceptions. The policy excludes:
 
 - What a student typed
 - What a student pasted
 - What was on their screen
 - Their face, voice, or body
 
-This is not a limitation — it is a deliberate design choice. The research underpinning this project (_The Invisible Window_, Abedini 2026) demonstrates that screen-based surveillance is structurally unreliable on modern operating systems. Behavioural metadata is both more privacy-preserving and more tamper-resistant.
+This data-minimisation choice limits collection but does not make client metadata trustworthy.
+The underlying display-fidelity research identifies ways screen capture can omit what an operator
+sees. Metadata signals also have blind spots and can be forged by a compromised endpoint.
 
 ### 3. Transparency to Examinees
 
@@ -35,7 +42,10 @@ The student exam page displays a privacy notice on load that must be acknowledge
 - What is not monitored (screen, camera, audio, content)
 - How risk scores are used (human review trigger, not automatic finding)
 
-Students must actively consent before the session starts.
+For joined exam sessions, the server requires the privacy-accepted lifecycle state before
+starting the exam. Anonymous demo sessions dismiss the notice client-side and do not establish
+a server-recorded consent event. A notice acknowledgment alone does not establish freely given
+consent or an institution's legal basis for collecting data.
 
 ### 4. Explainable Scores
 
@@ -45,7 +55,11 @@ When Claude provides narrative reasoning, its source is explicitly labelled in t
 
 ### 5. Tamper-Evident Audit Chain
 
-The HMAC-SHA256 audit chain ensures that the record of what Simurgh observed cannot be altered after the fact — by the system operator, the institution, or anyone else. Students have the same chain they can request for review.
+The HMAC-SHA256 audit chain detects changes relative to a trusted key and retained chain state.
+An operator holding the HMAC key can recompute a modified chain, so this mechanism alone does not
+prove an immutable history against that operator. Independent custody or externally retained
+commitments are needed for a stronger claim. Institutions should provide an accessible review
+and contest process for affected students.
 
 ### 6. Proportionality
 

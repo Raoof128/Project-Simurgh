@@ -1,0 +1,342 @@
+{
+  ".github/pull_request_template.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D13"]
+  },
+  "AGENT.md": {
+    "scope": "standing_rules_and_recent_entries_reviewed_plus_full_text_scan",
+    "note": "Standing invariants and relevant recent entries read; entire long log scanned. Append-only history preserved; not a full semantic rereview of every historical entry.",
+    "errata": ["D13"]
+  },
+  "AGENTS.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Current documentation routes and full-path phase naming; preserve standing gate rules.",
+    "errata": ["D13"]
+  },
+  "CHANGELOG.md": {
+    "scope": "standing_rules_and_recent_entries_reviewed_plus_full_text_scan",
+    "note": "Standing invariants and relevant recent entries read; entire long log scanned. Append-only history preserved; not a full semantic rereview of every historical entry.",
+    "errata": ["D13"]
+  },
+  "CONTRIBUTING.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Runtime matrix, fresh-output examples, targeted formatting and explicit full-E2E scope.",
+    "errata": ["D01"]
+  },
+  "DEVICE_ROADMAP.md": {
+    "scope": "byte_preservation_and_full_text_scan",
+    "note": "Exact archival copy; unchanged byte digest required. Dated scores, status and future-work language remain historical.",
+    "errata": ["D13"]
+  },
+  "PRIVACY.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Separate synthetic archives, explorer detail/downloads, historical server retention and helper capture/identifier exception.",
+    "errata": ["D04", "D06"]
+  },
+  "README.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Add integration/documentation routes and source-scoped latest smoke summary.",
+    "errata": ["D01", "D12"]
+  },
+  "RESEARCH_HISTORY.md": {
+    "scope": "byte_preservation_and_full_text_scan",
+    "note": "Exact archival copy; unchanged byte digest required. Dated scores, status and future-work language remain historical.",
+    "errata": ["D13"]
+  },
+  "ROADMAP.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Replace stale chronological status with completed evidence and named remaining acceptance conditions.",
+    "errata": ["D01", "D03", "D04"]
+  },
+  "SECURITY.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Correct branch, helper identifiers/capture behavior, retired route and current integration boundaries.",
+    "errata": ["D06", "D09"]
+  },
+  "docs/DEVICE_SHIELD_CONTRACT.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D07"]
+  },
+  "docs/DEVICE_SHIELD_PLATFORM_MATRIX.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D07"]
+  },
+  "docs/DISCLAIMER.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D15"]
+  },
+  "docs/ETHICS.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Distinguish review flags from automatic misconduct findings.",
+    "errata": ["D06"]
+  },
+  "docs/REVIEWER_INDEX.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Route all research families; distinguish 144/288 datasets, local review and exact validation revisions.",
+    "errata": ["D01", "D02", "D03", "D12"]
+  },
+  "docs/assurance/meta-study/README.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D03"]
+  },
+  "docs/assurance/meta/README.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D03", "D13"]
+  },
+  "docs/openai/APPLICATION_CHECKLIST.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Name later live evidence; preserve owner decisions and dated form requirements.",
+    "errata": ["D10", "D15"]
+  },
+  "docs/openai/CLAIM_AUDIT.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D10", "D13"]
+  },
+  "docs/openai/EVALUATION.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D10"]
+  },
+  "docs/openai/OPENAI_BRIEF.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Rewrite around actual transfer and role-correction evidence, limits and independent follow-up.",
+    "errata": ["D10", "D17"]
+  },
+  "docs/openai/PRESENTATION_AUDIT.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Add successor navigation; retain original historical audit body and coverage limits.",
+    "errata": ["D11"]
+  },
+  "docs/openai/PROBLEM_STATEMENT.txt": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Align problem, existing implementation and proposed independent evaluation within 200 words.",
+    "errata": ["D10"]
+  },
+  "docs/openai/PROPOSAL.txt": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Add bounded existing live evidence and distinguish the proposed independent extension; keep plaintext/word limits.",
+    "errata": ["D10", "D15"]
+  },
+  "docs/openai/READINESS_REPORT.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D10"]
+  },
+  "docs/openai/RESEARCH_FIT.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Update evidence and prior-art mapping; remove stale broad no-live-result framing.",
+    "errata": ["D10", "D17"]
+  },
+  "docs/openai/SECURITY_REVIEW.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D10"]
+  },
+  "docs/research/CONTINUATION_HANDOFF_2026-10-19.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Separate current branch from old bundle; update merged study and native/smoke scope.",
+    "errata": ["D05", "D12"]
+  },
+  "docs/research/connector-phase-2/README.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D03"]
+  },
+  "docs/research/explorer-phase-18/RESEARCH.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D04", "D17"]
+  },
+  "docs/research/llm-shield/references/gate-lifecycle.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D13"]
+  },
+  "docs/research/smoke-validation-2026-10-19/RESULTS.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D12"]
+  },
+  "docs/research/transfer-phase-17/BRIEF.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D02"]
+  },
+  "docs/research/transfer-phase-17/DESIGN.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D02"]
+  },
+  "docs/research/transfer-phase-17/RESULTS.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D02"]
+  },
+  "docs/research/transfer-phase-17/RUNBOOK.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D02"]
+  },
+  "docs/research/transfer-phase-17/VALIDATION.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D02"]
+  },
+  "papers/banking-shield/README.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D15"]
+  },
+  "papers/llm-shield-aisec2026/README.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D14"]
+  },
+  "papers/project-simurgh/README.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D15"]
+  },
+  "proofs/README.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the relevant claims and boundaries; preserve the original record. See listed errata/current evidence. Not a full independent scientific or legal review.",
+    "errata": ["D16"]
+  },
+  "tools/agentdojo-simurgh-adapter/README.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Corrected component entry point: runtime/setup, historical versus current integration, validation and data scope are explicit.",
+    "errata": ["D09"]
+  },
+  "tools/assurance-export/README.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Corrected component entry point: runtime/setup, historical versus current integration, validation and data scope are explicit.",
+    "errata": ["D03"]
+  },
+  "tools/assurance-reliability/README.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Corrected component entry point: runtime/setup, historical versus current integration, validation and data scope are explicit.",
+    "errata": ["D03"]
+  },
+  "tools/invisible-window-poc/README.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Corrected component entry point: runtime/setup, historical versus current integration, validation and data scope are explicit.",
+    "errata": ["D06"]
+  },
+  "tools/openai-readiness/README.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Corrected component entry point: runtime/setup, historical versus current integration, validation and data scope are explicit.",
+    "errata": ["D03"]
+  },
+  "tools/openai-readiness/inspect/README.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Corrected component entry point: runtime/setup, historical versus current integration, validation and data scope are explicit.",
+    "errata": ["D03"]
+  },
+  "tools/simurgh-attestation/stage4z/lanec/README.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the complete short runbook and scope; preserve stage-owned original. New capture versus frozen verification and key/operator independence remain distinct.",
+    "errata": ["D13"]
+  },
+  "tools/simurgh-attestation/stage5a/lanec/README.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the complete short runbook and scope; preserve stage-owned original. New capture versus frozen verification and key/operator independence remain distinct.",
+    "errata": ["D13"]
+  },
+  "tools/simurgh-attestation/stage5b/lanec/README.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the complete short runbook and scope; preserve stage-owned original. New capture versus frozen verification and key/operator independence remain distinct.",
+    "errata": ["D13"]
+  },
+  "tools/simurgh-attestation/stage5c/lanec/README.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the complete short runbook and scope; preserve stage-owned original. New capture versus frozen verification and key/operator independence remain distinct.",
+    "errata": ["D13"]
+  },
+  "tools/simurgh-attestation/stage5d/laneb/README.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Correct the claim that key-free subagent execution cannot refuse through additive errata; preserve ceremony history.",
+    "errata": ["D20"]
+  },
+  "tools/simurgh-attestation/stage5e/conformance-pack/DROPLET_SETUP.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Found missing pipefail in tee example and cross-account elevated setup; additive corrected guide preserves the original stage-owned file.",
+    "errata": ["D18"]
+  },
+  "tools/simurgh-attestation/stage5e/conformance-pack/README.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the complete short runbook and scope; preserve stage-owned original. New capture versus frozen verification and key/operator independence remain distinct.",
+    "errata": ["D13"]
+  },
+  "tools/simurgh-attestation/stage5e/laneb/README.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the complete short runbook and scope; preserve stage-owned original. New capture versus frozen verification and key/operator independence remain distinct.",
+    "errata": ["D13"]
+  },
+  "tools/simurgh-attestation/stage5e/lanec/README.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the complete short runbook and scope; preserve stage-owned original. New capture versus frozen verification and key/operator independence remain distinct.",
+    "errata": ["D13"]
+  },
+  "tools/simurgh-attestation/stage5f/conformance-pack/DROPLET_SETUP.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read runbook and actual runner; placeholders, unsupported Node-only failure diagnosis and optional Python skip are clarified additively.",
+    "errata": ["D19"]
+  },
+  "tools/simurgh-attestation/stage5f/conformance-pack/README.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read runbook and actual runner; placeholders, unsupported Node-only failure diagnosis and optional Python skip are clarified additively.",
+    "errata": ["D19"]
+  },
+  "tools/simurgh-attestation/stage5f/lanec/README.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the complete short runbook and scope; preserve stage-owned original. New capture versus frozen verification and key/operator independence remain distinct.",
+    "errata": ["D13"]
+  },
+  "tools/simurgh-attestation/stage5g/foreign-capture-pack/OUTPUT_CONTRACT.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the complete short runbook and scope; preserve stage-owned original. New capture versus frozen verification and key/operator independence remain distinct.",
+    "errata": ["D13"]
+  },
+  "tools/simurgh-attestation/stage5g/foreign-capture-pack/README.md": {
+    "scope": "selected_claims_and_scope_review_plus_full_text_scan",
+    "note": "Read the complete short runbook and scope; preserve stage-owned original. New capture versus frozen verification and key/operator independence remain distinct.",
+    "errata": ["D13"]
+  },
+  "tools/simurgh-daemon-linux/README.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Corrected component entry point: runtime/setup, historical versus current integration, validation and data scope are explicit.",
+    "errata": ["D03"]
+  },
+  "tools/simurgh-explorer/README.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Corrected component entry point: runtime/setup, historical versus current integration, validation and data scope are explicit.",
+    "errata": ["D04"]
+  },
+  "tools/simurgh-helper/README.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Corrected component entry point: runtime/setup, historical versus current integration, validation and data scope are explicit.",
+    "errata": ["D06"]
+  },
+  "tools/simurgh-node-macos/README.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Corrected component entry point: runtime/setup, historical versus current integration, validation and data scope are explicit.",
+    "errata": ["D08"]
+  },
+  "wiki/index.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Clarify absent claim/decision collections and link current documentation.",
+    "errata": ["D13"]
+  },
+  "wiki/log.md": {
+    "scope": "manual_editorial_review_and_correction",
+    "note": "Append scaffold-navigation update only.",
+    "errata": ["D13"]
+  }
+}

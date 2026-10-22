@@ -1,131 +1,62 @@
-# Roadmap
+# Research roadmap
 
-Project Simurgh is built in stages, each adding capability while preserving the privacy-first design contract.
+**Status reviewed: 21 October 2026.** The active track is host-controlled agent authorization
+with replayable evidence. This roadmap separates completed local work from experiments that
+still need new inputs. It is not a delivery-date or production-readiness commitment.
 
----
+## Completed and inspectable
 
-## Stage 1 — Academic Shield (Current) ✅
+| Work                              | Evidence                                                                                                                                                  | Important limit                                                                                   |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Two-model lifecycle comparison    | [Phase 17 results](docs/research/transfer-phase-17/RESULTS.md): 288 branches; Llama restricted effects 17/24 → 0/24 while active completion remains 23/24 | Internally authored known families; Luna already has a zero-effect baseline                       |
+| Corrected live Responses workflow | [Role correction](docs/research/provider-role-phase-17b/RESULTS.md): 2/3 authorized completions, 5/5 restricted declines                                  | One active refusal remains; the original eight declines are retained                              |
+| Paced local reliability           | [Phase 17 validation](docs/research/transfer-phase-17/VALIDATION.md): 120 fixtures, 1,200 snapshots                                                       | Fixed policy time and isolated services; not a production load test                               |
+| Local credential-lifecycle review | [Phase 8 follow-up](docs/research/PHASE_8_REVIEW_2026-10-19.md): completed scoped local review and replay                                                 | Trusted host assumptions; not an outside security assessment                                      |
+| Human dashboard and agent CLI     | [Explorer](tools/simurgh-explorer/README.md): shared queries, imports/exports, failure and unknown inspection                                             | 288 transfer branches plus selectable historical view; no archive verification or live web search |
+| Base, E2E and supplemental checks | [Full smoke validation](docs/research/smoke-validation-2026-10-19/RESULTS.md): 142/142 base steps, 32/32 E2E steps, 580 E2E tests                         | Exact implementation and environment recorded; strict browser parity remains blocked              |
+| Native platform checks            | [Latest native receipt](docs/research/smoke-validation-2026-10-19/RESULTS.md): 10 macOS tests, 11 Windows tests and fixture build                         | No interactive desktop capture or managed deployment validation                                   |
 
-**Status: Complete**
+The [integration matrix](docs/INTEGRATIONS.md) identifies the implemented surface, runtime and
+unsupported extension for each component. The [reviewer guide](docs/REVIEWER_INDEX.md) routes
+readers through both current and earlier evidence without mixing study denominators.
 
-Privacy-first academic integrity prototype.
+[21 October repairs](docs/readiness-2026-10-21/RESULTS.md) add Stage 4M public bindings,
+current-study browsing and fail-closed harness checks. The new live diagnostic stopped on HTTP 401;
+provider administration returned 403. The original active refusal remains unresolved.
 
-- [x] Metadata-only telemetry pipeline (no content collection)
-- [x] SHA-256 student identity hashing
-- [x] Local deterministic risk scoring (7-category weighted model)
-- [x] Claude narrative layer — Warning/Critical only, fail-open
-- [x] Academic event taxonomy (18 event types)
-- [x] Session lifecycle state machine (created → submitted)
-- [x] Exam registry API
-- [x] HMAC-SHA256 tamper-evident audit chain
-- [x] JSON report export with manual review recommendation
-- [x] Audit chain verification endpoint
-- [x] Instructor dashboard: risk cards, event timeline, filter bar
-- [x] Student page: privacy notice modal, helper status indicator
-- [x] macOS native helper (display-affinity scanner, Countermeasure A)
+## Next evidence, in priority order
 
----
+| Priority | Deliverable                                 | Acceptance evidence                                                                                                 | Required input                                                                        |
+| -------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| 1        | Independent replay of current evidence      | Separate operator receipt with pinned source/root, all command exits, disagreements and retained logs               | Owner-arranged classmate; [handoff](docs/research/CONTINUATION_HANDOFF_2026-10-19.md) |
+| 2        | Browser and accessibility validation        | Real browser rendering, keyboard/focus/zoom/contrast checks; strict parity exit 0 with `three_runtime_parity: true` | Host whose browser policy permits local fixtures; do not bypass managed policy        |
+| 3        | Externally authored transfer cases          | Freeze cases and scoring before capture; retain all attempts and utility/containment controls                       | Independent case custodian, selected model families and bounded authorized budget     |
+| 4        | Owned provider identity and alert lifecycle | Authenticated alert fetch, rotation/revocation/session tests and independently checked receiver effects             | Owned provider test project and lifecycle permissions; no secrets in documentation    |
+| 5        | Representative operational reliability      | Defined topology, load/duration, wall-clock leases, queues, recovery and incident ownership                         | Representative owned service and measurable acceptance targets                        |
+| 6        | Real-trace data handling review             | Field-level purpose, access, retention/deletion and disclosure review                                               | Authorized data owners and reviewer consent                                           |
 
-## Stage 1.5 — Validation Pack ✅
+These are distinct acceptance conditions. Passing a same-code replay cannot establish original
+independent custody; obtaining a second key cannot establish a second operator. Already admitted
+work and prior unknown-acknowledgement effects cannot be represented as prevented actions.
 
-**Status: Complete**
+## Earlier milestones and frozen limits
 
-Reviewer-readiness, validation, evidence mapping, and Stage 2 planning. No major Stage 2 runtime code.
+The [15 October gap map](docs/research/SIMURGH_GAP_MAP_2026-10-15.md),
+[16 October needs review](docs/research/OPENAI_NEEDS_2026-10-16.md) and
+[explorer gap register](docs/research/explorer-phase-18/RESEARCH.md) are dated research snapshots.
+Their “next,” “open” and “unrun” labels must be read at those revisions. The
+[documentation errata](docs/documentation-audit-2026-10-19/ERRATA.md) maps superseded statements
+to subsequent evidence. Earlier model captures, incident simulations and recovery experiments
+retain their own controls and denominators.
 
-- [x] Threat model
-- [x] Validation matrix
-- [x] Limitations document
-- [x] Stage 2 architecture plan
-- [x] Resource plan
-- [x] Demo script
-- [x] Risk register
-- [x] Reviewer checklist
-- [x] Evidence folder rules
-- [ ] Fresh remote CI evidence after branch push
-- [ ] Red-team validation
-- [ ] Privacy/legal review
-- [ ] Accessibility review
-- [ ] Institutional pilot evidence
+Historical attestation research through `v2.54.1` remains available in
+[RESEARCH_HISTORY.md](RESEARCH_HISTORY.md). Stage 5Q coverage remains 1,438/23,332 (6.2%);
+Stage 5R adds zero discharged cells; Stage 5S witness independence remains unproven. New agent
+experiments do not change these measurements. The original device roadmap is preserved exactly
+in [DEVICE_ROADMAP.md](DEVICE_ROADMAP.md); application package version `0.4.18` is a separate line.
 
----
-
-## Stage 2 — Device Shield / Integrity Node
-
-**Status: In progress** (Stage 2.8 Linux Display Integrity Research frozen — `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`)
-
-Transition toward signed local integrity proofs and device-aware validation.
-
-- [x] Simurgh SDK to Local Integrity Node pairing
-- [x] Signed integrity proof envelope
-- [x] macOS localhost daemon foundation with P-256 signed proofs
-- [x] Server challenge verification and telemetry `daemon_proof`
-- [x] Dashboard/report device-integrity state
-- [x] Reusable browser SDK for daemon discovery, pairing, proof fetch, and telemetry send
-- [x] Development daemon lifecycle commands and LaunchAgent install/uninstall helpers
-- [x] macOS metadata-only display-affinity scanner implementation
-- [ ] Tamper-aware local node logs
-- [x] Replay-resistant node/API challenge flow
-- [x] Privacy-preserving proof summaries
-- [x] Windows scanner proof contract and mock-first .NET daemon skeleton
-- [x] Real Windows laptop validation for `WDA_MONITOR` and `WDA_EXCLUDEFROMCAPTURE`
-- [x] Cross-platform Device Shield unification — Stage 2.7, `v0.4.13` (shared proof/scanner/risk/privacy contracts, cross-platform smoke + audit, Linux daemon proofs rejected with `unsupported_platform`)
-- [x] Stage 2 Windows Device Shield closeout — `v0.4.13-stage-2-6-2-7-closeout` (Windows technical brief, validation matrix, reviewer checklist, umbrella smoke + security audit gates, evidence folder, external review signal)
-- [x] Stage 2.8A/2.8B Linux X11 scanner + display-server lock + server-side Linux proof acceptance — `v0.4.15-stage-2-8A-8B-linux-x11-scanner` (X11 window-affinity enumeration, `display_server_lock` enforcement, Linux daemon lifecycle, Stage 2.8A/B smoke + cybersecurity audit)
-- [x] Stage 2.8C/2.8D Linux Wayland + XWayland + systemd `--user` lifecycle + Ubuntu CI — `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci` (live `display_server_mismatch` enforcement, Wayland portal advertised/active probe with no consent triggered, XWayland partial coverage, browser_package_hint UX-only, dev-only systemd user unit + lifecycle scripts, Ubuntu CI Rust + mandatory Xvfb + shellcheck, combined smoke + cybersecurity audit)
-- [ ] Production Windows Service packaging and deployment design
-- [x] Stage 2.8 Linux Display Integrity Research closeout — `v0.4.18-stage-2-8-linux-closeout` (Linux technical brief, validation matrix, reviewer checklist, closeout declaration, real-device validation plan, top-level doc updates)
-
-**Next: Stage 2.8 external review signal + Stage 3 Agent Shield planning.**
-
-- [ ] Agent integrity API — validates AI computer-use sessions
-- [ ] Webhook delivery for real-time risk alerts
-- [ ] Multi-exam support (concurrent sessions)
-- [ ] Rate-limit and burst protection hardening
-- [ ] Persistent storage (PostgreSQL / Supabase)
-
----
-
-## Stage 3 — Platform Expansion
-
-**Status: Proposed**
-
-Cross-platform delivery and LMS integration.
-
-- [ ] Browser PWA (no install required)
-- [ ] Production macOS daemon packaging, signing, notarisation, and managed deployment design
-- [ ] iOS and Android companion apps
-- [ ] ChromeOS support
-- [ ] LMS integration (Canvas, Moodle, Blackboard webhooks)
-- [ ] Institutional SSO (SAML / OAuth2)
-- [ ] Multi-tenant deployment support
-
----
-
-## Stage 4 — Privacy-Preserving Visuals (Research)
-
-**Status: Research**
-
-Countermeasure D — the "Code-Video" layer.
-
-- [ ] GPU-layer overlay detection (DirectX/Metal hook patterns)
-- [ ] Hardware-rooted attestation via TPM / Secure Enclave
-- [ ] Privacy-preserving visual verification without screen capture
-- [ ] On-device inference (no cloud dependency for scoring)
-
----
-
-## Known Limitations
-
-These limitations are documented in the research paper (§VI-C) and are not bugs:
-
-| Limitation                                                     | Class                       | Mitigation                                 |
-| -------------------------------------------------------------- | --------------------------- | ------------------------------------------ |
-| Click-through overlays (WS_EX_TRANSPARENT, ignoresMouseEvents) | Countermeasure C blind spot | Pair with native helper (Countermeasure A) |
-| Read-don't-paste workflows (silent transcription, human WPM)   | Structural detection gap    | Behavioural baseline analysis (Stage 2)    |
-| GPU-layer overlays (Cluely-class)                              | Advanced evasion            | Stage 4 research track                     |
-
----
-
-## Contributing
-
-Open an issue to discuss a proposal before submitting a PR. A dedicated contributor guide is not included in the Stage 1.5 validation pack.
+The [grant proposal](docs/openai/PROPOSAL.txt) remains an owner-review draft. Existing live results
+are evidence available to a future application, not approval of its budget, eligibility or submission.
+Use the [current primary-source map](docs/documentation-audit-2026-10-19/SOURCES.md) for applicable
+2026 guidance. Standards alignment requires evidence for each requirement; no universal compliance,
+external endorsement or funding outcome is asserted.

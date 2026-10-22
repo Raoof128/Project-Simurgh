@@ -1,0 +1,11 @@
+{
+  "Llama-3.2-3B-Instruct.config.json": "39fb36dc5416f445ebc4e71cb71fbcf6727e80a35836d8ba1a1474c318467b7a",
+  "feasibility.md": "bfa226a57cf8eaeaa5453cc867f7d6ce6dea0c1b11ee72a319d7e8e5d6482e5d",
+  "Llama-3.2-3B-Instruct.tokenizer_config.json": "9823dcfdc1121869029da45192238e85cf44f0b232a6d9dc20e4fe6f4242a14e",
+  "Llama-3.1-8B-Instruct.metadata.json": "ea8cab26e554a2f6b9fd6eafe7d4d95c86d00a311226e6783e54a47742311600",
+  "template-validation.json": "67fff15ec11253d3c6f931b3123d4be98077faf51352c01088ed573aaead7cf8",
+  "Llama-3.2-3B-Instruct.model.safetensors.index.json": "0a57c30afc07c81610ae7fe013bea3b9d50365f9a8145ae98e8714220f3d7c7c",
+  "Llama-3.2-3B-Instruct.metadata.json": "b48e6eb7101e9867322f7a7b347d04a9a4497a406dbae6ee4868a9e621df089e",
+  "Llama-3.1-8B-Instruct.README.md": "ed0e2e86f7a40c38b793b0a04dfd993b2c1dfb34906804f96b999f0bbd8d70e6",
+  "Llama-3.2-3B-Instruct.README.md": "8cea167f3aa4dbeea16d32caf6e446184e7e9aa9ebae7de6e3259ea049874570"
+}

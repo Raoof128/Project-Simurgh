@@ -1,0 +1,22 @@
+{
+  "baseline": "15105bac03588d601a2961b3d6f61db72c3b37a4",
+  "prior_checkpoint": "2824cbcf25bf5518b7327a55ec6ca8db059570fa",
+  "manual_read_count": 907,
+  "candidate_count": 919,
+  "complete": false,
+  "append_only_logs": true,
+  "checks": {
+    "changed_file_format": "Pass for changed audit files and SECURITY.md; Prettier flags extra blank lines in the newly appended AGENT.md/CHANGELOG.md entries. These already-published append-only bytes are preserved. The initial checkpoint incorrectly said pass; corrected in the next commit.",
+    "git_diff_check": "pass",
+    "local_links": {
+      "documents": 813,
+      "links": 1952,
+      "issues": 0
+    },
+    "candidate_identity": "919 unique baseline paths and hashes preserved; 907 complete reads, 12 pending; reviewed hashes match; scratch and tracked ledgers identical",
+    "preservation": "Prior HEAD log bytes preserved as exact prefixes; frozen specifications, source, captures and evidence unchanged",
+    "prior_authority": "4ca41a95 is a strict ancestor",
+    "local_probes": "Twelve VSC offline records using caller-created contexts, repository fixtures and historical headers; positive and refusal controls. No external ceremony or source/evidence mutation."
+  },
+  "scope": "Manual documentation checkpoint; no runtime mutation, model inference, full E2E rerun or interactive browser/native execution."
+}

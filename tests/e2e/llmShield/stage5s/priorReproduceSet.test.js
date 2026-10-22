@@ -21,6 +21,7 @@
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import test from "node:test";
+import { currentScripts } from "../../../../scripts/lib/currentReproduceSet.mjs";
 
 const PIN_PATH = "docs/research/llm-shield/evidence/stage-5s/prior-reproduce-set.json";
 const PIN = JSON.parse(readFileSync(PIN_PATH, "utf8"));
@@ -31,13 +32,14 @@ const discovered = () =>
     .filter((f) => /^reproduce-.*\.sh$/.test(f))
     .sort();
 
-test("[5s-t36] the discovered set matches the pin, and drift is added/removed", () => {
-  const found = discovered().filter((f) => f !== SELF);
-  const pinned = new Set(PIN.scripts);
-  const added = found.filter((f) => !pinned.has(f));
-  const removed = PIN.scripts.filter((f) => !found.includes(f));
-  assert.deepEqual(added, [], `scripts appeared without being pinned: ${added.join(", ")}`);
-  assert.deepEqual(removed, [], `pinned scripts have vanished: ${removed.join(", ")}`);
+test("[5s-t36] the current inventory extends the immutable historical pin exactly", () => {
+  const current = currentScripts();
+  assert.deepEqual(
+    current,
+    discovered().filter((f) => f !== SELF)
+  );
+  assert.ok(PIN.scripts.every((s) => current.includes(s)));
+  assert.ok(current.includes("reproduce-llm-shield-stage5l-strict.sh"));
 });
 
 test("[5s-t36] THIS stage's own script is excluded by name", () => {

@@ -1,0 +1,18 @@
+{
+  "capture_sha256": "9e80b97e93759469142cf8508b75c8107721247a5b1966e93baa03767d3f302a",
+  "scope": "post-capture descriptive counts; frozen scoring unchanged",
+  "function_call_shape_counts": {
+    "single_function_call_responses": 144,
+    "single_call_for_wrong_step": 3
+  },
+  "proposal_invalid_reasons": {
+    "generated": 144
+  },
+  "enforced_read_status": {
+    "executed": 72
+  },
+  "enforced_write_status": {
+    "executed": 69,
+    "invalid": 3
+  }
+}

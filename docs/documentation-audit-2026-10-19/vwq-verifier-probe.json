@@ -1,0 +1,193 @@
+{
+  "schema": "simurgh.documentation_probe.v1",
+  "scope": "Offline synthetic Stage 5S boundary checks; no network, inference or runtime changes.",
+  "cases": [
+    {
+      "id": "clean_fixture_with_placeholder_witness_and_receiver_signatures",
+      "exit_code": 0,
+      "statuses": {
+        "quorum_status": {
+          "a": "witnessed_quorum",
+          "b": "witnessed_quorum"
+        },
+        "comparison_status": "no_conflict_in_committed_comparison_set",
+        "witness_independence_status": "unproven",
+        "external_corroboration_status": "not_satisfied",
+        "equivocation_artifact_status": "absent_same_checkpoint"
+      },
+      "relations": ["same_checkpoint"],
+      "artifact_present": false
+    },
+    {
+      "id": "fork_positive_control",
+      "exit_code": 0,
+      "statuses": {
+        "quorum_status": {
+          "a": "witnessed_quorum",
+          "b": "witnessed_quorum"
+        },
+        "comparison_status": "equivocation_detected",
+        "witness_independence_status": "unproven",
+        "external_corroboration_status": "not_satisfied",
+        "equivocation_artifact_status": "present"
+      },
+      "relations": ["incompatible"],
+      "artifact_present": true
+    },
+    {
+      "id": "invalid_producer_signature_refused",
+      "exit_code": 477
+    },
+    {
+      "id": "third_conflicting_view_ignored",
+      "exit_code": 0,
+      "statuses": {
+        "quorum_status": {
+          "a": "witnessed_quorum",
+          "b": "witnessed_quorum"
+        },
+        "comparison_status": "no_conflict_in_committed_comparison_set",
+        "witness_independence_status": "unproven",
+        "external_corroboration_status": "not_satisfied",
+        "equivocation_artifact_status": "absent_same_checkpoint"
+      },
+      "relations": ["same_checkpoint"],
+      "artifact_present": false
+    },
+    {
+      "id": "substitute_signer_keep_old_key_digest_labels",
+      "exit_code": 0,
+      "statuses": {
+        "quorum_status": {
+          "a": "witnessed_quorum",
+          "b": "witnessed_quorum"
+        },
+        "comparison_status": "no_conflict_in_committed_comparison_set",
+        "witness_independence_status": "unproven",
+        "external_corroboration_status": "not_satisfied",
+        "equivocation_artifact_status": "absent_same_checkpoint"
+      },
+      "relations": ["same_checkpoint"],
+      "artifact_present": false
+    },
+    {
+      "id": "optional_committed_bindings_absent",
+      "exit_code": 0,
+      "statuses": {
+        "quorum_status": {
+          "a": "witnessed_quorum",
+          "b": "witnessed_quorum"
+        },
+        "comparison_status": "no_conflict_in_committed_comparison_set",
+        "witness_independence_status": "unproven",
+        "external_corroboration_status": "not_satisfied",
+        "equivocation_artifact_status": "absent_same_checkpoint"
+      },
+      "relations": ["same_checkpoint"],
+      "artifact_present": false
+    },
+    {
+      "id": "statement_and_receipt_envelope_bindings_absent",
+      "exit_code": 0,
+      "statuses": {
+        "quorum_status": {
+          "a": "witnessed_quorum",
+          "b": "witnessed_quorum"
+        },
+        "comparison_status": "no_conflict_in_committed_comparison_set",
+        "witness_independence_status": "unproven",
+        "external_corroboration_status": "not_satisfied",
+        "equivocation_artifact_status": "absent_same_checkpoint"
+      },
+      "relations": ["same_checkpoint"],
+      "artifact_present": false
+    },
+    {
+      "id": "clean_manifest_does_not_contain_views",
+      "exit_code": 0,
+      "statuses": {
+        "quorum_status": {
+          "a": "witnessed_quorum",
+          "b": "witnessed_quorum"
+        },
+        "comparison_status": "no_conflict_in_committed_comparison_set",
+        "witness_independence_status": "unproven",
+        "external_corroboration_status": "not_satisfied",
+        "equivocation_artifact_status": "absent_same_checkpoint"
+      },
+      "relations": ["same_checkpoint"],
+      "artifact_present": false
+    },
+    {
+      "id": "asserted_chain_overrides_signed_predecessor",
+      "exit_code": 0,
+      "statuses": {
+        "quorum_status": {
+          "a": "witnessed_quorum",
+          "b": "witnessed_quorum"
+        },
+        "comparison_status": "no_conflict_in_committed_comparison_set",
+        "witness_independence_status": "unproven",
+        "external_corroboration_status": "not_satisfied",
+        "equivocation_artifact_status": "absent_compatible"
+      },
+      "relations": ["compatible"],
+      "artifact_present": false
+    },
+    {
+      "id": "unknown_asserted_anchor_satisfies_status_helper",
+      "result": "satisfied"
+    },
+    {
+      "id": "fake_rfc3161_capture_accepted",
+      "result": {
+        "ok": true,
+        "refusals": [],
+        "state": "captured",
+        "verified": ["rfc3161"]
+      }
+    },
+    {
+      "id": "fake_rekor_capture_accepted",
+      "result": {
+        "ok": true,
+        "refusals": [],
+        "state": "captured",
+        "verified": ["rekor"]
+      }
+    },
+    {
+      "id": "fake_made_up_capture_accepted",
+      "result": {
+        "ok": true,
+        "refusals": [],
+        "state": "captured",
+        "verified": ["made_up"]
+      }
+    },
+    {
+      "id": "fake_bitcoin_ots_capture_accepted",
+      "result": {
+        "ok": true,
+        "refusals": [],
+        "state": "captured",
+        "verified": ["bitcoin_ots"]
+      }
+    },
+    {
+      "id": "audit_tier_accepts_signed_assertions_without_rebuilding_evidence",
+      "result": {
+        "ok": true,
+        "refusals": [],
+        "tier": "audit"
+      }
+    },
+    {
+      "id": "empty_consumption_map_passes_manifest_check",
+      "result": {
+        "ok": true,
+        "refusals": []
+      }
+    }
+  ]
+}

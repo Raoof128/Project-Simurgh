@@ -16,7 +16,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, dirname, delimiter } from "node:path";
 import { test } from "node:test";
 import { verifyEvidencePack } from "../../../tools/simurgh-attestation/stage4d/verifyPack.mjs";
 import {
@@ -42,6 +42,8 @@ import {
   verifyEbaManifest,
 } from "../../../tools/simurgh-attestation/stage4k/ebaManifest.mjs";
 import { runEbaCore } from "../../../tools/simurgh-attestation/stage4k/verify-stage4k-eba.mjs";
+
+import { discoverAlternateNode } from "../../../scripts/lib/runtimePrerequisites.mjs";
 
 const FIX = "tests/fixtures/llmShield/stage4k";
 const PIN = `${FIX}/eba-signer.pub`;
@@ -462,14 +464,13 @@ test("reproduce script exits 0 and prints ALL GREEN (heaviest test; script never
 test("node-version guard routes through the wrapper (skipped unless an alternate node < 26 exists)", (t) => {
   // A PATH with NO node at all cannot be wrapper-routed by construction (exit_via_wrapper
   // itself needs node) — so this only runs where a real pre-26 node binary exists.
-  const probe = spawnSync("/usr/bin/node", ["--version"], { encoding: "utf8" });
-  const major = probe.status === 0 ? Number(probe.stdout.slice(1).split(".")[0]) : NaN;
-  if (!Number.isInteger(major) || major >= 26) {
+  const alternate = discoverAlternateNode();
+  if (!alternate) {
     t.skip("no alternate pre-26 node available on this machine");
     return;
   }
   const r = spawnSync("bash", ["scripts/reproduce-llm-shield-stage4k.sh"], {
-    env: { ...process.env, PATH: "/usr/bin:/bin" },
+    env: { ...process.env, PATH: `${dirname(alternate)}${delimiter}${process.env.PATH}` },
     encoding: "utf8",
     timeout: 60_000,
   });

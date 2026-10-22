@@ -1,0 +1,28 @@
+{
+  "schema": "simurgh-phase11-handoff-v1",
+  "publication_commit": "f020c56eb4e144015c961faacc2e4d636129169d",
+  "freeze_commit": "67d1442faaeedb0b62f763b3a3ddb1ce9d3b7d5e",
+  "manifest_sha256": "3a63db0052b42c284b9feba94b82aa0b236e31530837c2caf42d927e2f008a96",
+  "artifacts": {
+    "docs/research/model-composition-phase-10/protocol.json": "28ea49ad7b7606596980b30468d88900d4703799f1ed7b7aa2ef561ed5e52323",
+    "docs/research/model-composition-phase-10/evidence.zip": "04cdeaacc2b805953a115f83738e1baf6e848039dc841fe0c8aab5d08b26108d",
+    "docs/research/model-composition-phase-10/capture.json": "0e0202204e0eb6fea42366f60f2161eb57ab2706cbd49c67328522306ab85b85",
+    "docs/research/model-composition-phase-10/journal.jsonl": "3264d36a1d62f11af5813ec746a0f63ac912f0674dc08a85f7e34f650a30397b",
+    "docs/research/model-composition-phase-10/report.json": "e564a1412f12fa78ba5726851848ff3121337387ed774e8a9aca0d959d2e3b25",
+    "docs/research/model-composition-phase-10/ROOT.sha256": "a48d2c2bf7c406e2afb678670f0764b1aaf33e2df0a520e667606038a299dde6",
+    "docs/research/model-composition-phase-10/receipt.json": "2309c202d8fee0568f0c5d9f019f64b81ca7a178cc3e40ef4fc7735c65ebf3c1",
+    "docs/research/model-composition-phase-10/token-receipt.json": "69282db1dad631d073e1d9dddee365f001dee90548138a0d25b3f52a6f21043d"
+  },
+  "requirements": {
+    "tools/assurance-sdk/requirements.lock": "40695ac2bd39bfaf4e5bddf4856b68caf6aa9bae7bc7b8b6a94ee4a8ceb70b49",
+    "tools/assurance-workflow/requirements.lock": "bde41d1e1dd882ffea359a089d71345f76244d8dca061af6f0837c800cbcba2d"
+  },
+  "verification_entrypoint": "tools/assurance-model-composed/evidence.py",
+  "expected": {
+    "tests": 16,
+    "generations": 48,
+    "branches": 144,
+    "raw_snapshots": 1440
+  },
+  "independent_custody": false
+}

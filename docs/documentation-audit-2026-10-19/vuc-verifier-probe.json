@@ -1,0 +1,108 @@
+{
+  "schema": "simurgh.documentation_audit.vuc_probe.v1",
+  "date": "2026-10-20",
+  "scope": "Core plus real Node adapter on local fixture copies and public keys; separate CLI attestation ingestion is not bypassed by these unsigned mutations. No source/evidence mutation or external ceremony.",
+  "cases": [
+    {
+      "name": "baseline",
+      "result": {
+        "raw": 0,
+        "ordering_state": "verified_immediate",
+        "finality_state": "pending"
+      }
+    },
+    {
+      "name": "fixture relabeled Rekor accepted under release while signed policy remains test",
+      "result": {
+        "raw": 0,
+        "ordering_state": "verified_immediate",
+        "finality_state": "pending"
+      }
+    },
+    {
+      "name": "empty finality object treated as confirmed",
+      "result": {
+        "raw": 0,
+        "ordering_state": "verified_immediate",
+        "finality_state": "confirmed"
+      }
+    },
+    {
+      "name": "unrecomputed verification context roots accepted",
+      "result": {
+        "raw": 0,
+        "ordering_state": "verified_immediate",
+        "finality_state": "pending"
+      }
+    },
+    {
+      "name": "false displayed projection fields accepted when stored root remains original",
+      "result": {
+        "raw": 0,
+        "ordering_state": "verified_immediate",
+        "finality_state": "pending"
+      }
+    },
+    {
+      "name": "signed producer execution binding with unrelated ceremony commitment start and identity",
+      "result": {
+        "raw": 0,
+        "ordering_state": "verified_immediate",
+        "finality_state": "pending"
+      }
+    },
+    {
+      "name": "VRC ledger and contest reference roots ignored",
+      "result": {
+        "raw": 0,
+        "ordering_state": "verified_immediate",
+        "finality_state": "pending"
+      }
+    },
+    {
+      "name": "unsigned unanchored prior shell accepted as compared regression universe",
+      "result": {
+        "raw": 0,
+        "ordering_state": "verified_immediate",
+        "finality_state": "pending"
+      }
+    },
+    {
+      "name": "duplicate wrong-universe omission claims counted valid",
+      "result": {
+        "raw": 0,
+        "ordering_state": "verified_immediate",
+        "finality_state": "pending"
+      }
+    },
+    {
+      "name": "nested adequacy assertion accepted",
+      "result": {
+        "raw": 0,
+        "ordering_state": "verified_immediate",
+        "finality_state": "pending"
+      }
+    },
+    {
+      "name": "portable browser accepts invalid producer commitment signature",
+      "result": {
+        "raw": 0,
+        "universe_root": "sha256:f2beeade86628a77613a772ca7a92b12644c870216996465590ce33a48aea3ee",
+        "universe_commitment_digest": "sha256:01cd6f553d8b6f1cf47acb7f2ed5dbf6b9519a3f1546575d3db293988c656344",
+        "u_commit": "sha256:cea31db5bd34e6e465d12e3d6c02982229920fce5ffdbde3dc84720bcb3fde9d",
+        "u_vpc": "sha256:cea31db5bd34e6e465d12e3d6c02982229920fce5ffdbde3dc84720bcb3fde9d",
+        "u_vrc": "sha256:cea31db5bd34e6e465d12e3d6c02982229920fce5ffdbde3dc84720bcb3fde9d",
+        "anchor_path": "declared_not_simulated"
+      }
+    },
+    {
+      "name": "Node invalid producer signature refusal control",
+      "result": {
+        "raw": 349,
+        "reason": "producer_commitment_sig_invalid",
+        "ordering_state": "verified_immediate",
+        "finality_state": "pending"
+      }
+    }
+  ]
+}

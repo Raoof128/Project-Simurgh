@@ -51,6 +51,7 @@ UNDER_EXIT=$?
 set -e
 if [ "$UNDER_EXIT" -ne 0 ]; then
   RAW="$(report_raw "$UNDER_REPORT")"
+  if [ "$RAW" = "0" ]; then RAW=29; fi
   echo "reproduce: under-budget bundle failed -> raw $RAW" >&2
   exit_via_wrapper "$RAW"
 fi

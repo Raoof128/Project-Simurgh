@@ -1,0 +1,24 @@
+{
+  "schema": "simurgh.documentation_probe.v1",
+  "date": "2026-10-19",
+  "node": "v24.19.0",
+  "scope": "Pure synthetic Stage 3P helper checks; no campaign, network, signing or full verifier bypass.",
+  "source": "tools/simurgh-benchmark/crossDefenceLib.mjs",
+  "source_sha256": "3242010418da443f3bcfc7c9b01ab5421c31a25a2e310c7be90cbe25682ef939",
+  "empty_scored": {
+    "cells": 25,
+    "contained_cells": 25,
+    "full_coverage_observed": true,
+    "controls": {
+      "overdefence": 0,
+      "total": 0
+    }
+  },
+  "empty_claim": {
+    "claim_conflict": [],
+    "full_coverage_violation": false
+  },
+  "affirmative_ranking": "ranking_export_violation",
+  "allowlisted_plus_affirmative": null,
+  "forbidden_field": "ranking_export_violation"
+}

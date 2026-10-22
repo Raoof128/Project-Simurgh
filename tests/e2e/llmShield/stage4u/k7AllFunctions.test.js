@@ -188,14 +188,26 @@ test("read-only kernel: no committed adapter/src-llmShield changes and capabilit
       /* ref not available in this environment */
     }
   }
-  if (!base) {
-    // No base ref (an exotic shallow checkout) — skip rather than false-fail.
-    return;
-  }
+  assert.ok(base, "Kernel preservation requires a real main baseline; fetch origin/main");
   const branchDiff = execFileSync("git", ["diff", "--name-only", `${base}..HEAD`, "--", ...paths], {
     encoding: "utf8",
   });
-  assert.equal(branchDiff.trim(), "", "no committed adapter/src-llmShield changes on this branch");
+  // R11: a completed documentation audit may change this exact README, not adapter code.
+  const readme = "tools/agentdojo-simurgh-adapter/README.md";
+  const changed = branchDiff.trim().split("\n").filter(Boolean);
+  if (changed.includes(readme)) {
+    const bytes = execFileSync("git", ["show", `HEAD:${readme}`]);
+    assert.equal(
+      crypto.createHash("sha256").update(bytes).digest("hex"),
+      "99d985c35b73f36389fb986c4d77d154060f32e10876749ac0e13dad7de38b86",
+      "Only the exact audited README is exempt"
+    );
+  }
+  assert.deepEqual(
+    changed.filter((path) => path !== readme),
+    [],
+    "no committed adapter/src-llmShield code changes on this branch"
+  );
   const baseKernel = execFileSync("git", ["show", `${base}:${kernel}`], { encoding: "utf8" });
   const headKernel = execFileSync("git", ["show", `HEAD:${kernel}`], { encoding: "utf8" });
   assert.equal(headKernel, baseKernel, "kernel byte-identical to base (committed)");

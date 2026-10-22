@@ -1,0 +1,55 @@
+{
+  "schema": "simurgh.documentation_audit.varl_probe.v1",
+  "date": "2026-10-19",
+  "scope": "Local copies of fixture bundles; explicitly public fixture key used for producer-signed cases. No runtime/evidence changes or model/API calls.",
+  "cases": [
+    {
+      "name": "baseline",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "original signature accepts missing audit-private log",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "producer-signed empty source registry accepted",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "producer-signed contradictory attempt count and round commitments accepted",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "producer-signed false hardening rule description makes enumeration durable",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "producer-signed unknown meaning class evades review requirement",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "producer-signed malformed UTS39 declared fields accepted",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "unsigned mutation rejected control",
+      "result": {
+        "raw": 241
+      }
+    }
+  ]
+}

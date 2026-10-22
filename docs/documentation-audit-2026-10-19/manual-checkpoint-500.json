@@ -1,0 +1,28 @@
+{
+  "baseline": "15105bac03588d601a2961b3d6f61db72c3b37a4",
+  "prior_checkpoint": "e7776ab88a3a4c2537ea7143767e6daf02688402",
+  "manual_read_count": 500,
+  "candidate_count": 919,
+  "complete": false,
+  "append_only_logs": true,
+  "checks": {
+    "changed_file_format": "pass",
+    "git_diff_check": "pass",
+    "local_links": {
+      "documents": 813,
+      "links": 1849,
+      "issues": 0
+    },
+    "candidate_identity": "919 unique baseline paths and hashes preserved; 500 complete reads, 419 pending; scratch and tracked ledgers identical",
+    "preservation": "Prior HEAD AGENT.md and CHANGELOG.md bytes are exact prefixes; other changes confined to current security/reviewer guidance and audit records",
+    "prior_authority": "4ca41a95 is a strict ancestor of prior_checkpoint",
+    "fallback_contract_probe": {
+      "receipt": "fallback-contract-probe.json",
+      "cases": 4,
+      "network_calls": 0,
+      "result": "Empty refusal and caught setup exception enter availability fallback; text refusal flag-off and terminal precheck prevent swap; original refusal metadata absent after adapter normalization",
+      "scope": "Injected local SDK client and actual adapter/normalizer/orchestrator; no HTTP route, live provider, or full consequence-gate execution"
+    }
+  },
+  "scope": "Documentation checkpoint and bounded diagnostics; no runtime change, fresh inference, full E2E rerun, independent custody or interactive browser/desktop validation."
+}

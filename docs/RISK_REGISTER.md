@@ -1,5 +1,10 @@
 # Stage 1.5 Risk Register
 
+> **Historical device-track document.** This preserves the Stage 1/2 planning or review state
+> identified below. Statements such as “current,” “next,” or “not implemented” are historical,
+> not the status of today’s research tree. Start at the [current reviewer index](REVIEWER_INDEX.md)
+> and [research roadmap](../ROADMAP.md) for active work.
+
 > **Status (v0.4.3, 2026-05-15):** "Stage 2 control" column items related to signed proofs and node pairing are now implemented (Stage 2.1 + 2.2 merged). Rows referring to Local Integrity Node / signed envelope are partially fulfilled — the proof envelope and pairing flow exist, but the localhost daemon (Stage 2.3) and browser SDK (Stage 2.4) are still pending. Hardware attestation remains future work.
 
 | Risk                                          | Likelihood | Impact | Current control                                                           | Stage 2 control                                                           | Status     |

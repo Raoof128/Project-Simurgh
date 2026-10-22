@@ -1,0 +1,7 @@
+{
+  "version": "8.10.2",
+  "archive": "https://download.redis.io/releases/redis-8.10.2.tar.gz",
+  "sha256": "b9ffee226b5eecdba98a679260dad764b2a4ebd90dce4ad5ac9e9f3eef9c02b3",
+  "hashRegister": "https://raw.githubusercontent.com/redis/redis-hashes/master/README",
+  "release": "https://github.com/redis/redis/releases/tag/8.10.2"
+}

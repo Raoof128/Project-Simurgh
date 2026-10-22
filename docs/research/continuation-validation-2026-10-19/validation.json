@@ -1,0 +1,65 @@
+{
+  "schema": "simurgh.continuation-validation.v1",
+  "date_utc": "2026-10-19",
+  "implementation_commit": "7bc4dfb6",
+  "base_gate": {
+    "commit": "6a5d12e7",
+    "command": "bash scripts/check.sh",
+    "passed_steps": 138,
+    "failed_steps": 4,
+    "failures": [
+      "privacy field scan (URL API property; fixed and unchanged scan rerun passes)",
+      "Rust mandatory Xvfb (runtime path missing; corrected rerun passes 34 tests)",
+      "Stage 3R fallback (server-readiness timeout; rerun passes 4 tests)",
+      "default Docker npm installation (npm exit handler failure; separate offline override passes)"
+    ],
+    "exit_code": 1
+  },
+  "node_unit": {
+    "tests": 5140,
+    "passed": 5137,
+    "failed": 0,
+    "skipped": 3,
+    "skips": [
+      "managed-browser file navigation",
+      "Lean typecheck unavailable in initial run",
+      "Lean repo gate unavailable in initial run"
+    ],
+    "followup": "Theorem suite rerun: 10 passed, no skips; includes the repo-wide Lean gate."
+  },
+  "explorer": {
+    "tests": 16,
+    "passed": 16,
+    "failed": 0,
+    "skipped": 0,
+    "production_build": true,
+    "http_assets_smoke": true,
+    "browser_rendered": false,
+    "runtime_dependency_advisories": 0
+  },
+  "reliability": {
+    "fixtures": 60,
+    "final_calls": 210,
+    "initial_calls": 10,
+    "raw_snapshots": 600,
+    "fresh_schedule_invariants": true
+  },
+  "source_export": {
+    "branches": 144,
+    "source_consistency_verified": true,
+    "independent_custody": false
+  },
+  "scope": "Local assistant-operated validation; independent custody, native macOS, real browser parity and live provider entitlement/identity tests not established.",
+  "end_to_end": {
+    "commit": "7bc4dfb6",
+    "command": "bash scripts/check-e2e.sh",
+    "passed_steps": 32,
+    "failed_steps": 0,
+    "tests": 580,
+    "passed_tests": 580,
+    "failed_tests": 0,
+    "skipped_tests": 0,
+    "exit_code": 0,
+    "browser_parity": "not established by the enclosing historical script"
+  }
+}

@@ -1,8 +1,18 @@
 # Simurgh ↔ AgentDojo Adapter (Stage 3H)
 
+**Scope update — 19 October 2026.** This is the historical Stage 3H adapter, not the
+current composed lifecycle evaluator. The legacy live gateway is retired through supported
+server entry points; optional live integration below is not a current validated deployment path.
+The [full smoke report](../../docs/research/smoke-validation-2026-10-19/RESULTS.md) records
+181 local adapter tests. It does not establish a new external AgentDojo/provider campaign.
+See the [integration matrix](../../docs/INTEGRATIONS.md) before choosing an experiment.
+
 In-loop mediating defence that lets AgentDojo evaluate the Simurgh LLM Shield as a real defence.
-This package is **transport + enforcement only**. It performs no safety classification — every
-allow/block decision comes from the real Node gateway and is never reinterpreted here.
+The original `SimurghDefence` class is **transport + enforcement only**: it forwards each
+step to the Node gateway and enforces its verdict. Later modules in this package also implement
+Python-side capability/authority heuristics for optional live execution. Do not generalize the
+gateway-only description to those modules. The [scoped review](../../docs/openai/SECURITY_REVIEW.md)
+records exact-destination and destructive-authority defects in that historical Python path.
 
 ## Configuration
 
@@ -23,7 +33,7 @@ allow/block decision comes from the real Node gateway and is never reinterpreted
 ## Layers
 
 - **Layer 1 (CI, Node, always-on):** the canary dry-run (`scripts/smoke-llm-shield-stage3h.sh`)
-  drives a vendored 30-case fixture through the real gateway. No AgentDojo, no network. The adapter
+  drives a vendored 30-case fixture through the real gateway. No AgentDojo installation or external provider request; the smoke uses local loopback HTTP. The adapter
   logic here is covered by this package's pytest suite.
 - **Layer 2 (optional, external):** install AgentDojo (`pip install -e .[agentdojo]`), bind
   `SimurghDefence` into AgentDojo's defence hook, and run the workspace suite with a live provider.
@@ -34,5 +44,6 @@ allow/block decision comes from the real Node gateway and is never reinterpreted
 ## Test
 
 ```bash
+cd tools/agentdojo-simurgh-adapter
 python3 -m pytest tests/ -q
 ```

@@ -1,0 +1,923 @@
+{
+  "schema": "simurgh.full-smoke-validation.v1",
+  "date": "2026-10-19",
+  "timezone": "Australia/Sydney",
+  "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+  "declaration_commit": "53260051",
+  "initial_source_commit": "2cf8ad69455585ef334e5e4def439d7b87cb5b5f",
+  "initial": {
+    "commands": [
+      {
+        "name": "base",
+        "command": ["bash", "scripts/check.sh"],
+        "source_commit": "2cf8ad69455585ef334e5e4def439d7b87cb5b5f",
+        "exit_code": 1,
+        "elapsed_seconds": 277.48,
+        "log_sha256": "72cfc2f0147944c9a6b9b0fedebf5006c3c83b4ff3347b81b3821582c4cbb1b3"
+      },
+      {
+        "name": "e2e",
+        "command": ["bash", "scripts/check-e2e.sh"],
+        "source_commit": "2cf8ad69455585ef334e5e4def439d7b87cb5b5f",
+        "exit_code": 1,
+        "elapsed_seconds": 313.291,
+        "log_sha256": "01edb3e841a1191811ff4e41681c042365cda0d2ccfb0c307862c8f285aac5c1"
+      }
+    ],
+    "unit": {
+      "tests": 5169,
+      "pass": 5167,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 2,
+      "todo": 0
+    },
+    "e2e": {
+      "tests": 580,
+      "pass": 578,
+      "fail": 2,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "base_steps": {
+      "passed": 138,
+      "failed": 4
+    },
+    "e2e_steps": {
+      "passed": 24,
+      "failed": 8
+    }
+  },
+  "repaired": {
+    "commands": [
+      {
+        "name": "base",
+        "command": ["bash", "scripts/check.sh"],
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "elapsed_seconds": 264.461,
+        "log_sha256": "5118f5b9dda5109d97c0222c9e9b9aee339e24675d8ae8b6a8e22adf8375d042"
+      },
+      {
+        "name": "e2e",
+        "command": ["bash", "scripts/check-e2e.sh"],
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "elapsed_seconds": 322.504,
+        "log_sha256": "a048df6675eafbc4e0ca5e9e9b49d6060f2f099527bca013c6de4b609ccd8fa3"
+      }
+    ],
+    "base_steps": {
+      "passed": 142,
+      "failed": 0
+    },
+    "e2e_steps": {
+      "passed": 32,
+      "failed": 0
+    },
+    "unit": {
+      "tests": 5171,
+      "pass": 5171,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "e2e": {
+      "tests": 580,
+      "pass": 580,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "rust": {
+      "passed": 34,
+      "failed": 0,
+      "ignored": 0
+    },
+    "explorer": {
+      "tests": 16,
+      "pass": 16,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "explorer_http": {
+      "status": "passed",
+      "assets": 2,
+      "records": 144,
+      "cli_summary_agrees": true,
+      "cli_unauthorized_filter_agrees": true,
+      "write_refused": true,
+      "cross_origin_refused": true,
+      "browser_rendering": "not_exercised"
+    },
+    "python_unittest_suites": 29,
+    "python_unittest_tests": 473,
+    "agentdojo_pytest_tests": 181,
+    "supplement": [
+      {
+        "name": "explorer-tests",
+        "command": ["npm", "--prefix", "tools/simurgh-explorer", "test"],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": null,
+        "elapsed_seconds": 1.73,
+        "log_sha256": "21dfdf0f1fac2086cfb0588ce3f3ef2ab311ab2caca275d6fb8fc48f2905dbae"
+      },
+      {
+        "name": "explorer-build",
+        "command": ["npm", "--prefix", "tools/simurgh-explorer", "run", "build"],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": null,
+        "elapsed_seconds": 1.069,
+        "log_sha256": "4d6f390d7e21639bde9b23d932937456fd816e007262c144253df33e8c0dc68a"
+      },
+      {
+        "name": "explorer-http-smoke",
+        "command": [
+          "node",
+          "/workspace/work/simurgh-full-smoke-2026-10-19/rerun/explorer-http-smoke.mjs"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": null,
+        "elapsed_seconds": 0.215,
+        "log_sha256": "f7d52e3abdbe0326dc0c94b53504321307de763d84c3de1a52d5d142345fb5a6"
+      },
+      {
+        "name": "agentdojo-adapter",
+        "command": [
+          "/workspace/simurgh-research/phase-15/pytest-venv/bin/python",
+          "-m",
+          "pytest",
+          "tests/",
+          "-q"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": null,
+        "elapsed_seconds": 1.768,
+        "log_sha256": "0f73ec298b82ec8c29fecbe8da59928493e6a13fb4c5e50324471ad932b2364f"
+      },
+      {
+        "name": "assurance-composed",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-composed/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 20,
+        "elapsed_seconds": 25.298,
+        "log_sha256": "0d0382fc68a4ebc01afe1691a7b16fa6ed6734f89355ba96c525f6edf7b6906f"
+      },
+      {
+        "name": "assurance-connector",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-connector/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 17,
+        "elapsed_seconds": 32.255,
+        "log_sha256": "0d6844dd92c2393da8a4076e243377d17528196a9be0188f5ccc029ddd2bc09a"
+      },
+      {
+        "name": "assurance-context",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-context/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 25,
+        "elapsed_seconds": 22.654,
+        "log_sha256": "b0f2e3d587ad8cee603bc60e29a8288758bd1a5ec246ed906e1fe3feead8ef4f"
+      },
+      {
+        "name": "assurance-credentials",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-credentials/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 24,
+        "elapsed_seconds": 23.804,
+        "log_sha256": "10d1601df6142a648d89ab4a6a8bc600c264dd9b88c3e408baa2a3e935374fa7"
+      },
+      {
+        "name": "assurance-durable",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-durable/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 16,
+        "elapsed_seconds": 6.454,
+        "log_sha256": "9482b3342f2e2393742a166d55a8254b2c14f2e15b017e426fd328ed02f6e814"
+      },
+      {
+        "name": "assurance-egress",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-egress/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 20,
+        "elapsed_seconds": 14.901,
+        "log_sha256": "fc28ca0114360a532069d342bf3826c5ec1e03d90965ef06d3934753d284bac7"
+      },
+      {
+        "name": "assurance-eval",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-eval/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 13,
+        "elapsed_seconds": 12.529,
+        "log_sha256": "ce9f9d4938d42ff0a1fe692c86139d535a7c6c96a1872c36abd9ff453b3f38bd"
+      },
+      {
+        "name": "assurance-export",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-export/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 7,
+        "elapsed_seconds": 0.465,
+        "log_sha256": "edfbb9dfd71f2bfdcc835d727a0fb6c6067fd276ab5c58e338004e1494ece7d3"
+      },
+      {
+        "name": "assurance-hardening",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-hardening/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 17,
+        "elapsed_seconds": 0.418,
+        "log_sha256": "dcb35ab60c7a21099e5bb5bd332162c23ab0343da58cbb1a54ab6f537c77e6ca"
+      },
+      {
+        "name": "assurance-isolation",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-isolation/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 26,
+        "elapsed_seconds": 10.998,
+        "log_sha256": "92ab007eee1bd3235070d60c476cade9849df516e15b9f3f0ad72dbf093d325f"
+      },
+      {
+        "name": "assurance-model-composed",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-model-composed/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 16,
+        "elapsed_seconds": 9.475,
+        "log_sha256": "7e1321b2b2a4e1746352c2ff5e2827a7018646fd7c6005dfb315c47ac5889118"
+      },
+      {
+        "name": "assurance-provider-role",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-provider-role/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 3,
+        "elapsed_seconds": 2.07,
+        "log_sha256": "417459833116908afedf8852d300a0a48a316da5c7b9eb39a86f327273d3a876"
+      },
+      {
+        "name": "assurance-recovery",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-recovery/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 15,
+        "elapsed_seconds": 13.75,
+        "log_sha256": "06053b939e9554823e220132e794d4b2916400f79c59e8064d74af52982931fa"
+      },
+      {
+        "name": "assurance-redis",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-redis/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 14,
+        "elapsed_seconds": 12.744,
+        "log_sha256": "aff1fd4b214a7c226928a693eca8d51268d0ca4ed9a6ec98fd31cb6305031e02"
+      },
+      {
+        "name": "assurance-reliability",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-reliability/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 12,
+        "elapsed_seconds": 6.001,
+        "log_sha256": "0c8e143ad7c16357929aafffaafc59bd1fed7bf66a943a7ac748cfc0ff600242"
+      },
+      {
+        "name": "assurance-reproduce",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-reproduce/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 13,
+        "elapsed_seconds": 2.17,
+        "log_sha256": "34c9b5752137f673fada0d7f1cb87001a6d7127651fbca736e73456ee1c332bc"
+      },
+      {
+        "name": "assurance-scope",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-scope/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 24,
+        "elapsed_seconds": 10.922,
+        "log_sha256": "be7305f8bac74be411de66ed62a1d9e44e4a87462a6a1fb04f114095dae4c5e7"
+      },
+      {
+        "name": "assurance-sdk",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-sdk/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 31,
+        "elapsed_seconds": 32.971,
+        "log_sha256": "7dc2cbb91b33b6820b26be7441eb0f31a3243478faa6297658dac0e4b3484689"
+      },
+      {
+        "name": "assurance-signals",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-signals/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 24,
+        "elapsed_seconds": 32.868,
+        "log_sha256": "0f374d680a11f3e3c415f8403ea3fd4c50f2e2c04a773ecb1d18201a906c6564"
+      },
+      {
+        "name": "assurance-transfer",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-transfer/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 15,
+        "elapsed_seconds": 3.625,
+        "log_sha256": "f1eb5ce6eb3e5123b951f5514fec64df77566897ee715738034cf5dca4f17a21"
+      },
+      {
+        "name": "assurance-workflow",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-workflow/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 15,
+        "elapsed_seconds": 344.712,
+        "log_sha256": "b83a210dc0fc556ca1aeab02c9a96f0230494689eb2ae3441d1b850b23699e73"
+      },
+      {
+        "name": "hf-containment",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/hf-containment/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 13,
+        "elapsed_seconds": 7.717,
+        "log_sha256": "99bc55ab50ca52912d4971c0ba4387105770a519e1592746f1abdb46fe37fd19"
+      },
+      {
+        "name": "hf-incident-sim",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/hf-incident-sim/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 5,
+        "elapsed_seconds": 6.093,
+        "log_sha256": "1d68b49a23885121a0293aa69bd66ae5b00995ad30945739f0fb07d1a7ee7c3b"
+      },
+      {
+        "name": "hf-native",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/hf-native/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 2,
+        "elapsed_seconds": 0.114,
+        "log_sha256": "82de699042898eb6315d9145471adaa0f1b3ae0473d7baf37c9bf4095a4f9d90"
+      },
+      {
+        "name": "local-meta-pilot",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/local-meta-pilot/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 10,
+        "elapsed_seconds": 0.717,
+        "log_sha256": "7ba8e1b2a7d1753a053202397762c668deec419e0ddeebebed58efd9765a4fc4"
+      },
+      {
+        "name": "local-meta-study",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/local-meta-study/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 21,
+        "elapsed_seconds": 18.276,
+        "log_sha256": "ffaaa34377057ba311b3c8f892b76f208d380f1d85b2bf163ce7fa485f54b3e7"
+      },
+      {
+        "name": "openai-comparison",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/openai-comparison/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 12,
+        "elapsed_seconds": 0.215,
+        "log_sha256": "241343ba073e33cc7fce097adfcc02e4fa2fbfe2a6454746fb223395b6ff0372"
+      },
+      {
+        "name": "openai-native",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/openai-native/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 20,
+        "elapsed_seconds": 0.265,
+        "log_sha256": "4c6ec6261d10ef06e9ed23455f6d00d025e6042369c2ed23e975405e9d30a0cf"
+      },
+      {
+        "name": "safety-study",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/safety-study/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 0,
+        "tests": 23,
+        "elapsed_seconds": 59.892,
+        "log_sha256": "b6900646e24e59c0aa98c1d4fe8a6bf45c957cc2e988f58a38ed7ea56b898d76"
+      },
+      {
+        "name": "browser-parity",
+        "command": [
+          "node",
+          "scripts/check-browser-parity.mjs",
+          "/workspace/work/simurgh-full-smoke-2026-10-19/rerun/browser-parity.json"
+        ],
+        "scope": "real browser prerequisite check; nonzero if unavailable",
+        "source_commit": "ebf2a752e2e8f26eb8d0684040db2b0fe05c8200",
+        "exit_code": 1,
+        "tests": null,
+        "elapsed_seconds": 0.115,
+        "log_sha256": "f4a021be44b936af31e601f150cc69bc260c3f2cf554913898df263fade15beb"
+      }
+    ]
+  },
+  "e2e_inventory": {
+    "reproduction_invocations": 30,
+    "distinct_reproduction_scripts": 29,
+    "scripts": {
+      "scripts/reproduce-stage4d.sh": 1,
+      "scripts/reproduce-stage4e.sh": 1,
+      "scripts/reproduce-stage4f.sh": 1,
+      "scripts/reproduce-stage4g.sh": 1,
+      "scripts/reproduce-llm-shield-stage4h.sh": 1,
+      "scripts/reproduce-llm-shield-stage4j.sh": 1,
+      "scripts/reproduce-llm-shield-stage4k.sh": 1,
+      "scripts/reproduce-llm-shield-stage4l.sh": 1,
+      "scripts/reproduce-llm-shield-stage4m.sh": 1,
+      "scripts/reproduce-llm-shield-stage4o.sh": 1,
+      "scripts/reproduce-llm-shield-stage4p.sh": 1,
+      "scripts/reproduce-llm-shield-stage4q.sh": 1,
+      "scripts/reproduce-llm-shield-stage4r.sh": 1,
+      "scripts/reproduce-llm-shield-stage4s.sh": 1,
+      "scripts/reproduce-llm-shield-stage4u.sh": 1,
+      "scripts/reproduce-llm-shield-stage4t.sh": 1,
+      "scripts/reproduce-llm-shield-stage4v.sh": 1,
+      "scripts/reproduce-llm-shield-stage4w.sh": 1,
+      "scripts/reproduce-llm-shield-stage4x.sh": 1,
+      "scripts/reproduce-llm-shield-stage4y.sh": 1,
+      "scripts/reproduce-llm-shield-stage4z.sh": 1,
+      "scripts/reproduce-llm-shield-stage5a.sh": 1,
+      "scripts/reproduce-llm-shield-stage5b.sh": 1,
+      "scripts/reproduce-llm-shield-stage5c.sh": 2,
+      "scripts/reproduce-llm-shield-stage5d.sh": 1,
+      "scripts/reproduce-llm-shield-stage5e.sh": 1,
+      "scripts/reproduce-llm-shield-stage5h.sh": 1,
+      "scripts/reproduce-llm-shield-stage5m.sh": 1,
+      "scripts/reproduce-llm-shield-stage5r.sh": 1
+    },
+    "full_chain_files": [
+      "tests/e2e/llmShield/stage4hFullSmoke.test.js",
+      "tests/e2e/llmShield/stage4jFullSmoke.test.js",
+      "tests/e2e/llmShield/stage4kAllFunctions.test.js",
+      "tests/e2e/llmShield/stage4kFullSmoke.test.js",
+      "tests/e2e/llmShield/stage4l/fullChain.e2e.test.js",
+      "tests/e2e/llmShield/stage4m/vxdFullNet.test.js",
+      "tests/e2e/llmShield/stage4n/seismographFullNet.test.js",
+      "tests/e2e/llmShield/stage4o/vtsaFullNet.test.js",
+      "tests/e2e/llmShield/stage4p/allFunctions.e2e.test.js",
+      "tests/e2e/llmShield/stage4q/allFunctions.e2e.test.js",
+      "tests/e2e/llmShield/stage4r/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage4r/laneb.test.js",
+      "tests/e2e/llmShield/stage4s/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage4s/laneb.test.js",
+      "tests/e2e/llmShield/stage4t/browserParity.test.js",
+      "tests/e2e/llmShield/stage4t/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage4t/laneb.test.js",
+      "tests/e2e/llmShield/stage4u/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage4u/laneb.test.js",
+      "tests/e2e/llmShield/stage4v/browserParity.test.js",
+      "tests/e2e/llmShield/stage4v/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage4v/laneb.test.js",
+      "tests/e2e/llmShield/stage4w/browserParity.test.js",
+      "tests/e2e/llmShield/stage4w/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage4w/laneb.test.js",
+      "tests/e2e/llmShield/stage4x/browserParity.test.js",
+      "tests/e2e/llmShield/stage4x/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage4x/laneb.test.js",
+      "tests/e2e/llmShield/stage4y/browserParity.test.js",
+      "tests/e2e/llmShield/stage4y/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage4y/laneb.test.js",
+      "tests/e2e/llmShield/stage4z/browserParity.test.js",
+      "tests/e2e/llmShield/stage4z/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage4z/laneb.test.js",
+      "tests/e2e/llmShield/stage4z/parity.test.js",
+      "tests/e2e/llmShield/stage5a/browserParity.test.js",
+      "tests/e2e/llmShield/stage5a/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage5a/laneb.test.js",
+      "tests/e2e/llmShield/stage5a/parity.test.js",
+      "tests/e2e/llmShield/stage5b/browserParity.test.js",
+      "tests/e2e/llmShield/stage5b/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage5b/laneb.test.js",
+      "tests/e2e/llmShield/stage5b/lanec.test.js",
+      "tests/e2e/llmShield/stage5b/parity.test.js",
+      "tests/e2e/llmShield/stage5b/realCapture.test.js",
+      "tests/e2e/llmShield/stage5c/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage5c/parity.test.js",
+      "tests/e2e/llmShield/stage5d/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage5d/parity.test.js",
+      "tests/e2e/llmShield/stage5e/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage5f/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage5f/parity.test.js",
+      "tests/e2e/llmShield/stage5g/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage5h/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage5i/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage5j/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage5k/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage5l/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage5m/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage5n/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage5n/realGreen.test.js",
+      "tests/e2e/llmShield/stage5o/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage5p/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage5q/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage5q/k7bAttestationBinding.test.js",
+      "tests/e2e/llmShield/stage5r/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage5s/attestation.test.js",
+      "tests/e2e/llmShield/stage5s/checkOrderNet.test.js",
+      "tests/e2e/llmShield/stage5s/contractSeams.test.js",
+      "tests/e2e/llmShield/stage5s/controls.test.js",
+      "tests/e2e/llmShield/stage5s/gateRedStates.test.js",
+      "tests/e2e/llmShield/stage5s/k7AllFunctions.test.js",
+      "tests/e2e/llmShield/stage5s/laneA.test.js",
+      "tests/e2e/llmShield/stage5s/laneB.test.js",
+      "tests/e2e/llmShield/stage5s/parity.test.js",
+      "tests/e2e/llmShield/stage5s/priorReproduceSet.test.js",
+      "tests/e2e/llmShield/stage5s/tamper.test.js"
+    ]
+  },
+  "preflight": {
+    "node": "v26.12.0",
+    "python": "Python 3.12.14",
+    "pytest": "pytest 8.4.2",
+    "lean": "Lean (version 4.15.0, x86_64-unknown-linux-gnu, commit 11651562caae, Release)",
+    "cargo": "cargo 1.99.1 (5f94df478 2026-08-27)",
+    "origin_main": "61883d9e6cbea6c9dc9faccd50ed72bd0ec28ce1"
+  },
+  "browser": {
+    "a_missing_browser_is_not_a_pass": "Browser parity is UNPROVEN when no browser ran. Two-runtime parity is a true, smaller claim; parity verified with one runtime unmeasured is a false one.",
+    "browser": {
+      "reason": "managed_browser_file_navigation_blocked",
+      "unavailable": true
+    },
+    "browser_binary": null,
+    "entry_count": 5,
+    "node_core": {
+      "mismatches": [],
+      "missing": [],
+      "ok": true
+    },
+    "note": "Node core \u2261 portable \u2261 Python \u2261 browser, over every manifest entry. The first link is what makes the rest mean anything: mirrors that agree only with each other were written by one person on one afternoon.",
+    "portable": {
+      "mismatches": [],
+      "missing": [],
+      "ok": true
+    },
+    "python": {
+      "mismatches": [],
+      "missing": [],
+      "ok": true
+    },
+    "receipt_kind": "runtime",
+    "schema": "simurgh.vpf.cross-runtime-parity.v1",
+    "three_runtime_parity": false,
+    "two_runtime_parity": true,
+    "vector_count": 17
+  },
+  "native": {
+    "source_commit": "2cf8ad69455585ef334e5e4def439d7b87cb5b5f",
+    "run_id": 39199323099,
+    "url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/39199323099",
+    "conclusion": "success",
+    "macos_tests": 10,
+    "windows_tests": 11,
+    "windows_fixture": "compile passed",
+    "raw_log": "hosted/native.log",
+    "native_paths_changed_by_repair": false,
+    "changes_since_native_run": [
+      "AGENT.md",
+      "CHANGELOG.md",
+      "docs/research/smoke-validation-2026-10-19/DESIGN.md",
+      "scripts/check.sh",
+      "tests/unit/maintenance/checkRuntimeEnvironment.test.js",
+      "tools/simurgh-daemon-linux/tests/xvfb_integration_tests.rs"
+    ]
+  },
+  "limitations": [
+    "Browser parity and real browser rendering unavailable under managed navigation policy.",
+    "Optional live external/provider campaigns were not enabled.",
+    "Native suites do not exercise interactive desktop capture or provider entitlements.",
+    "Root and explorer dependencies reused prepared installs; Docker used the documented offline npm build cache.",
+    "Recorded script step totals include optional exclusions and repeated checks; they are not unique-test counts.",
+    "Some historical scripts regenerated tracked fixtures only inside disposable checkouts."
+  ],
+  "logs": {
+    "file": "logs.zip",
+    "sha256": "3834abd2b84fb5adeba49685710068fad6b7c91274402543652e7b0f76bcd131",
+    "entries": 358,
+    "manifest": "manifest.json"
+  }
+}

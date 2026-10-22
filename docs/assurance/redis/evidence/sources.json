@@ -1,0 +1,26 @@
+[
+  {
+    "id": "release",
+    "requestedUrl": "https://api.github.com/repos/redis/redis/releases/latest",
+    "responseFileModifiedUtc": "2026-10-15T01:22:34.891438+00:00",
+    "sha256": "6e6c7f7908cf64eb3432a172be35cd9f5fb3af69dddeb2ba5ada9c38bf9f4b01"
+  },
+  {
+    "id": "hashes",
+    "requestedUrl": "https://raw.githubusercontent.com/redis/redis-hashes/master/README",
+    "responseFileModifiedUtc": "2026-10-15T01:22:34.416308+00:00",
+    "sha256": "3691f23233a9d42c43f601ad9d99c7b8e1c0e0e1ee37a249f1d05ec689e611f0"
+  },
+  {
+    "id": "set-doc",
+    "requestedUrl": "https://redis.io/docs/latest/commands/set/",
+    "responseFileModifiedUtc": "2026-10-15T01:22:34.856320+00:00",
+    "sha256": "cc4e81500b51d02f138190fde9c25c6d9315f8ade9544d539861eefbd40a77bf"
+  },
+  {
+    "id": "persistence-doc",
+    "requestedUrl": "https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/",
+    "responseFileModifiedUtc": "2026-10-15T01:22:35.196329+00:00",
+    "sha256": "86333e5067394afb4b926ed1cd73b0fbd64f412ef7382a8a23c1aee239c8294e"
+  }
+]

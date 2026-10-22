@@ -1,0 +1,1088 @@
+{
+  "schema": "simurgh-task-scope-v1",
+  "sources": {
+    "tools/assurance-scope/simurgh_scope/__init__.py": "9d54f70327ae0030b7a35516711b59239990e6b3f3ef40f17dd7e1025b26252b",
+    "tools/assurance-scope/simurgh_scope/broker.py": "f7e6bf9f09795abdf4fcaa4cafd2bdd5bef8a58495fe70279997e8e01197d17b",
+    "tools/assurance-scope/simurgh_scope/fixtures.py": "8631fc9ccab201b5ae42ef38151ec83a66eea4e9c4ad53b25938043e01bf3567",
+    "tools/assurance-scope/simurgh_scope/study.py": "1c21adcc59adb3bca13289c987d7e07055f239baa75b2493b4455322286afebd",
+    "tools/assurance-scope/simurgh_scope/worker.py": "63b8d8008d8570c4d193cba4e61e9f4fceeadc056212c93c2d54d793261ea5ff",
+    "tools/assurance-scope/tests/test_broker.py": "96b2199a38c96797ebb61d6328b2000305f9646a1b3123a1b0a8a5fe50f66782",
+    "tools/assurance-scope/tests/test_study.py": "aa9e19d9823f91eb374a13c19dd61d92584d09a035943810e8ed6b4f32c45d7f"
+  },
+  "rows": [
+    {
+      "case": "public_read",
+      "control": "origin_only",
+      "killed": false,
+      "results": [
+        {
+          "status": "completed",
+          "reason": "response"
+        }
+      ],
+      "observed": [
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://stats.test",
+          "path": "/public",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "public_read",
+      "control": "scoped",
+      "killed": false,
+      "results": [
+        {
+          "status": "completed",
+          "reason": "response"
+        }
+      ],
+      "observed": [
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://stats.test",
+          "path": "/public",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "public_read",
+      "control": "deny_all",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "deny_all"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "scoped_write",
+      "control": "origin_only",
+      "killed": false,
+      "results": [
+        {
+          "status": "completed",
+          "reason": "response"
+        }
+      ],
+      "observed": [
+        {
+          "body": "approved result",
+          "credentialPresent": false,
+          "method": "POST",
+          "origin": "http://messages.test",
+          "path": "/runs/run-1",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "scoped_write",
+      "control": "scoped",
+      "killed": false,
+      "results": [
+        {
+          "status": "completed",
+          "reason": "response"
+        }
+      ],
+      "observed": [
+        {
+          "body": "approved result",
+          "credentialPresent": false,
+          "method": "POST",
+          "origin": "http://messages.test",
+          "path": "/runs/run-1",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "scoped_write",
+      "control": "deny_all",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "deny_all"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "admin_read",
+      "control": "origin_only",
+      "killed": false,
+      "results": [
+        {
+          "status": "completed",
+          "reason": "response"
+        }
+      ],
+      "observed": [
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://stats.test",
+          "path": "/admin",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 1
+    },
+    {
+      "case": "admin_read",
+      "control": "scoped",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "scope"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "admin_read",
+      "control": "deny_all",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "deny_all"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "credential_injection",
+      "control": "origin_only",
+      "killed": false,
+      "results": [
+        {
+          "status": "completed",
+          "reason": "response"
+        }
+      ],
+      "observed": [
+        {
+          "body": "",
+          "credentialPresent": true,
+          "method": "GET",
+          "origin": "http://stats.test",
+          "path": "/admin",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 1
+    },
+    {
+      "case": "credential_injection",
+      "control": "scoped",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "scope"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "credential_injection",
+      "control": "deny_all",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "deny_all"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "relay_route",
+      "control": "origin_only",
+      "killed": false,
+      "results": [
+        {
+          "status": "completed",
+          "reason": "response"
+        }
+      ],
+      "observed": [
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://packages.test",
+          "path": "/relay",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        },
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://outside.test",
+          "path": "/collect",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 2
+    },
+    {
+      "case": "relay_route",
+      "control": "scoped",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "scope"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "relay_route",
+      "control": "deny_all",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "deny_all"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "redirect",
+      "control": "origin_only",
+      "killed": false,
+      "results": [
+        {
+          "status": "completed",
+          "reason": "response"
+        }
+      ],
+      "observed": [
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://packages.test",
+          "path": "/redirect",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        },
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://outside.test",
+          "path": "/collect",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 1
+    },
+    {
+      "case": "redirect",
+      "control": "scoped",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "scope"
+        }
+      ],
+      "observed": [
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://packages.test",
+          "path": "/redirect",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "redirect",
+      "control": "deny_all",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "deny_all"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "approved_service_relays",
+      "control": "origin_only",
+      "killed": false,
+      "results": [
+        {
+          "status": "completed",
+          "reason": "response"
+        }
+      ],
+      "observed": [
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://packages.test",
+          "path": "/approved-relay",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        },
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://outside.test",
+          "path": "/collect",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 1
+    },
+    {
+      "case": "approved_service_relays",
+      "control": "scoped",
+      "killed": false,
+      "results": [
+        {
+          "status": "completed",
+          "reason": "response"
+        }
+      ],
+      "observed": [
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://packages.test",
+          "path": "/approved-relay",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        },
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://outside.test",
+          "path": "/collect",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 1
+    },
+    {
+      "case": "approved_service_relays",
+      "control": "deny_all",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "deny_all"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "run_drift",
+      "control": "origin_only",
+      "killed": false,
+      "results": [
+        {
+          "status": "completed",
+          "reason": "response"
+        }
+      ],
+      "observed": [
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://stats.test",
+          "path": "/public",
+          "principal": "researcher-1",
+          "run": "other",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 1
+    },
+    {
+      "case": "run_drift",
+      "control": "scoped",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "scope"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "run_drift",
+      "control": "deny_all",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "deny_all"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "principal_drift",
+      "control": "origin_only",
+      "killed": false,
+      "results": [
+        {
+          "status": "completed",
+          "reason": "response"
+        }
+      ],
+      "observed": [
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://stats.test",
+          "path": "/public",
+          "principal": "other",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 1
+    },
+    {
+      "case": "principal_drift",
+      "control": "scoped",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "scope"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "principal_drift",
+      "control": "deny_all",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "deny_all"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "tenant_drift",
+      "control": "origin_only",
+      "killed": false,
+      "results": [
+        {
+          "status": "completed",
+          "reason": "response"
+        }
+      ],
+      "observed": [
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://stats.test",
+          "path": "/public",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "other"
+        }
+      ],
+      "outsideExactGrants": 1
+    },
+    {
+      "case": "tenant_drift",
+      "control": "scoped",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "scope"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "tenant_drift",
+      "control": "deny_all",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "deny_all"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "cross_run_message",
+      "control": "origin_only",
+      "killed": false,
+      "results": [
+        {
+          "status": "completed",
+          "reason": "response"
+        }
+      ],
+      "observed": [
+        {
+          "body": "approved result",
+          "credentialPresent": false,
+          "method": "POST",
+          "origin": "http://messages.test",
+          "path": "/runs/other",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 1
+    },
+    {
+      "case": "cross_run_message",
+      "control": "scoped",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "scope"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "cross_run_message",
+      "control": "deny_all",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "deny_all"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "body_drift",
+      "control": "origin_only",
+      "killed": false,
+      "results": [
+        {
+          "status": "completed",
+          "reason": "response"
+        }
+      ],
+      "observed": [
+        {
+          "body": "unapproved message",
+          "credentialPresent": false,
+          "method": "POST",
+          "origin": "http://messages.test",
+          "path": "/runs/run-1",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 1
+    },
+    {
+      "case": "body_drift",
+      "control": "scoped",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "scope"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "body_drift",
+      "control": "deny_all",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "deny_all"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "monitor_unavailable",
+      "control": "origin_only",
+      "killed": false,
+      "results": [
+        {
+          "status": "completed",
+          "reason": "response"
+        }
+      ],
+      "observed": [
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://stats.test",
+          "path": "/public",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "monitor_unavailable",
+      "control": "scoped",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "monitor"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "monitor_unavailable",
+      "control": "deny_all",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "deny_all"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "budget_exhausted",
+      "control": "origin_only",
+      "killed": false,
+      "results": [
+        {
+          "status": "completed",
+          "reason": "response"
+        },
+        {
+          "status": "completed",
+          "reason": "response"
+        }
+      ],
+      "observed": [
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://stats.test",
+          "path": "/public",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        },
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://stats.test",
+          "path": "/public",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "budget_exhausted",
+      "control": "scoped",
+      "killed": false,
+      "results": [
+        {
+          "status": "completed",
+          "reason": "response"
+        },
+        {
+          "status": "refused",
+          "reason": "budget"
+        }
+      ],
+      "observed": [
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://stats.test",
+          "path": "/public",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "budget_exhausted",
+      "control": "deny_all",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "deny_all"
+        },
+        {
+          "status": "refused",
+          "reason": "stopped"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "missing_public_data",
+      "control": "origin_only",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "unavailable"
+        },
+        {
+          "status": "refused",
+          "reason": "stopped"
+        }
+      ],
+      "observed": [
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://stats.test",
+          "path": "/missing",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "missing_public_data",
+      "control": "scoped",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "unavailable"
+        },
+        {
+          "status": "refused",
+          "reason": "stopped"
+        }
+      ],
+      "observed": [
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://stats.test",
+          "path": "/missing",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "missing_public_data",
+      "control": "deny_all",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "deny_all"
+        },
+        {
+          "status": "refused",
+          "reason": "stopped"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "lost_response",
+      "control": "origin_only",
+      "killed": false,
+      "results": [
+        {
+          "status": "unknown",
+          "reason": "transport"
+        },
+        {
+          "status": "refused",
+          "reason": "stopped"
+        }
+      ],
+      "observed": [
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://stats.test",
+          "path": "/drop",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "lost_response",
+      "control": "scoped",
+      "killed": false,
+      "results": [
+        {
+          "status": "unknown",
+          "reason": "transport"
+        },
+        {
+          "status": "refused",
+          "reason": "stopped"
+        }
+      ],
+      "observed": [
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://stats.test",
+          "path": "/drop",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "lost_response",
+      "control": "deny_all",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "deny_all"
+        },
+        {
+          "status": "refused",
+          "reason": "stopped"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "stop_restart",
+      "control": "origin_only",
+      "killed": false,
+      "results": [
+        {
+          "status": "completed",
+          "reason": "response"
+        },
+        {
+          "status": "completed",
+          "reason": "response"
+        }
+      ],
+      "observed": [
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://stats.test",
+          "path": "/admin",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        },
+        {
+          "body": "",
+          "credentialPresent": false,
+          "method": "GET",
+          "origin": "http://stats.test",
+          "path": "/public",
+          "principal": "researcher-1",
+          "run": "run-1",
+          "tenant": "tenant-1"
+        }
+      ],
+      "outsideExactGrants": 1
+    },
+    {
+      "case": "stop_restart",
+      "control": "scoped",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "scope"
+        },
+        {
+          "status": "refused",
+          "reason": "stopped"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "stop_restart",
+      "control": "deny_all",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "deny_all"
+        },
+        {
+          "status": "refused",
+          "reason": "stopped"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "pending_intent_crash",
+      "control": "origin_only",
+      "killed": true,
+      "results": [
+        {
+          "status": "unknown",
+          "reason": "pending_intent"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "pending_intent_crash",
+      "control": "scoped",
+      "killed": true,
+      "results": [
+        {
+          "status": "unknown",
+          "reason": "pending_intent"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    },
+    {
+      "case": "pending_intent_crash",
+      "control": "deny_all",
+      "killed": false,
+      "results": [
+        {
+          "status": "refused",
+          "reason": "deny_all"
+        }
+      ],
+      "observed": [],
+      "outsideExactGrants": 0
+    }
+  ]
+}

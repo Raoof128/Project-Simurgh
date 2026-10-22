@@ -1,0 +1,48 @@
+{
+  "schema": "simurgh.documentation_audit.vtsa_probe.v1",
+  "date": "2026-10-19",
+  "scope": "Temporary local evidence/arm copies. No retained source/fixture mutation. Signature-substitution cases use ephemeral self-selected keys accepted from the bundle; no forged retained signature or external identity claim.",
+  "cases": [
+    {
+      "name": "unchanged retained evidence",
+      "entrypoint": "verifyEvidence",
+      "ok": true,
+      "verdict": "green",
+      "arms": 18
+    },
+    {
+      "name": "unsigned evidence clean-chain signatures removed and tool body changed",
+      "entrypoint": "verifyEvidence",
+      "ok": true,
+      "verdict": "green",
+      "arms": 18
+    },
+    {
+      "name": "embedded attestation signer replaced by ephemeral self-selected signer",
+      "entrypoint": "verifyEvidence",
+      "ok": true,
+      "verdict": "green",
+      "arms": 18
+    },
+    {
+      "name": "unsigned manifest schema fingerprints and advertised manifest key changed",
+      "entrypoint": "verifyEvidence",
+      "ok": true,
+      "verdict": "green",
+      "arms": 18
+    },
+    {
+      "name": "ephemeral self-signed attestation removes non-claims and swaps allowed alignment claim",
+      "entrypoint": "verifyEvidence",
+      "ok": true,
+      "verdict": "green",
+      "arms": 18
+    },
+    {
+      "name": "selective proof with invalid signatures, invalid action digest and destructive receipt",
+      "entrypoint": "verifySelective",
+      "ok": true,
+      "verdict": "included"
+    }
+  ]
+}

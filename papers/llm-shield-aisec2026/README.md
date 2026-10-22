@@ -4,14 +4,15 @@ Blind-review title:
 
 **Verifiable Containment Attestation After LLM Guardrail Failure**
 
-This is the canonical paper package for the Simurgh LLM Shield / Verifiable Containment Attestation research. The current `main.tex`/`main.pdf` is the anonymous AISec submission version.
+This is the paper package for the Simurgh LLM Shield / Verifiable Containment Attestation research. `main.tex`/`main.pdf` contains the anonymous draft prepared for an intended AISec submission. This repository does not establish submission, acceptance, or peer review.
 
 ## Target
 
 - Primary venue: ACM AISec 2026.
 - Format: ACM `acmart`, `sigconf,anonymous,review`.
 - Paper type: original systems/security research paper with artifact.
-- Status: **READY FOR AISec HOTCRP UPLOAD** after the 2026-06-24 audit pass. Keep author identity only in HotCRP metadata during blind review.
+- Status: **Historical submission draft; current venue readiness requires owner review.** The 2026-06-24 audit recorded upload readiness for that snapshot. Venue metadata still contains `TBD` in `main.tex`; current deadlines, required metadata, anonymity rules and artifact links must be rechecked before submission. The paper has not been rebuilt or its numerical results revalidated by the OpenAI readiness sweep.
+- For the current research demonstration and its limitations, start with the [reviewer index](../../docs/REVIEWER_INDEX.md).
 
 ## Contents
 
@@ -25,7 +26,7 @@ This is the canonical paper package for the Simurgh LLM Shield / Verifiable Cont
 ## Build
 
 ```bash
-cd Papers/llm-shield-aisec2026
+cd papers/llm-shield-aisec2026
 make
 ```
 

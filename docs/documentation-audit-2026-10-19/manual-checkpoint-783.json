@@ -1,0 +1,22 @@
+{
+  "baseline": "15105bac03588d601a2961b3d6f61db72c3b37a4",
+  "prior_checkpoint": "4c307d4fa68feaf5a71d4ab0d78d6c5c7752e459",
+  "manual_read_count": 783,
+  "candidate_count": 919,
+  "complete": false,
+  "append_only_logs": true,
+  "checks": {
+    "changed_file_format": "pass",
+    "git_diff_check": "pass",
+    "local_links": {
+      "documents": 813,
+      "links": 1862,
+      "issues": 0
+    },
+    "candidate_identity": "919 unique baseline paths and hashes preserved; 783 complete reads, 136 pending; reviewed hashes match; scratch and tracked ledgers identical",
+    "preservation": "Prior HEAD log bytes preserved as exact prefixes; frozen specifications, source, captures and evidence unchanged",
+    "prior_authority": "4ca41a95 is a strict ancestor",
+    "sdk_probe": "Injected local fetch implementations confirm SDK 0.39.0 default retries and adapter abort mapping; fictional context prefix copied verbatim; no network; gateway-sdk-probe.json"
+  },
+  "scope": "Manual documentation checkpoint; no runtime mutation, HTTP route exploit, model inference, full E2E rerun or interactive browser/native execution."
+}

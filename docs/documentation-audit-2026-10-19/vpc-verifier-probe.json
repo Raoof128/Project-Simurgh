@@ -1,0 +1,157 @@
+{
+  "schema": "simurgh.documentation_audit.vpc_probe.v1",
+  "date": "2026-10-19",
+  "scope": "Local fixture copies and public fixture keys; no source/evidence mutation, outside ceremony or inference.",
+  "cases": [
+    {
+      "name": "baseline",
+      "result": {
+        "raw": 0,
+        "declared_depth": {
+          "per_section": {
+            "1": 1,
+            "2": 1,
+            "3": 1,
+            "4": 2,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1
+          },
+          "min_depth": 1,
+          "single_reviewer_sections": ["1", "2", "3", "6", "7", "8"]
+        }
+      }
+    },
+    {
+      "name": "producer replaces outer verifier key while original external verifier pin remains",
+      "result": {
+        "raw": 0,
+        "declared_depth": {
+          "per_section": {
+            "1": 1,
+            "2": 1,
+            "3": 1,
+            "4": 2,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1
+          },
+          "min_depth": 1,
+          "single_reviewer_sections": ["1", "2", "3", "6", "7", "8"]
+        }
+      }
+    },
+    {
+      "name": "duplicate section entries inflate independent coverage depth",
+      "result": {
+        "raw": 0,
+        "declared_depth": {
+          "per_section": {
+            "1": 3,
+            "2": 1,
+            "3": 1,
+            "4": 2,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1
+          },
+          "min_depth": 1,
+          "single_reviewer_sections": ["2", "3", "6", "7", "8"]
+        }
+      }
+    },
+    {
+      "name": "signed adequacy claim outside annotations accepted",
+      "result": {
+        "raw": 0,
+        "declared_depth": {
+          "per_section": {
+            "1": 1,
+            "2": 1,
+            "3": 1,
+            "4": 2,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1
+          },
+          "min_depth": 1,
+          "single_reviewer_sections": ["1", "2", "3", "6", "7", "8"]
+        }
+      }
+    },
+    {
+      "name": "empty reviewer and host registries accepted",
+      "result": {
+        "raw": 0,
+        "declared_depth": {
+          "per_section": {
+            "1": 1,
+            "2": 1,
+            "3": 1,
+            "4": 2,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1
+          },
+          "min_depth": 1,
+          "single_reviewer_sections": ["1", "2", "3", "6", "7", "8"]
+        }
+      }
+    },
+    {
+      "name": "reviewer and host borrow first reviewers separation evidence",
+      "result": {
+        "raw": 0,
+        "declared_depth": {
+          "per_section": {
+            "1": 1,
+            "2": 1,
+            "3": 1,
+            "4": 2,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1
+          },
+          "min_depth": 1,
+          "single_reviewer_sections": ["1", "2", "3", "6", "7", "8"]
+        }
+      }
+    },
+    {
+      "name": "portable browser accepts invalid signatures",
+      "result": {
+        "raw": 0,
+        "partition_digest": "sha256:d17ff2993532f40e0d58511467918fcfa48c1d85d0e8f30da023281b9d8bbe70",
+        "panel_subject_root": "sha256:9d4967e9ef190a99375ca4892b281ab83b32525bd2d93c26a23c150f2496994c",
+        "panel_evidence_root": "sha256:dc53d627a0025e910fb61d83f496cafd6f76679a0acde506b4a9f1083ffff083"
+      }
+    },
+    {
+      "name": "invalid signatures refused by Node control",
+      "result": {
+        "raw": 319,
+        "reason": "signature_invalid",
+        "declared_depth": {
+          "per_section": {
+            "1": 1,
+            "2": 1,
+            "3": 1,
+            "4": 2,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1
+          },
+          "min_depth": 1,
+          "single_reviewer_sections": ["1", "2", "3", "6", "7", "8"]
+        }
+      }
+    }
+  ]
+}

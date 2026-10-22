@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: AGPL-3.0-or-later
-# Stage 3E-live smoke. The disabled smoke runs against a shared no-live-env server;
+# Stage 3E retired-live smoke. Checks permanent retirement under legacy settings;
 # the env-specific live smokes self-boot their own server child. No network: live
-# smokes fail closed or skip before any provider call.
+# smokes must return retirement before any provider call.
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"

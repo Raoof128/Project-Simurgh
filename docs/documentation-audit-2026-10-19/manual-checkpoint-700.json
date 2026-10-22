@@ -1,0 +1,27 @@
+{
+  "baseline": "15105bac03588d601a2961b3d6f61db72c3b37a4",
+  "prior_checkpoint": "f2f158ec18b4cea42258cf4893302f8c26cc7527",
+  "manual_read_count": 700,
+  "candidate_count": 919,
+  "complete": false,
+  "append_only_logs": true,
+  "checks": {
+    "changed_file_format": "pass",
+    "git_diff_check": "pass",
+    "local_links": {
+      "documents": 813,
+      "links": 1852,
+      "issues": 0
+    },
+    "candidate_identity": "919 unique baseline paths and hashes preserved; 700 complete reads, 219 pending; current reviewed hashes match; scratch and tracked ledgers identical",
+    "preservation": "Prior HEAD log bytes preserved as exact prefixes; frozen specifications, source, captures and evidence unchanged",
+    "prior_authority": "4ca41a95 is a strict ancestor",
+    "stage4m_browser_module_parse": {
+      "runtime": "Node 26.12.0",
+      "exit": 1,
+      "result": "duplicate const fail declarations; exact extracted module rejected before execution",
+      "receipt": "stage4m-browser-parse.json"
+    }
+  },
+  "scope": "Manual documentation checkpoint and exact-module syntax diagnostic; no runtime changes, full E2E rerun, model inference, external ceremony or interactive browser execution."
+}

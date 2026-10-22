@@ -1,6 +1,6 @@
 {
   "schema": "simurgh.stage5q.problem_gate_set.v2",
-  "note": "Q1-F002. The SET is the authority; entry_count is telemetry. Added and removed are reported independently, so a repaired problem can never mask a new one. v2 SPLITS two things v1 conflated: the BASELINE measurement, which the Q1-F002 finding cites and which may never move, and the CURRENT census, which every later stage re-pins as it adds workflow steps. In v1 they were one field, so any stage that added a CI step could only go green by editing the number a prior finding had recorded — see Stage 5S finding 5S-F015.",
+  "note": "Q1-F002. The SET is the authority; entry_count is telemetry. Added and removed are reported independently, so a repaired problem can never mask a new one. v2 SPLITS two things v1 conflated: the BASELINE measurement, which the Q1-F002 finding cites and which may never move, and the CURRENT census, which every later stage re-pins as it adds workflow steps. In v1 they were one field, so any stage that added a CI step could only go green by editing the number a prior finding had recorded \u2014 see Stage 5S finding 5S-F015.",
   "baseline": {
     "tag": "v2.53.0-stage-5r-vpf",
     "entry_count": 19,
@@ -86,10 +86,102 @@
     ]
   },
   "current": {
-    "as_of": "2026-08-01, Stage 5S — five stage-5s-checks.yml steps added under authority 5S-M007",
-    "entry_count": 24,
+    "as_of": "2026-10-16 phase 13 reliability/export CI extension",
+    "entry_count": 47,
     "why": "the LIVE census, re-pinned by each stage that adds workflow steps. `baseline` is NOT touched: it is the v2.53.0 measurement the Q1-F002 finding cites, and a later stage may never move it to go green (5S-F015).",
     "gate_problems": [
+      {
+        "gate_id": "assurance-composed.yml::Validate composed lifecycle controls",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "assurance-context.yml::Validate durable context and delegated authority",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "assurance-credentials.yml::Validate authenticated credential lifecycle",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "assurance-followup.yml::Reproduce all saved proposals with retained receiver evidence",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "assurance-followup.yml::Validate guarded recovery and incident response",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "assurance-model-composed.yml::Validate composed model evidence",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "assurance-reliability-export.yml::Validate reliability and evidence export",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "assurance-signals.yml::Validate signed safety signals and monitor dispatch",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "openai-readiness.yml::Replay composed HF containment and local model proposals",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "openai-readiness.yml::Replay frozen Luna native function calls",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "openai-readiness.yml::Replay frozen Luna workflow comparison",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "openai-readiness.yml::Replay frozen Meta workflow study",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "openai-readiness.yml::Replay frozen synthetic safety study",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "openai-readiness.yml::Replay local Hugging Face incident simulation",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "openai-readiness.yml::Replay saved local Meta proposals without model downloads",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "openai-readiness.yml::Run the real-effects assurance experiment",
+        "reason_code": "unclassifiable_step"
+      },
+      {
+        "gate_id": "openai-readiness.yml::Validate descriptor isolation and selective connections",
+        "reason_code": "unclassifiable_step"
+      },
+      {
+        "gate_id": "openai-readiness.yml::Validate durable effects across process crashes and retries",
+        "reason_code": "unclassifiable_step"
+      },
+      {
+        "gate_id": "openai-readiness.yml::Validate incident scope and durable stopping",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "openai-readiness.yml::Validate kernel egress around an approved service",
+        "reason_code": "unclassifiable_step"
+      },
+      {
+        "gate_id": "openai-readiness.yml::Validate persisted native workflows across application restart",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "openai-readiness.yml::Validate real Redis connector recovery and ambiguous responses",
+        "reason_code": "missing_committed_universe_query"
+      },
+      {
+        "gate_id": "openai-readiness.yml::Verify the saved reviewer artifact against this source tree",
+        "reason_code": "unclassifiable_step"
+      },
       {
         "gate_id": "stage-1-checks.yml::Install Lean (elan) so the Stage 4R reproduce builds its proof",
         "reason_code": "unclassifiable_step"

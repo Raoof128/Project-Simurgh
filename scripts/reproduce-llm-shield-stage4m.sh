@@ -58,7 +58,7 @@ for b in $BUNDLES; do
   OBSERVED="$(verify_raw "$FIX/bundles/$b" "$T1/$b-report.json")"
   if [ "$OBSERVED" != "$EXPECTED" ]; then
     echo "reproduce: $b verdict raw=$OBSERVED, expected $EXPECTED" >&2
-    RAW="$OBSERVED"
+    RAW=29
     exit_via_wrapper "$RAW"
   fi
 done
@@ -96,7 +96,7 @@ mkdir -p "$TP"
 cp -R "$FIX/bundles/clean-chain/." "$TP/"
 rm -f "$TP/windows.json" "$TP/merge-events.json" "$TP/rescore-records.json"
 OBS="$(verify_raw "$TP" "$T1/tier-p-report.json" p)"
-if [ "$OBS" != "0" ]; then echo "reproduce: V19 tier-P raw=$OBS" >&2; RAW="$OBS"; exit_via_wrapper "$OBS"; fi
+if [ "$OBS" != "0" ]; then echo "reproduce: V19 tier-P raw=$OBS" >&2; RAW=29; exit_via_wrapper 29; fi
 
 echo "[8/12] V20 tier equivocation: tampered attestation root -> raw 22"
 TE="$T1/tier-eq"
@@ -104,7 +104,7 @@ mkdir -p "$TE"
 cp -R "$FIX/bundles/clean-chain/." "$TE/"
 node -e 'const fs=require("fs");const p=process.argv[1]+"/vxd-attestation.json";const j=JSON.parse(fs.readFileSync(p));j.windows_root="sha256:"+"0".repeat(64);fs.writeFileSync(p,JSON.stringify(j,null,2)+"\n")' "$TE"
 OBS="$(verify_raw "$TE" "$T1/tier-eq-report.json")"
-if [ "$OBS" != "22" ]; then echo "reproduce: V20 raw=$OBS expected 22" >&2; RAW="$OBS"; exit_via_wrapper "$OBS"; fi
+if [ "$OBS" != "22" ]; then echo "reproduce: V20 raw=$OBS expected 22" >&2; RAW=29; exit_via_wrapper 29; fi
 
 echo "[9/12] V21 no consumer-level identifiers anywhere under the fixtures"
 run_step 29 node -e '

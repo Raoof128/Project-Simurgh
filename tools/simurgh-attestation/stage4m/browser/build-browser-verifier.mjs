@@ -21,10 +21,26 @@ const SOURCES = [
   "browser/browser-adapter.mjs",
 ];
 
-// Strip ESM cross-file wiring: drop `import ... from "...";` blocks and the `export ` keyword.
+// This is a closed list of simple named-export modules, not a general ESM bundler.
+// Preserve each module's private lexical scope: several define their own `fail` helper.
 function inlineSource(text) {
-  const noImports = text.replace(/^import[\s\S]*?from\s+["'][^"']+["'];\s*$/gm, "");
-  return noImports.replace(/^export\s+/gm, "");
+  const names = [
+    ...text.matchAll(/^export\s+(?:async\s+)?(?:function|const|let|class)\s+(\w+)/gm),
+  ].map((m) => m[1]);
+  for (const match of text.matchAll(/^export\s*\{([^}]+)\};?/gm))
+    names.push(
+      ...match[1]
+        .split(",")
+        .map((name) => name.trim())
+        .filter(Boolean)
+    );
+  if (!names.length || names.some((name) => !/^[A-Za-z_$][\w$]*$/.test(name)))
+    throw new Error("unsupported_inline_exports");
+  const body = text
+    .replace(/^import[\s\S]*?from\s+["'][^"']+["'];\s*$/gm, "")
+    .replace(/^export\s*\{[^}]+\};?\s*$/gm, "")
+    .replace(/^export\s+/gm, "");
+  return `const { ${names.join(", ")} } = (() => {\n${body}\nreturn { ${names.join(", ")} };\n})();`;
 }
 
 export function buildBrowserVerifierHtml() {

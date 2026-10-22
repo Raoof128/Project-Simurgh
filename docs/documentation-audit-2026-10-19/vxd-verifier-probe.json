@@ -1,0 +1,263 @@
+{
+  "schema": "simurgh.documentation_audit.vxd_probe.v1",
+  "date": "2026-10-19",
+  "scope": "Temporary local fixture copies. Signed-producer cases use an explicitly pinned ephemeral key; unsigned public-tier cases retain the committed manifest, attestation and signer. No runtime/retained artifact change, inference, external disclosure or browser execution.",
+  "entrypoint": "runVxdCore",
+  "cases": [
+    {
+      "name": "unchanged committed full bundle",
+      "tier": "a",
+      "producer_resigned": false,
+      "rawCode": 0,
+      "reason": null,
+      "checks": [
+        {
+          "name": "windows_valid",
+          "status": "ok"
+        },
+        {
+          "name": "merge_chain_valid",
+          "status": "ok"
+        },
+        {
+          "name": "monotonicity",
+          "status": "ok"
+        },
+        {
+          "name": "rescore_recompute",
+          "status": "ok"
+        },
+        {
+          "name": "disclosure_binding",
+          "status": "ok"
+        },
+        {
+          "name": "contests_valid",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "attestation_roots",
+          "status": "ok"
+        },
+        {
+          "name": "manifest_signature",
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "name": "unchanged public bundle with ledgers removed",
+      "tier": "p",
+      "producer_resigned": false,
+      "rawCode": 0,
+      "reason": null,
+      "checks": [
+        {
+          "name": "windows_valid",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "merge_chain_valid",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "rescore_recompute",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "monotonicity",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "disclosure_binding",
+          "status": "ok"
+        },
+        {
+          "name": "contests_valid",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "attestation_roots",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "manifest_signature",
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "name": "unsigned public disclosure value and matching unsigned chain changed",
+      "tier": "p",
+      "producer_resigned": false,
+      "rawCode": 0,
+      "reason": null,
+      "checks": [
+        {
+          "name": "windows_valid",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "merge_chain_valid",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "rescore_recompute",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "monotonicity",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "disclosure_binding",
+          "status": "ok"
+        },
+        {
+          "name": "contests_valid",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "attestation_roots",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "manifest_signature",
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "name": "public disclosure and chain deleted without re-signing",
+      "tier": "p",
+      "producer_resigned": false,
+      "rawCode": 0,
+      "reason": null,
+      "checks": [
+        {
+          "name": "windows_valid",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "merge_chain_valid",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "rescore_recompute",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "monotonicity",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "disclosure_binding",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "contests_valid",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "attestation_roots",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "manifest_signature",
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "name": "signed aggregate totals falsified",
+      "tier": "a",
+      "producer_resigned": true,
+      "rawCode": 0,
+      "reason": null,
+      "checks": [
+        {
+          "name": "windows_valid",
+          "status": "ok"
+        },
+        {
+          "name": "merge_chain_valid",
+          "status": "ok"
+        },
+        {
+          "name": "monotonicity",
+          "status": "ok"
+        },
+        {
+          "name": "rescore_recompute",
+          "status": "ok"
+        },
+        {
+          "name": "disclosure_binding",
+          "status": "ok"
+        },
+        {
+          "name": "contests_valid",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "attestation_roots",
+          "status": "ok"
+        },
+        {
+          "name": "manifest_signature",
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "name": "signed proof and upstream digests replaced plus non-claims removed",
+      "tier": "a",
+      "producer_resigned": true,
+      "rawCode": 0,
+      "reason": null,
+      "checks": [
+        {
+          "name": "windows_valid",
+          "status": "ok"
+        },
+        {
+          "name": "merge_chain_valid",
+          "status": "ok"
+        },
+        {
+          "name": "monotonicity",
+          "status": "ok"
+        },
+        {
+          "name": "rescore_recompute",
+          "status": "ok"
+        },
+        {
+          "name": "disclosure_binding",
+          "status": "ok"
+        },
+        {
+          "name": "contests_valid",
+          "status": "not_in_tier"
+        },
+        {
+          "name": "attestation_roots",
+          "status": "ok"
+        },
+        {
+          "name": "manifest_signature",
+          "status": "ok"
+        }
+      ]
+    }
+  ],
+  "helper": {
+    "name": "two disjoint merge groups reuse one new commitment",
+    "entrypoint": "validateMergeChain",
+    "ok": true,
+    "output_clusters": [
+      "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    ]
+  }
+}

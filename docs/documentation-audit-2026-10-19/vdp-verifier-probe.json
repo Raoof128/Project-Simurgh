@@ -1,0 +1,233 @@
+{
+  "schema": "simurgh.documentation_audit.vdp_probe.v1",
+  "date": "2026-10-19",
+  "scope": "In-memory producer-signed inputs with explicitly insecure public fixture keys; no retained evidence/source mutations, external ceremony or signature forgery.",
+  "cases": [
+    {
+      "name": "baseline",
+      "raw": 0,
+      "filed_at_beat_status": "VERIFIED",
+      "sections": [
+        {
+          "key": "art73_high_risk_draft/remedial_actions",
+          "verb": "dispute_by_recomputation",
+          "operator_class": "evidence_backed",
+          "operator_value": 2,
+          "status": "AGREED",
+          "respondent_value": 2
+        },
+        {
+          "key": "art73_high_risk_draft/users_affected",
+          "verb": "dispute_by_recomputation",
+          "operator_class": "evidence_backed",
+          "operator_value": 2,
+          "status": "CONFLICT_PROVEN",
+          "respondent_value": 4
+        },
+        {
+          "key": "gpai_art55/evidence_available",
+          "verb": "dispute_by_recomputation",
+          "operator_class": "not_derivable",
+          "status": "ABSENCE_REBUTTED",
+          "respondent_value": ["mail.read"]
+        },
+        {
+          "key": "gpai_art55/root_cause_analysis",
+          "verb": "dispute_as_judgment",
+          "operator_class": "requires_human_input",
+          "status": "DISPUTE_RECORDED"
+        },
+        {
+          "key": "gpai_art55/serious_incident_response",
+          "verb": "dispute_by_recomputation",
+          "operator_class": "evidence_backed",
+          "operator_value": 2,
+          "status": "DISPUTE_FAILED",
+          "subreason": "recompute_failed"
+        }
+      ]
+    },
+    {
+      "name": "agreement ignores inconsistent claimed value",
+      "raw": 0,
+      "filed_at_beat_status": "VERIFIED",
+      "sections": [
+        {
+          "key": "art73_high_risk_draft/remedial_actions",
+          "verb": "agree",
+          "operator_class": "evidence_backed",
+          "operator_value": 2,
+          "status": "AGREED",
+          "respondent_value": 2
+        },
+        {
+          "key": "art73_high_risk_draft/users_affected",
+          "verb": "dispute_by_recomputation",
+          "operator_class": "evidence_backed",
+          "operator_value": 2,
+          "status": "CONFLICT_PROVEN",
+          "respondent_value": 4
+        },
+        {
+          "key": "gpai_art55/evidence_available",
+          "verb": "dispute_by_recomputation",
+          "operator_class": "not_derivable",
+          "status": "ABSENCE_REBUTTED",
+          "respondent_value": ["mail.read"]
+        },
+        {
+          "key": "gpai_art55/root_cause_analysis",
+          "verb": "dispute_as_judgment",
+          "operator_class": "requires_human_input",
+          "status": "DISPUTE_RECORDED"
+        },
+        {
+          "key": "gpai_art55/serious_incident_response",
+          "verb": "dispute_by_recomputation",
+          "operator_class": "evidence_backed",
+          "operator_value": 2,
+          "status": "DISPUTE_FAILED",
+          "subreason": "recompute_failed"
+        }
+      ]
+    },
+    {
+      "name": "participant count accepted as VERIFIED filing beat",
+      "raw": 0,
+      "filed_at_beat_status": "VERIFIED",
+      "sections": [
+        {
+          "key": "art73_high_risk_draft/remedial_actions",
+          "verb": "dispute_by_recomputation",
+          "operator_class": "evidence_backed",
+          "operator_value": 2,
+          "status": "AGREED",
+          "respondent_value": 2
+        },
+        {
+          "key": "art73_high_risk_draft/users_affected",
+          "verb": "dispute_by_recomputation",
+          "operator_class": "evidence_backed",
+          "operator_value": 2,
+          "status": "CONFLICT_PROVEN",
+          "respondent_value": 4
+        },
+        {
+          "key": "gpai_art55/evidence_available",
+          "verb": "dispute_by_recomputation",
+          "operator_class": "not_derivable",
+          "status": "ABSENCE_REBUTTED",
+          "respondent_value": ["mail.read"]
+        },
+        {
+          "key": "gpai_art55/root_cause_analysis",
+          "verb": "dispute_as_judgment",
+          "operator_class": "requires_human_input",
+          "status": "DISPUTE_RECORDED"
+        },
+        {
+          "key": "gpai_art55/serious_incident_response",
+          "verb": "dispute_by_recomputation",
+          "operator_class": "evidence_backed",
+          "operator_value": 2,
+          "status": "DISPUTE_FAILED",
+          "subreason": "recompute_failed"
+        }
+      ]
+    },
+    {
+      "name": "raw prose nested in binding and census accepted",
+      "raw": 0,
+      "filed_at_beat_status": "VERIFIED",
+      "sections": [
+        {
+          "key": "art73_high_risk_draft/remedial_actions",
+          "verb": "dispute_by_recomputation",
+          "operator_class": "evidence_backed",
+          "operator_value": 2,
+          "status": "AGREED",
+          "respondent_value": 2
+        },
+        {
+          "key": "art73_high_risk_draft/users_affected",
+          "verb": "dispute_by_recomputation",
+          "operator_class": "evidence_backed",
+          "operator_value": 2,
+          "status": "CONFLICT_PROVEN",
+          "respondent_value": 4
+        },
+        {
+          "key": "gpai_art55/evidence_available",
+          "verb": "dispute_by_recomputation",
+          "operator_class": "not_derivable",
+          "status": "ABSENCE_REBUTTED",
+          "respondent_value": ["mail.read"]
+        },
+        {
+          "key": "gpai_art55/root_cause_analysis",
+          "verb": "dispute_as_judgment",
+          "operator_class": "requires_human_input",
+          "status": "DISPUTE_RECORDED"
+        },
+        {
+          "key": "gpai_art55/serious_incident_response",
+          "verb": "dispute_by_recomputation",
+          "operator_class": "evidence_backed",
+          "operator_value": 2,
+          "status": "DISPUTE_FAILED",
+          "subreason": "recompute_failed"
+        }
+      ]
+    },
+    {
+      "name": "participant count accepted as conflict about remedial actions",
+      "raw": 0,
+      "filed_at_beat_status": "VERIFIED",
+      "sections": [
+        {
+          "key": "art73_high_risk_draft/remedial_actions",
+          "verb": "dispute_by_recomputation",
+          "operator_class": "evidence_backed",
+          "operator_value": 2,
+          "status": "CONFLICT_PROVEN",
+          "respondent_value": 4
+        },
+        {
+          "key": "art73_high_risk_draft/users_affected",
+          "verb": "dispute_by_recomputation",
+          "operator_class": "evidence_backed",
+          "operator_value": 2,
+          "status": "CONFLICT_PROVEN",
+          "respondent_value": 4
+        },
+        {
+          "key": "gpai_art55/evidence_available",
+          "verb": "dispute_by_recomputation",
+          "operator_class": "not_derivable",
+          "status": "ABSENCE_REBUTTED",
+          "respondent_value": ["mail.read"]
+        },
+        {
+          "key": "gpai_art55/root_cause_analysis",
+          "verb": "dispute_as_judgment",
+          "operator_class": "requires_human_input",
+          "status": "DISPUTE_RECORDED"
+        },
+        {
+          "key": "gpai_art55/serious_incident_response",
+          "verb": "dispute_by_recomputation",
+          "operator_class": "evidence_backed",
+          "operator_value": 2,
+          "status": "DISPUTE_FAILED",
+          "subreason": "recompute_failed"
+        }
+      ]
+    },
+    {
+      "name": "producer-signed unknown schema empty fixtures no Lane B passes audit",
+      "result": {
+        "ok": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "schema": "simurgh-gap-probes-v1",
+  "baseline_commit": "9141ec0b7cfe70c97185df3f16a1fa8493999076",
+  "scope": "Row validators only for timing; synthetic gateway only; deterministic injected revocation schedule; no production exploit claim",
+  "sources": {
+    "tools/hf-containment/gateway.py": "4c31b70ad72f4f71f8ed7124030a6bc78c1e27a5c1a1b5912f50ab4357085cd6",
+    "tools/hf-containment/model.py": "8cc38e132a301e05ebf5d8e16195b3c79eced5b119a3055141f26afd8e0613a2",
+    "tools/hf-native/native.py": "f1175aafbb9d5873b81926dedff945138204c43ae48e8562eea129516fc12faa",
+    "docs/assurance/hf-containment/evidence/model-capture.json": "1d91b2ee3d35b56069d6cbe7cdf97f72c623bca5fac42922bef6e9b260dfc7d9",
+    "docs/assurance/hf-native/evidence/capture.json": "8b40e52c289b268d7b80399db15fa534b3a942beb258ce33080160072319c883"
+  },
+  "observations": {
+    "plain_nan_timing_accepted_by_row_validator": true,
+    "plain_infinity_timing_accepted_by_row_validator": true,
+    "native_nan_timing_accepted_by_row_validator": true,
+    "native_infinity_timing_accepted_by_row_validator": true,
+    "unknown_task_configuration_accepts_public_report": true,
+    "unknown_task_configuration_accepts_handoff": true,
+    "revocation_committed_before_effect_insert": true,
+    "inflight_request_accepted_after_interleaved_revocation": true,
+    "effect_persisted_after_interleaved_revocation": true,
+    "subsequent_request_denied_as_revoked": true
+  }
+}

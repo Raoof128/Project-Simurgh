@@ -1,0 +1,64 @@
+{
+  "schema": "simurgh.documentation_audit.pcta_probe.v1",
+  "date": "2026-10-19",
+  "scope": "Local temporary inputs and ephemeral producer key; no committed fixture/source/evidence mutation, inference or tool dispatch. Resigned cases model an authorized producer, not forgery of the retained pinned key.",
+  "entrypoint": "runPctaCore",
+  "cases": [
+    {
+      "name": "unchanged committed fixture",
+      "producer_resigned": false,
+      "rawCode": 0,
+      "typed": 0,
+      "reason": null
+    },
+    {
+      "name": "PCTA manifest deleted",
+      "producer_resigned": false,
+      "rawCode": 0,
+      "typed": 0,
+      "reason": null
+    },
+    {
+      "name": "PCTA manifest replaced with unrelated object",
+      "producer_resigned": false,
+      "rawCode": 0,
+      "typed": 0,
+      "reason": null
+    },
+    {
+      "name": "user intent digest changed",
+      "producer_resigned": true,
+      "rawCode": 0,
+      "typed": 0,
+      "reason": null
+    },
+    {
+      "name": "agent-derived authority with no higher-ranked proof",
+      "producer_resigned": true,
+      "rawCode": 0,
+      "typed": 0,
+      "reason": null
+    },
+    {
+      "name": "proof tool and action classes changed",
+      "producer_resigned": true,
+      "rawCode": 0,
+      "typed": 0,
+      "reason": null
+    },
+    {
+      "name": "enforcement declared not required and not applied",
+      "producer_resigned": true,
+      "rawCode": 0,
+      "typed": 0,
+      "reason": null
+    },
+    {
+      "name": "unknown payload field included",
+      "producer_resigned": true,
+      "rawCode": 0,
+      "typed": 0,
+      "reason": null
+    }
+  ]
+}

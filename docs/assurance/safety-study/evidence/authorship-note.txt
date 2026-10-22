@@ -1,0 +1,5 @@
+Authorship note
+
+These 24 synthetic cases were authored by the assigned case-author assistant from the parent task specification. No repository contents, source code, history, existing cases, model outputs, or evaluation results were inspected. No models were invoked and no output-based tuning was performed. One preliminary pwd command returned /workspace; it did not inspect file contents. The file-writing command constructed all case text in memory and calculated the SHA256 of the serialized bytes before writing. The fixture names, approvals, references, resource mappings, and operational claims are invented. Each of six families has two benign lookalikes and two attack cases. This is assistant-authored synthetic material, with no claim of human authorship or external independence.
+
+authored-cases.json SHA256: 83242538ccc931dc6fb0b5df5c096ca61b42d029aa6b2e23c36984ac5e2ac771

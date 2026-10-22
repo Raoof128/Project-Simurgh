@@ -1,0 +1,40 @@
+{
+  "schema": "simurgh-phase11-local-receipt-v1",
+  "completed_at_utc": "2026-10-16T03:43:46.317841+00:00",
+  "publication_commit": "f020c56eb4e144015c961faacc2e4d636129169d",
+  "manifest_sha256": "3a63db0052b42c284b9feba94b82aa0b236e31530837c2caf42d927e2f008a96",
+  "python": "3.12.14",
+  "os": "Linux",
+  "architecture": "x86_64",
+  "fresh_clone": true,
+  "fresh_venv": true,
+  "hash_locked_install_exit": 0,
+  "dependency_check_exit": 0,
+  "focused_tests": {
+    "passed": 16,
+    "failed": 0,
+    "skipped": 0
+  },
+  "replay": {
+    "branches": 144,
+    "generations": 48,
+    "independent_custody": false,
+    "manifest_sha256": "3a63db0052b42c284b9feba94b82aa0b236e31530837c2caf42d927e2f008a96",
+    "model_inference_regenerated": false,
+    "raw_snapshots": 1440,
+    "verified": true
+  },
+  "initial_checkout_clean": true,
+  "final_checkout_clean": true,
+  "package_inventory_count": 63,
+  "artifacts_checked": 10,
+  "independent_custody": false,
+  "retained_files": {
+    "final-status.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "initial-status.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "packages.json": "bcb8c968cc65cdba961be0397e16b762fe9cb01d42a710dde99f700a094d58e1",
+    "pip-check.log": "9261363b733079a641c2e4cc9bc46ffa1d8336945a87f807b6cf68847dbc9b09",
+    "replay-receipt.json": "2309c202d8fee0568f0c5d9f019f64b81ca7a178cc3e40ef4fc7735c65ebf3c1",
+    "tests.log": "e776462221dc830804e04538a3de4de8e695f2b2fd3647c2c069a68683225f41"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "schema": "simurgh.documentation_audit.vwa_probe.v1",
+  "date": "2026-10-19",
+  "scope": "In-memory fixture copies, producer-signed using explicitly public fixture keys; unchanged audit-binding refusal control and standalone VSC checks. No source/evidence changes or inference.",
+  "cases": [
+    {
+      "name": "baseline",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "producer-signed joint declaration and capture shrink accepted",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "producer-signed duplicate layers and duplicate cells accepted",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "producer-signed empty commitments unknown rule and invalid capture metadata accepted",
+      "result": {
+        "raw": 0
+      }
+    },
+    {
+      "name": "unsigned audit mutation refused control",
+      "result": {
+        "raw": 191,
+        "reason": "vwa_signature_invalid",
+        "detail": "audit_binding"
+      }
+    },
+    {
+      "name": "missing audit skips before schema or signature checks",
+      "result": {
+        "skipped": true,
+        "raw": 0
+      }
+    },
+    {
+      "name": "VSC accepts unauthenticated arbitrary aggregate as evidence",
+      "result": {
+        "ok": true,
+        "errors": []
+      }
+    },
+    {
+      "name": "VSC accepts absent spans and narrative",
+      "result": {
+        "ok": true,
+        "errors": []
+      }
+    }
+  ]
+}

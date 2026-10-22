@@ -1,0 +1,72 @@
+{
+  "schema": "simurgh-transfer-validation-v1",
+  "original_freeze": "4afe9538a080991b32b5fd038580b06cfe835fd8",
+  "corrective_freeze": "fbe06eca6425c87b344bf2137b52f364fec28be6",
+  "local_tests": {
+    "transfer": 15,
+    "roles": 3,
+    "predecessor_model": 16,
+    "predecessor_reliability": 12,
+    "node_maintenance": 45,
+    "mutation_rejections": 10
+  },
+  "native": {
+    "run_url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/38962135213",
+    "conclusion": "success",
+    "macos_node": 2,
+    "macos_daemon": 8,
+    "windows_daemon": 11,
+    "windows_affinity_build": "passed",
+    "interactive_desktop": "not_run"
+  },
+  "api_attempts": 80,
+  "api_key_in_published_artifacts": false,
+  "task_downloaded_credential_copy": "removed_after_capture",
+  "logs": {
+    "archive-verify.log": "95d63798a444af2a6c30638d039278968b5a0ac9641b53b834583e82c970320e",
+    "corrected.log": "efad042a57efe305b4203e90d61a160c9548cb942401ab2ad7525d8b8062e047",
+    "demo.log": "d498c69aebe267e0fb0f4dc4993d4f25d837a0dc8c9bda78b36e0c57c19068d6",
+    "format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "llama.log": "1d8209ed4d9516ddcce29f2cd36c1b01d29d37a5b6468a24072f8eb6238933c1",
+    "luna.log": "306f7b50dd54cc30aee4ffe35c445066392811db6e7019a0b9dd55ddac963d31",
+    "maintenance-tests.log": "e27bb2000602af4c1e346836d06b4f00f05538c3e727a0795c08a7120da798a0",
+    "mutation_checks.py": "17c25b0fa9b3be305e82be41492bea708ea2e397a262e2b29efbadcb9faa8f5f",
+    "mutations.log": "4b7f87dd67b008d52e84dff704aba42f83dde0619f6e4e217ffa7d70c2177182",
+    "native-artifacts/macos-native-results/daemon.log": "8df122cc1c08aa6143a02e6e2bff85d2547d09333baf21bde88b7e123184ea62",
+    "native-artifacts/macos-native-results/node.log": "83c2de277abb1ef26f76801bb5d4dc9121025f7b5ca38fb77ef3d785d108467f",
+    "native-artifacts/macos-native-results/source.txt": "284ca0e17a1048ce95920c58808af0c3c807b335bddfaa407585d00783c3bed0",
+    "native-artifacts/macos-native-results/toolchain.txt": "397d818de37b7a684ba905c1b92230e4534ff4cda0daf8a6eabc2a1fcfd50390",
+    "native-artifacts/windows-native-results/affinity-build.log": "15e8e933d4ed373f145f06e1547002440c317175d510e67f675887bc8cd0ba47",
+    "native-artifacts/windows-native-results/source.txt": "e29e3ea2754bc759aec230703e5e95b27d6bddbad3544db87f712042af3af5b4",
+    "native-artifacts/windows-native-results/toolchain.txt": "dcd1c2cb53e13761a958c8d4ef5577f22f19be648bb3298cff1dba7fc3b4b8ae",
+    "native-artifacts/windows-native-results/windows.trx": "745c55fc34a18995758662f10db78afeff50d57cc56ae28fbff76ac9f77a504f",
+    "native-hosted.json": "93177963fb22e350eae5247e70f73b6855ac07bc57cd0c91faa825fffda8d401",
+    "native-hosted.log": "6934d140331f6767142d8f45b3b196af7fb270294c3e1e8a24a47224282e2292",
+    "npm-audit.json": "17cd53ca7073fcbc9c3a8f8ada2b881f07ca9a8d2149bb14502e7b62e55977cd",
+    "pip-model.log": "90e000d647e4593e5552b7f28db5e5030174e6ee19e81bc0b0507bbcf3d03064",
+    "pip-runtime.log": "356f84d759692aaa6e9a76f76293f7856d5ff172d2dbfdb788d0f637f4fc4182",
+    "predecessor-model-tests.log": "0fa6ec884e47b461bebc54c39626132c5378c90b72f1632f692ceb32e3c99212",
+    "predecessor-reliability-tests.log": "61290f28e6ece01e1ef2a9f7b1563be5d11393de21eb4790e396da55740d19c6",
+    "publish.log": "dea35e02bcea0486a3f9795625b212f1f25016e8e428eb820f24aadaddc930c5",
+    "role-tdd-red.log": "29a9c82b8cf4f39628bf49628081973822560d49fb57f8f06c0b38dc676047db",
+    "role-tests.log": "417459833116908afedf8852d300a0a48a316da5c7b9eb39a86f327273d3a876",
+    "soak.log": "97f47471cddf24d2d24496d22580aef9c1e96e5c385bb5babdbb607fa6837ecb",
+    "tdd-green.log": "0d4d8ba7abc01d0f8c1daf093abaed6476b3cb7054b66db2d8dfafc23e9d49f6",
+    "tdd-red.log": "813c04ac60caf781925398cf2145555a8196213472d2f93627195f5a4018af44",
+    "tests.log": "2001abd8047dedb92f2aac401a70d87a06d6243e2b8ef29478f6be1648aab340"
+  },
+  "artifacts": {
+    "docs/research/transfer-phase-17/evidence.zip": "766490e4736890e1e6bafd2fea611cb2ca04365a070703b45c230301ce205937",
+    "docs/research/transfer-phase-17/ROOT.sha256": "b33111e2653e487c4385c658d1a2e0176bcd31955415397058a7f41dcc48f42d",
+    "docs/research/provider-role-phase-17b/evidence.zip": "13eaef7e9068f85b3de8a06d26a4152f432966e818e0c679c587facb1a0e397b",
+    "docs/research/provider-role-phase-17b/ROOT.sha256": "4c8ef24aecd07829a907a43ea7effcd42b8bd59e512e3e9ef61df308cd88f2ed",
+    "docs/research/transfer-phase-17/validation-logs.zip": "1075219b742fcb64caa08a665f405497d3db62d00f3a5414df3f55f9b805c1c1"
+  },
+  "limits": [
+    "independent reproduction deferred",
+    "one corrected active workflow declined",
+    "Phase 8 whole-change review remains incomplete after automatic cybersecurity block",
+    "live provider IAM and authenticated alerts not validated",
+    "production load and interactive desktop not validated"
+  ]
+}

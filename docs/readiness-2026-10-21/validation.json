@@ -1,0 +1,1791 @@
+{
+  "schema": "simurgh.readiness.validation.v1",
+  "date": "2026-10-21",
+  "timezone": "Australia/Sydney",
+  "final_code_revision": "8155106a3a1790ca38e35781545a9bf987f31f9e",
+  "base": {
+    "command": {
+      "name": "base",
+      "command": ["bash", "scripts/check.sh"],
+      "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+      "exit_code": 0,
+      "elapsed_seconds": 440.765,
+      "log_sha256": "5118f5b9dda5109d97c0222c9e9b9aee339e24675d8ae8b6a8e22adf8375d042"
+    },
+    "steps": {
+      "passed": 142,
+      "failed": 0
+    }
+  },
+  "e2e": {
+    "command": {
+      "name": "e2e",
+      "command": ["bash", "scripts/check-e2e.sh"],
+      "source_commit": "8155106a3a1790ca38e35781545a9bf987f31f9e",
+      "exit_code": 0,
+      "elapsed_seconds": 347.738,
+      "log_sha256": "a048df6675eafbc4e0ca5e9e9b49d6060f2f099527bca013c6de4b609ccd8fa3"
+    },
+    "steps": {
+      "passed": 32,
+      "failed": 0
+    },
+    "tests": {
+      "tests": 580,
+      "pass": 580,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    }
+  },
+  "root": {
+    "source_commit": "8155106a3a1790ca38e35781545a9bf987f31f9e",
+    "command": ["npm", "test"],
+    "counts": {
+      "tests": 5181,
+      "pass": 5181,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    }
+  },
+  "explorer": {
+    "source_commit": "8155106a3a1790ca38e35781545a9bf987f31f9e",
+    "commands": [
+      ["npm", "--prefix", "tools/simurgh-explorer", "test"],
+      ["npm", "--prefix", "tools/simurgh-explorer", "run", "build"]
+    ],
+    "counts": {
+      "tests": 21,
+      "pass": 21,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "production_build": "passed",
+    "http": {
+      "status": "passed",
+      "assets": 2,
+      "records": 288,
+      "cli_summary_agrees": true,
+      "cli_unauthorized_filter_agrees": true,
+      "write_refused": true,
+      "cross_origin_refused": true,
+      "browser_rendering": "not_exercised"
+    }
+  },
+  "supplement": {
+    "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+    "python_suites": 29,
+    "python_tests": 473,
+    "agentdojo_tests": 181,
+    "rust": {
+      "passed": 34,
+      "failed": 0,
+      "ignored": 0
+    },
+    "commands": [
+      {
+        "name": "root-tests-with-lean",
+        "command": ["npm", "test"],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": null,
+        "elapsed_seconds": 95.524,
+        "log_sha256": "bbdecf62851dd6282c6dbd9c5d8ec04504982d14fd4a6221c7f5477eec9697a8"
+      },
+      {
+        "name": "explorer-tests",
+        "command": ["npm", "--prefix", "tools/simurgh-explorer", "test"],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": null,
+        "elapsed_seconds": 2.71,
+        "log_sha256": "2acdfeac794113e2413ce664cd90a762044f9e05a097b3d6c1bf6f1e7866ad89"
+      },
+      {
+        "name": "explorer-build",
+        "command": ["npm", "--prefix", "tools/simurgh-explorer", "run", "build"],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": null,
+        "elapsed_seconds": 2.19,
+        "log_sha256": "d614932c8bd058fe4df958a35e64c3315e36a7821627bcb4efcd9aeefe280e5b"
+      },
+      {
+        "name": "agentdojo-adapter",
+        "command": [
+          "/workspace/simurgh-research/phase-15/pytest-venv/bin/python",
+          "-m",
+          "pytest",
+          "tests/",
+          "-q"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": null,
+        "elapsed_seconds": 2.724,
+        "log_sha256": "3643843b624bf5fa10cf01f5d7cdc92bf4184832573a008fba7212ba3fdf2262"
+      },
+      {
+        "name": "assurance-composed",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-composed/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 20,
+        "elapsed_seconds": 41.743,
+        "log_sha256": "ccf7f7ec13f783396dd3c07f932fc0f1df317626e44f8b7b273e4f7e8c407c0c"
+      },
+      {
+        "name": "assurance-connector",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-connector/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 17,
+        "elapsed_seconds": 63.13,
+        "log_sha256": "1b51db743555cb37c18e74de3438f9a96b77a5c8dd04fa4d8dba7d2bbd3d0d99"
+      },
+      {
+        "name": "assurance-context",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-context/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 25,
+        "elapsed_seconds": 32.497,
+        "log_sha256": "99c249f8fddf07c1c274bd3c58e1c0dfe72b3b66fac021554ae4fc0ca5879e76"
+      },
+      {
+        "name": "assurance-credentials",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-credentials/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 24,
+        "elapsed_seconds": 27.388,
+        "log_sha256": "3a4028a57bac27a6f21731a13e4672133f488232bbe7d3b48ce7d2b4f48acf67"
+      },
+      {
+        "name": "assurance-durable",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-durable/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 16,
+        "elapsed_seconds": 7.27,
+        "log_sha256": "41bfecb55ea33a2262ea58d7521e20342a0c06a6abd4f5065000672bc57db7e1"
+      },
+      {
+        "name": "assurance-egress",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-egress/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 20,
+        "elapsed_seconds": 16.689,
+        "log_sha256": "fd49e66dce02883e823cc1795ae89384e93fd8ba793be84e85b8feab511aff9e"
+      },
+      {
+        "name": "assurance-eval",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-eval/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 13,
+        "elapsed_seconds": 13.407,
+        "log_sha256": "a6170904ccdfa23099bb53fe515bd1624ad396b1138ab13093fda4e53f22ac4f"
+      },
+      {
+        "name": "assurance-export",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-export/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 7,
+        "elapsed_seconds": 0.466,
+        "log_sha256": "2166e7b8333d9397cf6e8bcbd3f79ffbde25251d49bb106d13d03c31b3f1a16d"
+      },
+      {
+        "name": "assurance-hardening",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-hardening/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 17,
+        "elapsed_seconds": 0.418,
+        "log_sha256": "68e067edebe357654b3944d6394dc70157053a62a2a1a7eeb334945dde094ad3"
+      },
+      {
+        "name": "assurance-isolation",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-isolation/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 26,
+        "elapsed_seconds": 12.711,
+        "log_sha256": "2fa1b4d3cafc879746b7e3a29323f5751da405dafe599e68db35799d9da1b5c7"
+      },
+      {
+        "name": "assurance-model-composed",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-model-composed/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 16,
+        "elapsed_seconds": 17.358,
+        "log_sha256": "e0a66f4538731533601f449a21bc02754cfdb8fb4b978a270c7ee702d1c9ef21"
+      },
+      {
+        "name": "assurance-provider-role",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-provider-role/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 3,
+        "elapsed_seconds": 2.583,
+        "log_sha256": "417459833116908afedf8852d300a0a48a316da5c7b9eb39a86f327273d3a876"
+      },
+      {
+        "name": "assurance-recovery",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-recovery/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 15,
+        "elapsed_seconds": 28.913,
+        "log_sha256": "e46409658afd4892660a77d323c1a7e669db88a27a98be24dbcad7f7e7e2b994"
+      },
+      {
+        "name": "assurance-redis",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-redis/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 14,
+        "elapsed_seconds": 14.743,
+        "log_sha256": "db5b6ded1d9472abec29f1385cbe672d7b10988649e2f088f6945dd810d54199"
+      },
+      {
+        "name": "assurance-reliability",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-reliability/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 12,
+        "elapsed_seconds": 7.809,
+        "log_sha256": "a6af1833438b62e1698539258c2bd5d77fd6d80ea09ab92eacb520a5ff7a764e"
+      },
+      {
+        "name": "assurance-reproduce",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-reproduce/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 13,
+        "elapsed_seconds": 2.893,
+        "log_sha256": "fc8e924c1cd63cda3241fc5f7ca7037931177be3bc66eae29d732d9728f0c648"
+      },
+      {
+        "name": "assurance-scope",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-scope/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 24,
+        "elapsed_seconds": 14.523,
+        "log_sha256": "16ccac069a8292000008445af1fd3c8cc278bb95d80a3857bf512b4c3210e17d"
+      },
+      {
+        "name": "assurance-sdk",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-sdk/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 31,
+        "elapsed_seconds": 41.098,
+        "log_sha256": "90d954c57bb86aa1536af25ae21728991ff1ab0d56ca7ed251864cbf05ae4958"
+      },
+      {
+        "name": "assurance-signals",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-signals/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 24,
+        "elapsed_seconds": 39.245,
+        "log_sha256": "b5105228d20e007dbbcdaa5229529edd49bffb856ae12c5b86e7d0cd27d064d0"
+      },
+      {
+        "name": "assurance-transfer",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-transfer/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 15,
+        "elapsed_seconds": 4.149,
+        "log_sha256": "835c29428a46ec2746ca556361c57b954843bb520ad90a1e8c4e80cb22c11bf7"
+      },
+      {
+        "name": "assurance-workflow",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/assurance-workflow/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 15,
+        "elapsed_seconds": 378.324,
+        "log_sha256": "2dd539fefa215c7f574450eabc6cddb27687fafa1a8c0c291665388f6afeb1d6"
+      },
+      {
+        "name": "hf-containment",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/hf-containment/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 13,
+        "elapsed_seconds": 7.903,
+        "log_sha256": "38d748cb663c46ca933a6edf68ba9c70d7ec47f03085528d42b804691cd26f04"
+      },
+      {
+        "name": "hf-incident-sim",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/hf-incident-sim/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 5,
+        "elapsed_seconds": 6.831,
+        "log_sha256": "11ed84fbbdc5b548b9fbd7dfbcaab82201ce7305b2d9e8cb064d91d8bde792a4"
+      },
+      {
+        "name": "hf-native",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/hf-native/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 2,
+        "elapsed_seconds": 0.115,
+        "log_sha256": "82de699042898eb6315d9145471adaa0f1b3ae0473d7baf37c9bf4095a4f9d90"
+      },
+      {
+        "name": "local-meta-pilot",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/local-meta-pilot/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 10,
+        "elapsed_seconds": 0.816,
+        "log_sha256": "3eccd780870b07fc77cb80fd4a8397fe28ff6554cc17f562d5e529c9ecaa78ca"
+      },
+      {
+        "name": "local-meta-study",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/local-meta-study/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 21,
+        "elapsed_seconds": 19.978,
+        "log_sha256": "e3bbe5afd87b46b0e6d08afd9bbafcb58052f6dee682733f6f01f110824da0bf"
+      },
+      {
+        "name": "openai-comparison",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/openai-comparison/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 12,
+        "elapsed_seconds": 0.215,
+        "log_sha256": "45c30e53085af671b365e3ea69382f2828726b1c654bcc02cd1d85cacea72792"
+      },
+      {
+        "name": "openai-native",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/openai-native/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 20,
+        "elapsed_seconds": 0.265,
+        "log_sha256": "472e6cb8cbde3ab72c22a00591c082fbd7b9c3512623892c763af069f8a16c55"
+      },
+      {
+        "name": "safety-study",
+        "command": [
+          "/workspace/.venvs/simurgh-assurance-workflow/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools/safety-study/tests",
+          "-v"
+        ],
+        "scope": null,
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 0,
+        "tests": 23,
+        "elapsed_seconds": 62.437,
+        "log_sha256": "54c3b317886d66c729615f968dd2ab381181f7af99dc98ee7da4f612254ffe2f"
+      },
+      {
+        "name": "browser-parity",
+        "command": [
+          "node",
+          "scripts/check-browser-parity.mjs",
+          "/workspace/work/simurgh-full-smoke-2026-10-21-candidate/browser-parity.json"
+        ],
+        "scope": "real browser prerequisite check; nonzero if unavailable",
+        "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+        "exit_code": 1,
+        "tests": null,
+        "elapsed_seconds": 0.114,
+        "log_sha256": "89898151083948e2004baa971e77550dbe762d32399c41d1b225d4f34f2e5709"
+      }
+    ]
+  },
+  "hosted": {
+    "readiness": {
+      "conclusion": "success",
+      "databaseId": 39515726750,
+      "headSha": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+      "jobs": [
+        {
+          "completedAt": "2026-10-20T23:33:36Z",
+          "conclusion": "success",
+          "databaseId": 118947297424,
+          "name": "incident-scope",
+          "startedAt": "2026-10-20T23:32:57Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-python@v5",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Validate incident scope and durable stopping",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/upload-artifact@v4",
+              "number": 5,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-python@v5",
+              "number": 9,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 10,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 11,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/39515726750/job/118947297424"
+        },
+        {
+          "completedAt": "2026-10-20T23:36:20Z",
+          "conclusion": "success",
+          "databaseId": 118947297645,
+          "name": "sdk",
+          "startedAt": "2026-10-20T23:32:57Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-node@v4",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-python@v5",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Validate pinned SDK approval and resume integrations",
+              "number": 5,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Validate durable effects across process crashes and retries",
+              "number": 6,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Validate real Redis connector recovery and ambiguous responses",
+              "number": 7,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/upload-artifact@v4",
+              "number": 8,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-python@v5",
+              "number": 14,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@v4",
+              "number": 15,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 16,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 17,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/39515726750/job/118947297645"
+        },
+        {
+          "completedAt": "2026-10-20T23:33:30Z",
+          "conclusion": "success",
+          "databaseId": 118947297670,
+          "name": "kernel-egress",
+          "startedAt": "2026-10-20T23:32:57Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-python@v5",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Validate kernel egress around an approved service",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/upload-artifact@v4",
+              "number": 5,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-python@v5",
+              "number": 9,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 10,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 11,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/39515726750/job/118947297670"
+        },
+        {
+          "completedAt": "2026-10-20T23:35:23Z",
+          "conclusion": "success",
+          "databaseId": 118947297680,
+          "name": "meta-study-replay",
+          "startedAt": "2026-10-20T23:32:57Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-python@v5",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Replay frozen Meta workflow study",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-python@v5",
+              "number": 7,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 8,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 9,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/39515726750/job/118947297680"
+        },
+        {
+          "completedAt": "2026-10-20T23:34:57Z",
+          "conclusion": "success",
+          "databaseId": 118947297698,
+          "name": "luna-comparison-replay",
+          "startedAt": "2026-10-20T23:32:57Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-python@v5",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Replay frozen Luna workflow comparison",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-python@v5",
+              "number": 7,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 8,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 9,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/39515726750/job/118947297698"
+        },
+        {
+          "completedAt": "2026-10-20T23:37:08Z",
+          "conclusion": "success",
+          "databaseId": 118947297708,
+          "name": "safety-study-replay",
+          "startedAt": "2026-10-20T23:32:57Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-python@v5",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Replay frozen synthetic safety study",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-python@v5",
+              "number": 7,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 8,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 9,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/39515726750/job/118947297708"
+        },
+        {
+          "completedAt": "2026-10-20T23:33:31Z",
+          "conclusion": "success",
+          "databaseId": 118947297715,
+          "name": "descriptor-isolation",
+          "startedAt": "2026-10-20T23:32:57Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-python@v5",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Validate descriptor isolation and selective connections",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/upload-artifact@v4",
+              "number": 5,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-python@v5",
+              "number": 9,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 10,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 11,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/39515726750/job/118947297715"
+        },
+        {
+          "completedAt": "2026-10-20T23:33:15Z",
+          "conclusion": "success",
+          "databaseId": 118947297724,
+          "name": "hf-incident-replay",
+          "startedAt": "2026-10-20T23:32:57Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-python@v5",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Replay local Hugging Face incident simulation",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-python@v5",
+              "number": 7,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 8,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 9,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/39515726750/job/118947297724"
+        },
+        {
+          "completedAt": "2026-10-20T23:34:46Z",
+          "conclusion": "success",
+          "databaseId": 118947297763,
+          "name": "luna-native-replay",
+          "startedAt": "2026-10-20T23:32:57Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-python@v5",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Replay frozen Luna native function calls",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-python@v5",
+              "number": 7,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 8,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 9,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/39515726750/job/118947297763"
+        },
+        {
+          "completedAt": "2026-10-20T23:49:45Z",
+          "conclusion": "success",
+          "databaseId": 118947297768,
+          "name": "workflow-recovery",
+          "startedAt": "2026-10-20T23:32:57Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-node@v4",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-python@v5",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Validate persisted native workflows across application restart",
+              "number": 5,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/upload-artifact@v4",
+              "number": 6,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-python@v5",
+              "number": 10,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@v4",
+              "number": 11,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 12,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 13,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/39515726750/job/118947297768"
+        },
+        {
+          "completedAt": "2026-10-20T23:33:30Z",
+          "conclusion": "success",
+          "databaseId": 118947297796,
+          "name": "hf-containment-replay",
+          "startedAt": "2026-10-20T23:32:57Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-python@v5",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Replay composed HF containment and local model proposals",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-python@v5",
+              "number": 7,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 8,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 9,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/39515726750/job/118947297796"
+        },
+        {
+          "completedAt": "2026-10-20T23:33:24Z",
+          "conclusion": "success",
+          "databaseId": 118947297822,
+          "name": "offline",
+          "startedAt": "2026-10-20T23:32:57Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-node@v4",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run npm ci --no-audit --no-fund",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run npm run test:openai",
+              "number": 5,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run npm run openai:offline -- --out /tmp/simurgh-openai/report.json",
+              "number": 6,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run npm run openai:verify -- /tmp/simurgh-openai/report.json",
+              "number": 7,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Verify the saved reviewer artifact against this source tree",
+              "number": 8,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run the real-effects assurance experiment",
+              "number": 9,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/upload-artifact@v4",
+              "number": 10,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@v4",
+              "number": 19,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 20,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 21,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/39515726750/job/118947297822"
+        },
+        {
+          "completedAt": "2026-10-20T23:33:05Z",
+          "conclusion": "success",
+          "databaseId": 118947297899,
+          "name": "local-meta-replay",
+          "startedAt": "2026-10-20T23:32:57Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-python@v5",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-node@v4",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Replay saved local Meta proposals without model downloads",
+              "number": 5,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@v4",
+              "number": 8,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-python@v5",
+              "number": 9,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 10,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 11,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/39515726750/job/118947297899"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/39515726750"
+    },
+    "native": {
+      "conclusion": "success",
+      "databaseId": 39515723845,
+      "headSha": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+      "jobs": [
+        {
+          "completedAt": "2026-10-20T23:35:06Z",
+          "conclusion": "success",
+          "databaseId": 118947289355,
+          "name": "windows",
+          "startedAt": "2026-10-20T23:32:56Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-dotnet@v4",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Execute daemon tests and compile native affinity fixture",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/upload-artifact@v4",
+              "number": 5,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-dotnet@v4",
+              "number": 9,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 10,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 11,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/39515723845/job/118947289355"
+        },
+        {
+          "completedAt": "2026-10-20T23:34:09Z",
+          "conclusion": "success",
+          "databaseId": 118947289642,
+          "name": "macos",
+          "startedAt": "2026-10-20T23:32:57Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Build and execute both Swift package suites",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/upload-artifact@v4",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 8,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 9,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/39515723845/job/118947289642"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/39515723845"
+    },
+    "macos_tests": 10,
+    "windows_tests": 11,
+    "windows_fixture_build": "passed",
+    "artifact_download": "HTTP 403; job logs and GitHub status retained"
+  },
+  "browser": {
+    "a_missing_browser_is_not_a_pass": "Browser parity is UNPROVEN when no browser ran. Two-runtime parity is a true, smaller claim; parity verified with one runtime unmeasured is a false one.",
+    "browser": {
+      "reason": "managed_browser_file_navigation_blocked",
+      "unavailable": true
+    },
+    "browser_binary": null,
+    "entry_count": 5,
+    "node_core": {
+      "mismatches": [],
+      "missing": [],
+      "ok": true
+    },
+    "note": "Node core \u2261 portable \u2261 Python \u2261 browser, over every manifest entry. The first link is what makes the rest mean anything: mirrors that agree only with each other were written by one person on one afternoon.",
+    "portable": {
+      "mismatches": [],
+      "missing": [],
+      "ok": true
+    },
+    "python": {
+      "mismatches": [],
+      "missing": [],
+      "ok": true
+    },
+    "receipt_kind": "runtime",
+    "schema": "simurgh.vpf.cross-runtime-parity.v1",
+    "three_runtime_parity": false,
+    "two_runtime_parity": true,
+    "vector_count": 17
+  },
+  "initial_attempts": [
+    {
+      "source_commit": "b2bf7dc633cd4cce179066f18a56c47ac5412ab5",
+      "base": {
+        "passed": 140,
+        "failed": 2
+      },
+      "e2e": {
+        "passed": 23,
+        "failed": 9
+      }
+    },
+    {
+      "source_commit": "333a990d19b90b5d3aabe6f1605eca978e63fff9",
+      "base": {
+        "passed": 142,
+        "failed": 0
+      },
+      "e2e": {
+        "passed": 31,
+        "failed": 1
+      }
+    }
+  ],
+  "delta_after_base_and_supplement": [
+    "AGENT.md",
+    "CHANGELOG.md",
+    "docs/readiness-2026-10-21/GAPS.md",
+    "docs/readiness-2026-10-21/KERNEL_GATE_AUTHORITY.md",
+    "docs/readiness-2026-10-21/RECEIPT_AUTHORITY.md",
+    "docs/readiness-2026-10-21/RESULTS.md",
+    "docs/readiness-2026-10-21/refusal-retry-2.json",
+    "tests/e2e/llmShield/stage4u/k7AllFunctions.test.js",
+    "tests/unit/llmShield/stage5p/rawCodeCensus.test.js",
+    "tools/simurgh-explorer/core.mjs",
+    "tools/simurgh-explorer/tests/transfer.test.mjs"
+  ],
+  "delta_verification": "All changes since the complete base run are listed; final root, full E2E and explorer checks cover changed code/tests. Native and Python implementation bytes are unchanged.",
+  "credential_retry": {
+    "schema": "simurgh.readiness.inference-retry.v1",
+    "declaration": {
+      "authorized_by": "Owner: try now",
+      "declared_at_utc": "2026-10-21T00:13:13.880308+00:00",
+      "protocol": "docs/readiness-2026-10-21/REFUSAL_PROTOCOL.md",
+      "model": "gpt-6-luna",
+      "maximum_attempts": 4,
+      "maximum_reserved_usd": 1,
+      "stop_on_first_api_error": true,
+      "output": "refusal-retry-2"
+    },
+    "source_commit": "6bd4b2f5a8b05b50379a3b9d571c4e7ab0bcf81d",
+    "attempts": 1,
+    "http_status": 401,
+    "model_observations": 0,
+    "stopped_on_first_api_error": true,
+    "platform_connector": "UNAUTHORIZED: connection requires reauthentication",
+    "forced_controls": [
+      {
+        "case": "active",
+        "status": "observed",
+        "new_effects": 1,
+        "prior_effects": 0
+      },
+      {
+        "case": "authorized_reopen",
+        "status": "observed",
+        "new_effects": 1,
+        "prior_effects": 0
+      },
+      {
+        "case": "ancestor_revoke",
+        "status": "blocked",
+        "new_effects": 0,
+        "prior_effects": 0
+      },
+      {
+        "case": "signal_stop",
+        "status": "blocked",
+        "new_effects": 0,
+        "prior_effects": 0
+      },
+      {
+        "case": "unknown_prior",
+        "status": "blocked",
+        "new_effects": 0,
+        "prior_effects": 1
+      },
+      {
+        "case": "monitor_expired",
+        "status": "blocked",
+        "new_effects": 0,
+        "prior_effects": 0
+      },
+      {
+        "case": "interrupted_update",
+        "status": "blocked",
+        "new_effects": 0,
+        "prior_effects": 0
+      },
+      {
+        "case": "operator_restart",
+        "status": "observed",
+        "new_effects": 1,
+        "prior_effects": 0
+      }
+    ],
+    "raw_results_sha256": "93c5ed2f196e9e55acfb69bf4d94cb3d2668884137427c8ca615687e6b5c7d67"
+  },
+  "logs": {
+    "path": "logs.zip",
+    "sha256": "21656b09bc61485c41ac9442da4565cc26b136a9e3ad4c863ce1fea62e63dbe6",
+    "entries": 476,
+    "manifest": "manifest.json"
+  },
+  "limitations": [
+    "Managed browser file navigation blocks real browser parity and accessibility validation.",
+    "Model API requests returned HTTP 401; organization project listing HTTP 403.",
+    "OpenAI Platform connector requires reauthentication; no new key was created.",
+    "Classmate reproduction is owner-managed and excluded.",
+    "Historical verifier limitations remain open in GAPS.md.",
+    "Prepared dependency installs and documented Docker npm cache were reused.",
+    "Some historical reproduction scripts mutate fixtures only inside disposable checkouts.",
+    "Suite counts are separate and must not be summed as unique tests."
+  ]
+}

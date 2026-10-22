@@ -71,12 +71,17 @@ describe("rateLimit", () => {
     assert.equal(calls, 2);
   });
 
-  test("keyByIp extracts from x-forwarded-for", () => {
+  test("keyByIp uses Express trusted-proxy resolution instead of raw forwarding headers", () => {
     assert.equal(
-      keyByIp({ headers: { "x-forwarded-for": "1.2.3.4, 5.6.7.8" }, socket: {} }),
-      "1.2.3.4"
+      keyByIp({
+        ip: "203.0.113.10",
+        headers: { "x-forwarded-for": "1.2.3.4, 5.6.7.8" },
+        socket: {},
+      }),
+      "203.0.113.10"
     );
     assert.equal(keyByIp({ headers: {}, socket: { remoteAddress: "127.0.0.1" } }), "127.0.0.1");
+    assert.equal(keyByIp({ headers: { "x-forwarded-for": "1.2.3.4" }, socket: {} }), "unknown");
   });
 
   test("keyByHelperSecret extracts header", () => {

@@ -1,0 +1,69 @@
+Project Simurgh: Verifiable Tool Authorization for AI Agents
+
+OWNER-REVIEW DRAFT. Prepared 15 October 2026. No application has been submitted, funding requested, live model experiment performed, or OpenAI endorsement obtained by preparing this document. The owner must resolve the explicit pending items below before submission.
+
+1. Research question and defensive value
+
+Can an application-enforced tool authorization boundary prevent unauthorized effects in a fixed synthetic workload while preserving authorized work, and can a separate verifier expose inconsistent evidence?
+
+Agents can ingest untrusted text and then propose consequential tool operations. Schema-valid output need not be authorized output. A tool gateway can also report success while executing the wrong action, omitting evidence, or preventing all useful work. We propose a narrow instrument that distinguishes these outcomes by measuring effects, authorized-task completion, and evidence consistency separately.
+
+The intended users are developers and security researchers assessing an agent's integration with local tools. OpenAI's 2024 Instruction Hierarchy research studies model-level resistance to lower-trust instructions; its March 2026 agent-security analysis also emphasizes constraining consequences when manipulation succeeds. This experiment studies the application boundary, not a replication of those model-training or product-defense results. This proposal does not scan third-party targets, exploit external services, or deploy agents with production credentials. Its contribution is a reproducible application-security measurement method, with failures available for inspection.
+
+2. Existing foundation and readiness
+
+Project Simurgh is a provider-agnostic research repository with authorization boundaries, signed attestations, offline verifiers, and historical studies of containment and witness evidence. These are existing implementation and research materials, not evidence that this new OpenAI evaluation has succeeded. The original readiness track isolated a synthetic tool-authorization demonstration; subsequent real-effects, SDK, lifecycle and model studies are separately recorded.
+
+The current implementation includes a deterministic key-free path and an optional Responses API proposal adapter. The original readiness report and subsequent source-bound study reports separately record checks, failures and omissions. The initial offline instrument made no live-model claim. Subsequent separately frozen studies now provide bounded live evidence: 288 matched branches across Luna and Llama, and a corrected eight-case Responses workflow. Llama restricted new-effect trials fell from 17/24 to 0/24 with 23/24 active completions retained; Luna had 24/24 active completions and a zero restricted baseline. The corrected workflow completed 2/3 authorized cases and declined 5/5 restricted cases; the remaining active refusal and original eight declines are retained. These results do not validate every original instrument fixture or establish production protection. The proposed next campaign adds independent cases and reproduction rather than relabeling those captures. Owner identity, affiliations, qualifications, authorship, and operational security impact must be confirmed by the applicant; a repository account name does not establish those facts.
+
+3. Method and experimental controls
+
+Freeze a versioned threat model, fixture set, policy configuration, and source revision before the proposed campaign. Each fixture specifies a legitimate task, untrusted material where relevant, a proposed operation, authorization conditions, and expected observable effects. Treat all model output as untrusted input. Validate tool names and arguments and enforce authorization in application code before any controlled effect.
+
+Run each applicable case against the guarded boundary and a deliberately vulnerable control in an isolated local simulator. Include legitimate allowed operations, forbidden operations, malformed proposals, and approval-integrity cases supported by the implemented contract. A failed or refused model response must be retained as a terminal outcome. Report unsupported cases explicitly rather than expanding claims beyond the instrument.
+
+Use a separate consequence checker to examine resulting state and compare it with the fixture's expected authorized outcome. The checker must not simply trust an allow or deny label emitted by the boundary. Require a vulnerable control to produce the prohibited effect where expected, a safe control to avoid it, and an unrelated failure to remain an unrelated failure. A boundary that blocks every action must fail the useful-work control.
+
+Sign the artifact and support offline verification of its schema, case accounting, digest/signature integrity, and recorded outcomes. Mutate artifacts deliberately and verify rejection; prove the mutation actually changed bytes. A self-generated signing key supplies consistency under that key, not independent signer identity, trusted timestamps, or proof that recorded execution happened. A checker implemented by the same project is not independent organizational validation. Seek a separately operated reproduction as a later milestone, without claiming it in advance. Expose the task through established evaluation tooling where practical, preserving the local scorer and its controls. An Inspect task wrapper can improve reuse; it does not turn internally authored cases into an external benchmark or prove model safety.
+
+4. Datasets, models, and metrics
+
+The initial dataset consists of new, versioned synthetic local authorization cases and artificial tool responses. It contains no customer records, private documents, credentials, personal data, or third-party target details. Release fixtures, expected outcomes, and provenance information with the implementation. Keep development fixtures distinct from a proposed held-out expansion; do not describe hand-authored fixtures as unseen real-world attacks. Ask a separate contributor to author held-out resource/approval-substitution and information-disclosure cases with matched legitimate tasks. Freeze the boundary and scoring before seeing those cases. If no external contributor participates, label the extension internally authored. Existing AgentDojo-related work is background, not a newly executed external benchmark or a licensed dataset transfer.
+
+The offline mode uses deterministic proposals rather than a language model. For the proposed live arm, the owner must choose and record an available Responses API model identifier immediately before the experiment, preferably a dated snapshot when offered. Proposed candidates, based on the official catalog checked on 15 October 2026, are gpt-6.1-sol as primary and gpt-6-luna as a lower-cost comparison. PENDING OWNER DECISION: confirm or replace these model IDs, verify account availability, and approve data transmission and maximum spend. Do not infer current model availability from a documentation example. Record model IDs returned by the service, request configuration, prompts, fixture hashes, token usage, errors, and refusals where available. Use the same proposal schema and local execution boundary for each compared model.
+
+Report attempted cases and terminal outcomes without silently dropping failures; unauthorized effects divided by applicable prohibited-action cases; authorized-task completion divided by applicable legitimate-task cases; vulnerable-control detection; malformed/refused proposal counts; artifact verification and tamper outcomes; and elapsed time and token usage where measured. Keep control results separate from model results. State the counting rules and whether repeated trials are independent. Do not attach population-wide confidence claims to a small deterministic fixture set. Predeclare live repetitions and stopping rules before spending credits; any later exploratory cases must be labeled separately.
+
+5. Delivery milestones
+
+Proposed duration: eight weeks after an owner-approved start date. Location: the applicant's development environment and local simulator, with only synthetic prompts sent to the API if separately authorized. PENDING OWNER INPUT: team members, roles, institution, work location, and calendar start date.
+
+Weeks 1-2: Freeze threat model, fixture manifest, outcome definitions, model choices, and resource ceiling. Deliver a runnable offline baseline and a documented list of unsupported cases. Acceptance: legitimate and forbidden controls produce the expected distinct outcomes, with every case accounted for.
+
+Weeks 3-4: Extend adversarial fixtures and artifact-tamper checks; obtain code review and attempt reproduction in a clean environment. Acceptance: harmful controls demonstrate detector sensitivity, safe controls preserve useful work, unrelated failures remain classified as failures, and altered artifacts are rejected. Record defects and fixes explicitly.
+
+Weeks 5-6: After approval of account use and cost, run the frozen live campaign. Deliver raw permitted records, source/configuration identifiers, metrics, and cost accounting. Acceptance: all attempts, including refusals, malformed outputs, transport failures, and stopped runs, remain visible. If authorization or access is unavailable, deliver the offline instrument and report the live milestone as unexecuted.
+
+Weeks 7-8: Seek a separately operated reproduction, document disagreements, and prepare public code, synthetic data, findings, and a limitations report. Acceptance: a reviewer can rerun the published commands and check artifacts without the producer's private key. External reproduction is successful only when an external party actually completes it; otherwise record it as pending. Publication itself requires owner approval.
+
+6. Illustrative resource scenarios
+
+These USD figures are planning assumptions, not approved expenditure, vendor quotes, or a funding request already made. The owner must choose a scenario and justify actual rates, staff availability, API prices, and model access before submission. Credit ceilings are caps, not predictions of cost; use measured pilot token usage and current prices to size the campaign.
+
+Scenario A: USD 500 in API credits, with existing owner-provided engineering time and compute. This supports a bounded single-model pilot after the offline checks. The final case/repetition count must fit a precomputed token budget; reduce scope rather than exceed the cap. Deliver a new held-out live arm only if authorized. No cash salary or external review is funded in this scenario.
+
+Scenario B: USD 25,000 total support, comprising USD 20,000 for 200 engineering/research hours at an assumed USD 100/hour, USD 2,000 for 20 independent-review hours at the same assumed rate, USD 2,500 in API credits, and USD 500 for isolated compute/storage. This supports an eight-week part-time campaign with a second model or held-out expansion if the token budget permits. Reviewer independence requires an actual separate reviewer; earmarking funds does not establish it. Unused API or infrastructure allocation is not an obligation to spend.
+
+Neither scenario guarantees grant eligibility, allocation, or completion of a paid campaign. If the program offers credits only, the owner should request credits only and identify the separate source of labor support. The current program emphasizes real defensive impact; this proposal must not imply an existing deployed customer base or demonstrated vulnerability-remediation record.
+
+7. Public benefit, licensing, and research integrity
+
+Make the implementation, synthetic cases, schemas, reproducer, and negative findings publicly reviewable under the repository's existing AGPL-3.0 terms, subject to owner review and any separately licensed material. Do not copy this code into an MIT-licensed project or imply relicensing without a separate rights and compatibility review. Public sharing should exclude credentials, personal data, confidential API/account information, and unauthorized third-party content.
+
+The portable evaluator does not depend on OpenAI's hosted Evals service. Official documentation checked on 15 October 2026 schedules that service's read-only transition for 31 October and dashboard/API shutdown for 30 November 2026. Responses API function calling is the integration surface; the optional Agents SDK is not required for this instrument.
+
+Historical claims remain bounded. Stage 5Q reports 1,438 of 23,332 cells, or 6.2% coverage. Stage 5R adds zero discharged cells. Stage 5S detects comparisons within its declared surface and leaves witness independence unproven. This proposal does not alter signed historical evidence or turn those stages into evidence about OpenAI models. Local containment does not establish general model safety, signatures do not prove ground truth, and recorded approval does not prove human deliberation.
+
+8. Applicant decisions before submission
+
+Provide the applicant's legal name, email, role/title, required profile link, collaborators and relevant experience; confirm authorship of any cited publications; select models and funding scenario; convert relative milestones to dates; review current program terms, eligibility, export restrictions where applicable, and licensing obligations; approve final wording and public sharing. The currently fetched form does not independently establish every legal representation that may be presented during submission. Submission remains an explicit owner action.

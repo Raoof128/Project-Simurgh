@@ -1,0 +1,346 @@
+{
+  "archive_sha256": "82172351c6d3b653e7fa873c2f397ae921d6f81685432f6eb51ac7722d3a87df",
+  "files": {
+    "canary-green.log": {
+      "sha256": "3124d32592e8cd14ae916ebaab4ad899fc6ce2915be8eec0a98327545e9dadcb",
+      "original_sha256": "3124d32592e8cd14ae916ebaab4ad899fc6ce2915be8eec0a98327545e9dadcb",
+      "public_canary_redacted": false
+    },
+    "canary-red.log": {
+      "sha256": "49281a043753040a5b26b303c146aba94a79f9ecdda320c40e2644b912d7d96d",
+      "original_sha256": "49281a043753040a5b26b303c146aba94a79f9ecdda320c40e2644b912d7d96d",
+      "public_canary_redacted": false
+    },
+    "check-checkout-status.txt": {
+      "sha256": "2a7e0a210943d5c13df903d2f203f65cc1d6ba0ac7c6feec40438d4220c40996",
+      "original_sha256": "2a7e0a210943d5c13df903d2f203f65cc1d6ba0ac7c6feec40438d4220c40996",
+      "public_canary_redacted": false
+    },
+    "check-e2e-checkout-status.txt": {
+      "sha256": "2a7e0a210943d5c13df903d2f203f65cc1d6ba0ac7c6feec40438d4220c40996",
+      "original_sha256": "2a7e0a210943d5c13df903d2f203f65cc1d6ba0ac7c6feec40438d4220c40996",
+      "public_canary_redacted": false
+    },
+    "docker-container.log": {
+      "sha256": "7350c87318d00389ef9716ccdbcf8d0c8c5dbfc3dc527c3b290fa4bb62c0af83",
+      "original_sha256": "7350c87318d00389ef9716ccdbcf8d0c8c5dbfc3dc527c3b290fa4bb62c0af83",
+      "public_canary_redacted": false
+    },
+    "docker-npm-diagnosis.log": {
+      "sha256": "25e03963b62db0de77f31017755b2fde39d3ee43b6ee28c250bfb7b001f556ca",
+      "original_sha256": "25e03963b62db0de77f31017755b2fde39d3ee43b6ee28c250bfb7b001f556ca",
+      "public_canary_redacted": false
+    },
+    "docker-offline-build.log": {
+      "sha256": "0a6b31b98029ea551ce39ea0ffe31f024d0c3da7b3daa940f7bff6fc47c7cf5f",
+      "original_sha256": "0a6b31b98029ea551ce39ea0ffe31f024d0c3da7b3daa940f7bff6fc47c7cf5f",
+      "public_canary_redacted": false
+    },
+    "docker-offline-owned-build.log": {
+      "sha256": "a2c3598832637d2e55a113d2ba3e6eccabef8a1e053d7d81524c7d9421f7a079",
+      "original_sha256": "a2c3598832637d2e55a113d2ba3e6eccabef8a1e053d7d81524c7d9421f7a079",
+      "public_canary_redacted": false
+    },
+    "docker-prefetch.log": {
+      "sha256": "00030820d541a7f46bffeeccdeb22983106f52d511230103eacfd14641e1c24e",
+      "original_sha256": "00030820d541a7f46bffeeccdeb22983106f52d511230103eacfd14641e1c24e",
+      "public_canary_redacted": false
+    },
+    "docker-registry-check.log": {
+      "sha256": "d582c6297357983786bb372c60f0433b8b04ba9f2fe2eb578f4749585ccc8d69",
+      "original_sha256": "d582c6297357983786bb372c60f0433b8b04ba9f2fe2eb578f4749585ccc8d69",
+      "public_canary_redacted": false
+    },
+    "docker-registry-trusted.log": {
+      "sha256": "85bf1764888e12219e4a06d038742afec6ffab67c377fb54ec401b1ea88b31d6",
+      "original_sha256": "85bf1764888e12219e4a06d038742afec6ffab67c377fb54ec401b1ea88b31d6",
+      "public_canary_redacted": false
+    },
+    "docker-smoke-diagnostic.log": {
+      "sha256": "5ce12999e125fea3e7430e4b42d7c810e1ed4f75f3eeed0697b3f1df98d92feb",
+      "original_sha256": "5ce12999e125fea3e7430e4b42d7c810e1ed4f75f3eeed0697b3f1df98d92feb",
+      "public_canary_redacted": false
+    },
+    "docker-smoke-final.log": {
+      "sha256": "06d6b9ffa66eb48ada2e4e38f121758eec917acb0666f9a36e1b4cff309b6fe7",
+      "original_sha256": "06d6b9ffa66eb48ada2e4e38f121758eec917acb0666f9a36e1b4cff309b6fe7",
+      "public_canary_redacted": false
+    },
+    "docker-smoke-retained-diagnostic.log": {
+      "sha256": "5ce12999e125fea3e7430e4b42d7c810e1ed4f75f3eeed0697b3f1df98d92feb",
+      "original_sha256": "5ce12999e125fea3e7430e4b42d7c810e1ed4f75f3eeed0697b3f1df98d92feb",
+      "public_canary_redacted": false
+    },
+    "docker-smoke.log": {
+      "sha256": "5ce12999e125fea3e7430e4b42d7c810e1ed4f75f3eeed0697b3f1df98d92feb",
+      "original_sha256": "5ce12999e125fea3e7430e4b42d7c810e1ed4f75f3eeed0697b3f1df98d92feb",
+      "public_canary_redacted": false
+    },
+    "docker-trusted-build.log": {
+      "sha256": "adef811b6267277dad6c83bfcd31e97524bd20a17a2c04c8e2b7a1c5ce99207e",
+      "original_sha256": "adef811b6267277dad6c83bfcd31e97524bd20a17a2c04c8e2b7a1c5ce99207e",
+      "public_canary_redacted": false
+    },
+    "docker-trusted-final.log": {
+      "sha256": "7941f3661ffc186cc7a0c700eabaae6e9e2a7b108bc792501d69548d82610dbb",
+      "original_sha256": "7941f3661ffc186cc7a0c700eabaae6e9e2a7b108bc792501d69548d82610dbb",
+      "public_canary_redacted": false
+    },
+    "e2e-final-checkout-status.txt": {
+      "sha256": "d30e28d5b340a383d434e640f9d25d6cb4f03f762cf22399bad4752907301056",
+      "original_sha256": "d30e28d5b340a383d434e640f9d25d6cb4f03f762cf22399bad4752907301056",
+      "public_canary_redacted": false
+    },
+    "format-after.log": {
+      "sha256": "353ab62ab11b5aa0b8d622a1f7bedee9531caef9f52a9b2d5bee0dd001ba7955",
+      "original_sha256": "353ab62ab11b5aa0b8d622a1f7bedee9531caef9f52a9b2d5bee0dd001ba7955",
+      "public_canary_redacted": false
+    },
+    "format-before.log": {
+      "sha256": "427e4f227fc07949c519f03270cdda82120a1481d5004ceacf0c25da87eb3ff8",
+      "original_sha256": "427e4f227fc07949c519f03270cdda82120a1481d5004ceacf0c25da87eb3ff8",
+      "public_canary_redacted": false
+    },
+    "logs/agentdojo-simurgh-adapter.log": {
+      "sha256": "e46e9c85fe84b146afa7a19faac7fa30c1d6dc16bbdf41d7579b82601a928f26",
+      "original_sha256": "e46e9c85fe84b146afa7a19faac7fa30c1d6dc16bbdf41d7579b82601a928f26",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-composed.log": {
+      "sha256": "134210611e4a8aeddb02017c018eab125c06128c32454e240d7622a7ceac4f5c",
+      "original_sha256": "134210611e4a8aeddb02017c018eab125c06128c32454e240d7622a7ceac4f5c",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-connector.log": {
+      "sha256": "d6db72e8e23426796347ca89c83c357233b43be8adb69ed87f83b68bc0a820e4",
+      "original_sha256": "d6db72e8e23426796347ca89c83c357233b43be8adb69ed87f83b68bc0a820e4",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-context.log": {
+      "sha256": "56348b6b57dcbc34d2cd3e9658cfebe34a8a07405ffeacba97430a48c88bec3c",
+      "original_sha256": "56348b6b57dcbc34d2cd3e9658cfebe34a8a07405ffeacba97430a48c88bec3c",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-credentials.log": {
+      "sha256": "178ba2696278bdc036d2550241d0c94b30d9baf1bc6d15c0a4bf67ed7b1c1f1d",
+      "original_sha256": "178ba2696278bdc036d2550241d0c94b30d9baf1bc6d15c0a4bf67ed7b1c1f1d",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-durable.log": {
+      "sha256": "91ab819d408fc012f6e1f69d550a988923d55b6b21d0007aa18c120b3b446d80",
+      "original_sha256": "91ab819d408fc012f6e1f69d550a988923d55b6b21d0007aa18c120b3b446d80",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-egress.log": {
+      "sha256": "a7b62d3056646a9c5b438d9b0462b9cdd9b396c7297ac9b876a63d201fc0e801",
+      "original_sha256": "a7b62d3056646a9c5b438d9b0462b9cdd9b396c7297ac9b876a63d201fc0e801",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-eval.log": {
+      "sha256": "7fe17b23eb41613d55a800724870b3413fd5a0d897c6e8fba4d25edfc2676ec0",
+      "original_sha256": "7fe17b23eb41613d55a800724870b3413fd5a0d897c6e8fba4d25edfc2676ec0",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-export.log": {
+      "sha256": "d54685eb7d19c64a249517098c7e8a1d0bd9a6655369558afb55d7ee1ae35d25",
+      "original_sha256": "d54685eb7d19c64a249517098c7e8a1d0bd9a6655369558afb55d7ee1ae35d25",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-hardening.log": {
+      "sha256": "7bfddb7f8d0256484a595f1791429902196a8c18c5a9d89f0996f49593c8faec",
+      "original_sha256": "7bfddb7f8d0256484a595f1791429902196a8c18c5a9d89f0996f49593c8faec",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-isolation.log": {
+      "sha256": "6424919749ab74ba9b01fdfa084e157aba0911b4f4202883c9a582c8c1d82c96",
+      "original_sha256": "6424919749ab74ba9b01fdfa084e157aba0911b4f4202883c9a582c8c1d82c96",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-model-composed.log": {
+      "sha256": "df35994f16689bbd29f99c18f214df92417b621b5458b67a6f5150d6adf7fe28",
+      "original_sha256": "df35994f16689bbd29f99c18f214df92417b621b5458b67a6f5150d6adf7fe28",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-recovery.log": {
+      "sha256": "1d62fc47914da1ba72246c34753b533e0e462287f414593064671dfe97c75b73",
+      "original_sha256": "1d62fc47914da1ba72246c34753b533e0e462287f414593064671dfe97c75b73",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-redis.log": {
+      "sha256": "0f4ac7ee4848c1df782f1db1691a77697c680d2feb0f10d17b7c4bc7b54ab237",
+      "original_sha256": "0f4ac7ee4848c1df782f1db1691a77697c680d2feb0f10d17b7c4bc7b54ab237",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-reliability-final.log": {
+      "sha256": "bdc6576b332bbeff07f4b34396fc02c4c2f8a95359558e3f1e0341467e201618",
+      "original_sha256": "bdc6576b332bbeff07f4b34396fc02c4c2f8a95359558e3f1e0341467e201618",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-reliability.log": {
+      "sha256": "fff05698624fe2ddb8956288e2cdea9b16e9c1917129b2330a8ad49bb4e85ffc",
+      "original_sha256": "fff05698624fe2ddb8956288e2cdea9b16e9c1917129b2330a8ad49bb4e85ffc",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-reproduce.log": {
+      "sha256": "4c4f21fd7a9ded8dfc4ed5fbbb36756cc3383205f4c22bb56d38858f7f25a2ca",
+      "original_sha256": "4c4f21fd7a9ded8dfc4ed5fbbb36756cc3383205f4c22bb56d38858f7f25a2ca",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-scope.log": {
+      "sha256": "96a19ba3bd89d9d266f99b34d1d5ce65d7460027cf618bde240633625ca13b82",
+      "original_sha256": "96a19ba3bd89d9d266f99b34d1d5ce65d7460027cf618bde240633625ca13b82",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-sdk.log": {
+      "sha256": "ac71e4a4c7745bc42827f857f808b349ea7e6472cf3502538e88477c8003c8ff",
+      "original_sha256": "ac71e4a4c7745bc42827f857f808b349ea7e6472cf3502538e88477c8003c8ff",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-signals.log": {
+      "sha256": "c2a28d6460e1d6fda8be30aaf8a5b6b97161f0c5cbad8f96b6ccd9349a34b51e",
+      "original_sha256": "c2a28d6460e1d6fda8be30aaf8a5b6b97161f0c5cbad8f96b6ccd9349a34b51e",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-workflow-final.log": {
+      "sha256": "88d9aabe899330f502c6c4acfb3de78dbb8a123195eb8b9b3f7be66f75d89aac",
+      "original_sha256": "88d9aabe899330f502c6c4acfb3de78dbb8a123195eb8b9b3f7be66f75d89aac",
+      "public_canary_redacted": false
+    },
+    "logs/assurance-workflow.log": {
+      "sha256": "9dfacb21aa3e14fbbfb890dd0b5498ea514c7cb1ce1f60e6bbf32c62b1ace0cf",
+      "original_sha256": "9dfacb21aa3e14fbbfb890dd0b5498ea514c7cb1ce1f60e6bbf32c62b1ace0cf",
+      "public_canary_redacted": false
+    },
+    "logs/check-e2e-final.log": {
+      "sha256": "ad2c5abea940f28e4a1f749a890e3d11b1118918c0ca7badded1ff5fb4b7f479",
+      "original_sha256": "ad2c5abea940f28e4a1f749a890e3d11b1118918c0ca7badded1ff5fb4b7f479",
+      "public_canary_redacted": false
+    },
+    "logs/check-e2e.log": {
+      "sha256": "adc24cf783cfa5c703ec9770f0f16cd7055c8a88f8172fbc77854fbb634974cb",
+      "original_sha256": "adc24cf783cfa5c703ec9770f0f16cd7055c8a88f8172fbc77854fbb634974cb",
+      "public_canary_redacted": false
+    },
+    "logs/check.log": {
+      "sha256": "903f90a1c4b538f7d4d159267a50e610ef80e7b3e95c0e532d86e7d1317c957d",
+      "original_sha256": "fc7964b8768d104d395547009b311ebcf37ec3ced57559275b880b9ba2624ce4",
+      "public_canary_redacted": true
+    },
+    "logs/composition-phase-9-verify.log": {
+      "sha256": "abbc7034fa0a462a4925e8cc96d7add680bb78db282aaed3ea82fb6c4793c911",
+      "original_sha256": "abbc7034fa0a462a4925e8cc96d7add680bb78db282aaed3ea82fb6c4793c911",
+      "public_canary_redacted": false
+    },
+    "logs/context-phase-7-verify.log": {
+      "sha256": "7f7268c0dd638397efe6cf12ac90532efbdaf6f972c29bb2fb404e5d561e3745",
+      "original_sha256": "7f7268c0dd638397efe6cf12ac90532efbdaf6f972c29bb2fb404e5d561e3745",
+      "public_canary_redacted": false
+    },
+    "logs/credentials-phase-8-verify.log": {
+      "sha256": "572629e2824fce73e1d76e83fafb4f3e53a33c07a69b89e82ac5cd7182b3db4a",
+      "original_sha256": "572629e2824fce73e1d76e83fafb4f3e53a33c07a69b89e82ac5cd7182b3db4a",
+      "public_canary_redacted": false
+    },
+    "logs/gate-maintenance-tests.log": {
+      "sha256": "409169269fa431a1b637ecf40cf917d928523c8207036c577e38fdd6347228e0",
+      "original_sha256": "409169269fa431a1b637ecf40cf917d928523c8207036c577e38fdd6347228e0",
+      "public_canary_redacted": false
+    },
+    "logs/hf-containment.log": {
+      "sha256": "72da7b4400cd74281c07748d9c7db9dcf7819972f681b92198315e99c8c6afbe",
+      "original_sha256": "72da7b4400cd74281c07748d9c7db9dcf7819972f681b92198315e99c8c6afbe",
+      "public_canary_redacted": false
+    },
+    "logs/hf-incident-sim.log": {
+      "sha256": "b7cf1645a98d752461bec8069b9401c487c2f1bd57417a361a676da09ce6cf55",
+      "original_sha256": "b7cf1645a98d752461bec8069b9401c487c2f1bd57417a361a676da09ce6cf55",
+      "public_canary_redacted": false
+    },
+    "logs/hf-native.log": {
+      "sha256": "82de699042898eb6315d9145471adaa0f1b3ae0473d7baf37c9bf4095a4f9d90",
+      "original_sha256": "82de699042898eb6315d9145471adaa0f1b3ae0473d7baf37c9bf4095a4f9d90",
+      "public_canary_redacted": false
+    },
+    "logs/lean.log": {
+      "sha256": "ee3ccf70e1cb119741a8a3ed81b009abed6a8fa6825607eb33646a065bc62e4e",
+      "original_sha256": "ee3ccf70e1cb119741a8a3ed81b009abed6a8fa6825607eb33646a065bc62e4e",
+      "public_canary_redacted": false
+    },
+    "logs/local-meta-pilot.log": {
+      "sha256": "767582f65621f80130a704ffc6768b531d4a424c9b9e527abc1b4ce4c0cc19bc",
+      "original_sha256": "767582f65621f80130a704ffc6768b531d4a424c9b9e527abc1b4ce4c0cc19bc",
+      "public_canary_redacted": false
+    },
+    "logs/local-meta-study.log": {
+      "sha256": "63bb5f26ff4ecd770283e7691084f77c2c9f37aaea729edfa605a0bbed862779",
+      "original_sha256": "63bb5f26ff4ecd770283e7691084f77c2c9f37aaea729edfa605a0bbed862779",
+      "public_canary_redacted": false
+    },
+    "logs/node24-guard.log": {
+      "sha256": "1b8f0bc2cee38b2c799e8b823a08c682369076600002b712619f09b5329d599a",
+      "original_sha256": "1b8f0bc2cee38b2c799e8b823a08c682369076600002b712619f09b5329d599a",
+      "public_canary_redacted": false
+    },
+    "logs/npm-final.log": {
+      "sha256": "cb0d31d218ba848b8ea8afe2c5a7ae6d892c5b5ee7ffb042482c2427e64345b5",
+      "original_sha256": "cb0d31d218ba848b8ea8afe2c5a7ae6d892c5b5ee7ffb042482c2427e64345b5",
+      "public_canary_redacted": false
+    },
+    "logs/openai-comparison.log": {
+      "sha256": "73beee4c40baa2cfd75484fa69c35f34c59879be4221f6a38a416291f755483d",
+      "original_sha256": "73beee4c40baa2cfd75484fa69c35f34c59879be4221f6a38a416291f755483d",
+      "public_canary_redacted": false
+    },
+    "logs/openai-native.log": {
+      "sha256": "397f83af6af65e465881d9cded229573937b1cf3878fc9ae4d8a93c6fe1e830d",
+      "original_sha256": "397f83af6af65e465881d9cded229573937b1cf3878fc9ae4d8a93c6fe1e830d",
+      "public_canary_redacted": false
+    },
+    "logs/recovery-phase-5-verify.log": {
+      "sha256": "fd913e065bd066f7e2ae4b0425efec2376bb59e16d1b91cb0aabd203e1caf05b",
+      "original_sha256": "fd913e065bd066f7e2ae4b0425efec2376bb59e16d1b91cb0aabd203e1caf05b",
+      "public_canary_redacted": false
+    },
+    "logs/reproduction-phase-4-verify.log": {
+      "sha256": "5982ff36e25f0357f08c31989e08edc062c7b471e3086ce62b5420d16a9ad329",
+      "original_sha256": "5982ff36e25f0357f08c31989e08edc062c7b471e3086ce62b5420d16a9ad329",
+      "public_canary_redacted": false
+    },
+    "logs/rust-clippy.log": {
+      "sha256": "5ca86519911f9024ca8506aad04071bfda64bfeefed6113aa8de10a1a9b6b502",
+      "original_sha256": "5ca86519911f9024ca8506aad04071bfda64bfeefed6113aa8de10a1a9b6b502",
+      "public_canary_redacted": false
+    },
+    "logs/rust-fmt.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_canary_redacted": false
+    },
+    "logs/rust-test.log": {
+      "sha256": "fb3a9b7d2dc47eae35ad90d4dc4260cdc670244255032e64ea4a09220a3a0d49",
+      "original_sha256": "fb3a9b7d2dc47eae35ad90d4dc4260cdc670244255032e64ea4a09220a3a0d49",
+      "public_canary_redacted": false
+    },
+    "logs/safety-study.log": {
+      "sha256": "e71c7bdab70ada6d866e5fd7fdfe9d879548fbaa3c05c00301ee26ebceabd189",
+      "original_sha256": "e71c7bdab70ada6d866e5fd7fdfe9d879548fbaa3c05c00301ee26ebceabd189",
+      "public_canary_redacted": false
+    },
+    "logs/signals-phase-6-verify.log": {
+      "sha256": "188f26fecb6ff24e07939e367201437d9b319a17399f54778e98d91983c4742e",
+      "original_sha256": "188f26fecb6ff24e07939e367201437d9b319a17399f54778e98d91983c4742e",
+      "public_canary_redacted": false
+    },
+    "packages.txt": {
+      "sha256": "e3495b7b6a30d2b2b4550a873488d5306a0db93e70e3a47b210a0edb9e1abbf5",
+      "original_sha256": "e3495b7b6a30d2b2b4550a873488d5306a0db93e70e3a47b210a0edb9e1abbf5",
+      "public_canary_redacted": false
+    },
+    "secret-scan-final.log": {
+      "sha256": "b4274aefd61366de934df8f6533705b8932aa0283e97f4b1438f1eae8b8f1d01",
+      "original_sha256": "b4274aefd61366de934df8f6533705b8932aa0283e97f4b1438f1eae8b8f1d01",
+      "public_canary_redacted": false
+    }
+  },
+  "note": "Same-operator diagnostic logs; hashes bind supplied bytes, not independent custody. Exact public token-shaped canary is replaced where present."
+}

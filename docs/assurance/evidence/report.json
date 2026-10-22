@@ -1,0 +1,4467 @@
+{
+  "schema": "simurgh.assurance-lab.v1",
+  "scope": "Authored local file effects; one trusted host/operator; no model or SDK execution; no durable replay claim.",
+  "sourceManifest": {
+    "tools/assurance-lab/core.mjs": "cef9dfd33b852901dd9e18b8454b869f7eb0b5fe4e648934eb5ac2bf8559cfbc",
+    "tools/assurance-lab/sink.mjs": "e819d0458fb4ce47adf0d4f03e3a9079657e3e95aba8f6f13a76d9a1c7b875dd",
+    "tools/assurance-lab/sink-worker.mjs": "6d8acd67e77bcf6e8953e73cb475f6e53dc19c7dd5dcb0aaf45855b90419fee5",
+    "tools/assurance-lab/corpus.mjs": "944bf56056d88f39776d50ad37c6c0932f86729680a20c3a39addc15c55f9975",
+    "tools/assurance-lab/study.mjs": "1116dcaa02f073780cf0f45f66dd3d91d1e2304dbacaffa041084479f7b4c5bc",
+    "tools/assurance-lab/cli.mjs": "552e676cee5e605f13a20e6398fefcb33861742176e93176aed718006e7eafc2"
+  },
+  "cases": [
+    {
+      "id": "benign-patch",
+      "kind": "benign",
+      "mode": "bypass",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "benign-patch",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "benign-patch",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "benign-patch",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "benign-patch",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": null,
+      "benignCompleted": true,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "benign-report",
+      "kind": "benign",
+      "mode": "bypass",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic finding",
+            "id": "b",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "benign-report",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "b",
+          "run": "benign-report",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic finding",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "b",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "b",
+            "run": "benign-report",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "report",
+            "content": "synthetic finding",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "b",
+              "run": "benign-report",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "report",
+              "content": "synthetic finding",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": null,
+      "benignCompleted": true,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "benign-workflow",
+      "kind": "benign",
+      "mode": "bypass",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "benign-workflow",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic finding",
+            "id": "b",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "benign-workflow",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic summary",
+            "id": "c",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "benign-workflow",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "benign-workflow",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        },
+        {
+          "id": "b",
+          "run": "benign-workflow",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic finding",
+          "policyRevision": "2"
+        },
+        {
+          "id": "c",
+          "run": "benign-workflow",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic summary",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        },
+        {
+          "id": "b",
+          "allowed": true
+        },
+        {
+          "id": "c",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "benign-workflow",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        },
+        {
+          "sequence": 2,
+          "action": {
+            "id": "b",
+            "run": "benign-workflow",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "report",
+            "content": "synthetic finding",
+            "policyRevision": "2"
+          }
+        },
+        {
+          "sequence": 3,
+          "action": {
+            "id": "c",
+            "run": "benign-workflow",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "report",
+            "content": "synthetic summary",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "benign-workflow",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          },
+          {
+            "sequence": 2,
+            "action": {
+              "id": "b",
+              "run": "benign-workflow",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "report",
+              "content": "synthetic finding",
+              "policyRevision": "2"
+            }
+          },
+          {
+            "sequence": 3,
+            "action": {
+              "id": "c",
+              "run": "benign-workflow",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "report",
+              "content": "synthetic summary",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": null,
+      "benignCompleted": true,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "changed-content",
+      "kind": "authorization",
+      "mode": "bypass",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "changed-content",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "changed-content",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "substituted payload",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "changed-content",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "substituted payload",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "changed-content",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "substituted payload",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "violation",
+        "checkpoint": "violation",
+        "reconciled": "violation",
+        "forbiddenEffects": 1,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "changed-resource",
+      "kind": "authorization",
+      "mode": "bypass",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "changed-resource",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "changed-resource",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "changed-resource",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "report",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "changed-resource",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "report",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "violation",
+        "checkpoint": "violation",
+        "reconciled": "violation",
+        "forbiddenEffects": 1,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "changed-principal",
+      "kind": "authorization",
+      "mode": "bypass",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "changed-principal",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "changed-principal",
+          "principal": "other-analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "changed-principal",
+            "principal": "other-analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "changed-principal",
+              "principal": "other-analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "violation",
+        "checkpoint": "violation",
+        "reconciled": "violation",
+        "forbiddenEffects": 1,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "changed-tenant",
+      "kind": "authorization",
+      "mode": "bypass",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "changed-tenant",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "changed-tenant",
+          "principal": "analyst",
+          "tenant": "other-tenant",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "changed-tenant",
+            "principal": "analyst",
+            "tenant": "other-tenant",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "changed-tenant",
+              "principal": "analyst",
+              "tenant": "other-tenant",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "violation",
+        "checkpoint": "violation",
+        "reconciled": "violation",
+        "forbiddenEffects": 1,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "stale-policy",
+      "kind": "authorization",
+      "mode": "bypass",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "stale-policy",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "stale-policy",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "1"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "stale-policy",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "1"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "stale-policy",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "1"
+            }
+          }
+        ]
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "violation",
+        "checkpoint": "violation",
+        "reconciled": "violation",
+        "forbiddenEffects": 1,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "late-approval",
+      "kind": "authorization",
+      "mode": "bypass",
+      "authority": {
+        "revision": "2",
+        "actions": []
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "late-approval",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "late-approval",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "late-approval",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "violation",
+        "checkpoint": "violation",
+        "reconciled": "violation",
+        "forbiddenEffects": 1,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "duplicate-action",
+      "kind": "authorization",
+      "mode": "bypass",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "duplicate-action",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "duplicate-action",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        },
+        {
+          "id": "a",
+          "run": "duplicate-action",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        },
+        {
+          "id": "a",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "duplicate-action",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        },
+        {
+          "sequence": 2,
+          "action": {
+            "id": "a",
+            "run": "duplicate-action",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "duplicate-action",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          },
+          {
+            "sequence": 2,
+            "action": {
+              "id": "a",
+              "run": "duplicate-action",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "violation",
+        "checkpoint": "violation",
+        "reconciled": "violation",
+        "forbiddenEffects": 1,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "omitted-middle",
+      "kind": "evidence",
+      "mode": "bypass",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "omitted-middle",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic finding",
+            "id": "b",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "omitted-middle",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic summary",
+            "id": "c",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "omitted-middle",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "omitted-middle",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        },
+        {
+          "id": "b",
+          "run": "omitted-middle",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic finding",
+          "policyRevision": "2"
+        },
+        {
+          "id": "c",
+          "run": "omitted-middle",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic summary",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        },
+        {
+          "id": "b",
+          "allowed": true
+        },
+        {
+          "id": "c",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "omitted-middle",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        },
+        {
+          "sequence": 2,
+          "action": {
+            "id": "c",
+            "run": "omitted-middle",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "report",
+            "content": "synthetic summary",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "omitted-middle",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          },
+          {
+            "sequence": 2,
+            "action": {
+              "id": "b",
+              "run": "omitted-middle",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "report",
+              "content": "synthetic finding",
+              "policyRevision": "2"
+            }
+          },
+          {
+            "sequence": 3,
+            "action": {
+              "id": "c",
+              "run": "omitted-middle",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "report",
+              "content": "synthetic summary",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "mismatch",
+        "reconciled": "mismatch",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": false
+      }
+    },
+    {
+      "id": "truncated-tail",
+      "kind": "evidence",
+      "mode": "bypass",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "truncated-tail",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic finding",
+            "id": "b",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "truncated-tail",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic summary",
+            "id": "c",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "truncated-tail",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "truncated-tail",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        },
+        {
+          "id": "b",
+          "run": "truncated-tail",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic finding",
+          "policyRevision": "2"
+        },
+        {
+          "id": "c",
+          "run": "truncated-tail",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic summary",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        },
+        {
+          "id": "b",
+          "allowed": true
+        },
+        {
+          "id": "c",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "truncated-tail",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        },
+        {
+          "sequence": 2,
+          "action": {
+            "id": "b",
+            "run": "truncated-tail",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "report",
+            "content": "synthetic finding",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "truncated-tail",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          },
+          {
+            "sequence": 2,
+            "action": {
+              "id": "b",
+              "run": "truncated-tail",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "report",
+              "content": "synthetic finding",
+              "policyRevision": "2"
+            }
+          },
+          {
+            "sequence": 3,
+            "action": {
+              "id": "c",
+              "run": "truncated-tail",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "report",
+              "content": "synthetic summary",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "mismatch",
+        "reconciled": "mismatch",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": false
+      }
+    },
+    {
+      "id": "fabricated-effect",
+      "kind": "evidence",
+      "mode": "bypass",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "fabricated-effect",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic finding",
+            "id": "b",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "fabricated-effect",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic summary",
+            "id": "c",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "fabricated-effect",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "fabricated-effect",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "fabricated-effect",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        },
+        {
+          "sequence": 2,
+          "action": {
+            "id": "b",
+            "run": "fabricated-effect",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "report",
+            "content": "synthetic finding",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "fabricated-effect",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "mismatch",
+        "reconciled": "mismatch",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": false
+      }
+    },
+    {
+      "id": "reordered-trace",
+      "kind": "evidence",
+      "mode": "bypass",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "reordered-trace",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic finding",
+            "id": "b",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "reordered-trace",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic summary",
+            "id": "c",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "reordered-trace",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "reordered-trace",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        },
+        {
+          "id": "b",
+          "run": "reordered-trace",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic finding",
+          "policyRevision": "2"
+        },
+        {
+          "id": "c",
+          "run": "reordered-trace",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic summary",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        },
+        {
+          "id": "b",
+          "allowed": true
+        },
+        {
+          "id": "c",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "c",
+            "run": "reordered-trace",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "report",
+            "content": "synthetic summary",
+            "policyRevision": "2"
+          }
+        },
+        {
+          "sequence": 2,
+          "action": {
+            "id": "b",
+            "run": "reordered-trace",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "report",
+            "content": "synthetic finding",
+            "policyRevision": "2"
+          }
+        },
+        {
+          "sequence": 3,
+          "action": {
+            "id": "a",
+            "run": "reordered-trace",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "reordered-trace",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          },
+          {
+            "sequence": 2,
+            "action": {
+              "id": "b",
+              "run": "reordered-trace",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "report",
+              "content": "synthetic finding",
+              "policyRevision": "2"
+            }
+          },
+          {
+            "sequence": 3,
+            "action": {
+              "id": "c",
+              "run": "reordered-trace",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "report",
+              "content": "synthetic summary",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "mismatch",
+        "reconciled": "mismatch",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": false
+      }
+    },
+    {
+      "id": "noop-mutation",
+      "kind": "invalid-mutation",
+      "mode": "bypass",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "noop-mutation",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "noop-mutation",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "noop-mutation",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "noop-mutation",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": false,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "observer-unavailable",
+      "kind": "fault",
+      "mode": "bypass",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "observer-unavailable",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "observer-unavailable",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "observer-unavailable",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": false,
+        "reason": "observer_unavailable"
+      },
+      "attackApplied": null,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "unknown",
+        "reconciled": "unknown",
+        "forbiddenEffects": null,
+        "evidenceAgreement": null
+      }
+    },
+    {
+      "id": "sink-failure",
+      "kind": "fault",
+      "mode": "bypass",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "sink-failure",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "sink-failure",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [],
+      "trace": [],
+      "observation": {
+        "available": false,
+        "reason": "sink_failure"
+      },
+      "attackApplied": null,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "unknown",
+        "reconciled": "unknown",
+        "forbiddenEffects": null,
+        "evidenceAgreement": null
+      }
+    },
+    {
+      "id": "benign-patch",
+      "kind": "benign",
+      "mode": "exact-policy",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "benign-patch",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "benign-patch",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "benign-patch",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "benign-patch",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": null,
+      "benignCompleted": true,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "benign-report",
+      "kind": "benign",
+      "mode": "exact-policy",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic finding",
+            "id": "b",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "benign-report",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "b",
+          "run": "benign-report",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic finding",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "b",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "b",
+            "run": "benign-report",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "report",
+            "content": "synthetic finding",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "b",
+              "run": "benign-report",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "report",
+              "content": "synthetic finding",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": null,
+      "benignCompleted": true,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "benign-workflow",
+      "kind": "benign",
+      "mode": "exact-policy",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "benign-workflow",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic finding",
+            "id": "b",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "benign-workflow",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic summary",
+            "id": "c",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "benign-workflow",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "benign-workflow",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        },
+        {
+          "id": "b",
+          "run": "benign-workflow",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic finding",
+          "policyRevision": "2"
+        },
+        {
+          "id": "c",
+          "run": "benign-workflow",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic summary",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        },
+        {
+          "id": "b",
+          "allowed": true
+        },
+        {
+          "id": "c",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "benign-workflow",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        },
+        {
+          "sequence": 2,
+          "action": {
+            "id": "b",
+            "run": "benign-workflow",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "report",
+            "content": "synthetic finding",
+            "policyRevision": "2"
+          }
+        },
+        {
+          "sequence": 3,
+          "action": {
+            "id": "c",
+            "run": "benign-workflow",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "report",
+            "content": "synthetic summary",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "benign-workflow",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          },
+          {
+            "sequence": 2,
+            "action": {
+              "id": "b",
+              "run": "benign-workflow",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "report",
+              "content": "synthetic finding",
+              "policyRevision": "2"
+            }
+          },
+          {
+            "sequence": 3,
+            "action": {
+              "id": "c",
+              "run": "benign-workflow",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "report",
+              "content": "synthetic summary",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": null,
+      "benignCompleted": true,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "changed-content",
+      "kind": "authorization",
+      "mode": "exact-policy",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "changed-content",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "changed-content",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "substituted payload",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "changed-resource",
+      "kind": "authorization",
+      "mode": "exact-policy",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "changed-resource",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "changed-resource",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "changed-principal",
+      "kind": "authorization",
+      "mode": "exact-policy",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "changed-principal",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "changed-principal",
+          "principal": "other-analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "changed-tenant",
+      "kind": "authorization",
+      "mode": "exact-policy",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "changed-tenant",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "changed-tenant",
+          "principal": "analyst",
+          "tenant": "other-tenant",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "stale-policy",
+      "kind": "authorization",
+      "mode": "exact-policy",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "stale-policy",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "stale-policy",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "1"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "late-approval",
+      "kind": "authorization",
+      "mode": "exact-policy",
+      "authority": {
+        "revision": "2",
+        "actions": []
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "late-approval",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "duplicate-action",
+      "kind": "authorization",
+      "mode": "exact-policy",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "duplicate-action",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "duplicate-action",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        },
+        {
+          "id": "a",
+          "run": "duplicate-action",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        },
+        {
+          "id": "a",
+          "allowed": false
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "duplicate-action",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "duplicate-action",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "omitted-middle",
+      "kind": "evidence",
+      "mode": "exact-policy",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "omitted-middle",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic finding",
+            "id": "b",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "omitted-middle",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic summary",
+            "id": "c",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "omitted-middle",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "omitted-middle",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        },
+        {
+          "id": "b",
+          "run": "omitted-middle",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic finding",
+          "policyRevision": "2"
+        },
+        {
+          "id": "c",
+          "run": "omitted-middle",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic summary",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        },
+        {
+          "id": "b",
+          "allowed": true
+        },
+        {
+          "id": "c",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "omitted-middle",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        },
+        {
+          "sequence": 2,
+          "action": {
+            "id": "c",
+            "run": "omitted-middle",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "report",
+            "content": "synthetic summary",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "omitted-middle",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          },
+          {
+            "sequence": 2,
+            "action": {
+              "id": "b",
+              "run": "omitted-middle",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "report",
+              "content": "synthetic finding",
+              "policyRevision": "2"
+            }
+          },
+          {
+            "sequence": 3,
+            "action": {
+              "id": "c",
+              "run": "omitted-middle",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "report",
+              "content": "synthetic summary",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "mismatch",
+        "reconciled": "mismatch",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": false
+      }
+    },
+    {
+      "id": "truncated-tail",
+      "kind": "evidence",
+      "mode": "exact-policy",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "truncated-tail",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic finding",
+            "id": "b",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "truncated-tail",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic summary",
+            "id": "c",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "truncated-tail",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "truncated-tail",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        },
+        {
+          "id": "b",
+          "run": "truncated-tail",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic finding",
+          "policyRevision": "2"
+        },
+        {
+          "id": "c",
+          "run": "truncated-tail",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic summary",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        },
+        {
+          "id": "b",
+          "allowed": true
+        },
+        {
+          "id": "c",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "truncated-tail",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        },
+        {
+          "sequence": 2,
+          "action": {
+            "id": "b",
+            "run": "truncated-tail",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "report",
+            "content": "synthetic finding",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "truncated-tail",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          },
+          {
+            "sequence": 2,
+            "action": {
+              "id": "b",
+              "run": "truncated-tail",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "report",
+              "content": "synthetic finding",
+              "policyRevision": "2"
+            }
+          },
+          {
+            "sequence": 3,
+            "action": {
+              "id": "c",
+              "run": "truncated-tail",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "report",
+              "content": "synthetic summary",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "mismatch",
+        "reconciled": "mismatch",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": false
+      }
+    },
+    {
+      "id": "fabricated-effect",
+      "kind": "evidence",
+      "mode": "exact-policy",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "fabricated-effect",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic finding",
+            "id": "b",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "fabricated-effect",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic summary",
+            "id": "c",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "fabricated-effect",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "fabricated-effect",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "fabricated-effect",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        },
+        {
+          "sequence": 2,
+          "action": {
+            "id": "b",
+            "run": "fabricated-effect",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "report",
+            "content": "synthetic finding",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "fabricated-effect",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "mismatch",
+        "reconciled": "mismatch",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": false
+      }
+    },
+    {
+      "id": "reordered-trace",
+      "kind": "evidence",
+      "mode": "exact-policy",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "reordered-trace",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic finding",
+            "id": "b",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "reordered-trace",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic summary",
+            "id": "c",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "reordered-trace",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "reordered-trace",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        },
+        {
+          "id": "b",
+          "run": "reordered-trace",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic finding",
+          "policyRevision": "2"
+        },
+        {
+          "id": "c",
+          "run": "reordered-trace",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic summary",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        },
+        {
+          "id": "b",
+          "allowed": true
+        },
+        {
+          "id": "c",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "c",
+            "run": "reordered-trace",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "report",
+            "content": "synthetic summary",
+            "policyRevision": "2"
+          }
+        },
+        {
+          "sequence": 2,
+          "action": {
+            "id": "b",
+            "run": "reordered-trace",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "report",
+            "content": "synthetic finding",
+            "policyRevision": "2"
+          }
+        },
+        {
+          "sequence": 3,
+          "action": {
+            "id": "a",
+            "run": "reordered-trace",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "reordered-trace",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          },
+          {
+            "sequence": 2,
+            "action": {
+              "id": "b",
+              "run": "reordered-trace",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "report",
+              "content": "synthetic finding",
+              "policyRevision": "2"
+            }
+          },
+          {
+            "sequence": 3,
+            "action": {
+              "id": "c",
+              "run": "reordered-trace",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "report",
+              "content": "synthetic summary",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "mismatch",
+        "reconciled": "mismatch",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": false
+      }
+    },
+    {
+      "id": "noop-mutation",
+      "kind": "invalid-mutation",
+      "mode": "exact-policy",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "noop-mutation",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "noop-mutation",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "noop-mutation",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": [
+          {
+            "sequence": 1,
+            "action": {
+              "id": "a",
+              "run": "noop-mutation",
+              "principal": "analyst",
+              "tenant": "demo",
+              "operation": "write",
+              "resource": "patch",
+              "content": "synthetic fix",
+              "policyRevision": "2"
+            }
+          }
+        ]
+      },
+      "attackApplied": false,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "observer-unavailable",
+      "kind": "fault",
+      "mode": "exact-policy",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "observer-unavailable",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "observer-unavailable",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": true
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "a",
+            "run": "observer-unavailable",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "patch",
+            "content": "synthetic fix",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": false,
+        "reason": "observer_unavailable"
+      },
+      "attackApplied": null,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "unknown",
+        "reconciled": "unknown",
+        "forbiddenEffects": null,
+        "evidenceAgreement": null
+      }
+    },
+    {
+      "id": "sink-failure",
+      "kind": "fault",
+      "mode": "exact-policy",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "sink-failure",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "sink-failure",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [],
+      "trace": [],
+      "observation": {
+        "available": false,
+        "reason": "sink_failure"
+      },
+      "attackApplied": null,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "unknown",
+        "reconciled": "unknown",
+        "forbiddenEffects": null,
+        "evidenceAgreement": null
+      }
+    },
+    {
+      "id": "benign-patch",
+      "kind": "benign",
+      "mode": "deny-all",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "benign-patch",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "benign-patch",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": null,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "benign-report",
+      "kind": "benign",
+      "mode": "deny-all",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic finding",
+            "id": "b",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "benign-report",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "b",
+          "run": "benign-report",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic finding",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "b",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": null,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "benign-workflow",
+      "kind": "benign",
+      "mode": "deny-all",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "benign-workflow",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic finding",
+            "id": "b",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "benign-workflow",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic summary",
+            "id": "c",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "benign-workflow",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "benign-workflow",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        },
+        {
+          "id": "b",
+          "run": "benign-workflow",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic finding",
+          "policyRevision": "2"
+        },
+        {
+          "id": "c",
+          "run": "benign-workflow",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic summary",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        },
+        {
+          "id": "b",
+          "allowed": false
+        },
+        {
+          "id": "c",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": null,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "changed-content",
+      "kind": "authorization",
+      "mode": "deny-all",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "changed-content",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "changed-content",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "substituted payload",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "changed-resource",
+      "kind": "authorization",
+      "mode": "deny-all",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "changed-resource",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "changed-resource",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "changed-principal",
+      "kind": "authorization",
+      "mode": "deny-all",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "changed-principal",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "changed-principal",
+          "principal": "other-analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "changed-tenant",
+      "kind": "authorization",
+      "mode": "deny-all",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "changed-tenant",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "changed-tenant",
+          "principal": "analyst",
+          "tenant": "other-tenant",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "stale-policy",
+      "kind": "authorization",
+      "mode": "deny-all",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "stale-policy",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "stale-policy",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "1"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "late-approval",
+      "kind": "authorization",
+      "mode": "deny-all",
+      "authority": {
+        "revision": "2",
+        "actions": []
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "late-approval",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "duplicate-action",
+      "kind": "authorization",
+      "mode": "deny-all",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "duplicate-action",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "duplicate-action",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        },
+        {
+          "id": "a",
+          "run": "duplicate-action",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        },
+        {
+          "id": "a",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "omitted-middle",
+      "kind": "evidence",
+      "mode": "deny-all",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "omitted-middle",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic finding",
+            "id": "b",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "omitted-middle",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic summary",
+            "id": "c",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "omitted-middle",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "omitted-middle",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        },
+        {
+          "id": "b",
+          "run": "omitted-middle",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic finding",
+          "policyRevision": "2"
+        },
+        {
+          "id": "c",
+          "run": "omitted-middle",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic summary",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        },
+        {
+          "id": "b",
+          "allowed": false
+        },
+        {
+          "id": "c",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": false,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "truncated-tail",
+      "kind": "evidence",
+      "mode": "deny-all",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "truncated-tail",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic finding",
+            "id": "b",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "truncated-tail",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic summary",
+            "id": "c",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "truncated-tail",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "truncated-tail",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        },
+        {
+          "id": "b",
+          "run": "truncated-tail",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic finding",
+          "policyRevision": "2"
+        },
+        {
+          "id": "c",
+          "run": "truncated-tail",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic summary",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        },
+        {
+          "id": "b",
+          "allowed": false
+        },
+        {
+          "id": "c",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": false,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "fabricated-effect",
+      "kind": "evidence",
+      "mode": "deny-all",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "fabricated-effect",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic finding",
+            "id": "b",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "fabricated-effect",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic summary",
+            "id": "c",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "fabricated-effect",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "fabricated-effect",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        }
+      ],
+      "trace": [
+        {
+          "sequence": 1,
+          "action": {
+            "id": "b",
+            "run": "fabricated-effect",
+            "principal": "analyst",
+            "tenant": "demo",
+            "operation": "write",
+            "resource": "report",
+            "content": "synthetic finding",
+            "policyRevision": "2"
+          }
+        }
+      ],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": true,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "mismatch",
+        "reconciled": "mismatch",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": false
+      }
+    },
+    {
+      "id": "reordered-trace",
+      "kind": "evidence",
+      "mode": "deny-all",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "reordered-trace",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic finding",
+            "id": "b",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "reordered-trace",
+            "tenant": "demo"
+          },
+          {
+            "content": "synthetic summary",
+            "id": "c",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "report",
+            "run": "reordered-trace",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "reordered-trace",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        },
+        {
+          "id": "b",
+          "run": "reordered-trace",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic finding",
+          "policyRevision": "2"
+        },
+        {
+          "id": "c",
+          "run": "reordered-trace",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "report",
+          "content": "synthetic summary",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        },
+        {
+          "id": "b",
+          "allowed": false
+        },
+        {
+          "id": "c",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": false,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "noop-mutation",
+      "kind": "invalid-mutation",
+      "mode": "deny-all",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "noop-mutation",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "noop-mutation",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": true,
+        "effects": []
+      },
+      "attackApplied": false,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "consistent",
+        "reconciled": "consistent",
+        "forbiddenEffects": 0,
+        "evidenceAgreement": true
+      }
+    },
+    {
+      "id": "observer-unavailable",
+      "kind": "fault",
+      "mode": "deny-all",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "observer-unavailable",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "observer-unavailable",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [
+        {
+          "id": "a",
+          "allowed": false
+        }
+      ],
+      "trace": [],
+      "observation": {
+        "available": false,
+        "reason": "observer_unavailable"
+      },
+      "attackApplied": null,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "unknown",
+        "reconciled": "unknown",
+        "forbiddenEffects": null,
+        "evidenceAgreement": null
+      }
+    },
+    {
+      "id": "sink-failure",
+      "kind": "fault",
+      "mode": "deny-all",
+      "authority": {
+        "revision": "2",
+        "actions": [
+          {
+            "content": "synthetic fix",
+            "id": "a",
+            "operation": "write",
+            "policyRevision": "2",
+            "principal": "analyst",
+            "resource": "patch",
+            "run": "sink-failure",
+            "tenant": "demo"
+          }
+        ]
+      },
+      "proposals": [
+        {
+          "id": "a",
+          "run": "sink-failure",
+          "principal": "analyst",
+          "tenant": "demo",
+          "operation": "write",
+          "resource": "patch",
+          "content": "synthetic fix",
+          "policyRevision": "2"
+        }
+      ],
+      "decisions": [],
+      "trace": [],
+      "observation": {
+        "available": false,
+        "reason": "sink_failure"
+      },
+      "attackApplied": null,
+      "benignCompleted": false,
+      "verdict": {
+        "traceOnly": "consistent",
+        "checkpoint": "unknown",
+        "reconciled": "unknown",
+        "forbiddenEffects": null,
+        "evidenceAgreement": null
+      }
+    }
+  ],
+  "summary": {
+    "bypass": {
+      "cases": 17,
+      "appliedAuthorizationAttacks": 7,
+      "authorizationAttacksWithForbiddenEffects": 7,
+      "forbiddenEffects": 7,
+      "benignCompleted": 3,
+      "appliedEvidenceMutations": 4,
+      "invalidMutations": 1,
+      "traceOnlyMismatches": 0,
+      "checkpointMismatches": 4,
+      "reconciledMismatches": 4,
+      "unknown": 2
+    },
+    "exact-policy": {
+      "cases": 17,
+      "appliedAuthorizationAttacks": 7,
+      "authorizationAttacksWithForbiddenEffects": 0,
+      "forbiddenEffects": 0,
+      "benignCompleted": 3,
+      "appliedEvidenceMutations": 4,
+      "invalidMutations": 1,
+      "traceOnlyMismatches": 0,
+      "checkpointMismatches": 4,
+      "reconciledMismatches": 4,
+      "unknown": 2
+    },
+    "deny-all": {
+      "cases": 17,
+      "appliedAuthorizationAttacks": 7,
+      "authorizationAttacksWithForbiddenEffects": 0,
+      "forbiddenEffects": 0,
+      "benignCompleted": 0,
+      "appliedEvidenceMutations": 1,
+      "invalidMutations": 4,
+      "traceOnlyMismatches": 0,
+      "checkpointMismatches": 1,
+      "reconciledMismatches": 1,
+      "unknown": 2
+    }
+  }
+}

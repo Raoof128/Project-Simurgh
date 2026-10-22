@@ -8,6 +8,7 @@
 // itself.
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 import { measureRawCodeCensus } from "../../../../tools/simurgh-attestation/stage5p/node/measureStage5pRawCodes.mjs";
@@ -224,8 +225,54 @@ test("the static and dynamic nets disagree in scope, and both are required", () 
 
 // ---- repo hygiene: the literals live in exactly the approved places -----------------------------
 
+// Phase 16: exact historical test-count prose, not an unrestricted log-file exception.
+const HISTORICAL_TOTAL_LINES = new Map([
+  ["AGENT.md", "b369006e5cb739418756c4890469910b77d7105abe1bb22e46384d3b0bc7a472"],
+  ["CHANGELOG.md", "7aae9708e6bbab3d30624e1d62a0462b64d924a0c823c75e286ce97585f6daa4"],
+]);
+const approvedHistoricalTotal = (path, line) =>
+  HISTORICAL_TOTAL_LINES.get(path) === createHash("sha256").update(line).digest("hex");
+
+test("historical total exceptions bind exact paths and bytes, never new code literals", () => {
+  for (const [path, digest] of HISTORICAL_TOTAL_LINES) {
+    const matches = readFileSync(join(REPO, path), "utf8")
+      .split("\n")
+      .filter((line) => approvedHistoricalTotal(path, line));
+    assert.equal(
+      matches.length,
+      1,
+      `${path}: historical exception missing or duplicated (${digest})`
+    );
+    assert.equal(approvedHistoricalTotal(`elsewhere/${path}`, matches[0]), false);
+    assert.equal(approvedHistoricalTotal(path, matches[0] + " const VSI_LEAK = 467;"), false);
+    assert.equal(approvedHistoricalTotal(path, matches[0].replace("469", "468")), false);
+  }
+});
+
 test("raw literals 464-474 occur ONLY in the allocator, the registry, goldens and approved docs", () => {
+  // The reviewer entry point moved the old README verbatim to this archive. Keep
+  // the existing approved-documentation exception bound to those exact bytes;
+  // editing the archive must not create an unchecked documentation write surface.
+  assert.equal(
+    createHash("sha256")
+      .update(readFileSync(join(REPO, "RESEARCH_HISTORY.md")))
+      .digest("hex"),
+    "220c4e97d1b25e8505011bdce17355851fe6d895d2a3e5b0cd93efeda4f27baf",
+    "Historical README archive must retain the original approved bytes"
+  );
   const APPROVED = [
+    // Structured readiness receipt authorized by 6bd4b2f5.
+    "docs/readiness-2026-10-21/validation.json",
+    // R05: exact documentation additions authorized by 2068f1a6.
+    "AGENT.md",
+    "CHANGELOG.md",
+    "docs/documentation-audit-2026-10-19/FILES.md",
+    "docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md",
+    "docs/documentation-audit-2026-10-19/SOURCES.md",
+    "docs/documentation-audit-2026-10-19/inventory.json",
+    "docs/documentation-audit-2026-10-19/manual-progress.json",
+    "docs/research/smoke-validation-2026-10-19/validation.json",
+    "docs/research/LOCAL_MAINTENANCE_PHASE_16.md",
     "tools/simurgh-attestation/stage5p/core/rawCodeAllocator.mjs",
     "tools/simurgh-attestation/stage4h/exitCodes.mjs",
     "tools/simurgh-attestation/stage5p/node/measureStage5pRawCodes.mjs",
@@ -241,6 +288,7 @@ test("raw literals 464-474 occur ONLY in the allocator, the registry, goldens an
     "docs/research/llm-shield/STAGE_5P_CLOSEOUT.md",
     // The README banner states the stage's code band publicly — that is what a banner is for.
     "README.md",
+    "RESEARCH_HISTORY.md",
     // 5Q's spec and plan cite 474 to state where 5P's band closed and where the next free code
     // begins. That is exactly the "approved documentation" case the 5P ruling names: widen the
     // approved list, never weaken the band regex. A successor stage must be able to say which
@@ -283,7 +331,8 @@ test("raw literals 464-474 occur ONLY in the allocator, the registry, goldens an
       // number in a 20-stage repo becomes noise, and a noisy gate is a gate people switch off.
       if (!MENTIONS_5P.test(text)) continue;
       text.split("\n").forEach((line, i) => {
-        if (BAND.test(line)) offenders.push(`${rel}:${i + 1}: ${line.trim().slice(0, 90)}`);
+        if (BAND.test(line) && !approvedHistoricalTotal(rel, line))
+          offenders.push(`${rel}:${i + 1}: ${line.trim().slice(0, 90)}`);
       });
     }
   };

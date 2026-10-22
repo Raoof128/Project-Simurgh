@@ -1,0 +1,60 @@
+{
+  "schema": "simurgh.documentation_audit.vtc_quorum_probe.v1",
+  "date": "2026-10-20",
+  "scope": "Offline copies of retained public packet. No private release keys, evidence mutation, network or inference.",
+  "cases": [
+    {
+      "name": "retained real bundle baseline",
+      "raw": 0,
+      "externally_anchored": true
+    },
+    {
+      "name": "unrelated expected submitter PEM while separate fingerprint remains original",
+      "raw": 0,
+      "externally_anchored": true
+    },
+    {
+      "name": "unrelated TSA root and Bitcoin checkpoint pins ignored",
+      "raw": 0,
+      "externally_anchored": true
+    },
+    {
+      "name": "unknown top-level nested adequacy assertion is projected away",
+      "raw": 0,
+      "externally_anchored": true
+    },
+    {
+      "name": "malformed Rekor body masks inherited schema failure as outer exception",
+      "raw": 395,
+      "reason": "internal_or_env_unavailable",
+      "externally_anchored": null
+    },
+    {
+      "name": "malformed Rekor body maps to 395 rather than 385",
+      "raw": 395,
+      "reason": "internal_or_env_unavailable",
+      "externally_anchored": null
+    },
+    {
+      "name": "null v2 marker silently selects v1 route",
+      "raw": 0,
+      "externally_anchored": null
+    },
+    {
+      "name": "uppercase canonical anchor accepted at honest absence floor",
+      "raw": 393,
+      "reason": "incomplete_ecology",
+      "externally_anchored": false
+    },
+    {
+      "name": "public attestation payload unchanged after changing inclusion proof",
+      "equal": true
+    },
+    {
+      "name": "tampered inclusion refusal control",
+      "raw": 387,
+      "reason": "inclusion_invalid",
+      "externally_anchored": null
+    }
+  ]
+}

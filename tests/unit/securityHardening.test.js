@@ -127,3 +127,125 @@ test("student identifiers use a peppered HMAC instead of raw SHA-256", async () 
     else process.env.SIMURGH_STUDENT_ID_PEPPER = originalPepper;
   }
 });
+
+test("gateway session creation requires instructor identity outside demo mode", async () => {
+  const server = await startServer(
+    secureEnv({
+      ANTHROPIC_API_KEY: "sk-test-hardening",
+      SIMURGH_LLM_SHIELD_SECRET: "hardening-gateway-secret-32-characters",
+    })
+  );
+  try {
+    const url = `${server.base}/api/llm-shield/gateway/sessions`;
+    for (const suffix of [
+      "/sessions",
+      "//sessions",
+      "///sessions",
+      "/SeSsIoNs/",
+      "//sessions/?token=hardening-instructor-token",
+    ]) {
+      assert.equal(
+        (await fetch(`${server.base}/api/llm-shield/gateway${suffix}`, { method: "POST" })).status,
+        401,
+        suffix
+      );
+    }
+    assert.equal(
+      (await fetch(`${url}?token=hardening-instructor-token`, { method: "POST" })).status,
+      401
+    );
+    const authorized = await fetch(url, {
+      method: "POST",
+      headers: { authorization: "Bearer hardening-instructor-token" },
+    });
+    assert.equal(authorized.status, 200);
+    const session = await authorized.json();
+    assert.ok(session.token);
+    const mock = await fetch(`${server.base}/api/llm-shield/gateway/${session.session_id}/run`, {
+      method: "POST",
+      headers: { authorization: `Bearer ${session.token}`, "content-type": "application/json" },
+      body: JSON.stringify({
+        input: "Write a short public summary",
+        provider_mode: "mock",
+        provider: "mock",
+        scenario: "benign",
+      }),
+    });
+    assert.equal(mock.status, 200);
+    const otherSession = await fetch(url, {
+      method: "POST",
+      headers: { authorization: "Bearer hardening-instructor-token" },
+    }).then((r) => r.json());
+    const mismatch = await fetch(
+      `${server.base}/api/llm-shield/gateway/${otherSession.session_id}/run`,
+      {
+        method: "POST",
+        headers: { authorization: `Bearer ${session.token}`, "content-type": "application/json" },
+        body: JSON.stringify({ input: "public summary", provider_mode: "mock", provider: "mock" }),
+      }
+    );
+    assert.equal(mismatch.status, 403);
+  } finally {
+    server.child.kill();
+  }
+});
+
+test("mounted legacy live gateway is retired even when live flags are enabled", async () => {
+  const server = await startServer(
+    secureEnv({
+      ANTHROPIC_API_KEY: "sk-test-hardening",
+      SIMURGH_LLM_SHIELD_SECRET: "hardening-gateway-secret-32-characters",
+      SIMURGH_LIVE_PROVIDER_ENABLED: "true",
+      SIMURGH_LLM_PROVIDER: "anthropic",
+      SIMURGH_LIVE_PROVIDER_MODEL: "fixture-model",
+      ANTHROPIC_BASE_URL: "http://127.0.0.1:1",
+    })
+  );
+  try {
+    const response = await fetch(`${server.base}/api/llm-shield/gateway/nonexistent/run`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ input: "public summary", provider_mode: "live" }),
+    });
+    assert.equal(response.status, 410);
+    assert.equal((await response.json()).error, "legacy_live_gateway_retired");
+  } finally {
+    server.child.kill();
+  }
+});
+
+test("legacy process-data ingress, simulator and read endpoints are retired", async () => {
+  const server = await startServer(
+    secureEnv({ ANTHROPIC_API_KEY: "sk-test-hardening", SIMURGH_DEMO_MODE: "1" })
+  );
+  try {
+    for (const [path, method] of [
+      ["/api/affinity", "POST"],
+      ["/api/affinity/simulate", "POST"],
+      ["/api/affinity/example", "GET"],
+    ]) {
+      const response = await fetch(`${server.base}${path}`, {
+        method,
+        headers: {
+          "content-type": "application/json",
+          "x-simurgh-helper-secret": "hardening-helper-secret-32-characters",
+        },
+        ...(method === "POST"
+          ? {
+              body: JSON.stringify({
+                sessionId: "example",
+                hostile: [{ pid: 123, name: "synthetic-private-process" }],
+              }),
+            }
+          : {}),
+      });
+      assert.equal(response.status, 410);
+      const text = await response.text();
+      assert.match(text, /legacy_affinity_retired/);
+      assert.doesNotMatch(text, /synthetic-private-process/);
+    }
+    assert.doesNotMatch(server.stdout() + server.stderr(), /synthetic-private-process/);
+  } finally {
+    server.child.kill();
+  }
+});

@@ -1,0 +1,49 @@
+{
+  "reviewed_date": "2026-10-15",
+  "sources": [
+    {
+      "id": "kernel_seccomp",
+      "requested_url": "https://docs.kernel.org/userspace-api/seccomp_filter.html",
+      "effective_url": "https://docs.kernel.org/userspace-api/seccomp_filter.html",
+      "http_status": 200,
+      "curl_exit": 0,
+      "retrieved_utc": "2026-10-15T02:31:36.568364+00:00",
+      "sha256": "51f4cc94e43586a04333ad46e17a2afd1f9516afc88996bd6ec38edbfaa61998",
+      "text_chars": 16937,
+      "review_note": "Primary kernel documentation; explicitly not a general sandbox."
+    },
+    {
+      "id": "seccomp_man",
+      "requested_url": "https://man7.org/linux/man-pages/man2/seccomp.2.html",
+      "effective_url": "https://man7.org/linux/man-pages/man2/seccomp.2.html",
+      "http_status": 200,
+      "curl_exit": 0,
+      "retrieved_utc": "2026-10-15T02:31:36.472117+00:00",
+      "sha256": "95eca2f89204259e96055c099662dc27c4cf68818f082c35f3dc4d715bb150fa",
+      "text_chars": 39436,
+      "review_note": "Linux manual; architecture, inheritance, TSYNC and fail-closed installation."
+    },
+    {
+      "id": "kernel_landlock",
+      "requested_url": "https://docs.kernel.org/userspace-api/landlock.html",
+      "effective_url": "https://docs.kernel.org/userspace-api/landlock.html",
+      "http_status": 200,
+      "curl_exit": 0,
+      "retrieved_utc": "2026-10-15T02:31:36.685767+00:00",
+      "sha256": "13178ab12ace527f1ed652d3d41e138b20cfb52bf84fb3ab0639d82774011cc2",
+      "text_chars": 58999,
+      "review_note": "Primary kernel docs; complementary isolation and TCP restrictions."
+    },
+    {
+      "id": "kernel_namespaces",
+      "requested_url": "https://man7.org/linux/man-pages/man7/network_namespaces.7.html",
+      "effective_url": "https://man7.org/linux/man-pages/man7/network_namespaces.7.html",
+      "http_status": 200,
+      "curl_exit": 0,
+      "retrieved_utc": "2026-10-15T02:31:36.044643+00:00",
+      "sha256": "ea050b2f4172b785031b0cc5d52c7220574791dc9d6da0882ce99202f573a294",
+      "text_chars": 3190,
+      "review_note": "Linux manual; planned alternative not executed on this host."
+    }
+  ]
+}

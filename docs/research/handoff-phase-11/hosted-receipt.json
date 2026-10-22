@@ -1,0 +1,12 @@
+{
+  "databaseId": 38846752661,
+  "url": "https://github.com/Raoof128/Project-Simurgh/actions/runs/38846752661",
+  "status": "completed",
+  "conclusion": "success",
+  "headSha": "f020c56eb4e144015c961faacc2e4d636129169d",
+  "verification_lines": [
+    "composed-model\tValidate composed model evidence\t2026-10-16T03:41:58.7487787Z Ran 16 tests in 14.601s",
+    "composed-model\tValidate composed model evidence\t2026-10-16T03:42:42.4261643Z {\"branches\":144,\"generations\":48,\"independent_custody\":false,\"manifest_sha256\":\"3a63db0052b42c284b9feba94b82aa0b236e31530837c2caf42d927e2f008a96\",\"model_inference_regenerated\":false,\"raw_snapshots\":1440,\"verified\":true}"
+  ],
+  "independent_custody": false
+}

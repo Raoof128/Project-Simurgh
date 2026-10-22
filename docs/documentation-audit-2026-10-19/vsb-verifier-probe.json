@@ -1,0 +1,73 @@
+{
+  "schema": "simurgh.documentation_audit.vsb_probe.v1",
+  "date": "2026-10-19",
+  "scope": "Local fixture copies signed with explicitly public fixture key except refusal control. No source/evidence mutation or inference.",
+  "cases": [
+    {
+      "name": "baseline",
+      "result": {
+        "raw": 0
+      },
+      "grid_count": 54,
+      "slip_count": 9
+    },
+    {
+      "name": "producer-signed extra nonexistent slip accepted",
+      "result": {
+        "raw": 0
+      },
+      "grid_count": 54,
+      "slip_count": 10
+    },
+    {
+      "name": "producer-signed duplicate rate row hides another group",
+      "result": {
+        "raw": 0
+      },
+      "grid_count": 54,
+      "slip_count": 9
+    },
+    {
+      "name": "producer-signed source digest and reduction declarations unchecked",
+      "result": {
+        "raw": 0
+      },
+      "grid_count": 54,
+      "slip_count": 9
+    },
+    {
+      "name": "producer-signed null Lane C values and absent private log accepted",
+      "result": {
+        "raw": 0
+      },
+      "grid_count": 54,
+      "slip_count": 9
+    },
+    {
+      "name": "producer-signed empty base corpus passes complete-grid audit",
+      "result": {
+        "raw": 0
+      },
+      "grid_count": 0,
+      "slip_count": 0
+    },
+    {
+      "name": "audit without raw texts accepts all-slips-laundered ledger with omitted floor rows",
+      "result": {
+        "raw": 0
+      },
+      "grid_count": 54,
+      "slip_count": 0
+    },
+    {
+      "name": "unsigned mutation rejected control",
+      "result": {
+        "raw": 226,
+        "reason": "vsb_signature_invalid",
+        "detail": {}
+      },
+      "grid_count": 54,
+      "slip_count": 9
+    }
+  ]
+}

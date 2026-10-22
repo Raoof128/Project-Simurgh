@@ -1,0 +1,12 @@
+{
+  "health_status": 200,
+  "uid": "1000",
+  "mock_status": 200,
+  "receipt_schema": "3E",
+  "retired_live_status": 410,
+  "retired_error": "legacy_live_gateway_retired",
+  "external_provider_calls": 0,
+  "trusted_ca_during_prefetch": true,
+  "offline_package_cache": true,
+  "source_ownership_override": true
+}

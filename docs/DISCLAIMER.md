@@ -2,9 +2,12 @@
 
 ## Research Prototype
 
-Project Simurgh is a **research prototype** demonstrating privacy-preserving behavioural integrity verification. It is provided for educational and research purposes.
+Project Simurgh is a **research prototype** studying agent authorization, verifiable evidence and
+historical privacy-preserving device integrity. It is provided for educational and research purposes.
+Use the [reviewer index](REVIEWER_INDEX.md) to distinguish current experiments from historical work.
 
-**This software is not production-ready.** It has not undergone formal security audit, penetration testing, or legal compliance review. Do not deploy it in a production environment without appropriate review by qualified professionals.
+**This software is not production-ready.** The repository records scoped internal reviews and experiments; these do not establish an
+independent comprehensive security assessment, production penetration test or legal compliance. Do not deploy it in a production environment without appropriate review by qualified professionals.
 
 ---
 
@@ -29,7 +32,8 @@ Nothing in this repository constitutes legal advice. Before deploying any procto
 
 ## Risk Score Limitations
 
-Risk scores produced by Simurgh are probabilistic outputs of deterministic heuristics. They are **not** determinations of misconduct. They may produce false positives and false negatives. No automated system can definitively establish academic misconduct.
+The historical academic risk scores are outputs of deterministic heuristics, not calibrated
+probabilities of misconduct. They are **not** determinations of misconduct. They may produce false positives and false negatives. No automated system can definitively establish academic misconduct.
 
 Any disciplinary action taken on the basis of Simurgh output is the sole responsibility of the institution applying human judgment to that output.
 
@@ -37,7 +41,10 @@ Any disciplinary action taken on the basis of Simurgh output is the sole respons
 
 ## Third-Party Dependencies
 
-This project uses the Anthropic Claude API. Use of that API is subject to [Anthropic's Terms of Service](https://www.anthropic.com/legal/aup) and [Usage Policy](https://www.anthropic.com/legal/aup). The authors of this project are not affiliated with Anthropic.
+Optional integrations include Anthropic and OpenAI APIs. Account terms, usage policies, data
+handling and costs depend on the selected provider; review them before enabling a live run.
+See [PRIVACY.md](../PRIVACY.md), [SECURITY.md](../SECURITY.md) and the
+[OpenAI evaluation protocol](openai/EVALUATION.md). No provider endorsement is implied.
 
 ---
 

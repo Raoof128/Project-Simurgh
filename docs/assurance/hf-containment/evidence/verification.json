@@ -1,0 +1,22 @@
+{
+  "schema": "simurgh-hfc-verification-v1",
+  "source_commit": "fb3b7fe6e6c3aeaa4922a85fb17e9b745e5dba92",
+  "sha256": {
+    "protocol.json": "3d249515a650177d7adbee67916e4e70bd463703514e204ced3ab8a2fc66aab1",
+    "model-report.json": "ce53274fe3ac658f9dee43dfcf07c2f77506ad5b8c5f72ac0b45925ad5124613",
+    "report.json": "b1e476bf85574e18e9fa61c5c73bf0687e4050c722b1faf7a9125b9d58a1b6c3",
+    "model-capture.json": "1d91b2ee3d35b56069d6cbe7cdf97f72c623bca5fac42922bef6e9b260dfc7d9",
+    "model-capture.jsonl": "befe83f38271cecb180e0629d2b9733e2d4232a3ac80d183dd759a49c88d700b"
+  },
+  "scripted_replay": "70 exact control rows matched fresh effects",
+  "model_replay": "8 prompts, 40 invalid/unexecuted control records; raw output/journal linkage verified",
+  "tokenizer_reconstruction": "passed with pinned official local tokenizer",
+  "new_tests": 13,
+  "npm": {
+    "passed": 5119,
+    "failed": 0,
+    "skipped": 3
+  },
+  "external_operator": "not performed",
+  "hosted_ci": "pending new branch push"
+}

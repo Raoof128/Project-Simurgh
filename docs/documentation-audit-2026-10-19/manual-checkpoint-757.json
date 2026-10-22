@@ -1,0 +1,22 @@
+{
+  "baseline": "15105bac03588d601a2961b3d6f61db72c3b37a4",
+  "prior_checkpoint": "961c1b35532aaa1096ff1b240c7ca60d805fa0a5",
+  "manual_read_count": 757,
+  "candidate_count": 919,
+  "complete": false,
+  "append_only_logs": true,
+  "checks": {
+    "changed_file_format": "pass",
+    "git_diff_check": "pass",
+    "local_links": {
+      "documents": 813,
+      "links": 1859,
+      "issues": 0
+    },
+    "candidate_identity": "919 unique baseline paths and hashes preserved; 757 complete reads, 162 pending; reviewed hashes match; scratch and tracked ledgers identical",
+    "preservation": "Prior HEAD log bytes preserved as exact prefixes; frozen specifications, source, captures and evidence unchanged",
+    "prior_authority": "4ca41a95 is a strict ancestor",
+    "banking_rejection_key_probe": "Current validator and audit helper retain a synthetic unknown key; route connection inspected in source; receipt banking-rejection-key-probe.json"
+  },
+  "scope": "Manual documentation checkpoint; no runtime mutation, HTTP exploit, model inference, full E2E rerun or interactive browser/native execution."
+}

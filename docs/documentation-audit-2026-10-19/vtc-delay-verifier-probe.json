@@ -1,0 +1,108 @@
+{
+  "schema": "simurgh.documentation_audit.vtc_delay_probe.v1",
+  "date": "2026-10-20",
+  "scope": "Five hermetic core cases with explicit injected facts, four standalone OTS/real-endpoint cases. Temporary copies only; no full-chain rerun, network or inference.",
+  "cases": [
+    {
+      "name": "hermetic core baseline with explicitly injected fixture facts",
+      "raw": 0,
+      "reason": "ok",
+      "elapsed_lower_bound_ms": 88000
+    },
+    {
+      "name": "signed false displayed x0 and endpoint-subject fields",
+      "raw": 0,
+      "reason": "ok",
+      "elapsed_lower_bound_ms": 88000
+    },
+    {
+      "name": "core accepts missing trust/resource config and unrelated expected input source",
+      "raw": 0,
+      "reason": "ok",
+      "elapsed_lower_bound_ms": 88000
+    },
+    {
+      "name": "negative supplied accuracy increases elapsed bound",
+      "raw": 0,
+      "reason": "ok",
+      "elapsed_lower_bound_ms": 290000
+    },
+    {
+      "name": "invalid final signature refusal control",
+      "raw": 397,
+      "reason": "final_envelope_signature_invalid",
+      "elapsed_lower_bound_ms": null
+    },
+    {
+      "name": "fabricated OTS Bitcoin attestation at height 1 with no operations or header",
+      "result": {
+        "leaf_ok": true,
+        "confirmed": true,
+        "attestations": [
+          {
+            "height": 1,
+            "merkle_root": "36c5aef367f942f351bc019ceb2cc174f05f18774f54c93277df9e9908053bb9"
+          }
+        ],
+        "pending": false
+      }
+    },
+    {
+      "name": "real start endpoint baseline",
+      "result": {
+        "green": true,
+        "raw": 0,
+        "reason": "ok",
+        "detail": {
+          "endpoint_role": "start",
+          "child_component": "stage5m_quorum_extension",
+          "bitcoin_block_heights": [957983]
+        },
+        "stateFields": {
+          "computed_ecology_state": "confirmed",
+          "outcome_class": "ecology_confirmed",
+          "ecology_independence_number": 3,
+          "externally_anchored": true
+        }
+      }
+    },
+    {
+      "name": "real endpoint with fabricated Bitcoin attestation",
+      "result": {
+        "green": true,
+        "raw": 0,
+        "reason": "ok",
+        "detail": {
+          "endpoint_role": "start",
+          "child_component": "stage5m_quorum_extension",
+          "bitcoin_block_heights": [1]
+        },
+        "stateFields": {
+          "computed_ecology_state": "confirmed",
+          "outcome_class": "ecology_confirmed",
+          "ecology_independence_number": 3,
+          "externally_anchored": true
+        }
+      }
+    },
+    {
+      "name": "real endpoint with changed final TSA signature byte",
+      "result": {
+        "green": true,
+        "raw": 0,
+        "reason": "ok",
+        "detail": {
+          "endpoint_role": "start",
+          "child_component": "stage5m_quorum_extension",
+          "bitcoin_block_heights": [957983]
+        },
+        "stateFields": {
+          "computed_ecology_state": "confirmed",
+          "outcome_class": "ecology_confirmed",
+          "ecology_independence_number": 3,
+          "externally_anchored": true
+        }
+      }
+    }
+  ]
+}

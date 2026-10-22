@@ -1,0 +1,53 @@
+{
+  "schema": "simurgh.documentation_audit.vfr_probe.v1",
+  "date": "2026-10-19",
+  "scope": "In-memory copies only. Bundle mutations signed by an ephemeral self-selected key; no forged retained signature. Exemption cases use real signature verification against retained public fixture keys, preserving the exemption signature.",
+  "cases": [
+    {
+      "name": "retained bundle baseline",
+      "entrypoint": "verifyBundle",
+      "result": {
+        "raw": 0,
+        "reason": "verified"
+      }
+    },
+    {
+      "name": "self-selected signer with invalid schema/stage extra field and changed source/projection claims",
+      "entrypoint": "verifyBundle",
+      "result": {
+        "raw": 0,
+        "reason": "verified"
+      }
+    },
+    {
+      "name": "exemption with valid signature but omitted chain entries and verdict",
+      "entrypoint": "decide",
+      "result": {
+        "raw": 0,
+        "reason": "accepted_exempt",
+        "receipt_digest": "sha256:66a094b1dbd3c0b423b4d44797e7270d51b2533ea0111ea10acd292ae6d2c46e",
+        "crossing_digest": "sha256:b1453b9edff5594d5c802972d555791a87088ffc16eb021a788dfcce56014b48"
+      }
+    },
+    {
+      "name": "invalid crossing signature under valid signed exemption and omitted chain",
+      "entrypoint": "decide",
+      "result": {
+        "raw": 0,
+        "reason": "accepted_exempt",
+        "receipt_digest": "sha256:66a094b1dbd3c0b423b4d44797e7270d51b2533ea0111ea10acd292ae6d2c46e",
+        "crossing_digest": "sha256:b1453b9edff5594d5c802972d555791a87088ffc16eb021a788dfcce56014b48"
+      }
+    },
+    {
+      "name": "exemption with mismatched policy run and arbitrary crossing epoch",
+      "entrypoint": "decide",
+      "result": {
+        "raw": 0,
+        "reason": "accepted_exempt",
+        "receipt_digest": "sha256:66a094b1dbd3c0b423b4d44797e7270d51b2533ea0111ea10acd292ae6d2c46e",
+        "crossing_digest": "sha256:d94dad19613d5c8299849cb8caa0281451d80f95f08614cd2ee8ccd005f7a8df"
+      }
+    }
+  ]
+}

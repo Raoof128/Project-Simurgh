@@ -2,6 +2,11 @@ node_modules
 package-lock.json
 coverage
 
+# Exact generated OpenAI reviewer evidence; verify canonical signed payloads with openai:verify.
+docs/openai/results/*.json
+# Generated file inventory records exact hashes; regenerate with audit-reviewer-files.py.
+docs/openai/evidence/*.json
+
 # build / runtime artifacts
 .simurgh_check_logs
 data/sessions
@@ -162,3 +167,75 @@ tools/simurgh-attestation/stage5q/fixtures/
 docs/research/llm-shield/evidence/stage-5r/
 tools/simurgh-attestation/stage5s/fixtures/
 docs/research/llm-shield/evidence/stage-5s/
+
+# Preserve original local-model capture bytes and their recorded digests.
+docs/assurance/meta/evidence/capture*.json
+
+# Preserve raw repeated-study observations and author corpus.
+docs/assurance/meta-study/evidence/capture*.json
+docs/assurance/meta-study/evidence/cases.json
+
+# Preserve raw Luna API observations.
+docs/assurance/openai-comparison/evidence/capture*.json
+docs/assurance/openai-comparison/evidence/capture*.jsonl
+
+# Preserve native-function response and journal bytes.
+docs/assurance/openai-native/evidence/capture*.json
+docs/assurance/openai-native/evidence/capture*.jsonl
+
+# Preserve original safety-study corpus, model metadata, captures and journals.
+docs/assurance/safety-study/evidence/
+
+# Preserve source-bound incident simulation protocol and observations.
+docs/assurance/hf-incident/evidence/
+
+# Preserve frozen containment protocol, corpus and capture bytes.
+docs/assurance/hf-containment/evidence/
+docs/assurance/hf-containment/cases.json
+
+# Preserve native-call successor capture and protocol bytes.
+docs/assurance/hf-native/evidence/
+
+# P15-CHECK01: source-bound machine evidence; preserve bytes, use phase verifiers.
+docs/research/composition-phase-9/receipt.json
+docs/research/composition-phase-9/report.json
+docs/research/connector-phase-2/protocol.json
+docs/research/connector-phase-2/report.json
+docs/research/context-phase-7/receipt.json
+docs/research/context-phase-7/report.json
+docs/research/credentials-phase-8/receipt.json
+docs/research/credentials-phase-8/report.json
+docs/research/export-phase-14/metadata.json
+docs/research/export-phase-14/public.json
+docs/research/export-phase-14/receipt.json
+docs/research/export-phase-14/release.json
+docs/research/handoff-phase-11/local/packages.json
+docs/research/handoff-phase-11/local/replay-receipt.json
+docs/research/model-composition-phase-10/capture.json
+docs/research/model-composition-phase-10/development-pilot.json
+docs/research/model-composition-phase-10/protocol.json
+docs/research/model-composition-phase-10/receipt.json
+docs/research/model-composition-phase-10/report.json
+docs/research/model-composition-phase-10/token-receipt.json
+docs/research/model-phase-3/capture.json
+docs/research/model-phase-3/protocol.json
+docs/research/model-phase-3/report.json
+docs/research/model-phase-3/settings.json
+docs/research/recovery-phase-5/hosted-phase4/receipt.json
+docs/research/recovery-phase-5/receipt.json
+docs/research/recovery-phase-5/report.json
+docs/research/reliability-phase-13/protocol.json
+docs/research/reliability-phase-13/receipt.json
+docs/research/reliability-phase-13/report.json
+docs/research/reliability-phase-13/separate-verification.json
+docs/research/reproduction-phase-4/receipt.json
+docs/research/signals-phase-6/receipt.json
+docs/research/signals-phase-6/report.json
+docs/research/export-phase-14/separate-verification.json
+
+# P17-FORMAT01: immutable corrective-study input; checked by protocol verifier.
+docs/research/provider-role-phase-17b/baseline.json
+
+# R06: preserve published append-only logs; validate new diff and historical prefixes.
+AGENT.md
+CHANGELOG.md

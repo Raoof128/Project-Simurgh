@@ -1,0 +1,62 @@
+{
+  "schema": "simurgh.documentation_audit.narrative_helper_probe.v1",
+  "date_utc": "2026-10-19",
+  "node": "v24.19.0",
+  "scope": "Local synthetic helpers and in-memory copies of committed public evidence; no signing, network, secrets, gateway execution or repository evidence mutation. Does not establish acceptance by complete smoke/hash/rebuild pipeline.",
+  "source_sha256": {
+    "tools/simurgh-narrative/claimChecker.mjs": "855ea2f0a4190e203a2fc0618610f0f47844271c79e60b6ec0699935df1d7881",
+    "tools/simurgh-narrative/renderer.mjs": "c7b0b8d7dff2d6da71c37420dfd307b0f59d7e9f8fdc9418e4682d3e2cb2dc0a",
+    "tools/simurgh-narrative/verify-stage3s-narrative.mjs": "8b4980a281f2ba2ba56c6afaf55b8d4e34e842f5bff27ab9269afed81432ecf0"
+  },
+  "wording_mismatch": {
+    "digest": {
+      "audit_chain_valid": false,
+      "gateway": {
+        "fallback_used": false
+      }
+    },
+    "slots": [
+      {
+        "slot_id": "synthetic",
+        "evidence_ref": "gateway.fallback_used",
+        "operator": "==",
+        "expected_value": false,
+        "severity": "manual_review_recommended",
+        "wording": "chain_valid"
+      }
+    ],
+    "verification": {
+      "verified": [
+        {
+          "slot_id": "synthetic",
+          "wording": "chain_valid",
+          "severity": "manual_review_recommended"
+        }
+      ],
+      "rejected": [],
+      "conflict_attempts": 0
+    },
+    "rendered": {
+      "rendered_summary": "The audit chain verified end to end. This is not an automatic misconduct finding; it describes integrity signals for manual review. Raw pixels, typed/pasted content, audio, process names, and window titles were not captured.",
+      "automatic_finding_made": false
+    }
+  },
+  "empty_slots": {
+    "rendered_summary": "No integrity signals were observed. This is not an automatic misconduct finding; it describes integrity signals for manual review. Raw pixels, typed/pasted content, audio, process names, and window titles were not captured.",
+    "automatic_finding_made": false
+  },
+  "frozen_set_mutable": true,
+  "standalone_verifier": {
+    "original_ok": true,
+    "changed_slots_and_matching_output_hashes_ok": true,
+    "checks": {
+      "bundle_digest_match": true,
+      "key_fingerprint_match": true,
+      "signature_valid": true,
+      "digest_binding": true,
+      "receipt_binding": true,
+      "no_automatic_finding": true,
+      "no_rendered_conflicts": true
+    }
+  }
+}

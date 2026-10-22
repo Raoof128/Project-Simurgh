@@ -1,0 +1,33 @@
+{
+  "schema": "simurgh.documentation_audit.external_adapter_probe.v1",
+  "date_utc": "2026-10-19",
+  "node": "v24.19.0",
+  "scope": "Pure local synthetic helper calls; no network, signing, source/evidence mutation or claim of complete pipeline acceptance.",
+  "source_sha256": {
+    "tools/external-defense-adapters/normaliseExternalVerdict.mjs": "721b41b6e8c47eac19bc0a20adda151524e39ebbd81ac8d45a4682a35b3c7934",
+    "tools/external-defense-adapters/externalDefenseAdapterContract.mjs": "2dd82d5cecf9b6adf74af9c689e1a062626ffe38176c67101d93ae65b73432f5"
+  },
+  "contract": {
+    "raw_field": {
+      "accepted": true
+    },
+    "nested_hash": {
+      "accepted": true
+    },
+    "null_case_id": {
+      "accepted": true
+    }
+  },
+  "normalizer": {
+    "constructor": {
+      "verdict_type": "function",
+      "error_code": "none",
+      "downstream_contract_accepted": false
+    },
+    "__proto__": {
+      "verdict_type": "object",
+      "error_code": "none",
+      "downstream_contract_accepted": false
+    }
+  }
+}

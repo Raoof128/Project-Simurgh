@@ -1,0 +1,61 @@
+{
+  "scope": "Fourteen synthetic direct-module observations; no campaign rerun or frozen-artifact change.",
+  "results": [
+    {
+      "name": "F8 declared defective and repaired string sorts agree",
+      "observed": true
+    },
+    {
+      "name": "F8 flags the default sort",
+      "observed": "detected"
+    },
+    {
+      "name": "F8 clears equivalent comparator",
+      "observed": "not_detected"
+    },
+    {
+      "name": "F4 defective control detected",
+      "observed": "detected"
+    },
+    {
+      "name": "unrelated TRUSTED_ROOTS token clears F4",
+      "observed": "not_detected"
+    },
+    {
+      "name": "asserted triad without actual orthogonal failure admissible",
+      "observed": true
+    },
+    {
+      "name": "missing descriptors pass structural comparison with asserted path",
+      "observed": true
+    },
+    {
+      "name": "asserted cell with both signals absent discharges",
+      "observed": true
+    },
+    {
+      "name": "missing detection blocks discharge",
+      "observed": false
+    },
+    {
+      "name": "ledger builder accepts outside ID",
+      "observed": 1
+    },
+    {
+      "name": "separate set validator rejects outside ID",
+      "observed": false
+    },
+    {
+      "name": "nested label passes shallow blindness check",
+      "observed": true
+    },
+    {
+      "name": "minimal self-hashed verdict receipt passes",
+      "observed": true
+    },
+    {
+      "name": "supplied current holds overrides false recorded premise",
+      "observed": true
+    }
+  ]
+}

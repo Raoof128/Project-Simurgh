@@ -1,0 +1,53 @@
+{
+  "protocol_commit": "7141e0c5194b9599f4f552f801b0c193a4dc0154",
+  "input_count": 94,
+  "new_tests_passed": 23,
+  "inherited_runtime_tests_passed": 21,
+  "npm": {
+    "passed": 5119,
+    "failed": 0,
+    "prerequisite_skips": 3
+  },
+  "boundary_fresh_semantic_replay": "passed",
+  "luna_fresh_semantic_replay": "passed",
+  "api_credential_exact_scan": "clean",
+  "temporary_api_key_removed": true,
+  "hosted_ci": "not_observed",
+  "external_operator_replay": "not_performed",
+  "captures": {
+    "luna-capture.json": {
+      "sha256": "c89a9dd61080dc002e6dbe15b3076fc83ed6db04c0c5c659ca12b5ea56d1976c",
+      "bytes": 485272
+    },
+    "luna-capture.jsonl": {
+      "sha256": "43ab5edbed033047557148ac483d7bea3a928c65f60e7d015945300a56332439",
+      "bytes": 683825
+    },
+    "luna-report.json": {
+      "sha256": "0465913e76a08cdc59a531841e9d92cb0e18de258621a4c982cadb5038064b57",
+      "bytes": 234346
+    },
+    "boundary-report.json": {
+      "sha256": "1fe8e56bab95740bb02c85685110a5f83bcebe7e976c501bb00e8e2f1c76de0e",
+      "bytes": 149532
+    },
+    "meta-capture.json": {
+      "sha256": "80bb98dae459ec5b55310935df5eee14207ded4732fa7bcca04753107a807246",
+      "bytes": 768430
+    },
+    "meta-capture.jsonl": {
+      "sha256": "9d09ddaf0734e704ed05b2d6595c1c8d6dc9b4dd21ce0da0b2c73bea095cd520",
+      "bytes": 804203
+    },
+    "meta-report.json": {
+      "sha256": "7e58dfa1578cd1f1d28c97b321b12b5e0c4eafab3e7225bbd2bc4c2c8feeac2f",
+      "bytes": 94998
+    },
+    "meta-resource.json": {
+      "sha256": "98e08e6826e7fc6ea1a48ddf6ae6be54f409ecc5bc8f92410adb23d88996502a",
+      "bytes": 239
+    }
+  },
+  "meta_fresh_semantic_replay": "passed",
+  "meta_pinned_tokenizer_reconstruction": "passed"
+}

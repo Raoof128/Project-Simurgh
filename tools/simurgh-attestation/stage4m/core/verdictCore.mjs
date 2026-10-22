@@ -133,14 +133,18 @@ export async function verifyBundleCore({
     mark("contests_valid", "ok");
   } else mark("contests_valid", "not_in_tier");
 
-  // 7. attestation_roots (Tier A): the signed roots must recompute from the ledger records
-  // (V20: a tampered ledger cannot hide behind a public root).
-  if (skipLedger) mark("attestation_roots", "not_in_tier");
-  else if (attestation) {
+  // 7. Authenticate public artifacts in BOTH tiers. Only the private-ledger roots are
+  // unavailable in Tier P. Missing public evidence must match a signed empty root; it
+  // cannot hide behind the tier flag. Tier A also recomputes producer aggregates.
+  if (attestation) {
     const roots = {
-      windows_root: merkleRootSorted(windows.map(recordDigest)),
-      merge_chain_root: merkleRootSorted(mergeEvents.map(recordDigest)),
-      rescore_root: merkleRootSorted(rescoreRecords.map(recordDigest)),
+      ...(!skipLedger
+        ? {
+            windows_root: merkleRootSorted(windows.map(recordDigest)),
+            merge_chain_root: merkleRootSorted(mergeEvents.map(recordDigest)),
+            rescore_root: merkleRootSorted(rescoreRecords.map(recordDigest)),
+          }
+        : {}),
       disclosure_root: merkleRootSorted(disclosure ? [recordDigest(disclosure)] : []),
       contest_root: merkleRootSorted([...contests, ...acks].map(recordDigest)),
       chain_digest: chain ? chainDigest(chain) : merkleRootSorted([]),
@@ -150,6 +154,25 @@ export async function verifyBundleCore({
         return failCheck("attestation_roots", 22, "attestation_chain_mismatch");
     }
     mark("attestation_roots", "ok");
+    if (!skipLedger) {
+      const histogram = {};
+      let exposure = 0;
+      for (const w of windows)
+        for (const c of w.clusters) {
+          exposure += c.cluster_weighted_total;
+          histogram[c.cluster_size] = (histogram[c.cluster_size] ?? 0) + 1;
+        }
+      const aggregates = {
+        window_count: windows.length,
+        breach_count: new Set(rescoreRecords.flatMap((r) => r.breached_after)).size,
+        newly_revealed_count: new Set(rescoreRecords.flatMap((r) => r.newly_revealed)).size,
+        exposure_mass_total: exposure,
+        cluster_size_histogram: histogram,
+      };
+      if (canonicalJson(attestation.aggregates) !== canonicalJson(aggregates))
+        return failCheck("attestation_aggregates", 22, "attestation_aggregates_mismatch");
+      mark("attestation_aggregates", "ok");
+    } else mark("attestation_aggregates", "not_in_tier");
   } else mark("attestation_roots", "not_in_tier");
 
   // 8. manifest_signature (both tiers): adapter-supplied result, mapped to raw 25 on failure.

@@ -1,0 +1,50 @@
+{
+  "schema": "simurgh.documentation_audit.ccb_probe.v1",
+  "date": "2026-10-19",
+  "scope": "Temporary fixture copies; re-signed cases use an ephemeral producer key explicitly pinned by the caller. No retained fixture/source/evidence changes, inference, external dispatch or actual identity/cluster measurement.",
+  "entrypoint": "runCcbCore",
+  "cases": [
+    {
+      "name": "unchanged committed bundle",
+      "producer_resigned": false,
+      "rawCode": 0,
+      "typed": 0,
+      "reason": null
+    },
+    {
+      "name": "response digest changed without re-signing",
+      "producer_resigned": false,
+      "rawCode": 0,
+      "typed": 0,
+      "reason": null
+    },
+    {
+      "name": "unsigned attestation status tampered",
+      "producer_resigned": false,
+      "rawCode": 22,
+      "typed": 1,
+      "reason": "attestation_digest_mismatch"
+    },
+    {
+      "name": "signed attestation status and totals contradict clean ledger",
+      "producer_resigned": true,
+      "rawCode": 0,
+      "typed": 0,
+      "reason": null
+    },
+    {
+      "name": "signed attestation lacks required non-claims and known limitations",
+      "producer_resigned": true,
+      "rawCode": 0,
+      "typed": 0,
+      "reason": null
+    },
+    {
+      "name": "signed nonempty reserved corroborating commitments",
+      "producer_resigned": true,
+      "rawCode": 0,
+      "typed": 0,
+      "reason": null
+    }
+  ]
+}

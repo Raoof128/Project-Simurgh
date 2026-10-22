@@ -1,0 +1,28 @@
+{
+  "schema": "simurgh-hf-verification-v1",
+  "source_commit": "4ec01462dd6caad531b48d5f0cc127dd346c07fd",
+  "protocol_sha256": "58478fdf917da84309974d865902ca76e47f0605a34d04d71a96159b4edf1683",
+  "report_sha256": "ef51b9c0376b4035b2dbf02ca48553f16fd1886b7a4ef61cefa4e00184eecb5e",
+  "python": "3.12.14",
+  "platform": "Linux",
+  "checks": {
+    "fresh_semantic_replay": "passed",
+    "missing_scenario": "refused",
+    "missing_channel": "refused",
+    "changed_summary": "refused",
+    "report_overwrite": "refused_without_change",
+    "earlier_safety_inputs": "94 unchanged",
+    "credential_scan": "clean; configured credential values and common key patterns"
+  },
+  "tests": {
+    "new_python": 5,
+    "npm_passed": 5119,
+    "npm_failed": 0,
+    "npm_skipped": 3
+  },
+  "limitations": [
+    "Same-host verification; no external operator or execution attestation.",
+    "No live target requests or model inference in this simulation.",
+    "Hosted CI has not been observed."
+  ]
+}

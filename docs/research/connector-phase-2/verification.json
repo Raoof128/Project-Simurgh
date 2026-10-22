@@ -1,0 +1,59 @@
+{
+  "schema": "simurgh-connector-phase2-verification-v1",
+  "date": "2026-10-15",
+  "timezone": "Australia/Sydney",
+  "focused_tests": {
+    "passed": 17,
+    "failed": 0
+  },
+  "repository_tests": {
+    "passed": 5122,
+    "failed": 0,
+    "skipped": 3,
+    "skip_reasons": [
+      "headless Chrome unavailable",
+      "two Stage 5S Lean checks: Lean unavailable on PATH"
+    ]
+  },
+  "saved_report": {
+    "rows": 39,
+    "recovery_observations": 4,
+    "source_hashes": 16,
+    "fresh_replay": "passed",
+    "typed_tamper": "rejected",
+    "omitted_rows": "rejected",
+    "overwrite": "refused"
+  },
+  "frozen_source_checks": {
+    "safety": 94,
+    "hf_incident": 19,
+    "hf_containment": 27,
+    "hf_native": 34
+  },
+  "review": {
+    "kind": "fresh read-only agent",
+    "findings_addressed": [
+      "malformed HTTP outcome",
+      "bounded worker capture and descendant cleanup",
+      "author-confirmed typed evidence comparison"
+    ],
+    "deferred_minors": []
+  },
+  "checks": [
+    "Ruff",
+    "pip check",
+    "gate census set equality (39)",
+    "git diff --check",
+    "authored documentation formatting"
+  ],
+  "format_note": "Protocol bytes retain their preregistration serialization; report uses canonical JSON. Both intentionally excluded from the final authored-doc formatting check. A broad exploratory Prettier check reported these two artifact-format warnings.",
+  "hosted_ci": "pending after push",
+  "api_calls": 0,
+  "limitations": [
+    "synthetic identities and scripted model proposals",
+    "trusted SDK, host, receiver and Python bootstrap",
+    "same-host observation",
+    "no CPU, memory or process-count quotas",
+    "vendor connector semantics and outside reproduction unvalidated"
+  ]
+}

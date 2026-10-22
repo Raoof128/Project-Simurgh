@@ -1,0 +1,11 @@
+{
+  "schema": "simurgh.prior-reproduce-maintenance.v1",
+  "historical_sha256": "9d0c17b2f06896e68955b99323186c999bd6edd11ee5ccf3c065d70edbfa2d12",
+  "authority": "docs/research/CONTINUATION_PHASE_16.md",
+  "additions": [
+    {
+      "script": "reproduce-llm-shield-stage5l-strict.sh",
+      "reason": "P16-G02: maintained strict successor; historical 50-script set remains unchanged."
+    }
+  ]
+}

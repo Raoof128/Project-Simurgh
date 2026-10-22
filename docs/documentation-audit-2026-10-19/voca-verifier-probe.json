@@ -1,0 +1,49 @@
+{
+  "schema": "simurgh.documentation_audit.voca_probe.v1",
+  "date": "2026-10-19",
+  "scope": "Local temporary fixture copies and core inputs only; no retained source or fixture changes. Core signature-result injection is explicit, not a claim of forgery. Self-selected signer is ephemeral.",
+  "cases": [
+    {
+      "name": "retained bundle baseline",
+      "entrypoint": "verifyBundle",
+      "result": {
+        "ok": true,
+        "raw": 0,
+        "reason": "accepted"
+      }
+    },
+    {
+      "name": "unchanged signed bundle with invalid custody signatures in temporary fixture and stored sig booleans retained",
+      "entrypoint": "verifyBundle",
+      "result": {
+        "ok": true,
+        "raw": 0,
+        "reason": "accepted"
+      }
+    },
+    {
+      "name": "bundle built under ephemeral self-selected signer without external pin",
+      "entrypoint": "verifyBundle",
+      "result": {
+        "ok": true,
+        "raw": 0,
+        "reason": "accepted"
+      }
+    },
+    {
+      "name": "core-only disconnected first-hop input with rebuilt links and caller-provided signature results",
+      "entrypoint": "verifyCustody",
+      "result": {
+        "raw": 0,
+        "custody_path_digest": "sha256:065144b757f9599ae695a0a61c332274ecd2dc061cd77ccc9958dd93021b9cb0"
+      }
+    },
+    {
+      "name": "unconstrained plaintext failure_class",
+      "entrypoint": "verifyCpcEmission",
+      "result": {
+        "ok": true
+      }
+    }
+  ]
+}

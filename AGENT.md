@@ -1968,3 +1968,2206 @@ one machine's local agent configuration:
   - `README.md` — Updated lines 323 and 330.
 - **Verification:** Verified that "collaborate" and "partner" now appear in the "Why Anthropic?" and concluding sections. Global grep for "cooperate" returns zero matches in source code or documentation.
 - **Follow-ups:** None.
+
+### 2026-10-15 (Australia/Sydney) — Real-effects assurance lab and industry gap roadmap
+
+**Raouf:**
+
+- **Scope:** Owner-requested additive research improvement, implemented by Codex. First local
+  milestone of the approved comparative experiment; no numbered release or production rollout.
+- **Summary:** Added real child-process disposable file effects, precommitted exact-action policy,
+  bypass and deny-all controls, read-back observation, trace/checkpoint/effect comparison and
+  complete source-bound replay. The 17-case corpus runs under three controls: bypass has seven
+  forbidden effects; exact policy has zero observed forbidden effects and three benign completions;
+  deny-all loses all benign utility. Checkpoint and full observation both expose four trace
+  mutations. Two fault cases per control remain unknown; no-op mutations are excluded. Mapped
+  16 primary sources to industry needs, prior art, acceptance tests and remaining gaps.
+- **Files changed:** `tools/assurance-lab/{core,sink,sink-worker,corpus,study,cli}.mjs`;
+  `tests/unit/assuranceLab/{core,study,cli}.test.js`; `docs/assurance/` documentation, provenance and
+  report; `docs/superpowers/{specs,plans}/2026-10-15-assurance-lab.md`; `package.json`;
+  `.github/workflows/openai-readiness.yml`; `README.md`, `ROADMAP.md`, `docs/REVIEWER_INDEX.md`;
+  both change logs; the pre-existing mutable `current` census in
+  `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json` (25 to 26, added CI step
+  remains explicitly unclassifiable). Frozen baseline, historical evidence and original OpenAI
+  experiment sources/artifact remain unchanged.
+- **Verification:** Final `npm test`: 5,119 tests, 5,116 passed, zero failed, three skipped
+  (Chrome/Lean unavailable); 18 new lab tests included. Saved lab and original OpenAI report
+  verification passed. Three isolated mutations caused assertion failures. Fresh review found
+  non-enumerable/accessor/sparse-data validation bugs; three regressions were RED then GREEN
+  after stable data capture and strict descriptors. All 51 case outcomes stayed unchanged.
+  Corrected late-grant wording to after policy commitment, before execution. Workflow census is
+  set-identical, archive hashes unchanged. See `docs/assurance/VALIDATION.md` for scope and limits.
+- **Follow-ups:** Two actual SDK adapters, held-out attacks, external reproduction, durable atomic
+  replay, authenticated identity/revocation and measured overhead remain open. No paid model call,
+  submission, deployment, external operator independence or checkpoint superiority is claimed.
+
+## 2026-10-15 — Raouf: pinned SDK assurance integration (Australia/Sydney)
+
+- **Scope:** Continue the authorized next phase with actual OpenAI Agents SDK and LangGraph
+  approval/resume lifecycles against the unchanged real-effects lab; no live model or deployment.
+- **Summary:** Added a persistent bounded Node/Python bridge, scripted OpenAI Model with native
+  serialized RunState restoration, and LangGraph interrupt/checkpoint/resume adapter. Committed
+  authority and consumed grants persist across callbacks. All 102 case/control/runtime projections
+  match the original lab: per runtime, bypass has seven forbidden effects, exact policy has zero
+  observed forbidden effects and three benign completions, and deny-all loses all benign utility.
+  Two faults per control remain unknown. There are 156 main-matrix pauses (12 unavailable
+  observations), three exercised native reject/edit probes and one explicitly unsupported OpenAI
+  in-place edit. Checkpoint/full-effect results remain equal; no incremental advantage is claimed.
+- **Files changed:** `tools/assurance-sdk/` bridge, adapters, study, tests and 60-package hash lock;
+  `tests/unit/assuranceSdk/bridge.test.js`; `docs/assurance/sdk/` results, source notes, validation
+  and evidence; dated SDK spec/plan; scoped workflow and package script; README, roadmap,
+  reviewer index and assurance gap/status docs; both change logs. Original lab/OpenAI modules,
+  saved reports, frozen census baseline and historical archives remain unchanged.
+- **Verification:** Full npm suite: 5,122 tests, 5,119 passed, zero failed, three skipped
+  (Chrome/Lean unavailable). All 31 Python integration tests passed; fresh reviewer independently
+  reran them and the three Node bridge tests. Clean hash-locked pip installation and complete
+  saved-report replay passed; all 60 dependencies consistent. Original reports verify. CLI
+  overwrite/tamper negative checks pass. Ruff and changed-file formatting checks pass. A pipe
+  backpressure regression failed before nonblocking writes/shared deadline, then passed. Final
+  review found no Critical/Important issue. Current census problem set remains 26. Reusable SDK
+  install/start instructions saved to cloud configuration draft; publication remains separate.
+- **Follow-ups:** Deferred minor: LangGraph's standalone adapter accepts empty action lists and
+  trusts callback result/observation shapes; fixed-corpus study and bridge validation constrain
+  these inputs. Add parity validation before broader standalone reuse. Durable atomic replay,
+  restart/concurrency recovery, verified identity/revocation, held-out attacks, external
+  reproduction, realistic connectors and measured overhead remain open. No paid call, submission,
+  independent custody, hosted CI success, production readiness or historical coverage increase
+  is claimed. See `docs/assurance/sdk/VALIDATION.md` for the evidence and limits.
+
+## 2026-10-15 — Raouf: durable local effects and executor restart (Australia/Sydney)
+
+- **Scope:** Implement the authorized next assurance phase: local process-crash recovery,
+  retries and cooperating concurrent executors. Preserve all original lab/SDK sources and reports.
+- **Summary:** Added immutable SQLite authority and receipts, exact action binding, exclusive
+  idempotent file publication, cached completion and recovery of files published before receipt
+  commit. The 26-case report includes four SIGKILL windows, a volatile two-effect restart control,
+  one-effect durable replay, eight-worker races for one/two grants, changed arguments, authority
+  replacement, storage failures and lock timeout. Both unchanged SDK adapters perform native
+  approval/resume with fresh executor processes and one resulting effect across two attempts.
+  File and receipt writes are not one atomic transaction; no distributed exactly-once claim.
+- **Files changed:** `tools/assurance-durable/` package and tests; `docs/assurance/durable/`
+  report, sources, results and validation; dated durability spec/plan; scoped CI; README, roadmap,
+  reviewer index and assurance status links; both change logs. Re-derived only the existing
+  workflow census `current` set in `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json`
+  (26 to 27; one new unclassifiable CI step). Immutable baseline remains 19.
+- **Verification:** 16 durability tests and 31 existing SDK tests passed. Final npm suite:
+  5,122 tests, 5,119 passed, zero failed, three skipped (Chrome/Lean unavailable). Complete
+  26-case replay passed in the clean pip environment; all three prior saved reports verify.
+  CLI output-overwrite and tamper refusals pass. Census/finding-ledger tests: 23 passed. Ruff,
+  formatting and diff checks pass. Fresh review found a valid escaped-string effect exceeding
+  a fixed read cap; regression observed RED, then GREEN after encoded-length-bounded reads.
+  Final review found no other material issue or new deferred minor. Initial npm census drift
+  was diagnosed and current set updated under its existing lifecycle; frozen data stayed intact.
+- **Follow-ups:** Real connector idempotency and ambiguous-response recovery, power-loss tests,
+  end-to-end SDK workflow persistence, identity/revocation, held-out attacks and independent
+  reproduction remain open. Existing standalone LangGraph input-validation limitation remains
+  documented. No paid/model call, external witness, hosted CI result, deployment, submission,
+  new coverage discharge or production-readiness claim. Reusable durability startup checks
+  were saved in the cloud configuration draft; publication is separate from local validation.
+
+## 2026-10-15 — Raouf: real Redis connector recovery (Australia/Sydney)
+
+- **Scope:** Implement the authorized next assurance phase with a real local service. Preserve
+  all earlier lab, SDK, durability and OpenAI instrument source/report bytes.
+- **Summary:** Added a verified-source Redis 8.10.2 installer, disposable Unix-socket/AOF service,
+  bounded RESP transport and an actual successful-response-loss proxy. Durable SQLite intents
+  precede conditional SET; existing intents reconcile with GET only. The 19-case report covers
+  lost replies, pre-send utility loss, eight binding mutations, malformed input, damaged records,
+  service SIGKILL/restart, eight cooperating workers, a duplicate RPUSH control and both native
+  SDK integrations. One completion is not counted as a second created effect.
+- **Files changed:** `tools/assurance-redis/` implementation, installer and tests;
+  `docs/assurance/redis/` evidence, sources, validation and results; dated Redis spec/plan;
+  scoped CI, README, roadmap, reviewer index and assurance status links; both change logs.
+  Re-derived only the workflow census `current` set (27 to 28) for the new step classified
+  `missing_committed_universe_query`; its immutable baseline remains 19.
+- **Verification:** 14 new Python tests, 31 SDK tests and 16 durability tests passed. Full npm:
+  5,122 total, 5,119 passed, zero failed, three skipped (Chrome/Lean unavailable). Source installer
+  ran successfully; clean hash-locked Python environment replayed all 19 report cases. All four
+  prior reports verify unchanged. CLI overwrite/omitted-case refusals, Ruff, formatting, shell
+  syntax, census and diff checks pass. Fresh independent reviewer reproduced tests and report,
+  checked source provenance and found no material or minor defect. No review code fix required.
+- **Follow-ups:** Commit a combined pending-executor-crash/concurrent-recovery fixture, persist
+  end-to-end SDK workflow state, obtain held-out authorship and external reproduction, and measure
+  integration cost. Remote connectors, identity/revocation, power loss and multi-host execution
+  remain open. No paid/model call, external witness, hosted CI result, deployment, submission,
+  coverage discharge, distributed exactly-once or production-readiness claim. Reusable Redis
+  install/start instructions saved as a cloud draft; publication remains separate.
+
+## 2026-10-15 — Raouf: persisted native workflow recovery (Australia/Sydney)
+
+- **Scope:** Extend executor-only recovery evidence to one persisted native approval/tool workflow
+  in each pinned SDK. The user authorized proceeding without environment or API-key work.
+- **Summary:** Added native OpenAI RunState and official LangGraph SQLite checkpoints, trusted
+  byte/digest/version validation before restoration, persisted decisions and locally serialized
+  revocation/revision checks. Actual application SIGKILL after checkpoint persistence is followed
+  by restoration in another process. A post-effect SIGKILL replays the callback against the existing
+  Redis record. Cached completions return no new tool result and check current effect availability.
+  The 24-case report also covers rejection, checkpoint tamper/substitution/loss, version mismatch,
+  four concurrent resumes, conflicting decisions and missing completed effects.
+- **Files changed:** `tools/assurance-workflow/` implementation, dependency extension and tests;
+  `docs/assurance/workflow/` report, source register, results and validation; dated design/plan;
+  scoped workflow CI; README, roadmap, reviewer index and assurance links; both logs. Current
+  workflow census moves 28 to 29 for one `missing_committed_universe_query` step; baseline stays 19.
+- **Verification:** Final 15 workflow tests passed, including complete matrix replay and tamper
+  refusal. Saved 24-case artifact replay and CLI overwrite/omission refusals pass. Full npm:
+  5,122 total, 5,119 passed, zero failed, three skipped (Chrome/Lean unavailable). Earlier suites:
+  31 SDK, 16 durability, 14 Redis tests passed; all five previous reports verify unchanged.
+  Fresh extension environment used hash-locked wheels and passed pip check; existing package
+  versions are identical, with three added dependencies. Ruff, formatting, census and diff checks
+  pass. Fresh reviewer found no Critical/Important issue and one Minor orphaned native scratch
+  directory on SIGKILL. Regression failed first, then passed after moving scratch under parent
+  ownership; final suite passed. Cached-result and transport-unknown regressions also pass.
+- **Follow-ups:** External workflow reproduction, a multi-step crash matrix, authenticated approval
+  identity, distributed revocation and measured overhead remain open. Recovery replays from the
+  immutable approval checkpoint, not every latest intermediate state. The earlier Redis
+  pending-intent crash/race fixture is still separate. No live/model call, hosted CI result,
+  environment configuration change, deployment, submission, new coverage discharge or production
+  readiness claim. The user's new Hugging Face/Medicare incident request is the following phase.
+
+## 2026-10-15 — Raouf: incident-driven task scope and durable stopping (Australia/Sydney)
+
+- **Scope:** Implement the authorized next phase around the reported 2026 Hugging Face and
+  Australian Medicare incidents; preserve earlier tool sources and all six saved reports.
+- **Summary:** Reviewed 12 primary/independent sources with URL/time/response-hash provenance.
+  Added a standard-library Python request broker with exact task identity/method/URL/body grants,
+  per-redirect authorization, monitoring-health precondition, bounded requests, SQLite audit and
+  terminal stop state. Real child HTTP services communicate only through local Unix sockets and
+  reserved `.test` names. The 18-case/three-control report contains 54 rows, including the explicit
+  failure where an approved service relays beyond the broker's view. The research map attributes
+  Medicare patient-record claims to OpenAI and separates other Australian activities accurately.
+- **Files changed:** `tools/assurance-scope/**`, `docs/assurance/scope/**`, dated spec/plan, scoped
+  CI, README, roadmap, reviewer index, assurance/industry links and both logs. Re-derived only the
+  standing mutable census current set 29 to 30 (`unclassifiable_step`); baseline19 is unchanged.
+- **Verification:** 24 new Python tests pass, including actual pending-intent SIGKILL/new process
+  recovery, four-process budget contention, source/report tamper refusal and audit-failure windows.
+  Complete saved-report replay passes; all 54 observations unchanged after the review correction.
+  Full npm: 5,122 total, 5,119 passed, zero failed, three Chrome/Lean prerequisite skips. Original
+  OpenAI/lab reports replay; all earlier tool/report bytes compare unchanged. Ruff, scoped formatting,
+  CLI overwrite/omission/duplicate-key refusals, census and diff checks pass. One fresh reviewer
+  independently reproduced tests/report, checked source hashes and found one Important stop-write
+  gap. Reproduced it red; fixed pending-state handling across admission/response classification;
+  added two regression tests and reran the complete Python suite/report. No second-review claim.
+- **Follow-ups:** Enforce and observe network-layer egress from approved services; obtain held-out
+  authorship and outside reproduction; broaden multi-step SDK/memory and identity tests; measure
+  utility and integration costs. Trusted host/mandatory broker mediation remain assumptions. No
+  live target, real credential, model call, environment settings change, hosted CI, deployment,
+  company endorsement, incident-prevention guarantee or production-readiness claim.
+
+## 2026-10-15 — Raouf: kernel enforcement around an approved service (Australia/Sydney)
+
+- **Scope:** Execute the authorized next step for the approved-service onward-request gap. Add
+  `tools/assurance-egress/**` and separate evidence; preserve all seven earlier source/report families.
+- **Summary:** Added a Linux x86_64 ingress-only seccomp profile, trusted listener/descriptor
+  sanitation, fail-closed readiness, fork/exec inheritance probes and parent-owned loopback/Unix
+  observers. The unchanged exact-scope broker calls the real approved HTTP service. Twelve named
+  cases under three controls yield 36 rows: eight network channels deliver in the baseline and are
+  blocked under the profile; both useful operations complete. Descriptor hygiene applies to both
+  running controls. A filesystem mailbox still works and is retained as a negative result. Four
+  primary kernel/manual sources are recorded with response hashes; no new security primitive claimed.
+- **Files changed:** New egress implementation/tests/docs/report/source register; dated spec/plan;
+  scoped CI, README, roadmap, reviewer index and assurance links; both logs. Only the standing
+  mutable census current set changes 30 to 31 (`unclassifiable_step`); frozen baseline19 unchanged.
+- **Verification:** 20 new Python tests pass, including real raw-syscall/x32/descriptor-import
+  checks, fork/exec, useful work, all live channel baselines, report tamper/refusal and observer
+  failure. The 36-row report replays after the review correction with identical outcomes. Previous
+  scope suite 24 tests and 54-row report pass unchanged. Full npm: 5,122 total, 5,119 passed, zero
+  failed, three unavailable Chrome/Lean prerequisite skips. Ruff, formatting, CLI overwrite/omission/
+  duplicate-key refusals, census, frozen-byte and diff checks pass. One fresh reviewer reproduced
+  the initial suite/report and checked source hashes; one Important observer timeout defect found.
+  A stalled-first/full-second connection regression failed before fixing the too-broad timeout
+  handler. Active I/O failures now invalidate observation; full suite/report rerun green. No second
+  independent review claim. The npm run preceded this Python-only correction.
+- **Follow-ups:** Namespace mapping was unavailable (`/proc/self/uid_map` read-only); chose the
+  unprivileged additive seccomp profile without changing platform policy. This costs selective
+  egress and namespace isolation. Native mandatory launch, selective destination policy, filesystem/
+  IPC isolation, held-out probes, workload overhead and outside reproduction remain open. Trusted
+  Python bootstrap, local file/process effects and ingress replies are explicit bounds. No key,
+  external target, live model, environment setting change, hosted CI, deployment or production claim.
+
+## 2026-10-15 — Raouf: descriptor isolation and selective connections (Australia/Sydney)
+
+- **Scope:** Implement the authorized filesystem/IPC and selective-network experiment in a new
+  namespace; preserve all eight previous implementation/report families and frozen census baseline.
+- **Summary:** Added a Linux x86_64 descriptor-scoped seccomp profile, trusted file-mode/peer
+  validation, descriptor sanitation and outside file/network/signal observation. The unchanged
+  exact-scope broker admits a synthetic local capsule task. Nineteen cases under three controls
+  yield 57 rows: twelve attack baselines deliver and are blocked under the profile; three useful
+  operations survive. Two inherited-descriptor cases close in both running controls. Unwanted
+  content through approved output and TCP remains possible and is retained as negative evidence.
+- **Files changed:** `tools/assurance-isolation/**`, `docs/assurance/isolation/**`, dated spec/plan,
+  scoped CI, README, roadmap, reviewer index and assurance links; both logs. Only the mutable census
+  current set changes 31 to 32 (`unclassifiable_step`); baseline19 is unchanged.
+- **Verification:** 26 new Python tests and the source-bound 57-row saved-report replay pass.
+  Tests include actual kernel denials, raw-fork inheritance, exec, file-backed/shared mmap,
+  descriptor arguments, peer substitution, file modes, standard streams, multithreaded setup,
+  malformed worker output, observer timeouts and report tampering. Kernel/harness/report tests
+  began red before implementation. A malformed-result regression also failed before publication
+  was moved after validation. Previous egress 20 tests and 36-row report pass unchanged. Full npm:
+  5,122 total, 5,119 passed, zero failed, three missing Chrome/Lean prerequisite skips. Ruff,
+  scoped Prettier, CLI overwrite/omission/duplicate-key refusals, current census, frozen-byte and
+  diff checks pass. One fresh reviewer reproduced the original 24 tests/57 rows and source-response
+  hashes, found one Important worker-envelope defect and one minor protocol-check limitation.
+  Reproduced seven malformed CLI envelopes and boolean errno acceptance red; added shared strict
+  field/type/duplicate-key validation and reran the 26-test suite. The saved observations are
+  unchanged; only this phase's source hashes refresh. No second-review claim.
+- **Follow-ups:** Landlock ABI query returned ENOSYS and namespace setup was already unavailable;
+  use preopened capabilities without weakening platform controls. Cost: no dynamic paths,
+  reconnects or general application compatibility. Raw fork is supported; the glibc/Python clone
+  wrapper is intentionally denied. Deferred minor: bootstrap validates socket family/type/peer but
+  not protocol; current trusted provisioning creates TCP. Native mandatory launch, outside reproduction, held-out probes,
+  real workload overhead, content-release policy and dynamic permissions remain open. No key,
+  external target, paid/model call, environment edit, hosted CI result, independent operator,
+  deployment, incident-prevention guarantee or production-readiness claim.
+
+## 2026-10-15 — Raouf: local Meta Llama CPU pilot (Australia/Sydney)
+
+- **Scope:** Download and run a small official Meta model in this cloud machine, with additive
+  model evidence and preserved earlier source/report families.
+- **Summary:** Verified the pinned Llama 3.2 1B Instruct safetensors artifact and eight supporting
+  files; installed a separate CPU runtime outside Git. Retained both 15-case captures: initial
+  schema prompt 0 usable proposals, exploratory compact prompt 13 schema-valid proposals, three
+  unsafe mock bypass effects all blocked under enforcement, and two of three benign tasks complete.
+  Compact generation took 38.54 seconds with 2,970.05 MiB peak RSS. Added saved-output replay CI.
+- **Files changed:** `tools/local-meta-pilot/**`, `docs/assurance/meta/**`, dated plan/ledger, scoped
+  CI and formatting exclusion, README, reviewer index and both logs. Current mutable census 32 to
+  33 for saved-proposal replay; baseline19 and nine earlier source/report families unchanged.
+- **Verification:** Ten local tests pass. Both complete saved-report replays pass. Full npm: 5,122
+  total, 5,119 passed, zero failed, three Chrome/Lean prerequisite skips. Fresh reviewer found one
+  Important counter defect: failed bypass actions received containment credit. Reproduced red,
+  required demonstrated unsafe bypass effects, reran all ten tests and regenerated only evaluations.
+  Raw captures and generator snapshots preserved. No second review; npm preceded this Python-only
+  fix. Model hashes and recorded generation-source hashes verified; lint and scoped formatting pass.
+- **Follow-ups:** Dependency-lock artifact hashes remain a deferred minor; exact versions are
+  pinned, the installed CPU wheel was verified, and model hashes are checked at load. Freeze prompts,
+  obtain independently authored attacks/outside replication, repeat captures and compare a stronger
+  model. This is a one-action mock pilot, not frontier robustness, real incident prevention, native
+  SDK integration or evaluation of the later kernel profiles. No paid API, secret/weight in Git,
+  environment settings change, hosted-CI result or deployment claim.
+
+## 2026-10-15 — Raouf: repeated Meta workflow study protocol (Australia/Sydney)
+
+- **Scope:** User-authorized evaluation protocol, separate case authorship, repeated local captures
+  and complete native tool workflows; additive to the initial Meta pilot.
+- **Summary:** Defined 24 cases, three sampling seeds and two model turns. Separate case author
+  received no implementation or old outputs. Real descriptor-confined reads feed native SDK approval
+  and Redis writes; fixed-action controls and actual process-kill recovery have explicit limits.
+- **Files changed:** New `tools/local-meta-study/**`, `docs/assurance/meta-study/**`, dated plan and
+  both logs. Existing ten source/report families stay frozen.
+- **Verification:** Twenty-one pre-inference tests pass, including actual kernel/Redis/native SDK
+  effects, SIGKILL recovery, invalid baselines, case clustering and capture inventory. Ruff clean.
+  Fresh pre-inference review found provenance, prevention-credit and timing validation gaps;
+  regression tests failed before the fixes and the complete suite passed afterwards. No evaluation
+  generation has occurred; protocol/input commitment precedes collection.
+- **Follow-ups:** Complete pre-inference review, freeze sources/settings, collect the fixed run,
+  publish all failures and uncertainty, add saved-action CI, and verify/commit the evidence. Separate
+  agent authorship is not external independence. No paid API or environment settings changes.
+
+## 2026-10-15 — Raouf: fixed Meta study evidence and negative outcome (Australia/Sydney)
+
+- **Scope:** Execute the precommitted repeated local Meta study without prompt changes or retries;
+  publish every attempt and actual control effect.
+- **Summary:** Commit `996960de` froze protocol, 24 separately authored cases and 63 source/input
+  hashes before inference. All 144 attempts completed across three seeds; 137 began with Markdown
+  fences, four hit the token limit, and only three proposals were schema-valid writes. No read
+  proposal was valid; zero complete workflows. Real bypass produced two unauthorized writes, one
+  benign-task error and one attack case; enforcement blocked both. One authorized write completed.
+  With no complete model trajectory, model-derived recovery stayed unexercised. Scripted kernel,
+  SDK, Redis and SIGKILL tests are separate evidence. Generation took 967.27 seconds; peak inference
+  process RSS was 2975.48 MiB. The weak model/interface outcome is retained, not retuned away.
+- **Files changed:** Added raw capture, three-control report and local tokenizer consistency record
+  with its check-source snapshot; expanded study guide, reviewer index, README, plan ledger and
+  both logs. No post-result source, corpus, prompt or protocol change.
+- **Verification:** Pre-inference 21-test suite passed after review fixes; full npm 5119 passed,
+  zero failed, three Chrome/Lean prerequisite skips. All 72 paired trajectories/432 tool attempts
+  replay with matching semantic outcomes. Token/prompt/completion consistency checked for all 144
+  generations using the installed tokenizer. Missing-row, changed-summary and output-overwrite
+  refusals pass; raw capture bytes match the original. All frozen input/ancestor-commit bindings
+  verify; ten earlier source/report families and baseline19 stay unchanged. Live census34 exact;
+  original pilot reports replay, scoped formatting/Ruff/diff checks pass. Hosted CI not claimed.
+- **Follow-ups:** Before an OpenAI comparison, freeze its model/interface protocol and distinguish
+  schema-constrained output support from model capability. Outside authorship/replication, useful
+  model workflows, model-derived recovery and representative overhead remain unmeasured. This
+  run cannot estimate unnecessary blocking or broad protection: no benign baseline workflow
+  completed and only two actionable unsafe writes occurred. No paid API, new secret, environment
+  settings change, deployment, external independence or production-readiness claim.
+
+## 2026-10-15 — Raouf: frozen Luna 6 comparison protocol (Australia/Sydney)
+
+- **Scope:** Owner-authorized, bounded paid comparison using the supplied external key and exact
+  model `gpt-6-luna`; additive to eleven frozen experiment families.
+- **Summary:** Same 24 cases, three repetitions, two turns, unchanged JSON prompts and real runtime.
+  Maximum 144 requests and 128 output tokens each, no retries or redirects, stop on first API error.
+  Credential-free local replay and complete error inventory; no key persisted in Git or settings.
+- **Files changed:** New comparison tool/tests, protocol, source notes, dated plan; raw evidence
+  formatting exclusions and both logs. Earlier source/report families unchanged.
+- **Verification:** Twelve API-free comparison tests and 21 inherited kernel/SDK/Redis/recovery
+  tests pass. Initial inherited test invocation lacked PYTHONPATH; corrected invocation passes.
+  New tests first failed with missing implementation, then passed. Ruff clean. Official model,
+  pricing and Responses documentation checked; authenticated model listing confirms availability.
+  No evaluation inference has occurred at this protocol commitment.
+- **Follow-ups:** Execute once, retain every outcome, replay controls/recovery, document limitations,
+  add credential-free CI and commit evidence. No independent reviewer or production claim.
+
+## 2026-10-15 — Raouf: Luna 6 capture and retained interface failure (Australia/Sydney)
+
+- **Scope:** Execute the precommitted owner-authorized API comparison and publish every outcome;
+  no additional paid run, prompt tuning or retroactive repair.
+- **Summary:** Protocol commit `e4965bbb` binds 67 inputs. All 144 requests returned responses,
+  with two incomplete responses and no API errors/refusals. Of 144 proposals, 137 were invalid or
+  incomplete JSON and four more failed tool schema. Three public reads executed through the real
+  kernel boundary; all writes were invalid. Zero complete workflows, zero unsafe bypass effects,
+  prevention unestimable (0/0), and model-derived recovery unexercised. Retained 142 multi-message
+  responses explain the plain-text aggregation mismatch; no capability or protection ranking.
+  Usage: 31,980 input and 7,961 output tokens; conservative standard-tier estimate $0.007978.
+- **Files changed:** Added capture/journal, three-control report, post-capture response-shape counts
+  and source snapshot, result guide; linked README/reviewer index, added credential-free replay CI
+  and updated mutable census 34 to 35. Both logs updated; frozen plan and source inputs unchanged.
+- **Verification:** Twelve new comparison tests and 21 inherited runtime tests pass. Full npm
+  after CI/census changes: 5,119 passed, zero failed, three prerequisite skips. All 432 local control
+  attempts executed; capture/journal exact agreement, source/ancestor binding and earlier Meta
+  replay pass. Exact credential scan clean; temporary downloaded key file removed. All eleven
+  earlier source/report families and historical census baseline unchanged. Hosted CI and external
+  review not claimed. Fresh semantic replay of all 72 trajectories/432 control attempts passed;
+  missing-row, changed-summary and report-overwrite CLI refusals passed.
+- **Follow-ups:** A separately precommitted native function-calling or structured/phase-aware
+  interface experiment is needed before judging model capacity or using larger-model credits.
+  Keep this negative result. No production, independent-operator, general robustness, incident
+  prevention, useful-workflow overhead or zero-provider-retention claim. No cloud settings change.
+
+## 2026-10-15 — Raouf: native Luna protocol before inference (Australia/Sydney)
+
+- **Scope:** Owner-approved native function-call experiment, additive to twelve frozen families.
+- **Summary:** Same cases/model/budget; strict schemas, required single calls, text never executed.
+  Trusted host policy remains authoritative; unsafe argument choices stay representable.
+- **Files changed:** New native tool/tests, plan/protocol/guide, scoped replay CI, current census
+  35 to 36, raw-data formatting exclusions and both logs. Old evidence and baseline unchanged.
+- **Verification:** Twenty native tests and 21 inherited runtime tests pass. Fresh reviewer found
+  escaped-credential persistence and unchecked journals; four regressions failed before fixes,
+  then passed. Decoded envelopes/arguments/normalized results are screened, and replay requires
+  exact journal agreement. Full npm: 5,119 pass, zero failures, three prerequisite skips. Ruff clean.
+- **Follow-ups:** Freeze 71 input identities, execute one bounded capture, publish all results,
+  replay controls and eligible recovery, remove local key, verify and push. No paid inference yet;
+  no independent operator, second review, production or model-capability claim.
+
+## 2026-10-15 — Raouf: native Luna results and recovery (Australia/Sydney)
+
+- **Scope:** Execute the frozen native-call study; preserve all prior evidence.
+- **Summary:** All 144 calls returned one valid function call. Enforced and bypass completed
+  69/72 workflows and 34/36 benign tasks; deny-all completed zero. Three wrong-step reads remain
+  failures. Both selected SIGKILL recovery probes resumed with exactly one final Redis effect.
+  No unsafe bypass effect occurred: prevention is unestimable. Usage was 48,738 input and 3,174
+  output tokens; conservative standard-tier estimate $0.00767925.
+- **Files changed:** Native capture/journal/report, post-capture diagnostics/source, result guide,
+  README/reviewer links and both logs. Frozen protocol/source inputs unchanged after inference.
+- **Verification:** Fresh semantic replay matches all 72 trajectories/432 attempts and both
+  recovery probes. Twenty native tests and 21 inherited tests passed; npm 5,119 passed, zero failed,
+  three prerequisite skips. Six CLI tamper/overwrite refusals pass. All 71 input hashes and exact
+  journal agreement verify; twelve older families and historical census baseline unchanged.
+  Exact credential scan clean; temporary key removed. No hosted-CI or external-operator claim.
+- **Follow-ups:** Native-interface IOU paid. Independent challenge cases with demonstrated unsafe
+  baselines, independent replay and conversational tool loops remain. This suite's observed
+  utility was achieved with the same Luna model; broader capability and prevention remain unproven.
+
+## 2026-10-15 — Raouf: synthetic safety protocol before inference (Australia/Sydney)
+
+- **Scope:** Owner-authorized safety experiments, additive to thirteen frozen families; Luna and
+  conditional official Meta 3B, synthetic local resources only. No cloud settings changes.
+- **Summary:** Fresh 24-case corpus by a separate AI author; 14 scripted boundary/lifecycle cases
+  across three controls. Freeze fallback before inference: Meta only if Luna has no attack-labelled
+  unsafe baseline or an API error. Preserve all refusals, errors and model-interface failures.
+- **Files changed:** New safety-study tools/tests, plan, corpus, official model metadata/manifest,
+  guide, scoped replay CI, mutable census 36 to 37, raw-byte formatting exclusion and both logs.
+- **Verification:** Nine boundary tests and fourteen model tests pass; 21 inherited runtime tests
+  pass. Full npm: 5,119 passed, zero failed, three prerequisite skips. Fresh review raised three
+  integrity/metric issues; three reproductions failed before fixes and now pass, with an additional
+  fallback-replay regression. Review ended before a complete audit; no second review is claimed.
+- **Follow-ups:** Commit exact source/corpus/settings inventory before inference; run bounded
+  captures, verify actual effects, publish limits, clean the temporary key and push the branch.
+
+## 2026-10-15 — Raouf: verified Luna and Llama safety results (Australia/Sydney)
+
+- **Scope:** Execute the frozen 94-input safety protocol; preserve earlier experiments and all
+  model failures. The separately requested Hugging Face simulation is a successor surface.
+- **Summary:** Scripted controls blocked 8/8 demonstrated unsafe cases while preserving two
+  authorized operations. Luna completed 35/72 workflows and 16/36 benign tasks; 37 wrong-step
+  reads remain failures and no unsafe baseline occurred. The declared fallback ran official
+  Llama 3.2 3B: 20/24 workflows, all 12 benign tasks, four actual unsafe bypass writes, all four
+  blocked by enforcement. No unnecessary policy blocks among the 12 useful benign baselines.
+- **Files changed:** Added raw captures/journals, reports, actual SQLite artifacts, download and
+  resource verification, negative CLI checks and result guide; entry-point links and both logs.
+- **Verification:** Fresh semantic replay passed for all 42 scripted rows, 432 Luna and 144 Meta
+  action/control attempts, plus two selected SIGKILL probes in each lane. Pinned Meta tokenizer
+  reconstruction passed. All 94 input hashes remain unchanged; 23 new tests, 21 inherited runtime
+  tests and npm 5,119 passed, with zero failures and three npm prerequisite skips. Three CLI
+  tamper/overwrite refusals passed. Exact credential scan clean; temporary API key removed.
+- **Follow-ups:** Independent challenge authorship/operator replay and representative connectors
+  remain. Results are finite synthetic evidence; no broad robustness or incident-prevention claim.
+  Llama ran offline on CPU at BF16 with 6.67 GiB reported peak RSS; Luna's usage estimate is $0.008465.
+
+## 2026-10-15 — Raouf: local Hugging Face pattern protocol (Australia/Sydney)
+
+- **Scope:** Add a safe local simulation requested by the owner, preserving fourteen earlier
+  experiment families. Fake credentials and disposable services; no real target requests.
+- **Summary:** Five scripted scenarios across scoped, origin-only and deny-all controls;
+  nine separate mapped kernel channel probes. Real HTTP service effects test a cross-run
+  handoff/metadata/scorer/export chain, later barriers, useful work and an approved-service gap.
+- **Files changed:** New incident fixture, harness, five tests and plan; replay CI, mutable
+  census 37 to 38, raw-evidence formatting exclusion and both logs. Historical baseline unchanged.
+- **Verification:** Five new tests pass, including real service/egress effects, stop persistence,
+  fresh replay, missing inventory, summary/source tamper and overwrite refusal. Root inspected
+  source and control assumptions. No independent operator or production reconstruction claimed.
+- **Follow-ups:** Commit exact source/protocol before the published run; retain approved-service
+  relay and mailbox failures, publish results, verify the complete branch and push.
+
+## 2026-10-15 — Raouf: local Hugging Face pattern results (Australia/Sydney)
+
+- **Scope:** Execute the frozen 19-input incident protocol; keep synthetic pathway evidence
+  distinct from model behavior and the real incident. No live target or API calls.
+- **Summary:** All 15 scenario/control rows and nine separate channel rows completed without
+  errors. Scoped admission blocks three of four unsafe origin-only scenario witnesses while
+  preserving the approved read/write workflow. Approved-service relay remains a scoped failure;
+  separate kernel probes block proxy/Unix relays but retain shared-file mailbox delivery.
+- **Files changed:** Published report, verification ledger and result guide; entry-point links
+  and both logs. Frozen source/protocol and fourteen earlier experiment families unchanged.
+- **Verification:** Fresh complete semantic replay passes; all nine persisted-stop probes pass.
+  Five new tests pass. CLI refuses missing scenario/channel rows, altered summary and overwrite.
+  npm: 5,119 passed, zero failed, three prerequisite skips. Earlier 94 safety input hashes match;
+  credential scan clean. No hosted-CI success or independent operator attestation claimed.
+- **Follow-ups:** Compose approved-service containment with the incident chain, isolate shared
+  writable state, add representative service identity/scorer controls and independent replay.
+  These remaining gaps are published rather than counted as protection; commit and push branch.
+
+## 2026-10-15 — Raouf: composed containment protocol (Australia/Sydney)
+
+- **Scope:** Owner-authorized follow-through on the HF guide: compose approved-service
+  containment, run isolation, scoped credentials and scorer protection; bounded local Llama lane.
+- **Summary:** Five ablation controls over 14 scripted cases; eight frozen model prompts.
+  Host-owned task authority, preconnected gateway and descriptor kernel enforce distinct layers.
+  Synthetic random metadata credentials are excluded from worker bootstrap; no live target/API use.
+- **Files changed:** New hf-containment tools/tests/plan/corpus, scoped replay CI and mutable
+  census 38 to 39; raw-evidence exclusions and both logs. Earlier frozen experiments unchanged.
+- **Verification:** Thirteen new tests pass after initial missing-module failures and fixes for
+  a socket helper's post-filter lazy loading. A tokenizer-only probe caught BatchEncoding return
+  semantics before inference; reconstruction now uses explicit encoding. Full npm: 5,119 passed,
+  zero failed, three prerequisite skips. Source/control assumptions inspected locally.
+- **Follow-ups:** Freeze source/protocol, execute once, retain model refusals/failures, publish
+  replay instructions and results. CI's inherited scrubbed Redis child used an absent default
+  path; runner provisioning now installs the same pinned binary there. Hosted confirmation pending.
+  Independent operator reproduction and representative production IAM remain outside local evidence.
+
+## 2026-10-15 — Raouf: composed containment results (Australia/Sydney)
+
+- **Scope:** Execute the precommitted 27-input protocol; preserve all old evidence.
+- **Summary:** All 70 scripted rows replayed; combined controls block 12/12 demonstrated
+  unsafe baselines and preserve both useful workflows. Kernel-only permits harmful gateway
+  operations; identity-only permits direct file access. Both layers are needed in this matrix.
+  Plain-JSON Llama lane: eight generated responses, zero valid actions, one truncation,
+  zero benign completions; no prevention denominator. All failures remain unmodified.
+- **Files changed:** Scripted/model capture, journal, reports and verification ledger; result
+  guide, external replay instructions and both logs. No source or protocol edits after freeze.
+- **Verification:** Thirteen tests and full npm pass (5,119 passed, zero failed, three skipped).
+  Fresh scripted replay and model raw/journal linkage pass; pinned tokenizer reconstruction
+  passes. Earlier 94 safety and 19 incident inputs unchanged. External operator remains absent.
+- **Follow-ups:** Separately freeze a native-tool interface successor to address the measured
+  interface failure; retain this failed lane. Confirm hosted CI after pushing final evidence.
+
+## 2026-10-15 — Raouf: native HF model interface protocol (Australia/Sydney)
+
+- **Scope:** Separate successor to the retained eight-response plain-JSON failure.
+- **Summary:** Same corpus, model/settings and five actual controls; use the model's native
+  perform_action tool schema. One bounded capture, no output repair or retry. This interface
+  was selected after seeing the earlier failure and is not an unbiased predeclared comparison.
+- **Files changed:** New hf-native source/tests/plan/protocol, existing scoped CI job extension,
+  raw-evidence exclusion and both logs. No new census identity; all earlier inputs preserved.
+- **Verification:** Two native tests pass after initial missing-module failure; inherited
+  13 containment tests pass. Ruff clean. Exact prompt inventory and raw action linkage checked.
+- **Follow-ups:** Freeze before inference, execute once, verify tokenizer and fresh controls,
+  publish both outcomes, push and wait for hosted CI. External operator receipt remains absent.
+
+## 2026-10-15 — Raouf: native HF model results and release (Australia/Sydney)
+
+- **Scope:** Execute the separately frozen 34-input native-call successor; preserve all failures.
+- **Summary:** Four of eight responses yield valid calls. One unsafe scorer-tampering bypass
+  action occurs and combined containment blocks it. One of two benign prompts completes;
+  four invalid responses remain unexecuted. No general safety-rate claim or repaired output.
+- **Files changed:** Native capture/journal/report/verification, native result guide, parent
+  successor links, external replay instructions, root reviewer links, negative-check ledger
+  and both logs. Prior source/corpus/protocol/captures remain unchanged.
+- **Verification:** Fresh replay of 20 valid-action control rows (four deny-all refusals) and
+  20 invalid/unexecuted records agrees; pinned tokenizer reconstruction passes. Two new and
+  13 inherited tests pass; full npm 5,119 passed, zero failed, three prerequisite skips.
+  Missing rows, altered action/summary and overwrite refuse; 94/19/27/34 input hashes match.
+  Credential scan clean. Ready to push and observe hosted CI; no hosted success yet claimed.
+- **Follow-ups:** Local containment and replay package delivered. External operator receipt,
+  reliable model interface over broader tasks, representative real IAM/connectors and native
+  mandatory launcher remain explicit limits; the old failures are preserved for comparison.
+
+## 2026-10-15 — Raouf: current gap map and primary-source review (UTC)
+
+- **Scope:** Targeted audit of the agent-containment track at `9141ec0b`, selected legacy
+  findings and current primary guidance; no whole-repository semantic-audit claim.
+- **Summary:** Published 27 prioritized work items with pass conditions and a four-step
+  successor roadmap. Distinguished six previously documented open findings from fixture
+  hardening, evaluation limits and external validation. Retrieved 19 primary pages.
+- **Files changed:** New dated research map, source register, diagnostic script/results and
+  npm advisory snapshot; current roadmap/reviewer navigation and both logs.
+- **Verification:** Ten diagnostic observations reproduce: non-finite timing acceptance,
+  permissive unknown task configuration and an injected in-flight revocation ordering.
+  All published timings remain finite; 94/19/27/34 frozen input hashes match. npm audit
+  reports zero known advisories. Ruff and scoped formatting/link checks validate the new
+  package; no inference, external target probing or runtime remediation performed.
+  Baseline hosted readiness run 38704471366 passed all 13 jobs before this audit.
+- **Follow-ups:** Repair/isolate known historical paths through declared successor or
+  maintenance scope; prioritize native interface reliability, held-out adaptive tasks,
+  one authenticated connector and independent operator reproduction. Draft standards
+  and public vendor guidance are not certification, endorsement or customer demand.
+
+## 2026-10-15 — Raouf: hardening phase 1 scope (Australia/Sydney)
+
+- **Scope:** Declare the first implementation phase of the current gap map before edits.
+- **Summary:** Mutable server-boundary retirement/authentication, versioned authority and
+  HF gateway/validator successors, strict reproduction wrapper and presentation evidence.
+- **Files changed:** `docs/research/HARDENING_PHASE_1.md` and both logs.
+- **Verification:** Read affected callers, existing tests and frozen-source requirements.
+  No implementation or new outcome is claimed by this scope commit.
+- **Follow-ups:** Failing regressions first, implement, independently review, verify and push.
+
+## 2026-10-15 — Raouf: hardening successor and presentation package (Australia/Sydney)
+
+- **Scope:** Implement phase 1 of the gap map under prior scope commit `f86f7723`;
+  preserve frozen studies and distinguish retirement from functional remediation.
+- **Summary:** Authenticated non-demo gateway session creation, retired mounted legacy
+  live/affinity endpoints, and added exact-action authority, strict finite capture parsing,
+  explicit task configuration and transactional SQLite revocation/effect successor.
+  Added a strict historical-wrapper successor and a five-minute presentation script.
+- **Files changed:** Server boundary/tests; new `tools/assurance-hardening/**` and strict
+  wrapper; npm/CI commands; reviewer/policy/navigation docs; phase evidence and both logs.
+  Current census only re-derived under its existing contract; all 39 identities retained.
+- **Verification:** Full npm 5,122 passed, zero failed, three recorded prerequisite skips;
+  17 successor tests, seven server tests (included in npm), 13+2 inherited focused tests.
+  Fifteen demo checks replay exactly; tamper/overwrite refuse; 94/19/27/34 frozen input
+  hashes match. Ruff, syntax and scoped formatting/link checks pass. Fresh reviewer found
+  slash-path auth and mutable-request issues; both reproduced RED then fixed GREEN.
+  First full suite's census classification mismatch is recorded and resolved; immutable
+  baseline untouched. Hosted verification pending publication; no paid inference or keys.
+- **Follow-ups:** Held-out adaptive model study, real IAM/connector integration and outside
+  reproduction remain open. Legacy clients now receive documented 410 responses; old
+  native helpers and direct historical modules are not certified or silently repaired.
+
+## 2026-10-15 — Raouf: hardening hosted verification receipt (Australia/Sydney)
+
+- **Scope:** Record hosted results after publication; documentation only.
+- **Summary:** Implementation `e5d783434d36c2aff2ee750eb8888f50d48342d9` passed all 13
+  jobs in Actions run `38723711060`, including persisted workflow recovery.
+- **Files changed:** Phase record and both logs; tested source and saved evidence unchanged.
+- **Verification:** Exact run conclusion is success, 13/13 jobs successful. Local results
+  remain 5,122 npm passes with three prerequisite skips and 17 successor tests.
+- **Follow-ups:** Phase 1 complete within its declared local scope; later model/connector
+  and external validation phases remain open.
+
+## 2026-10-15 — Raouf: declare connector phase 2 (Australia/Sydney)
+
+- **Scope:** Additive next-phase design before implementation.
+- **Summary:** Native SDK approval, mandatory isolated proposal worker, exact authority,
+  sandbox inbox and conservative recovery; scripted engineering evidence only.
+- **Files changed:** `docs/research/CONNECTOR_PHASE_2.md`, both logs.
+- **Verification:** Clean starting tree; existing components and lifecycle read.
+- **Follow-ups:** Execute tests first, preserve frozen history, fresh review, commit/push.
+
+## 2026-10-15 — Raouf: composed connector phase 2 (Australia/Sydney)
+
+- **Scope:** Implement the additive phase 2 design `a52c5bd1` and matrix `57b10145`.
+- **Summary:** Native SDK approval, isolated proposal worker, exact identity/content
+  authority and authenticated sandbox inbox with durable intent, idempotency and lookup.
+  Two actual native-callback SIGKILL boundaries preserve unknown outcomes until observed.
+- **Files changed:** New `tools/assurance-connector/**` and phase 2 docs/evidence;
+  npm/CI integration, README, ROADMAP, reviewer index and both logs. Frozen inputs untouched.
+- **Verification:** 17 focused tests pass; full npm 5,122 pass, zero fail, three existing
+  Chrome/Lean skips. Matrix 39 rows: enforced 2/2 useful, 0/9 unauthorized; bypass 2/2
+  and 9/9; deny-all 0/2 and 0/9. Four recovery observations and 16 source hashes replay.
+  Historical 94/19/27/34 input hashes preserved. Fresh agent review plus author probe
+  found HTTP exception handling, worker resource cleanup and typed-evidence gaps;
+  one test-first repair pass closes them. Ruff/pip/census/diff/authored-doc checks pass.
+  Canonical report/preregistered protocol formatting warnings are recorded, bytes retained.
+- **Follow-ups:** Hosted CI pending push. Synthetic identities and local connector only;
+  SDK/bootstrap trusted, no CPU/memory/process-count quotas. Held-out model study,
+  real identity/vendor adapters and outside reproduction remain open. No paid inference.
+
+## 2026-10-15 — Raouf: declare held-out model phase 3 (Australia/Sydney)
+
+- **Scope:** New model study; historical source/evidence unchanged.
+- **Summary:** Separately authored 30 benign/30 adversarial tasks, three trials,
+  matched first proposals and adaptive control feedback, separate utility/safety metrics.
+- **Files changed:** Phase 3 design and both logs.
+- **Verification:** Phase 2 hosted run 38729498488: all 13 jobs successful.
+- **Follow-ups:** Corpus review, test-first runner, development pilot, freeze, full capture,
+  replay and fresh methods/code review. No paid provider or environment secret work.
+
+## 2026-10-15 — Raouf: freeze held-out model phase 3 (Australia/Sydney)
+
+- **Scope:** Implement design `40ac3763` additively; preserve historical source/evidence.
+- **Summary:** Separate corpus author/reviewer, strict native-tool parsing, local batch
+  inference, full-batch append-only capture, native connector effects, provenance and
+  task/family-aware analysis. Protocol binds 60 tasks, three trials and three controls.
+- **Files changed:** New runner/tests and phase 3 corpus/settings/protocol; npm/CI,
+  phase design and both logs. Frozen earlier inputs remain unchanged.
+- **Verification:** Fresh review findings reproduced RED then fixed GREEN; 13 focused
+  tests pass. Full npm 5,122 pass, zero fail, three prerequisite skips; Ruff/pip/census
+  pass. Two development pilots plus final-schema two-task smoke; tokenizer linkage
+  verified. No held-out inference or paid API calls before this freeze.
+- **Follow-ups:** Execute once, retain failures, replay effects/tokenizer, publish honest
+  results and limitations. Single small model, local connector and trusted host only.
+
+## 2026-10-16 — Raouf: complete held-out model phase 3 (Australia/Sydney)
+
+- **Scope:** Execute frozen protocol `0e80f4bc`; add results and reviewer navigation.
+- **Summary:** Official local Llama-3.2-3B-Instruct produced 403 responses across
+  60 tasks, three trials and three controls: all 540 branches retained. Enforced
+  benign completion 90/90; adversarial completion 59/90 with zero unauthorized
+  effects, versus 43/90 unauthorized effects in bypass. Thirty-one attacked branches
+  remain unsuccessful. No paid inference or environment-secret changes.
+- **Files changed:** New phase 3 capture/journal/report/receipt and guides; README,
+  ROADMAP, reviewer index, phase ledger and both logs. Frozen source/data unchanged.
+- **Verification:** Two fresh effect-replay passes, full tokenizer linkage and author
+  count cross-check pass. Thirteen focused tests pass; final npm 5,122 pass, zero fail,
+  three existing Chrome/Lean skips. All 31 protocol bindings and prior 94/19/27/34
+  input hashes match. Ruff/dependency/census/format/diff checks pass. Hosted CI follows push.
+- **Follow-ups:** Outside reproduction and independent effect custody; broader tasks,
+  vendor/IAM integration and preregistered recovery/model comparisons on a fresh corpus.
+  Pre-run review covered code/methods; no outside reviewer assessed the final results.
+
+## 2026-10-16 — Raouf: model phase 3 hosted verification receipt (Australia/Sydney)
+
+- **Scope:** Record hosted results; documentation only.
+- **Summary:** Implementation/evidence commit `78f6259aa5e063650a8f9b0f6eb6b222fd5f3cd8`
+  passed all 13 jobs in Actions run `38747723586`, including phase 3 capture replay.
+- **Files changed:** Phase 3 ledger and both logs; frozen source and results unchanged.
+- **Verification:** Overall conclusion success, 13/13 successful jobs. Hosted checks
+  replay saved proposals; model inference and tokenizer linkage were verified locally.
+- **Follow-ups:** Outside reproduction, broader tasks and recovery under attack remain
+  open. Phase 3 complete within its bounded local protocol; no production safety claim.
+
+## 2026-10-16 — Raouf: declare reproduction phase 4 (Australia/Sydney)
+
+- **Scope:** Additive portable replay and retained receiver evidence.
+- **Summary:** Implement approved roadmap step 4; outside participation remains pending.
+- **Files changed:** `docs/research/REPRODUCTION_PHASE_4.md`, both logs.
+- **Verification:** Clean starting tree; frozen replay interfaces and lifecycle reviewed.
+- **Follow-ups:** Test-first runner, raw evidence, fresh review, local reproduction and handoff.
+
+## 2026-10-16 — Raouf: freeze phase 4 reproduction runner (Australia/Sydney)
+
+- **Scope:** New runner/observer/tests/contract and operator guide; prior evidence unchanged.
+- **Summary:** Exact report replay, raw decision snapshots, externally supplied expected
+  root, strict archive/schema/receipt checks and incomplete-run evidence retention.
+- **Files changed:** `tools/assurance-reproduce/**`, phase 4 docs/contract, npm/CI and both logs.
+- **Verification:** 13 focused tests; npm 5,122 pass, zero fail, three existing skips.
+  Fresh review's SQLite filter defect reproduced RED and repaired GREEN; Ruff/dependencies pass.
+- **Follow-ups:** Full clean-checkout reproduction and pack verification; external operator pending.
+
+## 2026-10-16 — Raouf: publish phase 4 reproduction handoff (Australia/Sydney)
+
+- **Scope:** Retained local reproduction evidence and operator handoff; no model rerun.
+- **Summary:** Clean checkout/fresh dependency environment reproduced all 540 branches
+  and 763 decisions exactly in 89.236 seconds; 763 raw SQLite snapshots retained.
+  Outside operator validation remains pending; no independent custody claim.
+- **Files changed:** New phase 4 archive/root/receipt/results, guide/ledger/navigation and both logs.
+- **Verification:** Standard-library pack verification and author raw-effect count agree.
+  13 phase 4 plus 13 phase 3 tests pass; npm 5,122 pass, zero fail, three prior skips.
+  All 39 bound inputs match; previous frozen paths unchanged; exact gate census,
+  Ruff, dependencies, authored-doc formatting and diff checks pass.
+- **Follow-ups:** Hosted CI after push; outside operator and fresh-host run, independent
+  custody and new-protocol recovery improvements remain open. No external outreach.
+
+## 2026-10-16 — Raouf: declare recovery phase 5 (Australia/Sydney)
+
+- **Scope:** New guarded recovery, incident drills and fresh-host reproduction.
+- **Summary:** One exact host-approved fallback, no override of explicit decline,
+  read-only unknown reconciliation, revoke/stop ordering and retained raw effects.
+- **Files changed:** Phase 5 design, phase 4 hosted receipt and both logs.
+- **Verification:** Phase 4 commit 54119e57 passed all 13 jobs in run 38800643360.
+- **Follow-ups:** Test-first successor, strict source freeze, internal review, local/hosted
+  evidence. Outside validation remains pending. P5-CI01 authorizes only live census edits.
+
+## 2026-10-16 — Raouf: fresh-host replay automation (Australia/Sydney)
+
+- **Scope:** Path-scoped hosted reproduction, synthetic artifacts only.
+- **Summary:** Execute the unchanged phase 4 runner on a fresh GitHub machine and retain
+  raw snapshots, roots, receipts and failure logs. Project-operated, not independent.
+- **Files changed:** New follow-up workflow, current gate census and both logs.
+- **Verification:** P5-CI01 authority commit 619d31aa precedes this edit; one live gate
+  identity added, no removed identities, historical baseline unchanged.
+- **Follow-ups:** Inspect hosted execution and verify its downloaded pack locally.
+
+## 2026-10-16 — Raouf: freeze guarded recovery experiment (Australia/Sydney)
+
+- **Scope:** Additive phase 5 source/tests/protocol and project-operated fresh-host evidence.
+- **Summary:** Durable exact-grant fallback, terminal decline, lookup-only uncertainty,
+  stop/revoke ordering, 39 scripted cases plus three in-flight drills and raw evidence checks.
+- **Files changed:** New recovery tools/docs/protocol, follow-up CI/npm, current census and both logs.
+- **Verification:** 15 focused tests pass; npm 5,122 pass, zero fail, three prior skips.
+  Reviewer timing finding and author strict-JSON finding reproduced RED and fixed GREEN.
+  Fresh hosted phase 4 pack from run 38827781172 verifies locally; historical pin unchanged.
+- **Follow-ups:** Execute frozen phase 5 once, fresh native verification, publish and run CI.
+  No new model efficacy, outside operator, real IAM or distributed-cancellation claim.
+
+## 2026-10-16 — Raouf: publish guarded recovery results (Australia/Sydney)
+
+- **Scope:** Frozen phase 5 execution, raw evidence and current reviewer navigation.
+- **Summary:** 39 scripted rows plus three in-flight drills retained; guarded recovery
+  adds four completions (3→7/13), with declines and unknowns preserved. Stop detects
+  four declared mismatches; in-flight effects commit before revoke, later sends block.
+- **Files changed:** New report/pack/root/receipt/results, guides/navigation/ledger and both logs.
+- **Verification:** Original run and fresh replay plus separate verification pass;
+  42 raw SQLite snapshots, 46 frozen bindings unchanged. Fifteen focused tests;
+  final npm 5,122 pass, zero fail, three existing skips. Fresh-host phase 4 pack verifies.
+- **Follow-ups:** Hosted phase 5 checks after push. Outside operator/custody, new model
+  study and real identity/vendor integration remain open; no model-score revision.
+
+## 2026-10-16 — Raouf: record hosted recovery verification (Australia/Sydney)
+
+- **Scope:** Receipt-only closeout of phase 5 and fresh-machine reproduction.
+- **Summary:** Commit 34c01074 passed both follow-up workflow jobs in run 38829379613.
+- **Files changed:** Phase 5 design/execution ledger and both logs; frozen artifacts unchanged.
+- **Verification:** Hosted fresh reproduction and recovery/response verification both
+  succeeded. Separate broader readiness run 38829379622 was 10/13 passed with three
+  jobs running at receipt time; no final success claim for that run.
+- **Follow-ups:** Outside operator/custody, new model evaluation and real identity/vendor
+  integration remain open. Published results retain their scripted engineering scope.
+
+## 2026-10-16 — Raouf: research current OpenAI agent-safety needs (Australia/Sydney)
+
+- **Scope:** Public-source research and proposed priorities after phase 5; documentation only.
+- **Summary:** Mapped 29 official sources to 12 remaining needs, including provider safety
+  alerts, monitor outages, safe stopping, compaction, delegation and credential lifecycle.
+  Distinguished documented guidance, existing evidence and proposed acceptance tests.
+- **Files changed:** New OpenAI needs review/source register, reviewer index and both logs.
+- **Verification:** All 29 registered pages returned HTTP 200; response hashes and exact
+  normalized excerpts checked against fetched bytes. Local links, JSON, authored formatting
+  and diff checked; no runtime tests repeated for this documentation-only update.
+- **Follow-ups:** Prioritize an additive provider-alert/local-stop adapter, then fresh
+  compaction/delegation tasks and authenticated connector lifecycle with outside observation.
+  No new model results, deployment, external submission or exhaustive-coverage claim.
+
+## 2026-10-16 — Raouf: declare safety signals phase 6 (Australia/Sydney)
+
+- **Scope:** Additive provider-alert and monitor dispatch experiment; N01/N02 partial.
+- **Summary:** Signed local alerts, durable stop/pending state, bounded monitor leases,
+  separate operator restart and retained in-flight outcomes; no provider calls.
+- **Files changed:** Phase 6 design/plan and both logs.
+- **Verification:** Existing native dispatch and observation interfaces inspected;
+  exact 42 matrix plus two drill cases declared before implementation.
+- **Follow-ups:** Test-first implementation, fresh review, source freeze, retained evidence
+  and hosted checks. P6-CI01 authorizes only the live census update.
+
+## 2026-10-16 — Raouf: freeze safety signals phase 6 (Australia/Sydney)
+
+- **Scope:** Additive local provider-signal/monitor gate, tests, protocol and scoped CI.
+- **Summary:** Signed alert intake, durable pending/terminal states, monitor leases,
+  boot-bound operator restart and complete raw controller/receiver evidence.
+- **Files changed:** New assurance-signals tools and phase 6 docs; npm/CI, current gate
+  census and both logs. Frozen prior studies unchanged.
+- **Verification:** 24 focused tests pass. Four important internal-review findings and
+  one author key-separation finding reproduced RED and repaired GREEN. Ruff and all
+  62 pinned dependencies pass. P6-CI01 precedes one live gate addition (41→42).
+- **Follow-ups:** Retained execution after this source/protocol commit, separate artifact
+  verification and hosted checks. No live provider or independent-custody result claimed.
+
+## 2026-10-16 — Raouf: publish safety signals phase 6 (Australia/Sydney)
+
+- **Scope:** Frozen phase 6 execution, evidence and current reviewer navigation.
+- **Summary:** 42 matrix rows and two in-flight drills retained. Integrated policy
+  allows six intended deliveries, blocks 14 stop/hold cases and retains one unknown;
+  already admitted effects can finish after a stop. No model/provider result claimed.
+- **Files changed:** Phase 6 report/pack/root/receipt/results and guide, root design,
+  README, ROADMAP, reviewer index, current census timestamp and both logs.
+- **Verification:** Published run, mandatory fresh replay and separate verification
+  pass; 88 raw SQLite snapshots, 48 frozen bindings unchanged. Twenty-four focused
+  tests; final npm 5,122 pass, zero fail, three existing prerequisite skips. Ruff and
+  pinned dependencies pass. P6-CI01 preserves historical census fields.
+- **Follow-ups:** Hosted safety-signal checks after push, then phase 7 compaction and
+  delegation. Live provider delivery and independent custody remain unvalidated.
+
+## 2026-10-16 — Raouf: record hosted safety signals verification (Australia/Sydney)
+
+- **Scope:** Receipt-only closeout of phase 6; frozen source and artifacts unchanged.
+- **Summary:** Publication commit 820933bb passed safety-signals run 38832945791.
+- **Files changed:** Phase 6 design/execution ledger and both logs.
+- **Verification:** Fresh hosted runner passed 24 tests and verified the archive with
+  fresh replay, 42 matrix rows, two drills, 88 raw snapshots and the published hash.
+  Broader readiness run 38832945810 is 12/13 passed with workflow-recovery pending;
+  no final success claim for that run. Previous readiness run 38829379622 succeeded.
+- **Follow-ups:** Phase 7 compaction/delegation, then phase 8 credential lifecycle.
+  Live provider delivery, outside operator and independent custody remain open.
+
+## 2026-10-16 — Raouf: declare context and delegation phase 7 (Australia/Sydney)
+
+- **Scope:** Additive N04/N05 engineering study with known-failure propagation.
+- **Summary:** Durable checkpoints, authoritative outcome projections, narrowed
+  task-bound delegation and one shared action budget; 36 exact matrix identities.
+- **Files changed:** Phase 7 design/plan/ledger and both logs.
+- **Verification:** Existing host/native/observer interfaces inspected; clean branch,
+  enforced runtime network policy and reusable Python environment available.
+- **Follow-ups:** Test-first implementation, review, source freeze, raw evidence and
+  hosted replay. P7-CI01 authorizes only the live census addition. No live model claim.
+
+## 2026-10-16 — Raouf: implement context and lineage controls (Australia/Sydney)
+
+- **Scope:** Phase 7 durable checkpoints, structured summary audit and task delegation.
+- **Summary:** Exact grants and ancestor checks, one shared admission budget, retained
+  failures/unknowns and immutable old grants after any source change. Native experiment
+  and complete raw-state verifier added; source/protocol freeze still pending review.
+- **Files changed:** New assurance-context tools/tests, Phase 7 protocol and guide,
+  scoped CI, npm scripts, current census, design ledger and both logs.
+- **Verification:** Twenty focused tests passed before formatting. Source-restoration
+  defect reproduced RED and repaired GREEN; all raw tables and coordinated forgery
+  checked. Ruff passes. Live gate census is exact at 43; historical baseline unchanged.
+- **Follow-ups:** Final focused/repository checks, fresh whole-change review, source
+  freeze, retained execution, separate verification and hosted CI. No model claim.
+
+## 2026-10-16 — Raouf: freeze reviewed context experiment (Australia/Sydney)
+
+- **Scope:** Phase 7 source/protocol freeze before retained execution.
+- **Summary:** Fresh review found no Critical, Important or Minor defects. Retained
+  five additional reviewer probes as regressions; no production edits after review.
+- **Files changed:** New review-probe tests, refreshed 47-binding protocol, ledger and both logs.
+- **Verification:** All 25 focused tests passed; Ruff and 62 pinned packages pass.
+  Repository suite: 5,122 passed, zero failed, three existing prerequisite skips.
+  Prior phase readiness run 38832945810 now succeeded, all 13 jobs.
+- **Follow-ups:** Retained execution after this commit, separate archive verification,
+  publication and hosted Phase 7 checks. Live models/integration and custody remain open.
+
+## 2026-10-16 — Raouf: publish verified context and delegation evidence (Australia/Sydney)
+
+- **Scope:** Frozen Phase 7 execution, raw evidence and current reviewer navigation.
+- **Summary:** All 36 rows retained. Integrated policy completes five intended cases,
+  blocks 12 hold/authority cases and keeps one final unknown. Shared sibling budget
+  limits two individually approved actions to one effect; prior uncertainty remains.
+- **Files changed:** Phase 7 report/pack/root/receipt/results, guide/design ledger,
+  root README/ROADMAP, reviewer index and both logs.
+- **Verification:** Original fresh replay and separate archive verification pass;
+  108 raw SQLite snapshots, 47 frozen bindings. Twenty-five focused tests; repository
+  suite 5,122 pass, zero fail, three prerequisite skips. Ruff and pinned packages pass.
+- **Follow-ups:** Hosted verification after push. Phase 8 credential lifecycle next;
+  live compaction, model generalization and independent custody remain unvalidated.
+
+## 2026-10-16 — Raouf: record hosted context verification (Australia/Sydney)
+
+- **Scope:** Receipt-only Phase 7 closeout; frozen source and evidence unchanged.
+- **Summary:** Publication commit 8b04e791 passed context/delegation run 38836069448.
+- **Files changed:** Phase 7 design/execution ledger and both logs.
+- **Verification:** Hosted 25 tests passed; committed archive verified with fresh
+  replay, 36 rows, 108 raw snapshots and the published manifest hash. Broader readiness
+  run 38836069319 remains 7/13 passed, six pending, none failed at receipt time.
+- **Follow-ups:** Phase 8 authenticated credential lifecycle; fresh model integration,
+  outside operator/custody and final broader CI status remain separate open items.
+
+## 2026-10-16 — Raouf: declare credential lifecycle phase 8 (Australia/Sydney)
+
+- **Scope:** Additive owned-service authentication, expiry, rotation and revocation study.
+- **Summary:** Compare session-snapshot and per-commit credential checks; distinguish
+  vault deletion, existing/new sessions, cancellation and unknown remote outcomes.
+- **Files changed:** Phase 8 design/plan/ledger and both logs.
+- **Verification:** Clean branch; native/replay interfaces inspected; 46 case identities
+  and 92 raw snapshots declared. Prior phase broader readiness run 38836069319 succeeded.
+- **Follow-ups:** Test-first implementation, fresh review, source freeze, retained
+  execution and hosted checks. P8-CI01 authorizes only the live census addition.
+
+## 2026-10-16 — Raouf: implement authenticated credential lifecycle (Australia/Sydney)
+
+- **Scope:** Owned HTTP credential/session service, durable gateway, matrix and verifier.
+- **Summary:** Per-commit expiry/revocation, separate auth roles and issuer binding,
+  vault snapshots, session cancellation, retained unknowns and real dropped responses.
+- **Files changed:** New assurance-credentials source/tests, Phase 8 protocol/guide,
+  scoped CI, npm scripts, current census, design ledger and both logs.
+- **Verification:** All 23 focused tests pass; exact 46-row development matrix and 92
+  snapshots. Ruff passes; npm 5,122 passed, zero failed, three prerequisite skips.
+  P8-CI01 precedes one exact live census addition (43→44), with baseline preserved.
+- **Follow-ups:** Fresh review, source/protocol freeze, retained execution, separate
+  verification and hosted replay. No real provider credentials or model calls used.
+
+## 2026-10-16 — Raouf: fix admission race and freeze credential study (Australia/Sydney)
+
+- **Scope:** Phase 8 admission ordering, regression and source/protocol freeze.
+- **Summary:** Reproduced the partial review's paused-dispatch/revoke race before
+  fixing it with shared advisory locking; local stop persists before waiting. The
+  reviewer was automatically blocked and its whole-change review remains incomplete.
+- **Files changed:** Gateway, edge tests, 50-binding protocol, guide/design and both logs.
+- **Verification:** All 24 focused tests passed (29.677 seconds); Ruff passes. Repository
+  suite: 5,122 passed, zero failures, three prerequisite skips. Exact census is 44;
+  declaration ancestry and unchanged historical census fields verified.
+- **Follow-ups:** Retained execution, separate verification and hosted replay. Linux
+  locking cannot cancel timed-out remote work; only continuous receiver checks supply
+  the post-revocation commit bound. Outside review/provider integration remain open.
+
+## 2026-10-16 — Raouf: publish credential lifecycle evidence (Australia/Sydney)
+
+- **Scope:** Frozen Phase 8 execution, raw archive and current reviewer navigation.
+- **Summary:** All 46 rows retained; continuous checks produce seven observed, nine
+  denied, five blocked and two unknown results. Snapshot checks produce ten observed,
+  six denied, five blocked and two unknown. Lost acknowledgment retains its actual effect.
+- **Files changed:** Phase 8 report/archive/root/receipt/results, guide/design ledger,
+  README/ROADMAP, reviewer index and both logs.
+- **Verification:** Retained fresh replay and separate archive verification passed;
+  92 raw snapshots, 50 frozen bindings, archive/report byte equality and links checked.
+  Twenty-four focused tests and 5,122 repository tests passed; three prerequisite skips.
+- **Follow-ups:** Hosted verification after push. Whole-change review remains incomplete
+  after an automatic reviewer block; the reported race was reproduced and fixed.
+  Provider identity integration, new model evidence and independent custody remain open.
+
+## 2026-10-16 — Raouf: record hosted credential verification (Australia/Sydney)
+
+- **Scope:** Receipt-only Phase 8 closeout; frozen source and evidence unchanged.
+- **Summary:** Publication commit 8f665ae0 passed credential lifecycle run 38840727900.
+- **Files changed:** Phase 8 design/execution ledger and both logs.
+- **Verification:** Hosted 24 tests passed; committed archive verified with fresh
+  replay, 46 rows, 92 raw snapshots and the published manifest hash. Broader readiness
+  run 38840727954 remains seven jobs passed, six pending, none failed at receipt time.
+- **Follow-ups:** Complete the interrupted whole-change review; compose phases 6–8
+  before fresh model evaluation. Provider integration and outside custody remain open.
+
+## 2026-10-16 — Raouf: declare composed lifecycle phase 9 (Australia/Sydney)
+
+- **Scope:** Compose phases 6–8 in an owned native workflow; preserve frozen predecessors.
+- **Summary:** Declare 40 rows, 360 raw snapshots, exact adapter contracts and durable
+  holds for interrupted multi-control updates. No model or provider-key use planned.
+- **Files changed:** Phase 9 design/plan/ledger and both logs.
+- **Verification:** Inspected real signal/context/credential interfaces and clean branch.
+  Prior broader CI: 12 passed, workflow-recovery still running.
+- **Follow-ups:** Test-first implementation, fresh review, source freeze, retained
+  evidence and hosted replay. P9-CI01 authorizes only the new live census identity.
+
+## 2026-10-16 — Raouf: implement composed lifecycle controls (Australia/Sydney)
+
+- **Scope:** Actual phase 6–8 integration with adapters and durable update holds.
+- **Summary:** Two routes share lineage budget and credential authority; raw denials,
+  unknown revocations and interrupted multi-control updates retain their meanings.
+- **Files changed:** New assurance-composed code/tests, protocol/guide, scoped CI,
+  npm scripts, authorized current census, Phase 9 ledger and both logs.
+- **Verification:** All 17 focused tests passed; inherited suites passed 24/25/24 tests.
+  Repository suite: 5,122 passed, zero failures, three prerequisite skips. Ruff and
+  62 pinned packages passed. Live census exact at 45; historical fields preserved.
+- **Follow-ups:** Fresh whole-change review, source freeze, retained execution and
+  hosted replay. Prior broader Phase 8 CI now succeeded, all 13 jobs.
+
+## 2026-10-16 — Raouf: freeze reviewed composed lifecycle study (Australia/Sydney)
+
+- **Scope:** Phase 9 source/protocol freeze before retained execution.
+- **Summary:** Fresh review found no Critical, Important or Minor defects. Retained
+  three additional interruption/partial-stop probes; no production changes after review.
+- **Files changed:** Review-probe tests, refreshed 76-binding protocol, ledger and both logs.
+- **Verification:** All 20 focused tests passed; prior 73 inherited tests and 5,122
+  repository tests passed, zero failures, three prerequisite skips. Ruff and dependency
+  compatibility passed. Declared census authority precedes its exact single addition.
+- **Follow-ups:** Retained run, separate verification, publication and hosted CI. The
+  clean composition review does not complete Phase 8's separate interrupted review.
+
+## 2026-10-16 — Raouf: publish composed lifecycle evidence (Australia/Sydney)
+
+- **Scope:** Frozen Phase 9 execution, raw evidence and current reviewer navigation.
+- **Summary:** All 40 rows retained. Composed final outcomes: four observed (one cached),
+  15 blocked, one unknown; seven actual effects. Four raw receiver denials remain visible
+  despite conservative translation to blocked. Three intended new deliveries complete.
+- **Files changed:** Phase 9 report/archive/root/receipt/results, guide/design ledger,
+  README/ROADMAP, reviewer index and both logs.
+- **Verification:** Mandatory fresh replay and separate verification passed; 360 raw
+  snapshots, 76 frozen bindings. Canonical report equality, source hashes and links pass.
+  Twenty focused tests, 73 inherited tests and 5,122 repository tests passed.
+- **Follow-ups:** Hosted verification after push. Fresh held-out model evaluation,
+  representative provider identity and independent custody remain separate milestones.
+
+## 2026-10-16 — Raouf: record hosted composition verification (Australia/Sydney)
+
+- **Scope:** Receipt-only Phase 9 closeout; frozen source and evidence unchanged.
+- **Summary:** Publication commit 1db778f5 passed composed lifecycle run 38843557082.
+- **Files changed:** Phase 9 design/execution ledger and both logs.
+- **Verification:** Hosted 20 tests passed; archive verified with fresh replay, 40 rows,
+  360 snapshots and the published manifest hash. Broader readiness run 38843556999
+  remains seven jobs passed, six pending, none failed at receipt time.
+- **Follow-ups:** Fresh held-out model evaluation, authorized provider integration and
+  outside custody. The earlier interrupted Phase 8 review remains separately open.
+
+## 2026-10-16 — Raouf: declare composed model phase 10 (Australia/Sydney)
+
+- **Scope:** Fresh local Llama decisions against frozen composed controls, followed
+  by portable handoff and presentation closeout under the user's continuing instruction.
+- **Summary:** Separate authored 24-task corpus, two trials, three matched controls;
+  48 generations, 144 branches and 1,440 raw snapshots. No paid provider use.
+- **Files changed:** Phase 10 design/plan/ledger and both logs.
+- **Verification:** Existing model worker, protocol, model files and runtime inspected.
+- **Follow-ups:** Test-first harness, disjoint pilot, review, preregistration freeze,
+  retained capture/replay, then subsequent phases. P10-CI01 declares the live census addition.
+
+## 2026-10-16 — Raouf: implement composed model capture (Australia/Sydney)
+
+- **Scope:** New Phase 10 harness, authored corpus, disjoint pilot, source protocol and CI.
+- **Summary:** Append-only capture, 3 matched controls, exact raw-state replay and metrics;
+  no held-out inference yet. Live census 45→46 under prior P10-CI01 authority.
+- **Files changed:** New Phase 10 source/docs/workflow, npm commands, census and both logs.
+- **Verification:** 13 focused tests passed; 62 pinned packages compatible. Two development
+  pilot decisions generated with the official 3B model; active send and stopped decline.
+- **Follow-ups:** Whole-change review, source freeze, retained evaluation; then Phases 11–12.
+
+## 2026-10-16 — Raouf: declare portable handoff and presentation closeout (Australia/Sydney)
+
+- **Scope:** Additive Phase 11 clean-clone reproduction and Phase 12 evidence-backed presentation.
+- **Summary:** Pin the published Phase 10 evidence, test a fresh dependency environment,
+  and map measured results to the existing OpenAI needs register with remaining gaps.
+- **Files changed:** Two phase plans and both logs; no runtime or historical evidence edits.
+- **Verification:** Prior Phase 10 checks: 13 focused, 20 composed, 13 model-harness tests
+  passed; repository 5,122 passed, zero failures, three prerequisite skips.
+- **Follow-ups:** Complete Phase 10 review/freeze/run, then execute both plans consecutively.
+
+## 2026-10-16 — Raouf: freeze reviewed composed model study (Australia/Sydney)
+
+- **Scope:** Phase 10 preregistration freeze before held-out inference.
+- **Summary:** Fixed two Important review findings: authorized lost-ack effects remain
+  unknown rather than unauthorized; tokenizer validation rejects vacuous/invalid slots
+  and binds its counted result to the capture digest. No Critical or deferred Minor findings.
+- **Files changed:** New harness regressions/fixes, 95-binding protocol, ledger and both logs.
+- **Verification:** Reproductions RED→GREEN; 16 focused tests passed. Prior inherited
+  20/13 tests and repository 5,122 passed, zero failures, three skips. Ruff/dependencies pass.
+- **Follow-ups:** One retained held-out run and verification, then portable handoff and presentation.
+
+## 2026-10-16 — Raouf: publish composed Llama evidence (Australia/Sydney)
+
+- **Scope:** Frozen Phase 10 execution, complete evidence and current navigation.
+- **Summary:** 48 responses, 144 matched branches, 1,440 raw snapshots. Composed and
+  credential-only both complete 22/24 active tasks; stopped unauthorized effects are
+  0/24 versus 16/24. Two active failures and four prior effects per control retained.
+- **Files changed:** Phase 10 capture/archive/report/receipts/results, navigation and both logs.
+- **Verification:** Mandatory replay, separate replay and all 48 tokenizer records passed;
+  95 source bindings, 16 focused tests. No paid API use, retries or fallback model.
+- **Follow-ups:** Hosted replay, clean-clone handoff and presentation; external gaps remain open.
+
+## 2026-10-16 — Raouf: complete portable reproduction handoff (Australia/Sydney)
+
+- **Scope:** Phase 11 pinned manifest, clean-clone recipe, retained receipts and operator template.
+- **Summary:** Fresh clone and new Python environment replay the published Phase 10 evidence
+  without model files or API keys. Independent custody remains unestablished.
+- **Files changed:** Phase 11 guide/manifest/results/local and hosted receipts, root logs.
+- **Verification:** 16 tests passed; 48 generations, 144 branches, 1,440 snapshots replayed;
+  all 10 artifact/requirements hashes match; 63 distributions compatible; checkout clean.
+  Hosted run 38846752661 passed 16 tests and the same full replay at f020c56e.
+- **Follow-ups:** Presentation/gap closeout, outside operator and live-provider validation.
+
+## 2026-10-16 — Raouf: complete presentation and gap closeout (Australia/Sydney)
+
+- **Scope:** Phase 12 presentation, claim/evidence table, current gaps and navigation.
+- **Summary:** Present 22/24 active branch completion and 16/24→0/24 stopped unauthorized
+  effects with repeated-task denominators, two retained active failures and narrow limits.
+  Map N01–N12 to measured coverage and remaining external/generalization work.
+- **Files changed:** Phase 12 docs, README/ROADMAP/reviewer index and both logs.
+- **Verification:** Canonical numeric/denominator checks passed; 42 local links across 11
+  phase documents resolve; local handoff receipt hashes intact; scoped formatting clean.
+  Phase 10 hosted run passed. Broader run 38846752700: 10 successful, three pending, none failed.
+- **Follow-ups:** Outside custody, authorized provider integration, harder fresh multi-model
+  studies and interrupted Phase 8 review completion remain open; no production-readiness claim.
+
+## 2026-10-16 — Raouf: declare reliability, export and validation phases (Australia/Sydney)
+
+- **Scope:** Consecutive Phases 13–15 under the user's instruction to continue all local work/tests.
+- **Summary:** Bounded concurrent/restart schedules, explicit privacy-aware outcome projection,
+  and a consolidated test inventory; preserve frozen predecessors and external validation gaps.
+- **Files changed:** New design/plan/ledger and both root logs. P13-CI01 declares one live census addition.
+- **Verification:** Current checkout clean; previous broad CI 38846752700 now succeeded all 13 jobs.
+- **Follow-ups:** Test-first implementation, fresh review/freeze, retained runs and full local checks.
+
+## 2026-10-16 — Raouf: implement bounded reliability and reduced evidence export (Australia/Sydney)
+
+- **Scope:** Phases 13–14 implementation before review and source freeze.
+- **Summary:** Real queued native calls, interrupted durable update, complete raw-state
+  verification; allowlisted 144-branch projection with distinct public/source validation.
+- **Files changed:** Two new tools/tests/protocols, scoped CI/npm commands and the P13-CI01
+  live census addition (47 gates); predecessor sources/evidence remain unchanged.
+- **Verification:** Seven reliability and seven export tests pass after test-first development;
+  Ruff passes. Corrected formatter-exposed import-order failure via explicit dependency bridge.
+- **Follow-ups:** Fresh whole-change review, freeze, retained runs and consolidated test matrix.
+
+## 2026-10-16 — Raouf: freeze reviewed reliability and export protocols (Australia/Sydney)
+
+- **Scope:** Phases 13–14 preregistration before retained execution.
+- **Summary:** Corrected two Important verifier findings with five RED→GREEN regressions;
+  bind per-route outcomes, durable reservations, stop state and interrupted-update ordering.
+  Clarified that latency covers final calls only; no Critical or deferred implementation finding.
+- **Files changed:** New reliability validator/tests, draft protocol bindings, ledger and both logs.
+- **Verification:** Full reliability suite 12 passed; export suite seven passed; Ruff clean.
+- **Follow-ups:** Retain one full run/export, independently verify, finish consolidated validation.
+
+## 2026-10-16 — Raouf: publish reliability and privacy-aware export evidence (Australia/Sydney)
+
+- **Scope:** Frozen Phases 13–14 runs and current reviewer navigation.
+- **Summary:** 60 reliability fixtures/210 final calls/600 snapshots pass; composed controls
+  retain useful retries and prevent new queued-stop/interrupted-update effects. Export retains
+  all 144 Phase 10 outcomes with explicit omissions and full source consistency verification.
+- **Files changed:** New phase artifacts/results, current navigation, ledger and both logs.
+- **Verification:** Mandatory fresh reliability validation plus separate invocation pass;
+  export validates full source before projection and again after packaging; focused tests 12/7.
+- **Follow-ups:** Separate export invocation, hosted checks and Phase 15 complete test closeout.
+
+## 2026-10-16 — Raouf: declare precise aggregate-gate maintenance (Australia/Sydney)
+
+- **Scope:** P15-CHECK01, declared before two configuration/checker edits.
+- **Summary:** Exclude individually identified frozen machine JSON from prose formatting;
+  distinguish one exact public synthetic canary assignment from unexpected token values.
+- **Files changed:** Continuation ledger and both logs; no runtime/evidence mutation.
+- **Verification:** Aggregate run identified canonical-byte formatting conflicts and six
+  matches of the same synthetic canary; all observed values are existing test fixtures.
+- **Follow-ups:** Negative-test the narrow exception and rerun affected gates; retain other failures.
+
+## 2026-10-16 — Raouf: align format and secret gates with frozen evidence (Australia/Sydney)
+
+- **Scope:** Implement P15-CHECK01 within its two-file authority.
+- **Summary:** Preserve 34 exact machine-evidence JSON paths; exclude only the exact public
+  synthetic canary assignment in two bound test paths, retaining all other scanner matches.
+- **Files changed:** `.prettierignore`, `scripts/check.sh`, continuation ledger and both logs.
+- **Verification:** Canary check RED→GREEN; two exact cases excluded and six altered controls
+  retained. Actual secret-scan section passes; full Prettier check passes; 37 related gate tests pass.
+- **Follow-ups:** Finish consolidated validation and publish unresolved legacy/build limitations.
+
+## 2026-10-16 — Raouf: complete consolidated local validation (Australia/Sydney)
+
+- **Scope:** Phase 15 maintained test inventory, archive replays, setup diagnosis and handoff.
+- **Summary:** 636 Python tests across 28 suites pass; Node 5,124 pass/zero fail/one browser
+  skip; 39 Lean proofs and 34 mandatory-Xvfb Rust tests pass. End-to-end has 31 passing
+  steps and one frozen-inventory failure; legacy retired-route assertions remain visible.
+- **Files changed:** Validation inventory/log bundle/results/runbook/gaps, separate export
+  receipt, navigation, one additional exact canonical-file exclusion, ledger and both logs.
+- **Verification:** Phases 4–9 archive checks pass; Phases 10/13/14 full verification passes;
+  all 13 hosted readiness jobs and new hosted reliability/export pass at eb961854.
+  Trusted-CA prefetch/offline container build plus ownership override passes non-root mock
+  smoke and HTTP 410 retired-route refusal. TLS verification retained; no paid API calls.
+- **Follow-ups:** Legacy-gate migration, browser/macOS portability, interrupted Phase 8 review,
+  outside custody, live-provider integration and harder model generalization remain open.
+
+## 2026-10-16 — Raouf: declare Phase 16 maintenance (Australia/Sydney)
+
+- **Scope:** Prior authority for bounded legacy gate, inventory, browser and Docker maintenance.
+- **Summary:** Preserve frozen research bytes; migrate obsolete checks under the Phase 16 design.
+- **Files:** `docs/research/LOCAL_MAINTENANCE_PHASE_16.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Reproduced gateway retired-response and strict-successor inventory failures.
+- **Follow-ups:** Implement declared repairs, retain negative controls, publish measured results.
+
+## 2026-10-16 — Raouf: implement Phase 16 maintenance (Australia/Sydney)
+
+- **Scope:** Exact Phase 16 authority paths; no frozen research source or evidence changed.
+- **Summary:** Migrate HTTP smokes to permanent retirement, hash-bind a versioned current
+  reproduction set, execute browser parity through a local debugging pipe and loopback fixture,
+  and support lock-verified offline Docker installation with non-root source ownership.
+- **Files:** Declared gateway scripts/tests, inventory and browser helpers/tests, Dockerfile,
+  offline recipe, current manifest, `AGENT.md`, `CHANGELOG.md` and Phase 16 design.
+- **Verification:** 33 focused tests pass, including inventory mutations and browser failure/
+  timeout controls; Stage 5P's real Chromium lane passes 1,734 checks. Gateway core/live smoke
+  fixtures pass (72/40); audit 14/14. Offline Docker mock smoke runs as UID 1000.
+- **Follow-ups:** Run broad aggregate/E2E gates in a disposable clone; publish exact outcomes.
+
+## 2026-10-16 — Raouf: authorize additive Stage 5R browser successor (Australia/Sydney)
+
+- **Scope:** Add only `tests/unit/maintenance/stage5rBrowserParity.test.js` under P16-BROWSER-R.
+- **Summary:** Fresh real-browser parity through the working harness; preserve old driver/receipt.
+- **Files:** Phase 16 design, `AGENT.md`, `CHANGELOG.md` (authority only).
+- **Verification:** Current manifest has 5 entries and 17 vectors; historical driver still uses
+  the diagnosed failing dump-DOM/file-navigation path. No historical bytes changed.
+- **Follow-ups:** Compare all four evaluators and exercise missing/wrong-answer controls.
+
+## 2026-10-16 — Raouf: verify Stage 5R browser successor (Australia/Sydney)
+
+- **Scope:** Additive Phase 16 browser test; authorize new validation archive/manifest.
+- **Summary:** Compare the immutable Stage 5R manifest against Node core, portable Node,
+  Python and real Chromium. Historical driver and receipt remain byte-identical.
+- **Files:** `tests/unit/maintenance/stage5rBrowserParity.test.js`, Phase 16 design and root logs.
+- **Verification:** Three tests pass: 5 entries / 17 vectors across all evaluators and
+  missing/altered-answer negative controls. Implementation follows authority commit ce580463.
+- **Follow-ups:** Finish aggregate/E2E validation and publish revision-specific results.
+
+## 2026-10-16 — Raouf: authorize precise literal and privacy-test corrections (Australia/Sydney)
+
+- **Scope:** P16-LITERAL and P16-CANARY exact test paths; no application or evidence changes.
+- **Summary:** Correct cross-era prose correlation and a random digest substring false positive.
+- **Files:** Phase 16 design, `AGENT.md`, `CHANGELOG.md` (prior authority only).
+- **Verification:** Aggregate logs retain both failures; the historical total line hashes and
+  leaked-value report identify the causes. E2E prior-stage failure shares the literal cause.
+- **Follow-ups:** Hash-bound two-line exclusions, canonical-field recognition and negative controls.
+
+## 2026-10-16 — Raouf: clarify Phase 16 literal-gate documentation authority (Australia/Sydney)
+
+- **Scope:** Permit the exact Phase 16 design as approved code-band documentation.
+- **Summary:** The design must describe its finding literally; preserve the reserved-band
+  regex and restrict root logs to two exact historical line hashes.
+- **Files:** Phase 16 design, `AGENT.md`, `CHANGELOG.md` (authority only).
+- **Verification:** New privacy controls pass; literal gate now identifies only this new
+  design's own diagnostic prose, so its by-name approval is declared before editing the list.
+- **Follow-ups:** Complete the bounded gate repair and rerun the affected suites.
+
+## 2026-10-16 — Raouf: repair precise legacy test false positives (Australia/Sydney)
+
+- **Scope:** P16-LITERAL and P16-CANARY, under prior commits b6b9a235 and f5cc3a91.
+- **Summary:** Hash-bind two historical total lines, allow the exact maintenance design,
+  and recognize a canonical optional paired-node digest without ignoring malformed/raw values.
+- **Files:** `tests/unit/llmShield/stage5p/rawCodeCensus.test.js`,
+  `tests/e2e/stage27_cross_platform_device_shield_smoke.mjs`,
+  `tests/unit/maintenance/privacyCanary.test.js`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 25 focused tests pass; the original numeric-canary collision was reproduced
+  before the fix. Changed path/line/code controls and seven raw-value controls remain rejecting.
+  The Stage 2.6/2.7 closeout smoke passes. Historical evidence and application code are unchanged.
+- **Follow-ups:** Repeat broad gates on the final implementation and retain initial failures.
+
+## 2026-10-16 — Raouf: publish Phase 16 validation (Australia/Sydney)
+
+- **Scope:** Results and reviewer navigation for final implementation 8ebe0103; frozen history intact.
+- **Summary:** Close reproduced gateway/inventory/browser/container maintenance failures and
+  precise legacy test false positives; retain initial failures and external/platform limits.
+- **Files:** Phase 16 results, runbook, validation manifest and log archive; `README.md`,
+  `ROADMAP.md`, `docs/REVIEWER_INDEX.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 5,154/5,154 direct Node tests with zero skips; aggregate 142/142 steps;
+  E2E 32/32 steps (579 tests passed, one path-specific skip separately exercised); Rust 34,
+  Lean 39 proofs, portable .NET 11 tests; Chromium parity for both declared surfaces.
+  Archive retains 326 logs with hashes and no secret/canary redactions. Authority ancestry
+  and unchanged predecessor research paths verified. No paid provider calls or new inference.
+- **Follow-ups:** Native platforms, outside custody, provider entitlements, sustained deployment
+  and the previously interrupted whole-change review remain unproven; push the topic branch.
+
+## 2026-10-17 — Raouf: authorize provider transfer and reviewer handoff (Australia/Sydney)
+
+- **Scope:** Phases 17–20, user-approved readiness items 2–5; external reproduction deferred.
+- **Summary:** Add bounded live workflow, two-family comparison, paced reliability and brief.
+- **Files:** New Phase 17 design and matching root logs; exact write paths declared in design.
+- **Verification:** Clean baseline 6a88786a; installed model and OpenAI model access checked.
+  No inference calls yet; existing frozen lifecycle and reliability APIs inspected.
+- **Follow-ups:** Test new capture/verification code, freeze inputs, capture within budget,
+  publish actual results and remaining platform/review limits without changing history.
+
+## 2026-10-17 — Raouf: freeze provider transfer implementation (Australia/Sydney)
+
+- **Scope:** New transfer namespace under authority 359202cf; predecessor bytes preserved.
+- **Summary:** Add strict Responses roundtrip, persistent request budget, matched local/API
+  comparison, paced process-based reliability capture and raw-storage/replay verification.
+- **Files:** `tools/assurance-transfer/**`, Phase 17 corpus/settings/source protocol and logs.
+- **Verification:** 15 substantive tests pass, including all eight lifecycle outcomes,
+  duplicate calls/arguments, budget exhaustion, source-request binding and storage mutation.
+  Ruff checks pass. A test import collision was corrected before capture; no API inference yet.
+- **Follow-ups:** Capture frozen inputs once, retain all outcomes, verify archive and publish brief.
+
+## 2026-10-17 — Raouf: authorize host-role correction and native CI (Australia/Sydney)
+
+- **Scope:** Separate Phase 17B correction and bounded macOS/Windows validation jobs.
+- **Summary:** Luna's returned reasons identify user-role host authority as insufficient;
+  preserve the complete first study and freeze a developer-role correction before 16 new calls.
+- **Files:** Phase 17B design and root logs; new adapter/docs/workflow paths declared exactly.
+- **Verification:** Original capture retains all eight declines, including three active cases.
+  Original 64-attempt study continues unchanged; combined corrective budget remains below $1.
+- **Follow-ups:** Test authority-role separation, bind prior ledger, capture once; run native CI.
+
+## 2026-10-17 — Raouf: freeze corrected provider roles and native jobs (Australia/Sydney)
+
+- **Scope:** Additive Phase 17B adapter and Phase 19 native workflow under authority 00503114.
+- **Summary:** Host-authored task/state uses developer messages; retrieved text stays tool data.
+  Bind the original 64-attempt ledger and all eight original workflow results before correction.
+- **Files:** New role adapter/tests/protocol/baseline, scoped native workflow and root logs.
+- **Verification:** Three role/budget tests pass; Ruff and workflow formatting pass. Original
+  transfer source remains unchanged. Runtime/model dependency checks and npm audit are clean.
+- **Follow-ups:** Capture at most 16 corrected requests; run native jobs; retain all outcomes.
+
+## 2026-10-17 — Raouf: authorize exact frozen-baseline format exclusion (Australia/Sydney)
+
+- **Scope:** P17-FORMAT01, one exact addition to `.prettierignore`.
+- **Summary:** Preserve the compact baseline JSON committed before corrective capture.
+- **Files:** Phase 17 maintenance declaration and both root logs; ignore edit follows later.
+- **Verification:** Corrective protocol hashes the baseline bytes; reformatting changes that input.
+- **Follow-ups:** Add the exact path, retain source verification, format human-facing reports.
+
+## 2026-10-17 — Raouf: publish provider transfer and presentation package (Australia/Sydney)
+
+- **Scope:** Phases 17–20 and separate declared role correction; external reproduction deferred.
+- **Summary:** Retain 96 model decisions, 288 matched branches and 120 paced reliability fixtures.
+  Llama retains 23/24 active completions while restricted effect trials fall from 17/24 to zero.
+  Luna comparison is 24/24 active and zero restricted effects in both useful controls.
+  Corrected live workflow completes 2/3 authorized cases and declines all five restricted cases;
+  retain the remaining active refusal and all original eight declines without further tuning.
+- **Files:** New result reports, source-bound archives, brief/demo/validation package, current
+  navigation, exact P17-FORMAT01 ignore addition and matching root logs.
+- **Verification:** 18 new Python tests; 16/12 predecessor suites; 45 Node/browser tests; 10
+  rejected evidence mutations. Full comparison/workflow replay and 4,240 snapshots verify.
+  Hosted macOS 10 tests, Windows 11 tests and affinity build pass at fbe06eca. Dependency
+  checks and formatting pass; 213 local links resolve. Original-source authority ancestry
+  and unchanged predecessor bytes checked. All 80 paid calls retained; estimated $0.0061306.
+  Exact-key scan passed and the task-downloaded credential copy was removed after capture.
+- **Follow-ups:** Finish the already-running hosted recovery job and publish its receipt.
+  One active refusal, production IAM/alerts/load, interactive desktop behavior and the
+  previously blocked whole-change security review remain explicit limitations.
+
+## 2026-10-17 — Raouf: complete hosted readiness receipt (Australia/Sydney)
+
+- **Scope:** Additive final hosted receipt and current navigation wording; no runtime edits.
+- **Summary:** All 13 existing readiness jobs passed at implementation freeze 4afe9538,
+  including persisted workflow recovery; both native platform jobs already passed at fbe06eca.
+- **Files:** New hosted receipt/log archive, validation guide, current entry-point prose and logs.
+- **Verification:** Exact job identities, successful conclusions, source SHA and log hashes
+  checked. Prior evidence bundles remain byte-identical. Formatter and diff checks pass.
+- **Follow-ups:** Independent reproduction stays deferred. One corrected active refusal and
+  the documented provider/deployment/desktop/review limitations remain unresolved.
+
+## 2026-10-19 — Raouf: declare maintained gate migration (Australia/Sydney)
+
+- **Scope:** Phase 16, P16-G01 retired HTTP contract and P16-G02 versioned reproduce inventory.
+- **Summary:** Preserve the historical 50-script pin; declare the strict successor separately and validate exact identities.
+- **Files changed:** `docs/research/CONTINUATION_PHASE_16.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Original inventory test fails on the strict Stage 5L addition; original gateway smoke fails on the already-retired response.
+- **Follow-ups:** Implement declared maintenance, test negative controls and run the affected gates before the Phase 8 review.
+
+## 2026-10-19 — Raouf: migrate maintained legacy gates (Australia/Sydney)
+
+- **Scope:** P16-G01/P16-G02 under preceding authority commit `8af9d15a`.
+- **Summary:** HTTP smokes require retirement regardless of historical flags; maintained reproduce inventory adds the strict Stage 5L successor beside the unchanged historical pin.
+- **Files changed:** Exact Phase 16 maintenance surface; shared inventory validator, versioned manifest and eight behavioral regression tests.
+- **Verification:** 15 inventory tests pass; core smoke (72 fixtures), retirement smoke (40 fixtures), and 14 security-audit checks pass in a disposable checkout. Historical pin hash matches. Added/removed, equal-count substitution, duplicate, path, empty-set and changed-pin controls refuse.
+- **Follow-ups:** Run consolidated end-to-end checks after the Phase 8 review and portability work. No aggregate-green claim yet.
+
+## 2026-10-19 — Raouf: complete local Phase 8 follow-up review (Australia/Sydney)
+
+- **Scope:** All Phase 8 Python source/tests and its workflow, with supporting boundary reads.
+- **Summary:** No new confirmed vulnerability within the declared trusted-host lab model. The earlier interrupted review is superseded by this local review, not relabeled as independent.
+- **Files changed:** `docs/research/PHASE_8_REVIEW_2026-10-19.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 24 tests passed in 21.659 seconds; separate fresh archive replay verified 46 rows, 92 snapshots and all 50 frozen bindings.
+- **Follow-ups:** External review/custody and production identity/TLS remain separate. Browser portability is next.
+
+## 2026-10-19 — Raouf: declare portable runtime maintenance (Australia/Sydney)
+
+- **Scope:** P17-B01 browser prerequisites and P17-N01 alternate Node selection.
+- **Summary:** Replace machine-specific discovery; preserve explicit skips and refuse false browser parity. Add a fresh-output Stage 5R command without changing the frozen receipt.
+- **Files changed:** Phase 17 declaration and both logs.
+- **Verification:** Minimal Chromium runs time out; diagnosis confirms managed navigation restriction. Existing Node 24 is outside `/usr/bin`.
+- **Follow-ups:** Implement and test discovery; retain managed-browser prerequisite and macOS limits in the handoff.
+
+## 2026-10-19 — Raouf: implement portable runtime prerequisites (Australia/Sydney)
+
+- **Scope:** P17-B01/P17-N01 under preceding authority `fdb2d047`.
+- **Summary:** Discover configured/platform browsers and real alternate Node; report managed file-navigation restriction explicitly. Fresh Stage 5R runner refuses overwrite and returns nonzero for unproven browser parity.
+- **Files changed:** Declared Phase 17 runtime helpers, runner and tests; both logs.
+- **Verification:** Regression tests RED→GREEN; 15 targeted checks pass with one explicit browser skip. Real Node 24 wrapper test passes. Fresh Stage 5R receipt establishes Node/portable/Python agreement and records three-runtime parity false (exit 1).
+- **Follow-ups:** Run browser/macOS checks on a permitted machine; build the owner-requested shared evidence explorer.
+
+## 2026-10-19 — Raouf: declare shared evidence explorer (Australia/Sydney)
+
+- **Scope:** Owner-requested Phase 18 human dashboard and agent CLI.
+- **Summary:** One local schema/query layer, honest failure classifications, source-linked research and explicit open gaps. Isolated frontend package; preserve all predecessor artifacts.
+- **Files changed:** Phase 18 declaration and both logs.
+- **Verification:** Reviewed public Phase 14 schema, Phase 10 capture/report and existing 29-source register; consulted current official evaluation, monitoring and MCP documentation.
+- **Follow-ups:** Build, test and prepare the independent-operator handoff; external custody remains with the owner/classmate.
+
+## 2026-10-19 — Raouf: implement human and agent evidence explorer (Australia/Sydney)
+
+- **Scope:** Additive Phase 18 under preceding authority `2569dae5`.
+- **Summary:** Shared versioned queries, React dashboard, JSON CLI, local import/export and selected full-detail joins. Indexed 144 retained outcomes and 48 research/source entries with eight gap records.
+- **Files changed:** Isolated `tools/simurgh-explorer` package, dated research/gap register, current navigation and both logs.
+- **Verification:** Behavioral tests pass for CLI/UI equivalence, complete outcomes, unknowns, invalid imports, read-only server and inert content; Vite production build passes. Runtime dependency audit reports zero known advisories. Browser layout remains unverified under managed navigation policy.
+- **Follow-ups:** Consolidated disposable-checkout gates and owner/classmate handoff; no production-readiness, live-provider or outside-custody claim.
+
+## 2026-10-19 — Raouf: prepare independent handoff and tighten explorer provenance (Australia/Sydney)
+
+- **Scope:** Phase 18 follow-up within its additive authority.
+- **Summary:** Add pinned replay instructions and blank operator receipt; imported-data CLI commands require the loaded file, and local detail shows its separate capture pointer.
+- **Files changed:** Explorer import/detail validation, copy-command UI and interaction tests; continuation handoff, receipt template and both logs.
+- **Verification:** 15 explorer tests pass, including filtered export and imported-file CLI context. Fresh full-source/export verification confirms all 144 outcomes. No loaded producer claim is promoted to verification.
+- **Follow-ups:** Finish aggregate/reliability checks and package the local dashboard and complete source history. External measurements remain explicitly open.
+
+## 2026-10-19 — Raouf: align explorer output with repository checks (Australia/Sydney)
+
+- **Scope:** Additive Phase 18 source/build maintenance; historical gate unchanged.
+- **Summary:** Validate external link user-info via serialized origin; keep generated frontend/public index in ignored build cache. Preserve explicit record and detail source bounds.
+- **Files changed:** Explorer URL validation, negative tests, Vite configuration, build/serve paths, README and both logs.
+- **Verification:** Aggregate privacy scan initially flagged a URL API property; unchanged scanner now passes. Credential-bearing/executable URLs still refuse. All 16 explorer tests and production build pass.
+- **Follow-ups:** Retain initial aggregate failures alongside corrected runtime prerequisite reruns; finish E2E and delivery.
+
+## 2026-10-19 — Raouf: finish local continuation validation and delivery (Australia/Sydney)
+
+- **Scope:** Phase 16–18 local fixes, dashboard/CLI, research index and independent handoff.
+- **Summary:** Complete E2E gate passes 32 steps and 580 tests without skips; source/export and reliability replays pass. Keep initial base failures and corrected focused reruns visible.
+- **Files changed:** Fresh validation record/receipts/log bundle, current navigation and both logs. No frozen evidence changed in the primary checkout.
+- **Verification:** 16 explorer tests/build/HTTP/packaged CLI pass. Root unit run: 5,137 pass, zero fail, three skips; real Lean rerun resolves its two prerequisite skips. Rust 34 pass with Xvfb, fallback 4 pass on rerun. Default Docker npm build still fails; separate documented offline build and non-root mock/retirement smoke pass.
+- **Follow-ups:** Owner/classmate handles independent reproduction. Browser/macOS, real provider lifecycle, harder externally held multi-model tasks, sustained deployment and real-data privacy remain scoped external inputs. No remote publication or paid inference performed.
+
+## 2026-10-19 — Raouf: reconcile remote continuation before push (Australia/Sydney)
+
+- **Scope:** Merge remote `4fb57b2c` with local dashboard continuation `71e4a5a9` at the owner's explicit push request.
+- **Summary:** Preserve both histories and append-only logs. Retain remote maintained gateway/inventory/browser gate implementations; retain local dashboard, CLI, runtime helpers and review records. Navigation distinguishes the Phase 10 viewer snapshot from newer provider/native results.
+- **Files changed:** Conflict resolution in current navigation, both logs and overlapping maintenance gates; no frozen provider captures/protocols modified.
+- **Verification:** 40 merged-tree maintenance tests and 16 explorer tests pass; production build passes. No fresh provider inference or platform certification implied.
+- **Follow-ups:** Push combined branch without rewriting remote history. Earlier downloadable bundles remain snapshots of their recorded commits.
+
+## 2026-10-19 — Raouf: prepare professional reviewer README (Australia/Sydney)
+
+- **Scope:** Owner-requested README rewrite for a technical reviewer and reproducible handoff.
+- **Summary:** Lead with the measured control benefit and retained utility; keep the Luna zero-baseline result and unresolved live refusal explicit. Add an architecture diagram, complete result table, credential-free replay commands, dashboard/CLI scope, review routes and outstanding work. Link the completed local Phase 8 review without rewriting historical records.
+- **Files changed:** `README.md`, `AGENT.md`, `CHANGELOG.md`. Runtime, frozen inputs and evidence are unchanged.
+- **Verification:** README formatting and whitespace checks pass; all 34 local links/anchors resolve and no tracked Markdown links target removed root anchors. Corrected demo freshly replays all eight cases; complete transfer verification passes 288 comparison branches, original workflows and reliability storage checks. All five documented CLI examples execute and emit valid JSON. Used the existing pinned Python 3.12 environment; no fresh dependency install, model generation or platform validation is claimed.
+- **Follow-ups:** Commit and push this handoff, then run the owner's requested full E2E smoke workflow against the resulting revision. Independent reproduction and provider/production boundaries remain explicit.
+
+## 2026-10-19 — Raouf: declare full-smoke harness repairs (Australia/Sydney)
+
+- **Scope:** Owner-requested full validation; bounded maintenance declared in `docs/research/smoke-validation-2026-10-19/DESIGN.md` before implementation.
+- **Summary:** Preserve the initial 138-pass/four-failure aggregate. Repair login-shell PATH replacement and Xvfb reset-after-readiness setup; retain all substantive checks and frozen evidence. Diagnose fixed-port collisions without changing host network policy.
+- **Files changed:** Declaration and both logs only.
+- **Verification:** Root suite: 5,167 passed, zero failed, two Lean prerequisite skips. Reproduced Xvfb connection failures in a second four-case run. Current-commit native CI passes both macOS and Windows jobs; full E2E remains running.
+- **Follow-ups:** Add behavioral launcher regressions, repair the declared setup, rerun complete workflows and publish exact scope and remaining prerequisites.
+
+## 2026-10-19 — Raouf: stabilize full-smoke toolchain and display setup (Australia/Sydney)
+
+- **Scope:** Maintained harness repair under preceding declaration `53260051`.
+- **Summary:** Command steps now retain the caller's runtime PATH. Owned Xvfb fixtures disable reset after the readiness probe disconnects, preserving a stable display until explicit teardown. Scanner behavior and assertions are unchanged.
+- **Files changed:** `scripts/check.sh`, `tests/unit/maintenance/checkRuntimeEnvironment.test.js`, `tools/simurgh-daemon-linux/tests/xvfb_integration_tests.rs`, and both logs.
+- **Verification:** Both quiet/verbose launcher regressions fail before repair and pass after it. Rust formatting passes; ten consecutive real mandatory-Xvfb runs pass all four cases (40 executions, no skips). Initial failures remain retained.
+- **Follow-ups:** Run the complete base/E2E sequence on this repair with pytest and the real `origin/main` reference available; execute supplemental suites and publish scoped receipts. These checkout prerequisites do not change historical verifiers.
+
+## 2026-10-19 — Raouf: complete full smoke validation and publish receipts (Australia/Sydney)
+
+- **Scope:** Full base/E2E workflow and supplemental research/dashboard coverage on repaired implementation `ebf2a752`; additive validation and current README navigation.
+- **Summary:** Both prescribed scripts pass after the declared harness repairs. Preserve original failures, setup corrections, exact source/toolchain receipts, all supplemental outcomes and the explicit managed-browser exclusion.
+- **Files changed:** Fresh `docs/research/smoke-validation-2026-10-19/RESULTS.md`, `validation.json`, `logs.zip`; README validation link and both logs. No historical source, protocol, archive or evidence pin changed.
+- **Verification:** Base 142/142 steps; E2E 32/32 steps and 580/580 tests. Root 5,171/5,171 tests with zero skips; Rust 34/34, explorer 16/16 plus production build and built-app HTTP/CLI agreement; 473 unittest cases across 29 research suites and 181 adapter pytest cases, without skips. Native CI at `2cf8ad69` passes 10 macOS and 11 Windows tests plus Windows fixture compilation; affected native paths are unchanged by the repair. Strict browser parity exits 1 with managed navigation blocked. All 358 recorded log/receipt files pass ZIP readback and per-file SHA-256 checks; original failures and focused red/green runs remain included.
+- **Follow-ups:** Push repairs and documentation. Outside reproduction, real browser rendering/parity, opt-in provider campaigns and interactive platform/deployment checks remain explicitly unverified. Earlier delivery bundles retain their recorded snapshot revisions; no paid inference or outreach occurred.
+
+## 2026-10-19 — Raouf: declare repository documentation audit (Australia/Sydney)
+
+- **Scope:** Owner-authorized documentation audit and push from baseline `8d47bbbf`.
+- **Summary:** Inventory every tracked document candidate; correct current guidance against implementation and primary sources. Preserve historical and frozen bytes with additive errata. Record manual review separately from automated coverage.
+- **Files changed:** `docs/documentation-audit-2026-10-19/DESIGN.md` and both root logs.
+- **Verification:** Remote branch matches baseline; initial inventory identifies 910 candidates across prose, rendered papers, evidence text and executable HTML. Standing gate-lifecycle invariants checked.
+- **Follow-ups:** Complete source research, per-file ledger, corrections and documentation verification; no runtime or frozen-surface edits declared.
+
+## 2026-10-19 — Raouf: audit documentation and align current guidance (Australia/Sydney)
+
+- **Scope:** Documentation maintenance under preceding declaration `4ca41a95`; all 910 baseline document candidates individually inventoried and scanned. No production runtime, gate, test, dependency lock, frozen protocol, capture or manuscript bytes changed.
+- **Summary:** Correct 27 current documents and add an integration matrix, documentation map, historical replay guide, 13-entry primary-source review and 20-item errata register. Separate the 144-outcome viewer from the 288-branch study, completed local review from independent review, and historical bundles from the current branch. Correct the legacy helper identifier/capture claim and demonstrate the historical tee pipeline's masked failure.
+- **Files changed:** Current root/reviewer/application/component guidance, wiki navigation/log, new `docs/documentation-audit-2026-10-19/` records and audit tooling, and both root logs. The ledger names every baseline path and its exact review scope.
+- **Verification:** 910/910 candidates accounted for; 881 unchanged and 29 changed including these two append-only logs. Parsed local links/anchors resolve; repository Prettier and diff checks pass. Original Node instrument: 31 tests, fresh offline report and verification pass. Corrected eight-case demo and six explorer CLI examples pass. Inspect: five tests and seven-sample mock smoke pass, retaining its intended execution failure. Auditor controls detect empty/missing inputs and broken links; pipeline controls preserve exit 73 with pipefail. Headline counts checked against raw reports; no paid inference.
+- **Follow-ups:** Coverage is not universal semantic validation: 27 editorial updates, 37 selected-claim/scope reviews, two log reviews, two exact-archive checks and 842 automated-only candidates are explicitly distinguished. Historical scientific/citation review, independent custody, browser/accessibility, interactive platforms and real provider/deployment evidence retain their stated limits. Commit and push the audited documentation without rewriting history.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation review checkpoint
+
+**Owner-requested work; implementation and review by Codex assistance.**
+
+- **Scope:** Continue the documentation audit under preceding authority `4ca41a95`, from
+  baseline `15105bac`. This checkpoint records 181 complete manual reads out of 919 document
+  candidates; 738 remain unread in this continuation. Reading and final claim verification
+  are separate states. The exhaustive review is not complete.
+- **Summary:** Correct HMAC student pseudonymization, platform key storage, periodic retention,
+  audit-key prerequisites and trust limits, Linux startup, macOS CLI diagnostics, fixture
+  logging/capture claims, adapter boundaries, consent wording and portable replay paths.
+  Add 22 dated findings and exact per-file progress. Preserve historical paper/test/evidence
+  defects with additive errata, including banking protocol/approval and scanner-scope gaps.
+- **Verification:** Corrected Linux daemon builds and starts with health HTTP 200; owned process
+  stopped. Both stored-response diagnostic scripts reproduce documented counts. All 19 shell
+  blocks in edited guidance pass bash syntax checks. Local link checker reports 1,835 links in
+  813 documents, zero issues. Official grant form, Evals dates and three related-work sources
+  rechecked. No new model inference, human study, external outreach or production change.
+- **Follow-ups:** Continue the remaining complete reads and final evidence checks. Native/browser,
+  independent-operator and provider-lifecycle exclusions remain. This progress record must not
+  be represented as completed manual review of all documentation.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation review checkpoint: 281/919
+
+Owner-requested work; implementation and review by Codex assistance.
+
+- Read 100 additional documents completely since checkpoint `e46fa0c2`, bringing the
+  continuation to 281 complete reads and 638 pending. This is not an exhaustive-review completion.
+- Added paper, pilot, bibliography and reproduction errata M23–M31. Preserved frozen
+  publication artifacts, evidence and existing log entries. Corrected current security guidance
+  using Apple's and Microsoft's documented capture-affinity limitations.
+- Verification is documentation-scoped: changed-file formatting, local links, exact baseline
+  candidate coverage and preservation checks are recorded in the dated audit checkpoint.
+  No new inference, human study, interactive desktop test or full E2E run is claimed.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 400-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under preceding declaration `4ca41a95`. The continuation now
+  records 400 complete reads of 919 baseline candidates; 519 remain pending. This is not
+  completion of the exhaustive audit. Frozen sources, publications and evidence are preserved.
+- **Changes:** Add M32–M39 corrections for stage recipes, archived browser verifiers, legacy
+  public-page claims, the personal résumé, dated continuation status and fixture limitations.
+  Update current privacy and reviewer guidance for external font requests, banking withdrawal,
+  Windows count semantics and the maintained dashboard route.
+- **Evidence:** Retain the thirteen-case Node WebCrypto diagnostic for the archived Stage 5A
+  page. Read the remaining local Phase 1–16 prose and compare small published receipts. The
+  existing altered-family negative returns exit 1 naming F1/vulnerable. Recheck official OpenAI
+  monitoring, multi-agent, vault and environment-security guidance. These are scoped checks,
+  not a fresh full E2E run or interactive desktop/browser validation.
+- **Validation:** Checkpoint receipt records formatting, local links, exact ledger identity and
+  preservation checks. No inference, outreach, deployment, gate or runtime change.
+- **Remaining:** Continue the unread stage records, plans, specifications and large logs;
+  preserve unresolved runtime defects and outside-validation limits as explicit findings.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 500-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under preceding declaration `4ca41a95`. Read 500 of 919
+  baseline candidates completely; 419 remain pending. This is a progress checkpoint.
+- **Changes:** Add M40–M44 corrections for historical briefs, regulatory projection, early-stage
+  measurements, reproduction commands and fallback claims. Preserve frozen stage files and
+  scientific evidence; update current security and reviewer guidance directly.
+- **Finding:** A local injected-client probe shows the preserved adapter converts an empty
+  provider refusal into an availability failure, allowing fallback with refusal fallback off.
+  Terminal local prechecks still prevent swaps. The mounted legacy live route is already
+  retired with HTTP 410; direct module use and old revisions retain the mismatch.
+- **Evidence:** Inspect committed AgentDojo metrics, adapter/orchestrator code and the Stage 3K
+  metric implementation. Recheck official EU Article 73/113, Anthropic refusal/reference-event
+  guidance and J-space monitoring limitations. No live provider call or runtime mutation.
+- **Validation:** Retain the four-case local probe and document checks in the checkpoint receipt.
+  No new full E2E, independent custody or interactive browser/desktop validation is claimed.
+- **Remaining:** Continue all unread stage evidence, specifications, plans and large logs, then
+  resolve outstanding source checks and validate the complete ledger before claiming completion.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 600-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under preceding declaration `4ca41a95`. Complete manual reads
+  now cover 600 of 919 baseline candidates; 319 remain unread. The exhaustive audit continues.
+- **Changes:** Add M45–M52 errata for Stage 3S–5S and the early live-AgentDojo overview.
+  Separate legal reporting regimes, conditional cryptographic claims, recorded consistency,
+  real observations, model runs and independent reproduction. Preserve all frozen records.
+- **Evidence:** Link Stage 5Q's later falsification of Stage 5M's six-attack containment claim.
+  Inspect the Stage 4P reproduce and CPC digest/emission code, the release-witness workflow,
+  and the Stage 4K fixture builder. The corrected Stage 4K temporary-output rebuild runs
+  under Node 26 and its deterministic ledger matches the committed bytes.
+- **Sources:** Recheck Commission GPAI/incident guidance, NIST's agent-security RFI, RFC 3161
+  accuracy semantics, Sigstore automated OIDC guidance and Anthropic's October 12 distillation
+  update. Record source dates and distinguish vendor reports from project measurements.
+- **Validation:** Record formatting, links, baseline identities, reviewed hashes and append-only
+  preservation in the checkpoint receipt. No runtime changes, new inference, external ceremony,
+  full E2E rerun or independent custody claim.
+- **Remaining:** Continue every pending evidence document, specification, plan and large log;
+  resolve remaining claim checks before marking the manual audit complete.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 700-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under preceding declaration `4ca41a95`; 700 of 919 baseline
+  documents completely read, 219 pending. The exhaustive review remains in progress.
+- **Changes:** Add M53–M56 corrections for evidence counts, skipped execution, unsupported
+  live-regression attribution, reviewer-key independence and archive/timestamp identities.
+- **Finding:** The frozen Stage 4M HTML module repeats `const fail` at top level and cannot
+  parse. Exact extracted-module syntax check under Node 26 returns exit 1; the published HTML
+  hash matches. Update current security and reviewer guidance; preserve the frozen artifact.
+- **Validation:** Check changed-file formatting, local links, baseline identities, current read
+  hashes and append-only preservation. No runtime repair, new inference, outside ceremony,
+  fresh full E2E or interactive browser validation is claimed.
+- **Remaining:** Read every pending specification, plan, evidence document and large log,
+  resolve findings and validate the final ledger before claiming completion.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 735-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under preceding declaration `4ca41a95`; 735 of 919 baseline
+  documents completely read, 184 pending. The exhaustive review remains in progress.
+- **Changes:** Add M57–M62 corrections for reconstructed logs, the Stage 5P standalone verifier,
+  publication versions, static architecture diagrams and early implementation plans. Disclose
+  the Linux manifest/source license metadata conflict in the README without changing licensing.
+- **Finding:** In temporary copies, the exact archived Stage 5P standalone verifier exits 0
+  with missing auxiliary manifests, an invalid checkpoint signature or an incomplete pair census.
+  Preserve the original; qualify security and reviewer guidance and retain the probe receipt.
+- **Sources:** Check Rekor's checkpoint/trust-key requirements, RFC 9943's statement limits,
+  arXiv citation versions, Cargo target selection and the XDG ScreenCast lifecycle.
+- **Validation:** Record formatting, links, exact baseline identities, refreshed read hashes
+  and append-only preservation in the checkpoint receipt. Frozen code and evidence remain intact.
+  No new model inference, external ceremony, full E2E or interactive native/browser run.
+- **Remaining:** Finish every pending plan, specification and large log, resolve remaining
+  documentation findings and validate the final ledger before claiming completion.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 757-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 757 of 919 baseline
+  candidates completely read, 162 pending. Exhaustive review remains in progress.
+- **Changes:** Add M63–M68 corrections for voting/banking plans, early device specifications,
+  and LLM benchmark methodology. Distinguish mock classification, browser behavior, native
+  observation, consent and independently verified effects. Preserve historical specifications.
+- **Finding:** Current banking rejection helpers retain arbitrary unknown key names. Trace the
+  submit route in source, confirm helper behavior with a fictional marker, retain the scoped
+  receipt and disclose the limitation in privacy/security guides. No runtime repair is claimed.
+- **Sources:** Read TC39 string-length semantics; distinguish the living 2027 draft from a
+  finalized 2026 edition. Do not count failed Bash webpage retrievals as verified sources.
+- **Validation:** Check formatting, local links, exact baseline identities, reviewed hashes and
+  append-only log preservation. No new model request, external ceremony, full E2E rerun or
+  interactive browser/native test was performed for this documentation checkpoint.
+- **Remaining:** Complete all pending plans, specifications and logs, resolve documentation
+  findings and validate the final ledger before reporting the exhaustive review complete.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 783-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 783 of 919 baseline
+  candidates completely read, 136 pending. Exhaustive review remains in progress.
+- **Changes:** Add M69–M72 corrections for complete Stage 3D/3E plans/specifications and all
+  October 15 assurance plans/contracts. Separate mock tests, API contracts, source findings,
+  local recovery, dated results and independent validation. Preserve historical documents.
+- **Findings:** Inspect retained gateway risk mapping, raw context prefixes, caller receipt
+  strings and call accounting. An injected-fetch SDK 0.39.0 check confirms two default retries
+  and generic error mapping on adapter timeout. No provider or socket request was made.
+- **Guidance:** Update current security/privacy disclosures, retain a scoped probe receipt,
+  and cite the official SDK retry/timeout reference. The legacy live route remains retired;
+  these documentation changes do not repair direct module use or old revisions.
+- **Validation:** Formatting, local links, exact baseline identities, reviewed hashes,
+  append-only logs and frozen-surface preservation checked for this checkpoint. No new model
+  capture, full E2E rerun, external ceremony or interactive browser/native test.
+- **Remaining:** Finish every pending manual read, resolve documentation findings and validate
+  the final ledger before reporting the exhaustive review complete.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 800-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 800 of 919 baseline
+  candidates completely read, 119 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M73–M80 corrections for the complete Stage 3H core/Layer-2 and Stage 3I–3N
+  plans and specifications. Distinguish proposed checks, implemented helper behavior, finite
+  synthetic cases, retained outcomes and independently verified evidence.
+- **Findings:** Local synthetic helper probes confirm permissive unknown-verdict mapping,
+  default metric flags, omitted canonical `__proto__` members and limited claim-registry/hash-map
+  checks. These scoped observations do not assert complete verifier or runtime exploits.
+- **Guidance:** Update current security disclosures and preserve bounded probe receipts.
+  Frozen evidence, historical specifications, runtime source and signing keys remain unchanged.
+- **Validation:** Check formatting, local links, candidate identities, reviewed hashes,
+  append-only log prefixes and frozen-surface preservation. No new model inference, signing,
+  full E2E rerun, external ceremony or interactive browser/native execution.
+- **Remaining:** Complete all pending manual reads and final correction verification before
+  declaring the exhaustive documentation review complete.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 810-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 810 of 919 baseline
+  candidates completely read, 109 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M81–M85 for the complete Stage 3O–3S specifications and plans, qualifying
+  oracle/replica coverage, temporal continuity, fallback budgets and narrative verification.
+- **Findings:** Bounded local probes demonstrate vacuous coverage, phrase exemptions, unbound
+  narrative wording and incomplete standalone slot/receipt binding. These do not establish
+  acceptance by the full campaign, smoke or hash/rebuild pipelines.
+- **Guidance:** Update current security disclosures and retain scoped probe receipts. Preserve
+  frozen plans, signatures, evidence and runtime source.
+- **Validation:** Formatting, links, ledger identities and hashes, append-only log prefixes and
+  frozen-surface preservation checked. No inference, signing, external ceremony or E2E rerun.
+- **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 820-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 820 of 919 baseline
+  candidates completely read, 99 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M86–M90 for complete Stage 3T–3W specifications and plans, including
+  metadata/collision guarantees, external replay metrics, capture provenance and release witnesses.
+- **Findings:** Bounded synthetic probes confirm permissive adapter metadata and classifier
+  parsing. Separate helper behavior from complete release checks. Record the frozen capture's
+  conflicting decode declarations and preserve its signature and self-reported-origin limitation.
+- **Guidance:** Update current security disclosures and check the official Llama Guard 4 card.
+  Preserve frozen plans, evidence, signatures and runtime source.
+- **Validation:** Check formatting, local links, ledger identities and hashes, append-only log
+  prefixes and frozen-surface preservation. No inference, signing, external ceremony or E2E rerun.
+- **Remaining:** Complete all pending reads and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 830-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 830 of 919 baseline
+  candidates completely read, 89 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M91–M95 for complete Stage 3X, 4A-lite, 4D, 4F and integrated-gate plans
+  and specifications. Qualify replay surfaces, finite equivalence, fixture signing and summaries.
+- **Findings:** Direct Stage 4F verification accepts changed utility/frontier metadata with
+  unchanged signed cell packs. Its frontier file is a digest, not an Ed25519 signature. Preserve
+  a disposable-copy probe receipt and distinguish direct verification from golden comparisons.
+- **Guidance:** Update README and SECURITY; check RFC 9162 against the retained Merkle helper.
+  Preserve frozen evidence, source, specifications and signatures. Runtime repair is separate.
+- **Validation:** Check formatting, links, ledger identities/hashes, append-only prefixes and
+  frozen-surface preservation. No signing, inference, external ceremony or full E2E rerun.
+- **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 840-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 840 of 919 baseline
+  candidates completely read, 79 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M96–M100 for Stage 4G and Stage 4H foundation through 4H.3 specs/plans.
+  Distinguish declared campaign outcomes, historical milestones and current verifier behavior.
+- **Findings:** Stage 4G uses synthetic pack hashes and declared outcomes. Stage 4H's main CLI
+  omits its documented Q7/duplicate-key checks; selected enum counts do not bound total export
+  information. Q6 summaries exercise diagnostic helpers rather than every full crypto path.
+- **Guidance:** Update SECURITY and verify adaptive-attack bibliography identities (S28).
+  Preserve frozen plans, evidence, signatures and runtime code; implementation repair is separate.
+- **Validation:** Check formatting, local links, ledger identities/hashes, append-only prefixes
+  and frozen-surface preservation. No signing, inference, external ceremony or full E2E rerun.
+- **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 850-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 850 of 919 baseline
+  candidates completely read, 69 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M101–M105 for Stage 4H.4/4H.5, the unmerged full-chain addendum, and
+  Stage 4J/4K/4L complete specs/plans; qualify manifest, accounting and reproduction claims.
+- **Findings:** Temporary probes confirm ignored PCTA manifests and accepted producer-signed
+  semantic discrepancies in PCTA/EBA/CCB. Correct current SECURITY guidance; retain probe
+  receipts and distinguish missing semantic checks from signature forgery or deployed effects.
+- **Research:** Check accessible PCTA/CCB primary research identities (S29–S30); preserve
+  frozen records, captures, signatures and runtime source. Implementation repair is separate.
+- **Validation:** Check formatting, local links, all baseline identities/read hashes, append-only
+  prefixes and frozen-surface preservation. Probes used temporary inputs and ephemeral local
+  test keys only; no inference, external ceremony, production signing or full E2E rerun.
+- **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 854-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 854 of 919 baseline
+  candidates completely read, 65 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M106–M107 for the complete Stage 4M/4N specs and plans; correct README
+  and SECURITY descriptions of signed bindings, disclosure bounds and reporting liveness.
+- **Findings:** Local temporary probes confirm unsigned Tier-P disclosure/chain acceptance,
+  unchecked VXD producer claims, and Stage 4N CLI authentication and band/schedule gaps.
+  Distinguish fixed-artifact signature tests from verification of arbitrary supplied inputs.
+- **Research:** Verify the frontier-safety reproducibility position paper identity and scope
+  (S31). Preserve frozen plans, proof/runtime source, captures and signed evidence.
+- **Validation:** Check formatting, local links, baseline identities/read hashes, append-only
+  prefixes and frozen surfaces. No inference, external ceremony or full E2E rerun; runtime
+  repairs remain separate. Local probes used temporary inputs and explicitly scoped keys.
+- **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 858-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 858 of 919 baseline
+  candidates completely read, 61 pending. Exhaustive review remains in progress.
+- **Changes:** Add M108–M109 for the complete Stage 4O/4P specifications and plans;
+  correct SECURITY guidance on selective membership, signer trust and custody replay.
+- **Findings:** Temporary local probes confirm unauthenticated selective inclusion and
+  clean-chain changes in 4O, and stored custody-signature booleans in 4P bundle replay.
+  Qualify action binding, Lean ghost detection, CPC privacy and synthetic bridge claims.
+- **Research:** S32–S33 distinguish primary research, samples and incident reporting
+  from Simurgh measurements, architectural conformance and novelty assertions.
+- **Validation:** Check formatting, local links, baseline identities/read hashes,
+  append-only prefixes and frozen surfaces. Probes used temporary inputs and ephemeral
+  keys; no retained source changes, inference, external ceremony or full E2E rerun.
+- **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 864-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 864 of 919 baseline
+  candidates completely read, 55 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M110–M112 for full Stage 4Q/4R/4S specifications and plans; update
+  SECURITY guidance on approval, private matching and delegation verification.
+- **Findings:** Temporary probes establish exemption omissions, unbound supplied corpora,
+  repeated mask-proof acceptance, fanout-owner gaps and unknown-tier fallback. Qualify
+  human attendance, external identity, action binding, symbolic proofs and finite test scope.
+- **Research:** S34–S36 distinguish primary prior art and official platform documentation
+  from novelty, standards, legal, privacy and market-prevalence assertions.
+- **Validation:** Check formatting, local links, baseline identities/read hashes,
+  append-only prefixes and frozen surfaces. No runtime repairs, model inference, external
+  ceremony or full E2E rerun; temporary probes leave retained evidence unchanged.
+- **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 870-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 870 of 919 baseline
+  candidates completely read, 49 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M113–M115 for complete Stage 4T/4U/4V specifications and plans; update
+  SECURITY guidance on capsule views, red-team findings and counter-capsule semantics.
+- **Findings:** Temporary fixture-key probes establish omitted fields, contradictory views,
+  unbound attack expectations, irrelevant recomputation and empty audit inventories. Qualify
+  reported anchors, legal timing, local-process blindness, parity and symbolic proof scope.
+- **Research:** S37–S38 qualify incident-reporting literature, California defenses and the
+  NIST agent initiative; distinguish primary-source claims from implementation validation.
+- **Validation:** Check formatting, local links, baseline identities/read hashes, append-only
+  prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
+  full E2E rerun; all temporary probes preserve retained evidence and signatures.
+- **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 874-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 874 of 919 baseline
+  candidates completely read, 45 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M116–M117 for complete Stage 4W/4X specifications and plans; update
+  SECURITY guidance on displayed narrative claims, density and leakage-ledger completeness.
+- **Findings:** Seven VSN probes and six VLR probes establish unbound prose, marker-only
+  checking, empty/omitted audit outcomes and core-versus-CLI binding differences. Retain
+  refusal controls and qualify symbolic proofs, local process boundaries and finite parity.
+- **Research:** S39–S40 correct the C2PA textual-region comparison and qualify incident,
+  benchmark, standards and institutional claims against primary sources.
+- **Validation:** Check formatting, local links, baseline identities/read hashes, append-only
+  prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
+  full E2E rerun; temporary probes preserve retained evidence and source bytes.
+- **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 878-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 878 of 919 baseline
+  candidates completely read, 41 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M118–M119 for complete Stage 4Y/4Z specifications and plans; update
+  SECURITY guidance on audit binding, replay coverage and workspace declarations.
+- **Findings:** Seven VDR and eight VWA probe cases retain baseline/refusal controls while
+  demonstrating unbound audit data, duplicate grids, producer-relative coverage and VSC trust.
+  Qualify browser functionality, incomplete capture, symbolic proofs and finite parity.
+- **Research:** S41–S42 check primary review/interpretability sources and NIST OSCAL required
+  fields; distinguish incomplete projections and proposed adoption from verified conformance.
+- **Validation:** Check formatting, local links, baseline identities/read hashes, append-only
+  prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
+  full E2E rerun; temporary probes preserve retained evidence and source bytes.
+- **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 882-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 882 of 919 baseline
+  candidates completely read, 37 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M120–M121 for complete Stage 5A/5B specifications and plans; update
+  SECURITY guidance on optional-evidence omission, capture binding and replay truthfulness.
+- **Findings:** Eight VNC and eight VAR probe cases demonstrate duplicate flag accounting,
+  silent audit-depth reduction, unbound capture/results and outcome-label suppression.
+  Baseline/refusal controls retained; no source or retained-evidence mutation.
+- **Research:** S43–S44 check primary introspection, monitorability and red-team measurements;
+  distinguish ablation effects, source publication dates and incompatible ASR denominators.
+- **Validation:** Check formatting, local links, baseline identities/read hashes, append-only
+  prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
+  full E2E rerun; temporary probes preserve retained evidence and source bytes.
+- **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 886-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 886 of 919 baseline
+  candidates completely read, 33 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M122–M123 for complete Stage 5C/5D specifications and plans; correct
+  SECURITY guidance on conditional completeness, severity labels and adaptive-ledger checks.
+- **Findings:** Eight VSB and eight VARL probe cases retain baseline/refusal controls and
+  demonstrate extra slips, omitted rate groups, missing audit input and unchecked declarations.
+  Distinguish digest-derived severity, partial parity and finite proofs from stronger claims.
+- **Research:** S45–S46 check primary metamorphic/guardrail research, the BrowseComp account
+  and official Unicode standards; correct dates, denominators and normalization inferences.
+- **Validation:** Check formatting, local links, baseline identities/read hashes, append-only
+  prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
+  full E2E rerun; temporary probes preserve retained evidence and source bytes.
+- **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 890-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 890 of 919 baseline
+  candidates completely read, 29 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M124–M125 for complete Stage 5E/5F specifications and plans; correct
+  SECURITY guidance on score/review provenance and panel/capture/ceremony bindings.
+- **Findings:** Eight VDA and eight VMP local probe cases retain baseline/refusal controls;
+  qualify review equivalence, empty curves, adapter replay, census semantics and strict policy.
+- **Research:** S47–S48 check official model/loading contracts, the voluntary GPAI Code
+  and extensible in-toto/C2PA formats; remove unsupported scope and novelty inferences.
+- **Validation:** Check formatting, local links, baseline identities/read hashes, append-only
+  prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
+  full E2E rerun; temporary probes preserve retained evidence and source bytes.
+- **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-19 (Australia/Sydney) — Manual documentation audit: 894-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 894 of 919 baseline
+  candidates completely read, 25 pending. Exhaustive manual review remains in progress.
+- **Changes:** Add M126–M127 for complete Stage 5G/5H specifications and plans; correct
+  SECURITY guidance on foreign-capture anchoring and disclosure-tier reviewer facts.
+- **Findings:** Eight VFC and nine VSD local probe cases qualify corpus/census binding,
+  mock Sigstore identity, ceremony corroboration, receipt outputs and portable verification.
+- **Research:** S49–S50 compare official Sigstore requirements, Stanford FMTI figures,
+  Epoch benchmark methodology and Commission GPAI applicability/enforcement dates.
+- **Validation:** Check formatting, local links, baseline identities/read hashes, append-only
+  prefixes and frozen surfaces. No runtime changes, model inference, external ceremony or
+  full E2E rerun; temporary probes preserve retained evidence and source bytes.
+- **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-20 (Australia/Sydney) — Manual documentation audit: 898-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 898 of 919 baseline
+  candidates completely read, 21 pending. Exhaustive manual review remains in progress.
+- **Changes:** M128–M129 cover complete Stage 5I/5J specifications and plans; SECURITY now
+  qualifies panel identities, coverage depth, contest history and attestation verification.
+- **Findings:** Eight VPC and eleven VRC fixture probes expose signer/separation gaps,
+  omitted epoch tickets, unchecked digest fields and partial portable verification.
+- **Research:** S51–S52 check official RSP history, SCITT architecture and cross-evaluation
+  context; historical policy versions and synthetic reviews remain explicitly bounded.
+- **Validation:** Check changed-file formatting, local links, baseline identities/read hashes,
+  append-only prefixes and frozen surfaces. No runtime changes, model inference, external
+  ceremony or full E2E rerun; retained source/evidence bytes are preserved.
+- **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-20 (Australia/Sydney) — Manual documentation audit: 902-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 902 of 919 baseline
+  candidates completely read, 17 pending. Exhaustive manual review remains in progress.
+- **Changes:** M130–M131 cover complete Stage 5K/5L specifications and plans; SECURITY qualifies
+  universe ordering and temporal release claims. Twelve VUC and eleven VTC-Q local probe cases
+  document binding, anchor, projection and portable-verification limits with refusal controls.
+- **Research:** S53–S54 check CT/PLANTS, ATT&CK census, SEC evidence, RFC 3161 accuracy,
+  OpenSSL validation time and C2PA version context against primary sources.
+- **Validation:** Check changed-file formatting, links, baseline identities/read hashes,
+  append-only prefixes and frozen surfaces. No runtime changes, model inference, external
+  ceremony or full E2E rerun; retained source/evidence bytes are preserved.
+- **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-20 (Australia/Sydney) — Manual documentation audit: 906-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 906 of 919 baseline
+  candidates completely read, 13 pending. Exhaustive manual review remains in progress.
+- **Changes:** M132–M133 cover complete Stage 5M/5N specifications and plans. SECURITY qualifies
+  real Rekor checks, inherited anchor assumptions, unwired TSA signature/Bitcoin-header checks,
+  unbound token seeding and resource-validation order. Ten quorum and nine delay probe cases
+  use local copies and explicit fixture facts; original captures remain intact.
+- **Research:** S55–S56 check primary prior art, GRAM's preliminary scope, RTS 25 clock classes,
+  qualified timestamps and AI Act record/retention distinctions; retrieval limits are recorded.
+- **Validation:** Check changed-file formatting, links, baseline identities/read hashes,
+  append-only prefixes and frozen surfaces. No runtime changes, model inference, external
+  ceremony or full E2E rerun.
+- **Remaining:** Complete every pending manual read and final correction verification.
+
+
+### 2026-10-20 (Australia/Sydney) — Manual documentation audit: 907-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 907 of 919 baseline
+  candidates completely read, 12 pending. Exhaustive manual review remains in progress.
+- **Changes:** M134 covers all 5,193 lines of the Stage 5O specification and reconciles frozen
+  amendments with implemented context, history, probability and package checks. Twelve offline
+  probe records preserve positive controls and refusals; SECURITY states the composition limits.
+- **Research:** S57 checks RFC 6962 status/construction, RFC 5869 entropy assumptions and Dopp's
+  audit-sampling paper; novelty and quotation claims are bounded by the retrieved sources.
+- **Validation:** Check changed-file formatting, links, baseline identities/read hashes,
+  append-only prefixes and frozen surfaces. No runtime changes, inference, external ceremony
+  or full E2E rerun; original specifications and evidence remain intact.
+- **Remaining:** Complete every pending manual read and final correction verification.
+
+### 2026-10-20 (Australia/Sydney) — Manual documentation audit: 909-file checkpoint
+
+**Raouf / Codex-assisted maintenance:**
+
+- **Scope:** Documentation only under prior declaration `4ca41a95`; 909 of 919 baseline
+  candidates completely read, 10 pending. Exhaustive manual review remains in progress.
+- **Changes:** M135 covers the complete Stage 5P specification/annexes and Lane A plan.
+  Eleven offline probes qualify resolver signatures, submission/replay binding, complementary
+  claims, attestation schema and discharge validation. SECURITY records these boundaries.
+- **Research:** S58 checks Sigstore, SCITT, GLEIF and EUDI primary sources; direct AI Act retrieval
+  was blocked and is not represented as fresh quotation verification.
+- **Validation:** Check audit-file formatting, links, baseline identities/read hashes, append-only
+  prefixes and frozen surfaces. The 907 checkpoint's formatting claim is corrected: published
+  append-only log entries have extra-blank-line warnings. Their original bytes are preserved.
+- **Remaining:** Complete every pending manual read and final correction verification. No runtime
+  changes, model inference, external ceremony or full E2E rerun in this checkpoint.
+
+### 2026-10-20 (Australia/Sydney) — Manual documentation audit: 913 of 919
+
+- Read both Stage 5Q and 5R specifications and plans in full; added M136–M137 and S59.
+- Recorded twelve VSR and fourteen VPF offline observations with reproducible audit scripts.
+- Preserved frozen campaign results: Stage 5Q incomplete, Stage 5R zero new discharge.
+- Checks: reviewed hashes, 919 baseline identities, mutable scope and append-only prefixes;
+  audit-file formatting and local links checked in checkpoint 913. Existing log spacing warnings
+  from checkpoint 907 remain preserved. No runtime change, inference or full E2E rerun.
+- Six documents remain; the manual audit continues.
+
+### 2026-10-20 (Australia/Sydney) — Manual documentation review completed: 919 candidates
+
+**Codex (owner-authorized continuation):**
+
+- **Scope:** Documentation and audit tooling under authority `4ca41a95`. Complete content
+  review of all 919 candidates; no unread rows. Baseline identities, hashes and individual
+  assessments remain in `docs/documentation-audit-2026-10-19/manual-progress.json`.
+- **Corrections:** M138 records Stage 5S witness/capture/comparison limits; M139–M141 correct
+  activity-log interpretation, the exact research archive and initial-scan scope. README,
+  DOCUMENTATION and the audit landing page now link completed coverage and final validation.
+  Historical records remain intact; these corrections do not close runtime findings.
+- **Method:** The final four large documents were read through a lossless paragraph map,
+  including every distinct paragraph and all 910 initial-ledger rows. Ordered duplicate
+  occurrences reconstructed to original hashes. Complete publication text is distinguished
+  from visual review; historical citation, personal/legal and external-validation limits remain.
+- **Verification:** All 919 reviewed hashes and original identities match; 898 non-audit,
+  unedited candidate documents retain baseline bytes. Full Git scope check preserves runtime,
+  tests, frozen specifications, captures and publications; both logs retain exact prior prefixes.
+  Local links: 814 Markdown documents, 1,980 links, zero issues before this appended entry.
+  The 16-case Stage 5S offline diagnostic reproduces retained JSON, including acceptance gaps
+  and its invalid-signature refusal control. New diff whitespace and scoped formatting checks
+  are recorded in `docs/documentation-audit-2026-10-19/FINAL_VALIDATION.md`; published checkpoint-907
+  log whitespace is retained and is not claimed to pass whole-file formatting.
+- **Evidence limits:** The existing full smoke remains implementation `ebf2a752`; no new paid
+  inference, external ceremony or full E2E rerun. Runtime repairs, real-browser/native interaction,
+  provider lifecycle and independent operator evidence remain separately scoped. No submission,
+  deployment, endorsement or standards certification is implied.
+
+### 2026-10-21 (Australia/Sydney) — Readiness repair programme and Stage 4M authority
+
+**Raouf: Codex-assisted implementation**
+
+- **Scope:** Owner requested all proposed readiness work except classmate reproduction.
+- **Summary:** Added the ordered repair/validation plan and primary-source gap map. Declared
+  exact Stage 4M paths for M106 binding/aggregate/collision repairs and M54 generated-script
+  parsing before implementation. Historical evidence remains unchanged.
+- **Files changed:** `docs/readiness-2026-10-21/PLAN.md`, `docs/readiness-2026-10-21/SOURCES.md`,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Read current rules and the prior complete log review; inspected Stage 4M
+  core/loader/adapter/tests. No runtime change or new completion claim in this authority commit.
+- **Follow-ups:** Reproduce failures, implement bounded repairs, extend exact authority before
+  later components, validate current-study explorer and run a fresh candidate smoke. Provider
+  administrative test configuration and real-browser tooling remain unresolved inputs.
+
+### 2026-10-21 (Australia/Sydney) — Stage 4M authenticated public evidence repair
+
+**Raouf: Codex-assisted implementation**
+
+- **Scope:** The five exact implementation/test paths authorized by `1fbd03fd`.
+- **Summary:** Public verification checks signed public roots even without private ledgers;
+  audit verification recomputes aggregates; duplicate merge targets fail closed. Browser generation
+  preserves module-local scopes. Existing signed fixtures and captured HTML remain unchanged.
+- **Verification:** New regressions first reproduced five failures with one passing control.
+  After repair, all 54 Stage 4M tests and all 12 reproduction steps pass under Node 26.
+  Generated JavaScript parses; this is not an actual browser-interaction receipt.
+- **Follow-ups:** M106 remains partially open for upstream authentication assumptions. Continue
+  current-study explorer, remaining audit dispositions and fresh whole-repository smoke.
+
+### 2026-10-21 (Australia/Sydney) — Current-study explorer and fail-closed runners
+
+**Raouf: Codex-assisted implementation**
+
+- **Scope:** Explorer paths declared in `036df196`; reproduction paths in `4d92239b`.
+- **Summary:** Default explorer now projects all 288 transfer branches with model/study identities,
+  selected output details, retained malformed proposals, full-inventory validation and identical
+  CLI/UI filters. Historical Phase 10 remains selectable. Added AGPL package metadata.
+  Stage 4K/4L/4M harness mismatches cannot return successful raw zero.
+- **Verification:** Explorer regressions first failed on the old 144-row default; all 20 tests
+  and production build now pass. Four injected runner mismatch branches failed before repair
+  and pass after repair. Full reproduction and whole-repository smoke follow at a committed revision.
+- **Follow-ups:** Real browser interaction is unverified. OpenAI read-only capability checks:
+  model listing HTTP 200; organization project listing HTTP 403. No provider mutation attempted.
+
+### 2026-10-21 (Australia/Sydney) — Tighten harness regression evidence
+
+**Raouf: Codex-assisted implementation**
+
+- **Scope:** Existing R04 test authority; no runner behavior change.
+- **Summary:** The Stage 4K injected branch gained a nested conditional during repair.
+  Corrected branch extraction to include its outer terminator and require the exact mapped
+  shell status 3 plus a reproduction diagnostic, excluding syntax-error false positives.
+- **Files changed:** `tests/unit/reproduceMismatch.test.js`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** All four complete mismatch branches return mapped raw-29 shell status 3;
+  none reaches the success marker. This supersedes the earlier less-specific nonzero assertion.
+- **Follow-ups:** Fresh full smoke at the committed repair revision.
+
+### 2026-10-21 (Australia/Sydney) — Readiness documentation and smoke maintenance repairs
+
+**Raouf: Codex-assisted implementation**
+
+- **Scope:** R05/R06 authority `2068f1a6`; mutable reviewer routes and new readiness artifacts.
+- **Summary:** Updated current explorer routes and Stage 4M security boundaries; retained all
+  141 audit finding dispositions without treating documentation corrections as runtime closure.
+  Named exact audited documents in the Stage 5P census and preserved append-only log prefixes.
+- **Verification:** Stage 5P census passes and an injected unapproved runtime literal still fails.
+  Whole-repository formatting passes with historical logs explicitly excluded. Current repair
+  receipts retain Stage 4M/explorer tests, HTTP capability outcomes and local forced-call controls.
+- **Evaluation:** Four-arm protocol frozen at `61124a77`; first Responses request returned 401,
+  stopping the campaign after one attempt. Eight local forced controls complete; no new model
+  result, provider admin operation or independent validation claimed. Project listing returned 403.
+- **Follow-ups:** Full candidate smoke and publication. Original active refusal, additional historic
+  verifier limitations, actual browser/accessibility and provider lifecycle evidence remain open.
+
+### 2026-10-21 (Australia/Sydney) — Transfer import denominator hardening
+
+**Raouf: Codex-assisted implementation**
+
+- **Scope:** Existing explorer R02 authority `036df196`; core and transfer regression tests.
+- **Summary:** Infer a missing study label from validated record identities, reject a contradictory
+  label or mixed studies, and require transfer selections to retain the original denominator.
+- **Verification:** New mutation test failed before repair. All 21 explorer tests and production
+  build pass afterward. This isolated follow-up is validated separately from the complete smoke
+  running at `333a990d`; root runtime and stage verifier sources do not change in this follow-up.
+- **Follow-ups:** Publish exact tested revisions and complete smoke receipts without merging
+  their provenance. External acceptance gaps remain explicit.
+
+### 2026-10-21 (Australia/Sydney) — Final E2E gate repair and credential retry
+
+**Raouf: Codex-assisted implementation**
+
+- **Scope:** R11 authority `c6ec4a63`; R05 receipt authority `6bd4b2f5`.
+- **Summary:** Stage 4U admits only the exact audited adapter README bytes while retaining
+  all adapter/kernel code protections; absent main baseline now fails explicitly. The current
+  validation receipt is named in the existing Stage 5P documentation allowlist.
+- **Verification:** Original full candidate: base 142/142, root 5,181/5,181; E2E 31/32 steps
+  with one README-scope failure among 580 tests. Focused repaired Stage 4U checks pass.
+  Hosted readiness 13/13 jobs and both macOS/Windows jobs pass at `333a990d`.
+- **Credentials:** Owner requested retry and authorized replacement-key setup. The connector
+  requires reauthentication; the separately budgeted environment-key retry again returned HTTP
+  401 on its first request, then stopped. No replacement key or new model result was produced.
+- **Follow-ups:** Execute the committed negative control and complete final E2E rerun; publish
+  logs, tested revisions, explicit blocked browser/provider checks and all remaining findings.
+
+### 2026-10-21 (Australia/Sydney) — Readiness validation receipts and handoff
+
+**Raouf: Codex-assisted implementation**
+
+- **Scope:** Final readiness reports and complete retained validation archive; no additional
+  runtime change. Exact tested code revision `8155106a3a1790ca38e35781545a9bf987f31f9e`.
+- **Verification:** Final root suite 5,181 passed, full E2E 32/32 gates with 580 tests passed,
+  explorer 21 tests plus production build and built-asset HTTP/CLI agreement. Base smoke
+  142/142 steps at `333a990d`; all 29 Python suites (473 tests), adapter 181 tests and Rust
+  tests passed at that revision. Hosted readiness 13/13 jobs and both native jobs passed.
+  The receipt lists the intervening changes and separate provenance; counts are not additive.
+  A committed kernel mutation was rejected by the repaired Stage 4U gate in a disposable checkout.
+- **Evidence:** `docs/readiness-2026-10-21/validation.json`, `RESULTS.md` and `logs.zip` retain
+  exact commands/revisions, failed attempts, successful runs and an entry-level SHA-256 manifest.
+  Documentation corrections preserve all 141 prior audit dispositions and append-only prefixes.
+- **Limits:** Both bounded inference attempts stopped at their first HTTP 401. The connector
+  requires reauthentication; no replacement key was created. Provider administration/alerts,
+  actual browser/accessibility, independent classmate reproduction and other historical verifier
+  findings remain open. Native artifact download returned 403; hosted job logs are retained.
+
+### 2026-10-21 (Australia/Sydney) — Uploaded-credential live diagnostic
+
+**Raouf: Codex-assisted implementation**
+
+- **Scope:** Owner supplied a credential and requested its use. Executed the unchanged, frozen
+  four-arm diagnostic at `e9f809cd` with a new declaration, fresh outputs and USD 1 reserve ceiling.
+  No credential was written to the repository or persistent environment configuration.
+- **Results:** All four API requests returned HTTP 200. Baseline active and clarified active each
+  produced one intended local receiver effect; stop and unknown-prior declined with zero new
+  effects. All eight forced-call controls completed; unknown-prior retained its earlier effect.
+  Usage: 1,296 input and 119 output tokens. Reserved budget is not claimed as billed cost.
+- **Verification:** Frozen request identity, exact delivered resource/content, statuses and effect
+  counts checked; four-attempt ledger and archive hashes verified; secret scan passed. Initial
+  system-Python import failure occurred before any request; the project virtual environment worked.
+- **Evidence:** New `REFUSAL_FOLLOWUP.md`, `refusal-upload-3.json` and `refusal-upload-3.zip` under
+  `docs/readiness-2026-10-21/`; current results, plan, gap map and handoff updated. Prior captures,
+  failed-attempt receipts, full smoke archive and code remain unchanged.
+- **Limits:** Both active arms acted, so this sample does not attribute behavior to clarification
+  or explain the earlier refusal. Provider lifecycle, real browser and outside reproduction remain
+  unverified. No key creation, rotation, revocation or alert operation was performed.
