@@ -100,7 +100,7 @@ fail() {
 run_step() {
   local name="$1"
   local command="$2"
-  local log_file="$LOG_DIR/${name// /_}.log"
+  local log_file="$LOG_DIR/${name//[^a-zA-Z0-9_.-]/_}.log"
 
   # Preserve the validation job's selected Node, Python and Lean executables.
   # Login profiles can replace PATH and silently select a different toolchain.
@@ -122,7 +122,7 @@ run_step() {
       # exactly how a Stage 5S CI failure had to be diagnosed by reading workflow step order
       # instead of the log (5S-F018). Failure lines are cheap and are what a reader needs first.
       local failures
-      failures="$(grep -aE '^(not ok [0-9]+|✖|FAIL:|Error:)' "$log_file" 2>/dev/null | head -25 || true)"
+      failures="$(grep -aE -A30 '^(not ok [0-9]+|✖|FAIL:|Error:)' "$log_file" 2>/dev/null | head -200 || true)"
       if [[ -n "$failures" ]]; then
         echo -e "${YELLOW}Failure lines from $log_file:${NC}"
         echo "$failures"

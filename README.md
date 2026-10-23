@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/Project-Simurgh-Logo.png" alt="Project Simurgh — Knowledge, Verification, Guidance" width="100%" />
+</p>
+
 # Project Simurgh
 
 **Inspectable authorization for AI agents. Replay the proposal, enforce the boundary, verify the effect.**

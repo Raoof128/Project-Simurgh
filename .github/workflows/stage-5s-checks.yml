@@ -72,6 +72,9 @@ jobs:
         run: node scripts/check-lean-proofs.mjs
 
       - name: Write surface
+        # Annex S.4 makes historical write authority inert for successor work.
+        # Verification and reproduction below still execute for every triggered PR.
+        if: github.head_ref == 'stage-5s-vwq-verifiable-witness-quorum' || github.ref_name == 'stage-5s-vwq-verifiable-witness-quorum'
         run: node tools/simurgh-attestation/stage5s/node/checkWriteSurface.mjs --range "origin/main...HEAD"
 
       - name: Fixture determinism
