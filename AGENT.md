@@ -4186,3 +4186,22 @@ Owner-requested work; implementation and review by Codex assistance.
   parity passes all nine tests. Browser failure root cause remains unconfirmed.
 - **Follow-ups:** Add regression coverage, repair logs/scoping, insert original header image,
   run local checks and inspect hosted CI before claiming resolution.
+
+### 2026-10-23 (Australia/Sydney) — CI log portability, historical scope and original README logo
+
+**Raouf: Codex-assisted implementation**
+
+- **Scope:** Maintenance authority `696a7480`; CI reporting, Stage 5S workflow condition and README.
+- **Summary:** Sanitize log filenames to portable ASCII characters and print failure diagnostics
+  before trailing summaries. Limit the historical Stage 5S whole-branch write-surface command
+  to its declared branch, including pull-request head refs; all verifier/proof/reproduction steps
+  remain active. Display the original logo across the README header without editing image bytes.
+- **Files changed:** `scripts/check.sh`, `.github/workflows/stage-5s-checks.yml`, `README.md`,
+  `tests/unit/maintenance/checkRuntimeEnvironment.test.js`,
+  `tests/unit/maintenance/stage5sWorkflowScope.test.js`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** New logging/scope regressions failed before repair and pass afterward;
+  17 focused checks pass. Stage 5P real-browser parity passes nine checks on both Node 26 and
+  the failed hosted job's Node 22.23.3. Scoped Prettier, shell syntax and `git diff --check` pass.
+  Logo SHA-256 remains `d691609b994688823acb185789473d98091b924a7cb7ac1a7f2e473c9668b455`.
+- **Follow-ups:** Full suite and hosted CI still pending at this commit. The original main
+  browser failure remains recorded; no browser assertion, timeout or skip behavior was changed.

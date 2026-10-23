@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -54,6 +54,40 @@ run_step runtime  'simurgh_runtime_probe'
       assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
       assert.match(result.stdout, /passed: runtime/);
       assert.equal(readFileSync(join(logs, "runtime.log"), "utf8"), "selected-runtime\n");
+    } finally {
+      rmSync(scratch, { recursive: true, force: true });
+    }
+  });
+}
+
+for (const verbose of [false, true]) {
+  test(`check logs are uploadable and preserve failure details when verbose=${verbose}`, () => {
+    const scratch = mkdtempSync(join(tmpdir(), "simurgh-log-name-"));
+    try {
+      const result = spawnSync(
+        "bash",
+        [
+          "-c",
+          `
+set -euo pipefail
+VERBOSE=${verbose}
+YELLOW='' NC=''
+pass() { echo "unexpected pass"; }
+fail() { echo "failed: $1"; }
+${runStep}
+run_step 'prettier --check (npm run format:check)' 'printf "not ok 1 - browser parity\\n  error: original-browser-diagnostic\\n"; seq 1 80; exit 7'
+`,
+        ],
+        { encoding: "utf8", env: { ...process.env, LOG_DIR: scratch } }
+      );
+      assert.equal(result.status, 0, result.stderr);
+      assert.match(result.stdout, /failed: prettier/);
+      assert.doesNotMatch(result.stdout, /unexpected pass/);
+      assert.match(result.stdout, /original-browser-diagnostic/);
+      const logs = readdirSync(scratch);
+      assert.equal(logs.length, 1);
+      assert.match(logs[0], /^[A-Za-z0-9_.-]+$/);
+      assert.match(readFileSync(join(scratch, logs[0]), "utf8"), /original-browser-diagnostic/);
     } finally {
       rmSync(scratch, { recursive: true, force: true });
     }
