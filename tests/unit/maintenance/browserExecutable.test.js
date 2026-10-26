@@ -41,6 +41,28 @@ test("browser process failure is a failure, not a skip", async () => {
     /browser (exited|transport failed)/
   );
 });
+test("a browser that never answers times out naming the stalled step and its stderr", async () => {
+  const { browserResult } = await import("../../../scripts/lib/browserExecutable.mjs");
+  const { mkdtempSync, writeFileSync, chmodSync, rmSync } = await import("node:fs");
+  const { tmpdir } = await import("node:os");
+  const { join } = await import("node:path");
+  const dir = mkdtempSync(join(tmpdir(), "simurgh-silent-browser-"));
+  const stub = join(dir, "chrome");
+  writeFileSync(stub, "#!/bin/sh\necho 'stub browser: holding the pipe' >&2\nexec sleep 30\n");
+  chmodSync(stub, 0o755);
+  try {
+    await assert.rejects(
+      browserResult(stub, "http://127.0.0.1:1/", { timeoutMs: 400 }),
+      (error) => {
+        assert.match(error.message, /timed out after \d+ms awaiting Target\.createTarget/);
+        assert.match(error.message, /stub browser: holding the pipe/);
+        return true;
+      }
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
 test("a real browser with no result times out and a subsequent run remains usable", async (t) => {
   const chrome = findBrowser();
   if (!chrome) {
@@ -60,7 +82,10 @@ test("a real browser with no result times out and a subsequent run remains usabl
   await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
   try {
     const base = `http://127.0.0.1:${server.address().port}`;
-    await assert.rejects(browserResult(chrome, `${base}/empty`, { timeoutMs: 1500 }), /timed out/);
+    await assert.rejects(
+      browserResult(chrome, `${base}/empty`, { timeoutMs: 1500 }),
+      /timed out after \d+ms awaiting .*; last #out /
+    );
     const result = await browserResult(chrome, `${base}/negative`);
     assert.equal(result.ok, false, "a browser failure result must never be converted to success");
     assert.deepEqual(result.failures, ["negative-control"]);

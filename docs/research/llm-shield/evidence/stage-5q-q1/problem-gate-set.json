@@ -86,8 +86,8 @@
     ]
   },
   "current": {
-    "as_of": "2026-10-16 phase 13 reliability/export CI extension",
-    "entry_count": 47,
+    "as_of": "2026-10-26 README replay CI extension",
+    "entry_count": 48,
     "why": "the LIVE census, re-pinned by each stage that adds workflow steps. `baseline` is NOT touched: it is the v2.53.0 measurement the Q1-F002 finding cites, and a later stage may never move it to go green (5S-F015).",
     "gate_problems": [
       {
@@ -181,6 +181,10 @@
       {
         "gate_id": "openai-readiness.yml::Verify the saved reviewer artifact against this source tree",
         "reason_code": "unclassifiable_step"
+      },
+      {
+        "gate_id": "readme-replay.yml::Run the README complete comparative-study verification",
+        "reason_code": "missing_committed_universe_query"
       },
       {
         "gate_id": "stage-1-checks.yml::Install Lean (elan) so the Stage 4R reproduce builds its proof",

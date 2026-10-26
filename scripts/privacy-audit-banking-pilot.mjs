@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // SPDX-License-Identifier: AGPL-3.0-or-later
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createChain, appendEntry } from "../src/audit/hmacChain.js";
 import {
@@ -14,7 +15,11 @@ import {
 } from "../src/bankingPilot/bankingReportBuilder.js";
 import { buildBankingNarrativePayload } from "../src/bankingPilot/bankingNarrativeSanitiser.js";
 
-const evidenceDir = "docs/research/banking-pilot/evidence/phase-a-synthetic";
+// The audit scans freshly generated fixtures. Regenerating carries new timestamps and HMACs, so
+// the committed evidence is rewritten only on request; a routine audit run leaves the tree clean.
+const evidenceDir = process.argv.includes("--write-evidence")
+  ? "docs/research/banking-pilot/evidence/phase-a-synthetic"
+  : mkdtempSync(join(tmpdir(), "simurgh-banking-audit-"));
 mkdirSync(evidenceDir, { recursive: true });
 
 const hmacKey = "privacy-audit-hmac-key";

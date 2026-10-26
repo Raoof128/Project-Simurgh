@@ -48,12 +48,41 @@ export async function browserResult(chrome, url, { timeoutMs = 30000 } = {}) {
       "--disable-gpu",
       "--disable-dev-shm-usage",
       "--disable-background-networking",
+      // Unattended-run defaults, aligned with Puppeteer's launch set: nothing below changes what
+      // the fixture page can do, only what the browser process does at startup (no crash
+      // handler, keyring, field trials, extensions, sync, Cast/mDNS discovery or hang monitor).
+      // Hosted gate runs stalled before the first CDP reply at a rate no diagnostic reproduced
+      // (0 of 37 runs); these are the startup paths an unattended CI browser does not need.
+      "--password-store=basic",
+      "--use-mock-keychain",
+      "--disable-background-timer-throttling",
+      "--disable-backgrounding-occluded-windows",
+      "--disable-renderer-backgrounding",
+      "--disable-component-update",
+      "--disable-breakpad",
+      "--disable-crash-reporter",
+      "--disable-client-side-phishing-detection",
+      "--disable-component-extensions-with-background-pages",
+      "--disable-default-apps",
+      "--disable-extensions",
+      "--disable-field-trial-config",
+      "--disable-hang-monitor",
+      "--disable-ipc-flooding-protection",
+      "--disable-popup-blocking",
+      "--disable-prompt-on-repost",
+      "--disable-search-engine-choice-screen",
+      "--disable-sync",
+      "--disable-features=Translate,AcceptCHFrame,MediaRouter,OptimizationHints",
+      "--enable-automation",
+      "--metrics-recording-only",
       "--no-first-run",
       "--no-default-browser-check",
       "--allow-file-access-from-files",
       "--remote-debugging-pipe",
-      "--no-startup-window",
       `--user-data-dir=${profile}`,
+      // An initial blank tab, as Puppeteer launches, so the profile is initialised before the
+      // first Target.createTarget instead of lazily by it under --no-startup-window.
+      "about:blank",
     ],
     { stdio: ["ignore", "ignore", "pipe", "pipe", "pipe"] }
   );
@@ -61,8 +90,17 @@ export async function browserResult(chrome, url, { timeoutMs = 30000 } = {}) {
     pending = new Map(),
     buffer = "",
     stderr = "",
-    failure;
-  const deadline = Date.now() + timeoutMs;
+    failure,
+    lastValue;
+  const started = Date.now();
+  const deadline = started + timeoutMs;
+  // A timeout names the protocol step that stalled and keeps the browser's own output, so a
+  // hosted failure is diagnosable from its log rather than reproduced by guesswork.
+  const timedOut = (method) =>
+    new Error(
+      `browser result timed out after ${Date.now() - started}ms awaiting ${method}; ` +
+        `last #out ${JSON.stringify(lastValue ?? null)}; stderr: ${stderr.slice(-1200) || "(empty)"}`
+    );
   const fail = (error) => {
     failure = error;
     for (const entry of pending.values()) {
@@ -106,11 +144,11 @@ export async function browserResult(chrome, url, { timeoutMs = 30000 } = {}) {
     new Promise((resolve, reject) => {
       if (failure) return reject(failure);
       const remaining = deadline - Date.now();
-      if (remaining <= 0) return reject(new Error("browser result timed out"));
+      if (remaining <= 0) return reject(timedOut(method));
       const requestId = ++id;
       const timer = setTimeout(() => {
         pending.delete(requestId);
-        reject(new Error("browser result timed out"));
+        reject(timedOut(method));
       }, remaining);
       pending.set(requestId, { resolve, reject, timer });
       child.stdio[3].write(
@@ -134,10 +172,11 @@ export async function browserResult(chrome, url, { timeoutMs = 30000 } = {}) {
       );
       if (result.exceptionDetails) throw new Error("browser fixture evaluation failed");
       const value = result.result?.value;
+      lastValue = value;
       if (value && value !== "running…") return JSON.parse(value);
       await new Promise((resolve) => setTimeout(resolve, 25));
     }
-    throw new Error("browser result timed out");
+    throw timedOut("a fixture result");
   } finally {
     fail(new Error("browser closed"));
     child.kill();

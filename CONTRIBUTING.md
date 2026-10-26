@@ -22,13 +22,14 @@ Before changing a stage-owned gate or frozen surface, read the standing invarian
 
 ## Reproducible environments
 
-| Task                                    | Environment                                                                                | Entry point                                                               |
-| --------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
-| Current credential-free evidence replay | Full Git history, Python 3.12, hash-locked SDK/workflow dependencies, POSIX local services | [README replay](README.md#replay-the-evidence)                            |
-| Dashboard and JSON CLI                  | Node 24 or 26; isolated package lock for UI build                                          | [Explorer guide](tools/simurgh-explorer/README.md)                        |
-| Historical offline Node instrument      | Root `npm ci`; Node 22+ for this focused instrument                                        | [Instrument guide](tools/openai-readiness/README.md)                      |
-| Full base/E2E reproduction              | Node 26 plus the recorded Python, Lean, Rust, Xvfb and Docker prerequisites                | [Full smoke report](docs/research/smoke-validation-2026-10-19/RESULTS.md) |
-| Native platform checks                  | Real macOS/Swift or Windows/.NET host as specified by the workflow                         | [Native CI workflow](.github/workflows/provider-transfer-native.yml)      |
+| Task                                    | Environment                                                                                                                                                           | Entry point                                                               |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| Current credential-free evidence replay | Full Git history, Python 3.12, hash-locked SDK/workflow dependencies, **Linux x86_64** (the worker's seccomp filter); run `tools/replay-preflight/preflight.py` first | [README replay](README.md#replay-the-evidence)                            |
+| Python tool suites (`tools/*/tests`)    | Linux x86_64 with the packages each workflow installs; most suites error on macOS or ARM (seccomp, `/proc`, pinned Redis), which is environmental, not a regression   | [Workflows](.github/workflows/)                                           |
+| Dashboard and JSON CLI                  | Node 24 or 26; isolated package lock for UI build                                                                                                                     | [Explorer guide](tools/simurgh-explorer/README.md)                        |
+| Historical offline Node instrument      | Root `npm ci`; Node 22+ for this focused instrument                                                                                                                   | [Instrument guide](tools/openai-readiness/README.md)                      |
+| Full base/E2E reproduction              | Node 26 plus the recorded Python, Lean, Rust, Xvfb and Docker prerequisites                                                                                           | [Full smoke report](docs/research/smoke-validation-2026-10-19/RESULTS.md) |
+| Native platform checks                  | Real macOS/Swift or Windows/.NET host as specified by the workflow                                                                                                    | [Native CI workflow](.github/workflows/provider-transfer-native.yml)      |
 
 Run from the repository root unless a component guide says otherwise. Use `npm ci` and
 committed lockfiles; upgrading a dependency is a separate change with its own validation.

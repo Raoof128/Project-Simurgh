@@ -10,7 +10,7 @@ and ordinary temporary files. No API key, model weights or third-party Python pa
 is needed to replay saved actions. Run on a disposable local test machine.
 
 ```bash
-git clone --branch openai-readiness https://github.com/Raoof128/Project-Simurgh.git
+git clone https://github.com/Raoof128/Project-Simurgh.git
 cd Project-Simurgh
 export PYTHONDONTWRITEBYTECODE=1
 python -m unittest discover -s tools/hf-containment/tests -v

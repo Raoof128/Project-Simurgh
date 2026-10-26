@@ -4973,3 +4973,121 @@ Owner-requested work; implementation and review by Codex assistance.
   Logo SHA-256 remains `d691609b994688823acb185789473d98091b924a7cb7ac1a7f2e473c9668b455`.
 - **Follow-ups:** Full suite and hosted CI still pending at this commit. The original main
   browser failure remains recorded; no browser assertion, timeout or skip behavior was changed.
+
+### 2026-10-26 (Australia/Sydney) — README replay host requirement, CI replay and clean-tree checks
+
+**Raouf: Claude-assisted implementation**
+
+- **Scope:** Maintenance authority `36cfc99a`. Adds an unpinned replay preflight and a README replay
+  workflow; README host requirement; browser timeout diagnostics; macOS temp-path test fix; banking
+  audit, bytecode and `elan-init` hygiene; one `current` census re-pin. No frozen verifier, protocol,
+  evidence archive, proof or pinned source changed (132 pinned paths across 12 protocols: no diff).
+- **Summary:** An independent review found the README demo fails on every host but native Linux
+  x86_64: macOS stops with `database is locked` (the frozen pipeline's `fcntl.flock` on its SQLite
+  file conflicts with SQLite's lock on Darwin) and Linux arm64 or emulated amd64 stop with
+  `worker_refused` (seccomp is Linux x86_64 only; the frozen runner discards the reason). Those
+  sources are hash-pinned, so the repair surrounds them: `tools/replay-preflight/preflight.py` names
+  each unmet prerequisite by reproducing the worker's own bootstrap, the README states the
+  requirement, and `readme-replay.yml` runs the README commands verbatim on `ubuntu-latest`,
+  comparing the demo with the archived report. Browser timeouts now name the stalled CDP step, last
+  fixture value and Chrome stderr, and Chrome gets standard unattended-run flags; the main-only
+  browser timeouts did not reproduce locally, so this is hardening plus diagnostics, not a confirmed
+  root cause. The banking privacy audit writes to a temporary directory unless `--write-evidence`.
+- **Files changed:** `tools/replay-preflight/{preflight.py,tests/test_preflight.py}`,
+  `.github/workflows/readme-replay.yml`,
+  `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json`, `README.md`,
+  `scripts/lib/browserExecutable.mjs`, `tests/unit/maintenance/browserExecutable.test.js`,
+  `tests/unit/openaiReadiness/cli.test.js`, `scripts/privacy-audit-banking-pilot.mjs`, `.gitignore`,
+  two untracked `tools/agentdojo-simurgh-adapter/**/__pycache__/*.pyc`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Preflight 9/9 tests; on macOS it refuses with the platform, flock and seccomp
+  reasons. Stub-browser regression fails on the old helper and passes on the new one. Browser
+  files 20/20 on macOS Chrome and on Linux Chromium; full suite twice in a 4-CPU Linux Chromium
+  container passed both browser tests. Full `npm test` 5,186/5,186 on macOS Node 24.21.0 (main fails
+  two CLI tests there). Stage 5Q 590/590; census 48, set-identical to the pin, `baseline` untouched.
+  Workflow comparator accepts the archived rows and rejects tampered or empty output. Ruff, Prettier
+  and `git diff --check` pass. The banking audit passes and leaves the tree clean.
+- **Follow-ups:** The demo itself has not yet run to completion anywhere in this change: it needs
+  the hosted `readme-replay.yml` run on x86_64. Hosted quality-gate success must be checked on the
+  pushed revision. Other docs still clone `--branch openai-readiness`; some may be pinned, so they
+  were left unchanged.
+
+### 2026-10-26 (Australia/Sydney) — Hosted README replay result and body-parser advisory
+
+**Raouf: Claude-assisted implementation**
+
+- **Scope:** Addendum authority `109f9f50`. `package-lock.json` only; no source, evidence or
+  `package.json` change.
+- **Summary:** PR #140's first hosted run executed the README replay on x86_64 for the first time:
+  `readme-replay` passed (runs 40284904491 and its push twin). The demo printed the eight archived
+  rows (`authorized_reopen` and `operator_restart` observed with one new effect each, `active` and
+  five restricted cases declined, `unknown_prior` retaining one prior effect), matching the README,
+  and the full transfer-study verification passed. The quality gate (run 40284904565) passed
+  `npm test`, including both browser tests that failed on `main`, and reported a clean working
+  tree. It failed six steps on one newly published advisory, GHSA-27r3-jxmh-p828 (`body-parser`
+  < 1.20.9, high), which `express@4.22.3` resolved to 1.20.8. `npm audit fix` moves it to 1.20.9
+  within the declared range.
+- **Files changed:** `package-lock.json`, `docs/superpowers/specs/2026-10-26-readme-replay-maintenance.md`
+  (addendum, separate commit), `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm audit` reports 0 vulnerabilities; full `npm test` 5,186/5,186 on macOS; the
+  five Stage 2.x security audit scripts each exit 0 locally.
+- **Follow-ups:** Confirm the quality gate on the pushed revision. One passing PR run does not
+  establish that the main-only browser timeouts are gone; watch the next pushes to `main`.
+
+### 2026-10-26 (Australia/Sydney) — Documentation corrections from the strict review
+
+**Raouf: Claude-assisted implementation**
+
+- **Scope:** Addendum 2 authority `6df06533`. Current instructions only; no frozen record edited.
+- **Summary:** `CONTRIBUTING.md` now states that the credential-free replay needs Linux x86_64
+  and the preflight, and that the `tools/*/tests` Python suites need Linux x86_64 with the packages
+  their workflows install (31 of 36 suites error on macOS for environmental reasons: seccomp,
+  `/proc/self/task`, pinned Redis, CI-installed packages). `docs/research/reproduction-phase-4/README.md`
+  and `docs/assurance/hf-containment/REPRODUCE.md` clone the default branch; `openai-readiness` is
+  merged.
+- **Files changed:** `CONTRIBUTING.md`, `docs/research/reproduction-phase-4/README.md`,
+  `docs/assurance/hf-containment/REPRODUCE.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Both corrected files are unpinned (not listed in any protocol `sources`);
+  Prettier clean; the 17 log-reading tests pass.
+- **Follow-ups:** None.
+
+### 2026-10-26 (Australia/Sydney) — Restore the adapter bytecode the Stage 4U guard protects
+
+**Raouf: Claude-assisted implementation**
+
+- **Scope:** Addendum 3 to the README replay maintenance. Two files restored byte-for-byte from
+  `cb27617a`; no other change.
+- **Summary:** The first E2E gate reached since `main` went red (run 40313439452 on `5e85b023`,
+  31/32) failed `tests/e2e/llmShield/stage4u/k7AllFunctions.test.js` "read-only kernel": the
+  earlier untracking of `tools/agentdojo-simurgh-adapter/**/__pycache__/*.pyc` was a committed change
+  under the frozen adapter surface. The guard is correct; the untracking is withdrawn. Note that the
+  same main gate run passed 143/143 with both browser tests green.
+- **Files changed:** `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/__pycache__/__init__.cpython-312.pyc`,
+  `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/__pycache__/simurgh_client.cpython-312.pyc`
+  (restored), `docs/superpowers/specs/2026-10-26-readme-replay-maintenance.md`, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** `git diff cb27617a -- tools/agentdojo-simurgh-adapter` is empty; the Stage 4U
+  read-only-kernel test passes locally against `origin/main`.
+- **Follow-ups:** Hosted E2E gate on the pushed revision. The adapter still carries tracked
+  bytecode that CI regenerates; that is cosmetic (committed-state guards ignore it) and belongs to a
+  Stage 4U declaration.
+
+### 2026-10-26 (Australia/Sydney) — Browser-lane diagnostic result and startup hardening
+
+**Raouf: Claude-assisted implementation**
+
+- **Scope:** Addendum 4 to the README replay maintenance; `scripts/lib/browserExecutable.mjs` launch
+  arguments only. No timeout, retry, skip or assertion changed.
+- **Summary:** Two throwaway diagnostics on `diag/browser-flake` (the second reusing the quality
+  gate's exact pre-steps) ran the browser lane 35 times alone and in two full suites with 0
+  failures, against 3 failures in 6 real gate runs; the runner has no `DBUS_SESSION_BUS_ADDRESS`, so
+  the logged D-Bus parse errors are Chromium's own `disabled:` sentinel. The stall is not
+  reproduced. The launch now matches Puppeteer's unattended set and opens an initial `about:blank`
+  tab instead of `--no-startup-window`, so profile initialisation precedes the first CDP command.
+  This is hardening on precedent, not a confirmed fix; the stalled-step diagnostic from the first
+  repair remains in place to name the cause if it recurs.
+- **Files changed:** `scripts/lib/browserExecutable.mjs`,
+  `docs/superpowers/specs/2026-10-26-readme-replay-maintenance.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 20/20 browser tests on macOS Chrome; 20/20 three times on Debian Chromium 156
+  in a Linux container; Prettier clean.
+- **Follow-ups:** Watch the next pushes to `main`; one green gate does not establish that the stall
+  is gone.

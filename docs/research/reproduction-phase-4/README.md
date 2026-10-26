@@ -25,7 +25,7 @@ Use the published `openai-readiness` branch including the evidence commit, and r
 the exact checked-out revision. Obtain that revision through a channel you trust:
 
 ```sh
-git clone --branch openai-readiness https://github.com/Raoof128/Project-Simurgh.git
+git clone https://github.com/Raoof128/Project-Simurgh.git
 cd Project-Simurgh
 git rev-parse HEAD
 ```

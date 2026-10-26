@@ -123,13 +123,20 @@ These documentation checks do not refresh implementation test receipts or establ
 
 ## Replay the evidence
 
-**No API key, model download or paid inference is needed.** Use a full Git checkout,
-Python 3.12 and a POSIX environment with local process and loopback networking support.
+**No API key, model download or paid inference is needed.** Use a full Git checkout and
+Python 3.12 on **Linux x86_64** with local process and loopback networking support.
 Dependency installation needs package-index access; the replay itself uses local services.
 Keep Git history: the verifier checks committed source bytes as well as live files.
 
+**Host requirement.** The replay runs every proposal in a worker locked down by a Linux x86_64
+seccomp filter, and its frozen sources cannot change without invalidating the evidence. On
+macOS it stops with `database is locked`; on Linux ARM, or x86_64 emulation such as Docker
+on Apple silicon, with `worker_refused`. Use a native x86_64 Linux machine, VM or CI runner.
+The preflight below names any unmet prerequisite before the replay starts, and the
+[README replay workflow](.github/workflows/readme-replay.yml) runs these commands in CI.
+
 ```sh
-git clone --branch openai-readiness https://github.com/Raoof128/Project-Simurgh.git
+git clone https://github.com/Raoof128/Project-Simurgh.git
 cd Project-Simurgh
 git rev-parse HEAD
 
@@ -138,6 +145,8 @@ python3.12 -m venv "$simurgh_review_dir/venv"
 "$simurgh_review_dir/venv/bin/python" -m pip install --require-hashes --only-binary=:all: \
   -r tools/assurance-sdk/requirements.lock \
   -r tools/assurance-workflow/requirements.lock
+
+"$simurgh_review_dir/venv/bin/python" -B tools/replay-preflight/preflight.py
 
 "$simurgh_review_dir/venv/bin/python" -B tools/assurance-provider-role/corrected_roles.py demo \
   --archive docs/research/provider-role-phase-17b/evidence.zip \
