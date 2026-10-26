@@ -4264,3 +4264,20 @@ Owner-requested work; implementation and review by Codex assistance.
   five Stage 2.x security audit scripts each exit 0 locally.
 - **Follow-ups:** Confirm the quality gate on the pushed revision. One passing PR run does not
   establish that the main-only browser timeouts are gone; watch the next pushes to `main`.
+
+### 2026-10-26 (Australia/Sydney) — Documentation corrections from the strict review
+
+**Raouf: Claude-assisted implementation**
+
+- **Scope:** Addendum 2 authority `6df06533`. Current instructions only; no frozen record edited.
+- **Summary:** `CONTRIBUTING.md` now states that the credential-free replay needs Linux x86_64
+  and the preflight, and that the `tools/*/tests` Python suites need Linux x86_64 with the packages
+  their workflows install (31 of 36 suites error on macOS for environmental reasons: seccomp,
+  `/proc/self/task`, pinned Redis, CI-installed packages). `docs/research/reproduction-phase-4/README.md`
+  and `docs/assurance/hf-containment/REPRODUCE.md` clone the default branch; `openai-readiness` is
+  merged.
+- **Files changed:** `CONTRIBUTING.md`, `docs/research/reproduction-phase-4/README.md`,
+  `docs/assurance/hf-containment/REPRODUCE.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Both corrected files are unpinned (not listed in any protocol `sources`);
+  Prettier clean; the 17 log-reading tests pass.
+- **Follow-ups:** None.
