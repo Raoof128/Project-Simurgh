@@ -4351,3 +4351,29 @@ Owner-requested work; implementation and review by Codex assistance.
   rejection itself is unverified until the hosted `evidence-mutations` job runs.
 - **Follow-ups:** Confirm the hosted job on the pushed revision. Branch is stacked on
   `fix/replay-demo-platform` (PR #140), so it lands after that PR.
+
+### 2026-10-26 (Australia/Sydney) — Browser-lane launch budget and launch serialisation
+
+**Raouf: Claude-assisted implementation**
+
+- **Scope:** Maintenance authority `1ff10bc2`. `scripts/lib/browserExecutable.mjs` and its test file
+  only. No parity assertion, retry, skip or fixture-page change; the 30 s fixture budget is unchanged.
+- **Summary:** Eight fresh `ubuntu-latest` jobs running the full suite (run 40320690955) measured
+  Chrome's `Target.createTarget` at 10–29 s under the concurrently running suite, inside the helper's
+  single 30 s budget; three browser files launching at once starved each other (one job: no reply
+  from any of three launches). That, not D-Bus (the runner has no bus address; the parse errors are
+  Chromium's own `disabled:` sentinel), was the main-branch stall. The helper now serialises launches
+  with a cross-process lock held from spawn to the first CDP reply, and bounds process start with its
+  own fail-closed `launchTimeoutMs` (120 s); `timeoutMs` (30 s) then measures the fixture's work from
+  that reply. Timeout messages name the budget, the pending step, every completed step's duration and
+  Chrome's stderr. Re-measured on eight fresh cold runners (run 40322059697 on the diagnostic branch):
+  8/8 browser lanes passed with parity durations 1.7–32 s, versus 5/8 failing before.
+- **Files changed:** `scripts/lib/browserExecutable.mjs`,
+  `tests/unit/maintenance/browserExecutable.test.js`,
+  `docs/superpowers/specs/2026-10-26-browser-launch-budget.md` (separate commit), `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** 23/23 browser-lane tests on macOS Chrome and twice on Debian Chromium 156 in a
+  Linux container, including four new regressions (launch budget named, lock held and released, second
+  launch waits, stale lock cleared). Prettier clean. The eight-job measurement above.
+- **Follow-ups:** Watch the next pushes to `main`. The diagnostic branch `diag/browser-cold` is
+  deleted after this entry; its runs stay in the Actions history.
