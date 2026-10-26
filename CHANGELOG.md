@@ -5134,7 +5134,7 @@ Owner-requested work; implementation and review by Codex assistance.
   with a cross-process lock held from spawn to the first CDP reply, and bounds process start with its
   own fail-closed `launchTimeoutMs` (120 s); `timeoutMs` (30 s) then measures the fixture's work from
   that reply. Timeout messages name the budget, the pending step, every completed step's duration and
-  Chrome's stderr. Re-measured on eight fresh cold runners (run 40321373967 on the diagnostic branch):
+  Chrome's stderr. Re-measured on eight fresh cold runners (run 40322059697 on the diagnostic branch):
   8/8 browser lanes passed with parity durations 1.7–32 s, versus 5/8 failing before.
 - **Files changed:** `scripts/lib/browserExecutable.mjs`,
   `tests/unit/maintenance/browserExecutable.test.js`,
