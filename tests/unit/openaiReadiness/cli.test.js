@@ -1,13 +1,23 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { mkdtempSync, readFileSync, writeFileSync, symlinkSync, rmSync } from "node:fs";
+import {
+  mkdtempSync,
+  readFileSync,
+  realpathSync,
+  writeFileSync,
+  symlinkSync,
+  rmSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 const runner = new URL("../../../tools/openai-readiness/run.mjs", import.meta.url);
 const verifier = new URL("../../../tools/openai-readiness/verify.mjs", import.meta.url);
+// Resolve the temporary root: on macOS it sits behind the /var -> /private/var symlink, which the
+// CLI rightly refuses as an output parent, so an unresolved root would fail or pass for the wrong reason.
+const tempDir = (prefix) => realpathSync(mkdtempSync(join(tmpdir(), prefix)));
 test("offline CLI creates verifiable artifact and refuses overwrites and symlinks", () => {
-  const dir = mkdtempSync(join(tmpdir(), "simurgh-cli-"));
+  const dir = tempDir("simurgh-cli-");
   const out = join(dir, "report.json");
   try {
     execFileSync(process.execPath, [runner.pathname, "--out", out]);
@@ -31,7 +41,7 @@ test("live CLI requires explicit consent before any API call", () => {
   assert.match(result.stderr, /allow-live/);
 });
 test("mock provider runs through live CLI, records failures and exits nonzero", () => {
-  const dir = mkdtempSync(join(tmpdir(), "simurgh-live-cli-"));
+  const dir = tempDir("simurgh-live-cli-");
   const out = join(dir, "report.json");
   try {
     const preloader = join(dir, "mock.mjs");
@@ -62,7 +72,7 @@ test("mock provider runs through live CLI, records failures and exits nonzero", 
   }
 });
 test("output refuses symlink parents", () => {
-  const dir = mkdtempSync(join(tmpdir(), "simurgh-symlink-"));
+  const dir = tempDir("simurgh-symlink-");
   try {
     symlinkSync(dir, join(dir, "linked"), "dir");
     assert.notEqual(
@@ -76,7 +86,7 @@ test("output refuses symlink parents", () => {
   }
 });
 test("verifier rejects oversized artifacts without echoing their contents", () => {
-  const dir = mkdtempSync(join(tmpdir(), "simurgh-large-"));
+  const dir = tempDir("simurgh-large-");
   try {
     const path = join(dir, "large.json");
     writeFileSync(path, "PRIVATE_SENTINEL".repeat(800000));
@@ -89,7 +99,7 @@ test("verifier rejects oversized artifacts without echoing their contents", () =
   }
 });
 test("verifier rejects FIFO input without blocking", () => {
-  const dir = mkdtempSync(join(tmpdir(), "simurgh-fifo-"));
+  const dir = tempDir("simurgh-fifo-");
   try {
     const fifo = join(dir, "report.fifo");
     execFileSync("mkfifo", [fifo]);

@@ -1,0 +1,83 @@
+name: README replay demo
+
+# Runs the README's "Replay the evidence" commands exactly as written, on the only host class
+# they support (Linux x86_64 with seccomp). Before this workflow no CI job exercised them.
+
+on:
+  push:
+    paths:
+      - ".github/workflows/readme-replay.yml"
+      - "README.md"
+      - "tools/**"
+      - "docs/research/provider-role-phase-17b/**"
+      - "docs/research/transfer-phase-17/**"
+  pull_request:
+    paths:
+      - ".github/workflows/readme-replay.yml"
+      - "README.md"
+      - "tools/**"
+      - "docs/research/provider-role-phase-17b/**"
+      - "docs/research/transfer-phase-17/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  readme-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    defaults:
+      run:
+        # Explicit bash runs with pipefail, so a failing demo cannot hide behind `tee`.
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install the README's hash-locked dependencies and test the preflight
+        run: |
+          python -m pip install --require-hashes --only-binary=:all: -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock
+          python -m pip check
+          python -m unittest discover -s tools/replay-preflight/tests -v
+      - name: Preflight the replay host
+        run: python -B tools/replay-preflight/preflight.py
+      - name: Run the README provider-role demo and compare it with the archived report
+        run: |
+          python -B tools/assurance-provider-role/corrected_roles.py demo \
+            --archive docs/research/provider-role-phase-17b/evidence.zip \
+            --expected-root "$(cat docs/research/provider-role-phase-17b/ROOT.sha256)" | tee demo.out
+          python -B - demo.out <<'PY'
+          import json, sys, zipfile
+          from pathlib import Path
+          archive = "docs/research/provider-role-phase-17b/evidence.zip"
+          rows = json.loads(zipfile.ZipFile(archive).read("report.json"))["rows"]
+          expected = [
+              f"{r['case']} {r['status']} new effects: {r['new_effects']} prior: {r['prior_effects']}"
+              for r in rows
+          ]
+          actual = Path(sys.argv[1]).read_text().splitlines()
+          if actual != expected:
+              sys.exit("demo output differs from the archived report:\n" + "\n".join(actual))
+          new = [r for r in rows if r["new_effects"]]
+          declined = [r for r in rows if r["status"] == "declined"]
+          prior = [r for r in rows if r["prior_effects"]]
+          # The README's stated result: eight rows, two new authorized effects, one active and
+          # five restricted declines, and the unknown-acknowledgement case keeps one prior effect.
+          assert len(rows) == 8, len(rows)
+          assert [r["new_effects"] for r in new] == [1, 1], new
+          assert len(declined) == 6 and declined[0]["case"] == "active", declined
+          assert [(r["case"], r["prior_effects"]) for r in prior] == [("unknown_prior", 1)], prior
+          print("README demo matches the archived report and the README's stated result")
+          PY
+      - name: Run the README complete comparative-study verification
+        run: |
+          python -B tools/assurance-transfer/transfer_study.py verify \
+            --archive docs/research/transfer-phase-17/evidence.zip \
+            --expected-root "$(cat docs/research/transfer-phase-17/ROOT.sha256)" > transfer-verify.json
+          python -c "import json; json.load(open('transfer-verify.json')); print('transfer study verified')"

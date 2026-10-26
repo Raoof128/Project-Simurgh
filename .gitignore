@@ -81,3 +81,6 @@ tools/simurgh-attestation/stage4r/byo/simurgh-reviewer-identity-key.pem
 
 # Sendable bundle, rebuilt on demand from the versioned directory.
 stage5p-independent-verification.tar.gz
+
+# Lean installer the CI quality gate downloads into the checkout root
+/elan-init

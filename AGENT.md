@@ -4205,3 +4205,40 @@ Owner-requested work; implementation and review by Codex assistance.
   Logo SHA-256 remains `d691609b994688823acb185789473d98091b924a7cb7ac1a7f2e473c9668b455`.
 - **Follow-ups:** Full suite and hosted CI still pending at this commit. The original main
   browser failure remains recorded; no browser assertion, timeout or skip behavior was changed.
+
+### 2026-10-26 (Australia/Sydney) — README replay host requirement, CI replay and clean-tree checks
+
+**Raouf: Claude-assisted implementation**
+
+- **Scope:** Maintenance authority `36cfc99a`. Adds an unpinned replay preflight and a README replay
+  workflow; README host requirement; browser timeout diagnostics; macOS temp-path test fix; banking
+  audit, bytecode and `elan-init` hygiene; one `current` census re-pin. No frozen verifier, protocol,
+  evidence archive, proof or pinned source changed (132 pinned paths across 12 protocols: no diff).
+- **Summary:** An independent review found the README demo fails on every host but native Linux
+  x86_64: macOS stops with `database is locked` (the frozen pipeline's `fcntl.flock` on its SQLite
+  file conflicts with SQLite's lock on Darwin) and Linux arm64 or emulated amd64 stop with
+  `worker_refused` (seccomp is Linux x86_64 only; the frozen runner discards the reason). Those
+  sources are hash-pinned, so the repair surrounds them: `tools/replay-preflight/preflight.py` names
+  each unmet prerequisite by reproducing the worker's own bootstrap, the README states the
+  requirement, and `readme-replay.yml` runs the README commands verbatim on `ubuntu-latest`,
+  comparing the demo with the archived report. Browser timeouts now name the stalled CDP step, last
+  fixture value and Chrome stderr, and Chrome gets standard unattended-run flags; the main-only
+  browser timeouts did not reproduce locally, so this is hardening plus diagnostics, not a confirmed
+  root cause. The banking privacy audit writes to a temporary directory unless `--write-evidence`.
+- **Files changed:** `tools/replay-preflight/{preflight.py,tests/test_preflight.py}`,
+  `.github/workflows/readme-replay.yml`,
+  `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json`, `README.md`,
+  `scripts/lib/browserExecutable.mjs`, `tests/unit/maintenance/browserExecutable.test.js`,
+  `tests/unit/openaiReadiness/cli.test.js`, `scripts/privacy-audit-banking-pilot.mjs`, `.gitignore`,
+  two untracked `tools/agentdojo-simurgh-adapter/**/__pycache__/*.pyc`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Preflight 9/9 tests; on macOS it refuses with the platform, flock and seccomp
+  reasons. Stub-browser regression fails on the old helper and passes on the new one. Browser
+  files 20/20 on macOS Chrome and on Linux Chromium; full suite twice in a 4-CPU Linux Chromium
+  container passed both browser tests. Full `npm test` 5,186/5,186 on macOS Node 24.21.0 (main fails
+  two CLI tests there). Stage 5Q 590/590; census 48, set-identical to the pin, `baseline` untouched.
+  Workflow comparator accepts the archived rows and rejects tampered or empty output. Ruff, Prettier
+  and `git diff --check` pass. The banking audit passes and leaves the tree clean.
+- **Follow-ups:** The demo itself has not yet run to completion anywhere in this change: it needs
+  the hosted `readme-replay.yml` run on x86_64. Hosted quality-gate success must be checked on the
+  pushed revision. Other docs still clone `--branch openai-readiness`; some may be pinned, so they
+  were left unchanged.

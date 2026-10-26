@@ -48,6 +48,13 @@ export async function browserResult(chrome, url, { timeoutMs = 30000 } = {}) {
       "--disable-gpu",
       "--disable-dev-shm-usage",
       "--disable-background-networking",
+      // Unattended-run defaults (as Puppeteer uses): no keyring/D-Bus lookup at startup and no
+      // throttling of a page the harness polls but never shows.
+      "--password-store=basic",
+      "--disable-background-timer-throttling",
+      "--disable-backgrounding-occluded-windows",
+      "--disable-renderer-backgrounding",
+      "--disable-component-update",
       "--no-first-run",
       "--no-default-browser-check",
       "--allow-file-access-from-files",
@@ -61,8 +68,17 @@ export async function browserResult(chrome, url, { timeoutMs = 30000 } = {}) {
     pending = new Map(),
     buffer = "",
     stderr = "",
-    failure;
-  const deadline = Date.now() + timeoutMs;
+    failure,
+    lastValue;
+  const started = Date.now();
+  const deadline = started + timeoutMs;
+  // A timeout names the protocol step that stalled and keeps the browser's own output, so a
+  // hosted failure is diagnosable from its log rather than reproduced by guesswork.
+  const timedOut = (method) =>
+    new Error(
+      `browser result timed out after ${Date.now() - started}ms awaiting ${method}; ` +
+        `last #out ${JSON.stringify(lastValue ?? null)}; stderr: ${stderr.slice(-1200) || "(empty)"}`
+    );
   const fail = (error) => {
     failure = error;
     for (const entry of pending.values()) {
@@ -106,11 +122,11 @@ export async function browserResult(chrome, url, { timeoutMs = 30000 } = {}) {
     new Promise((resolve, reject) => {
       if (failure) return reject(failure);
       const remaining = deadline - Date.now();
-      if (remaining <= 0) return reject(new Error("browser result timed out"));
+      if (remaining <= 0) return reject(timedOut(method));
       const requestId = ++id;
       const timer = setTimeout(() => {
         pending.delete(requestId);
-        reject(new Error("browser result timed out"));
+        reject(timedOut(method));
       }, remaining);
       pending.set(requestId, { resolve, reject, timer });
       child.stdio[3].write(
@@ -134,10 +150,11 @@ export async function browserResult(chrome, url, { timeoutMs = 30000 } = {}) {
       );
       if (result.exceptionDetails) throw new Error("browser fixture evaluation failed");
       const value = result.result?.value;
+      lastValue = value;
       if (value && value !== "running…") return JSON.parse(value);
       await new Promise((resolve) => setTimeout(resolve, 25));
     }
-    throw new Error("browser result timed out");
+    throw timedOut("a fixture result");
   } finally {
     fail(new Error("browser closed"));
     child.kill();
