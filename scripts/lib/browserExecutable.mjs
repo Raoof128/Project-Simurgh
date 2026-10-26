@@ -48,19 +48,41 @@ export async function browserResult(chrome, url, { timeoutMs = 30000 } = {}) {
       "--disable-gpu",
       "--disable-dev-shm-usage",
       "--disable-background-networking",
-      // Unattended-run defaults (as Puppeteer uses): no keyring/D-Bus lookup at startup and no
-      // throttling of a page the harness polls but never shows.
+      // Unattended-run defaults, aligned with Puppeteer's launch set: nothing below changes what
+      // the fixture page can do, only what the browser process does at startup (no crash
+      // handler, keyring, field trials, extensions, sync, Cast/mDNS discovery or hang monitor).
+      // Hosted gate runs stalled before the first CDP reply at a rate no diagnostic reproduced
+      // (0 of 37 runs); these are the startup paths an unattended CI browser does not need.
       "--password-store=basic",
+      "--use-mock-keychain",
       "--disable-background-timer-throttling",
       "--disable-backgrounding-occluded-windows",
       "--disable-renderer-backgrounding",
       "--disable-component-update",
+      "--disable-breakpad",
+      "--disable-crash-reporter",
+      "--disable-client-side-phishing-detection",
+      "--disable-component-extensions-with-background-pages",
+      "--disable-default-apps",
+      "--disable-extensions",
+      "--disable-field-trial-config",
+      "--disable-hang-monitor",
+      "--disable-ipc-flooding-protection",
+      "--disable-popup-blocking",
+      "--disable-prompt-on-repost",
+      "--disable-search-engine-choice-screen",
+      "--disable-sync",
+      "--disable-features=Translate,AcceptCHFrame,MediaRouter,OptimizationHints",
+      "--enable-automation",
+      "--metrics-recording-only",
       "--no-first-run",
       "--no-default-browser-check",
       "--allow-file-access-from-files",
       "--remote-debugging-pipe",
-      "--no-startup-window",
       `--user-data-dir=${profile}`,
+      // An initial blank tab, as Puppeteer launches, so the profile is initialised before the
+      // first Target.createTarget instead of lazily by it under --no-startup-window.
+      "about:blank",
     ],
     { stdio: ["ignore", "ignore", "pipe", "pipe", "pipe"] }
   );

@@ -5070,3 +5070,24 @@ Owner-requested work; implementation and review by Codex assistance.
 - **Follow-ups:** Hosted E2E gate on the pushed revision. The adapter still carries tracked
   bytecode that CI regenerates; that is cosmetic (committed-state guards ignore it) and belongs to a
   Stage 4U declaration.
+
+### 2026-10-26 (Australia/Sydney) — Browser-lane diagnostic result and startup hardening
+
+**Raouf: Claude-assisted implementation**
+
+- **Scope:** Addendum 4 to the README replay maintenance; `scripts/lib/browserExecutable.mjs` launch
+  arguments only. No timeout, retry, skip or assertion changed.
+- **Summary:** Two throwaway diagnostics on `diag/browser-flake` (the second reusing the quality
+  gate's exact pre-steps) ran the browser lane 35 times alone and in two full suites with 0
+  failures, against 3 failures in 6 real gate runs; the runner has no `DBUS_SESSION_BUS_ADDRESS`, so
+  the logged D-Bus parse errors are Chromium's own `disabled:` sentinel. The stall is not
+  reproduced. The launch now matches Puppeteer's unattended set and opens an initial `about:blank`
+  tab instead of `--no-startup-window`, so profile initialisation precedes the first CDP command.
+  This is hardening on precedent, not a confirmed fix; the stalled-step diagnostic from the first
+  repair remains in place to name the cause if it recurs.
+- **Files changed:** `scripts/lib/browserExecutable.mjs`,
+  `docs/superpowers/specs/2026-10-26-readme-replay-maintenance.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 20/20 browser tests on macOS Chrome; 20/20 three times on Debian Chromium 156
+  in a Linux container; Prettier clean.
+- **Follow-ups:** Watch the next pushes to `main`; one green gate does not establish that the stall
+  is gone.

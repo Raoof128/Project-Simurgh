@@ -99,3 +99,16 @@ surface this maintenance has no authority over. The two files are restored byte-
 `cb27617a`; the "untrack" row above is withdrawn. The clean working tree after the quality gate
 came from the banking audit change and does not depend on these files. Removing tracked bytecode
 from the adapter directory needs a Stage 4U declaration of its own.
+
+## Addendum 4 — 26 October 2026, browser-lane diagnostic result and startup hardening
+
+Two throwaway diagnostic workflows on branch `diag/browser-flake` (runs 40313212176 and
+40314303342, the second reusing this gate's exact pre-steps) ran the two real-browser test files 35
+times alone and inside two full `npm test` runs: 0 browser failures, against 3 failures in 6 real
+gate runs. `DBUS_SESSION_BUS_ADDRESS` is unset on the runner, so the `Could not parse server
+address` lines are Chromium's own `disabled:` sentinel, not a cause. The cause is still not
+reproduced. Within the existing `scripts/lib/browserExecutable.mjs` row, the launch is aligned with
+Puppeteer's unattended set (no crash handler, keyring, field trials, extensions, sync, Cast/mDNS
+discovery or hang monitor) and starts with an initial `about:blank` tab so the profile is
+initialised before the first `Target.createTarget` rather than lazily by it. No timeout, retry,
+skip or assertion changes. The diagnostic branch is deleted after this note.
