@@ -4328,7 +4328,7 @@ Owner-requested work; implementation and review by Codex assistance.
 
 **Raouf: Claude-assisted implementation**
 
-- **Scope:** Maintenance authority `8b0e87e6`. New unpinned tool and workflow; README row;
+- **Scope:** Maintenance authority `015f8081`. New unpinned tool and workflow; README row;
   dated note in `docs/research/transfer-phase-17/VALIDATION.md`. No pinned source, protocol,
   archive or recorded validation row changed; `validation-logs.zip` is byte-identical.
 - **Summary:** The strict review of PR #140 found the README's "10 deliberate mutations rejected"
