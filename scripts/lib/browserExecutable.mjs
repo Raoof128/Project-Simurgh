@@ -1,5 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-import { accessSync, constants, mkdtempSync, rmSync } from "node:fs";
+import {
+  accessSync,
+  constants,
+  mkdirSync,
+  mkdtempSync,
+  rmdirSync,
+  rmSync,
+  statSync,
+} from "node:fs";
 import { delimiter, join } from "node:path";
 import { tmpdir } from "node:os";
 import { spawn } from "node:child_process";
@@ -28,9 +36,51 @@ export function findBrowser(env = process.env, available = executable) {
   ];
   return candidates.find(available) || null;
 }
+// Chrome launches from concurrently running test files are serialised. On a 4-vCPU hosted runner
+// three simultaneous cold starts starved each other past the whole budget (run 40320690955). The
+// lock is a directory, created atomically, held from spawn until the browser's first CDP reply and
+// then released so the next file can launch; a lock older than the launch budget is stale.
+// The path is read per launch so a test can give itself a private lock.
+export const launchLockPath = () =>
+  process.env.SIMURGH_CHROME_LAUNCH_LOCK || join(tmpdir(), "simurgh-chrome-launch.lock");
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+async function acquireLaunchLock(deadline, staleMs) {
+  const lock = launchLockPath();
+  for (;;) {
+    try {
+      mkdirSync(lock);
+      return () => {
+        try {
+          rmdirSync(lock);
+        } catch {
+          /* already released */
+        }
+      };
+    } catch (error) {
+      if (error.code !== "EEXIST") throw error;
+    }
+    try {
+      if (Date.now() - statSync(lock).mtimeMs > staleMs) rmdirSync(lock);
+    } catch {
+      /* released by its owner between the two calls */
+    }
+    if (Date.now() >= deadline) return null;
+    await sleep(50);
+  }
+}
+
 // Use Chrome's local debugging pipe: no listening port and no dependency on --dump-dom.
 // Only trusted repository fixture pages may be passed; --no-sandbox is for this owned harness.
-export async function browserResult(chrome, url, { timeoutMs = 30000 } = {}) {
+//
+// Two budgets, both fail-closed. Process start under load is bounded by launchTimeoutMs and
+// measured to the first CDP reply; the fixture's work is bounded by timeoutMs from that reply.
+// Eight fresh-runner jobs measured Target.createTarget at 10-29 s while the rest of the suite ran,
+// so one shared 30 s budget failed whenever startup alone consumed most of it.
+export async function browserResult(
+  chrome,
+  url,
+  { timeoutMs = 30000, launchTimeoutMs = 120000 } = {}
+) {
   const parsed = new URL(url);
   if (
     parsed.protocol !== "http:" ||
@@ -39,6 +89,12 @@ export async function browserResult(chrome, url, { timeoutMs = 30000 } = {}) {
     parsed.password
   )
     throw new Error("only loopback fixture URLs are allowed");
+  const launchStarted = Date.now();
+  let release = await acquireLaunchLock(launchStarted + launchTimeoutMs, launchTimeoutMs + 5000);
+  if (!release)
+    throw new Error(
+      `browser launch lock not acquired within ${launchTimeoutMs}ms: another launch is still starting`
+    );
   const profile = mkdtempSync(join(tmpdir(), "simurgh-chrome-"));
   const child = spawn(
     chrome,
@@ -92,13 +148,18 @@ export async function browserResult(chrome, url, { timeoutMs = 30000 } = {}) {
     stderr = "",
     failure,
     lastValue;
-  const started = Date.now();
-  const deadline = started + timeoutMs;
-  // A timeout names the protocol step that stalled and keeps the browser's own output, so a
-  // hosted failure is diagnosable from its log rather than reproduced by guesswork.
+  let phase = "launch";
+  let phaseStarted = launchStarted;
+  let deadline = launchStarted + launchTimeoutMs;
+  // A timeout names the budget and the protocol step that stalled, how long each completed step
+  // took, and the browser's own output, so a hosted failure is diagnosable from its log rather
+  // than reproduced by guesswork. The per-step record matters: within one budget the step named
+  // as pending is not necessarily the slow one.
+  const completed = [];
   const timedOut = (method) =>
     new Error(
-      `browser result timed out after ${Date.now() - started}ms awaiting ${method}; ` +
+      `browser ${phase} timed out after ${Date.now() - phaseStarted}ms awaiting ${method}; ` +
+        `completed: ${completed.join(", ") || "(none)"}; ` +
         `last #out ${JSON.stringify(lastValue ?? null)}; stderr: ${stderr.slice(-1200) || "(empty)"}`
     );
   const fail = (error) => {
@@ -146,11 +207,26 @@ export async function browserResult(chrome, url, { timeoutMs = 30000 } = {}) {
       const remaining = deadline - Date.now();
       if (remaining <= 0) return reject(timedOut(method));
       const requestId = ++id;
+      const sent = Date.now();
       const timer = setTimeout(() => {
         pending.delete(requestId);
         reject(timedOut(method));
       }, remaining);
-      pending.set(requestId, { resolve, reject, timer });
+      const settle = (fn) => (value) => {
+        // Only the first few steps are informative; the evaluate poll repeats until #out fills.
+        if (completed.length < 6) completed.push(`${method} ${Date.now() - sent}ms`);
+        if (phase === "launch") {
+          // The browser has answered: launch is over, the fixture budget starts, the next
+          // concurrently running file may launch its own browser.
+          phase = "result";
+          phaseStarted = Date.now();
+          deadline = phaseStarted + timeoutMs;
+          release?.();
+          release = null;
+        }
+        fn(value);
+      };
+      pending.set(requestId, { resolve: settle(resolve), reject: settle(reject), timer });
       child.stdio[3].write(
         JSON.stringify({ id: requestId, method, params, ...(sessionId ? { sessionId } : {}) }) +
           "\0"
@@ -178,6 +254,7 @@ export async function browserResult(chrome, url, { timeoutMs = 30000 } = {}) {
     }
     throw timedOut("a fixture result");
   } finally {
+    release?.();
     fail(new Error("browser closed"));
     child.kill();
     const force = setTimeout(() => child.kill("SIGKILL"), 2000);
