@@ -4323,3 +4323,31 @@ Owner-requested work; implementation and review by Codex assistance.
   in a Linux container; Prettier clean.
 - **Follow-ups:** Watch the next pushes to `main`; one green gate does not establish that the stall
   is gone.
+
+### 2026-10-26 (Australia/Sydney) — Evidence mutation checks committed as a test lane
+
+**Raouf: Claude-assisted implementation**
+
+- **Scope:** Maintenance authority `8b0e87e6`. New unpinned tool and workflow; README row;
+  dated note in `docs/research/transfer-phase-17/VALIDATION.md`. No pinned source, protocol,
+  archive or recorded validation row changed; `validation-logs.zip` is byte-identical.
+- **Summary:** The strict review of PR #140 found the README's "10 deliberate mutations rejected"
+  rested on a script inside `validation-logs.zip` that no test or workflow runs, hard-codes
+  `/workspace/Project-Simurgh`, and passes `replay=False` throughout. `tools/evidence-mutations/`
+  ports the ten mutations with their recorded reason codes as one test each, resolving the root from
+  `__file__`, and adds the check the logged script could not make: a role archive whose flipped
+  `new_effects`, manifest entry and root all agree passes `read_pack` (asserted on every host) and
+  must be rejected by the fresh replay with `role_report_mismatch` (Linux x86_64 only; reported
+  SKIPPED elsewhere, and the workflow fails if the runner skips it). The census did not classify
+  the new step as a completeness gate, so `problem-gate-set.json` is untouched.
+- **Files changed:** `tools/evidence-mutations/{mutations.py,tests/test_mutations.py}`,
+  `.github/workflows/evidence-mutations.yml`, `README.md`,
+  `docs/research/transfer-phase-17/VALIDATION.md`,
+  `docs/superpowers/specs/2026-10-26-evidence-mutation-lane.md` (separate commit), `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** `mutations.py` 10/10 rejected on macOS with the logged codes; suite 14 tests,
+  13 passed and the replay check skipped on macOS; Ruff check and format clean; census 48,
+  set-identical to the pin; Prettier clean; empty diff on every protocol-pinned path. The replay
+  rejection itself is unverified until the hosted `evidence-mutations` job runs.
+- **Follow-ups:** Confirm the hosted job on the pushed revision. Branch is stacked on
+  `fix/replay-demo-platform` (PR #140), so it lands after that PR.

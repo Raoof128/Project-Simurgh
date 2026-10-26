@@ -1,0 +1,50 @@
+name: Evidence mutation rejections
+
+# The ten mutations recorded in docs/research/transfer-phase-17/validation-logs.zip, run as
+# tests, plus a consistently re-signed role archive that only the fresh replay can reject.
+# The replay needs the worker's Linux x86_64 seccomp filter, so the job runs on ubuntu-latest.
+
+on:
+  push:
+    paths:
+      - ".github/workflows/evidence-mutations.yml"
+      - "tools/evidence-mutations/**"
+      - "docs/research/provider-role-phase-17b/**"
+      - "docs/research/transfer-phase-17/**"
+  pull_request:
+    paths:
+      - ".github/workflows/evidence-mutations.yml"
+      - "tools/evidence-mutations/**"
+      - "docs/research/provider-role-phase-17b/**"
+      - "docs/research/transfer-phase-17/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evidence-mutations:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install the hash-locked dependencies
+        run: |
+          python -m pip install --require-hashes --only-binary=:all: -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock
+          python -m pip check
+      - name: Reject every logged mutation and the re-signed archive
+        run: |
+          python -B tools/evidence-mutations/mutations.py
+          python -B -m unittest discover -s tools/evidence-mutations/tests -v 2>&1 | tee mutation-tests.log
+          # The replay check must have RUN here, not skipped: an x86_64 runner has no excuse.
+          if grep -q "test_replay_rejects_the_resigned_archive .* skipped" mutation-tests.log; then
+            echo "the replay check was skipped on the one host that can run it"; exit 1
+          fi
+          grep -q "^OK" mutation-tests.log
