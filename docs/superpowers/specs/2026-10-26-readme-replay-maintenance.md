@@ -69,3 +69,15 @@ empty. The macOS and ARM limits are documented, not removed. A browser failure r
 no retry-to-green, skip, longer timeout or weakened assertion is authorized, and the browser flags
 are hardening, not a confirmed root cause. Hosted success must be checked against the pushed
 revision before any passing claim.
+
+## Addendum — 26 October 2026, after the first hosted run
+
+PR #140's quality gate (run 40284904565) passed `npm test` and reported a clean working tree, but
+failed `npm audit` and five Stage 2.x security audits that re-run it: advisory GHSA-27r3-jxmh-p828
+(high) affects `body-parser` < 1.20.9, which `express@4.22.3` resolves to 1.20.8. The advisory
+post-dates the 23 October runs that passed `npm audit`; it is unrelated to the changes above.
+
+| Exact path                 | Operation | Purpose                                                                                             |
+| -------------------------- | --------- | --------------------------------------------------------------------------------------------------- |
+| `package-lock.json`        | modify    | `npm audit fix` within declared ranges: `body-parser` 1.20.8 → 1.20.9. `package.json` is unchanged. |
+| `AGENT.md`, `CHANGELOG.md` | append    | Record the hosted results and the dependency remediation.                                           |
