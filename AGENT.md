@@ -4281,3 +4281,24 @@ Owner-requested work; implementation and review by Codex assistance.
 - **Verification:** Both corrected files are unpinned (not listed in any protocol `sources`);
   Prettier clean; the 17 log-reading tests pass.
 - **Follow-ups:** None.
+
+### 2026-10-26 (Australia/Sydney) — Restore the adapter bytecode the Stage 4U guard protects
+
+**Raouf: Claude-assisted implementation**
+
+- **Scope:** Addendum 3 to the README replay maintenance. Two files restored byte-for-byte from
+  `cb27617a`; no other change.
+- **Summary:** The first E2E gate reached since `main` went red (run 40313439452 on `5e85b023`,
+  31/32) failed `tests/e2e/llmShield/stage4u/k7AllFunctions.test.js` "read-only kernel": the
+  earlier untracking of `tools/agentdojo-simurgh-adapter/**/__pycache__/*.pyc` was a committed change
+  under the frozen adapter surface. The guard is correct; the untracking is withdrawn. Note that the
+  same main gate run passed 143/143 with both browser tests green.
+- **Files changed:** `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/__pycache__/__init__.cpython-312.pyc`,
+  `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/__pycache__/simurgh_client.cpython-312.pyc`
+  (restored), `docs/superpowers/specs/2026-10-26-readme-replay-maintenance.md`, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** `git diff cb27617a -- tools/agentdojo-simurgh-adapter` is empty; the Stage 4U
+  read-only-kernel test passes locally against `origin/main`.
+- **Follow-ups:** Hosted E2E gate on the pushed revision. The adapter still carries tracked
+  bytecode that CI regenerates; that is cosmetic (committed-state guards ignore it) and belongs to a
+  Stage 4U declaration.

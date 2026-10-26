@@ -90,3 +90,12 @@ post-dates the 23 October runs that passed `npm audit`; it is unrelated to the c
 | `docs/research/reproduction-phase-4/README.md` | modify    | Clone the default branch; `openai-readiness` is merged. Current instruction, not a frozen record.                                           |
 | `docs/assurance/hf-containment/REPRODUCE.md`   | modify    | Same clone-line correction.                                                                                                                 |
 | `AGENT.md`, `CHANGELOG.md`                     | append    | Record the change.                                                                                                                          |
+
+## Addendum 3 — 26 October 2026, the bytecode untracking is withdrawn
+
+The E2E gate on `5e85b023` (run 40313439452) failed its Stage 4U read-only-kernel guard: untracking
+`tools/agentdojo-simurgh-adapter/**/__pycache__/*.pyc` is a committed change under a frozen
+surface this maintenance has no authority over. The two files are restored byte-for-byte from
+`cb27617a`; the "untrack" row above is withdrawn. The clean working tree after the quality gate
+came from the banking audit change and does not depend on these files. Removing tracked bytecode
+from the adapter directory needs a Stage 4U declaration of its own.
