@@ -98,13 +98,13 @@ See the [correction and case-by-case results](docs/research/provider-role-phase-
 
 ### Reliability and engineering evidence
 
-| Evidence                        | Recorded result                                                                           | Scope                                                                         |
-| ------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| Paced concurrency/restart run   | 120 fixtures, 420 final calls, 1,200 snapshots over 61.45 seconds                         | Isolated fixtures and fixed logical policy time; no deployment-capacity claim |
-| Composed stop/recovery behavior | No new effects after queued stops, interrupted updates or unknown prior acknowledgements  | Authorized reopen and idempotent retry outcomes retained                      |
-| Archive replay                  | 288 comparison branches and eight original/eight corrected workflows match retained state | Saved proposals, freshly executed local services                              |
-| Evidence mutation checks        | 10 deliberate mutations rejected                                                          | Omissions, duplicates, proposal/effect changes, roles, report and budget      |
-| Native CI at `fbe06eca`         | 10 macOS tests and 11 Windows daemon tests pass; Windows affinity fixture compiles        | Interactive desktop capture was not exercised                                 |
+| Evidence                        | Recorded result                                                                                                                                      | Scope                                                                                              |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Paced concurrency/restart run   | 120 fixtures, 420 final calls, 1,200 snapshots over 61.45 seconds                                                                                    | Isolated fixtures and fixed logical policy time; no deployment-capacity claim                      |
+| Composed stop/recovery behavior | No new effects after queued stops, interrupted updates or unknown prior acknowledgements                                                             | Authorized reopen and idempotent retry outcomes retained                                           |
+| Archive replay                  | 288 comparison branches and eight original/eight corrected workflows match retained state                                                            | Saved proposals, freshly executed local services                                                   |
+| Evidence mutation checks        | 10 deliberate mutations rejected, now committed as tests in `tools/evidence-mutations` with a replay-layer check of a consistently re-signed archive | Ten structural checks run without replay; the re-signed-archive check runs on Linux x86_64 CI only |
+| Native CI at `fbe06eca`         | 10 macOS tests and 11 Windows daemon tests pass; Windows affinity fixture compiles                                                                   | Interactive desktop capture was not exercised                                                      |
 
 The [validation receipts](docs/research/transfer-phase-17/VALIDATION.md) identify exact revisions,
 commands and logs. The [13-job hosted readiness run](https://github.com/Raoof128/Project-Simurgh/actions/runs/38961632209)
