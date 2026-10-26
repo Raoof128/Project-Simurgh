@@ -5010,3 +5010,25 @@ Owner-requested work; implementation and review by Codex assistance.
   the hosted `readme-replay.yml` run on x86_64. Hosted quality-gate success must be checked on the
   pushed revision. Other docs still clone `--branch openai-readiness`; some may be pinned, so they
   were left unchanged.
+
+### 2026-10-26 (Australia/Sydney) — Hosted README replay result and body-parser advisory
+
+**Raouf: Claude-assisted implementation**
+
+- **Scope:** Addendum authority `109f9f50`. `package-lock.json` only; no source, evidence or
+  `package.json` change.
+- **Summary:** PR #140's first hosted run executed the README replay on x86_64 for the first time:
+  `readme-replay` passed (runs 40284904491 and its push twin). The demo printed the eight archived
+  rows (`authorized_reopen` and `operator_restart` observed with one new effect each, `active` and
+  five restricted cases declined, `unknown_prior` retaining one prior effect), matching the README,
+  and the full transfer-study verification passed. The quality gate (run 40284904565) passed
+  `npm test`, including both browser tests that failed on `main`, and reported a clean working
+  tree. It failed six steps on one newly published advisory, GHSA-27r3-jxmh-p828 (`body-parser`
+  < 1.20.9, high), which `express@4.22.3` resolved to 1.20.8. `npm audit fix` moves it to 1.20.9
+  within the declared range.
+- **Files changed:** `package-lock.json`, `docs/superpowers/specs/2026-10-26-readme-replay-maintenance.md`
+  (addendum, separate commit), `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm audit` reports 0 vulnerabilities; full `npm test` 5,186/5,186 on macOS; the
+  five Stage 2.x security audit scripts each exit 0 locally.
+- **Follow-ups:** Confirm the quality gate on the pushed revision. One passing PR run does not
+  establish that the main-only browser timeouts are gone; watch the next pushes to `main`.
