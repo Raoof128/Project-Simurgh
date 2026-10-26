@@ -81,3 +81,12 @@ post-dates the 23 October runs that passed `npm audit`; it is unrelated to the c
 | -------------------------- | --------- | --------------------------------------------------------------------------------------------------- |
 | `package-lock.json`        | modify    | `npm audit fix` within declared ranges: `body-parser` 1.20.8 → 1.20.9. `package.json` is unchanged. |
 | `AGENT.md`, `CHANGELOG.md` | append    | Record the hosted results and the dependency remediation.                                           |
+
+## Addendum 2 — 26 October 2026, documentation defects from the strict review
+
+| Exact path                                     | Operation | Purpose                                                                                                                                     |
+| ---------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CONTRIBUTING.md`                              | modify    | State the Linux x86_64 requirement for the replay and for the `tools/*/tests` Python suites, which fail on macOS for environmental reasons. |
+| `docs/research/reproduction-phase-4/README.md` | modify    | Clone the default branch; `openai-readiness` is merged. Current instruction, not a frozen record.                                           |
+| `docs/assurance/hf-containment/REPRODUCE.md`   | modify    | Same clone-line correction.                                                                                                                 |
+| `AGENT.md`, `CHANGELOG.md`                     | append    | Record the change.                                                                                                                          |
