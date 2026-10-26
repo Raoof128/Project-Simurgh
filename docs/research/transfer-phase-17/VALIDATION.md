@@ -48,3 +48,14 @@ and [raw hosted logs](hosted-validation-logs.zip) preserve exact job identities 
 The original validation bundle is unchanged; this is an additive receipt. The hosted jobs
 exercise their existing suites, while the new transfer/role suites and archive replay are
 recorded as local checks above. No final-publication-head hosted result is implied.
+
+## Note added 26 October 2026
+
+The "Deliberate evidence mutations" row above records a one-off run of `mutation_checks.py` from
+[validation-logs.zip](validation-logs.zip). Every one of its ten checks passed `replay=False`, so
+they exercised the structural validators and not the fresh replay. The same ten mutations now run
+as individual tests in `tools/evidence-mutations/tests/test_mutations.py`, with the recorded
+reason codes, under `.github/workflows/evidence-mutations.yml`. That lane adds one check the
+logged script could not make: a role archive whose flipped report, manifest entry and root all
+agree passes `read_pack` by construction and must be rejected by the fresh replay, which needs
+Linux x86_64. The recorded rows and the log bundle are unchanged.
