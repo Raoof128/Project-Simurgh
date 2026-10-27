@@ -61,3 +61,13 @@ No change to frozen sources, archived evidence, recorded numbers or `src/llmShie
 Shield session store keeps its fixed capacity without eviction; the repair bounds how fast one
 client can fill it and SECURITY.md states the residual. Branch protection on `main` is a repository
 setting, applied after this branch merges, and recorded in the log entry.
+
+## Addendum 1 — gates that observe the pinned workflows
+
+Pinning the actions and the elan installer changes text that two existing gates read. Both are
+updated in the direction their own lifecycle declares, before the repair commit:
+
+| Exact path                                                            | Operation             | Purpose                                                                                                                                                                                                                                                                                                         |
+| --------------------------------------------------------------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tests/unit/linuxCiWorkflow.test.js`                                  | modify                | The Stage 2.8D test asserts the literal `dtolnay/rust-toolchain@stable`. It now requires the action pinned to a 40-hex commit **and** `toolchain: stable`, which is stricter: a moving ref fails it.                                                                                                            |
+| `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json` | modify `current` only | Re-pin the live census, as the gate's successor rule (5S-F015) requires. The 5Q `Install Lean (elan)` step no longer fetches `elan-init.sh` from `master`, so the census classifies it `unclassifiable_step` like the five other elan steps, not `missing_committed_universe_query`. `baseline` is not touched. |
