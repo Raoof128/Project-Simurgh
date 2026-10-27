@@ -5145,3 +5145,47 @@ Owner-requested work; implementation and review by Codex assistance.
   launch waits, stale lock cleared). Prettier clean. The eight-job measurement above.
 - **Follow-ups:** Watch the next pushes to `main`. The diagnostic branch `diag/browser-cold` is
   deleted after this entry; its runs stay in the Actions history.
+
+### 2026-10-28 (Australia/Sydney) — Pass-3 audit repair
+
+**Raouf: Claude-assisted implementation**
+
+- **Scope:** Maintenance authority `f8abb488` and Addendum 1 `144ffcb0`
+  (`docs/superpowers/specs/2026-10-28-pass3-audit-repair.md`). Frozen gate sources, archived
+  evidence, recorded numbers and `src/llmShield/**` are unchanged.
+- **Summary:** Repairs the High and main Medium findings of the strict pass-3 audit of `6e4a1a0b`.
+  (1) `hashStudentId` fell back to `SIMURGH_AUDIT_SECRET` and the unauthenticated join route returned
+  that HMAC for any identifier, so a student could mint valid audit-chain signatures; the key is now
+  derived with domain separation (`v2:` digests). (2) Tokenless telemetry may hold at most a quarter of
+  the session store and is rate-limited per IP when it creates a session; LLM Shield session creation
+  is rate-limited at the mount; limiter keys for bearers are fixed-length digests and each limiter
+  holds at most 50,000 buckets. (3) The four defects in hash-pinned gate code (title-case webhook
+  headers rejected a genuine stop alert; hard-coded provider ids; a stop on one route did not block
+  the sibling; `flock` on the SQLite file broke macOS) are fixed in the post-freeze successor
+  `tools/assurance-composed-successor/`, which subclasses the frozen modules; SECURITY.md discloses
+  that the evaluated code keeps them. (4) The Stage 4H E2E test byte-compares the rebuilt fixtures
+  with the committed ones instead of rewriting and re-reading them, and a dirty tree after either
+  gate fails under `CI=true`. (5) `check.sh` counts skips and informational steps separately, never
+  as passes; the duplicate Stage 5C VSB entry is removed from `check-e2e.sh`. (6) `npm test` uses
+  Node's recursive glob, which adds three Stage 5Q files (25 tests) the shell pattern never ran, with
+  a guard test; `check.sh` runs the whole AgentDojo adapter suite (180 tests) instead of nine named
+  files. (7) All 79 action references are pinned to commit SHAs and every elan install uses release
+  v4.2.4 with a verified sha256, never `master`. (8) README, RESULTS and BRIEF state that the 24
+  restricted trials cluster into six restricted states (5/6 credential-only effects, 0/6 composed;
+  Wilson about 43.6–97.0% and 0–39.0%); no reported number changed.
+- **Files changed:** see the declaration's table and Addendum 1; plus `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Each regression was seen failing on `6e4a1a0b` first: forged entry verified
+  (`true !== false`); join returned 503 after a tokenless flood; fourth LLM Shield create returned
+  200; 15,360-character limiter key; title-case alert raised `invalid_webhook_event`; real ids
+  classified `unrelated`; sibling dispatch `observed` under `session_snapshot`; frozen pipeline
+  `database is locked` on macOS without a shim; the old 4H test passed over an injected merkle-root
+  drift and silently overwrote it; the discovery guard listed the three unrun files. After the
+  repair: `npm test` 5,221/5,221, 0 skipped (Node 24); successor suite 26/26 on macOS with no lock
+  shim; Stage 4H E2E 2/2 on Node 26 and failing with the drifted path named when drift is injected;
+  adapter suite 180 passed, 1 skipped (no `cryptography` in a pytest-only venv); the five frozen
+  directories show no diff; the 5Q census `baseline` is unchanged; elan tarball sha256 recomputed
+  locally; Prettier clean.
+- **Follow-ups:** Require the quality and E2E gates on `main` through branch protection once this
+  merges. The LLM Shield session store still has no eviction. About ten `scripts/reproduce-*.sh` still
+  have no CI caller. A future study that wants the fixed gate freezes the successor's sources in its
+  own protocol.

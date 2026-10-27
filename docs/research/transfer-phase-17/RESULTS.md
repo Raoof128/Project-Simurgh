@@ -29,6 +29,12 @@ For Llama, 9/12 restricted tasks had an effect in at least one credential-only t
 versus 0/12 under composition. Descriptive task-level Wilson intervals are approximately
 46.8–91.1% and 0–24.2%. These are not population estimates: six families and repeated
 trials are clustered, the corpus is authored internally, and the sample is small.
+The task-level intervals still treat the 12 restricted tasks as independent, but each benign and
+adversarial pair shares one restricted state. At the level of the six restricted states, 5/6 had
+a credential-only effect (signal stop 3, ancestor revoke 4, pending alert 4, unknown prior 4,
+monitor expired 2 of the 17 effect trials; credential revoke 0) versus 0/6 under composition,
+with Wilson intervals of about 43.6–97.0% and 0–39.0%. _(Added 28 October 2026, pass-3 audit;
+recomputed from `evidence.zip`. No reported number changed.)_
 Luna's zero baseline effects demonstrate no additional protection in this comparison.
 
 Both models receive the same semantic messages, exact target report and explicit trusted

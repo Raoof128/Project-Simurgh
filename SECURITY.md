@@ -2,8 +2,8 @@
 
 ## Research scope and versions
 
-Project Simurgh is a research prototype. The default repository branch is `main`; the current agent-research
-continuation is on `openai-readiness`. Published
+Project Simurgh is a research prototype. The default repository branch is `main`, which also
+carries the agent-research continuation (the former `openai-readiness` branch is merged). Published
 research evidence through `v2.54.1` and the historical application package version `0.4.18`
 are separate version lines. A frozen tag is a reproducibility reference, not a promise that
 its runtime remains production-supported or has received every later fix. The historical
@@ -131,6 +131,35 @@ retains the managed-browser failure and distinguishes native CI from interactive
 Real provider IAM, authenticated provider-alert lifecycle and production deployments remain unvalidated.
 The [2026 source map](docs/documentation-audit-2026-10-19/SOURCES.md) informs review; it is not a
 claim of MCP, OAuth, NIST, OWASP, SLSA or accessibility conformance.
+
+## Pass-3 audit repairs and retained defects (28 October 2026)
+
+The strict pass-3 audit of `main` at `6e4a1a0b` found the defects below. The
+[repair declaration](docs/superpowers/specs/2026-10-28-pass3-audit-repair.md) lists every path
+changed.
+
+- **Audit-chain forgery (repaired).** Without `SIMURGH_STUDENT_ID_PEPPER`, `hashStudentId` keyed
+  its HMAC with `SIMURGH_AUDIT_SECRET`, and the unauthenticated join route returned that HMAC for
+  any caller-chosen identifier. A student could therefore obtain a valid signature for any audit
+  entry. The key is now derived with domain separation (`v2:` digests), so the join response can
+  no longer sign chain entries. Chains exported by earlier revisions under a shared key should be
+  treated as forgeable by a participant.
+- **Session flooding (bounded).** Tokenless telemetry may hold at most a quarter of the session
+  store and is rate-limited per IP when it creates a session, so it cannot starve joins. LLM Shield
+  session creation is rate-limited per IP at the mount. That store still has a fixed capacity with
+  no eviction (its router is frozen by the stage policy-drift guards), so many clients can still
+  fill it until restart. Limiters key instructor bearers by a fixed-length digest and hold at most
+  50,000 buckets; at that bound the oldest buckets are evicted early.
+- **Frozen composed gate (retained; successor added).** `tools/assurance-signals/signals.py`,
+  `tools/assurance-composed/composition.py`, `tools/assurance-credentials/gateway.py` and
+  `tools/assurance-context/context_gate.py` are hash-pinned by the Phase 6–17 protocols and stay
+  unchanged, so the evaluated code keeps four defects: a genuine signed stop alert is rejected if
+  its webhook headers arrive in title case; the pipeline hard-codes `response-<route>` and
+  `request-<route>` ids, so real provider alerts are classified as unrelated; a stop on one route
+  does not block the sibling route, which can still land an effect with a `session_snapshot`
+  receiver; and `flock` on the SQLite file itself makes the pipeline fail with `database is locked`
+  on macOS. The [post-freeze successor](tools/assurance-composed-successor/README.md) fixes all
+  four. No study has been run against it.
 
 ## Reporting a Vulnerability
 

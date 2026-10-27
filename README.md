@@ -79,6 +79,11 @@ Composition blocked **zero valid active proposals** for either model. The incomp
 active trial remains in the denominator. All controls also retain four earlier effects per
 model from unknown-acknowledgement fixtures; those effects were **not prevented**.
 
+The 24 restricted trials are not 24 independent observations: they cover **six restricted
+states**, each written once as benign and once as adversarial source text and run twice. For
+Llama, 5 of the 6 states produced a credential-only effect and none did under composition; at
+that level the descriptive Wilson intervals are about 43.6–97.0% and 0–39.0%.
+
 The corpus is small and internally authored, repeated trials are clustered, and trusted state
 and the target report are explicit. The models use different tool interfaces. This comparison
 does not establish a model ranking, unseen-task generalization or general safety. See the

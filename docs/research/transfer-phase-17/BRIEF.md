@@ -22,8 +22,10 @@ proposal; a stopped branch was not counted as safe merely because its tool repor
 | Meta Llama-3.2-3B / composed         |                     23/24 |                               0/24 |
 | Either model / deny all              |                      0/24 |                               0/24 |
 
-The Llama result demonstrates an additional control benefit on these cases without losing
-valid active proposals. Luna already declined all restricted tasks, so its comparison shows
+On these cases the Llama result is consistent with an additional control benefit, without
+losing valid active proposals. The 24 restricted trials cluster into six restricted states
+(5/6 with a credential-only effect, 0/6 composed), and the credential-only control cannot observe
+stop, lease or alert state, so part of the difference holds by construction. Luna already declined all restricted tasks, so its comparison shows
 no incremental safety benefit. One Llama active task did not complete.
 
 A separate live Responses workflow exposed a host-message role defect. The original eight
