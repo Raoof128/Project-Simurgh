@@ -278,6 +278,12 @@ function sanitiseTelemetry(raw) {
 // ─────────────────────────────────────────────────────────────
 const SESSION_TTL_MS = 4 * 60 * 60 * 1000; // 4 hours of inactivity
 const MAX_SESSIONS = Number(process.env.SIMURGH_MAX_SESSIONS) || 10_000;
+// Sessions created by tokenless /api/telemetry (the legacy direct-telemetry path) share the
+// store with joined sessions but may hold at most this many slots, so an unauthenticated flood
+// of fresh sessionIds cannot starve /api/exams/:id/join of capacity.
+const MAX_LEGACY_SESSIONS =
+  Number(process.env.SIMURGH_MAX_LEGACY_SESSIONS) || Math.max(1, Math.floor(MAX_SESSIONS / 4));
+const legacySessionIds = new Set();
 const sessions = new Map();
 const timeline = eventTimeline();
 const examSessions = new Map(); // sessionId → sessionRecord (Stage 1 lifecycle)
@@ -327,7 +333,10 @@ const evictionTimer = setInterval(
   () => {
     const cutoff = Date.now() - SESSION_TTL_MS;
     for (const [id, s] of sessions.entries()) {
-      if (s.lastActivity < cutoff) sessions.delete(id);
+      if (s.lastActivity < cutoff) {
+        sessions.delete(id);
+        legacySessionIds.delete(id);
+      }
     }
   },
   5 * 60 * 1000
@@ -505,6 +514,16 @@ app.use(
 app.use("/api/affinity", (_req, res) => {
   res.status(410).json({ error: "legacy_affinity_retired" });
 });
+// The LLM Shield session store has a fixed capacity and no eviction, and its router
+// (src/llmShield, frozen by the stage policy-drift guards) has no limiter of its own, so
+// the bound on how fast one client can fill it is applied here, at the mount.
+const limitLlmShieldSessions = createRateLimiter({
+  windowMs: 60_000,
+  max: Number(process.env.SIMURGH_LLM_SHIELD_SESSION_RATE_MAX) || 60,
+  keyFn: keyByIp,
+  name: "llm-shield-sessions",
+});
+app.post("/api/llm-shield/sessions", limitLlmShieldSessions);
 app.use("/api/llm-shield", llmShieldRouter);
 
 // Instructor route — serves the shell page. Data APIs below remain bearer-gated
@@ -552,6 +571,21 @@ function requireSessionToken(req, res, next) {
 
 // Pre-configured rate limiters
 const limitJoin = createRateLimiter({ windowMs: 60_000, max: 10, keyFn: keyByIp, name: "join" });
+// Per-IP limit on tokenless telemetry that would create a new session. Existing sessions
+// (joined or legacy) pass through; they have their own token bucket in the handler.
+const limitLegacyTelemetrySession = createRateLimiter({
+  windowMs: 60_000,
+  max: Number(process.env.SIMURGH_LEGACY_TELEMETRY_SESSION_RATE_MAX) || 60,
+  keyFn: keyByIp,
+  name: "legacy-telemetry-session",
+});
+function gateLegacyTelemetrySession(req, res, next) {
+  const id = String(req.body?.sessionId ?? "").slice(0, 64);
+  if (!id || !/^[A-Za-z0-9_-]+$/.test(id) || sessions.has(id) || examSessions.has(id)) {
+    return next();
+  }
+  return limitLegacyTelemetrySession(req, res, next);
+}
 const limitAffinity = createRateLimiter({
   windowMs: 60_000,
   max: 60,
@@ -680,7 +714,7 @@ app.post("/api/device/pair", limitDevicePair, requireSessionToken, (req, res) =>
 // ─────────────────────────────────────────────────────────────
 //  /api/telemetry — candidate-side ingest (rate-limited, validated)
 // ─────────────────────────────────────────────────────────────
-app.post("/api/telemetry", async (req, res) => {
+app.post("/api/telemetry", gateLegacyTelemetrySession, async (req, res) => {
   const sessionId = String(req.body?.sessionId ?? "").slice(0, 64);
   if (!sessionId || !/^[A-Za-z0-9_-]+$/.test(sessionId)) {
     return res.status(400).json({ error: "valid sessionId required" });
@@ -703,8 +737,14 @@ app.post("/api/telemetry", async (req, res) => {
   const telemetry = sanitiseTelemetry(req.body?.telemetry);
   if (!telemetry) return res.status(400).json({ error: "telemetry_payload_invalid" });
 
+  // A session that does not exist yet and has no join record is a legacy (tokenless) one.
+  const createsLegacySession = !examRecord && !sessions.has(sessionId);
+  if (createsLegacySession && legacySessionIds.size >= MAX_LEGACY_SESSIONS) {
+    return res.status(503).json({ error: "legacy_session_capacity_exceeded" });
+  }
   const sess = getSession(sessionId);
   if (!sess) return res.status(503).json({ error: "server_capacity_exceeded" });
+  if (createsLegacySession) legacySessionIds.add(sessionId);
 
   // Block telemetry on closed/submitted sessions to protect the audit record.
   const closedStates = new Set([STATES.SUBMITTED, STATES.REPORT_GENERATED, STATES.CLOSED]);
@@ -1259,6 +1299,7 @@ app.post("/api/exams/:examId/join", limitJoin, (req, res) => {
     examSessions.delete(sessionId);
     return res.status(503).json({ error: "server_capacity_exceeded" });
   }
+  legacySessionIds.delete(sessionId); // an existing legacy session is now a joined one
   const sessionToken = issueSessionToken(
     sessionId,
     SESSION_SIGNING_SECRET,

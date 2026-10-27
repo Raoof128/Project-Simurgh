@@ -90,11 +90,37 @@ describe("rateLimit", () => {
   });
 
   test("keyByInstructorToken extracts bearer only", () => {
-    assert.equal(
-      keyByInstructorToken({ headers: { authorization: "Bearer T1" }, query: {} }),
-      "T1"
-    );
+    const key = keyByInstructorToken({ headers: { authorization: "Bearer T1" }, query: {} });
+    assert.match(key, /^tok:[0-9a-f]{32}$/);
+    assert.equal(keyByInstructorToken({ headers: { authorization: "bearer  T1" } }), key);
     assert.equal(keyByInstructorToken({ headers: {}, query: { token: "T2" } }), null);
     assert.equal(keyByInstructorToken({ headers: {}, query: {} }), null);
+  });
+
+  test("keyByInstructorToken keys on a fixed-length digest, not the bearer text", () => {
+    // The limiter runs before auth, so the bearer is attacker-chosen and can be any length.
+    const huge = "A".repeat(15 * 1024);
+    const keyHuge = keyByInstructorToken({ headers: { authorization: `Bearer ${huge}` } });
+    const keyOther = keyByInstructorToken({
+      headers: { authorization: `Bearer ${huge.slice(0, -1)}B` },
+    });
+    assert.equal(keyHuge.length, "tok:".length + 32);
+    assert.equal(keyOther.length, keyHuge.length);
+    assert.notEqual(keyHuge, keyOther, "bearers differing in the last byte get different keys");
+    assert.ok(!keyHuge.includes("AAAA"), "the key must not embed the bearer");
+  });
+
+  test("bucket map is bounded by maxBuckets", () => {
+    const limiter = createRateLimiter({
+      windowMs: 60_000,
+      max: 5,
+      keyFn: (req) => req.k,
+      maxBuckets: 3,
+    });
+    for (let i = 0; i < 10; i += 1) limiter({ k: `k${i}` }, mockRes(), () => {});
+    assert.ok(limiter._buckets.size <= 3, `size was ${limiter._buckets.size}`);
+    // The newest keys are the ones kept.
+    assert.ok(limiter._buckets.has("k9"));
+    limiter._stop();
   });
 });
