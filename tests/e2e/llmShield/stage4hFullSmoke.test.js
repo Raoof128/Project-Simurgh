@@ -1,9 +1,17 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
+import {
+  existsSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  unlinkSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, relative } from "node:path";
 import { test } from "node:test";
 import { stage4CodeForRawCode } from "../../../tools/simurgh-attestation/stage4h/exitCodes.mjs";
 
@@ -17,6 +25,36 @@ function runNode(args) {
     encoding: "utf8",
     stdio: ["ignore", "pipe", "pipe"],
   });
+}
+
+/** Every file under `dirs`, keyed by repo-relative path, with its exact bytes. */
+function snapshotFiles(dirs) {
+  const files = new Map();
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const path = join(dir, entry.name);
+      if (entry.isDirectory()) walk(path);
+      else files.set(relative(".", path), readFileSync(path));
+    }
+  };
+  for (const dir of dirs) walk(dir);
+  return files;
+}
+
+/** Paths whose bytes differ between two snapshots, including added and removed files. */
+function driftedPaths(before, after) {
+  const paths = new Set([...before.keys(), ...after.keys()]);
+  return [...paths]
+    .filter(
+      (path) => !before.has(path) || !after.has(path) || !before.get(path).equals(after.get(path))
+    )
+    .sort();
+}
+
+/** Put the committed bytes back so a drifting builder cannot rewrite tracked evidence. */
+function restoreFiles(before, after) {
+  for (const path of after.keys()) if (!before.has(path)) unlinkSync(path);
+  for (const [path, bytes] of before) writeFileSync(path, bytes);
 }
 
 function runVerifier({ basePack, basePackSig, basePackPubkey, certificate, manifest, out }) {
@@ -64,9 +102,16 @@ function assertMetadataOnlyJson(path) {
 
 test("Stage 4H.2 full reviewer E2E smoke covers builder, CLI, evidence, and Q0/Q4 raw-code matrix", () => {
   const tmp = mkdtempSync(join(tmpdir(), "stage4h-e2e-"));
+  // The builder writes in place. Compare its output with the committed bytes, so this test
+  // fails when the committed evidence drifts instead of regenerating it and checking itself.
+  const committed = snapshotFiles([fixtureRoot, evidenceRoot]);
   try {
     const build = runNode([builder]);
     assert.equal(build.status, 0, build.stderr || build.stdout);
+    const rebuilt = snapshotFiles([fixtureRoot, evidenceRoot]);
+    const drifted = driftedPaths(committed, rebuilt);
+    if (drifted.length) restoreFiles(committed, rebuilt);
+    assert.deepEqual(drifted, [], "rebuilt Stage 4H fixtures differ from the committed bytes");
 
     const cases = [
       {
