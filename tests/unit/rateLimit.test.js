@@ -123,4 +123,48 @@ describe("rateLimit", () => {
     assert.ok(limiter._buckets.has("k9"));
     limiter._stop();
   });
+
+  test("a full map never evicts a throttled bucket, so flooding cannot reset a limit", () => {
+    const limiter = createRateLimiter({
+      windowMs: 60_000,
+      max: 2,
+      keyFn: (req) => req.k,
+      maxBuckets: 2,
+    });
+    const hit = (k) => {
+      const res = mockRes();
+      let passed = false;
+      limiter({ k }, res, () => {
+        passed = true;
+      });
+      return passed ? 200 : res.statusCode;
+    };
+    assert.equal(hit("attacker"), 200);
+    assert.equal(hit("attacker"), 200);
+    assert.equal(hit("attacker"), 429);
+    // Fresh keys fill the map; the throttled bucket must survive them.
+    for (let i = 0; i < 5; i += 1) hit(`fresh${i}`);
+    assert.equal(hit("attacker"), 429, "flooding fresh keys reset a throttled bucket");
+    limiter._stop();
+  });
+
+  test("a map full of throttled buckets refuses new keys instead of evicting", () => {
+    const limiter = createRateLimiter({
+      windowMs: 60_000,
+      max: 1,
+      keyFn: (req) => req.k,
+      maxBuckets: 2,
+    });
+    limiter({ k: "a" }, mockRes(), () => {});
+    limiter({ k: "b" }, mockRes(), () => {});
+    const res = mockRes();
+    let passed = false;
+    limiter({ k: "c" }, res, () => {
+      passed = true;
+    });
+    assert.equal(passed, false);
+    assert.equal(res.statusCode, 429);
+    assert.ok(limiter._buckets.has("a") && limiter._buckets.has("b"));
+    limiter._stop();
+  });
 });

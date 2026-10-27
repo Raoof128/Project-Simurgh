@@ -43,11 +43,19 @@ export function createRateLimiter({
     const b = buckets.get(key);
     if (!b || now - b.windowStart >= windowMs) {
       if (!b && buckets.size >= maxBuckets) {
-        // Full: drop expired buckets, then the oldest live ones (Map iteration is insertion order).
+        // Full: drop expired buckets, then the oldest live ones still under their limit (Map
+        // iteration is insertion order). A throttled bucket is never evicted, or flooding fresh
+        // keys would reset it; if every live bucket is throttled, the new key is refused.
         sweep();
-        for (const oldest of buckets.keys()) {
+        for (const [k, v] of buckets) {
           if (buckets.size < maxBuckets) break;
-          buckets.delete(oldest);
+          if (v.count < max) buckets.delete(k);
+        }
+        if (buckets.size >= maxBuckets) {
+          res.setHeader("Retry-After", Math.ceil(windowMs / 1000));
+          return res
+            .status(429)
+            .json({ error: "rate_limited", scope: name, retry_after_ms: windowMs });
         }
       }
       buckets.set(key, { windowStart: now, count: 1 });

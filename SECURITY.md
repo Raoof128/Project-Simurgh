@@ -149,7 +149,8 @@ changed.
   session creation is rate-limited per IP at the mount. That store still has a fixed capacity with
   no eviction (its router is frozen by the stage policy-drift guards), so many clients can still
   fill it until restart. Limiters key instructor bearers by a fixed-length digest and hold at most
-  50,000 buckets; at that bound the oldest buckets are evicted early.
+  50,000 buckets; at that bound only buckets still under their limit are evicted, and if every
+  live bucket is throttled a new key gets HTTP 429.
 - **Frozen composed gate (retained; successor added).** `tools/assurance-signals/signals.py`,
   `tools/assurance-composed/composition.py`, `tools/assurance-credentials/gateway.py` and
   `tools/assurance-context/context_gate.py` are hash-pinned by the Phase 6–17 protocols and stay
