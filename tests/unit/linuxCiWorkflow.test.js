@@ -14,7 +14,12 @@ test("[stage-2-8d] CI workflow installs xvfb + x11-utils + dbus-x11", () => {
 
 test("[stage-2-8d] CI workflow installs Rust stable + fmt + clippy + cargo test", () => {
   const src = readFileSync(WF_PATH, "utf8");
-  assert.ok(/dtolnay\/rust-toolchain@stable/.test(src), "Rust toolchain action missing");
+  // Pinned to a commit (a moving ref is a supply-chain hole), still installing stable.
+  assert.ok(
+    /dtolnay\/rust-toolchain@[0-9a-f]{40}\b/.test(src),
+    "Rust toolchain action missing or not pinned to a commit"
+  );
+  assert.ok(/toolchain:\s*stable\b/.test(src), "Rust toolchain is not stable");
   assert.ok(/cargo fmt --check/.test(src), "cargo fmt step missing");
   assert.ok(/cargo clippy.*-D warnings/.test(src), "cargo clippy -D warnings missing");
   assert.ok(/cargo test.*tools\/simurgh-daemon-linux/.test(src), "cargo test step missing");

@@ -34,13 +34,13 @@ jobs:
     name: VWQ gates
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           # The reproduce and prior-stage sweeps walk history; a shallow clone makes them lie about
           # what they verified (the 3S lesson).
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "26"
 
@@ -58,7 +58,9 @@ jobs:
         # steps to the PRECEDING one, so the same words above this line made `npm ci` read as a
         # completeness gate and silently added a census entry.
         run: |
-          curl -sSfL https://github.com/leanprover/elan/releases/latest/download/elan-x86_64-unknown-linux-gnu.tar.gz | tar xz
+          curl -sSfL -o "$RUNNER_TEMP/elan.tar.gz" https://github.com/leanprover/elan/releases/download/v4.2.4/elan-x86_64-unknown-linux-gnu.tar.gz
+          echo "42b94d4244e8353142c456ec0e4ca6528fd898a6c604d4059f494e706e431f63  $RUNNER_TEMP/elan.tar.gz" | sha256sum -c -
+          tar xzf "$RUNNER_TEMP/elan.tar.gz"
           ./elan-init -y --default-toolchain "$(cat proofs/stage5s/lean-toolchain)"
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
 

@@ -21,7 +21,7 @@ jobs:
     runs-on: macos-15
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - name: Build and execute both Swift package suites
         shell: bash
         run: |
@@ -33,7 +33,7 @@ jobs:
           grep -E 'Executed [1-9][0-9]* tests?, with 0 failures' native-results/node.log
           swift test --package-path tools/simurgh-daemon-macos 2>&1 | tee native-results/daemon.log
           grep -E 'Executed [1-9][0-9]* tests?, with 0 failures' native-results/daemon.log
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: always()
         with:
           name: macos-native-results
@@ -43,8 +43,8 @@ jobs:
     runs-on: windows-2022
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
         with:
           dotnet-version: 8.0.x
       - name: Execute daemon tests and compile native affinity fixture
@@ -60,7 +60,7 @@ jobs:
           if ([int]$counts.executed -le 0 -or [int]$counts.failed -ne 0 -or [int]$counts.passed -ne [int]$counts.executed) { throw 'Missing or failing test execution' }
           dotnet build tools/simurgh-daemon-windows/src/SimurghAffinityFixture/SimurghAffinityFixture.csproj --artifacts-path "$pwd/.native-artifacts" | Tee-Object native-results/affinity-build.log
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: always()
         with:
           name: windows-native-results
