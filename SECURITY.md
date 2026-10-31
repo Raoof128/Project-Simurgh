@@ -58,8 +58,9 @@ while its own `risk_verdict` is `blocked`, or while the provider response kind i
 response leaves this process as `gateway_verdict: blocked` with `output_exported: false`, no
 `output_text`, an added reason code and a `mount_guard` field naming the router's own verdict. The
 frozen receipt inside the body still records the router's decision. The guard is on unless
-`SIMURGH_GATEWAY_EXPORT_GUARD=0`; the only place that sets it is the Stage 3H security-audit
-smoke, which replays the frozen fixture corpus against the frozen router's own verdicts. Direct module use of
+`SIMURGH_GATEWAY_EXPORT_GUARD=0`; the only places that set it are the two Stage 3H smokes
+(`smoke-llm-shield-stage3h.sh`, `security-audit-llm-shield-stage3h.sh`), which replay the frozen
+fixture corpus against the frozen router's own verdicts. Direct module use of
 `src/llmShield/gateway` keeps the defect. The 31 October audit also reproduced, in the frozen
 router, that the verdict is non-monotone across runs (score 4 is withheld while score 6 is
 accepted), that fallback output is exported at blocked risk, and that provider errors are reported

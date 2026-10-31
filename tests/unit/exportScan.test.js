@@ -18,7 +18,7 @@ test("secret shapes are withheld, including the hyphenated key form the frozen r
   assert.deepEqual(reasons("token eyJhbGciOiJIUzI1.eyJzdWIiOiIxMjM0.SflKxwRJSMeKKF2QT4"), [
     "export_secret_shape_jwt",
   ]);
-  assert.deepEqual(reasons("SIMURGH_AUDIT_SECRET=0123456789abcdef"), [
+  assert.deepEqual(reasons("EXAMPLE_SERVICE_TOKEN=0123456789abcdef"), [
     "export_secret_shape_env_assignment",
   ]);
   assert.deepEqual(reasons("Authorization: Bearer abcdefghijklmnopqrstuvwxyz0123"), [

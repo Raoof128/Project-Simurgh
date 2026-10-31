@@ -1708,6 +1708,7 @@ if node --test --experimental-test-coverage \
   --test-coverage-functions=100 \
   tests/unit/llmShield/attestation/canonicalise.test.js \
   tests/unit/llmShield/attestation/attestationLib.test.js \
+  tests/unit/llmShield/attestation/canonicalStrict.test.js \
   > "$LOG_DIR/llm-shield-stage3m-helper-coverage.log" 2>&1; then
   pass "LLM Shield 3M attestation helper coverage"
 else
