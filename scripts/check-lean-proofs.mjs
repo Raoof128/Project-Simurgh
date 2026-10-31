@@ -10,7 +10,7 @@
 // and this comment exists so the guarantee is never read as stronger than it is.
 
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -22,20 +22,64 @@ import { GATE_REASONS, auditCorpus } from "./lib/leanProofGate.mjs";
 // directory coverage silently loses a whole directory.
 const DEFAULT_FLOOR = 39;
 
+// The axiom sweep, appended to a scratch copy of each proof. Text can be hidden from a regex
+// (audit E-1: `private axiom`, a macro expanding to `sorryAx`); the kernel's own axiom census
+// cannot. Every theorem's axioms must lie in Lean's three standard ones, and no non-internal axiom
+// may be declared. The sweep must print its summary line, or the gate treats it as not having run.
+const STANDARD_AXIOMS = ["propext", "Quot.sound", "Classical.choice"];
+const AXIOM_SWEEP = `
+open Lean Elab Command in
+#eval show CommandElabM Unit from do
+  let env ← getEnv
+  let mut thms : Nat := 0
+  let mut bad : Array String := #[]
+  for (n, ci) in env.constants.map₂.toList do
+    match ci with
+    | .thmInfo _ =>
+      thms := thms + 1
+      let axs ← liftCoreM (collectAxioms n)
+      for a in axs do
+        unless (${STANDARD_AXIOMS.map((a) => `a == \`\`${a}`).join(" || ")}) do
+          bad := bad.push s!"{n} uses {a}"
+    | .axiomInfo _ => unless n.isInternal do bad := bad.push s!"declared axiom {n}"
+    | _ => pure ()
+  logInfo m!"SIMURGH_AXIOM_SWEEP theorems={thms} nonstandard={bad}"
+`;
+
 function typecheckFile(path) {
+  // `lean` exits 0 on a `sorry`-closed theorem — it is a warning. The escape scan, not this
+  // call, is what makes an unproven proof fail. This catches genuine type errors, and, through
+  // the appended sweep, any axiom the regex could not see.
+  const scratch = mkdtempSync(join(tmpdir(), "simurgh-lean-sweep-"));
   try {
-    // `lean` exits 0 on a `sorry`-closed theorem — it is a warning. The escape scan, not this
-    // call, is what makes an unproven proof fail. This catches genuine type errors only.
-    const output = execFileSync("lean", [path], {
+    const copy = join(scratch, path.split("/").pop());
+    // `import Lean` must precede everything, so it is prepended: line numbers in any error below
+    // are therefore one greater than in the committed file. No proof file carries imports of its own.
+    writeFileSync(copy, "import Lean\n" + readFileSync(path, "utf8") + AXIOM_SWEEP);
+    const output = execFileSync("lean", [copy], {
       encoding: "utf8",
       stdio: ["ignore", "pipe", "pipe"],
     });
+    // Lean prints an `Array String` as `[...]` here (4.15 omits the `#`); accept both spellings.
+    const line = /SIMURGH_AXIOM_SWEEP theorems=(\d+) nonstandard=#?\[(.*?)\]/s.exec(output);
+    if (!line) {
+      return {
+        ok: false,
+        reason: GATE_REASONS.AXIOM_SWEEP_SILENT,
+        output: "the axiom sweep printed no summary — it did not run",
+      };
+    }
+    if (line[2].trim() !== "") {
+      return { ok: false, reason: GATE_REASONS.NONSTANDARD_AXIOM, output: line[2].trim() };
+    }
     return { ok: true, output };
   } catch (err) {
     if (err.code === "ENOENT") {
       return { ok: false, reason: GATE_REASONS.MISSING_LEAN, output: "lean is not on PATH" };
     }
     return { ok: false, output: `${err.stdout ?? ""}${err.stderr ?? ""}`.trim() };
+  } finally {
+    rmSync(scratch, { recursive: true, force: true });
   }
 }
 
@@ -98,7 +142,7 @@ function main(argv) {
 
   console.log(
     `OK: ${verdict.count} Lean proof(s) discovered under ${root}/ (floor ${floor}), ` +
-      `0 escape hatches, ${typecheck ? "all type-check" : "type-check skipped"}, ` +
+      `0 escape hatches, ${typecheck ? "all type-check on the three standard axioms" : "type-check skipped"}, ` +
       `self-test red on demand`
   );
   return 0;

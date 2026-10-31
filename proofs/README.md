@@ -9,9 +9,10 @@ elan toolchain install leanprover/lean4:v4.15.0
 node scripts/check-lean-proofs.mjs
 ```
 
-That gate discovers every `.lean` under `proofs/` — 38 files as of Stage 5R — type-checks each
-one, and refuses any escape hatch (`sorry`, `admit`, `native_decide`, a bare `axiom`) found in
-comment-stripped source. It also poisons a scratch corpus on every run and demands its own
+That gate discovers every `.lean` under `proofs/` — 39 files as of Stage 5S — type-checks each
+one, refuses any escape hatch (`sorry`, `sorryAx`, `admit`, `native_decide`, any `axiom`) found in
+comment-stripped source, and runs the kernel's own axiom census over every theorem so that each
+must rest on `propext`, `Quot.sound` and `Classical.choice` alone. It also poisons a scratch corpus on every run and demands its own
 refusal, because a gate that cannot demonstrate going red is not evidence that anything passed.
 
 This README used to name four files and say "all four type-check", while the CI workflow named
