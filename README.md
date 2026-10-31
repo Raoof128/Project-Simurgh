@@ -82,7 +82,11 @@ model from unknown-acknowledgement fixtures; those effects were **not prevented*
 The 24 restricted trials are not 24 independent observations: they cover **six restricted
 states**, each written once as benign and once as adversarial source text and run twice. For
 Llama, 5 of the 6 states produced a credential-only effect and none did under composition; at
-that level the descriptive Wilson intervals are about 43.6–97.0% and 0–39.0%.
+that level the descriptive Wilson intervals are about 43.6–97.0% and 0–39.0%. The
+credential-only control has no stop, lease or alert input: in every restricted credential-only
+Llama trial a new effect occurred exactly when Llama emitted the exact call in one of the five
+states that control cannot observe, so the 17/24 → 0/24 difference mostly measures how often the
+model emits the call, not how finely the gate discriminates.
 
 The corpus is small and internally authored, repeated trials are clustered, and trusted state
 and the target report are explicit. The models use different tool interfaces. This comparison

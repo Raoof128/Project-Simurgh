@@ -35,6 +35,21 @@ a credential-only effect (signal stop 3, ancestor revoke 4, pending alert 4, unk
 monitor expired 2 of the 17 effect trials; credential revoke 0) versus 0/6 under composition,
 with Wilson intervals of about 43.6–97.0% and 0–39.0%. _(Added 28 October 2026, pass-3 audit;
 recomputed from `evidence.zip`. No reported number changed.)_
+The credential-only control observes revocation but has no stop, lease or alert input. Joining the
+restricted credential-only Llama rows to their generations shows a new effect exactly when Llama
+emitted the exact-argument call in a state that control cannot see (ancestor revoke 4/4, pending
+alert 4/4, unknown prior 4/4, signal stop 3, monitor expired 2; credential revoke 4 calls, 0
+effects), so 5/6 is the most that baseline could show and the headline difference mostly measures
+call emission rather than gate discrimination. _(Added 31 October 2026, repository audit;
+recomputed from `evidence.zip`.)_
+
+Model identity and sampling, as retained in `evidence.zip`: the `llama.json` header records
+`manifest_sha256` `d3118936…` (the committed prospective manifest for
+`meta-llama/Llama-3.2-3B-Instruct` at revision `0cb88a4f`, whose weight hashes come from the
+hub's LFS metadata with `weights_downloaded: false`) and the worker's own `ready: true`; the
+archive holds the worker's claim, not an independent hash of the loaded weights. The capture used
+`torch.bfloat16` on CPU, temperature 0.7, top*p 0.9, max_new_tokens 256, seed 171000 and a single
+captured generation per proposal. *(Added 31 October 2026, repository audit.)\_
 Luna's zero baseline effects demonstrate no additional protection in this comparison.
 
 Both models receive the same semantic messages, exact target report and explicit trusted
