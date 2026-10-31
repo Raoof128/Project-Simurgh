@@ -171,7 +171,9 @@ router.use(contentLengthWithinLimit);
 router.use(requireBankingConfig);
 
 router.post("/consent/accept", rejectBankingWritesIfClosed, limitBankingConsent, (_req, res) => {
-  if (store.activeSize() >= MAX_BANKING_SESSIONS) {
+  // Active sessions are capped for the pilot; the record count is capped separately so withdrawn
+  // records (retained for their audit chains) still bound memory.
+  if (store.activeSize() >= MAX_BANKING_SESSIONS || store.size() >= MAX_BANKING_SESSIONS * 2) {
     return res.status(503).json({ ok: false, error: "banking_session_capacity_reached" });
   }
   const pepper = getEnv("SIMURGH_BANKING_PILOT_PEPPER");

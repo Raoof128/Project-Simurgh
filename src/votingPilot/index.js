@@ -18,7 +18,6 @@ const limitConsent = createRateLimiter({
   keyFn: keyByIp,
   name: "voting-consent",
 });
-let acceptedSessions = 0;
 
 const FORBIDDEN_BALLOT_FIELDS = new Set([
   "choice",
@@ -65,9 +64,10 @@ function rejectIfClosed(req, res, next) {
 // POST /consent/accept — atomic consent + session creation
 router.post("/consent/accept", limitConsent, (req, res) => {
   if (collectionClosed()) return res.status(410).json({ error: "voting_pilot_collection_closed" });
-  if (acceptedSessions >= MAX_VOTING_SESSIONS)
+  // Counted from the store (withdrawn records excluded), with a hard bound on records, so the cap
+  // neither becomes permanent after withdrawals nor lets withdrawn records grow without limit.
+  if (store.activeSize() >= MAX_VOTING_SESSIONS || store.size() >= MAX_VOTING_SESSIONS * 2)
     return res.status(503).json({ error: "voting_session_capacity_reached" });
-  acceptedSessions += 1;
   const pepper = getEnv("SIMURGH_VOTING_PILOT_PEPPER");
   const anonymousCode = crypto.randomBytes(8).toString("hex");
   const { pilot_session_id, record } = store.accept({

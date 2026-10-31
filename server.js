@@ -526,7 +526,11 @@ const app = express();
 // SIMURGH_TRUST_PROXY=true or an Express trust-proxy value such as "loopback" (audit D).
 if (process.env.SIMURGH_TRUST_PROXY) {
   const tp = process.env.SIMURGH_TRUST_PROXY;
-  app.set("trust proxy", tp === "true" ? true : /^\d+$/.test(tp) ? Number(tp) : tp);
+  // Never `true`: trusting every proxy lets any client forge X-Forwarded-For. A hop count or an
+  // Express subnet name/list ("loopback", "uniquelocal", CIDRs) is accepted; "true" becomes
+  // "loopback" with a warning. The proxy must overwrite X-Forwarded-For, not append to it.
+  if (tp === "true") console.warn("[simurgh] SIMURGH_TRUST_PROXY=true is read as loopback");
+  app.set("trust proxy", tp === "true" ? "loopback" : /^\d+$/.test(tp) ? Number(tp) : tp);
 }
 app.disable("x-powered-by");
 app.use(express.json({ limit: stagingConfig.jsonBodyLimit }));
@@ -660,6 +664,7 @@ app.get("/health", (_req, res) => {
 // guessing was unthrottled), and the compare is constant-time over digests.
 const INSTRUCTOR_AUTH_FAILURES_PER_MINUTE =
   Number(process.env.SIMURGH_INSTRUCTOR_AUTH_FAILURES_PER_MINUTE) || 30;
+const INSTRUCTOR_FAILURE_BUCKETS = 50_000;
 const instructorFailures = new Map();
 function tokenEquals(a, b) {
   if (typeof a !== "string" || typeof b !== "string") return false;
@@ -679,10 +684,23 @@ function requireInstructorAuth(req, res, next) {
   const auth = req.headers.authorization;
   const bearer = auth && /^Bearer\s+/i.test(auth) ? auth.replace(/^Bearer\s+/i, "") : null;
   if (!tokenEquals(bearer, INSTRUCTOR_TOKEN)) {
-    if (!f || now - f.windowStart >= 60_000)
+    if (f && now - f.windowStart < 60_000) f.count += 1;
+    else {
+      if (!f && instructorFailures.size >= INSTRUCTOR_FAILURE_BUCKETS) {
+        // Full: drop expired entries, then entries still under the limit; a throttled address is
+        // never dropped, and if none can go the new address is refused rather than admitted.
+        for (const [k, v] of instructorFailures) {
+          if (instructorFailures.size < INSTRUCTOR_FAILURE_BUCKETS) break;
+          if (now - v.windowStart >= 60_000 || v.count < INSTRUCTOR_AUTH_FAILURES_PER_MINUTE)
+            instructorFailures.delete(k);
+        }
+        if (instructorFailures.size >= INSTRUCTOR_FAILURE_BUCKETS) {
+          res.setHeader("Retry-After", "60");
+          return res.status(429).json({ error: "rate_limited", scope: "instructor-auth" });
+        }
+      }
       instructorFailures.set(ip, { windowStart: now, count: 1 });
-    else f.count += 1;
-    if (instructorFailures.size > 50_000) instructorFailures.clear();
+    }
     return res.status(401).json({ error: "auth_required" });
   }
   next();
