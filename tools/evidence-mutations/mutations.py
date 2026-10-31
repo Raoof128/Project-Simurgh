@@ -159,6 +159,51 @@ def structural_check(name, target, mutate, transfer=None, roles=None):
     raise ValueError(f"unknown mutation target {target!r} for {name!r}")
 
 
+# Archive-layer mutations (31 October 2026 audit, C-11). The ten structural checks above never
+# touch `read_pack`, so removing its root, member-hash and inventory checks left 10/10 green. Each
+# of these rewrites the role archive in a caller-supplied directory and expects `read_pack` itself
+# to refuse it; they are counted separately from the ten logged mutations.
+def _rewrite_role_archive(directory, mutate_members, root=None):
+    with zipfile.ZipFile(ROLES / "evidence.zip") as z:
+        members = {n: z.read(n) for n in z.namelist()}
+    manifest = members.pop("manifest.json")
+    mutate_members(members)
+    path = Path(directory) / "mutated.zip"
+    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as out:
+        out.writestr("manifest.json", manifest)
+        for name, body in members.items():
+            out.writestr(name, body)
+    return path, (hashlib.sha256(manifest).hexdigest() if root is None else root)
+
+
+def member_byte_flip(members):
+    body = bytearray(members["report.json"])
+    body[-2] ^= 0x01
+    members["report.json"] = bytes(body)
+
+
+def dropped_member(members):
+    del members["report.json"]
+
+
+def added_member(members):
+    members["extra.json"] = b"{}"
+
+
+ARCHIVE = (
+    ("member byte flip under an unchanged manifest", member_byte_flip, None, "member_hash"),
+    ("member missing from the archive", dropped_member, None, "archive_inventory"),
+    ("member absent from the manifest", added_member, None, "archive_inventory"),
+    ("wrong expected root", lambda m: None, "0" * 64, "manifest_root"),
+)
+
+
+def archive_check(directory, mutate, root):
+    Path(directory).mkdir(parents=True, exist_ok=True)
+    path, expected = _rewrite_role_archive(directory, mutate, root)
+    return lambda: read_pack(path, expected)
+
+
 def resigned_role_archive(directory, case_index=1):
     """A role archive whose flipped report, manifest entry and root all agree.
 
@@ -192,7 +237,18 @@ def main():
     print(
         f"mutation checks passed: {len(STRUCTURAL) - len(accepted)}/{len(STRUCTURAL)}"
     )
-    return 1 if accepted else 0
+    import tempfile
+
+    archive_accepted = []
+    with tempfile.TemporaryDirectory() as td:
+        for name, mutate, root, expected in ARCHIVE:
+            reason = rejection(archive_check(Path(td) / name.replace(" ", "_"), mutate, root))
+            status = "REJECTED" if reason is not None and expected in reason else "ACCEPTED"
+            print("archive:", name, status, reason if reason is not None else "(no refusal)")
+            if status != "REJECTED":
+                archive_accepted.append(name)
+    print(f"archive checks passed: {len(ARCHIVE) - len(archive_accepted)}/{len(ARCHIVE)}")
+    return 1 if accepted or archive_accepted else 0
 
 
 if __name__ == "__main__":
