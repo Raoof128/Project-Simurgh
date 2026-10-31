@@ -2,6 +2,8 @@
 // CI verify-only: checks the committed Stage 3P catalogue — signature, digest
 // binding to every committed target attestation, silent-drop, and corpus/shape
 // agreement — against the 3P public key.
+import { fileURLToPath } from "node:url";
+import { realpathSync } from "node:fs";
 import crypto from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
@@ -67,7 +69,19 @@ async function main() {
   console.log("stage3p catalogue verify: PASS");
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Main-module guard. `import.meta.url` is the loader's REAL, percent-encoded path; `process.argv[1]`
+// is whatever the shell passed. Compared as text, a verifier launched through a symlinked
+// directory (`/tmp` on macOS) or a path containing a space never runs and exits 0 printing
+// nothing (audit C-1, 31 October 2026). Both sides are resolved to the physical path here.
+function isMainModule(moduleUrl) {
+  try {
+    return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(moduleUrl);
+  } catch {
+    return false;
+  }
+}
+
+if (isMainModule(import.meta.url)) {
   main().catch((e) => {
     console.error(e.message);
     process.exit(1);

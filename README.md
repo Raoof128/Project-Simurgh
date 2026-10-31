@@ -248,10 +248,15 @@ The retained Stage 4F frontier verifier has confirmed unsigned-certificate and u
 gaps. Its result is not assurance against a dishonest producer; see the
 [scoped finding and probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m94--retained-stage-4f-frontier-is-unsigned-and-does-not-meet-the-dishonest-evaluator-claim).
 
-The retained Stage 4M public-tier verifier also accepts altered or missing disclosure/chain
-files without changes to the signed attestation. See the
-[confirmed binding gap](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m106--stage-4m-public-tier-verification-omits-signed-disclosure-and-chain-bindings)
-before relying on public-tier verification. These runtime gaps remain open.
+The retained Stage 4M public-tier verifier accepted altered or missing disclosure/chain files
+without changes to the signed attestation; the 21 October repair closed that Tier-P binding gap
+(re-verified 31 October: altered, deleted and forged disclosure files now return raw 22). Its
+residuals stay open: upstream and proof digests, non-claims and known-limitation lists are not
+recomputed under a pinned key, an unknown `--tier` value skips claim recomputation, and the
+acknowledgement key is read from the bundle. See the
+[original finding](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m106--stage-4m-public-tier-verification-omits-signed-disclosure-and-chain-bindings)
+and [SECURITY.md](SECURITY.md#retained-stage-4m-public-tier-disclosure-verification). The 4F gap
+above remains open.
 The Stage 4N heartbeat CLI also omits manifest authentication and accepts inputs beyond its
 advertised disclosure bound; see the [verification limits and probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m107--stage-4n-cli-consistency-does-not-authenticate-a-feed-or-bound-all-public-disclosure).
 

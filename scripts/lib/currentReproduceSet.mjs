@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync, readdirSync, realpathSync } from "node:fs";
 import { resolve } from "node:path";
-import { pathToFileURL } from "node:url";
+import { pathToFileURL, fileURLToPath } from "node:url";
 export const BASELINE = "docs/research/llm-shield/evidence/stage-5s/prior-reproduce-set.json";
 export const CURRENT = "docs/research/maintenance-phase-16/prior-reproduce-set.v2.json";
 export const SELF = "reproduce-llm-shield-stage5s.sh";
@@ -46,7 +46,19 @@ export function currentScripts(root = ".") {
     .sort();
   return validateCurrentSet(manifest, bytes, discovered);
 }
-if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+// Main-module guard. `import.meta.url` is the loader's REAL, percent-encoded path; `process.argv[1]`
+// is whatever the shell passed. Compared as text, a verifier launched through a symlinked
+// directory (`/tmp` on macOS) or a path containing a space never runs and exits 0 printing
+// nothing (audit C-1, 31 October 2026). Both sides are resolved to the physical path here.
+function isMainModule(moduleUrl) {
+  try {
+    return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(moduleUrl);
+  } catch {
+    return false;
+  }
+}
+
+if (isMainModule(import.meta.url)) {
   try {
     console.log(currentScripts().join("\n"));
   } catch (error) {

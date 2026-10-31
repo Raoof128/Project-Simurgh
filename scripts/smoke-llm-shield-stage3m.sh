@@ -10,6 +10,7 @@ node tools/simurgh-attestation/verify-attestation.mjs \
   --bundle "$EV/attestation.bundle.json" \
   --signature "$EV/attestation.signature.json" \
   --public-key "$EV/attestation.public-key.json" \
+  --expected-key-fingerprint sha256:875b59ebbee8e6eb6fe34d6e06d60d74434cbcf5ec17acb18d1c9f68e2a06798 \
   --reproduce
 
 bash scripts/policy-drift-guard-llm-shield-stage3m.sh

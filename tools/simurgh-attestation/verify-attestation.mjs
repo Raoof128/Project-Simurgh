@@ -2,8 +2,11 @@
 // Two-tier offline verifier. The portable core is pure and imports NO Stage 3L
 // code (callers pass loaded data). --reproduce dynamically imports the Stage 3L
 // producer only when requested.
+import { fileURLToPath } from "node:url";
+import { realpathSync } from "node:fs";
 import crypto from "node:crypto";
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, stat, writeFile } from "node:fs/promises";
+import { isAbsolute } from "node:path";
 import { canonicalJson, sha256Hex, fingerprintPublicKey } from "./canonicalise.mjs";
 import {
   validateBundleSchema,
@@ -32,7 +35,10 @@ export function verifyBundle({
   let sigValid = false;
   try {
     const sig = Buffer.from(String(sidecar.signature).replace(/^base64:/, ""), "base64");
-    sigValid = crypto.verify(null, canonicalBytes, crypto.createPublicKey(publicKeyPem), sig);
+    const key = crypto.createPublicKey(publicKeyPem);
+    // `crypto.verify(null, …)` accepts any key type; the sidecar's `Ed25519` label is not checked
+    // by the signature itself, so a P-256 or RSA key would verify its own signature (audit C-2).
+    sigValid = key.asymmetricKeyType === "ed25519" && crypto.verify(null, canonicalBytes, key, sig);
   } catch {
     sigValid = false;
   }
@@ -74,11 +80,24 @@ export function verifyBundle({
 }
 
 // ---- CLI ----
+const MAX_EVIDENCE_BYTES = 64 * 1024 * 1024;
 function arg(name) {
   const i = process.argv.indexOf(name);
   return i === -1 ? null : process.argv[i + 1];
 }
-const isCli = import.meta.url === `file://${process.argv[1]}`;
+// Main-module guard. `import.meta.url` is the loader's REAL, percent-encoded path; `process.argv[1]`
+// is whatever the shell passed. Compared as text, a verifier launched through a symlinked
+// directory (`/tmp` on macOS) or a path containing a space never runs and exits 0 printing
+// nothing (audit C-1, 31 October 2026). Both sides are resolved to the physical path here.
+function isMainModule(moduleUrl) {
+  try {
+    return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(moduleUrl);
+  } catch {
+    return false;
+  }
+}
+
+const isCli = isMainModule(import.meta.url);
 
 async function reproduceStage3l(bundle) {
   const lib = await import("../../tests/e2e/llm_shield_stage3l_fable5_reference_lib.mjs");
@@ -100,8 +119,22 @@ async function mainCli() {
   const publicKeyPem = JSON.parse(await readFile(arg("--public-key"), "utf8")).public_key_pem;
   const reproduce = process.argv.includes("--reproduce");
   const evidenceFiles = [];
-  for (const ref of bundle.referenced_evidence)
-    evidenceFiles.push([ref.path, await readFile(ref.path)]);
+  for (const ref of bundle.referenced_evidence) {
+    // The bundle is untrusted input: its paths are read before any check. Only a relative path
+    // to a regular file of bounded size inside the checkout is read (audit C-13: `/dev/zero`
+    // made the verifier read without bound).
+    const path = String(ref.path);
+    if (isAbsolute(path) || path.split(/[\\/]+/).includes("..")) {
+      evidenceFiles.push([path, Buffer.alloc(0)]);
+      continue;
+    }
+    const info = await stat(path).catch(() => null);
+    if (!info || !info.isFile() || info.size > MAX_EVIDENCE_BYTES) {
+      evidenceFiles.push([path, Buffer.alloc(0)]);
+      continue;
+    }
+    evidenceFiles.push([path, await readFile(path)]);
+  }
   const reproduced = reproduce ? await reproduceStage3l(bundle) : null;
   const result = verifyBundle({
     bundle,
