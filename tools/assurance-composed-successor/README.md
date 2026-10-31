@@ -35,6 +35,25 @@ evaluated, defects included.
    file; on Darwin that makes SQLite on the same file fail with "database is locked". The successor
    locks a `<db>.lock` sidecar (created if missing, symlink refused with `ValueError("lock_state")`).
 
+Three further repairs from the 31 October 2026 repository audit (A1-1, A1-2, A1-3):
+
+5. **Only the three verification headers are folded.** The first version of fix 1 refused the whole
+   delivery when any two header names collided after folding, or any name was non-ASCII, even for
+   names the signature check never reads; a signed alert carrying `Content-Type`/`content-type` or
+   `X-Protö` was dropped and the route kept dispatching. Now only `webhook-id`, `webhook-timestamp`
+   and `webhook-signature` are folded and checked for ambiguity; everything else passes through.
+6. **An authentic alert is never discarded.** The frozen gate raises `invalid_webhook_event` only
+   after the signature verified, and it raises before any write, so a signed alert with an extra
+   field, a float `created_at` or a bytes body left no trace while the route kept dispatching. The
+   successor decodes bytes, and holds any signature-valid but unparseable alert `pending` under its
+   webhook id (`alert_unparseable_pending` event, empty alert id, never looked up). That row blocks
+   every route until the host reconciles it; redelivery of the same bytes is idempotent and a
+   different body under the same id collides.
+7. **A pending alert holds every route.** `latched_routes()` read only `terminal`; an alert that
+   was received while lookup was down left the sibling route dispatching until the lookup
+   recovered. `blocking_routes()` also returns routes with a pending alert, and the block is
+   recorded as `dispatch_sibling_pending`.
+
 ## Run the tests
 
 ```sh
@@ -56,7 +75,10 @@ No study has been run against the successor. It is a regression-tested repair, n
 gate. A future study that wants the fixed gate freezes this module's sources in its own
 `protocol.json`; it does not re-pin the old ones.
 
-Not covered: callers that use `pipeline.gateways[...]` or `pipeline.signals[...]` directly rather
+Not covered: a pending unparseable alert has no in-band release (a new pipeline directory is the
+host's path); revocation is not re-driven after a crash between the stop latch and the revoke
+(frozen `signals.py`, A1-4); restart approvals are not bound to a pipeline instance (A1-5);
+callers that use `pipeline.gateways[...]` or `pipeline.signals[...]` directly rather
 than through `resume()`; the window between the latch check and an already-admitted dispatch (the
 frozen gate also lets admitted work finish after a stop); `SignalGate.receive` does not take the
 pipeline lock.

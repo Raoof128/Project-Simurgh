@@ -74,6 +74,30 @@ def title(name):
     return "-".join(part.capitalize() for part in name.split("-"))
 
 
+def signed_event(route, mutate, secret=SECRET):
+    """A signed alert whose body was altered by ``mutate`` BEFORE signing (so the signature is
+    genuine but the shape is not what the frozen gate expects)."""
+    event_id, alert_id = "evt_" + route, "alert_" + route
+    event = {
+        "object": "event",
+        "id": event_id,
+        "type": "safety.alert.created",
+        "created_at": 1700000000,
+        "data": {"id": alert_id},
+    }
+    mutate(event)
+    raw = encode(event)
+    stamp = str(int(time.time()))
+    signature = base64.b64encode(
+        hmac.digest(secret, f"{event_id}.{stamp}.{raw}".encode(), "sha256")
+    ).decode()
+    return raw, {
+        "webhook-id": event_id,
+        "webhook-timestamp": stamp,
+        "webhook-signature": "v1," + signature,
+    }
+
+
 class Rig:
     """One receiver, two routes, a controllable clock; mirrors the frozen composition suite."""
 
@@ -223,6 +247,87 @@ class HeaderCaseTests(unittest.TestCase):
         raw, headers = signed("a")
         with self.assertRaisesRegex(ValueError, "^invalid_webhook$"):
             rig.pipe.signals["a"].receive(raw, list(headers.items()))
+
+
+class AlertDropTests(unittest.TestCase):
+    """Audit A1-1, A1-2, A1-3 (31 October 2026): a signature-valid alert is never dropped without a
+    durable trace, and an unresolved alert holds every route, not only its own."""
+
+    def test_unrelated_headers_colliding_in_case_do_not_drop_a_signed_alert(self):
+        rig = Rig(self)
+        raw, headers = signed("a")
+        headers["Content-Type"] = "application/json"
+        headers["content-type"] = "application/json"
+        self.assertEqual(rig.pipe.signals["a"].receive(raw, headers), "stopped")
+        self.assertEqual(rig.dispatch("a"), "blocked")
+        self.assertEqual(rig.effects(), 0)
+
+    def test_unrelated_non_ascii_header_name_does_not_drop_a_signed_alert(self):
+        rig = Rig(self)
+        raw, headers = signed("a")
+        headers["X-Prot\u00f6"] = "1"
+        self.assertEqual(rig.pipe.signals["a"].receive(raw, headers), "stopped")
+        self.assertEqual(rig.dispatch("a"), "blocked")
+
+    def test_kelvin_sign_still_cannot_fold_onto_a_webhook_header(self):
+        rig = Rig(self)
+        raw, headers = signed("a")
+        headers["webhoo\u212a-id"] = "evt_other"
+        with self.assertRaises(ValueError):
+            rig.pipe.signals["a"].receive(raw, headers)
+        self.assertEqual(rig.pipe.signals["a"].state()["pending"], 0)
+
+    def test_non_dict_header_mapping_is_accepted(self):
+        rig = Rig(self)
+        raw, headers = signed("a", header_case=title)
+        proxy = types.MappingProxyType(headers)
+        self.assertEqual(rig.pipe.signals["a"].receive(raw, proxy), "stopped")
+        self.assertEqual(rig.dispatch("a"), "blocked")
+
+    def test_bytes_body_is_accepted(self):
+        rig = Rig(self)
+        raw, headers = signed("a")
+        self.assertEqual(rig.pipe.signals["a"].receive(raw.encode(), headers), "stopped")
+
+    def test_signed_but_unparseable_alert_is_held_pending_and_blocks_every_route(self):
+        rig = Rig(self, policy="session_snapshot")
+        gate = rig.pipe.signals["a"]
+        raw, headers = signed_event("a", lambda e: e.update(extra="field"))
+        self.assertEqual(gate.receive(raw, headers), "pending")
+        self.assertEqual(gate.state()["pending"], 1)
+        self.assertIn("alert_unparseable_pending", [e["type"] for e in gate.events()])
+        # Redelivery of the same bytes is idempotent; a different body under the same id collides.
+        self.assertEqual(gate.receive(raw, headers), "pending")
+        self.assertEqual(rig.dispatch("a"), "blocked")
+        self.assertEqual(rig.dispatch("b"), "blocked")
+        self.assertEqual(rig.effects(), 0)
+        self.assertIn("dispatch_sibling_pending", rig.events())
+
+    def test_float_created_at_in_a_signed_alert_is_held_not_dropped(self):
+        rig = Rig(self)
+        gate = rig.pipe.signals["a"]
+        raw, headers = signed_event("a", lambda e: e.update(created_at=1700000000.0))
+        self.assertEqual(gate.receive(raw, headers), "pending")
+        self.assertEqual(rig.dispatch("a"), "blocked")
+
+    def test_forged_signature_on_an_unparseable_body_is_still_rejected_without_a_trace(self):
+        rig = Rig(self)
+        gate = rig.pipe.signals["a"]
+        raw, headers = signed_event("a", lambda e: e.update(extra="field"), secret=b"x" * 32)
+        with self.assertRaises(ValueError):
+            gate.receive(raw, headers)
+        self.assertEqual(gate.state()["pending"], 0)
+
+    def test_pending_alert_on_one_route_blocks_the_sibling(self):
+        rig = Rig(self, policy="session_snapshot")
+        rig.pipe.signals["a"].lookup = lambda alert_id: (_ for _ in ()).throw(OSError("down"))
+        self.assertEqual(rig.pipe.signals["a"].receive(*signed("a")), "pending")
+        self.assertEqual(rig.dispatch("b"), "blocked")
+        self.assertEqual(rig.effects(), 0)
+        self.assertIn("dispatch_sibling_pending", rig.events())
+        # The sibling block also holds below the bound session.
+        session = rig.pipe.resume("root")
+        self.assertEqual(session.context.dispatch(rig.actions["b"])["status"], "blocked")
 
 
 class BindingTests(unittest.TestCase):

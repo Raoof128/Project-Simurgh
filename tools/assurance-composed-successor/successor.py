@@ -19,9 +19,11 @@ No study has been run against this module.
 """
 
 import fcntl
+import hashlib
 import os
 import stat
 import sys
+from collections.abc import Mapping
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -45,6 +47,8 @@ CredentialPort = frozen.CredentialPort
 
 ROUTES = ("a", "b")
 BINDING_FIELDS = {"response_id", "request_id"}
+# The only header names the signature check reads; every other name is irrelevant to it.
+WEBHOOK_HEADERS = frozenset({"webhook-id", "webhook-timestamp", "webhook-signature"})
 
 
 @contextmanager
@@ -111,22 +115,80 @@ class SuccessorSignalGate(SignalGate):
 
         The OpenAI SDK matches ``webhook-id`` case-insensitively but the frozen
         ``event["id"] != headers.get("webhook-id")`` is case-sensitive, so a genuinely
-        signed ``Webhook-Id`` alert raised and never latched. Folding is ASCII-only:
-        ``str.lower`` maps U+212A to ``k``, which would let a non-ASCII name collide with
-        ``webhook-id``. Two names that fold together are ambiguous (the SDK would verify
-        the first, the gate would read the other) and are rejected.
+        signed ``Webhook-Id`` alert raised and never latched. Only the three names the
+        verification reads are folded (ASCII only: ``str.lower`` maps U+212A to ``k``, so a
+        non-ASCII name that folds onto one of them is refused); two of them that fold
+        together are ambiguous and refused. Every other header is passed through untouched
+        (audit A1-1: an unrelated ``Content-Type``/``content-type`` pair, or a non-ASCII
+        name, must not drop a signed alert).
+
+        A bytes body is decoded as UTF-8. A signature-valid alert whose body the frozen gate
+        cannot parse is held ``pending`` under its webhook id, not discarded (audit A1-2).
         """
-        if type(headers) is not dict:
+        if isinstance(raw, (bytes, bytearray)):
+            try:
+                raw = bytes(raw).decode("utf-8")
+            except UnicodeDecodeError as exc:
+                raise ValueError("invalid_webhook") from exc
+        # Frameworks hand over header mappings that are not plain dicts (``http.server`` gives an
+        # ``email.message.Message``); any mapping is read, the frozen gate still receives a dict.
+        if not isinstance(headers, Mapping):
             raise ValueError("invalid_webhook")
         folded = {}
         for name, value in headers.items():
-            if type(name) is not str or not name.isascii():
+            if type(name) is not str:
                 raise ValueError("invalid_webhook")
             key = name.lower()
-            if key in folded:
-                raise ValueError("invalid_webhook")
-            folded[key] = value
-        return super().receive(raw, folded)
+            if key in WEBHOOK_HEADERS:
+                if not name.isascii() or key in folded:
+                    raise ValueError("invalid_webhook")
+                folded[key] = value
+            else:
+                folded[name] = value
+        try:
+            return super().receive(raw, folded)
+        except ValueError as exc:
+            # Raised by the frozen gate only AFTER the signature verified, so the alert is
+            # authentic; a verifier that forgets an authentic alert fails open.
+            if str(exc) != "invalid_webhook_event":
+                raise
+            return self._hold_unparseable(raw, folded)
+
+    def _hold_unparseable(self, raw, headers):
+        digest = hashlib.sha256(raw.encode()).hexdigest()
+        wid = headers.get("webhook-id")
+        event_id = wid if identifier(wid) else "unparseable-" + digest[:32]
+        with self.db() as db:
+            prior = db.execute(
+                "SELECT digest,status FROM inbox WHERE id=?", (event_id,)
+            ).fetchone()
+            if prior and prior[0] != digest:
+                raise ValueError("event_id_collision")
+            if prior:
+                return prior[1]
+            # An empty alert id marks the row as unparseable; resolve() below never looks
+            # it up, so it stays pending until the host reconciles it out of band.
+            db.execute("INSERT INTO inbox VALUES(?,?,?,'pending')", (event_id, digest, ""))
+            self._emit(db, "alert_unparseable_pending", event_id=event_id, body_sha256=digest)
+        return "pending"
+
+    def resolve(self, event_id):
+        with self.db() as db:
+            row = db.execute(
+                "SELECT alert_id,status FROM inbox WHERE id=?", (event_id,)
+            ).fetchone()
+        if row is not None and row[0] == "" and row[1] == "pending":
+            return "pending"
+        return super().resolve(event_id)
+
+
+def sibling_block_kind(blocking):
+    """``dispatch_sibling_latched`` when any route is terminal, else ``dispatch_sibling_pending``."""
+    return (
+        "dispatch_sibling_latched"
+        if any(state["terminal"] for state in blocking.values())
+        else "dispatch_sibling_pending"
+    )
 
 
 class GuardedSignalPort(frozen.SignalPort):
@@ -141,8 +203,9 @@ class GuardedSignalPort(frozen.SignalPort):
         self.pipeline = pipeline
 
     def dispatch(self, action):
-        if self.pipeline.latched_routes():
-            self.pipeline.record("dispatch_sibling_latched")
+        blocking = self.pipeline.blocking_routes()
+        if blocking:
+            self.pipeline.record(sibling_block_kind(blocking))
             return {"status": "blocked"}
         return super().dispatch(action)
 
@@ -154,8 +217,9 @@ class BoundSession(frozen.BoundSession):
             if self.pipeline.held():
                 self.pipeline.record("dispatch_held")
                 return {"status": "blocked"}
-            if self.pipeline.latched_routes():
-                self.pipeline.record("dispatch_sibling_latched")
+            blocking = self.pipeline.blocking_routes()
+            if blocking:
+                self.pipeline.record(sibling_block_kind(blocking))
                 return {"status": "blocked"}
             return self.context.dispatch(action)
 
@@ -294,6 +358,16 @@ class Pipeline(frozen.Pipeline):
 
     def latched_routes(self):
         return sorted(n for n, s in self.signals.items() if s.state()["terminal"])
+
+    def blocking_routes(self):
+        """Routes that must hold every sibling: latched, or carrying an unresolved alert.
+
+        The M6 rationale (one shared credential, alerts per route) applies equally while an
+        alert is still pending (audit A1-3): until lookup resolves it, no route may land an
+        effect on that credential.
+        """
+        states = {n: s.state() for n, s in self.signals.items()}
+        return {n: st for n, st in states.items() if st["terminal"] or st["pending"]}
 
     def stop(self):
         """Replaces frozen ``Pipeline.stop``: every route is attempted.
