@@ -35,7 +35,12 @@ fi
 
 echo "-- Node<->Python parity + INDEPENDENT Lane-D over the real packet --"
 D_ALLOK="$(python3 tools/simurgh-attestation/stage5m/python/vtcq_quorum_parity.py --laned "$EV" | python3 -c 'import sys,json;print(json.load(sys.stdin)["all_ok"])')"
-[ "$D_ALLOK" = "True" ] && echo "Lane-D all_ok: True"
+if [ "$D_ALLOK" = "True" ]; then
+  echo "Lane-D all_ok: True"
+else
+  echo "FAIL: Lane-D all_ok=$D_ALLOK" >&2
+  exit 1
+fi
 
 echo "-- real Lane-B offline gate (honest pending floor) --"
 "$NODE" --test tests/unit/llmShield/stage5m/laneB.test.js 2>&1 | tail -2

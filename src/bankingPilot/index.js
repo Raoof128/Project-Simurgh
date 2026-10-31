@@ -97,6 +97,11 @@ function requirePathTokenMatch(req, res, next) {
   if (req.bankingSessionId !== req.params.sessionId) {
     return res.status(403).json({ ok: false, error: "forbidden" });
   }
+  // The participant hash in the token was never compared with the record (audit D-9).
+  const record = store.get(req.params.sessionId);
+  if (record && record.participant_code_hash !== req.participantCodeHash) {
+    return res.status(403).json({ ok: false, error: "forbidden" });
+  }
   next();
 }
 
@@ -166,7 +171,9 @@ router.use(contentLengthWithinLimit);
 router.use(requireBankingConfig);
 
 router.post("/consent/accept", rejectBankingWritesIfClosed, limitBankingConsent, (_req, res) => {
-  if (store.size() >= MAX_BANKING_SESSIONS) {
+  // Active sessions are capped for the pilot; the record count is capped separately so withdrawn
+  // records (retained for their audit chains) still bound memory.
+  if (store.activeSize() >= MAX_BANKING_SESSIONS || store.size() >= MAX_BANKING_SESSIONS * 2) {
     return res.status(503).json({ ok: false, error: "banking_session_capacity_reached" });
   }
   const pepper = getEnv("SIMURGH_BANKING_PILOT_PEPPER");

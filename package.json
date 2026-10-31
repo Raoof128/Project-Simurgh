@@ -23,7 +23,7 @@
     "test:openai": "node --test tests/unit/openaiReadiness/*.test.js",
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "test": "node --test tests/unit/*.test.js tests/unit/**/*.test.js tests/unit/**/**/*.test.js",
+    "test": "node --test 'tests/unit/**/*.test.js'",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test:stage5p": "node --test tests/unit/llmShield/stage5p/*.test.js",

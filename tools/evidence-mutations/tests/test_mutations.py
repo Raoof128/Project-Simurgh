@@ -63,6 +63,40 @@ class InventoryTests(unittest.TestCase):
         self.assertTrue(raw)
 
 
+class ArchiveLayer(LoadedEvidence):
+    """C-11: the archive reader itself must refuse a tampered, incomplete or mis-rooted pack."""
+
+    def test_each_archive_mutation_is_refused_by_read_pack(self):
+        with tempfile.TemporaryDirectory() as td:
+            for name, mutate, root, expected in mutations.ARCHIVE:
+                with self.subTest(name=name):
+                    self.assert_rejected(
+                        name,
+                        expected,
+                        mutations.archive_check(Path(td) / name.replace(" ", "_"), mutate, root),
+                    )
+
+    def test_a_weakened_reader_is_caught(self):
+        # Anti-vacuity: with the member-hash check removed, the byte-flip mutation must be ACCEPTED.
+        import transfer_study
+
+        original = transfer_study.read_pack
+
+        def weakened(path, root):
+            import zipfile as zf
+
+            with zf.ZipFile(path) as z:
+                return {n: z.read(n) for n in z.namelist()}
+
+        mutations.read_pack = weakened
+        try:
+            with tempfile.TemporaryDirectory() as td:
+                check = mutations.archive_check(Path(td), mutations.member_byte_flip, None)
+                self.assertIsNone(mutations.rejection(check))
+        finally:
+            mutations.read_pack = original
+
+
 class ResignedArchive(unittest.TestCase):
     """F3 from the 26 Oct 2026 review: a consistent re-sign defeats the hash layer by design."""
 

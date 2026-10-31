@@ -119,7 +119,7 @@ test("student identifiers use a peppered HMAC instead of raw SHA-256", async () 
     const digest = hashStudentId(raw);
     const plainSha256 = crypto.createHash("sha256").update(raw).digest("hex");
 
-    assert.match(digest, /^v1:[0-9a-f]{64}$/);
+    assert.match(digest, /^v2:[0-9a-f]{64}$/);
     assert.notEqual(digest, plainSha256);
     assert.equal(digest, hashStudentId(raw));
   } finally {

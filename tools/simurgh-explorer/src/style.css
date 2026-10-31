@@ -765,6 +765,11 @@ summary {
 .message button {
   padding: 2px 8px;
 }
+.message.imported {
+  background: #f3ecd6;
+  border-color: #d9c48a;
+  color: #5a4a12;
+}
 footer {
   display: flex;
   justify-content: space-between;

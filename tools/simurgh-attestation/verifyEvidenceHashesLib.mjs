@@ -4,7 +4,7 @@
 // Hardened: rejects a map that lists evidence-hashes.json itself; rejects absolute paths, raw ".."
 // segments (checked BEFORE normalisation, which can erase them), and any key that resolves outside
 // stageDir. `_injectMap` is a test-only seam (replaces the on-disk map).
-import { readFileSync } from "node:fs";
+import { lstatSync, readFileSync } from "node:fs";
 import { join, isAbsolute, resolve, relative } from "node:path";
 import { sha256Hex } from "./canonicalise.mjs";
 
@@ -39,7 +39,10 @@ export function verifyEvidenceHashes(stageDir, { _injectMap } = {}) {
       checked += 1;
       let actual;
       try {
-        actual = sha256Hex(readFileSync(p, "utf8"));
+        // Bytes, not a decoded string: `readFileSync(p, "utf8")` re-encodes invalid sequences, so
+        // two different byte strings hashed the same (audit C-9). A symlink is refused outright.
+        if (lstatSync(p).isSymbolicLink()) throw new Error("symlink");
+        actual = sha256Hex(readFileSync(p));
       } catch {
         mismatches.push(p);
         continue;

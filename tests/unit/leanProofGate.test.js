@@ -169,6 +169,10 @@ test("[q1-f001][W3] the gate rejects every escape hatch family", () => {
     ["admit", "theorem t : True := by\n  admit\n"],
     ["native_decide", "theorem t : True := by\n  native_decide\n"],
     ["axiom", "axiom cheat : False\n"],
+    // Audit E-1: these three type-check and passed the line-anchored `^\s*axiom` form.
+    ["private axiom", "private axiom cheat : False\ntheorem t : False := cheat\n"],
+    ["@[simp] axiom", "@[simp] axiom cheat : False\ntheorem t : False := cheat\n"],
+    ["sorryAx", "theorem t : False := sorryAx False false\n"],
   ]) {
     const verdict = withCorpus({ "stage4/Bad.lean": body }, (root) =>
       auditCorpus({ root, floor: 1, typecheck: false })

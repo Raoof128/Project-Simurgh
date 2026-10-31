@@ -3,7 +3,7 @@ name = "simurgh-daemon-linux"
 version = "2.8.0"
 edition = "2021"
 description = "Project Simurgh Linux Device Shield daemon — research prototype."
-license = "MIT"
+license = "AGPL-3.0-or-later"
 
 [lib]
 name = "simurgh_daemon_linux"

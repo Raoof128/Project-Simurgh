@@ -3,7 +3,7 @@ import crypto from "node:crypto";
 
 import { getManualReviewReason } from "../device/scannerRiskPolicy.js";
 
-export function buildReport(sessionRecord, sessionData, eventList, auditChainValid) {
+export function buildReport(sessionRecord, sessionData, eventList, auditChainValid, extras = {}) {
   const { id, examId, studentIdHash, startedAt, submittedAt, createdAt } = sessionRecord;
   const { latest, affinity, daemon } = sessionData;
 
@@ -41,9 +41,28 @@ export function buildReport(sessionRecord, sessionData, eventList, auditChainVal
       "RISK_ESCALATED",
     ].includes(e.event)
   );
+  // Counts kept outside the 500-event ring take precedence over the retained window (audit D-4).
+  const ANOMALY_TYPES = [
+    "BULK_PASTE",
+    "FOCUS_LOSS",
+    "ABNORMAL_WPM_SPIKE",
+    "LONG_IDLE_GAP",
+    "CAPTURE_EXCLUDED_WINDOW",
+    "RISK_ESCALATED",
+  ];
+  const counted = extras.event_counts
+    ? ANOMALY_TYPES.filter((t) => extras.event_counts[t] > 0).map((t) => [
+        t,
+        extras.event_counts[t],
+      ])
+    : null;
+  const anomalyTotal = counted ? counted.reduce((n, [, c]) => n + c, 0) : anomalyEvents.length;
+  const anomalyNames = counted
+    ? counted.map(([t, c]) => `${t}×${c}`).join(", ")
+    : anomalyEvents.map((e) => e.event).join(", ");
   const summary =
-    anomalyEvents.length > 0
-      ? `${anomalyEvents.length} anomalous event(s) detected: ${anomalyEvents.map((e) => e.event).join(", ")}.`
+    anomalyTotal > 0
+      ? `${anomalyTotal} anomalous event(s) detected: ${anomalyNames}.`
       : "No significant anomalies detected during the session.";
 
   return {
@@ -58,6 +77,11 @@ export function buildReport(sessionRecord, sessionData, eventList, auditChainVal
     final_risk_score: riskScore,
     privacy_mode: "metadata_only",
     audit_chain_valid: !!auditChainValid,
+    audit_chain_truncated: !!extras.audit_chain_truncated,
+    peak_risk_level: extras.peak_risk_level ?? riskLevel,
+    peak_risk_score: extras.peak_risk_score ?? riskScore,
+    timeline_truncated: !!extras.timeline_truncated,
+    event_counts: extras.event_counts ?? null,
     helper_connected: helperConnected,
     device_integrity: buildDeviceIntegritySection(daemon),
     summary,

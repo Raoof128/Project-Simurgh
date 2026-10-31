@@ -26,7 +26,12 @@ try {
     );
   } else {
     if (p.length !== 1) throw new Error("Exactly one command is required");
-    if (o.file && statSync(o.file).size > LIMIT) throw new Error("Input exceeds 12 MiB limit");
+    if (o.file) {
+      // A device or FIFO reports size 0 and then reads without bound (audit F-5).
+      const stat = statSync(o.file);
+      if (!stat.isFile()) throw new Error("Input must be a regular file");
+      if (stat.size > LIMIT) throw new Error("Input exceeds 12 MiB limit");
+    }
     const b = o.file
       ? parseBundle(readFileSync(o.file, "utf8"))
       : buildIndex({ detail: o.detail, study: o.study });

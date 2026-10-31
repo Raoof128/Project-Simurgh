@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// Must be the first import: it fills process.env from .env before any module snapshots it.
+import "./src/config/loadDotenv.js";
 import express from "express";
 import Anthropic from "@anthropic-ai/sdk";
 import crypto from "node:crypto";
-import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { stagingConfig } from "./src/config/env.js";
@@ -38,6 +39,7 @@ import votingPilotRouter from "./src/votingPilot/index.js";
 import bankingPilotRouter from "./src/bankingPilot/index.js";
 import llmShieldRouter from "./src/llmShield/llmShieldRouter.js";
 import gatewayRouter from "./src/llmShield/gateway/gatewayRouter.js";
+import { scanExport } from "./src/security/exportScan.js";
 import {
   createRateLimiter,
   keyByIp,
@@ -47,28 +49,6 @@ import {
 } from "./src/security/rateLimit.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-
-// ─────────────────────────────────────────────────────────────
-//  .env loader — strips inline `#` comments outside quotes
-//  SIMURGH_SKIP_DOTENV=1 skips the file so tests can prove the
-//  fail-closed guards against a genuinely empty environment.
-// ─────────────────────────────────────────────────────────────
-const envPath = join(__dirname, ".env");
-if (process.env.SIMURGH_SKIP_DOTENV !== "1" && existsSync(envPath)) {
-  for (const line of readFileSync(envPath, "utf8").split("\n")) {
-    const m = line.match(/^\s*([A-Z_][A-Z0-9_]*)\s*=\s*(.*)\s*$/);
-    if (!m || process.env[m[1]]) continue;
-    let val = m[2];
-    // strip trailing inline `#` comment (only when not inside quotes)
-    const quoted = /^\s*(['"])(.*?)\1\s*(?:#.*)?$/.exec(val);
-    if (quoted) val = quoted[2];
-    else {
-      const hashIdx = val.indexOf("#");
-      if (hashIdx >= 0) val = val.slice(0, hashIdx);
-    }
-    process.env[m[1]] = val.trim();
-  }
-}
 
 const PORT = Number(process.env.PORT) || 3030;
 const MODEL = process.env.SIMURGH_MODEL || "claude-sonnet-4-6";
@@ -87,6 +67,67 @@ if (!apiKey && DEMO_MODE) {
   );
 }
 const client = apiKey ? new Anthropic({ apiKey }) : null;
+
+// Model-call governance (audit D-2). Anonymous (tokenless) sessions could drive one paid call per
+// accepted window with no ceiling, and the SIMURGH_CLAUDE_ON_* and SIMURGH_SCORING_MODE knobs had
+// no readers. Tokenless sessions never reach the model unless explicitly re-enabled, the knobs are
+// honoured, and a process-wide per-minute budget bounds spend whatever the session count.
+const MODEL_CALLS_PER_MINUTE = Number(process.env.SIMURGH_MODEL_CALLS_PER_MINUTE) || 120;
+const MODEL_FOR_LEGACY_SESSIONS = process.env.SIMURGH_MODEL_FOR_LEGACY_SESSIONS === "1";
+const modelBudget = {
+  windowStart: 0,
+  count: 0,
+  take() {
+    const now = Date.now();
+    if (now - this.windowStart >= 60_000) {
+      this.windowStart = now;
+      this.count = 0;
+    }
+    if (this.count >= MODEL_CALLS_PER_MINUTE) return false;
+    this.count += 1;
+    return true;
+  },
+};
+function modelCallGate(riskLevel, examRecord) {
+  if (!client || DEMO_MODE) return "local_only";
+  if (!examRecord && !MODEL_FOR_LEGACY_SESSIONS) return "skipped-untokened-session";
+  if (stagingConfig.scoringMode === "local") return "skipped-local-mode";
+  if (riskLevel === "Safe" && !stagingConfig.claudeOnSafe) return "skipped-safe";
+  if (riskLevel === "Warning" && !stagingConfig.claudeOnWarning) return "skipped-warning";
+  if (riskLevel === "Critical" && !stagingConfig.claudeOnCritical) return "skipped-critical";
+  if (!modelBudget.take()) return "skipped-model-budget";
+  return "allowed";
+}
+
+// Known placeholder secrets from .env.example ran unchanged (audit D-9); a token minted under
+// one let a caller read another participant's pilot export.
+const PLACEHOLDER_SECRETS = new Set([
+  "replace-with-32-char-random-secret",
+  "change-me-llm-shield-secret-32-chars",
+]);
+for (const name of [
+  "SIMURGH_AUDIT_SECRET",
+  "SIMURGH_SESSION_SIGNING_SECRET",
+  "SIMURGH_HELPER_SECRET",
+  "SIMURGH_LLM_SHIELD_SECRET",
+  "SIMURGH_VOTING_PILOT_PEPPER",
+  "SIMURGH_VOTING_PILOT_TOKEN_SECRET",
+  "SIMURGH_BANKING_PILOT_PEPPER",
+  "SIMURGH_BANKING_PILOT_TOKEN_SECRET",
+]) {
+  if (PLACEHOLDER_SECRETS.has(process.env[name] ?? "")) {
+    if (DEMO_MODE) console.warn(`[simurgh] ${name} is the .env.example placeholder (demo mode).`);
+    else {
+      console.error(`[simurgh] FATAL: ${name} is the .env.example placeholder. Refusing to start.`);
+      process.exit(78);
+    }
+  }
+}
+if (DEMO_MODE && process.env.SIMURGH_INSTRUCTOR_TOKEN) {
+  console.warn(
+    "[simurgh] ⚠ SIMURGH_DEMO_MODE=1 ignores SIMURGH_INSTRUCTOR_TOKEN: every instructor route is open."
+  );
+}
 
 // ─────────────────────────────────────────────────────────────
 //  Secret bootstrap — fail fast in production, warn in demo
@@ -268,7 +309,12 @@ function sanitiseTelemetry(raw) {
   // key_intervals (optional array) — reject if oversized
   if (Array.isArray(raw.key_intervals)) {
     if (raw.key_intervals.length > 1000) return null;
-    out.key_intervals = raw.key_intervals.slice(0, 200);
+    // Typed: free text and nested objects used to reach the model prompt verbatim (pass-3 M2).
+    out.key_intervals = raw.key_intervals
+      .slice(0, 200)
+      .map((v) => Number(v))
+      .filter((v) => Number.isFinite(v) && v >= 0 && v <= 600_000)
+      .map((v) => Math.round(v));
   }
   return out;
 }
@@ -278,6 +324,12 @@ function sanitiseTelemetry(raw) {
 // ─────────────────────────────────────────────────────────────
 const SESSION_TTL_MS = 4 * 60 * 60 * 1000; // 4 hours of inactivity
 const MAX_SESSIONS = Number(process.env.SIMURGH_MAX_SESSIONS) || 10_000;
+// Sessions created by tokenless /api/telemetry (the legacy direct-telemetry path) share the
+// store with joined sessions but may hold at most this many slots, so an unauthenticated flood
+// of fresh sessionIds cannot starve /api/exams/:id/join of capacity.
+const MAX_LEGACY_SESSIONS =
+  Number(process.env.SIMURGH_MAX_LEGACY_SESSIONS) || Math.max(1, Math.floor(MAX_SESSIONS / 4));
+const legacySessionIds = new Set();
 const sessions = new Map();
 const timeline = eventTimeline();
 const examSessions = new Map(); // sessionId → sessionRecord (Stage 1 lifecycle)
@@ -327,8 +379,15 @@ const evictionTimer = setInterval(
   () => {
     const cutoff = Date.now() - SESSION_TTL_MS;
     for (const [id, s] of sessions.entries()) {
-      if (s.lastActivity < cutoff) sessions.delete(id);
+      if (s.lastActivity < cutoff) {
+        sessions.delete(id);
+        legacySessionIds.delete(id);
+        replayGuard.reset(id);
+      }
     }
+    // Replay-guard rows and pairing challenges never purged (audit D-11).
+    replayGuard.evictOlderThan(cutoff);
+    daemonPairingRegistry.evictExpired(Date.now());
   },
   5 * 60 * 1000
 ).unref?.();
@@ -428,6 +487,21 @@ function persistVerdict(sessionId, verdict) {
     verdict.reasoning = verdict.reasoning.slice(0, 280);
   }
   sess.latest = verdict;
+  // The report's final level used to be the latest window only, so a Critical first window
+  // ended as "Safe" (audit D-4). The peak survives the 50-entry history and the timeline ring.
+  const rank = { Safe: 0, Warning: 1, Critical: 2 };
+  if (!sess.peak || (rank[verdict.risk_level] ?? 0) >= (rank[sess.peak.risk_level] ?? 0)) {
+    if (
+      !sess.peak ||
+      (rank[verdict.risk_level] ?? 0) > (rank[sess.peak.risk_level] ?? 0) ||
+      verdict.risk_score >= sess.peak.risk_score
+    )
+      sess.peak = {
+        risk_level: verdict.risk_level,
+        risk_score: verdict.risk_score,
+        ts: verdict.ts,
+      };
+  }
   sess.history.unshift(verdict);
   if (sess.history.length > 50) sess.history.pop();
   appendAudit(sess, "verdict", verdict);
@@ -453,6 +527,16 @@ function appendAudit(sess, type, payload) {
 //  Express app
 // ─────────────────────────────────────────────────────────────
 const app = express();
+// Behind a TLS proxy every client shares one address unless the proxy is trusted; opt in with
+// SIMURGH_TRUST_PROXY=true or an Express trust-proxy value such as "loopback" (audit D).
+if (process.env.SIMURGH_TRUST_PROXY) {
+  const tp = process.env.SIMURGH_TRUST_PROXY;
+  // Never `true`: trusting every proxy lets any client forge X-Forwarded-For. A hop count or an
+  // Express subnet name/list ("loopback", "uniquelocal", CIDRs) is accepted; "true" becomes
+  // "loopback" with a warning. The proxy must overwrite X-Forwarded-For, not append to it.
+  if (tp === "true") console.warn("[simurgh] SIMURGH_TRUST_PROXY=true is read as loopback");
+  app.set("trust proxy", tp === "true" ? "loopback" : /^\d+$/.test(tp) ? Number(tp) : tp);
+}
 app.disable("x-powered-by");
 app.use(express.json({ limit: stagingConfig.jsonBodyLimit }));
 
@@ -496,14 +580,94 @@ app.use(
     // A separate full-path auth route can be bypassed before the nested router.
     if (req.method === "POST" && /^\/+sessions\/*$/i.test(req.path))
       return requireInstructorAuth(req, res, next);
+    if (GATEWAY_EXPORT_GUARD && req.method === "POST" && /^\/+[^/]+\/run\/*$/i.test(req.path))
+      guardGatewayExport(res, req);
     next();
   },
   gatewayRouter
 );
+
+// The frozen gateway router (src/llmShield, stage policy-drift guards) computes a cumulative
+// risk verdict and then omits its `blocked` case from the final decision, so a session whose
+// accumulated risk is `blocked` still receives `gateway_verdict: accepted` with the provider text
+// exported; a provider error is likewise reported as accepted (audit B-2, 31 October 2026). The
+// export boundary is this process's response, so the decision is corrected here, at the mount,
+// before the body leaves. The frozen receipt inside the body still records what the router
+// decided; `mount_guard` records what this conductor did about it.
+// On by default. The frozen Stage 3H adapter smoke replays 26 fixture cases on one session and
+// expects the frozen router's own verdicts at a cumulative score above 80; that historical replay
+// sets SIMURGH_GATEWAY_EXPORT_GUARD=0 explicitly. Any other value keeps the guard.
+const GATEWAY_EXPORT_GUARD = process.env.SIMURGH_GATEWAY_EXPORT_GUARD !== "0";
+
+const EXPORT_CANARIES = String(process.env.SIMURGH_EXPORT_CANARIES ?? "")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+function requestContexts(req) {
+  const contexts = Array.isArray(req?.body?.contexts) ? req.body.contexts : [];
+  return contexts.map((c) => (typeof c?.content === "string" ? c.content : "")).filter(Boolean);
+}
+function guardGatewayExport(res, req) {
+  const json = res.json.bind(res);
+  res.json = (body) => {
+    if (
+      body &&
+      typeof body === "object" &&
+      body.gateway_verdict &&
+      body.gateway_verdict !== "blocked"
+    ) {
+      const reasons = [];
+      if (body.risk_verdict === "blocked") reasons.push("cumulative_risk_blocked_at_mount");
+      // The frozen output firewall is a fixed-marker regex over raw text; the maintained scan
+      // normalises, decodes and checks for secret shapes and context echoes (audit B-3).
+      if (typeof body.output_text === "string") {
+        const scan = scanExport(body.output_text, {
+          contexts: requestContexts(req),
+          canaries: EXPORT_CANARIES,
+        });
+        for (const code of scan.reasons) reasons.push(code);
+      }
+      if (body.receipt?.provider_response_kind === "error")
+        reasons.push("provider_error_not_exported_at_mount");
+      if (reasons.length) {
+        const { output_text: _withheld, ...rest } = body;
+        return json({
+          ...rest,
+          ok: false,
+          gateway_verdict: "blocked",
+          output_exported: false,
+          reason_codes: [
+            ...(Array.isArray(body.reason_codes) ? body.reason_codes : []),
+            ...reasons,
+          ],
+          mount_guard: { router_verdict: body.gateway_verdict, reasons },
+        });
+      }
+    }
+    return json(body);
+  };
+}
 // Retire collection as well as public reads: raw process identifiers must not
 // enter the old storage, audit, SSE or verdict projection paths below.
 app.use("/api/affinity", (_req, res) => {
   res.status(410).json({ error: "legacy_affinity_retired" });
+});
+// The LLM Shield session store has a fixed capacity and no eviction, and its router
+// (src/llmShield, frozen by the stage policy-drift guards) has no limiter of its own, so
+// the bound on how fast one client can fill it is applied here, at the mount.
+const limitLlmShieldSessions = createRateLimiter({
+  windowMs: 60_000,
+  max: Number(process.env.SIMURGH_LLM_SHIELD_SESSION_RATE_MAX) || 60,
+  keyFn: keyByIp,
+  name: "llm-shield-sessions",
+});
+// Applied on the mount prefix rather than as an exact-path route: the router accepts
+// `//sessions`, `/sessions/` and case variants, and an exact `app.post` in front of it
+// limited only the canonical spelling (audit B-1, 31 October 2026).
+app.use("/api/llm-shield", (req, res, next) => {
+  if (req.method === "POST" && /^\/+sessions\/*$/i.test(req.path))
+    return limitLlmShieldSessions(req, res, next);
+  next();
 });
 app.use("/api/llm-shield", llmShieldRouter);
 
@@ -518,18 +682,60 @@ app.get("/health", (_req, res) => {
 });
 
 // Auth gate for instructor endpoints (dashboard, sessions list, audit, SSE).
+// Wrong tokens are counted per IP (each wrong token used to get its own limiter bucket, so
+// guessing was unthrottled), and the compare is constant-time over digests.
+const INSTRUCTOR_AUTH_FAILURES_PER_MINUTE =
+  Number(process.env.SIMURGH_INSTRUCTOR_AUTH_FAILURES_PER_MINUTE) || 30;
+const INSTRUCTOR_FAILURE_BUCKETS = 50_000;
+const instructorFailures = new Map();
+function tokenEquals(a, b) {
+  if (typeof a !== "string" || typeof b !== "string") return false;
+  const da = crypto.createHash("sha256").update(a).digest();
+  const db = crypto.createHash("sha256").update(b).digest();
+  return crypto.timingSafeEqual(da, db);
+}
 function requireInstructorAuth(req, res, next) {
   if (DEMO_MODE) return next();
+  const ip = keyByIp(req);
+  const now = Date.now();
+  const f = instructorFailures.get(ip);
+  if (f && now - f.windowStart < 60_000 && f.count >= INSTRUCTOR_AUTH_FAILURES_PER_MINUTE) {
+    res.setHeader("Retry-After", "60");
+    return res.status(429).json({ error: "rate_limited", scope: "instructor-auth" });
+  }
   const auth = req.headers.authorization;
   const bearer = auth && /^Bearer\s+/i.test(auth) ? auth.replace(/^Bearer\s+/i, "") : null;
-  if (bearer !== INSTRUCTOR_TOKEN) return res.status(401).json({ error: "auth_required" });
+  if (!tokenEquals(bearer, INSTRUCTOR_TOKEN)) {
+    if (f && now - f.windowStart < 60_000) f.count += 1;
+    else {
+      if (!f && instructorFailures.size >= INSTRUCTOR_FAILURE_BUCKETS) {
+        // Full: drop expired entries, then entries still under the limit; a throttled address is
+        // never dropped, and if none can go the new address is refused rather than admitted.
+        for (const [k, v] of instructorFailures) {
+          if (instructorFailures.size < INSTRUCTOR_FAILURE_BUCKETS) break;
+          if (now - v.windowStart >= 60_000 || v.count < INSTRUCTOR_AUTH_FAILURES_PER_MINUTE)
+            instructorFailures.delete(k);
+        }
+        if (instructorFailures.size >= INSTRUCTOR_FAILURE_BUCKETS) {
+          res.setHeader("Retry-After", "60");
+          return res.status(429).json({ error: "rate_limited", scope: "instructor-auth" });
+        }
+      }
+      instructorFailures.set(ip, { windowStart: now, count: 1 });
+    }
+    return res.status(401).json({ error: "auth_required" });
+  }
   next();
 }
 
 function privacySafeDaemonRejectReason(reason) {
-  return reason === "forbidden_local_field" || String(reason).startsWith("forbidden_field:")
-    ? "forbidden_local_field"
-    : reason;
+  const r = String(reason);
+  if (reason === "forbidden_local_field" || r.startsWith("forbidden_field:"))
+    return "forbidden_local_field";
+  // Caller-chosen key names are never written into a signed entry (audit D-6).
+  if (r.startsWith("unknown_field:")) return "unknown_field";
+  if (r.startsWith("missing_field:")) return r.slice(0, 64);
+  return r.slice(0, 64);
 }
 
 // Auth gate for student session endpoints. Token is issued at /join and must
@@ -550,8 +756,37 @@ function requireSessionToken(req, res, next) {
   next();
 }
 
+// A student token stays valid after submit, and the device and integrity routes kept writing to
+// the signed chain (audit D-5). Writes after the terminal state are refused.
+function rejectClosedExamSession(req, res, next) {
+  const record = examSessions.get(req.sessionTokenSessionId);
+  const closed = new Set([STATES.SUBMITTED, STATES.REPORT_GENERATED, STATES.CLOSED]);
+  if (record && closed.has(record.state)) {
+    return res.status(403).json({ error: "session_closed", state: record.state });
+  }
+  next();
+}
+
+// SIMURGH_ALLOW_DUPLICATE_JOINS=1 restores the historical behaviour of unlimited joins per identity.
+const ALLOW_DUPLICATE_JOINS = process.env.SIMURGH_ALLOW_DUPLICATE_JOINS === "1";
+
 // Pre-configured rate limiters
 const limitJoin = createRateLimiter({ windowMs: 60_000, max: 10, keyFn: keyByIp, name: "join" });
+// Per-IP limit on tokenless telemetry that would create a new session. Existing sessions
+// (joined or legacy) pass through; they have their own token bucket in the handler.
+const limitLegacyTelemetrySession = createRateLimiter({
+  windowMs: 60_000,
+  max: Number(process.env.SIMURGH_LEGACY_TELEMETRY_SESSION_RATE_MAX) || 60,
+  keyFn: keyByIp,
+  name: "legacy-telemetry-session",
+});
+function gateLegacyTelemetrySession(req, res, next) {
+  const id = String(req.body?.sessionId ?? "").slice(0, 64);
+  if (!id || !/^[A-Za-z0-9_-]+$/.test(id) || sessions.has(id) || examSessions.has(id)) {
+    return next();
+  }
+  return limitLegacyTelemetrySession(req, res, next);
+}
 const limitAffinity = createRateLimiter({
   windowMs: 60_000,
   max: 60,
@@ -610,446 +845,408 @@ const limitDevicePair = createRateLimiter({
 // ─────────────────────────────────────────────────────────────
 //  Stage 2.3 — device daemon challenge + pairing
 // ─────────────────────────────────────────────────────────────
-app.post("/api/device/challenge", limitDeviceChallenge, requireSessionToken, (req, res) => {
-  const sessionId = req.sessionTokenSessionId;
-  const sess = sessions.get(sessionId);
-  if (!sess) return res.status(409).json({ error: "session_expired_or_evicted" });
-  const purpose = String(req.body?.purpose ?? "");
-  const result = daemonPairingRegistry.createChallenge(sessionId, purpose, Date.now());
-  if (!result.ok) return res.status(400).json({ error: result.reason });
-  appendAudit(sess, EVENTS.DAEMON_PAIRING_CHALLENGE_ISSUED, {
-    purpose,
-    challenge_id_hash: result.challenge_hash,
-    expires_at: new Date(result.expires_at).toISOString(),
-  });
-  res.json({
-    challenge: result.challenge,
-    expires_in_ms: result.expires_in_ms,
-    purpose,
-  });
-});
-
-app.post("/api/device/pair", limitDevicePair, requireSessionToken, (req, res) => {
-  const sessionId = req.sessionTokenSessionId;
-  const sess = sessions.get(sessionId);
-  const record = examSessions.get(sessionId);
-  if (!sess || !record) return res.status(409).json({ error: "session_expired_or_evicted" });
-  const result = daemonPairingRegistry.completePairing(req.body, {
-    sessionId,
-    examId: record.examId,
-    now: Date.now(),
-  });
-  if (!result.ok) {
-    const safeReason = privacySafeDaemonRejectReason(result.reason);
-    daemonStateRegistry.recordRejected(sessionId, { reason: safeReason });
-    appendAudit(sess, EVENTS.DAEMON_PROOF_REJECTED, {
-      reason: safeReason,
-      stage: "pair",
+app.post(
+  "/api/device/challenge",
+  limitDeviceChallenge,
+  requireSessionToken,
+  rejectClosedExamSession,
+  (req, res) => {
+    const sessionId = req.sessionTokenSessionId;
+    const sess = sessions.get(sessionId);
+    if (!sess) return res.status(409).json({ error: "session_expired_or_evicted" });
+    const purpose = String(req.body?.purpose ?? "");
+    const result = daemonPairingRegistry.createChallenge(sessionId, purpose, Date.now());
+    if (!result.ok) return res.status(400).json({ error: result.reason });
+    appendAudit(sess, EVENTS.DAEMON_PAIRING_CHALLENGE_ISSUED, {
+      purpose,
+      challenge_id_hash: result.challenge_hash,
+      expires_at: new Date(result.expires_at).toISOString(),
     });
-    return res.status(result.reason === "invalid_signature" ? 401 : 409).json({
-      error: result.reason,
+    res.json({
+      challenge: result.challenge,
+      expires_in_ms: result.expires_in_ms,
+      purpose,
     });
   }
-  daemonStateRegistry.recordPaired(sessionId, {
-    node_id_hash: result.node_id_hash,
-    public_key: result.public_key,
-    daemon_version: result.daemon_version,
-    platform: result.platform,
-    now: result.paired_at,
-  });
-  appendAudit(sess, EVENTS.DAEMON_PAIRED, {
-    node_id_hash: result.node_id_hash,
-    daemon_version: result.daemon_version,
-    platform: result.platform,
-    challenge_id_hash: result.challenge_hash,
-  });
-  timeline.add(sessionId, EVENTS.DAEMON_PAIRED, {
-    node_id_hash: result.node_id_hash,
-    daemon_version: result.daemon_version,
-  });
-  sseBroadcast("daemon", { sessionId, summary: sessionSummary(sessionId) });
-  res.json({
-    status: "paired",
-    session_id: sessionId,
-    node_id_hash: result.node_id_hash,
-    daemon_version: result.daemon_version,
-    paired_at: new Date(result.paired_at).toISOString(),
-  });
-});
+);
+
+app.post(
+  "/api/device/pair",
+  limitDevicePair,
+  requireSessionToken,
+  rejectClosedExamSession,
+  (req, res) => {
+    const sessionId = req.sessionTokenSessionId;
+    const sess = sessions.get(sessionId);
+    const record = examSessions.get(sessionId);
+    if (!sess || !record) return res.status(409).json({ error: "session_expired_or_evicted" });
+    const result = daemonPairingRegistry.completePairing(req.body, {
+      sessionId,
+      examId: record.examId,
+      now: Date.now(),
+    });
+    if (!result.ok) {
+      const safeReason = privacySafeDaemonRejectReason(result.reason);
+      daemonStateRegistry.recordRejected(sessionId, { reason: safeReason });
+      appendAudit(sess, EVENTS.DAEMON_PROOF_REJECTED, {
+        reason: safeReason,
+        stage: "pair",
+      });
+      return res.status(result.reason === "invalid_signature" ? 401 : 409).json({
+        error: result.reason,
+      });
+    }
+    daemonStateRegistry.recordPaired(sessionId, {
+      node_id_hash: result.node_id_hash,
+      public_key: result.public_key,
+      daemon_version: result.daemon_version,
+      platform: result.platform,
+      now: result.paired_at,
+    });
+    appendAudit(sess, EVENTS.DAEMON_PAIRED, {
+      node_id_hash: result.node_id_hash,
+      daemon_version: result.daemon_version,
+      platform: result.platform,
+      challenge_id_hash: result.challenge_hash,
+    });
+    timeline.add(sessionId, EVENTS.DAEMON_PAIRED, {
+      node_id_hash: result.node_id_hash,
+      daemon_version: result.daemon_version,
+    });
+    sseBroadcast("daemon", { sessionId, summary: sessionSummary(sessionId) });
+    res.json({
+      status: "paired",
+      session_id: sessionId,
+      node_id_hash: result.node_id_hash,
+      daemon_version: result.daemon_version,
+      paired_at: new Date(result.paired_at).toISOString(),
+    });
+  }
+);
 
 // ─────────────────────────────────────────────────────────────
 //  /api/telemetry — candidate-side ingest (rate-limited, validated)
 // ─────────────────────────────────────────────────────────────
-app.post("/api/telemetry", async (req, res) => {
-  const sessionId = String(req.body?.sessionId ?? "").slice(0, 64);
-  if (!sessionId || !/^[A-Za-z0-9_-]+$/.test(sessionId)) {
-    return res.status(400).json({ error: "valid sessionId required" });
-  }
-
-  // Session token enforcement:
-  //   - If the session was created via /api/exams/:id/join, token is REQUIRED.
-  //   - If not (legacy direct-telemetry session), token is OPTIONAL (no identity bound).
-  // This protects authenticated exam sessions while preserving direct-test workflows.
-  const examRecord = examSessions.get(sessionId);
-  if (examRecord) {
-    const bearer = extractBearer(req);
-    if (!bearer) return res.status(401).json({ error: "session_token_required" });
-    const ver = verifySessionToken(bearer, SESSION_SIGNING_SECRET);
-    if (!ver.valid) return res.status(401).json({ error: ver.reason });
-    if (ver.sessionId !== sessionId)
-      return res.status(401).json({ error: "token_session_mismatch" });
-  }
-
-  const telemetry = sanitiseTelemetry(req.body?.telemetry);
-  if (!telemetry) return res.status(400).json({ error: "telemetry_payload_invalid" });
-
-  const sess = getSession(sessionId);
-  if (!sess) return res.status(503).json({ error: "server_capacity_exceeded" });
-
-  // Block telemetry on closed/submitted sessions to protect the audit record.
-  const closedStates = new Set([STATES.SUBMITTED, STATES.REPORT_GENERATED, STATES.CLOSED]);
-  if (examRecord && closedStates.has(examRecord.state)) {
-    return res.status(403).json({ error: "session_closed", state: examRecord.state });
-  }
-
-  if (!consumeRateToken(sess)) {
-    return res.status(429).json({ error: "rate_limited", retry_after_ms: 2500 });
-  }
-
-  if (
-    (stagingConfig.requireDaemonProof || req.body?.daemon_required === true) &&
-    !req.body?.daemon_proof
-  ) {
-    daemonStateRegistry.recordMissing(sessionId);
-    appendAudit(sess, EVENTS.DAEMON_MISSING, {
-      daemon_state: "missing",
-      reason: stagingConfig.requireDaemonProof
-        ? "daemon_proof_required"
-        : "telemetry_without_daemon_proof",
-    });
-    if (stagingConfig.requireDaemonProof) {
-      return res.status(428).json({ error: "daemon_proof_required" });
+// Express 4 does not catch a rejected async handler; one rejection was an unhandled rejection
+// and Node exited, taking every in-memory audit chain with it (audit D-1).
+function asyncRoute(fn) {
+  return (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
+}
+app.post(
+  "/api/telemetry",
+  gateLegacyTelemetrySession,
+  asyncRoute(async (req, res) => {
+    const sessionId = String(req.body?.sessionId ?? "").slice(0, 64);
+    if (!sessionId || !/^[A-Za-z0-9_-]+$/.test(sessionId)) {
+      return res.status(400).json({ error: "valid sessionId required" });
     }
-  }
 
-  // Replay protection — required when sequence + timestamp are provided.
-  // For backward compatibility, telemetry without these fields uses only the
-  // legacy token-bucket rate limiter below. New clients send both.
-  const sequence = req.body?.sequence;
-  const clientTs = req.body?.timestamp;
-  if (sequence !== undefined || clientTs !== undefined) {
-    const ts = typeof clientTs === "number" ? clientTs : Date.parse(clientTs);
-    const result = replayGuard.check(sessionId, sequence, ts);
-    if (!result.ok) return res.status(400).json({ error: result.reason });
-  }
+    // Session token enforcement:
+    //   - If the session was created via /api/exams/:id/join, token is REQUIRED.
+    //   - If not (legacy direct-telemetry session), token is OPTIONAL (no identity bound).
+    // This protects authenticated exam sessions while preserving direct-test workflows.
+    const examRecord = examSessions.get(sessionId);
+    if (examRecord) {
+      const bearer = extractBearer(req);
+      if (!bearer) return res.status(401).json({ error: "session_token_required" });
+      const ver = verifySessionToken(bearer, SESSION_SIGNING_SECRET);
+      if (!ver.valid) return res.status(401).json({ error: ver.reason });
+      if (ver.sessionId !== sessionId)
+        return res.status(401).json({ error: "token_session_mismatch" });
+    }
 
-  if (req.body?.daemon_proof) {
-    const pairedDaemon = daemonPairingRegistry.getPairedNode(sessionId);
-    const daemonValidation = validateDaemonProof(req.body.daemon_proof, {
-      now: Date.now(),
-      expectedSessionId: sessionId,
-      expectedExamId: examRecord?.examId ?? null,
-      pairedNode: pairedDaemon,
-    });
-    if (!daemonValidation.ok) {
-      const safeReason = privacySafeDaemonRejectReason(daemonValidation.reason);
-      daemonStateRegistry.recordRejected(sessionId, { reason: safeReason });
-      appendAudit(sess, EVENTS.DAEMON_PROOF_REJECTED, {
-        reason: safeReason,
-        node_id_hash_if_paired: pairedDaemon?.node_id_hash ?? null,
+    const telemetry = sanitiseTelemetry(req.body?.telemetry);
+    if (!telemetry) return res.status(400).json({ error: "telemetry_payload_invalid" });
+
+    // A session that does not exist yet and has no join record is a legacy (tokenless) one.
+    const createsLegacySession = !examRecord && !sessions.has(sessionId);
+    if (createsLegacySession && legacySessionIds.size >= MAX_LEGACY_SESSIONS) {
+      return res.status(503).json({ error: "legacy_session_capacity_exceeded" });
+    }
+    const sess = getSession(sessionId);
+    if (!sess) return res.status(503).json({ error: "server_capacity_exceeded" });
+    if (createsLegacySession) legacySessionIds.add(sessionId);
+
+    // Block telemetry on closed/submitted sessions to protect the audit record.
+    const closedStates = new Set([STATES.SUBMITTED, STATES.REPORT_GENERATED, STATES.CLOSED]);
+    if (examRecord && closedStates.has(examRecord.state)) {
+      return res.status(403).json({ error: "session_closed", state: examRecord.state });
+    }
+
+    if (!consumeRateToken(sess)) {
+      return res.status(429).json({ error: "rate_limited", retry_after_ms: 2500 });
+    }
+
+    if (
+      (stagingConfig.requireDaemonProof || req.body?.daemon_required === true) &&
+      !req.body?.daemon_proof
+    ) {
+      daemonStateRegistry.recordMissing(sessionId);
+      appendAudit(sess, EVENTS.DAEMON_MISSING, {
+        daemon_state: "missing",
+        reason: stagingConfig.requireDaemonProof
+          ? "daemon_proof_required"
+          : "telemetry_without_daemon_proof",
       });
-      if (daemonValidation.reason === "forbidden_local_field") {
-        appendAudit(sess, EVENTS.SCANNER_PRIVACY_REJECTED, {
+      if (stagingConfig.requireDaemonProof) {
+        return res.status(428).json({ error: "daemon_proof_required" });
+      }
+    }
+
+    // Replay protection — required when sequence + timestamp are provided.
+    // For backward compatibility, telemetry without these fields uses only the
+    // legacy token-bucket rate limiter below. New clients send both.
+    const sequence = req.body?.sequence;
+    const clientTs = req.body?.timestamp;
+    if (sequence !== undefined || clientTs !== undefined) {
+      const ts = typeof clientTs === "number" ? clientTs : Date.parse(clientTs);
+      const result = replayGuard.check(sessionId, sequence, ts);
+      if (!result.ok) return res.status(400).json({ error: result.reason });
+    }
+
+    if (req.body?.daemon_proof) {
+      const pairedDaemon = daemonPairingRegistry.getPairedNode(sessionId);
+      const daemonValidation = validateDaemonProof(req.body.daemon_proof, {
+        now: Date.now(),
+        expectedSessionId: sessionId,
+        expectedExamId: examRecord?.examId ?? null,
+        pairedNode: pairedDaemon,
+      });
+      if (!daemonValidation.ok) {
+        const safeReason = privacySafeDaemonRejectReason(daemonValidation.reason);
+        daemonStateRegistry.recordRejected(sessionId, { reason: safeReason });
+        appendAudit(sess, EVENTS.DAEMON_PROOF_REJECTED, {
           reason: safeReason,
-          privacy_mode: "metadata_only",
+          node_id_hash_if_paired: pairedDaemon?.node_id_hash ?? null,
+        });
+        if (daemonValidation.reason === "forbidden_local_field") {
+          appendAudit(sess, EVENTS.SCANNER_PRIVACY_REJECTED, {
+            reason: safeReason,
+            privacy_mode: "metadata_only",
+          });
+        }
+        return res.status(daemonValidation.reason === "invalid_signature" ? 401 : 409).json({
+          error: daemonValidation.reason,
         });
       }
-      return res.status(daemonValidation.reason === "invalid_signature" ? 401 : 409).json({
-        error: daemonValidation.reason,
-      });
-    }
-    const consumed = daemonPairingRegistry.consumeChallenge(
-      sessionId,
-      daemonValidation.proof.challenge,
-      "proof",
-      Date.now()
-    );
-    if (!consumed.ok) {
-      daemonStateRegistry.recordRejected(sessionId, { reason: consumed.reason });
-      appendAudit(sess, EVENTS.DAEMON_PROOF_REJECTED, {
-        reason: consumed.reason,
-        node_id_hash: daemonValidation.proof.node_id_hash,
-      });
-      return res.status(409).json({ error: consumed.reason });
-    }
-    if (daemonValidation.proof.platform === "linux" && daemonValidation.proof.display_server) {
-      const lockResult = displayServerLock.observe(
+      const consumed = daemonPairingRegistry.consumeChallenge(
         sessionId,
-        daemonValidation.proof.display_server
+        daemonValidation.proof.challenge,
+        "proof",
+        Date.now()
       );
-      if (!lockResult.ok) {
+      if (!consumed.ok) {
+        daemonStateRegistry.recordRejected(sessionId, { reason: consumed.reason });
         appendAudit(sess, EVENTS.DAEMON_PROOF_REJECTED, {
-          reason: "display_server_mismatch",
-          locked_display_server: lockResult.locked_display_server,
-          observed_display_server: lockResult.observed_display_server,
+          reason: consumed.reason,
           node_id_hash: daemonValidation.proof.node_id_hash,
         });
-        return res.status(409).json({ error: "display_server_mismatch" });
+        return res.status(409).json({ error: consumed.reason });
       }
-    }
-    daemonStateRegistry.recordProofVerified(sessionId, {
-      sequence: daemonValidation.proof.sequence,
-      platform: daemonValidation.proof.platform,
-      capture_excluded_window_count: daemonValidation.proof.capture_excluded_window_count,
-      capture_restricted_window_count: daemonValidation.proof.capture_restricted_window_count,
-      monitor_only_window_count: daemonValidation.proof.monitor_only_window_count,
-      helper_state: daemonValidation.proof.helper_state,
-      scanner_state: daemonValidation.proof.scanner_state,
-      scanner_version: daemonValidation.proof.scanner_version,
-      scan_timestamp: daemonValidation.proof.scan_timestamp,
-      scan_duration_ms: daemonValidation.proof.scan_duration_ms,
-      scan_error_count: daemonValidation.proof.scan_error_count,
-      suspicious_window_count: daemonValidation.proof.suspicious_window_count,
-      visible_window_count: daemonValidation.proof.visible_window_count,
-      timestamp: daemonValidation.proof.timestamp,
-      challenge_id_hash: daemonValidation.proof.challenge_id_hash,
-      // Stage 2.8B: forward Linux-specific scanner fields. The recorder
-      // defaults them to 0/null when absent (macOS/Windows path is unaffected).
-      x11_managed_window_count: daemonValidation.proof.x11_managed_window_count,
-      x11_override_redirect_window_count: daemonValidation.proof.x11_override_redirect_window_count,
-      x11_above_window_count: daemonValidation.proof.x11_above_window_count,
-      x11_fullscreen_window_count: daemonValidation.proof.x11_fullscreen_window_count,
-      x11_skip_taskbar_window_count: daemonValidation.proof.x11_skip_taskbar_window_count,
-      xwayland_window_count: daemonValidation.proof.xwayland_window_count,
-      display_server: daemonValidation.proof.display_server,
-      coverage: daemonValidation.proof.coverage,
-      portal_advertised: daemonValidation.proof.portal_advertised,
-      portal_active: daemonValidation.proof.portal_active,
-    });
-    appendAudit(sess, EVENTS.DAEMON_PROOF_VERIFIED, {
-      node_id_hash: daemonValidation.proof.node_id_hash,
-      daemon_version: daemonValidation.proof.daemon_version,
-      platform: daemonValidation.proof.platform,
-      proof_timestamp: daemonValidation.proof.timestamp,
-      capture_excluded_window_count: daemonValidation.proof.capture_excluded_window_count,
-      capture_restricted_window_count: daemonValidation.proof.capture_restricted_window_count,
-      monitor_only_window_count: daemonValidation.proof.monitor_only_window_count,
-      helper_state: daemonValidation.proof.helper_state,
-      scanner_state: daemonValidation.proof.scanner_state,
-      scanner_version: daemonValidation.proof.scanner_version,
-      visible_window_count: daemonValidation.proof.visible_window_count,
-      suspicious_window_count: daemonValidation.proof.suspicious_window_count,
-      scan_duration_ms: daemonValidation.proof.scan_duration_ms,
-      scan_error_count: daemonValidation.proof.scan_error_count,
-      privacy_mode: daemonValidation.proof.privacy_mode,
-      challenge_id_hash: daemonValidation.proof.challenge_id_hash,
-    });
-    appendAudit(sess, EVENTS.SCANNER_SCAN_COMPLETED, {
-      scanner_state: daemonValidation.proof.scanner_state,
-      capture_excluded_window_count: daemonValidation.proof.capture_excluded_window_count,
-      capture_restricted_window_count: daemonValidation.proof.capture_restricted_window_count,
-      monitor_only_window_count: daemonValidation.proof.monitor_only_window_count,
-      visible_window_count: daemonValidation.proof.visible_window_count,
-      scan_duration_ms: daemonValidation.proof.scan_duration_ms,
-      privacy_mode: daemonValidation.proof.privacy_mode,
-    });
-    if (daemonValidation.proof.scanner_state === "permission_denied") {
-      appendAudit(sess, EVENTS.SCANNER_PERMISSION_DENIED, {
+      if (daemonValidation.proof.platform === "linux" && daemonValidation.proof.display_server) {
+        const lockResult = displayServerLock.observe(
+          sessionId,
+          daemonValidation.proof.display_server
+        );
+        if (!lockResult.ok) {
+          appendAudit(sess, EVENTS.DAEMON_PROOF_REJECTED, {
+            reason: "display_server_mismatch",
+            locked_display_server: lockResult.locked_display_server,
+            observed_display_server: lockResult.observed_display_server,
+            node_id_hash: daemonValidation.proof.node_id_hash,
+          });
+          return res.status(409).json({ error: "display_server_mismatch" });
+        }
+      }
+      daemonStateRegistry.recordProofVerified(sessionId, {
+        sequence: daemonValidation.proof.sequence,
+        platform: daemonValidation.proof.platform,
+        capture_excluded_window_count: daemonValidation.proof.capture_excluded_window_count,
+        capture_restricted_window_count: daemonValidation.proof.capture_restricted_window_count,
+        monitor_only_window_count: daemonValidation.proof.monitor_only_window_count,
+        helper_state: daemonValidation.proof.helper_state,
         scanner_state: daemonValidation.proof.scanner_state,
+        scanner_version: daemonValidation.proof.scanner_version,
+        scan_timestamp: daemonValidation.proof.scan_timestamp,
+        scan_duration_ms: daemonValidation.proof.scan_duration_ms,
+        scan_error_count: daemonValidation.proof.scan_error_count,
+        suspicious_window_count: daemonValidation.proof.suspicious_window_count,
+        visible_window_count: daemonValidation.proof.visible_window_count,
+        timestamp: daemonValidation.proof.timestamp,
+        challenge_id_hash: daemonValidation.proof.challenge_id_hash,
+        // Stage 2.8B: forward Linux-specific scanner fields. The recorder
+        // defaults them to 0/null when absent (macOS/Windows path is unaffected).
+        x11_managed_window_count: daemonValidation.proof.x11_managed_window_count,
+        x11_override_redirect_window_count:
+          daemonValidation.proof.x11_override_redirect_window_count,
+        x11_above_window_count: daemonValidation.proof.x11_above_window_count,
+        x11_fullscreen_window_count: daemonValidation.proof.x11_fullscreen_window_count,
+        x11_skip_taskbar_window_count: daemonValidation.proof.x11_skip_taskbar_window_count,
+        xwayland_window_count: daemonValidation.proof.xwayland_window_count,
+        display_server: daemonValidation.proof.display_server,
+        coverage: daemonValidation.proof.coverage,
+        portal_advertised: daemonValidation.proof.portal_advertised,
+        portal_active: daemonValidation.proof.portal_active,
+      });
+      appendAudit(sess, EVENTS.DAEMON_PROOF_VERIFIED, {
+        node_id_hash: daemonValidation.proof.node_id_hash,
+        daemon_version: daemonValidation.proof.daemon_version,
+        platform: daemonValidation.proof.platform,
+        proof_timestamp: daemonValidation.proof.timestamp,
+        capture_excluded_window_count: daemonValidation.proof.capture_excluded_window_count,
+        capture_restricted_window_count: daemonValidation.proof.capture_restricted_window_count,
+        monitor_only_window_count: daemonValidation.proof.monitor_only_window_count,
+        helper_state: daemonValidation.proof.helper_state,
+        scanner_state: daemonValidation.proof.scanner_state,
+        scanner_version: daemonValidation.proof.scanner_version,
+        visible_window_count: daemonValidation.proof.visible_window_count,
+        suspicious_window_count: daemonValidation.proof.suspicious_window_count,
+        scan_duration_ms: daemonValidation.proof.scan_duration_ms,
         scan_error_count: daemonValidation.proof.scan_error_count,
         privacy_mode: daemonValidation.proof.privacy_mode,
+        challenge_id_hash: daemonValidation.proof.challenge_id_hash,
       });
-    } else if (daemonValidation.proof.scanner_state === "scanner_unavailable") {
-      appendAudit(sess, EVENTS.SCANNER_UNAVAILABLE, {
-        scanner_state: daemonValidation.proof.scanner_state,
-        scan_error_count: daemonValidation.proof.scan_error_count,
-        privacy_mode: daemonValidation.proof.privacy_mode,
-      });
-    } else if (daemonValidation.proof.scanner_state === "scan_error") {
-      appendAudit(sess, EVENTS.SCANNER_ERROR, {
-        scanner_state: daemonValidation.proof.scanner_state,
-        scan_error_count: daemonValidation.proof.scan_error_count,
-        privacy_mode: daemonValidation.proof.privacy_mode,
-      });
-    }
-    if (daemonValidation.proof.capture_excluded_window_count > 0) {
-      appendAudit(sess, EVENTS.SCANNER_RISK_DETECTED, {
+      appendAudit(sess, EVENTS.SCANNER_SCAN_COMPLETED, {
         scanner_state: daemonValidation.proof.scanner_state,
         capture_excluded_window_count: daemonValidation.proof.capture_excluded_window_count,
+        capture_restricted_window_count: daemonValidation.proof.capture_restricted_window_count,
+        monitor_only_window_count: daemonValidation.proof.monitor_only_window_count,
         visible_window_count: daemonValidation.proof.visible_window_count,
         scan_duration_ms: daemonValidation.proof.scan_duration_ms,
         privacy_mode: daemonValidation.proof.privacy_mode,
       });
-      appendAudit(sess, EVENTS.DEVICE_RISK_ESCALATED, {
-        daemon_state: "risk_detected",
-        capture_excluded_window_count: daemonValidation.proof.capture_excluded_window_count,
-      });
-      timeline.add(sessionId, EVENTS.DEVICE_RISK_ESCALATED, {
-        daemon_state: "risk_detected",
-      });
+      if (daemonValidation.proof.scanner_state === "permission_denied") {
+        appendAudit(sess, EVENTS.SCANNER_PERMISSION_DENIED, {
+          scanner_state: daemonValidation.proof.scanner_state,
+          scan_error_count: daemonValidation.proof.scan_error_count,
+          privacy_mode: daemonValidation.proof.privacy_mode,
+        });
+      } else if (daemonValidation.proof.scanner_state === "scanner_unavailable") {
+        appendAudit(sess, EVENTS.SCANNER_UNAVAILABLE, {
+          scanner_state: daemonValidation.proof.scanner_state,
+          scan_error_count: daemonValidation.proof.scan_error_count,
+          privacy_mode: daemonValidation.proof.privacy_mode,
+        });
+      } else if (daemonValidation.proof.scanner_state === "scan_error") {
+        appendAudit(sess, EVENTS.SCANNER_ERROR, {
+          scanner_state: daemonValidation.proof.scanner_state,
+          scan_error_count: daemonValidation.proof.scan_error_count,
+          privacy_mode: daemonValidation.proof.privacy_mode,
+        });
+      }
+      if (daemonValidation.proof.capture_excluded_window_count > 0) {
+        appendAudit(sess, EVENTS.SCANNER_RISK_DETECTED, {
+          scanner_state: daemonValidation.proof.scanner_state,
+          capture_excluded_window_count: daemonValidation.proof.capture_excluded_window_count,
+          visible_window_count: daemonValidation.proof.visible_window_count,
+          scan_duration_ms: daemonValidation.proof.scan_duration_ms,
+          privacy_mode: daemonValidation.proof.privacy_mode,
+        });
+        appendAudit(sess, EVENTS.DEVICE_RISK_ESCALATED, {
+          daemon_state: "risk_detected",
+          capture_excluded_window_count: daemonValidation.proof.capture_excluded_window_count,
+        });
+        timeline.add(sessionId, EVENTS.DEVICE_RISK_ESCALATED, {
+          daemon_state: "risk_detected",
+        });
+      }
     }
-  }
 
-  if (!client || DEMO_MODE) {
     const normed = normaliseTelemetry(telemetry) ?? telemetry;
     const scored = scoreAcademicRisk(normed, helperInfoForSession(sess, sessionId), {
       reconnects: sess.reconnects || 0,
       startedAt: sess.startedAt,
     });
-    const verdict = {
+    sess.latestRiskScore = scored.risk_score;
+    sess.latestCategories = scored.categories;
+    // Written once, before any model call: a provider failure used to leave a Critical verdict
+    // with an empty timeline and a "no significant anomalies" summary (audit D-3).
+    recordWindowEvents(sessionId, telemetry, scored);
+    const localVerdict = (reasoning) => ({
       risk_level: scored.risk_level,
       risk_score: scored.risk_score,
       confidence: scored.confidence,
       categories: scored.categories,
       reasoning: scored.reasoning || scored.recommendation,
       recommendation: scored.recommendation,
-      source: scored.source,
+      source: { score: "local_heuristic", reasoning },
       ts: Date.now(),
       cache: { creation: 0, read: 0 },
-    };
-    sess.latestRiskScore = scored.risk_score;
-    sess.latestCategories = scored.categories;
-    timeline.add(sessionId, EVENTS.TELEMETRY_WINDOW_RECEIVED, {
-      risk_level: scored.risk_level,
-      risk_score: scored.risk_score,
-    });
-    if (telemetry.focus_losses > 0)
-      timeline.add(sessionId, EVENTS.FOCUS_LOSS, { count: telemetry.focus_losses });
-    if (telemetry.paste_payload_chars >= 200)
-      timeline.add(sessionId, EVENTS.BULK_PASTE, { chars: telemetry.paste_payload_chars });
-    if (telemetry.effective_wpm >= 250)
-      timeline.add(sessionId, EVENTS.ABNORMAL_WPM_SPIKE, { wpm: telemetry.effective_wpm });
-    if (telemetry.max_idle_gap_ms >= 60000)
-      timeline.add(sessionId, EVENTS.LONG_IDLE_GAP, { ms: telemetry.max_idle_gap_ms });
-    persistVerdict(sessionId, verdict);
-    return res.json(verdict);
-  }
-
-  try {
-    const normed = normaliseTelemetry(telemetry) ?? telemetry;
-    const scored = scoreAcademicRisk(normed, helperInfoForSession(sess, sessionId), {
-      reconnects: sess.reconnects || 0,
-      startedAt: sess.startedAt,
     });
 
-    // Honour stagingConfig.claudeOnSafe — skip Claude call for Safe verdicts to reduce cost.
-    if (scored.risk_level === "Safe" && !stagingConfig.claudeOnSafe) {
-      const verdict = {
-        risk_level: scored.risk_level,
-        risk_score: scored.risk_score,
-        confidence: scored.confidence,
-        categories: scored.categories,
-        reasoning: scored.recommendation,
-        recommendation: scored.recommendation,
-        source: { score: "local_heuristic", reasoning: "skipped-safe" },
-        ts: Date.now(),
-        cache: { creation: 0, read: 0 },
-      };
-      sess.latestRiskScore = scored.risk_score;
-      sess.latestCategories = scored.categories;
-      timeline.add(sessionId, EVENTS.TELEMETRY_WINDOW_RECEIVED, {
-        risk_level: scored.risk_level,
-        risk_score: scored.risk_score,
-      });
-      if (telemetry.focus_losses > 0)
-        timeline.add(sessionId, EVENTS.FOCUS_LOSS, { count: telemetry.focus_losses });
-      if (telemetry.paste_payload_chars >= 200)
-        timeline.add(sessionId, EVENTS.BULK_PASTE, { chars: telemetry.paste_payload_chars });
-      if (telemetry.effective_wpm >= 250)
-        timeline.add(sessionId, EVENTS.ABNORMAL_WPM_SPIKE, { wpm: telemetry.effective_wpm });
-      if (telemetry.max_idle_gap_ms >= 60000)
-        timeline.add(sessionId, EVENTS.LONG_IDLE_GAP, { ms: telemetry.max_idle_gap_ms });
+    const gate = modelCallGate(scored.risk_level, examRecord);
+    if (gate !== "allowed") {
+      const verdict =
+        gate === "local_only" ? { ...localVerdict(), source: scored.source } : localVerdict(gate);
       persistVerdict(sessionId, verdict);
       return res.json(verdict);
     }
 
-    const response = await client.messages.create({
-      model: MODEL,
-      max_tokens: 200,
-      system: [{ type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } }],
-      messages: [
-        {
-          role: "user",
-          content: `Telemetry window (last 5 seconds):\n\`\`\`json\n${JSON.stringify(telemetry, null, 2)}\n\`\`\``,
-        },
-      ],
-    });
-
-    const text = response.content.find((b) => b.type === "text")?.text ?? "{}";
-    let parsed;
     try {
-      const cleaned = text.replace(/^```json\s*|\s*```$/g, "").trim();
-      parsed = JSON.parse(cleaned);
-    } catch {
-      parsed = { risk_level: "Safe", reasoning: "Model output unparseable; defaulting to Safe." };
-    }
+      const response = await client.messages.create({
+        model: MODEL,
+        max_tokens: 200,
+        system: [{ type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } }],
+        messages: [
+          {
+            role: "user",
+            content: `Telemetry window (last 5 seconds):\n\`\`\`json\n${JSON.stringify(telemetry, null, 2)}\n\`\`\``,
+          },
+        ],
+      });
 
-    const claudeReasoning = String(parsed.reasoning ?? "").slice(0, 280);
-    const verdict = {
-      risk_level: scored.risk_level,
-      risk_score: scored.risk_score,
-      confidence: scored.confidence,
-      categories: scored.categories,
-      reasoning: claudeReasoning || scored.recommendation,
-      recommendation: scored.recommendation,
-      source: { score: "local_heuristic", reasoning: "claude_narrative" },
-      ts: Date.now(),
-      cache: {
-        creation: response.usage?.cache_creation_input_tokens ?? 0,
-        read: response.usage?.cache_read_input_tokens ?? 0,
-      },
-    };
-    sess.latestRiskScore = scored.risk_score;
-    sess.latestCategories = scored.categories;
-    timeline.add(sessionId, EVENTS.TELEMETRY_WINDOW_RECEIVED, {
-      risk_level: scored.risk_level,
-      risk_score: scored.risk_score,
-    });
-    if (telemetry.focus_losses > 0)
-      timeline.add(sessionId, EVENTS.FOCUS_LOSS, { count: telemetry.focus_losses });
-    if (telemetry.paste_payload_chars >= 200)
-      timeline.add(sessionId, EVENTS.BULK_PASTE, { chars: telemetry.paste_payload_chars });
-    if (telemetry.effective_wpm >= 250)
-      timeline.add(sessionId, EVENTS.ABNORMAL_WPM_SPIKE, { wpm: telemetry.effective_wpm });
-    if (telemetry.max_idle_gap_ms >= 60000)
-      timeline.add(sessionId, EVENTS.LONG_IDLE_GAP, { ms: telemetry.max_idle_gap_ms });
-    persistVerdict(sessionId, verdict);
-    res.json(verdict);
-  } catch (err) {
-    const msg = err?.message ?? String(err);
-    const lowCredit = /credit balance is too low/i.test(msg);
-    if (lowCredit) console.warn("[simurgh] anthropic low-credit — falling back to local heuristic");
-    else console.error("[simurgh] anthropic error:", msg);
-    const normed = normaliseTelemetry(telemetry) ?? telemetry;
-    const scored = scoreAcademicRisk(normed, helperInfoForSession(sess, sessionId), {
-      reconnects: sess.reconnects || 0,
-      startedAt: sess.startedAt,
-    });
-    const verdict = {
-      risk_level: scored.risk_level,
-      risk_score: scored.risk_score,
-      confidence: scored.confidence,
-      categories: scored.categories,
-      reasoning: scored.recommendation,
-      recommendation: scored.recommendation,
-      source: {
-        score: "local_heuristic",
-        reasoning: lowCredit ? "fallback-low-credit" : "fallback-error",
-      },
-      ts: Date.now(),
-      cache: { creation: 0, read: 0 },
-    };
-    sess.latestRiskScore = scored.risk_score;
-    sess.latestCategories = scored.categories;
-    persistVerdict(sessionId, verdict);
-    res.json(verdict);
-  }
-});
+      const text = response.content.find((b) => b.type === "text")?.text ?? "{}";
+      let parsed;
+      try {
+        const cleaned = text.replace(/^```json\s*|\s*```$/g, "").trim();
+        parsed = JSON.parse(cleaned);
+      } catch {
+        parsed = { risk_level: "Safe", reasoning: "Model output unparseable; defaulting to Safe." };
+      }
+
+      const claudeReasoning = String(parsed.reasoning ?? "").slice(0, 280);
+      const verdict = {
+        ...localVerdict("claude_narrative"),
+        reasoning: claudeReasoning || scored.recommendation,
+        cache: {
+          creation: response.usage?.cache_creation_input_tokens ?? 0,
+          read: response.usage?.cache_read_input_tokens ?? 0,
+        },
+      };
+      persistVerdict(sessionId, verdict);
+      res.json(verdict);
+    } catch (err) {
+      const msg = err?.message ?? String(err);
+      const lowCredit = /credit balance is too low/i.test(msg);
+      if (lowCredit)
+        console.warn("[simurgh] anthropic low-credit — falling back to local heuristic");
+      else console.error("[simurgh] anthropic error:", msg);
+      const verdict = localVerdict(lowCredit ? "fallback-low-credit" : "fallback-error");
+      persistVerdict(sessionId, verdict);
+      res.json(verdict);
+    }
+  })
+);
+
+function recordWindowEvents(sessionId, telemetry, scored) {
+  timeline.add(sessionId, EVENTS.TELEMETRY_WINDOW_RECEIVED, {
+    risk_level: scored.risk_level,
+    risk_score: scored.risk_score,
+  });
+  if (telemetry.focus_losses > 0)
+    timeline.add(sessionId, EVENTS.FOCUS_LOSS, { count: telemetry.focus_losses });
+  if (telemetry.paste_payload_chars >= 200)
+    timeline.add(sessionId, EVENTS.BULK_PASTE, { chars: telemetry.paste_payload_chars });
+  if (telemetry.effective_wpm >= 250)
+    timeline.add(sessionId, EVENTS.ABNORMAL_WPM_SPIKE, { wpm: telemetry.effective_wpm });
+  if (telemetry.max_idle_gap_ms >= 60000)
+    timeline.add(sessionId, EVENTS.LONG_IDLE_GAP, { ms: telemetry.max_idle_gap_ms });
+}
 
 // ─────────────────────────────────────────────────────────────
 //  /api/dashboard — instructor endpoint (auth-gated outside demo)
 // ─────────────────────────────────────────────────────────────
-app.get("/api/dashboard/:sessionId", requireInstructorAuth, (req, res) => {
+app.get("/api/dashboard/:sessionId", limitSessions, requireInstructorAuth, (req, res) => {
   const sess = sessions.get(req.params.sessionId);
   res.json({
     latest: sess?.latest ?? null,
@@ -1149,7 +1346,7 @@ app.get("/api/affinity/:sessionId", (req, res) => {
 // ─────────────────────────────────────────────────────────────
 //  Audit log — tamper-evident HMAC chain (paper §VI-F)
 // ─────────────────────────────────────────────────────────────
-app.get("/api/audit/:sessionId", requireInstructorAuth, (req, res) => {
+app.get("/api/audit/:sessionId", limitSessions, requireInstructorAuth, (req, res) => {
   const sess = sessions.get(req.params.sessionId);
   if (!sess) return res.status(404).json({ error: "session not found" });
   res.setHeader(
@@ -1186,7 +1383,10 @@ app.get("/api/sessions", limitSessions, requireInstructorAuth, (_req, res) => {
 
 // SSE stream — auth-gated. EventSource cannot send bearer headers, so the
 // instructor client falls back to polling outside explicit demo mode.
-app.get("/api/stream/instructor", requireInstructorAuth, (req, res) => {
+const MAX_SSE_CLIENTS = Number(process.env.SIMURGH_MAX_SSE_CLIENTS) || 200;
+app.get("/api/stream/instructor", limitSessions, requireInstructorAuth, (req, res) => {
+  if (sseClients.size >= MAX_SSE_CLIENTS)
+    return res.status(503).json({ error: "sse_capacity_reached" });
   res.set({
     "content-type": "text/event-stream",
     "cache-control": "no-cache, no-transform",
@@ -1222,7 +1422,7 @@ app.get("/api/meta", (_req, res) => {
 // ─────────────────────────────────────────────────────────────
 
 // Create exam (instructor only)
-app.post("/api/exams", requireInstructorAuth, (req, res) => {
+app.post("/api/exams", limitSessions, requireInstructorAuth, (req, res) => {
   const { title, durationMinutes, description } = req.body ?? {};
   if (!title) return res.status(400).json({ error: "title required" });
   const exam = createExam({ title, durationMinutes, description });
@@ -1230,7 +1430,7 @@ app.post("/api/exams", requireInstructorAuth, (req, res) => {
 });
 
 // List exams (instructor only)
-app.get("/api/exams", requireInstructorAuth, (_req, res) => {
+app.get("/api/exams", limitSessions, requireInstructorAuth, (_req, res) => {
   res.json({ exams: listExams() });
 });
 
@@ -1247,8 +1447,24 @@ app.post("/api/exams/:examId/join", limitJoin, (req, res) => {
   if (!/^[A-Za-z0-9_-]+$/.test(sessionId)) {
     return res.status(400).json({ error: "invalid sessionId format" });
   }
-  if (examSessions.has(sessionId)) {
+  if (examSessions.has(sessionId) || sessions.has(sessionId)) {
+    // A tokenless session pre-created under this id would otherwise hand its state and audit
+    // entries to the joining student (audit D-10). Clients should let the server choose the id.
     return res.status(409).json({ error: "sessionId already in use" });
+  }
+  if (!ALLOW_DUPLICATE_JOINS) {
+    // One open session per student per exam (audit D-10): a second join under the same identity
+    // while the first is still open is refused rather than silently creating a twin.
+    const closed = new Set([STATES.SUBMITTED, STATES.REPORT_GENERATED, STATES.CLOSED]);
+    for (const existing of examSessions.values()) {
+      if (
+        existing.examId === exam.id &&
+        existing.studentIdHash === studentIdHash &&
+        !closed.has(existing.state)
+      ) {
+        return res.status(409).json({ error: "student_already_joined" });
+      }
+    }
   }
   let record = createSessionRecord(exam.id, studentIdHash);
   record = { ...record, id: sessionId };
@@ -1259,6 +1475,7 @@ app.post("/api/exams/:examId/join", limitJoin, (req, res) => {
     examSessions.delete(sessionId);
     return res.status(503).json({ error: "server_capacity_exceeded" });
   }
+  legacySessionIds.delete(sessionId); // an existing legacy session is now a joined one
   const sessionToken = issueSessionToken(
     sessionId,
     SESSION_SIGNING_SECRET,
@@ -1331,10 +1548,11 @@ app.get("/api/sessions/:sessionId/report", limitReport, requireInstructorAuth, (
   const record = examSessions.get(sessionId);
   if (!sess && !record) return res.status(404).json({ error: "session not found" });
 
-  const { valid: auditValid } = verifyAuditExport(
+  const auditResult = verifyAuditExport(
     { entries: sess?.auditChain?.entries ?? [], truncated: sess?.auditChain?.truncated ?? false },
     AUDIT_KEY
   );
+  const auditValid = auditResult.valid;
 
   const report = buildReport(
     record ?? {
@@ -1353,7 +1571,13 @@ app.get("/api/sessions/:sessionId/report", limitReport, requireInstructorAuth, (
       daemon: daemonStateRegistry.get(sessionId),
     },
     timeline.get(sessionId),
-    auditValid
+    auditValid,
+    {
+      audit_chain_truncated: auditResult.truncated,
+      peak_risk_level: sess?.peak?.risk_level ?? null,
+      peak_risk_score: sess?.peak?.risk_score ?? null,
+      ...timeline.stats(sessionId),
+    }
   );
 
   timeline.add(sessionId, EVENTS.REPORT_GENERATED, { report_id: report.report_id });
@@ -1383,6 +1607,7 @@ app.post(
   "/api/integrity/pairing/challenge",
   limitPairingChallenge,
   requireSessionToken,
+  rejectClosedExamSession,
   (req, res) => {
     const sessionId = req.sessionTokenSessionId;
     const sess = sessions.get(sessionId);
@@ -1421,6 +1646,7 @@ app.post(
   "/api/integrity/pairing/complete",
   limitPairingComplete,
   requireSessionToken,
+  rejectClosedExamSession,
   (req, res) => {
     const sessionId = req.sessionTokenSessionId;
     const sess = sessions.get(sessionId);
@@ -1504,99 +1730,119 @@ app.post(
 //  Stage 2.1 — integrity proof ingestion (v1 pipeline)
 //  POST /api/integrity/proofs
 // ─────────────────────────────────────────────────────────────
-app.post("/api/integrity/proofs", limitIntegrityProof, requireSessionToken, (req, res) => {
-  const sessionId = req.sessionTokenSessionId;
+app.post(
+  "/api/integrity/proofs",
+  limitIntegrityProof,
+  requireSessionToken,
+  rejectClosedExamSession,
+  (req, res) => {
+    const sessionId = req.sessionTokenSessionId;
 
-  // Step 2 (spec): session must still exist. No implicit resurrection.
-  const sess = sessions.get(sessionId);
-  if (!sess) {
-    return res.status(409).json({ error: "session_expired_or_evicted" });
-  }
+    // Step 2 (spec): session must still exist. No implicit resurrection.
+    const sess = sessions.get(sessionId);
+    if (!sess) {
+      return res.status(409).json({ error: "session_expired_or_evicted" });
+    }
 
-  // Helper to log rejection to audit chain with a minimal privacy-safe payload.
-  function recordReject(reason, parsedHash = null, hasSignature = false) {
-    appendAudit(sess, EVENTS.INTEGRITY_PROOF_REJECTED, {
-      reason,
-      node_id_hash_if_parsed: parsedHash,
-      has_signature: hasSignature,
+    // Helper to log rejection to audit chain with a minimal privacy-safe payload.
+    function recordReject(reason, parsedHash = null, hasSignature = false) {
+      appendAudit(sess, EVENTS.INTEGRITY_PROOF_REJECTED, {
+        reason,
+        node_id_hash_if_parsed: parsedHash,
+        has_signature: hasSignature,
+      });
+    }
+
+    // Step 3 (spec): schema + crypto validation.
+    const pairedNode = pairingRegistry.getPairedNode(sessionId);
+    const validation = validateProof(req.body, {
+      now: Date.now(),
+      pairedNode,
+      expectedSessionId: sessionId,
+    });
+    if (!validation.ok) {
+      const hints = safeParsedPairingHints(req.body);
+      recordReject(validation.reason, hints.node_id_hash_if_parsed, hints.has_signature);
+
+      let status = 400;
+      if (validation.reason === "invalid_signature") status = 401;
+      if (validation.reason === "registered_signature_invalid") status = 401;
+      if (validation.reason === "proof_session_mismatch") status = 401;
+      if (validation.reason === "paired_node_mismatch") status = 409;
+      if (validation.reason === "paired_public_key_mismatch") status = 409;
+      return res.status(status).json({ error: validation.reason });
+    }
+    const { proof, signature_status } = validation;
+
+    // Token session must match proof session.
+    if (proof.session_id !== sessionId) {
+      recordReject("proof_session_mismatch", proof.node_id_hash, true);
+      return res.status(401).json({ error: "proof_session_mismatch" });
+    }
+
+    // Step 4 (spec): nonce replay protection.
+    const nonceResult = proofNonceGuard.check(proof.nonce, sessionId);
+    if (!nonceResult.ok) {
+      recordReject(nonceResult.reason, proof.node_id_hash, true);
+      return res.status(409).json({ error: nonceResult.reason });
+    }
+
+    // Step 5 (spec): N1 strict node continuity.
+    const stateResult = integrityState.record(sessionId, proof);
+    if (!stateResult.ok) {
+      recordReject(stateResult.reason, proof.node_id_hash, true);
+      return res.status(409).json({ error: stateResult.reason });
+    }
+
+    // Step 7 (spec): success audit with hashed nonce + summaries only.
+    const nonceHash = crypto.createHash("sha256").update(proof.nonce_bytes).digest("hex");
+    appendAudit(sess, EVENTS.INTEGRITY_PROOF_RECEIVED, {
+      node_id_hash: proof.node_id_hash,
+      nonce_hash: nonceHash,
+      signature_status,
+      platform: proof.platform,
+      version: proof.version,
+      capability_summary: { ...proof.capabilities },
+      signal_summary: {
+        capture_excluded_window_count: proof.signals.capture_excluded_window_count,
+        helper_status: proof.signals.helper_status,
+      },
+    });
+
+    // Step 8 (spec): success receipt.
+    res.status(202).json({
+      status: "accepted",
+      session_id: sessionId,
+      nonce: proof.nonce,
+      node_id_hash: proof.node_id_hash,
+      signature_status,
+      platform: proof.platform,
+      received_at: new Date().toISOString(),
+      note:
+        signature_status === "verified"
+          ? "Signature verified against the node registered to this session."
+          : "Signature mathematically verified, node not yet paired. Submit /api/integrity/pairing/challenge to pair.",
     });
   }
-
-  // Step 3 (spec): schema + crypto validation.
-  const pairedNode = pairingRegistry.getPairedNode(sessionId);
-  const validation = validateProof(req.body, {
-    now: Date.now(),
-    pairedNode,
-    expectedSessionId: sessionId,
-  });
-  if (!validation.ok) {
-    const hints = safeParsedPairingHints(req.body);
-    recordReject(validation.reason, hints.node_id_hash_if_parsed, hints.has_signature);
-
-    let status = 400;
-    if (validation.reason === "invalid_signature") status = 401;
-    if (validation.reason === "registered_signature_invalid") status = 401;
-    if (validation.reason === "proof_session_mismatch") status = 401;
-    if (validation.reason === "paired_node_mismatch") status = 409;
-    if (validation.reason === "paired_public_key_mismatch") status = 409;
-    return res.status(status).json({ error: validation.reason });
-  }
-  const { proof, signature_status } = validation;
-
-  // Token session must match proof session.
-  if (proof.session_id !== sessionId) {
-    recordReject("proof_session_mismatch", proof.node_id_hash, true);
-    return res.status(401).json({ error: "proof_session_mismatch" });
-  }
-
-  // Step 4 (spec): nonce replay protection.
-  const nonceResult = proofNonceGuard.check(proof.nonce, sessionId);
-  if (!nonceResult.ok) {
-    recordReject(nonceResult.reason, proof.node_id_hash, true);
-    return res.status(409).json({ error: nonceResult.reason });
-  }
-
-  // Step 5 (spec): N1 strict node continuity.
-  const stateResult = integrityState.record(sessionId, proof);
-  if (!stateResult.ok) {
-    recordReject(stateResult.reason, proof.node_id_hash, true);
-    return res.status(409).json({ error: stateResult.reason });
-  }
-
-  // Step 7 (spec): success audit with hashed nonce + summaries only.
-  const nonceHash = crypto.createHash("sha256").update(proof.nonce_bytes).digest("hex");
-  appendAudit(sess, EVENTS.INTEGRITY_PROOF_RECEIVED, {
-    node_id_hash: proof.node_id_hash,
-    nonce_hash: nonceHash,
-    signature_status,
-    platform: proof.platform,
-    version: proof.version,
-    capability_summary: { ...proof.capabilities },
-    signal_summary: {
-      capture_excluded_window_count: proof.signals.capture_excluded_window_count,
-      helper_status: proof.signals.helper_status,
-    },
-  });
-
-  // Step 8 (spec): success receipt.
-  res.status(202).json({
-    status: "accepted",
-    session_id: sessionId,
-    nonce: proof.nonce,
-    node_id_hash: proof.node_id_hash,
-    signature_status,
-    platform: proof.platform,
-    received_at: new Date().toISOString(),
-    note:
-      signature_status === "verified"
-        ? "Signature verified against the node registered to this session."
-        : "Signature mathematically verified, node not yet paired. Submit /api/integrity/pairing/challenge to pair.",
-  });
-});
+);
 
 // ─────────────────────────────────────────────────────────────
 //  Listen + graceful shutdown
 // ─────────────────────────────────────────────────────────────
+// Last: a JSON error handler. Express's default wrote an HTML page with the stack and absolute
+// paths whenever NODE_ENV was not "production" (pass-3 Low; audit D). Status codes from the body
+// parser (400, 413) are preserved; anything else is a 500 with a fixed body.
+app.use((err, _req, res, _next) => {
+  const status = Number(err?.status ?? err?.statusCode) || 500;
+  if (status >= 500) console.error("[simurgh] request failed:", err?.message ?? err);
+  res.status(status).json({
+    error: status >= 500 ? "internal_error" : String(err?.type ?? "request_error").slice(0, 64),
+  });
+});
+process.on("unhandledRejection", (reason) => {
+  console.error("[simurgh] unhandled rejection:", reason?.message ?? reason);
+});
+
 const server = app.listen(PORT, () => {
   console.log(`[simurgh] listening on http://localhost:${PORT}  (model: ${MODEL})`);
   if (HELPER_SHARED_SECRET) {

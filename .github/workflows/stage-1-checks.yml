@@ -17,6 +17,10 @@ concurrency:
   group: simurgh-quality-gate-${{ github.ref }}
   cancel-in-progress: true
 
+# Least privilege: these jobs only read the checkout (audit E-7).
+permissions:
+  contents: read
+
 jobs:
   stage-1-checks:
     name: Run Simurgh quality gate (scripts/check.sh)
@@ -42,7 +46,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           # Full history so the policy-drift guards can resolve a real base ref
           # (origin/main / merge-commit parent) and verify "zero src/llmShield
@@ -52,7 +56,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Node.js 22
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           cache: npm
@@ -61,7 +65,8 @@ jobs:
         run: npm ci
 
       - name: Install Python test dependencies
-        run: python3 -m pip install "pytest>=8.0"
+        run: |
+          python3 -m pip install --require-hashes --only-binary=:all: -r .github/pip/pytest-requirements.lock
 
       - name: Install Linux daemon test dependencies (xvfb, dbus, shellcheck)
         run: |
@@ -70,12 +75,13 @@ jobs:
             xvfb x11-utils dbus-x11 xterm shellcheck
 
       - name: Install Rust stable toolchain
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable branch
         with:
+          toolchain: stable
           components: rustfmt,clippy
 
       - name: Cache cargo registry + target
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: |
             ~/.cargo/registry
@@ -120,7 +126,9 @@ jobs:
         # preceding one, and these words above the line made `sudo sysctl` read as a completeness
         # gate and added a census entry.
         run: |
-          curl -sSfL https://github.com/leanprover/elan/releases/latest/download/elan-x86_64-unknown-linux-gnu.tar.gz | tar xz
+          curl -sSfL -o "$RUNNER_TEMP/elan.tar.gz" https://github.com/leanprover/elan/releases/download/v4.2.4/elan-x86_64-unknown-linux-gnu.tar.gz
+          echo "42b94d4244e8353142c456ec0e4ca6528fd898a6c604d4059f494e706e431f63  $RUNNER_TEMP/elan.tar.gz" | sha256sum -c -
+          tar xzf "$RUNNER_TEMP/elan.tar.gz"
           ./elan-init -y --default-toolchain "$(cat proofs/stage4m/lean-toolchain)"
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
 
@@ -128,7 +136,7 @@ jobs:
         run: ./scripts/check.sh
 
       - name: Set up Node.js 26 (byte-stable E2E reproduce)
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 26
 
@@ -137,7 +145,7 @@ jobs:
 
       - name: Upload check logs on failure
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: simurgh-check-logs
           path: .simurgh_check_logs/

@@ -65,7 +65,19 @@ export function createExplorerServer({
     }
   });
 }
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+// Main-module guard. `import.meta.url` is the loader's REAL, percent-encoded path; `process.argv[1]`
+// is whatever the shell passed. Compared as text, a verifier launched through a symlinked
+// directory (`/tmp` on macOS) or a path containing a space never runs and exits 0 printing
+// nothing (audit C-1, 31 October 2026). Both sides are resolved to the physical path here.
+function isMainModule(moduleUrl) {
+  try {
+    return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(moduleUrl);
+  } catch {
+    return false;
+  }
+}
+
+if (isMainModule(import.meta.url)) {
   const port = Number(process.env.SIMURGH_EXPLORER_PORT || 4173);
   if (!Number.isInteger(port) || port < 1024 || port > 65535)
     throw new Error("Invalid SIMURGH_EXPLORER_PORT");

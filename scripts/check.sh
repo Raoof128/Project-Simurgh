@@ -29,6 +29,11 @@
 
 set -euo pipefail
 
+# Never write Python bytecode into the checkout. Two tracked .pyc files under the frozen Stage 4U
+# adapter surface are rewritten by any step that imports the adapter package without this guard,
+# and a tracked file rewritten by a gate step is a failure under CI=true (see the Git status step).
+export PYTHONDONTWRITEBYTECODE=1
+
 # ── Project root ──────────────────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
@@ -76,6 +81,10 @@ done
 
 PASS=0
 FAIL=0
+# Skips and informational measurements are reported but never counted as passes, so
+# "Passed: N" counts only checks that could have failed.
+SKIP=0
+INFO=0
 FAILED_STEPS=()
 
 LOG_DIR=".simurgh_check_logs"
@@ -95,6 +104,16 @@ fail() {
   echo -e "${RED}✗ $1${NC}"
   FAIL=$((FAIL + 1))
   FAILED_STEPS+=("$1")
+}
+
+skip() {
+  echo -e "${YELLOW}- $1${NC}"
+  SKIP=$((SKIP + 1))
+}
+
+info() {
+  echo -e "${YELLOW}i $1${NC}"
+  INFO=$((INFO + 1))
 }
 
 run_step() {
@@ -1594,7 +1613,7 @@ if [[ "${SIMURGH_RUN_STAGE3H_LAYER2:-0}" == "1" ]]; then
     tail -80 "$LOG_DIR/llm-shield-stage3h-layer2-smoke.log"
   fi
 else
-  pass "LLM Shield 3H-L2 AgentDojo external run skipped (set SIMURGH_RUN_STAGE3H_LAYER2=1)"
+  skip "LLM Shield 3H-L2 AgentDojo external run skipped (set SIMURGH_RUN_STAGE3H_LAYER2=1)"
 fi
 
 step "LLM Shield 3I context-calibration audits"
@@ -1617,7 +1636,7 @@ fi
 if [[ "${SIMURGH_RUN_STAGE3J_ALL_SUITES:-0}" == "1" ]]; then
   pass "LLM Shield 3J real all-suite run executed via smoke (SIMURGH_RUN_STAGE3J_ALL_SUITES=1)"
 else
-  pass "LLM Shield 3J real all-suite run skipped (set SIMURGH_RUN_STAGE3J_ALL_SUITES=1)"
+  skip "LLM Shield 3J real all-suite run skipped (set SIMURGH_RUN_STAGE3J_ALL_SUITES=1)"
 fi
 
 step "LLM Shield 3K adaptive-readiness audits"
@@ -1631,7 +1650,7 @@ fi
 if [[ "${SIMURGH_RUN_STAGE3K:-0}" == "1" ]]; then
   pass "LLM Shield 3K real run executed via smoke (SIMURGH_RUN_STAGE3K=1)"
 else
-  pass "LLM Shield 3K real run skipped (set SIMURGH_RUN_STAGE3K=1)"
+  skip "LLM Shield 3K real run skipped (set SIMURGH_RUN_STAGE3K=1)"
 fi
 
 step "LLM Shield 3L Fable-5 reference containment"
@@ -1645,7 +1664,7 @@ fi
 if [[ "${SIMURGH_RUN_STAGE3L:-0}" == "1" ]]; then
   pass "LLM Shield 3L real run executed via smoke (SIMURGH_RUN_STAGE3L=1)"
 else
-  pass "LLM Shield 3L real run skipped (set SIMURGH_RUN_STAGE3L=1)"
+  skip "LLM Shield 3L real run skipped (set SIMURGH_RUN_STAGE3L=1)"
 fi
 
 step "LLM Shield 3F/3G helper function coverage"
@@ -1689,6 +1708,7 @@ if node --test --experimental-test-coverage \
   --test-coverage-functions=100 \
   tests/unit/llmShield/attestation/canonicalise.test.js \
   tests/unit/llmShield/attestation/attestationLib.test.js \
+  tests/unit/llmShield/attestation/canonicalStrict.test.js \
   > "$LOG_DIR/llm-shield-stage3m-helper-coverage.log" 2>&1; then
   pass "LLM Shield 3M attestation helper coverage"
 else
@@ -2164,7 +2184,11 @@ fi
 
 step "LLM Shield 3E-core docker smoke (skips if no docker)"
 if bash scripts/docker-smoke-llm-shield-stage3e.sh > "$LOG_DIR/llm-shield-stage3e-docker-smoke.log" 2>&1; then
-  pass "LLM Shield 3E-core docker smoke"
+  if grep -q "SKIP (docker unavailable)" "$LOG_DIR/llm-shield-stage3e-docker-smoke.log"; then
+    skip "LLM Shield 3E-core docker smoke skipped (docker unavailable)"
+  else
+    pass "LLM Shield 3E-core docker smoke"
+  fi
 else
   fail "LLM Shield 3E-core docker smoke"
   tail -40 "$LOG_DIR/llm-shield-stage3e-docker-smoke.log"
@@ -2197,20 +2221,35 @@ fi
 # Stage 3C evidence (informational — not gates; these print measurements only).
 step "LLM Shield 3C ablation (informational)"
 if node tests/e2e/llm_shield_ablation_runner.mjs > "$LOG_DIR/llm-shield-ablation.log" 2>&1; then
-  pass "LLM Shield 3C ablation"
+  info "LLM Shield 3C ablation (exit 0)"
   cat "$LOG_DIR/llm-shield-ablation.log"
 else
-  pass "LLM Shield 3C ablation (non-gating; see log)"
+  info "LLM Shield 3C ablation failed (non-gating; see log)"
   tail -20 "$LOG_DIR/llm-shield-ablation.log"
 fi
 
 step "LLM Shield 3C held-out generalization (informational)"
 if node tests/e2e/llm_shield_heldout_runner.mjs > "$LOG_DIR/llm-shield-heldout.log" 2>&1; then
-  pass "LLM Shield 3C held-out generalization"
+  info "LLM Shield 3C held-out generalization (exit 0)"
   cat "$LOG_DIR/llm-shield-heldout.log"
 else
-  pass "LLM Shield 3C held-out (non-gating; see log)"
+  info "LLM Shield 3C held-out failed (non-gating; see log)"
   tail -20 "$LOG_DIR/llm-shield-heldout.log"
+fi
+
+step "AgentDojo adapter Python suite (all tests)"
+# The whole directory, not a hand-picked list: files nobody names would otherwise never run.
+if python3 -c "import pytest" >/dev/null 2>&1; then
+  if (cd tools/agentdojo-simurgh-adapter && PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q -p no:cacheprovider tests) > "$LOG_DIR/agentdojo-adapter-pytest.log" 2>&1; then
+    pass "AgentDojo adapter Python suite ($(tail -1 "$LOG_DIR/agentdojo-adapter-pytest.log"))"
+  else
+    fail "AgentDojo adapter Python suite"
+    tail -40 "$LOG_DIR/agentdojo-adapter-pytest.log"
+  fi
+elif [[ "${CI:-}" == "true" ]]; then
+  fail "AgentDojo adapter Python suite — pytest missing in CI"
+else
+  skip "AgentDojo adapter Python suite skipped (pytest not installed)"
 fi
 
 # ── 14. Git status sanity ────────────────────────────────
@@ -2221,7 +2260,12 @@ if git rev-parse --git-dir > /dev/null 2>&1; then
   else
     echo -e "${YELLOW}Working tree has uncommitted changes:${NC}"
     git status --short
-    pass "working tree (uncommitted changes are fine if you haven't pushed yet)"
+    if [[ "${CI:-}" == "true" ]]; then
+      # In CI the tree starts clean, so any change here was written by a gate step.
+      fail "working tree dirty after the gate (a step rewrote tracked files)"
+    else
+      pass "working tree (uncommitted changes are fine if you haven't pushed yet)"
+    fi
   fi
 
   CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
@@ -2241,6 +2285,7 @@ echo ""
 echo -e "${CYAN}━━━ Summary ━━━${NC}"
 echo -e "  ${GREEN}Passed: $PASS${NC}"
 echo -e "  ${RED}Failed: $FAIL${NC}"
+echo -e "  ${YELLOW}Skipped: $SKIP  Informational: $INFO (not counted as passes)${NC}"
 
 if [[ "$FAIL" -gt 0 ]]; then
   echo ""

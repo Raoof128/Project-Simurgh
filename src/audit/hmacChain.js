@@ -2,6 +2,9 @@
 import crypto from "node:crypto";
 
 export const CHAIN_CAP = 5000;
+// A signed entry's payload is bounded: a caller-chosen 30 KB key name was stored verbatim in a
+// validly signed entry (audit D-6). Oversized payloads are replaced by a fixed marker.
+export const MAX_PAYLOAD_BYTES = 4096;
 
 export function createChain() {
   return { prevHash: "GENESIS", entries: [], truncated: false };
@@ -13,11 +16,16 @@ export function appendEntry(chain, hmacKey, type, payload) {
     chain.truncated = true;
     return;
   }
+  const serialised = JSON.stringify(payload ?? null);
+  const bounded =
+    Buffer.byteLength(serialised, "utf8") > MAX_PAYLOAD_BYTES
+      ? { payload_oversized: true, bytes: Buffer.byteLength(serialised, "utf8") }
+      : payload;
   const entry = {
     seq: chain.entries.length,
     ts: Date.now(),
-    type,
-    payload,
+    type: String(type).slice(0, 64),
+    payload: bounded,
     prev: chain.prevHash,
   };
   const sig = crypto.createHmac("sha256", hmacKey).update(JSON.stringify(entry)).digest("hex");

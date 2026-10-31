@@ -214,13 +214,17 @@ export function parseBundle(text) {
   const b = JSON.parse(text);
   return b.schema === "simurgh-phase14-outcomes-v1" ? adaptPublic(b) : validateBundle(b);
 }
-const matches = (text, query) =>
-  query
-    .toLowerCase()
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean)
-    .every((t) => text.toLowerCase().includes(t));
+export const QUERY_LIMIT = 1024;
+const terms = (query) => {
+  ensure(typeof query === "string" && query.length <= QUERY_LIMIT, "Query too long");
+  return query.toLowerCase().trim().split(/\s+/).filter(Boolean);
+};
+const matches = (text, query) => {
+  const wanted = terms(query);
+  if (!wanted.length) return true;
+  const haystack = text.toLowerCase();
+  return wanted.every((t) => haystack.includes(t));
+};
 export function queryRecords(b, { q = "", kind = "all", control = "all", model = "all" } = {}) {
   ensure(
     [

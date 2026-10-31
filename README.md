@@ -79,6 +79,15 @@ Composition blocked **zero valid active proposals** for either model. The incomp
 active trial remains in the denominator. All controls also retain four earlier effects per
 model from unknown-acknowledgement fixtures; those effects were **not prevented**.
 
+The 24 restricted trials are not 24 independent observations: they cover **six restricted
+states**, each written once as benign and once as adversarial source text and run twice. For
+Llama, 5 of the 6 states produced a credential-only effect and none did under composition; at
+that level the descriptive Wilson intervals are about 43.6–97.0% and 0–39.0%. The
+credential-only control has no stop, lease or alert input: in every restricted credential-only
+Llama trial a new effect occurred exactly when Llama emitted the exact call in one of the five
+states that control cannot observe, so the 17/24 → 0/24 difference mostly measures how often the
+model emits the call, not how finely the gate discriminates.
+
 The corpus is small and internally authored, repeated trials are clustered, and trusted state
 and the target report are explicit. The models use different tool interfaces. This comparison
 does not establish a model ranking, unseen-task generalization or general safety. See the
@@ -239,10 +248,15 @@ The retained Stage 4F frontier verifier has confirmed unsigned-certificate and u
 gaps. Its result is not assurance against a dishonest producer; see the
 [scoped finding and probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m94--retained-stage-4f-frontier-is-unsigned-and-does-not-meet-the-dishonest-evaluator-claim).
 
-The retained Stage 4M public-tier verifier also accepts altered or missing disclosure/chain
-files without changes to the signed attestation. See the
-[confirmed binding gap](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m106--stage-4m-public-tier-verification-omits-signed-disclosure-and-chain-bindings)
-before relying on public-tier verification. These runtime gaps remain open.
+The retained Stage 4M public-tier verifier accepted altered or missing disclosure/chain files
+without changes to the signed attestation; the 21 October repair closed that Tier-P binding gap
+(re-verified 31 October: altered, deleted and forged disclosure files now return raw 22). Its
+residuals stay open: upstream and proof digests, non-claims and known-limitation lists are not
+recomputed under a pinned key, an unknown `--tier` value skips claim recomputation, and the
+acknowledgement key is read from the bundle. See the
+[original finding](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m106--stage-4m-public-tier-verification-omits-signed-disclosure-and-chain-bindings)
+and [SECURITY.md](SECURITY.md#retained-stage-4m-public-tier-disclosure-verification). The 4F gap
+above remains open.
 The Stage 4N heartbeat CLI also omits manifest authentication and accepts inputs beyond its
 advertised disclosure bound; see the [verification limits and probe](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m107--stage-4n-cli-consistency-does-not-authenticate-a-feed-or-bound-all-public-disclosure).
 

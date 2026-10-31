@@ -119,7 +119,19 @@ export function buildIndex({ root = ROOT, detail = false, study = "phase17" } = 
   }
   return validateBundle(b);
 }
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+// Main-module guard. `import.meta.url` is the loader's REAL, percent-encoded path; `process.argv[1]`
+// is whatever the shell passed. Compared as text, a verifier launched through a symlinked
+// directory (`/tmp` on macOS) or a path containing a space never runs and exits 0 printing
+// nothing (audit C-1, 31 October 2026). Both sides are resolved to the physical path here.
+function isMainModule(moduleUrl) {
+  try {
+    return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(moduleUrl);
+  } catch {
+    return false;
+  }
+}
+
+if (isMainModule(import.meta.url)) {
   const args = process.argv.slice(2),
     i = args.indexOf("--output");
   if (i < 0 || !args[i + 1]) throw new Error("Usage: node index.mjs --output file.json [--detail]");

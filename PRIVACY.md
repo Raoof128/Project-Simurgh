@@ -153,7 +153,11 @@ and pasted text content are excluded from that pipeline.
 The exam join route receives the raw identifier and transforms it with **HMAC-SHA256** before
 placing it in the session record. [`hashStudentId`](src/privacy/hashIdentity.js) selects
 `SIMURGH_STUDENT_ID_PEPPER`, otherwise `SIMURGH_AUDIT_SECRET`, otherwise a known development
-fallback, and emits `v1:<digest>`. Configure a dedicated secret pepper for non-demo use.
+fallback. That base secret is never used as the HMAC key directly: the key is
+`HMAC-SHA256(base, "simurgh/student-id/v2")`, the digest is `HMAC-SHA256(key, identifier)`, and
+the output is `v2:<digest>`. The derivation keeps the returned value from doubling as an
+audit-chain signature when the audit secret is the base. Configure a dedicated secret pepper for
+non-demo use.
 
 This is deterministic pseudonymization, not anonymity: values remain linkable under the same
 key, and the known development fallback does not protect guessable identifiers. The join handler

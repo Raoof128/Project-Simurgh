@@ -8,7 +8,7 @@ describe("hashStudentId", () => {
     const result = hashStudentId("john.doe@example.com");
     assert.equal(typeof result, "string");
     assert.equal(result.length, 67);
-    assert.match(result, /^v1:[0-9a-f]{64}$/);
+    assert.match(result, /^v2:[0-9a-f]{64}$/);
   });
 
   test("same input always produces same hash", () => {

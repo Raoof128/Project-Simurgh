@@ -2,9 +2,12 @@
 services:
   simurgh-gateway:
     build: { context: ., dockerfile: Dockerfile.gateway }
-    ports: ["33030:33030"]
+    restart: unless-stopped
+    # Loopback only: the image runs in demo mode, where instructor routes need no token.
+    ports: ["127.0.0.1:33030:33030"]
     environment:
-      SIMURGH_LLM_SHIELD_SECRET: "${SIMURGH_LLM_SHIELD_SECRET:-docker-mock-secret-32-characters-xx}"
+      # No default: a published default secret is no secret (pass-3 M4).
+      SIMURGH_LLM_SHIELD_SECRET: "${SIMURGH_LLM_SHIELD_SECRET:?set SIMURGH_LLM_SHIELD_SECRET (32+ characters)}"
       SIMURGH_LIVE_PROVIDER_ENABLED: "false"
       SIMURGH_GATEWAY_PROVIDER_MODE: "mock"
       SIMURGH_LLM_PROVIDER: "mock"

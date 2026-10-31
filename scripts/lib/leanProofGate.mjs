@@ -33,14 +33,19 @@ export const GATE_REASONS = Object.freeze({
   CORPUS_PROVES_NOTHING: "lean_gate_corpus_proves_nothing",
   TYPECHECK_FAILED: "lean_gate_typecheck_failed",
   MISSING_LEAN: "lean_gate_missing_lean_binary",
+  NONSTANDARD_AXIOM: "lean_gate_nonstandard_axiom",
+  AXIOM_SWEEP_SILENT: "lean_gate_axiom_sweep_silent",
 });
 
 /**
  * An escape hatch is the formal analogue of a vacuous gate: it type-checks, it is green, and it
  * establishes nothing. `axiom` is here because a proof that assumes its conclusion is not one.
  */
+// `axiom` is unanchored: `private axiom`, `@[simp] axiom` and `noncomputable axiom` all type-check
+// and all passed the line-anchored form (audit E-1, 31 October 2026). `sorryAx` is the constant
+// `sorry` elaborates to; written directly it raises no warning at all.
 const ESCAPES =
-  /\bsorry\b|\badmit\b|\bnative_decide\b|^\s*axiom\s|\bunsafe\s|@\[implemented_by|\bpartial\s+def\b/m;
+  /\bsorry\b|\bsorryAx\b|\badmit\b|\bnative_decide\b|\baxiom\b|\bunsafe\s|@\[implemented_by|\bpartial\s+def\b/m;
 
 /** Any declaration form. A file of `#eval`s is not a proof file, whatever its extension says. */
 const DECLARATION = /\b(theorem|lemma|example|def|abbrev|structure|inductive|class|instance)\b/;

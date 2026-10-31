@@ -18,6 +18,11 @@
 
 set -euo pipefail
 
+# Never write Python bytecode into the checkout. Two tracked .pyc files under the frozen Stage 4U
+# adapter surface are rewritten by any step that imports the adapter package without this guard,
+# and a tracked file rewritten by a gate step is a failure under CI=true (see the Git status step).
+export PYTHONDONTWRITEBYTECODE=1
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$PROJECT_ROOT"
@@ -136,7 +141,6 @@ declare -a REPRODUCE=(
   "Stage 5C VSB|scripts/reproduce-llm-shield-stage5c.sh"
   "Stage 5D VARL|scripts/reproduce-llm-shield-stage5d.sh"
   "Stage 5E VDA|scripts/reproduce-llm-shield-stage5e.sh"
-  "Stage 5C VSB|scripts/reproduce-llm-shield-stage5c.sh"
   "Stage 5H VSD|scripts/reproduce-llm-shield-stage5h.sh"
   "Stage 5M VTC-Quorum|scripts/reproduce-llm-shield-stage5m.sh"
   "Stage 5R VPF|scripts/reproduce-llm-shield-stage5r.sh"
@@ -151,6 +155,18 @@ for entry in "${REPRODUCE[@]}"; do
     fail "$name — reproduce script missing: $script"
   fi
 done
+
+step "Git status after E2E"
+if [[ -n "$(git status --porcelain)" ]]; then
+  git status --short
+  if [[ "${CI:-}" == "true" ]]; then
+    fail "working tree dirty after E2E (a step rewrote tracked files)"
+  else
+    echo -e "${YELLOW}Working tree has uncommitted changes (not failing outside CI).${NC}"
+  fi
+else
+  pass "working tree clean after E2E"
+fi
 
 # ── Summary ──────────────────────────────────────────────
 echo ""

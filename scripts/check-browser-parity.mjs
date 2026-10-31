@@ -1,6 +1,14 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Maintained fresh-output parity runner. Never overwrites a prior receipt.
-import { readFileSync, writeFileSync, copyFileSync, mkdirSync, mkdtempSync, rmSync } from "node:fs";
+import {
+  readFileSync,
+  writeFileSync,
+  copyFileSync,
+  mkdirSync,
+  mkdtempSync,
+  rmSync,
+  realpathSync,
+} from "node:fs";
 import { spawnSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
@@ -158,6 +166,18 @@ export async function main() {
 }
 
 // Main guard from the first commit.
-if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+// Main-module guard. `import.meta.url` is the loader's REAL, percent-encoded path; `process.argv[1]`
+// is whatever the shell passed. Compared as text, a verifier launched through a symlinked
+// directory (`/tmp` on macOS) or a path containing a space never runs and exits 0 printing
+// nothing (audit C-1, 31 October 2026). Both sides are resolved to the physical path here.
+function isMainModule(moduleUrl) {
+  try {
+    return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(moduleUrl);
+  } catch {
+    return false;
+  }
+}
+
+if (isMainModule(import.meta.url)) {
   process.exit(await main());
 }

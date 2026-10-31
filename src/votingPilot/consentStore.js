@@ -58,5 +58,16 @@ export function createConsentStore() {
     return { ok: true };
   }
 
-  return { accept, get, withdraw, markSubmitted };
+  function size() {
+    return store.size;
+  }
+
+  // Withdrawn records stay for their audit chains but no longer count as active sessions.
+  function activeSize() {
+    let n = 0;
+    for (const record of store.values()) if (!record.withdrawn) n += 1;
+    return n;
+  }
+
+  return { accept, get, withdraw, markSubmitted, size, activeSize };
 }

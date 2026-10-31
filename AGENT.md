@@ -4377,3 +4377,136 @@ Owner-requested work; implementation and review by Codex assistance.
   launch waits, stale lock cleared). Prettier clean. The eight-job measurement above.
 - **Follow-ups:** Watch the next pushes to `main`. The diagnostic branch `diag/browser-cold` is
   deleted after this entry; its runs stay in the Actions history.
+
+### 2026-10-28 (Australia/Sydney) — Pass-3 audit repair
+
+**Raouf: Claude-assisted implementation**
+
+- **Scope:** Maintenance authority `f8abb488` and Addendum 1 `144ffcb0`
+  (`docs/superpowers/specs/2026-10-28-pass3-audit-repair.md`). Frozen gate sources, archived
+  evidence, recorded numbers and `src/llmShield/**` are unchanged.
+- **Summary:** Repairs the High and main Medium findings of the strict pass-3 audit of `6e4a1a0b`.
+  (1) `hashStudentId` fell back to `SIMURGH_AUDIT_SECRET` and the unauthenticated join route returned
+  that HMAC for any identifier, so a student could mint valid audit-chain signatures; the key is now
+  derived with domain separation (`v2:` digests). (2) Tokenless telemetry may hold at most a quarter of
+  the session store and is rate-limited per IP when it creates a session; LLM Shield session creation
+  is rate-limited at the mount; limiter keys for bearers are fixed-length digests and each limiter
+  holds at most 50,000 buckets. (3) The four defects in hash-pinned gate code (title-case webhook
+  headers rejected a genuine stop alert; hard-coded provider ids; a stop on one route did not block
+  the sibling; `flock` on the SQLite file broke macOS) are fixed in the post-freeze successor
+  `tools/assurance-composed-successor/`, which subclasses the frozen modules; SECURITY.md discloses
+  that the evaluated code keeps them. (4) The Stage 4H E2E test byte-compares the rebuilt fixtures
+  with the committed ones instead of rewriting and re-reading them, and a dirty tree after either
+  gate fails under `CI=true`. (5) `check.sh` counts skips and informational steps separately, never
+  as passes; the duplicate Stage 5C VSB entry is removed from `check-e2e.sh`. (6) `npm test` uses
+  Node's recursive glob, which adds three Stage 5Q files (25 tests) the shell pattern never ran, with
+  a guard test; `check.sh` runs the whole AgentDojo adapter suite (180 tests) instead of nine named
+  files. (7) All 79 action references are pinned to commit SHAs and every elan install uses release
+  v4.2.4 with a verified sha256, never `master`. (8) README, RESULTS and BRIEF state that the 24
+  restricted trials cluster into six restricted states (5/6 credential-only effects, 0/6 composed;
+  Wilson about 43.6–97.0% and 0–39.0%); no reported number changed.
+- **Files changed:** see the declaration's table and Addendum 1; plus `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Each regression was seen failing on `6e4a1a0b` first: forged entry verified
+  (`true !== false`); join returned 503 after a tokenless flood; fourth LLM Shield create returned
+  200; 15,360-character limiter key; title-case alert raised `invalid_webhook_event`; real ids
+  classified `unrelated`; sibling dispatch `observed` under `session_snapshot`; frozen pipeline
+  `database is locked` on macOS without a shim; the old 4H test passed over an injected merkle-root
+  drift and silently overwrote it; the discovery guard listed the three unrun files. After the
+  repair: `npm test` 5,221/5,221, 0 skipped (Node 24); successor suite 26/26 on macOS with no lock
+  shim; Stage 4H E2E 2/2 on Node 26 and failing with the drifted path named when drift is injected;
+  adapter suite 180 passed, 1 skipped (no `cryptography` in a pytest-only venv); the five frozen
+  directories show no diff; the 5Q census `baseline` is unchanged; elan tarball sha256 recomputed
+  locally; Prettier clean.
+- **Follow-ups:** Require the quality and E2E gates on `main` through branch protection once this
+  merges. The LLM Shield session store still has no eviction. About ten `scripts/reproduce-*.sh` still
+  have no CI caller. A future study that wants the fixed gate freezes the successor's sources in its
+  own protocol.
+
+### 2026-10-31 (Australia/Sydney) — Pass-3 branch: repair of the three red hosted checks
+
+**Raouf: Claude-assisted implementation**
+
+- **Scope:** Addendum 2 authority `e5f417e3`
+  (`docs/superpowers/specs/2026-10-28-pass3-audit-repair.md`). Gate scripts and one guard test on
+  this branch; two frozen-stage workflow pins moved to their own branches. No frozen source,
+  archived evidence, recorded number or assertion changed.
+- **Summary:** The first hosted run of PR #144 failed three checks. (1) The quality gate failed its
+  own new dirty-tree check: the Stage 3H/3J/3K smoke scripts import the adapter package and rewrote
+  the two tracked `.pyc` files under the frozen Stage 4U surface, which the 26 October restoration
+  forbids untracking. `check.sh` and `check-e2e.sh` now export `PYTHONDONTWRITEBYTECODE=1` once,
+  before any Python runs, so every step and every script a step calls inherits it. (2) and (3) The
+  Stage 5Q and 5R gates fired because this branch pinned their own workflow files, and each judged the
+  whole branch diff against its exhaustive surface (42 and 41 refusals). Annex A5.3 of the 5Q spec
+  already states that a stage-workflow change lands in its own pull request; the 5Q pin with its
+  census re-pin and the 5R pin are restored to `main` here and carried on `ci/pin-stage-5q-workflow`
+  (`c1b48638`) and `ci/pin-stage-5r-workflow` (`41d10727`, which also adds the
+  `permissions: contents: read` block the 5R workflow never declared).
+- **Files changed:** `scripts/check.sh`, `scripts/check-e2e.sh`,
+  `tests/unit/maintenance/gateBytecodeGuard.test.js` (new), `.github/workflows/stage-5q-checks.yml`,
+  `.github/workflows/stage-5r-checks.yml`,
+  `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json` (all three restored to
+  `main`), the declaration (Addendum 2), `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Hosted log of run 40576071879 names the two rewritten `.pyc` paths as the only
+  dirt. After the restore: 5Q gate census 48 problems, set-identical to the committed pin (exit 0);
+  the 5Q workflow-shape, write-surface and transition tests and the 5R write-surface test 78/78; the
+  workflow-observing tests 18/18; the new guard 2/2. On `ci/pin-stage-5q-workflow`: the 5Q
+  write-surface gate accepts the one path outside Q0 under Annex A5 (authority at base), census
+  48/48, Stage 5Q suite 584/584. On `ci/pin-stage-5r-workflow`: `WRITE SURFACE OK: 1 changed
+  file(s)`, Stage 5R suite 389/389. Prettier clean on edited supported files. The hosted gates
+  have not yet run on these revisions.
+- **Follow-ups:** Open the two pin branches as separate pull requests after this one. The Stage 5Q
+  and 5R gates still judge a whole PR diff whenever their workflow file is touched; a declared
+  `maintenance_behaviour` for both (gate lifecycle contract) would remove the need for the split.
+
+
+### 2026-10-31 (Australia/Sydney) — Full repository audit, red team and remediation
+
+**Raouf: Claude-assisted implementation**
+
+- **Scope:** Branch `audit/2026-10-31-full-repository`, cut from `fix/pass3-audit-findings` after the
+  repair of its three red hosted checks. Maintained surfaces only: `server.js`, `src/*` outside
+  `src/llmShield`, `scripts/*`, the workflows, the explorer, the composed-gate successor, the
+  top-level attestation libraries, `tools/evidence-mutations`, mutable documentation. Frozen
+  sources, archived evidence, recorded numbers, `src/llmShield/**`, the Stage 4U adapter and
+  stage-owned verifiers are unchanged; their defects are disclosed in SECURITY.md.
+- **Summary:** Seven independent read-only reviewers (areas A1, A2, B, C, D, E, F) each confirmed
+  findings by running code against `e75753d1`; every repair landed with a regression that fails
+  on the pre-fix revision. Highest-impact repairs: an anonymous 12 KB telemetry body nested 6,000
+  deep crashed the server (D-1); anonymous callers could drive paid model calls with no ceiling
+  and the gating knobs had no readers (D-2); `//sessions` bypassed the per-IP LLM Shield bound
+  (B-1); the frozen gateway exported provider text at blocked cumulative risk, now withheld at
+  the mount (B-2); nineteen maintained verifier entry points exited 0 silently through a
+  symlinked or space-containing path (C-1); the Lean gate accepted `private axiom` and `sorryAx`
+  (E-1); the composed-gate successor dropped signed alerts over irrelevant headers or unparseable
+  bodies and let a pending alert's sibling dispatch (A1-1..3); imported explorer bundles were
+  presented as repository data (F-3). Every headline research number recomputed from the
+  archives; README and RESULTS gained the baseline-observability and model-identity caveats
+  without changing a number. The full register, remediation record, verification matrix,
+  research-claim audit, residual-risk register and file inventory are in
+  `docs/security-audit-2026-10-31/`.
+- **Files changed:** see `docs/security-audit-2026-10-31/REMEDIATION.md` (one row per commit).
+- **Verification:** see `docs/security-audit-2026-10-31/VERIFICATION.md` (commands, versions, exit
+  codes, counts, platform). Hosted CI has not run on these revisions; nothing was pushed.
+- **Follow-ups:** open the two pin branches as separate pull requests; apply branch protection to
+  `main`; the residual-risk register lists the confirmed unresolved items, the missing external
+  evidence and the platform-blocked checks.
+
+### 2026-10-31 (Australia/Sydney) — Audit second pass: the items left open
+
+**Raouf: Claude-assisted implementation**
+
+- **Scope:** Same branch; maintained surfaces and successors only. Frozen bytes unchanged.
+- **Summary:** One open session per student per exam, with the lockout trade-off documented
+  (D-10); expired pairing challenges and replay-guard rows purged (D-11); bounded limiter eviction
+  with a full-sweep fallback (D-13); a maintained export scan at the gateway mount for what the
+  frozen output firewall exported (B-3: normalisation, decoding, secret shapes, canaries, context
+  echo); the maintained attestation verifier refuses ambiguous bundles, comparing key names after
+  decoding (C-8/E-3); the composed-gate successor re-drives revocation after a crash or replay and
+  refuses a symlinked signal database (A1-4, A1-8); the explorer checks the archive root and the
+  members it reads against the manifest (F-4).
+- **Files changed:** commits `53cef6ea`, `5b806250`, `b9fa3f04`, `71e92d5a`, `630fd27e` and the
+  deliverables.
+- **Verification:** export scan 9/9, canonical 6/6, runtime regressions 16/16, successor 38/38,
+  explorer 23/23, security and related suites 192/192, 3M/3E/3H smokes pass; full `npm test` in
+  `docs/security-audit-2026-10-31/VERIFICATION.md`.
+- **Follow-ups:** unchanged from the first entry.

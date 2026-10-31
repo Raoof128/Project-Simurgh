@@ -6,7 +6,11 @@ cd "$ROOT"
 PORT="${SIMURGH_LLM_SHIELD_STAGE3H_SEC_PORT:-33059}"
 BASE="http://127.0.0.1:$PORT"
 LOG="${TMPDIR:-/tmp}/simurgh-llm-shield-stage3h-sec-$PORT.log"
-SIMURGH_DEMO_MODE=1 SIMURGH_LLM_SHIELD_SECRET="smoke-llm-shield-secret-32-characters" PORT="$PORT" node server.js >"$LOG" 2>&1 &
+# SIMURGH_GATEWAY_EXPORT_GUARD=0: this smoke replays the frozen Stage 3H fixture corpus on one
+# gateway session and asserts the frozen router's own verdicts, which never gated on cumulative
+# risk (score reaches 81). The maintained conductor withholds such exports by default
+# (audit B-2, 31 October 2026); the historical replay is measured without that correction.
+SIMURGH_DEMO_MODE=1 SIMURGH_LLM_SHIELD_SECRET="smoke-llm-shield-secret-32-characters" SIMURGH_GATEWAY_EXPORT_GUARD=0 PORT="$PORT" node server.js >"$LOG" 2>&1 &
 PID=$!
 trap 'kill "$PID" >/dev/null 2>&1 || true' EXIT
 for _ in {1..60}; do curl -sf "$BASE/health" >/dev/null 2>&1 && break; sleep 0.25; done
