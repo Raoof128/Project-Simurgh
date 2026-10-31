@@ -66,5 +66,13 @@ export function createBankingSessionStore() {
     return store.size;
   }
 
-  return { accept, get, markSubmitted, withdraw, size };
+  // Withdrawn sessions no longer count against capacity (audit D-8): with the cap reached and
+  // 48 of 50 sessions withdrawn, consent still returned 503 until restart.
+  function activeSize() {
+    let n = 0;
+    for (const record of store.values()) if (!record.withdrawn) n += 1;
+    return n;
+  }
+
+  return { accept, get, markSubmitted, withdraw, size, activeSize };
 }

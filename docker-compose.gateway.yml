@@ -2,6 +2,7 @@
 services:
   simurgh-gateway:
     build: { context: ., dockerfile: Dockerfile.gateway }
+    restart: unless-stopped
     # Loopback only: the image runs in demo mode, where instructor routes need no token.
     ports: ["127.0.0.1:33030:33030"]
     environment:

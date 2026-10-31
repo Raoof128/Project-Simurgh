@@ -98,5 +98,9 @@ export const keyBySessionToken = (req) => {
   if (req.sessionTokenSessionId) return req.sessionTokenSessionId;
   const auth = req.headers.authorization;
   const bearer = auth && /^Bearer\s+/i.test(auth) ? auth.replace(/^Bearer\s+/i, "") : null;
-  return bearer ? `tok:${bearer.slice(0, 64)}` : "unauthenticated";
+  // A 64-character prefix of the bearer was the victim's non-secret session id plus a dot, so ten
+  // junk-signature bearers throttled the real student (audit D-12). The full bearer is digested.
+  return bearer
+    ? `tok:${crypto.createHash("sha256").update(bearer).digest("hex").slice(0, 32)}`
+    : "unauthenticated";
 };

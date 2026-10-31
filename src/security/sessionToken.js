@@ -38,6 +38,9 @@ export function verifySessionToken(token, signingKey) {
     return { valid: false, reason: "token_malformed" };
   }
 
+  // Lenient base64url decoding accepted trailing garbage after the signature (audit D-12); the
+  // token must be the canonical encoding of what it decodes to.
+  if (b64url(providedSig) !== sigB64) return { valid: false, reason: "token_malformed" };
   if (providedSig.length !== expectedSig.length) return { valid: false, reason: "token_invalid" };
   if (!crypto.timingSafeEqual(providedSig, expectedSig))
     return { valid: false, reason: "token_invalid" };

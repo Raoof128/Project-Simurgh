@@ -54,25 +54,44 @@ export function createEvent(sessionId, type, detail = {}) {
 
 export function eventTimeline({ maxEventsPerSession = 500 } = {}) {
   const store = new Map();
+  // Per-type counts and the number of events the ring dropped, kept outside the ring so a report
+  // can say what happened in the first 78 minutes of a two-hour exam (audit D-4).
+  const stats = new Map();
 
   return {
     add(sessionId, type, detail = {}) {
       if (!store.has(sessionId)) store.set(sessionId, []);
+      if (!stats.has(sessionId)) stats.set(sessionId, { counts: {}, dropped: 0 });
       const events = store.get(sessionId);
+      const st = stats.get(sessionId);
       events.push(createEvent(sessionId, type, detail));
+      st.counts[type] = (st.counts[type] ?? 0) + 1;
       if (events.length > maxEventsPerSession) {
+        st.dropped += events.length - maxEventsPerSession;
         events.splice(0, events.length - maxEventsPerSession);
       }
     },
     get(sessionId) {
       return [...(store.get(sessionId) ?? [])];
     },
+    stats(sessionId) {
+      const st = stats.get(sessionId) ?? { counts: {}, dropped: 0 };
+      return {
+        event_counts: { ...st.counts },
+        timeline_truncated: st.dropped > 0,
+        events_dropped: st.dropped,
+      };
+    },
     clear(sessionId) {
       store.delete(sessionId);
+      stats.delete(sessionId);
     },
     evictMissing(activeSessionIds) {
       for (const sessionId of store.keys()) {
-        if (!activeSessionIds.has(sessionId)) store.delete(sessionId);
+        if (!activeSessionIds.has(sessionId)) {
+          store.delete(sessionId);
+          stats.delete(sessionId);
+        }
       }
     },
   };

@@ -63,21 +63,32 @@ function isAllowedHashField(key) {
   return ALLOWED_HASH_SUFFIXES.some((s) => key.endsWith(s));
 }
 
+// Nesting deeper than this is never a legitimate proof. The scan used to recurse without a cap,
+// so a 12 KB body nested 6,000 deep threw RangeError inside an async route and the process
+// exited (audit D-1, 31 October 2026). Deep input is reported as a forbidden field: fail closed.
+export const MAX_SCAN_DEPTH = 32;
+
 export function containsForbiddenLocalFieldDeep(value) {
   if (value === null || typeof value !== "object") return null;
-  if (Array.isArray(value)) {
-    for (const item of value) {
-      const nested = containsForbiddenLocalFieldDeep(item);
-      if (nested) return nested;
+  // Explicit stack: no recursion, no RangeError, whatever the input shape.
+  const stack = [{ node: value, depth: 0 }];
+  while (stack.length > 0) {
+    const { node, depth } = stack.pop();
+    if (depth > MAX_SCAN_DEPTH) return "nesting_depth_exceeded";
+    if (Array.isArray(node)) {
+      for (const item of node) {
+        if (item !== null && typeof item === "object") stack.push({ node: item, depth: depth + 1 });
+      }
+      continue;
     }
-    return null;
-  }
-  for (const [key, nestedValue] of Object.entries(value)) {
-    if (FORBIDDEN_LOCAL_FIELD_NAMES.includes(key) && !isAllowedHashField(key)) {
-      return key;
+    for (const [key, nestedValue] of Object.entries(node)) {
+      if (FORBIDDEN_LOCAL_FIELD_NAMES.includes(key) && !isAllowedHashField(key)) {
+        return key;
+      }
+      if (nestedValue !== null && typeof nestedValue === "object") {
+        stack.push({ node: nestedValue, depth: depth + 1 });
+      }
     }
-    const nested = containsForbiddenLocalFieldDeep(nestedValue);
-    if (nested) return nested;
   }
   return null;
 }

@@ -301,6 +301,45 @@ in place; where a maintained successor or mount-level correction exists it is na
   Node 26 only; on Node 24 four evidence files differ. Reproduction claims for Stage 4H are
   Node-26 claims.
 
+## Runtime server repairs (31 October 2026)
+
+The audit's area-D reviewer reproduced these in the maintained server; each is repaired on the
+audit branch with a regression in `tests/unit/maintenance/auditRuntime.test.js`:
+
+- **Process crash from one anonymous request.** A 12 KB telemetry body whose `daemon_proof` was
+  nested 6,000 deep overflowed the recursive forbidden-field scan inside an async route; Express 4
+  turned that into an unhandled rejection and Node exited, losing every in-memory audit chain. The
+  scan is iterative with a depth cap (deep input is refused as a forbidden field), the async route is
+  wrapped so errors reach a JSON error handler, unhandled rejections are logged, and the compose
+  service restarts.
+- **Model-call governance.** Tokenless (legacy) sessions could drive one paid call per accepted
+  window with no ceiling, and `SIMURGH_SCORING_MODE`, `SIMURGH_CLAUDE_ON_WARNING` and
+  `SIMURGH_CLAUDE_ON_CRITICAL` had no readers. Tokenless sessions never reach the model unless
+  `SIMURGH_MODEL_FOR_LEGACY_SESSIONS=1`, the knobs are honoured, and `SIMURGH_MODEL_CALLS_PER_MINUTE`
+  (default 120) bounds spend process-wide. `key_intervals` is typed before it enters the prompt.
+- **Evidence behind a verdict.** The timeline is written before any model call, so a provider
+  outage no longer blanks the events behind a Critical verdict; the report carries the peak risk
+  level, per-type event counts and a `timeline_truncated` flag that survive the 500-event ring.
+- **Audit chain.** A truncated chain, or an export whose declared `entry_count` disagrees, now
+  verifies as invalid and the report says `audit_chain_truncated`; device and integrity routes refuse
+  writes after submit; signed payloads are bounded to 4 KiB and caller-chosen key names never enter
+  a reason code. The 5,000-entry cap itself remains: a session can still reach it, and when it does
+  the record says so instead of claiming validity.
+- **Configuration.** `.env` is loaded before any module snapshots `process.env`; known placeholder
+  secrets from `.env.example` refuse to start outside demo mode; demo mode warns that it ignores a
+  configured instructor token; `SIMURGH_TRUST_PROXY` opts in to proxy-aware per-IP limits.
+- **Authentication and limits.** The instructor token is compared in constant time over digests,
+  wrong tokens are counted per IP (30 per minute, then 429), the dashboard, audit, exam and SSE
+  routes share the instructor limiter, SSE clients are capped, session-token limiter keys digest the
+  whole bearer, a session token must be canonical base64url, and a join may not claim a session id a
+  tokenless session already holds.
+- **Pilots.** Voting consent has a per-IP limiter and a session cap, voting report provenance is
+  set by the operator's environment rather than echoed from the query string, withdrawn banking
+  sessions free capacity, and a banking token's participant hash is checked against the record.
+
+Still open in the runtime: per-exam student de-duplication, purge of expired pairing challenges
+and replay-guard entries, limiter CPU at the 50,000-bucket cap, and the demo-mode image itself.
+
 ## Reporting a Vulnerability
 
 **Do not open a public GitHub issue for security vulnerabilities.**

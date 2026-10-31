@@ -6,9 +6,19 @@ import { buildPilotReport } from "./reportBuilder.js";
 import { VOTING_PILOT_EVENTS } from "./events.js";
 import { appendEntry } from "../audit/hmacChain.js";
 import { issueSessionToken, verifySessionToken, extractBearer } from "../security/sessionToken.js";
+import { createRateLimiter, keyByIp } from "../security/rateLimit.js";
 
 const router = Router();
 const store = createConsentStore();
+// Consent had no limiter and no cap: 30,000 requests from one IP in 8.7 s (audit D-8).
+const MAX_VOTING_SESSIONS = Number(process.env.SIMURGH_VOTING_PILOT_MAX_SESSIONS || 5000);
+const limitConsent = createRateLimiter({
+  windowMs: 60_000,
+  max: Number(process.env.SIMURGH_VOTING_PILOT_CONSENT_RATE_MAX) || 60,
+  keyFn: keyByIp,
+  name: "voting-consent",
+});
+let acceptedSessions = 0;
 
 const FORBIDDEN_BALLOT_FIELDS = new Set([
   "choice",
@@ -53,8 +63,11 @@ function rejectIfClosed(req, res, next) {
 }
 
 // POST /consent/accept — atomic consent + session creation
-router.post("/consent/accept", (req, res) => {
+router.post("/consent/accept", limitConsent, (req, res) => {
   if (collectionClosed()) return res.status(410).json({ error: "voting_pilot_collection_closed" });
+  if (acceptedSessions >= MAX_VOTING_SESSIONS)
+    return res.status(503).json({ error: "voting_session_capacity_reached" });
+  acceptedSessions += 1;
   const pepper = getEnv("SIMURGH_VOTING_PILOT_PEPPER");
   const anonymousCode = crypto.randomBytes(8).toString("hex");
   const { pilot_session_id, record } = store.accept({
@@ -143,8 +156,10 @@ router.get("/:sessionId/report", requirePilotToken, (req, res) => {
     ts: new Date().toISOString(),
   });
 
-  const dataSource = req.query.data_source ?? "researcher_self_pilot";
-  const synthetic = req.query.synthetic === "true";
+  // Provenance is set by the operator's environment, never echoed from the query string
+  // (pass-3 Low, audit D-8): a caller could label a report "independent_audit_verified".
+  const dataSource = process.env.SIMURGH_VOTING_PILOT_DATA_SOURCE || "researcher_self_pilot";
+  const synthetic = process.env.SIMURGH_VOTING_PILOT_SYNTHETIC === "true";
   const report = buildPilotReport(record, { dataSource, synthetic });
 
   res.json(report);
