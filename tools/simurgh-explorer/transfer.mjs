@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 import { resolve } from "node:path";
 import { SCHEMA, validateBundle } from "./core.mjs";
@@ -130,7 +131,7 @@ export function loadTransfer(root, readBound, detail) {
   const captures = JSON.parse(
     execFileSync(
       "python3",
-      [new URL("./read-transfer.py", import.meta.url).pathname, resolve(root, path)],
+      [fileURLToPath(new URL("./read-transfer.py", import.meta.url)), resolve(root, path)],
       { encoding: "utf8", maxBuffer: 12 * 1024 * 1024, timeout: 30000 }
     )
   );

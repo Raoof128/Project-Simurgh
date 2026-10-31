@@ -56,10 +56,14 @@ test("filtered JSON round-trips and retains selection denominator", () => {
   assert.equal(b.records.length, 12);
   assert.equal(b.selection.total, 144);
 });
-test("CLI refuses absent records and unknown filters", () => {
+test("CLI refuses absent records, unknown filters, special files and oversized queries", () => {
   for (const args of [
     ["inspect", "--id", "missing"],
     ["records", "--kind", "invented"],
+    // Audit F-5: a device reports size 0 and then reads without bound.
+    ["summary", "--file", "/dev/zero"],
+    // Audit F-6: the matcher lower-cases every record per term; cap the query.
+    ["records", "--q", "a ".repeat(600)],
   ])
     assert.equal(spawnSync(process.execPath, [cli.pathname, ...args]).status, 2);
 });

@@ -65,6 +65,7 @@ export function App({ initial }) {
     [year, setYear] = useState("2026"),
     [error, setError] = useState(""),
     [notice, setNotice] = useState(""),
+    [imported, setImported] = useState(null),
     [raw, setRaw] = useState(false);
   const file = useRef(null),
     stats = summary(bundle),
@@ -85,6 +86,7 @@ export function App({ initial }) {
       if (input.size > LIMIT) throw new Error("File exceeds 12 MiB. Use a scoped explorer export.");
       const next = parseBundle(await input.text());
       setBundle(next);
+      setImported(input.name);
       setSelected(null);
       setKind("all");
       setControl("all");
@@ -101,6 +103,7 @@ export function App({ initial }) {
   }
   function reset() {
     setBundle(initial);
+    setImported(null);
     setSelected(null);
     setKind("all");
     setControl("all");
@@ -183,7 +186,13 @@ export function App({ initial }) {
           <div>
             <span>Workspace</span>
             <b>/</b>
-            <span>{bundle.mode === "local_detail" ? "Local detail" : "Public evidence"}</span>
+            <span>
+              {imported
+                ? "Imported evidence"
+                : bundle.mode === "local_detail"
+                  ? "Local detail"
+                  : "Public evidence"}
+            </span>
           </div>
           <div className="actions">
             <button onClick={() => file.current.click()}>
@@ -229,6 +238,13 @@ export function App({ initial }) {
           {notice && (
             <div className="message" role="status">
               {notice}
+            </div>
+          )}
+          {imported && (
+            <div className="message imported" role="note" data-testid="imported-banner">
+              Imported from {imported}: {String(bundle.verification).replaceAll("_", " ")}. The
+              title, provenance and document labels below come from the file, not from this
+              repository.
             </div>
           )}
           <div className="metrics" aria-label="Evidence inventory">
@@ -518,7 +534,11 @@ export function App({ initial }) {
                   independent custody or inference origin.
                 </p>
                 <details>
-                  <summary>Source bindings</summary>
+                  <summary>
+                    {imported
+                      ? "Source bindings (producer-supplied, not checked by the explorer)"
+                      : "Source bindings"}
+                  </summary>
                   <pre className="raw">{JSON.stringify(bundle.provenance, null, 2)}</pre>
                 </details>
               </section>
@@ -564,7 +584,12 @@ export function App({ initial }) {
                       onClick={() => setDocId(d.id)}
                     >
                       <span className="eyebrow">
-                        {d.url ? "PRIMARY SOURCE" : "PROJECT DOCUMENT"} · {d.reviewed}
+                        {imported
+                          ? "IMPORTED DOCUMENT"
+                          : d.url
+                            ? "PRIMARY SOURCE"
+                            : "PROJECT DOCUMENT"}{" "}
+                        · {d.reviewed}
                       </span>
                       <h2>{d.title}</h2>
                       <p>{d.snippet}</p>

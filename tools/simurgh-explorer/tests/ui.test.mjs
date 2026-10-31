@@ -87,11 +87,17 @@ test("dashboard interactions: shared filter, source record, research, gaps and i
       input.dispatchEvent(new dom.window.Event("change", { bubbles: true }));
     });
     assert.match(document.querySelector("[role=status]").textContent, /Loaded 3 records/);
+    // Audit F-3: the transient notice disappears on navigation; the import label must not.
+    const banner = () => document.querySelector("[data-testid=imported-banner]");
+    assert.match(banner().textContent, /Imported from valid\.json: not verified by explorer/);
     await act(() => document.querySelectorAll("nav button")[1].click());
+    assert.ok(banner(), "the imported-evidence banner survives navigation");
+    assert.match(document.querySelector(".topbar").textContent, /Imported evidence/);
     await click("Copy CLI");
     assert.match(document.querySelector("[role=status]").textContent, /loaded-bundle.json/);
     await click("Restore repository data");
     assert.match(document.querySelector("[role=status]").textContent, /restored/);
+    assert.equal(banner(), null, "restoring repository data removes the import label");
   } finally {
     await act(() => root.unmount());
     dom.window.close();
