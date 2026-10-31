@@ -9,6 +9,10 @@ on:
     paths: ["proofs/**", "scripts/check-lean-proofs.mjs", "scripts/lib/leanProofGate.mjs"]
   pull_request:
     paths: ["proofs/**", "scripts/check-lean-proofs.mjs", "scripts/lib/leanProofGate.mjs"]
+# Least privilege: these jobs only read the checkout (audit E-7).
+permissions:
+  contents: read
+
 jobs:
   lean-check:
     runs-on: ubuntu-latest

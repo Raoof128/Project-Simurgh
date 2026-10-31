@@ -24,6 +24,10 @@ on:
       - "proofs/stage5o/**"
       - "scripts/reproduce-llm-shield-stage5o.sh"
       - ".github/workflows/stage-5o-reproduce.yml"
+# Least privilege: these jobs only read the checkout (audit E-7).
+permissions:
+  contents: read
+
 jobs:
   stage5o-reproduce:
     runs-on: ubuntu-latest

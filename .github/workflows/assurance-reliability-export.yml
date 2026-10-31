@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - ".github/workflows/assurance-reliability-export.yml"
+      # Imported through sys.path by this lane (pass-3 M13): a change there must run it.
+      - "tools/assurance-model-composed/**"
       - "tools/assurance-reliability/**"
       - "tools/assurance-export/**"
       - "docs/research/reliability-phase-13/**"
@@ -11,6 +13,7 @@ on:
   pull_request:
     paths:
       - ".github/workflows/assurance-reliability-export.yml"
+      - "tools/assurance-model-composed/**"
       - "tools/assurance-reliability/**"
       - "tools/assurance-export/**"
       - "docs/research/reliability-phase-13/**"
