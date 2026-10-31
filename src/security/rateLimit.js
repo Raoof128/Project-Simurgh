@@ -8,6 +8,7 @@ import crypto from "node:crypto";
 // periodic sweep alone would let a flood grow the map for up to five minutes between passes.
 const DEFAULT_MAX_BUCKETS = 50_000;
 const EVICT_SCAN_LIMIT = 2_048;
+const FULL_SWEEP_INTERVAL_MS = 1_000;
 
 export function createRateLimiter({
   windowMs,
@@ -28,6 +29,7 @@ export function createRateLimiter({
       if (v.windowStart < cutoff) buckets.delete(k);
     }
   };
+  let lastFullSweep = 0;
   const cleanup = setInterval(sweep, 5 * 60 * 1000);
   cleanup.unref?.();
 
@@ -57,8 +59,12 @@ export function createRateLimiter({
           if (now - v.windowStart >= windowMs || v.count < max) buckets.delete(k);
         }
         // Throttled buckets at the front can pin the bounded scan; only then pay for a full
-        // sweep of expired buckets (O(n) under attack, O(scan limit) otherwise).
-        if (buckets.size >= maxBuckets) sweep();
+        // sweep of expired buckets, and at most once per second however many requests arrive,
+        // so the request path stays O(scan limit) under attack as well.
+        if (buckets.size >= maxBuckets && now - lastFullSweep >= FULL_SWEEP_INTERVAL_MS) {
+          lastFullSweep = now;
+          sweep();
+        }
         if (buckets.size >= maxBuckets) {
           res.setHeader("Retry-After", Math.ceil(windowMs / 1000));
           return res
