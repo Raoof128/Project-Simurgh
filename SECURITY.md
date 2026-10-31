@@ -173,6 +173,106 @@ changed.
   on macOS. The [post-freeze successor](tools/assurance-composed-successor/README.md) fixes all
   four. No study has been run against it.
 
+## Repository audit (31 October 2026): retained defects in frozen surfaces
+
+The full repository audit of 31 October 2026 (`docs/security-audit-2026-10-31/`) reproduced the
+defects below in surfaces that stay byte-identical: `src/llmShield/**` (stage policy-drift
+guards), `tools/agentdojo-simurgh-adapter/**` (Stage 4U read-only kernel), the Phase 6–17
+hash-pinned gate modules, and stage-owned verifiers. Each is disclosed here rather than repaired
+in place; where a maintained successor or mount-level correction exists it is named.
+
+- **Output firewall (`src/llmShield/outputLeakageFirewall.js`).** A fixed-marker regex over raw
+  text, with no normalisation, decoding, canary or context-echo check. Reproduced exports:
+  a canary string, `sk-test-…`/`sk-ant-…`-shaped keys (the pattern forbids a hyphen after `sk-`),
+  `SIMURGH_AUDIT_SECRET=…`, a JWT-shaped token, and "system prompt" written with a double space,
+  fullwidth letters, zero-width characters, base64, hex or reversed. A context holding such a
+  secret is demoted, not rejected, and on the live path is forwarded to the provider. Nine of
+  twelve benign code-help outputs containing trigger words were blocked. Treat this firewall as a
+  marker filter, not a leakage boundary.
+- **Context provenance (`contextProvenanceGuard.js`).** A context that declares
+  `trust_level: "synthetic"` and carries no marker words is accepted as caller-asserted; the
+  `LLM_CONTEXT_ACCEPTED` audit event is therefore assertable by the caller.
+- **Input firewall framing (`promptFirewall.js`, `promptContextGuard.js`).** A denylisted phrase
+  is `blocked` bare, but only `warning` after a trivial prefix such as "What is 2+2?", a quote
+  wrapper or a JSON-quoted `content` field; the model is then called and the gateway exports.
+- **Risk accumulator (`runRiskAccumulator.js`, routers).** Risk is per session and advisory to
+  the plain 3A route, which neither reads nor writes it; a new session resets it to zero. The
+  cumulative-risk export omission is corrected at the mount (see the retained gateway limits
+  above); direct module use keeps it.
+- **Tool gate (`toolInvocationGate.js`, `toolPolicy.js`).** The decision uses only the
+  self-declared `tool_class`; `tool_name` is hashed and arguments are never inspected. Safe today
+  only because the live normaliser forces class `unknown`.
+- **Audit chain cap (`src/audit/hmacChain.js`, used by both routers).** After about 5,000
+  entries nothing is appended, `/verify` still reports valid, and a later receipt repeats the
+  previous run's `audit_entry_hash`. The LLM Shield `/run` route has no rate limit, so a session
+  holder can reach the cap in seconds.
+- **Receipts and counters.** `finishConfigRejected` records `provider_mode: "live"` for an invalid
+  mode and the SHA-256 of the empty string as the input hash. The Stage 3L reference library
+  (`tests/e2e/llm_shield_stage3l_fable5_reference_lib.mjs`) hard-codes `receipt_exported` and
+  `audit_verified`, its 120 input-miss cases are five tuples repeated, and `unsafe_tool_executed`
+  can never fire because no execution code exists; the Layer-2 recorder (`layer2_runner.py`)
+  hard-codes four bypass flags to `False` and `audit_verified` to `True`. These are structural
+  non-events, not measurements.
+- **AgentDojo adapter (frozen Stage 4U).** `capability_kernel.is_grounded` and the mirror in
+  `live_defence.py` test the address's local part as a substring of the task text, so
+  `mail@attacker.example` is grounded by the word "email" and `ice@…` by "Alice"; egress keys
+  outside the inspected set are not examined; `delete_file(file_id="ALL")` is authorised by any
+  destructive verb in the task. `verdict_to_outcome` treats every value other than the exact
+  string `blocked` (including `{}`, `null`, `"BLOCKED"`, HTTP 500) as allow, and a gateway
+  exception demotes instead of rejecting. The frozen Stage 1-LIVE/4D–4G results were measured
+  with these helpers against a fixed attacker address that the substring test does reject.
+- **Historical live gateway (direct module use only; the mounted route returns 410).** Quota is
+  checked before and recorded after the awaited call, SDK retries stay at the default (six
+  provider hits per failing request), the fallback hop skips the ledger, a refusal with empty
+  content still falls back, and an abort is classified as a generic provider error.
+- **Frozen composed gate (`signals.py`), beyond the four successor fixes.** A signature-valid
+  alert whose body the gate cannot parse was discarded without a trace (now held `pending` by the
+  successor); revocation is not re-driven after a crash between the stop latch and the revoke
+  call; restart approvals are scoped to configuration and boot id, not to a pipeline instance, so a
+  token minted for one directory restarts another with the same configuration; the default lease
+  clock is `time.monotonic`, which on this macOS host excludes 7.2 hours of suspend; the signal
+  database path follows symlinks while the sibling files refuse them; `transport.rpc` lets
+  `RecursionError` escape its status vocabulary; and the exact-match comparator compares JSON
+  text, so two lone surrogates equal the code point they encode.
+- **Workflow and recovery harnesses (hash-pinned).** `tools/assurance-workflow` records `denied`
+  as the terminal result when a policy is revoked after a crash that followed the effect; the
+  effect is in the receiver, the record says denied, and only the `completed` branch reads the
+  receiver back. `tools/assurance-recovery/control.py` lets `agents.exceptions.UserError` escape
+  after the recovery reservation is committed (the next call is `recovery_budget_exhausted`, fail
+  closed), returns `runtime_error` for an action that did execute and reconciles only `unknown`,
+  and keys the recovery budget to the controller directory rather than the approval, so a fresh
+  directory recovers again and the `recovered` counters double-count. `Host.dispatch` answers
+  `blocked` on a retry after revocation although the effect landed, and `not_observed` is a
+  point-in-time snapshot with no quiescence barrier (a receiver write-locked for 4.5 s showed 0
+  effects, then 1). The eval replay accepts a capture whose failure steps were never re-executed
+  (`historical_failure_steps_not_reexecuted` is reported, not refused), and the public export
+  `validate` enforces no relation between a row's status and its effect count, so a doctored
+  bundle passes `inspect` while `source_consistency_verified` stays `false`. None of these
+  changes a committed number: 600 random-time kills of two racing durable executors produced one
+  effect every time, 16/24/40 processes on budgets 1/3/10 produced exactly 1/3/10 dispatches, and
+  34 URL-scope variants dispatched nothing.
+- **Stage 5S witness quorum (`stage5s/core/quorum.mjs`, `receivers.mjs`).** The verifier reads
+  `signature_verified` from the input statement and never verifies a witness or receiver
+  signature; replacing every witness signature with garbage, or deleting it, still yields
+  `witnessed_quorum`. The producer checkpoint signature is verified.
+- **Shared canonical JSON (`tools/simurgh-attestation/canonicalise.mjs`, about 140 importers).**
+  An own `__proto__` key is dropped from the canonical form, so two documents that differ only
+  in that key share a digest; integer-like keys are emitted in numeric order (Node) while the
+  Python and Stage 5S string-building canonicalisers emit them in insertion order; `-0`, `1e-7`,
+  integers above 2^53 and lone surrogates differ between Node and Python. No committed evidence
+  contains such input, so every committed digest is unaffected; a verifier hashing attacker JSON
+  through this function is not.
+- **Stage 5R cross-runtime parity runner.** Always overwrites the tracked
+  `cross-runtime-parity.json` and exits 0 when the browser leg fails; only the dirty-tree check
+  backstops it.
+- **Device-daemon signing contracts.** Node, Rust, Swift and C# canonicalisers diverge on nested
+  key order, `/` escaping, non-ASCII escaping, `-0`, duplicate keys and case-insensitive sorting;
+  latent for today's flat snake_case payloads, and no known-answer test feeds a native proof to the
+  Node validator.
+- **Node-version-bound evidence.** The Stage 4H fixture builder reproduces the committed bytes on
+  Node 26 only; on Node 24 four evidence files differ. Reproduction claims for Stage 4H are
+  Node-26 claims.
+
 ## Reporting a Vulnerability
 
 **Do not open a public GitHub issue for security vulnerabilities.**
