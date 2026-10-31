@@ -7,7 +7,13 @@ import { realpathSync } from "node:fs";
 import crypto from "node:crypto";
 import { readFile, stat, writeFile } from "node:fs/promises";
 import { isAbsolute } from "node:path";
-import { canonicalJson, sha256Hex, fingerprintPublicKey } from "./canonicalise.mjs";
+import {
+  assertNoDuplicateKeys,
+  canonicalJson,
+  canonicalJsonStrict,
+  sha256Hex,
+  fingerprintPublicKey,
+} from "./canonicalise.mjs";
 import {
   validateBundleSchema,
   validateSidecarSchema,
@@ -25,9 +31,24 @@ export function verifyBundle({
   evidenceFiles,
   reproduce = false,
   reproduced = null,
+  bundleText = null,
+  sidecarText = null,
 }) {
   const checks = {};
   checks.schema_valid = validateBundleSchema(bundle).ok && validateSidecarSchema(sidecar).ok;
+
+  // The signature binds the parsed value; a bundle whose text or value is ambiguous (duplicate
+  // keys, an own `__proto__`, non-finite or unsafe numbers) verifies under the same signature as a
+  // different document (audit C-8). Refused here, before the digest is trusted.
+  let unambiguous = true;
+  try {
+    if (bundleText !== null) assertNoDuplicateKeys(bundleText);
+    if (sidecarText !== null) assertNoDuplicateKeys(sidecarText);
+    canonicalJsonStrict(bundle);
+  } catch {
+    unambiguous = false;
+  }
+  checks.bundle_unambiguous = unambiguous;
 
   const canonicalBytes = Buffer.from(canonicalJson(bundle), "utf8");
   checks.bundle_digest_match = sha256Hex(canonicalBytes) === sidecar.bundle_sha256;
@@ -114,8 +135,10 @@ async function reproduceStage3l(bundle) {
 }
 
 async function mainCli() {
-  const bundle = JSON.parse(await readFile(arg("--bundle"), "utf8"));
-  const sidecar = JSON.parse(await readFile(arg("--signature"), "utf8"));
+  const bundleText = await readFile(arg("--bundle"), "utf8");
+  const sidecarText = await readFile(arg("--signature"), "utf8");
+  const bundle = JSON.parse(bundleText);
+  const sidecar = JSON.parse(sidecarText);
   const publicKeyPem = JSON.parse(await readFile(arg("--public-key"), "utf8")).public_key_pem;
   const reproduce = process.argv.includes("--reproduce");
   const evidenceFiles = [];
@@ -144,6 +167,8 @@ async function mainCli() {
     evidenceFiles,
     reproduce,
     reproduced,
+    bundleText,
+    sidecarText,
   });
   const lines = [
     `simurgh attestation verify: ${result.pass ? "PASS" : "FAIL"}`,
