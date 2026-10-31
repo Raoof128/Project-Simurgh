@@ -75,10 +75,16 @@ rm -f "$a" "$b"
 node tools/simurgh-attestation/stage5r/node/verifyAttestation.mjs
 
 step "unit tests"
-if node --test tests/unit/llmShield/stage5r/*.test.js >/dev/null; then
+UNIT_LOG="$(mktemp)"
+if node --test tests/unit/llmShield/stage5r/*.test.js >"$UNIT_LOG" 2>&1; then
   echo "  green"
+  rm -f "$UNIT_LOG"
 else
+  # Name what failed: a bare FAIL line leaves the reviewer nothing to reproduce.
   echo "FAIL: Stage 5R unit tests" >&2
+  grep -E "^not ok|^✖|AssertionError|Error:|expected|actual" "$UNIT_LOG" | head -60 >&2
+  tail -20 "$UNIT_LOG" >&2
+  rm -f "$UNIT_LOG"
   exit 1
 fi
 
