@@ -5258,3 +5258,23 @@ Owner-requested work; implementation and review by Codex assistance.
 - **Follow-ups:** open the two pin branches as separate pull requests; apply branch protection to
   `main`; the residual-risk register lists the confirmed unresolved items, the missing external
   evidence and the platform-blocked checks.
+
+### 2026-10-31 (Australia/Sydney) — Audit second pass: the items left open
+
+**Raouf: Claude-assisted implementation**
+
+- **Scope:** Same branch; maintained surfaces and successors only. Frozen bytes unchanged.
+- **Summary:** One open session per student per exam, with the lockout trade-off documented
+  (D-10); expired pairing challenges and replay-guard rows purged (D-11); bounded limiter eviction
+  with a full-sweep fallback (D-13); a maintained export scan at the gateway mount for what the
+  frozen output firewall exported (B-3: normalisation, decoding, secret shapes, canaries, context
+  echo); the maintained attestation verifier refuses ambiguous bundles, comparing key names after
+  decoding (C-8/E-3); the composed-gate successor re-drives revocation after a crash or replay and
+  refuses a symlinked signal database (A1-4, A1-8); the explorer checks the archive root and the
+  members it reads against the manifest (F-4).
+- **Files changed:** commits `53cef6ea`, `5b806250`, `b9fa3f04`, `71e92d5a`, `630fd27e` and the
+  deliverables.
+- **Verification:** export scan 9/9, canonical 6/6, runtime regressions 16/16, successor 38/38,
+  explorer 23/23, security and related suites 192/192, 3M/3E/3H smokes pass; full `npm test` in
+  `docs/security-audit-2026-10-31/VERIFICATION.md`.
+- **Follow-ups:** unchanged from the first entry.

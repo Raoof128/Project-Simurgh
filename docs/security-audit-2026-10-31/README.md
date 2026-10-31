@@ -56,8 +56,8 @@ cannot distinguish an honest producer from a dishonest one.** In detail:
   callers could drive paid model calls with no ceiling (P1, repaired), a provider outage blanked
   the evidence behind a Critical verdict, the audit chain truncated silently and kept accepting
   writes after submit, `.env` was loaded after the configuration snapshot, placeholder secrets ran,
-  and session ids could be squatted. All repaired except per-exam student de-duplication and two
-  unbounded maps, which are listed as residuals.
+  and session ids could be squatted. All repaired, including (second pass) one open session per
+  student per exam, purged guard maps and a bounded limiter scan.
 - **Research claims (F).** Every headline number in README, BRIEF and RESULTS recomputed from the
   archives without the repository's own scorer; no exclusions, no denominator mismatch, matched
   controls receive identical proposals, effects come from receiver snapshots. Two framing
@@ -75,10 +75,10 @@ cannot distinguish an honest producer from a dishonest one.** In detail:
 | Severity |  Found |  Fixed | Partially fixed | Disclosed (frozen) | Open (maintained) |
 | -------- | -----: | -----: | --------------: | -----------------: | ----------------: |
 | P0       |      1 |      1 |               0 |                  0 |                 0 |
-| P1       |      8 |      4 |               0 |                  4 |                 0 |
-| P2       |     33 |     20 |               2 |                 11 |                 0 |
-| P3       |     41 |     16 |               0 |                 22 |                 3 |
-| **All**  | **83** | **41** |           **2** |             **37** |             **3** |
+| P1       |      8 |      4 |               1 |                  3 |                 0 |
+| P2       |     33 |     22 |               4 |                  7 |                 0 |
+| P3       |     41 |     22 |               0 |                 19 |                 0 |
+| **All**  | **83** | **49** |           **5** |             **29** |             **0** |
 
 "Disclosed" means reproduced in a surface that stays byte-identical (hash-pinned gate modules,
 `src/llmShield`, the Stage 4U adapter, stage-owned verifiers) and recorded in SECURITY.md with a
@@ -96,7 +96,12 @@ resistance.
   hashes cover bytes; the Lean gate asks the kernel which axioms each theorem uses.
 - The quality gate cannot be made green by rewriting tracked bytecode, and three reproduce
   scripts cannot print `ALL PASS` after a failure.
-- The explorer cannot present an imported bundle as repository evidence after one click.
+- The explorer cannot present an imported bundle as repository evidence after one click, and it
+  refuses an archive whose root or members disagree with its manifest.
+- A maintained export scan at the mount withholds secret-shaped tokens, encoded or spaced policy
+  markers, configured canaries and echoes of request contexts that the frozen firewall exported;
+  the maintained verifier refuses bundles whose text or value is ambiguous; the successor re-drives
+  revocation after a crash.
 
 ## What remains risky
 
@@ -118,6 +123,7 @@ or as independently certified evidence.
 **PARTIALLY REMEDIATED, BLOCKERS REMAIN.** Every reproducible P0/P1 defect in a maintained surface
 is repaired with regression coverage, and the frozen-surface defects are disclosed rather than
 hidden. The blockers are not code: the seccomp replay, the Linux-only suites, Node 26 reproduce
-scripts and the hosted gates could not run on this host, and four P1 findings live in frozen
-verifiers whose repair needs a declared maintenance surface and a re-run of their lanes. The
+scripts and the hosted gates could not run on this host, and three P1 findings live in frozen
+surfaces (the 4F frontier, the 5S verifier, the Stage 4U adapter) whose repair needs a declared
+maintenance surface and a re-run of their lanes. The
 hosted CI has not run on these revisions.

@@ -1,17 +1,17 @@
 {
  "schema": "simurgh.audit-inventory.v1",
  "generated": "2026-10-31",
- "head_at_generation": "5f7c46725224ea7bbf5aaa736134a6eeb9fbaa02",
+ "head_at_generation": "78cd769a03b934db0b366c750ff804ef81702788",
  "note": "SHA-256 of each file's bytes in the working tree at generation; this file's own hash is not included. Review status names the area report that covered the path; 'inventory only' means the hash is recorded and no claim of semantic review is made.",
  "counts": {
-  "files": 8953,
+  "files": 8956,
   "by_review_status": {
-   "complete": 775,
+   "complete": 776,
    "read": 14,
    "inventory only": 5448,
    "inventory and binding only": 109,
    "this audit's deliverable": 7,
-   "partial": 2600
+   "partial": 2602
   }
  },
  "files": [
@@ -27,7 +27,7 @@
   },
   {
    "path": ".env.example",
-   "sha256": "e41bc6dca192967e5a75273a97e7cc9816412677fcc03cd4bf224eecd1f47f84",
+   "sha256": "9f02510de532b67dad0db48c012efd61aa017da9ffe82ec468a43f60b8c5b91f",
    "category": "configuration",
    "language": "other",
    "mutability": "maintained",
@@ -267,7 +267,7 @@
   },
   {
    "path": "AGENT.md",
-   "sha256": "bad0a859069a90e764c2ac3a70aba63f83612f241dcc456a67b71ad254e76c23",
+   "sha256": "0ff08da9a4d890faef1ae55440663c10bf190630fa747b4852086985709891d9",
    "category": "documentation",
    "language": "markdown",
    "mutability": "mutable",
@@ -287,7 +287,7 @@
   },
   {
    "path": "CHANGELOG.md",
-   "sha256": "edcbc87b7713c3d82260d8902da9109482447ad184108d1a776f8595052c4caf",
+   "sha256": "b472abcc8c94299b4e9bd06041cccaf70449f5aba89f2267012dea011a72aa59",
    "category": "documentation",
    "language": "markdown",
    "mutability": "mutable",
@@ -387,7 +387,7 @@
   },
   {
    "path": "SECURITY.md",
-   "sha256": "9bf2fdcf9bf6927fc7b3d8b06321cc5adfd044b450c3744b1c1b618964e534d1",
+   "sha256": "ab1cfaff029f23e4e12ff27e758220c479643b7b95caa72775783d788b34ae5e",
    "category": "documentation",
    "language": "markdown",
    "mutability": "mutable",
@@ -53167,7 +53167,7 @@
   },
   {
    "path": "docs/security-audit-2026-10-31/FINDINGS.md",
-   "sha256": "7bb84f05974eaac4600cc24bef7b770a8220ca67963bc2cad2f879ddfc8aa4f1",
+   "sha256": "3629e4aaa242310e420fd96694038b426db76562318158eccc1cbbfcea54ef60",
    "category": "documentation",
    "language": "markdown",
    "mutability": "mutable",
@@ -53177,7 +53177,7 @@
   },
   {
    "path": "docs/security-audit-2026-10-31/README.md",
-   "sha256": "66358e0a32fa7a3eefc67a8dbf0b083ffc7de0612bb3417c2e8ffe7a1743f9b6",
+   "sha256": "994a13c7400af8b6c35cc5b6348794e48e4d24e28e44743248f3d55262741512",
    "category": "documentation",
    "language": "markdown",
    "mutability": "mutable",
@@ -53187,7 +53187,7 @@
   },
   {
    "path": "docs/security-audit-2026-10-31/REMEDIATION.md",
-   "sha256": "18ab549d4b50017a96dc152297486f16047d338b0ce3abf2f3499c1114211f58",
+   "sha256": "4bf5170e7e4338a70a68ded3fe2b18d6b452e856275e5b729e8547025aa0f258",
    "category": "documentation",
    "language": "markdown",
    "mutability": "mutable",
@@ -53207,7 +53207,7 @@
   },
   {
    "path": "docs/security-audit-2026-10-31/RESIDUAL_RISK.md",
-   "sha256": "7d495a74e985d180116fd38fc510ad14b203bcd467d14722826740cd6d42a926",
+   "sha256": "0cf45238d314a72e753a756eb67c480703b21f783b6b66c0bdb2f497b85094b3",
    "category": "documentation",
    "language": "markdown",
    "mutability": "mutable",
@@ -53227,7 +53227,7 @@
   },
   {
    "path": "docs/security-audit-2026-10-31/VERIFICATION.md",
-   "sha256": "e933ffefe2da3a536ef5dd702ff5d3c1c9c0ed0a185640bfef58b016b9f9b471",
+   "sha256": "9cdb24cf31364a1e0b0f8141b4a60d662c1f5cd9917ce6677d5e4caa82077b78",
    "category": "documentation",
    "language": "markdown",
    "mutability": "mutable",
@@ -59237,7 +59237,7 @@
   },
   {
    "path": "server.js",
-   "sha256": "42baa70ca9e86bfc5a24a73103b01d3d3496deafde74aac117dae31ca8d3e22c",
+   "sha256": "bcfc07ca1a2aa68dfabde83343c26c49a85317ece720ac6cfc122b58fd31a29f",
    "category": "runtime-server",
    "language": "javascript",
    "mutability": "maintained",
@@ -59497,7 +59497,7 @@
   },
   {
    "path": "src/device/daemonPairing.js",
-   "sha256": "3a46646a648e48cd85be3952e14c6e704831eafd9b53e9bc6527aa53bd9b67c8",
+   "sha256": "ce02d59e0238af8b27d16871ff3243410390bcd25708f21728c3fb29b90147a1",
    "category": "runtime-server",
    "language": "javascript",
    "mutability": "maintained",
@@ -60036,8 +60036,18 @@
    "review_status": "complete"
   },
   {
+   "path": "src/security/exportScan.js",
+   "sha256": "772516c2149a0157ef1d942bf44bc966dfc74105674f9c0c6ee1346738002b2f",
+   "category": "runtime-server",
+   "language": "javascript",
+   "mutability": "maintained",
+   "sensitivity": "normal",
+   "review_area": "D",
+   "review_status": "complete"
+  },
+  {
    "path": "src/security/rateLimit.js",
-   "sha256": "249dc0dfefcbfdcbf0412d5dd6bbfd450b6b8e1ff56dd2669124da32acbbd649",
+   "sha256": "882c5436323c6331cd6380f604db4503682a28a980d6ec646a56aeaae28bf1dc",
    "category": "runtime-server",
    "language": "javascript",
    "mutability": "maintained",
@@ -66916,6 +66926,16 @@
    "review_status": "partial (executed; test-hygiene sweep for .only/.skip/empty assertions)"
   },
   {
+   "path": "tests/unit/exportScan.test.js",
+   "sha256": "45a8b01962dc35349002aa2e8c5a4f655aabccfeab1263838d1c3a727eaffbc1",
+   "category": "test",
+   "language": "javascript",
+   "mutability": "mutable",
+   "sensitivity": "normal",
+   "review_area": "B+D+E",
+   "review_status": "partial (executed; test-hygiene sweep for .only/.skip/empty assertions)"
+  },
+  {
    "path": "tests/unit/forbiddenLocalFields.test.js",
    "sha256": "83152fc3e0325392a5d49e313d97589c07509680f6ee675c9769a4ca8e99d41f",
    "category": "test",
@@ -67128,6 +67148,16 @@
   {
    "path": "tests/unit/llmShield/attestation/attestationLib.test.js",
    "sha256": "d247fb05f4618da73da9767fa7e88be6231434cdc5c199b33c2fa3fadd01f436",
+   "category": "test",
+   "language": "javascript",
+   "mutability": "mutable",
+   "sensitivity": "normal",
+   "review_area": "B+D+E",
+   "review_status": "partial (executed; test-hygiene sweep for .only/.skip/empty assertions)"
+  },
+  {
+   "path": "tests/unit/llmShield/attestation/canonicalStrict.test.js",
+   "sha256": "f38ce30c392654b274be5283c9d8b6e852d4c8a2f053b8fd551bd174cdcd6c0e",
    "category": "test",
    "language": "javascript",
    "mutability": "mutable",
@@ -74067,7 +74097,7 @@
   },
   {
    "path": "tests/unit/maintenance/auditRuntime.test.js",
-   "sha256": "09acd7e6e8983d3762a3ab0f65052c27667e288f58a82f37fe813a1e8bb4a50e",
+   "sha256": "ab4f82081e37ee82571b7fb4f6f826367312e9cd0a5fa0a2e08630e21def7bd3",
    "category": "test",
    "language": "javascript",
    "mutability": "mutable",
@@ -75457,7 +75487,7 @@
   },
   {
    "path": "tools/assurance-composed-successor/README.md",
-   "sha256": "06ede0e1537b813a64725a3e746d4d6701b8b562a904e555db20898bba4e30bf",
+   "sha256": "ab03351911eeacaec3fe8129e9b0c63ea333348a8949f9ea946c8ed6a831375b",
    "category": "runtime-maintained",
    "language": "markdown",
    "mutability": "maintained",
@@ -75467,7 +75497,7 @@
   },
   {
    "path": "tools/assurance-composed-successor/successor.py",
-   "sha256": "4025ff85b2606c2911e759a5537911620118c78d27ea2f0394e54c1754b6e85a",
+   "sha256": "8806728aee606a505b21ccec0d5106ad60815f49fb001a765d21f0d72a6b9230",
    "category": "runtime-maintained",
    "language": "python",
    "mutability": "maintained",
@@ -75477,7 +75507,7 @@
   },
   {
    "path": "tools/assurance-composed-successor/tests/test_successor.py",
-   "sha256": "f99e8549217fe5f1142af8b07a04d44999e18efbdfbd8c814cadac28390c32d7",
+   "sha256": "e8a376dd1f88920fcae5ad52376536ad07fb90cb774fec45e3a093fe96930c0d",
    "category": "runtime-maintained",
    "language": "python",
    "mutability": "maintained",
@@ -78027,7 +78057,7 @@
   },
   {
    "path": "tools/simurgh-attestation/canonicalise.mjs",
-   "sha256": "f89efcb72d7a6c5588a198a10c525ec781e31301e30773d5a363d6c4c18c8738",
+   "sha256": "b3370eab15063556296c3dfe3a751c3053e19ff605237c15f16ec044e3fd77af",
    "category": "runtime-verifier",
    "language": "javascript",
    "mutability": "maintained",
@@ -87687,7 +87717,7 @@
   },
   {
    "path": "tools/simurgh-attestation/verify-attestation.mjs",
-   "sha256": "4adc2ff56b5e764faf389df9f09f1c0e45d1b5818e630573007e4dc3e8e73b4e",
+   "sha256": "b345633ffefe09f36fcafc6e0df7db482505d3fad89e4689eb0ab96c29aa4142",
    "category": "runtime-verifier",
    "language": "javascript",
    "mutability": "maintained",
@@ -88887,7 +88917,7 @@
   },
   {
    "path": "tools/simurgh-explorer/read-transfer.py",
-   "sha256": "51f8b7eec6a420370ec9dd1828754a91541dfaedadae65c26597cfa94520d9ea",
+   "sha256": "424b5437a28c8801b4cc2477094c71c8eabf770232a904fb0e74ecb07edc1651",
    "category": "runtime-explorer",
    "language": "python",
    "mutability": "maintained",
@@ -88957,7 +88987,7 @@
   },
   {
    "path": "tools/simurgh-explorer/tests/transfer.test.mjs",
-   "sha256": "aa1f04e9cb5572db4c935d351333a0954664b97cfd7723c62eb693d8558a4681",
+   "sha256": "f4796ead65451820da5973fe7a56d7b1fb85e886092b34d403d86d368d8598db",
    "category": "test",
    "language": "javascript",
    "mutability": "maintained",
@@ -88977,7 +89007,7 @@
   },
   {
    "path": "tools/simurgh-explorer/transfer.mjs",
-   "sha256": "f72b21525a104ac66bd5655c81d1cf8c19188f339aceddae82b050cceb9702e6",
+   "sha256": "accce698873bb5ef39f15f427595f92579775b53491a76cf77642bc6666ab86c",
    "category": "runtime-explorer",
    "language": "javascript",
    "mutability": "maintained",

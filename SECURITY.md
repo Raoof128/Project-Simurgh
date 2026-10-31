@@ -184,7 +184,9 @@ hash-pinned gate modules, and stage-owned verifiers. Each is disclosed here rath
 in place; where a maintained successor or mount-level correction exists it is named.
 
 - **Output firewall (`src/llmShield/outputLeakageFirewall.js`).** A fixed-marker regex over raw
-  text, with no normalisation, decoding, canary or context-echo check. Reproduced exports:
+  text, with no normalisation, decoding, canary or context-echo check (the maintained export scan
+  described under the runtime repairs now covers those at the mount; direct module use keeps the
+  gap). Reproduced exports:
   a canary string, `sk-test-…`/`sk-ant-…`-shaped keys (the pattern forbids a hyphen after `sk-`),
   `SIMURGH_AUDIT_SECRET=…`, a JWT-shaped token, and "system prompt" written with a double space,
   fullwidth letters, zero-width characters, base64, hex or reversed. A context holding such a
@@ -230,10 +232,11 @@ in place; where a maintained successor or mount-level correction exists it is na
 - **Frozen composed gate (`signals.py`), beyond the four successor fixes.** A signature-valid
   alert whose body the gate cannot parse was discarded without a trace (now held `pending` by the
   successor); revocation is not re-driven after a crash between the stop latch and the revoke
-  call; restart approvals are scoped to configuration and boot id, not to a pipeline instance, so a
+  call (the successor now revokes on open and on replay); restart approvals are scoped to configuration and boot id, not to a pipeline instance, so a
   token minted for one directory restarts another with the same configuration; the default lease
   clock is `time.monotonic`, which on this macOS host excludes 7.2 hours of suspend; the signal
-  database path follows symlinks while the sibling files refuse them; `transport.rpc` lets
+  database path follows symlinks while the sibling files refuse them (the successor refuses a
+  symlinked signal database); `transport.rpc` lets
   `RecursionError` escape its status vocabulary; and the exact-match comparator compares JSON
   text, so two lone surrogates equal the code point they encode.
 - **Workflow and recovery harnesses (hash-pinned).** `tools/assurance-workflow` records `denied`
@@ -284,6 +287,10 @@ in place; where a maintained successor or mount-level correction exists it is na
   signature; replacing every witness signature with garbage, or deleting it, still yields
   `witnessed_quorum`. The producer checkpoint signature is verified.
 - **Shared canonical JSON (`tools/simurgh-attestation/canonicalise.mjs`, about 140 importers).**
+  The maintained `verify-attestation.mjs` now refuses ambiguous input (own `__proto__`,
+  non-finite or unsafe numbers, duplicate keys in the raw text, compared after decoding) through
+  `canonicalJsonStrict` and `assertNoDuplicateKeys`, whose output is byte-identical on everything
+  they accept; the frozen stage verifiers keep the shared form.
   An own `__proto__` key is dropped from the canonical form, so two documents that differ only
   in that key share a digest; integer-like keys are emitted in numeric order (Node) while the
   Python and Stage 5S string-building canonicalisers emit them in insertion order; `-0`, `1e-7`,
@@ -337,8 +344,24 @@ audit branch with a regression in `tests/unit/maintenance/auditRuntime.test.js`:
   set by the operator's environment rather than echoed from the query string, withdrawn banking
   sessions free capacity, and a banking token's participant hash is checked against the record.
 
-Still open in the runtime: per-exam student de-duplication, purge of expired pairing challenges
-and replay-guard entries, limiter CPU at the 50,000-bucket cap, and the demo-mode image itself.
+Second pass (same day): one open session per student per exam, refused with
+`student_already_joined` (`SIMURGH_ALLOW_DUPLICATE_JOINS=1` restores unlimited joins). Because
+joins are unauthenticated, this trades a silent twin session for a visible lockout: whoever joins
+first under a student's identifier holds it until that session is submitted or evicted, so an
+instructor who sees a student refused should close the squatter's session. Expired pairing
+challenges and replay-guard rows are purged on the eviction sweep; a full limiter map scans at
+most 2,048 buckets and falls back to a full expiry sweep only when that scan frees nothing. Still
+open in the runtime: the demo-mode image itself.
+
+**Maintained export scan at the mount.** Because the frozen output firewall is a fixed-marker regex
+over raw text, `src/security/exportScan.js` runs inside the gateway mount guard on every exported
+`output_text`: NFKC normalisation with format characters stripped, base64 and hex runs decoded,
+reversed text checked, secret-shaped tokens (including the hyphenated `sk-ant-…` form the frozen
+pattern misses, AWS keys, PEM blocks, JWTs, GitHub and Slack tokens, `NAME_SECRET=value`
+assignments, bearer strings), policy markers compared on a letters-only collapse, operator-configured
+`SIMURGH_EXPORT_CANARIES`, and any 40-character window of a request context that reappears in the
+output. It can only withhold more than the frozen firewall, never less, so the frozen firewall's
+nine-of-twelve false blocks on benign code help remain. The scan never returns the matched text.
 
 ## Reporting a Vulnerability
 
