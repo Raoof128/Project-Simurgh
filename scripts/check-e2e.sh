@@ -18,6 +18,11 @@
 
 set -euo pipefail
 
+# Never write Python bytecode into the checkout. Two tracked .pyc files under the frozen Stage 4U
+# adapter surface are rewritten by any step that imports the adapter package without this guard,
+# and a tracked file rewritten by a gate step is a failure under CI=true (see the Git status step).
+export PYTHONDONTWRITEBYTECODE=1
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$PROJECT_ROOT"

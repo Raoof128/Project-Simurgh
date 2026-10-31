@@ -4421,3 +4421,40 @@ Owner-requested work; implementation and review by Codex assistance.
   merges. The LLM Shield session store still has no eviction. About ten `scripts/reproduce-*.sh` still
   have no CI caller. A future study that wants the fixed gate freezes the successor's sources in its
   own protocol.
+
+### 2026-10-31 (Australia/Sydney) — Pass-3 branch: repair of the three red hosted checks
+
+**Raouf: Claude-assisted implementation**
+
+- **Scope:** Addendum 2 authority `e5f417e3`
+  (`docs/superpowers/specs/2026-10-28-pass3-audit-repair.md`). Gate scripts and one guard test on
+  this branch; two frozen-stage workflow pins moved to their own branches. No frozen source,
+  archived evidence, recorded number or assertion changed.
+- **Summary:** The first hosted run of PR #144 failed three checks. (1) The quality gate failed its
+  own new dirty-tree check: the Stage 3H/3J/3K smoke scripts import the adapter package and rewrote
+  the two tracked `.pyc` files under the frozen Stage 4U surface, which the 26 October restoration
+  forbids untracking. `check.sh` and `check-e2e.sh` now export `PYTHONDONTWRITEBYTECODE=1` once,
+  before any Python runs, so every step and every script a step calls inherits it. (2) and (3) The
+  Stage 5Q and 5R gates fired because this branch pinned their own workflow files, and each judged the
+  whole branch diff against its exhaustive surface (42 and 41 refusals). Annex A5.3 of the 5Q spec
+  already states that a stage-workflow change lands in its own pull request; the 5Q pin with its
+  census re-pin and the 5R pin are restored to `main` here and carried on `ci/pin-stage-5q-workflow`
+  (`c1b48638`) and `ci/pin-stage-5r-workflow` (`41d10727`, which also adds the
+  `permissions: contents: read` block the 5R workflow never declared).
+- **Files changed:** `scripts/check.sh`, `scripts/check-e2e.sh`,
+  `tests/unit/maintenance/gateBytecodeGuard.test.js` (new), `.github/workflows/stage-5q-checks.yml`,
+  `.github/workflows/stage-5r-checks.yml`,
+  `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json` (all three restored to
+  `main`), the declaration (Addendum 2), `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Hosted log of run 40576071879 names the two rewritten `.pyc` paths as the only
+  dirt. After the restore: 5Q gate census 48 problems, set-identical to the committed pin (exit 0);
+  the 5Q workflow-shape, write-surface and transition tests and the 5R write-surface test 78/78; the
+  workflow-observing tests 18/18; the new guard 2/2. On `ci/pin-stage-5q-workflow`: the 5Q
+  write-surface gate accepts the one path outside Q0 under Annex A5 (authority at base), census
+  48/48, Stage 5Q suite 584/584. On `ci/pin-stage-5r-workflow`: `WRITE SURFACE OK: 1 changed
+  file(s)`, Stage 5R suite 389/389. Prettier clean on edited supported files. The hosted gates
+  have not yet run on these revisions.
+- **Follow-ups:** Open the two pin branches as separate pull requests after this one. The Stage 5Q
+  and 5R gates still judge a whole PR diff whenever their workflow file is touched; a declared
+  `maintenance_behaviour` for both (gate lifecycle contract) would remove the need for the split.
+
