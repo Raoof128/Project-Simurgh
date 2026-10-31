@@ -505,7 +505,8 @@ app.use(
     // A separate full-path auth route can be bypassed before the nested router.
     if (req.method === "POST" && /^\/+sessions\/*$/i.test(req.path))
       return requireInstructorAuth(req, res, next);
-    if (req.method === "POST" && /^\/+[^/]+\/run\/*$/i.test(req.path)) guardGatewayExport(res);
+    if (GATEWAY_EXPORT_GUARD && req.method === "POST" && /^\/+[^/]+\/run\/*$/i.test(req.path))
+      guardGatewayExport(res);
     next();
   },
   gatewayRouter
@@ -518,6 +519,11 @@ app.use(
 // export boundary is this process's response, so the decision is corrected here, at the mount,
 // before the body leaves. The frozen receipt inside the body still records what the router
 // decided; `mount_guard` records what this conductor did about it.
+// On by default. The frozen Stage 3H adapter smoke replays 26 fixture cases on one session and
+// expects the frozen router's own verdicts at a cumulative score above 80; that historical replay
+// sets SIMURGH_GATEWAY_EXPORT_GUARD=0 explicitly. Any other value keeps the guard.
+const GATEWAY_EXPORT_GUARD = process.env.SIMURGH_GATEWAY_EXPORT_GUARD !== "0";
+
 function guardGatewayExport(res) {
   const json = res.json.bind(res);
   res.json = (body) => {

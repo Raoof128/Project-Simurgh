@@ -57,7 +57,9 @@ Since 31 October 2026 the conductor corrects the export at the mount (`server.js
 while its own `risk_verdict` is `blocked`, or while the provider response kind is `error`, the
 response leaves this process as `gateway_verdict: blocked` with `output_exported: false`, no
 `output_text`, an added reason code and a `mount_guard` field naming the router's own verdict. The
-frozen receipt inside the body still records the router's decision. Direct module use of
+frozen receipt inside the body still records the router's decision. The guard is on unless
+`SIMURGH_GATEWAY_EXPORT_GUARD=0`; the only place that sets it is the Stage 3H security-audit
+smoke, which replays the frozen fixture corpus against the frozen router's own verdicts. Direct module use of
 `src/llmShield/gateway` keeps the defect. The 31 October audit also reproduced, in the frozen
 router, that the verdict is non-monotone across runs (score 4 is withheld while score 6 is
 accepted), that fallback output is exported at blocked risk, and that provider errors are reported
