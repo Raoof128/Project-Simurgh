@@ -110,6 +110,28 @@ class SidecarGateway(Gateway):
 
 
 class SuccessorSignalGate(SignalGate):
+    def __init__(self, path, host, **kwargs):
+        """Mirrors the frozen constructor with two repairs.
+
+        The frozen gate accepts a symlinked signal database (``is_file`` follows links) while
+        every sibling file refuses one (audit A1-8); and after a crash between the stop latch and
+        the revoke call the credential stayed live for ever, because nothing re-drives revocation
+        on open (audit A1-4). Both are handled here, before and after the frozen constructor.
+        """
+        if Path(path).is_symlink():
+            raise ValueError("signal_state")
+        super().__init__(path, host, **kwargs)
+        self._ensure_revoked()
+
+    def _ensure_revoked(self):
+        """A latched route whose revocation never ran (or ran into an unknown) is revoked now."""
+        if not self.state()["terminal"]:
+            return
+        kinds = {event["type"] for event in self.events()}
+        if "host_revoked" in kinds:
+            return
+        self._revoke()
+
     def receive(self, raw, headers):
         """Normalise header names before the frozen verification and event-id check.
 
@@ -146,13 +168,17 @@ class SuccessorSignalGate(SignalGate):
             else:
                 folded[name] = value
         try:
-            return super().receive(raw, folded)
+            outcome = super().receive(raw, folded)
         except ValueError as exc:
             # Raised by the frozen gate only AFTER the signature verified, so the alert is
             # authentic; a verifier that forgets an authentic alert fails open.
             if str(exc) != "invalid_webhook_event":
                 raise
             return self._hold_unparseable(raw, folded)
+        # A replayed stop event answers "stopped" from the inbox without revoking (A1-4).
+        if outcome == "stopped":
+            self._ensure_revoked()
+        return outcome
 
     def _hold_unparseable(self, raw, headers):
         digest = hashlib.sha256(raw.encode()).hexdigest()

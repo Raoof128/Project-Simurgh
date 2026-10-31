@@ -330,6 +330,48 @@ class AlertDropTests(unittest.TestCase):
         self.assertEqual(session.context.dispatch(rig.actions["b"])["status"], "blocked")
 
 
+class RevocationReplayTests(unittest.TestCase):
+    """Audit A1-4 and A1-8 (31 October 2026)."""
+
+    def test_revocation_is_redriven_on_open_after_a_crash_between_latch_and_revoke(self):
+        rig = Rig(self)
+        gate = rig.pipe.signals["a"]
+        # Simulate the crash: latch the route directly, as the frozen _stop does, without revoking.
+        with gate.db() as db:
+            gate._stop(db, "test_crash")
+        self.assertTrue(gate.state()["terminal"])
+        self.assertNotIn("host_revoked", [e["type"] for e in gate.events()])
+        self.assertFalse(rig.pipe.gateways["a"].state()["stopped"])
+        rig.reopen()
+        reopened = rig.pipe.signals["a"]
+        self.assertIn("host_revoked", [e["type"] for e in reopened.events()])
+        self.assertTrue(rig.pipe.gateways["a"].state()["stopped"])
+        self.assertEqual(rig.dispatch("a"), "blocked")
+        self.assertEqual(rig.effects(), 0)
+
+    def test_replaying_a_stopped_event_redrives_a_missing_revocation(self):
+        rig = Rig(self)
+        gate = rig.pipe.signals["a"]
+        raw, headers = signed("a")
+        self.assertEqual(gate.receive(raw, headers), "stopped")
+        # Erase the revocation outcome as a crash after the inbox write would have left it.
+        with gate.db() as db:
+            db.execute("DELETE FROM events WHERE payload LIKE '%host_revoked%'")
+        self.assertNotIn("host_revoked", [e["type"] for e in gate.events()])
+        self.assertEqual(gate.receive(raw, headers), "stopped")
+        self.assertIn("host_revoked", [e["type"] for e in gate.events()])
+
+    def test_symlinked_signal_database_is_refused(self):
+        rig = Rig(self)
+        real = rig.path / "controls" / "a-signal.sqlite"
+        moved = rig.path / "elsewhere.sqlite"
+        os.rename(real, moved)
+        os.symlink(moved, real)
+        with self.assertRaises(ValueError) as caught:
+            rig.reopen()
+        self.assertEqual(str(caught.exception), "signal_state")
+
+
 class BindingTests(unittest.TestCase):
     """M5: the frozen pipeline hard-wires response-<name> and request-<name>."""
 

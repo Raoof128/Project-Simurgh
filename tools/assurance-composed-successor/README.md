@@ -53,6 +53,11 @@ Three further repairs from the 31 October 2026 repository audit (A1-1, A1-2, A1-
    was received while lookup was down left the sibling route dispatching until the lookup
    recovered. `blocking_routes()` also returns routes with a pending alert, and the block is
    recorded as `dispatch_sibling_pending`.
+8. **Revocation is re-driven.** After a crash between the stop latch and the revoke call the
+   frozen gate reopened latched but never revoked, and a replayed stop event answered `stopped`
+   from the inbox without revoking (A1-4). The successor revokes on open and on replay whenever a
+   route is terminal with no `host_revoked` event.
+9. **A symlinked signal database is refused** on open, as the sibling files already were (A1-8).
 
 ## Run the tests
 
@@ -76,8 +81,8 @@ gate. A future study that wants the fixed gate freezes this module's sources in 
 `protocol.json`; it does not re-pin the old ones.
 
 Not covered: a pending unparseable alert has no in-band release (a new pipeline directory is the
-host's path); revocation is not re-driven after a crash between the stop latch and the revoke
-(frozen `signals.py`, A1-4); restart approvals are not bound to a pipeline instance (A1-5);
+host's path); restart approvals are not bound to a pipeline instance (A1-5); the connector's host
+database path still follows symlinks (frozen `core.py`);
 callers that use `pipeline.gateways[...]` or `pipeline.signals[...]` directly rather
 than through `resume()`; the window between the latch check and an already-admitted dispatch (the
 frozen gate also lets admitted work finish after a stop); `SignalGate.receive` does not take the
