@@ -7,6 +7,7 @@ import crypto from "node:crypto";
 // Upper bound on live buckets per limiter. Keys come from unauthenticated requests, so the
 // periodic sweep alone would let a flood grow the map for up to five minutes between passes.
 const DEFAULT_MAX_BUCKETS = 50_000;
+const EVICT_SCAN_LIMIT = 2_048;
 
 export function createRateLimiter({
   windowMs,
@@ -46,10 +47,14 @@ export function createRateLimiter({
         // Full: drop expired buckets, then the oldest live ones still under their limit (Map
         // iteration is insertion order). A throttled bucket is never evicted, or flooding fresh
         // keys would reset it; if every live bucket is throttled, the new key is refused.
-        sweep();
+        // The scan is bounded: a full sweep of 50,000 buckets on every new key cost about 2 ms per
+        // request at the cap (audit D-13). Buckets are in insertion order, so the oldest are seen
+        // first; if nothing within the bound can go, the new key is refused.
+        let examined = 0;
         for (const [k, v] of buckets) {
-          if (buckets.size < maxBuckets) break;
-          if (v.count < max) buckets.delete(k);
+          if (buckets.size < maxBuckets || examined >= EVICT_SCAN_LIMIT) break;
+          examined += 1;
+          if (now - v.windowStart >= windowMs || v.count < max) buckets.delete(k);
         }
         if (buckets.size >= maxBuckets) {
           res.setHeader("Retry-After", Math.ceil(windowMs / 1000));

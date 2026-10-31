@@ -76,6 +76,14 @@ export function createDaemonPairingRegistry({ challengeTtlMs = 30_000 } = {}) {
       }
     },
 
+    // Expired challenges used to stay until the session itself was evicted: 300k of them held
+    // 79 MB (audit D-11). They are dropped on the same sweep as everything else.
+    challengeCount() {
+      return challenges.size;
+    },
+    evictExpired(now = Date.now()) {
+      for (const [key, entry] of challenges) if (entry.expires_at < now) challenges.delete(key);
+    },
     evictMissing(activeIds) {
       for (const sessionId of paired.keys()) {
         if (!activeIds.has(sessionId)) paired.delete(sessionId);

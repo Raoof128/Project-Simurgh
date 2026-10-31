@@ -350,3 +350,114 @@ test("D-9: a .env.example placeholder secret refuses to start outside demo mode"
   assert.equal(await exited, 78);
   assert.match(stderr(), /placeholder/);
 });
+
+// ─────────────────────────────────────────────────────────────
+//  Second pass (31 October 2026): the items left open after the first repairs.
+// ─────────────────────────────────────────────────────────────
+import { createDaemonPairingRegistry } from "../../../src/device/daemonPairing.js";
+import { createRateLimiter } from "../../../src/security/rateLimit.js";
+
+test("D-10: one open session per student per exam; a submitted session frees the identity", async () => {
+  const { base, stop } = await bootServer();
+  try {
+    const { id } = await (await post(`${base}/api/exams`, { title: "audit" })).json();
+    const first = await post(`${base}/api/exams/${id}/join`, { studentId: "twin" });
+    assert.ok([200, 201].includes(first.status));
+    const j = await first.json();
+    const second = await post(`${base}/api/exams/${id}/join`, { studentId: "twin" });
+    assert.equal(second.status, 409);
+    assert.equal((await second.json()).error, "student_already_joined");
+    // A different exam is a different identity scope.
+    const other = await (await post(`${base}/api/exams`, { title: "other" })).json();
+    assert.ok(
+      [200, 201].includes(
+        (await post(`${base}/api/exams/${other.id}/join`, { studentId: "twin" })).status
+      )
+    );
+    const auth = { authorization: `Bearer ${j.sessionToken}` };
+    for (const step of ["privacy-accept", "start", "submit"]) {
+      assert.ok(
+        [200, 201].includes(
+          (await post(`${base}/api/sessions/${j.sessionId}/${step}`, {}, auth)).status
+        )
+      );
+    }
+    const again = await post(`${base}/api/exams/${id}/join`, { studentId: "twin" });
+    assert.ok([200, 201].includes(again.status), "a closed session must not block a fresh join");
+  } finally {
+    stop();
+  }
+});
+
+test("D-11: expired pairing challenges are purged on the sweep", () => {
+  const registry = createDaemonPairingRegistry({ challengeTtlMs: 1000 });
+  for (let i = 0; i < 50; i += 1) registry.createChallenge(`s${i}`, "pair", 0);
+  assert.equal(registry.challengeCount(), 50);
+  registry.evictExpired(500);
+  assert.equal(registry.challengeCount(), 50, "unexpired challenges stay");
+  registry.evictExpired(5000);
+  assert.equal(registry.challengeCount(), 0);
+});
+
+test("D-13: a full limiter map refuses a new key in bounded time instead of scanning everything", () => {
+  const limiter = createRateLimiter({
+    windowMs: 60_000,
+    max: 1,
+    keyFn: (req) => req.key,
+    maxBuckets: 3000,
+    name: "t",
+  });
+  const res = () => {
+    const r = { code: 200, body: null, headers: {} };
+    r.setHeader = (k, v) => (r.headers[k] = v);
+    r.status = (c) => ((r.code = c), r);
+    r.json = (b) => ((r.body = b), r);
+    return r;
+  };
+  for (let i = 0; i < 3000; i += 1) {
+    limiter({ key: `k${i}` }, res(), () => {});
+    limiter({ key: `k${i}` }, res(), () => {}); // second hit throttles the bucket
+  }
+  const started = process.hrtime.bigint();
+  const r = res();
+  let passed = false;
+  limiter({ key: "fresh" }, r, () => (passed = true));
+  const ms = Number(process.hrtime.bigint() - started) / 1e6;
+  assert.equal(passed, false);
+  assert.equal(r.code, 429);
+  assert.ok(ms < 50, `refusal took ${ms} ms`);
+});
+
+test("B-3: the mount withholds an export that carries a configured canary even though the frozen firewall accepted it", async () => {
+  const { base, stop } = await bootServer({
+    SIMURGH_LLM_SHIELD_SECRET: "pass3-llm-shield-secret-32-characters",
+    ANTHROPIC_API_KEY: "sk-test-FAKE",
+    SIMURGH_EXPORT_CANARIES: "general explanation",
+  });
+  try {
+    const created = await post(
+      `${base}/api/llm-shield/gateway/sessions`,
+      {},
+      { authorization: "Bearer test-instructor-token" }
+    );
+    const { session_id: sessionId, token } = await created.json();
+    const res = await (
+      await post(
+        `${base}/api/llm-shield/gateway/${sessionId}/run`,
+        { input: "Explain photosynthesis briefly." },
+        { authorization: `Bearer ${token}` }
+      )
+    ).json();
+    assert.equal(
+      res.receipt.output_firewall_verdict,
+      "accepted",
+      "the frozen firewall accepted it"
+    );
+    assert.equal(res.gateway_verdict, "blocked");
+    assert.equal(res.output_text, undefined);
+    assert.ok(res.reason_codes.includes("export_canary"));
+    assert.equal(res.mount_guard.router_verdict, "accepted");
+  } finally {
+    stop();
+  }
+});

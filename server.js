@@ -39,6 +39,7 @@ import votingPilotRouter from "./src/votingPilot/index.js";
 import bankingPilotRouter from "./src/bankingPilot/index.js";
 import llmShieldRouter from "./src/llmShield/llmShieldRouter.js";
 import gatewayRouter from "./src/llmShield/gateway/gatewayRouter.js";
+import { scanExport } from "./src/security/exportScan.js";
 import {
   createRateLimiter,
   keyByIp,
@@ -381,8 +382,12 @@ const evictionTimer = setInterval(
       if (s.lastActivity < cutoff) {
         sessions.delete(id);
         legacySessionIds.delete(id);
+        replayGuard.reset(id);
       }
     }
+    // Replay-guard rows and pairing challenges never purged (audit D-11).
+    replayGuard.evictOlderThan(cutoff);
+    daemonPairingRegistry.evictExpired(Date.now());
   },
   5 * 60 * 1000
 ).unref?.();
@@ -576,7 +581,7 @@ app.use(
     if (req.method === "POST" && /^\/+sessions\/*$/i.test(req.path))
       return requireInstructorAuth(req, res, next);
     if (GATEWAY_EXPORT_GUARD && req.method === "POST" && /^\/+[^/]+\/run\/*$/i.test(req.path))
-      guardGatewayExport(res);
+      guardGatewayExport(res, req);
     next();
   },
   gatewayRouter
@@ -594,7 +599,15 @@ app.use(
 // sets SIMURGH_GATEWAY_EXPORT_GUARD=0 explicitly. Any other value keeps the guard.
 const GATEWAY_EXPORT_GUARD = process.env.SIMURGH_GATEWAY_EXPORT_GUARD !== "0";
 
-function guardGatewayExport(res) {
+const EXPORT_CANARIES = String(process.env.SIMURGH_EXPORT_CANARIES ?? "")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+function requestContexts(req) {
+  const contexts = Array.isArray(req?.body?.contexts) ? req.body.contexts : [];
+  return contexts.map((c) => (typeof c?.content === "string" ? c.content : "")).filter(Boolean);
+}
+function guardGatewayExport(res, req) {
   const json = res.json.bind(res);
   res.json = (body) => {
     if (
@@ -605,6 +618,15 @@ function guardGatewayExport(res) {
     ) {
       const reasons = [];
       if (body.risk_verdict === "blocked") reasons.push("cumulative_risk_blocked_at_mount");
+      // The frozen output firewall is a fixed-marker regex over raw text; the maintained scan
+      // normalises, decodes and checks for secret shapes and context echoes (audit B-3).
+      if (typeof body.output_text === "string") {
+        const scan = scanExport(body.output_text, {
+          contexts: requestContexts(req),
+          canaries: EXPORT_CANARIES,
+        });
+        for (const code of scan.reasons) reasons.push(code);
+      }
       if (body.receipt?.provider_response_kind === "error")
         reasons.push("provider_error_not_exported_at_mount");
       if (reasons.length) {
@@ -744,6 +766,9 @@ function rejectClosedExamSession(req, res, next) {
   }
   next();
 }
+
+// SIMURGH_ALLOW_DUPLICATE_JOINS=1 restores the historical behaviour of unlimited joins per identity.
+const ALLOW_DUPLICATE_JOINS = process.env.SIMURGH_ALLOW_DUPLICATE_JOINS === "1";
 
 // Pre-configured rate limiters
 const limitJoin = createRateLimiter({ windowMs: 60_000, max: 10, keyFn: keyByIp, name: "join" });
@@ -1426,6 +1451,20 @@ app.post("/api/exams/:examId/join", limitJoin, (req, res) => {
     // A tokenless session pre-created under this id would otherwise hand its state and audit
     // entries to the joining student (audit D-10). Clients should let the server choose the id.
     return res.status(409).json({ error: "sessionId already in use" });
+  }
+  if (!ALLOW_DUPLICATE_JOINS) {
+    // One open session per student per exam (audit D-10): a second join under the same identity
+    // while the first is still open is refused rather than silently creating a twin.
+    const closed = new Set([STATES.SUBMITTED, STATES.REPORT_GENERATED, STATES.CLOSED]);
+    for (const existing of examSessions.values()) {
+      if (
+        existing.examId === exam.id &&
+        existing.studentIdHash === studentIdHash &&
+        !closed.has(existing.state)
+      ) {
+        return res.status(409).json({ error: "student_already_joined" });
+      }
+    }
   }
   let record = createSessionRecord(exam.id, studentIdHash);
   record = { ...record, id: sessionId };
