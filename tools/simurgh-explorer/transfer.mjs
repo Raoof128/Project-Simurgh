@@ -11,7 +11,7 @@ const equal = (a, b) =>
 export function projectTransfer(
   captures,
   tasks,
-  { detail = false, archiveSha256, tasksSha256 } = {}
+  { detail = false, archiveSha256, tasksSha256, manifestRoot = null } = {}
 ) {
   requireThat(tasks.length === 24 && new Set(tasks.map((t) => t.id)).size === 24, "task inventory");
   const records = [];
@@ -111,7 +111,14 @@ export function projectTransfer(
     title: "Model transfer · Phase 17",
     mode: detail ? "local_detail" : "public",
     verification: "not_verified_by_explorer",
-    provenance: { archive_sha256: archiveSha256, tasks_sha256: tasksSha256 },
+    provenance: {
+      // The zip file's own hash, for the record; the verifier's root is the manifest hash below.
+      archive_sha256: archiveSha256,
+      archive_manifest_root: manifestRoot ?? null,
+      root_file_matches_manifest: manifestRoot != null,
+      members_match_manifest: manifestRoot != null,
+      tasks_sha256: tasksSha256,
+    },
     omissions: [
       "raw_state_and_credentials",
       "prompt_messages",
@@ -127,7 +134,8 @@ export function projectTransfer(
 export function loadTransfer(root, readBound, detail) {
   const path = "docs/research/transfer-phase-17/evidence.zip";
   const archive = readBound(root, path),
-    tasks = readBound(root, "docs/research/transfer-phase-17/tasks.json");
+    tasks = readBound(root, "docs/research/transfer-phase-17/tasks.json"),
+    rootFile = readBound(root, "docs/research/transfer-phase-17/ROOT.sha256");
   const captures = JSON.parse(
     execFileSync(
       "python3",
@@ -135,9 +143,16 @@ export function loadTransfer(root, readBound, detail) {
       { encoding: "utf8", maxBuffer: 12 * 1024 * 1024, timeout: 30000 }
     )
   );
+  // Cheap consistency checks that need no replay (audit F-4): the committed ROOT.sha256 must equal
+  // sha256(manifest.json) inside the archive, and the two members read must match the manifest.
+  // This is byte consistency with a repository-supplied pin, not independent verification.
+  const expectedRoot = rootFile.text.trim();
+  if (captures.manifest_root !== expectedRoot) throw new Error("archive_root_mismatch");
+  if (captures.members_match_manifest !== true) throw new Error("archive_member_mismatch");
   return projectTransfer(captures, JSON.parse(tasks.text), {
     detail,
     archiveSha256: archive.sha256,
     tasksSha256: tasks.sha256,
+    manifestRoot: captures.manifest_root,
   });
 }

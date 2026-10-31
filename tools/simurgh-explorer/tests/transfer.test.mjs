@@ -57,3 +57,56 @@ test("transfer imports cannot evade inventory checks by dropping the study label
   c.selection = { total: 3, retained: 3 };
   assert.throws(() => parseBundle(JSON.stringify(c)), /selection/);
 });
+
+// Audit F-4 (31 October 2026): the loader checks ROOT.sha256 against sha256(manifest.json) and the
+// members it reads against the manifest; a mismatch is refused, never loaded with a quiet label.
+import { cpSync, mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { readBound } from "../index.mjs";
+import { loadTransfer } from "../transfer.mjs";
+
+// npm runs these tests from tools/simurgh-explorer; the evidence lives at the repository root.
+const REPO = fileURLToPath(new URL("../../../", import.meta.url));
+
+function scratchRoot() {
+  const root = mkdtempSync(join(tmpdir(), "simurgh-explorer-root-"));
+  const dir = join(root, "docs/research/transfer-phase-17");
+  mkdirSync(dir, { recursive: true });
+  for (const name of ["evidence.zip", "tasks.json", "ROOT.sha256"]) {
+    cpSync(join(REPO, "docs/research/transfer-phase-17", name), join(dir, name));
+  }
+  return { root, dir };
+}
+
+test("loader records the manifest root and refuses a ROOT.sha256 that does not match it", (t) => {
+  const { root, dir } = scratchRoot();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const bundle = loadTransfer(root, readBound, false);
+  assert.equal(bundle.provenance.root_file_matches_manifest, true);
+  assert.match(bundle.provenance.archive_manifest_root, /^[0-9a-f]{64}$/);
+  writeFileSync(join(dir, "ROOT.sha256"), "0".repeat(64) + "\n");
+  assert.throws(() => loadTransfer(root, readBound, false), /archive_root_mismatch/);
+});
+
+test("loader refuses a member whose bytes no longer match the manifest", (t) => {
+  const { root, dir } = scratchRoot();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  execFileSync("python3", [
+    "-I",
+    "-c",
+    [
+      "import sys, zipfile",
+      "src, dst = sys.argv[1], sys.argv[2]",
+      "with zipfile.ZipFile(src) as z:",
+      "    members = {n: z.read(n) for n in z.namelist()}",
+      "members['llama.json'] = members['llama.json'] + b' '  # still valid JSON, different bytes",
+      "with zipfile.ZipFile(dst, 'w', zipfile.ZIP_DEFLATED) as out:",
+      "    [out.writestr(n, b) for n, b in members.items()]",
+    ].join("\n"),
+    join(REPO, "docs/research/transfer-phase-17/evidence.zip"),
+    join(dir, "evidence.zip"),
+  ]);
+  assert.throws(() => loadTransfer(root, readBound, false), /archive_member_mismatch/);
+});
