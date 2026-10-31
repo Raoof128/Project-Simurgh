@@ -505,10 +505,50 @@ app.use(
     // A separate full-path auth route can be bypassed before the nested router.
     if (req.method === "POST" && /^\/+sessions\/*$/i.test(req.path))
       return requireInstructorAuth(req, res, next);
+    if (req.method === "POST" && /^\/+[^/]+\/run\/*$/i.test(req.path)) guardGatewayExport(res);
     next();
   },
   gatewayRouter
 );
+
+// The frozen gateway router (src/llmShield, stage policy-drift guards) computes a cumulative
+// risk verdict and then omits its `blocked` case from the final decision, so a session whose
+// accumulated risk is `blocked` still receives `gateway_verdict: accepted` with the provider text
+// exported; a provider error is likewise reported as accepted (audit B-2, 31 October 2026). The
+// export boundary is this process's response, so the decision is corrected here, at the mount,
+// before the body leaves. The frozen receipt inside the body still records what the router
+// decided; `mount_guard` records what this conductor did about it.
+function guardGatewayExport(res) {
+  const json = res.json.bind(res);
+  res.json = (body) => {
+    if (
+      body &&
+      typeof body === "object" &&
+      body.gateway_verdict &&
+      body.gateway_verdict !== "blocked"
+    ) {
+      const reasons = [];
+      if (body.risk_verdict === "blocked") reasons.push("cumulative_risk_blocked_at_mount");
+      if (body.receipt?.provider_response_kind === "error")
+        reasons.push("provider_error_not_exported_at_mount");
+      if (reasons.length) {
+        const { output_text: _withheld, ...rest } = body;
+        return json({
+          ...rest,
+          ok: false,
+          gateway_verdict: "blocked",
+          output_exported: false,
+          reason_codes: [
+            ...(Array.isArray(body.reason_codes) ? body.reason_codes : []),
+            ...reasons,
+          ],
+          mount_guard: { router_verdict: body.gateway_verdict, reasons },
+        });
+      }
+    }
+    return json(body);
+  };
+}
 // Retire collection as well as public reads: raw process identifiers must not
 // enter the old storage, audit, SSE or verdict projection paths below.
 app.use("/api/affinity", (_req, res) => {

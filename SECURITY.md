@@ -49,8 +49,19 @@ them, and misclassifies the installed SDK's abort exception as a generic provide
 A local synthetic SDK probe confirmed the retry and abort behavior without network access.
 See the [gateway corrections and probe scope](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m70--stage-3e-core-draft-contracts-exceed-the-shown-implementation).
 These findings qualify historical risk, quota and timeout claims. The mounted legacy live
-route remains retired; direct module use and old revisions retain the defects. No runtime
-repair or live-provider validation is claimed by this documentation update.
+route remains retired; direct module use and old revisions retain the defects. No live-provider
+validation is claimed.
+
+Since 31 October 2026 the conductor corrects the export at the mount (`server.js`,
+`guardGatewayExport`): when the frozen router returns `gateway_verdict: accepted` or `warning`
+while its own `risk_verdict` is `blocked`, or while the provider response kind is `error`, the
+response leaves this process as `gateway_verdict: blocked` with `output_exported: false`, no
+`output_text`, an added reason code and a `mount_guard` field naming the router's own verdict. The
+frozen receipt inside the body still records the router's decision. Direct module use of
+`src/llmShield/gateway` keeps the defect. The 31 October audit also reproduced, in the frozen
+router, that the verdict is non-monotone across runs (score 4 is withheld while score 6 is
+accepted), that fallback output is exported at blocked risk, and that provider errors are reported
+as accepted; the mount guard covers the response for all three.
 
 ## Retained AgentDojo helper limits
 
