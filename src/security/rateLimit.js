@@ -56,6 +56,9 @@ export function createRateLimiter({
           examined += 1;
           if (now - v.windowStart >= windowMs || v.count < max) buckets.delete(k);
         }
+        // Throttled buckets at the front can pin the bounded scan; only then pay for a full
+        // sweep of expired buckets (O(n) under attack, O(scan limit) otherwise).
+        if (buckets.size >= maxBuckets) sweep();
         if (buckets.size >= maxBuckets) {
           res.setHeader("Retry-After", Math.ceil(windowMs / 1000));
           return res
@@ -63,6 +66,9 @@ export function createRateLimiter({
             .json({ error: "rate_limited", scope: name, retry_after_ms: windowMs });
         }
       }
+      // Delete before set so a bucket entering a new window moves to the back of the Map and the
+      // front stays the oldest, which is what the bounded eviction scan relies on.
+      if (b) buckets.delete(key);
       buckets.set(key, { windowStart: now, count: 1 });
       return next();
     }

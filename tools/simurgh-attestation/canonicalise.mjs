@@ -83,8 +83,15 @@ export function assertNoDuplicateKeys(text) {
       const top = stack[stack.length - 1];
       const str = readString();
       if (top && top.expectKey) {
-        if (top.keys.has(str)) throw new Error(`json_duplicate_key:${str.slice(0, 64)}`);
-        top.keys.add(str);
+        // Compare DECODED names: `"a"` and `"\u0061"` are the same key to JSON.parse.
+        let decoded;
+        try {
+          decoded = JSON.parse(`"${str}"`);
+        } catch {
+          throw new Error("json_invalid_string_escape");
+        }
+        if (top.keys.has(decoded)) throw new Error(`json_duplicate_key:${decoded.slice(0, 64)}`);
+        top.keys.add(decoded);
         top.expectKey = false;
       }
     } else if (c === ",") {

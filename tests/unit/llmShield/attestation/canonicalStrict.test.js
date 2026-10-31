@@ -33,6 +33,9 @@ test("duplicate keys at any depth are refused before parsing; escaped quotes are
   assert.throws(() => assertNoDuplicateKeys('{"a":{"b":1,"b":2}}'), /json_duplicate_key:b/);
   assert.equal(assertNoDuplicateKeys('{"a":"x\\"a\\"","b":"a"}'), true);
   assert.equal(assertNoDuplicateKeys('[{"a":1},{"a":2}]'), true);
+  // An escaped spelling of the same name is the same key.
+  assert.throws(() => assertNoDuplicateKeys('{"a":1,"\\u0061":2}'), /json_duplicate_key:a/);
+  assert.throws(() => assertNoDuplicateKeys('{"\\u00e9":1,"é":2}'), /json_duplicate_key/);
 });
 
 import { execFileSync, spawnSync } from "node:child_process";
