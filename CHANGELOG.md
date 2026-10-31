@@ -5226,3 +5226,35 @@ Owner-requested work; implementation and review by Codex assistance.
   and 5R gates still judge a whole PR diff whenever their workflow file is touched; a declared
   `maintenance_behaviour` for both (gate lifecycle contract) would remove the need for the split.
 
+
+### 2026-10-31 (Australia/Sydney) — Full repository audit, red team and remediation
+
+**Raouf: Claude-assisted implementation**
+
+- **Scope:** Branch `audit/2026-10-31-full-repository`, cut from `fix/pass3-audit-findings` after the
+  repair of its three red hosted checks. Maintained surfaces only: `server.js`, `src/*` outside
+  `src/llmShield`, `scripts/*`, the workflows, the explorer, the composed-gate successor, the
+  top-level attestation libraries, `tools/evidence-mutations`, mutable documentation. Frozen
+  sources, archived evidence, recorded numbers, `src/llmShield/**`, the Stage 4U adapter and
+  stage-owned verifiers are unchanged; their defects are disclosed in SECURITY.md.
+- **Summary:** Seven independent read-only reviewers (areas A1, A2, B, C, D, E, F) each confirmed
+  findings by running code against `e75753d1`; every repair landed with a regression that fails
+  on the pre-fix revision. Highest-impact repairs: an anonymous 12 KB telemetry body nested 6,000
+  deep crashed the server (D-1); anonymous callers could drive paid model calls with no ceiling
+  and the gating knobs had no readers (D-2); `//sessions` bypassed the per-IP LLM Shield bound
+  (B-1); the frozen gateway exported provider text at blocked cumulative risk, now withheld at
+  the mount (B-2); nineteen maintained verifier entry points exited 0 silently through a
+  symlinked or space-containing path (C-1); the Lean gate accepted `private axiom` and `sorryAx`
+  (E-1); the composed-gate successor dropped signed alerts over irrelevant headers or unparseable
+  bodies and let a pending alert's sibling dispatch (A1-1..3); imported explorer bundles were
+  presented as repository data (F-3). Every headline research number recomputed from the
+  archives; README and RESULTS gained the baseline-observability and model-identity caveats
+  without changing a number. The full register, remediation record, verification matrix,
+  research-claim audit, residual-risk register and file inventory are in
+  `docs/security-audit-2026-10-31/`.
+- **Files changed:** see `docs/security-audit-2026-10-31/REMEDIATION.md` (one row per commit).
+- **Verification:** see `docs/security-audit-2026-10-31/VERIFICATION.md` (commands, versions, exit
+  codes, counts, platform). Hosted CI has not run on these revisions; nothing was pushed.
+- **Follow-ups:** open the two pin branches as separate pull requests; apply branch protection to
+  `main`; the residual-risk register lists the confirmed unresolved items, the missing external
+  evidence and the platform-blocked checks.
