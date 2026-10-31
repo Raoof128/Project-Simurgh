@@ -253,6 +253,32 @@ in place; where a maintained successor or mount-level correction exists it is na
   changes a committed number: 600 random-time kills of two racing durable executors produced one
   effect every time, 16/24/40 processes on budgets 1/3/10 produced exactly 1/3/10 dispatches, and
   34 URL-scope variants dispatched nothing.
+- **Stage-owned CLI entry guards (184 files).** `import.meta.url` is compared with
+  `process.argv[1]` as text, so a stage verifier launched through a symlinked directory (`/tmp`
+  on macOS) or a checkout path containing a space never runs and exits 0 printing nothing. The
+  nineteen maintained entry points resolve both sides to the physical path since 31 October; for
+  the stage-owned ones, run from the physical checkout path with no spaces, and treat a verifier
+  that prints nothing as not having run.
+- **Stage 5S standalone attestation verifier.** It reads `vwq-public-key.pem` from the bundle's own
+  directory and checks only that bindings are non-null; an envelope with every status set to its
+  most favourable value, re-signed under a fresh key placed beside it, returns `OK`. `--tier` is
+  echoed and otherwise ignored. The evaluator takes the producer key from the bundle, compares
+  digests as strings, and accepts fake RFC 3161, Rekor and OpenTimestamps captures that carry
+  `inclusion_verified: true` (manual-review M138, 16/16 probe asserts still pass).
+- **Stage 4F frontier (M94, open).** `frontier.sig` is the certificate's own digest; the utility
+  sidecars are unsigned; a producer that flips twelve benign cells to failed and recomputes the
+  metrics, frontier and certificate exits 0 with benign utility 0 at every point.
+- **Stage 4N heartbeat (M107, open), plus a second preimage.** The CLI has no manifest, attestation
+  or key parameter; `merklePath.mjs` has no leaf/node domain separation and `inclusionCore.mjs`
+  never binds `bundle_digest` to bytes, so a root presented as a leaf with an empty path, or an
+  interior node with a shortened path, is accepted.
+- **Stage 4H tamper matrix.** Two arms set `signatureOk` and `merkleOk` to false without mutating
+  a byte, so they report `tampered_accepted_count = 0` even with the signature checks neutered;
+  the CLI never calls `validateJsonTextNoDuplicateKeys`.
+- **Key trust in retained stages.** Stage 4O verifies the attestation under the public key the
+  manifest itself carries; the 4D–4H test private key is committed beside its public key by
+  design; about two dozen signers sign bare canonical JSON with distinct keys and schema tags but
+  no domain prefix.
 - **Stage 5S witness quorum (`stage5s/core/quorum.mjs`, `receivers.mjs`).** The verifier reads
   `signature_verified` from the input statement and never verifies a witness or receiver
   signature; replacing every witness signature with garbage, or deleting it, still yields
