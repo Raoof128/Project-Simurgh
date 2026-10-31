@@ -523,7 +523,14 @@ const limitLlmShieldSessions = createRateLimiter({
   keyFn: keyByIp,
   name: "llm-shield-sessions",
 });
-app.post("/api/llm-shield/sessions", limitLlmShieldSessions);
+// Applied on the mount prefix rather than as an exact-path route: the router accepts
+// `//sessions`, `/sessions/` and case variants, and an exact `app.post` in front of it
+// limited only the canonical spelling (audit B-1, 31 October 2026).
+app.use("/api/llm-shield", (req, res, next) => {
+  if (req.method === "POST" && /^\/+sessions\/*$/i.test(req.path))
+    return limitLlmShieldSessions(req, res, next);
+  next();
+});
 app.use("/api/llm-shield", llmShieldRouter);
 
 // Instructor route — serves the shell page. Data APIs below remain bearer-gated

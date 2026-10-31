@@ -155,6 +155,13 @@ test("POST /api/llm-shield/sessions is rate-limited per IP", async () => {
     const extra = await post(`${base}/api/llm-shield/sessions`, {});
     assert.equal(extra.status, 429);
     assert.equal((await extra.json()).scope, "llm-shield-sessions");
+    // Audit B-1 (31 October 2026): the router accepts these spellings too, and an exact-path
+    // limiter in front of it let `//sessions` create 200 sessions in 31 ms from one IP.
+    for (const variant of ["//sessions", "/sessions/", "/SESSIONS", "///sessions//"]) {
+      const res = await post(`${base}/api/llm-shield${variant}`, {});
+      assert.equal(res.status, 429, `${variant} must share the per-IP bound`);
+      assert.equal((await res.json()).scope, "llm-shield-sessions");
+    }
   } finally {
     stop();
   }
