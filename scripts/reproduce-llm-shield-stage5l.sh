@@ -24,7 +24,12 @@ SNAP="$(mktemp -d)"
 trap 'rm -rf "$SNAP"' EXIT
 cp -r docs/research/llm-shield/evidence/stage-5l "$SNAP/before"
 "$NODE" tools/simurgh-attestation/stage5l/node/build-vtcq-evidence.mjs >/dev/null
-diff -r "$SNAP/before" docs/research/llm-shield/evidence/stage-5l && echo "byte-stable: OK"
+if diff -r "$SNAP/before" docs/research/llm-shield/evidence/stage-5l; then
+  echo "byte-stable: OK"
+else
+  echo "FAIL: stage-5l evidence is not byte-stable" >&2
+  exit 1
+fi
 
 echo "-- unit + K7 net --"
 "$NODE" --test tests/unit/llmShield/stage5l/*.test.js tests/e2e/llmShield/stage5l/*.test.js 2>&1 | tail -3
@@ -37,6 +42,11 @@ else
 fi
 
 echo "-- Node<->Python parity --"
-python3 tools/simurgh-attestation/stage5l/python/vtcq_parity.py >/dev/null && echo "parity: OK"
+if python3 tools/simurgh-attestation/stage5l/python/vtcq_parity.py >/dev/null; then
+  echo "parity: OK"
+else
+  echo "FAIL: Node<->Python parity" >&2
+  exit 1
+fi
 
 echo "== Stage 5L VTC-Q reproduce: ALL PASS =="
