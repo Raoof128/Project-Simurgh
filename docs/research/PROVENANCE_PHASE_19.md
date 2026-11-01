@@ -88,8 +88,9 @@ that file. This declaration commit must be a strict ancestor of that edit.
 - Ruling: 19b-1 ended with three wired deterministic channels; 19b-2 wired the fourth and the
   receipt now reads `phase_19b_closed: true` on six named conditions. Not among them: the native
   delivery path (not exercised on this host) and any outside replay.
-- Ruling: the workflow's five run steps are the gate ids the census measured; `current` gained
-  exactly those, `baseline` untouched. The workflow installs elan so the Lean differential test runs
+- Ruling: of the workflow's five run steps the census classified three as problem gates (the elan
+  install as `unclassifiable_step`, the two pack-verify steps as `missing_committed_universe_query`)
+  and two as ordinary steps; `current` gained exactly those three ids (48 → 51), `baseline` untouched. The workflow installs elan so the Lean differential test runs
   rather than skips, and chains the frozen Phase 17 replay through the 19a verifier on Linux x86_64,
   which the authoring host could not. No hosted run has executed yet; the first run's receipt is owed.
 - Ruling: 19c is receiver-direct by design (gauntlet M5). The strawman is a power check and G22 is
