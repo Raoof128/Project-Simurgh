@@ -14,6 +14,26 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-01 (Australia/Sydney) — Phase 19 close-out: final e2e and first push
+
+**Raouf:**
+
+- **Scope:** Phase 19 close-out on branch `phase-19/authority-provenance`: final end-to-end verification at
+  `5b7382d1` and the first push of the branch to `origin`. Logs only; no source, evidence or frozen file
+  changed in this entry.
+- **Summary:** With 19a–19g all committed, the full `tools/assurance-provenance` suite, `scripts/check.sh`
+  and every committed pack were re-run from the branch head. The first suite run died with
+  `No space left on device` (the authoring Mac's data volume was at 100%); only this session's own scratch
+  extracts were deleted and the suite was re-run clean. The branch is pushed so the hosted workflow
+  `.github/workflows/assurance-provenance.yml` runs for the first time; its receipt is owed and is not
+  claimed here.
+- **Files changed:** `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** suite 125 ok / 10 skipped (Linux namespace tests on macOS); `check.sh` 146 pass, 0 fail,
+  4 skip, 2 informational; packs 19a, 19b (closed), 19c, 19e, 19g verify on macOS; 19d verifies in a
+  privileged `python:3.12-slim` container; census checker set-identical (53); `ruff` and `prettier` clean.
+- **Follow-ups:** read the first hosted run and record its outcome in the declaration ledger; open the PR
+  when the owner asks; `IOU-19-SPEND`, `IOU-19-OPERATOR`, `IOU-19-KIT` remain owed.
+
 ### 2026-11-01 (Australia/Sydney) — Phase 19f: outside-operator handoff package
 
 **Raouf:**
