@@ -239,3 +239,9 @@ docs/research/provider-role-phase-17b/baseline.json
 # R06: preserve published append-only logs; validate new diff and historical prefixes.
 AGENT.md
 CHANGELOG.md
+
+# P19-FORMAT01: Phase 19a source-bound machine evidence; protocol.json is hashed into the pack and
+# report.json/receipt.json are canonical wire bytes. Preserve bytes; use tools/assurance-provenance/evidence.py verify.
+docs/research/provenance-phase-19a/protocol.json
+docs/research/provenance-phase-19a/report.json
+docs/research/provenance-phase-19a/receipt.json

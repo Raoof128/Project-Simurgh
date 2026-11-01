@@ -14,6 +14,48 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-01 (Australia/Sydney) — Phase 19a: projection verifier over the Phase 17 archive; Phase 19 declared
+
+**Raouf:**
+
+- **Scope:** New research namespace `tools/assurance-provenance/` (Phase 19a projection verifier) and
+  its evidence pack `docs/research/provenance-phase-19a/`; Phase 19 declaration, design (v2.1 after a
+  four-review gauntlet), plan, plug-in map and gauntlet records; the 31 Oct and 1 Nov Zurvan gap hunts.
+  No frozen file, verifier semantics, evidence value, code, score, tag or runtime mechanism changed.
+  No version bump. No CI workflow added yet (P19-CI01 declared, not exercised).
+- **Summary:** Phase 19a recomputes four projections from the frozen Phase 17 archive for the
+  `composed_frozen` arm: the per-generation-and-control split (Luna's zero restricted-state effects
+  are 24 model declines; Llama's 17 restricted-state effects under credential-only become 23 gate
+  blocks under composed), an awareness-flag sidecar reported `evaluable: false` because the
+  instrument elicited no verbalisation, coverage as three counts with an architectural denominator
+  (every receiver effect has a gateway record; the twelve `unknown` records per model are the four
+  seeded `unknown_prior` effects counted per control), and a judge-free row (0 of 288 outcomes
+  model-scored, reported not claimed) beside the forced-call citation (`VALIDATION.md` line 10).
+  The verifier rejects five named mutations and a wrong root with distinct reasons. The frozen
+  modules are not imported on this host; the replay chain runs only with `--replay` on Linux x86_64
+  and the receipt says so (`hash_bound_projection`, `replay.result: not_run`). The design's claims
+  were narrowed by the gauntlet (Species 8→5; "proves", "by construction" and "model-blind" removed).
+- **Files changed:** `tools/assurance-provenance/{projection,evidence}.py`,
+  `tools/assurance-provenance/tests/{test_projection,test_evidence}.py`,
+  `docs/research/provenance-phase-19a/{protocol,report,receipt}.json`, `evidence.zip`, `ROOT.sha256`,
+  `RESULTS.md`, `README.md`, `docs/research/PROVENANCE_PHASE_19.md`,
+  `docs/research/GAP_HUNT_ZURVAN_2026-10-31.md`, `docs/research/GAP_HUNT_ZURVAN_2026-11-01.md`,
+  `docs/research/gap-hunt-zurvan-2026-11-01/**`, `docs/superpowers/specs/2026-11-01-phase-19-*`,
+  `docs/superpowers/specs/2026-11-01-phase-19-gauntlet/**`,
+  `docs/superpowers/plans/2026-11-01-phase-19a-projection-verifier.md`, `.prettierignore`,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `python -m unittest discover -s tools/assurance-provenance/tests` 18 passed on
+  macOS (Python 3.12); `ruff check` and `ruff format --check` clean on the namespace;
+  `evidence.py verify` on the committed pack returns `verified: true` in a fresh process; `prettier
+  --check` clean on every new markdown file and the three evidence JSON files are listed in
+  `.prettierignore` under P19-FORMAT01. Not run: the Linux `--replay` chain, `scripts/check.sh`,
+  hosted CI.
+- **Follow-ups:** Add `.github/workflows/assurance-provenance.yml` and re-pin the Stage 5Q census in
+  one commit after this declaration commit, with gate ids measured by `measureGateCensus.mjs`; run
+  the pack with `--replay` on a Linux x86_64 runner; Phase 19b (agent-writable manifest, reader
+  census and mutants, provenance-tagged decision record, approval token, stop/lease/outage lane,
+  Lean model with differential test) per the design's §6.
+
 ### 2026-09-14 (Australia/Sydney) — Documentation: reference the 12 Sep 2026 embedded-evaluator proposal
 
 **Raouf:**
