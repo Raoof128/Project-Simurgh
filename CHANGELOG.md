@@ -1,5 +1,42 @@
 ## Change Log
 
+## [phase-19b-1] — 2026-11-01 — Phase 19b-1 write-anywhere lane, provenance records, outage lane, Lean model
+
+**Raouf:**
+
+- **Scope:** Phase 19b-1 in `tools/assurance-provenance/` (seven new modules, eight new test files),
+  `proofs/phase19/AuthorityProvenance.lean`, the 19b-1 evidence pack, the 19b plan, the declaration
+  ledger, `.prettierignore` (P19-FORMAT02), `scripts/check-lean-proofs.mjs` floor 39→40. The 19a
+  protocol now pins an explicit file set instead of a directory glob and its pack is regenerated.
+  No frozen file, verifier semantics, evidence value or runtime mechanism of any archived phase
+  changed. No version bump. No CI workflow added yet.
+- **Summary:** The Agent-Writable Manifest lists eleven channels with their readers; three are
+  wired through disciplined resume adapters. The write-anywhere lane writes twelve payloads (nine
+  quoted verbatim from the lab reports) into each wired channel and finds zero differences in the
+  clean successor's verdicts, receiver effects and authority-state hash, while all nine reader
+  mutants (textual grant, textual stop, agent-writable budget) are killed. Each clean dispatch
+  writes a signed provenance-tagged decision record that an offline verifier recomputes from the
+  host tables. The outage lane holds the exact approved action during a signal-store outage
+  (`dispatch_signal_unavailable`), records that an outage after reservation leaves the attempt
+  `unknown` with the budget consumed, treats the self-asserted stop as a no-reader statement with
+  the mutant as the test, and binds lease renewal after an `unrelated` alert to a signed
+  acknowledgement. The Lean model proves four properties of the admission chain and a differential
+  test matches it to the running gate on 48 states. Three wired channels, not four: 19b is not
+  closed.
+- **Files changed:** `tools/assurance-provenance/{awm,payloads,rig,mutants,provenance,gate19,lane,evidence19b}.py`,
+  `tools/assurance-provenance/evidence.py` (explicit 19a pins), `tools/assurance-provenance/tests/*`,
+  `proofs/phase19/{AuthorityProvenance.lean,lean-toolchain}`, `scripts/check-lean-proofs.mjs`,
+  `docs/research/provenance-phase-19b/**`, `docs/research/provenance-phase-19a/**` (regenerated),
+  `docs/research/PROVENANCE_PHASE_19.md`, `docs/superpowers/plans/2026-11-01-phase-19b-write-anywhere-lane.md`,
+  `proofs/README.md`, `.prettierignore`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 57 tests pass in `tools/assurance-provenance/tests` on macOS (Python 3.12, about
+  ten minutes); `ruff check` and `ruff format --check` clean; `node scripts/check-lean-proofs.mjs`
+  reports 40 proofs at floor 40 with zero escape hatches; both packs verify in a fresh process;
+  `prettier --check .` clean. Not run: the Linux `--replay` chain for 19a, `scripts/check.sh`, hosted CI.
+- **Follow-ups:** 19b-2 (signed approval token at `native_resume`, re-implemented dispatch for a
+  token-approved unregistered action, forged-token reason-code matrix, `tool_result_body` reader);
+  the CI workflow and 5Q census re-pin in one commit; the Linux replay run.
+
 ## [phase-19a] — 2026-11-01 — Phase 19a projection verifier; Phase 19 authority provenance declared
 
 **Raouf:**

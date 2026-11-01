@@ -41,8 +41,18 @@ SIDECARS = {
 }
 
 
+PHASE_19A_FILES = (
+    "projection.py",
+    "evidence.py",
+    "tests/test_projection.py",
+    "tests/test_evidence.py",
+)
+
+
 def expected_sources():
-    names = {str(p.relative_to(ROOT)) for p in LANE.rglob("*.py")}
+    # An explicit set, not a directory glob: later Phase 19 modules in this namespace must not
+    # invalidate the 19a pack (pin sets, not counts; gate-lifecycle.md).
+    names = {str((LANE / n).relative_to(ROOT)) for n in PHASE_19A_FILES}
     names.update(
         str((P17 / n).relative_to(ROOT))
         for n in ("protocol.json", "ROOT.sha256", "tasks.json", "VALIDATION.md")

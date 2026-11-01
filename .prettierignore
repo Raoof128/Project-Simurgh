@@ -245,3 +245,10 @@ CHANGELOG.md
 docs/research/provenance-phase-19a/protocol.json
 docs/research/provenance-phase-19a/report.json
 docs/research/provenance-phase-19a/receipt.json
+
+# P19-FORMAT02: Phase 19b-1 source-bound machine evidence; protocol.json is hashed into the pack and
+# the others are canonical wire bytes. Preserve bytes; use tools/assurance-provenance/evidence19b.py verify.
+docs/research/provenance-phase-19b/protocol.json
+docs/research/provenance-phase-19b/agent-writable.json
+docs/research/provenance-phase-19b/report.json
+docs/research/provenance-phase-19b/receipt.json
