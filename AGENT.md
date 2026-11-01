@@ -14,6 +14,35 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-01 (Australia/Sydney) — Phase 19c: forked receiver, credential and manifest lanes, route corpus, cumulative lane
+
+**Raouf:**
+
+- **Scope:** Phase 19c in `tools/assurance-provenance/` (`receiver19.py`, `lanes19c.py`,
+  `evidence19c.py`, three test files), the 19c evidence pack, plan, results, declaration ledger,
+  `.prettierignore` (P19-FORMAT03). The frozen receiver is forked, not edited; no frozen file,
+  verifier semantics, evidence value or runtime mechanism of any archived phase changed. No version
+  bump. No CI workflow yet.
+- **Summary:** The forked receiver adds eight reasons after the six frozen ones. Receiver-direct
+  lanes show: a credential for another run lands on the frozen receiver and is `run` on the fork; a
+  bearer replayed without holder proof lands frozen and is `wrong_binding` on the fork; a write under
+  a comment-only grant is `grant_scope`; a regenerated spec, an edited config and a run-cache
+  `vectors.npz` are `substituted_input` (G28); seven lab-authored route variants all canonicalise to
+  the denied path and are `effect_denied` while the authored strawman admits every one (power check,
+  not a comparator; G22 unpaid); three sub-limit calls cross a running limit on the third
+  (`cumulative_limit_exceeded`) where the frozen receiver lands all three; administrative revocation
+  with a technically valid credential is `admin_revoked`. The HTTP transport is not forked.
+- **Files changed:** `tools/assurance-provenance/{receiver19,lanes19c,evidence19c}.py`,
+  `tools/assurance-provenance/tests/{test_receiver19,test_lanes19c,test_evidence19c}.py`,
+  `docs/research/provenance-phase-19c/**`, `docs/research/PROVENANCE_PHASE_19.md`,
+  `docs/superpowers/plans/2026-11-01-phase-19c-forked-receiver.md`, `.prettierignore`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 11 receiver, 6 lane and 4 evidence tests pass (seconds); the namespace's 86 tests
+  pass; `ruff check` and `ruff format --check` clean; the 19c pack verifies in a fresh process;
+  `prettier --check .` clean. Not run: `scripts/check.sh`, hosted CI, the Linux replay chain.
+- **Follow-ups:** the CI workflow with the 5Q census re-pin in one commit; the Linux replay run for
+  19a; 19d (namespace launcher and packet canary), 19e (capture arms), 19f (outside operator), 19g
+  (evaluator kit and deployer profile).
+
 ### 2026-11-01 (Australia/Sydney) — Phase 19b-2: approval token, forged-token matrix, tool-result channel; 19b closed
 
 **Raouf:**

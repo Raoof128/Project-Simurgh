@@ -252,3 +252,8 @@ docs/research/provenance-phase-19b/protocol.json
 docs/research/provenance-phase-19b/agent-writable.json
 docs/research/provenance-phase-19b/report.json
 docs/research/provenance-phase-19b/receipt.json
+
+# P19-FORMAT03: Phase 19c source-bound machine evidence; bytes preserved; verify with tools/assurance-provenance/evidence19c.py.
+docs/research/provenance-phase-19c/protocol.json
+docs/research/provenance-phase-19c/report.json
+docs/research/provenance-phase-19c/receipt.json

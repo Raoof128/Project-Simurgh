@@ -3,8 +3,8 @@
 Declared 1 November 2026 (Australia/Sydney), baseline `30fe9e4b`, under the owner's instruction to
 proceed with the gauntlet-revised design
 ([Phase 19 v2.1](../superpowers/specs/2026-11-01-phase-19-authority-provenance-design.md)).
-Phase 19a and 19b are executed here; 19c–19g are declared scope and are not implemented by this
-entry.
+Phase 19a, 19b and 19c are executed here; 19d–19g are declared scope and are not implemented by
+this entry.
 
 ## Design and scope
 
@@ -27,6 +27,13 @@ and the `tool_result_body` reader as the fourth wired channel, which closes 19b 
 receipt).
 Results: [provenance-phase-19b/RESULTS.md](provenance-phase-19b/RESULTS.md).
 
+Phase 19c ([plan](../superpowers/plans/2026-11-01-phase-19c-forked-receiver.md)) forks the frozen
+receiver inside the namespace and adds eight reasons after the six frozen ones: run-bound credentials,
+holder-bound sessions, an approved-input manifest (`substituted_input`, G28), a canonicalising
+receiver with two effect classes for the route corpus, per-call and running limits, administrative
+revocation and grant scope. Every lane is receiver-direct and drives the frozen receiver on the same
+bytes. Results: [provenance-phase-19c/RESULTS.md](provenance-phase-19c/RESULTS.md).
+
 Trusted host, provisioning, storage and receiver, as in the README. The frozen modules are neither
 edited nor imported except for the optional Linux replay chain. Recomputing the project's own
 archive is not custody evidence.
@@ -34,9 +41,9 @@ archive is not custody evidence.
 ## Write scope and gate lifecycle
 
 Add `tools/assurance-provenance/**`, `docs/research/provenance-phase-19a/**`,
-`docs/research/provenance-phase-19b/**`, `proofs/phase19/**`, this ledger and the
+`docs/research/provenance-phase-19b/**`, `docs/research/provenance-phase-19c/**`, `proofs/phase19/**`, this ledger and the
 Phase 19 design, plan, plug-in map and gauntlet records under `docs/superpowers/`. Modify
-`.prettierignore` (P19-FORMAT01 and P19-FORMAT02: evidence files, bytes preserved), `AGENT.md`,
+`.prettierignore` (P19-FORMAT01, 02 and 03: evidence files, bytes preserved), `AGENT.md`,
 `CHANGELOG.md`, and `scripts/check-lean-proofs.mjs` (floor 39→40, in the commit that adds the proof).
 Modify nothing frozen. The CI workflow `.github/workflows/assurance-provenance.yml` is **not** added by this entry.
 
@@ -72,5 +79,8 @@ a strict ancestor of that commit. Preserve all non-current fields.
 - Ruling: 19b-1 ended with three wired deterministic channels; 19b-2 wired the fourth and the
   receipt now reads `phase_19b_closed: true` on six named conditions. Not among them: the native
   delivery path (not exercised on this host) and any outside replay.
+- Ruling: 19c is receiver-direct by design (gauntlet M5). The strawman is a power check and G22 is
+  not paid. A POSIX leading double slash is not a receiver's canonical form; the canonicaliser
+  collapses it.
 - Ruling: an invalid relayed approval never reduces authority. It is recorded with its reason and
   the ordinary grant path decides; otherwise the tool-result channel would be a denial lever.
