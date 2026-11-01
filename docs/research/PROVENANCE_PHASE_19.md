@@ -54,6 +54,14 @@ identity for its step; the count here is measured, not assumed), and must carry 
 `tools/assurance-provenance/**` and `docs/research/provenance-phase-19a/**`. This declaration must be
 a strict ancestor of that commit. Preserve all non-current fields.
 
+**P19-LEAN01 (authority for one Stage 5S test edit).** `tests/unit/llmShield/stage5s/theoremSet.test.js`
+test `[5s-t26]` pins the repository Lean floor at exactly 39 and the gate's discovered count at exactly 39. Adding any proof, which `scripts/check-lean-proofs.mjs` itself instructs the adding task to do by
+raising the floor, breaks it. That is a count pin of the Q1-F002 species named in
+`docs/research/llm-shield/references/gate-lifecycle.md` (pin sets, not counts). This declaration
+authorises changing those two assertions to monotone bounds (floor at least 39; discovered count at
+least the floor; the gate must still report zero escape hatches and all type-check) and nothing else in
+that file. This declaration commit must be a strict ancestor of that edit.
+
 | Field                         | Declaration                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | active_phase                  | Phase 19a projection verifier (19b–19g declared)                                                                    |
