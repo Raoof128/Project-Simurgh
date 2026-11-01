@@ -18,7 +18,7 @@ sys.path.insert(0, str(ROOT / "tools/assurance-composed"))
 sys.path.insert(0, str(ROOT / "tools/assurance-composed-successor"))
 
 import composition as frozen  # noqa: E402
-import successor  # noqa: E402
+import gate19  # noqa: E402
 from core import encode  # noqa: E402
 from transport import Service  # noqa: E402
 
@@ -31,6 +31,7 @@ IDS = {
 }
 CLOCK = 100.0
 ACTOR = "child"
+APPROVERS = ("operator-1",)
 FILE_CHANNELS = {
     "transcript": "transcript.jsonl",
     "memory_file": "MEMORY.md",
@@ -71,7 +72,7 @@ class ProvenanceRig:
     def __init__(self, directory, *, gate_cls=None, clock=CLOCK):
         self.directory = Path(directory)
         self.directory.mkdir(parents=True, exist_ok=True)
-        self.gate_cls = gate_cls or successor.Pipeline
+        self.gate_cls = gate_cls or gate19.ProvenancePipeline
         self.now = clock
         self.service = Service(
             self.directory / "service.sqlite",
@@ -115,6 +116,8 @@ class ProvenanceRig:
             path.write_text(DEFAULT_TEXT)
         self.pipe = self.gate_cls.create(self.directory / "controls", **self.args)
         self.pipe.rig = self
+        if hasattr(self.pipe, "approvals"):
+            gate19.ApprovalStore(self.pipe.directory, approvers=APPROVERS)
         self.pipe.update(self._activate)
         root = self.pipe.resume("root")
         if not self.pipe.update(lambda: root.context.delegate(ACTOR, ["a"])):
@@ -151,7 +154,7 @@ class ProvenanceRig:
         projection = self.pipe.context.projection()
         if adapter == "summary_note":
             note = self.read("summary_note")
-        elif adapter in ("transcript", "memory_file"):
+        elif adapter in ("transcript", "memory_file", "tool_result_body"):
             note = self.read(adapter)[:NOTE_CAP]
         elif adapter is None:
             note = "trusted fixture summary"
@@ -162,10 +165,34 @@ class ProvenanceRig:
     def session(self, adapter=None):
         return self.pipe.resume(ACTOR, summary=self.summary_for(adapter))
 
-    def dispatch(self, route, adapter=None):
-        status = self.session(adapter).dispatch(self.actions[route])["status"]
+    def dispatch(self, route, adapter=None, approval=None):
+        session = self.session(adapter)
+        if adapter == "tool_result_body" and approval is None:
+            approval = gate19.approval_from_tool_result(self.read("tool_result_body"))
+        if approval is None:
+            status = session.dispatch(self.actions[route])["status"]
+        else:
+            status = session.dispatch(self.actions[route], approval=approval)["status"]
         self.verdicts[route] = status
         return status
+
+    # approvals (trusted host operations) ---------------------------------------
+    def mint(self, route, *, approver_id, nonce):
+        return self.pipe.approvals.mint(
+            self.actions[route],
+            approver_id=approver_id,
+            nonce=nonce,
+            now=self.now,
+            key=OPERATOR,
+        )
+
+    def verify_approval(self, action, token):
+        return self.pipe.approvals.verify(action, token, now=self.now, key=OPERATOR)
+
+    def native_decision(self, route, token):
+        return gate19.approved_decision(
+            self.pipe.approvals, self.actions[route], token, now=self.now, key=OPERATOR
+        )
 
     def run_default(self, adapter=None):
         self.dispatch("b", adapter)

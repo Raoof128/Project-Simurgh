@@ -42,6 +42,7 @@ PHASE_19B_FILES = (
     "tests/test_lane.py",
     "tests/test_lean_differential.py",
     "tests/test_evidence19b.py",
+    "tests/test_approval.py",
 )
 SHARED_SOURCES = (
     "tools/assurance-composed-successor/successor.py",
@@ -144,19 +145,34 @@ def build_report(work):
     work = Path(work)
     wa = lane.write_anywhere(work / "wa")
     outage = lane.outage(work / "outage")
+    approval = lane.approval_matrix(work / "approval")
+    closed_by = {
+        "wired_deterministic_channels_at_least_4": wa["wired_deterministic_channels"]
+        >= 4,
+        "every_mutant_killed": wa["kill_count"] == wa["mutants_total"],
+        "zero_clean_differences": wa["clean_differences"] == 0,
+        "forgeries_distinct_and_blocked": approval["distinct_reasons"]
+        and approval["all_forgeries_blocked"],
+        "positive_control_lands": approval["positive_control"]["verdict"] == "observed",
+        "outage_pair_holds": outage["outage_exact_action"]["verdict"] == "blocked"
+        and outage["no_outage_control"]["verdict"] == "observed",
+    }
     return {
         "schema": SCHEMA,
         "arm": "composed_successor",
         "awm": awm.manifest(),
         "write_anywhere": wa,
         "outage": outage,
+        "approval": approval,
         "lean": lean_section(),
         "wired_deterministic_channels": wa["wired_deterministic_channels"],
-        "phase_19b_closed": False,
-        "why_not_closed": (
-            "the design's 19b gate needs at least four wired deterministic channels; the "
-            "tool_result_body reader and the approval token are 19b-2"
-        ),
+        "phase_19b_closed": all(closed_by.values()),
+        "closed_by": closed_by,
+        "not_closed_by_this_pack": [
+            "the Lean model is tied to the gate only on the enumerated states",
+            "the native delivery path is not exercised on this host",
+            "no outside operator has replayed any Phase 19 pack",
+        ],
     }
 
 
@@ -173,6 +189,8 @@ def compare(saved, actual):
         raise ValueError("kill_count_mismatch")
     if wire(saved["outage"]) != wire(actual["outage"]):
         raise ValueError("outage_mismatch")
+    if wire(saved["approval"]) != wire(actual["approval"]):
+        raise ValueError("approval_mismatch")
     if wire(saved["awm"]) != wire(actual["awm"]):
         raise ValueError("awm_mismatch")
     if wire(saved) != wire(actual):
@@ -190,6 +208,8 @@ def receipt_for(report, manifest_root):
         "kill_count": report["write_anywhere"]["kill_count"],
         "mutants_total": report["write_anywhere"]["mutants_total"],
         "provenance_records": report["write_anywhere"]["provenance"]["records"],
+        "closed_by": report["closed_by"],
+        "approval_forgeries": len(report["approval"]["rows"]),
         "lean": {
             "sha256": report["lean"]["sha256"],
             "states_compared": report["lean"]["states_compared"],

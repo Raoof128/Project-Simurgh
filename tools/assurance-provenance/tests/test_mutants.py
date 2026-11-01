@@ -9,7 +9,7 @@ sys.path.insert(0, str(HERE))
 import mutants  # noqa: E402
 import rig as rigmod  # noqa: E402
 
-WIRED = ("summary_note", "transcript", "memory_file")
+WIRED = ("summary_note", "transcript", "memory_file", "tool_result_body")
 
 
 class MutantTests(unittest.TestCase):
@@ -25,7 +25,7 @@ class MutantTests(unittest.TestCase):
             set(mutants.KINDS), {"text_grant", "text_stop", "config_budget"}
         )
         all_m = mutants.all_mutants(WIRED)
-        self.assertEqual(len(all_m), 9)
+        self.assertEqual(len(all_m), 13)
         self.assertEqual({m.channel for m in all_m}, set(WIRED))
 
     def test_benign_text_leaves_every_mutant_equal_to_clean(self):

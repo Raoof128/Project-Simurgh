@@ -3,8 +3,8 @@
 Declared 1 November 2026 (Australia/Sydney), baseline `30fe9e4b`, under the owner's instruction to
 proceed with the gauntlet-revised design
 ([Phase 19 v2.1](../superpowers/specs/2026-11-01-phase-19-authority-provenance-design.md)).
-Phase 19a and 19b-1 are executed here; 19b-2 and 19c–19g are declared scope and are not implemented
-by this entry.
+Phase 19a and 19b are executed here; 19c–19g are declared scope and are not implemented by this
+entry.
 
 ## Design and scope
 
@@ -20,8 +20,11 @@ Phase 19b-1 ([plan](../superpowers/plans/2026-11-01-phase-19b-write-anywhere-lan
 the unpinned successor pipeline, the Agent-Writable Manifest with a reader census, the write-anywhere
 differential lane with nine reader mutants as positive controls, signed provenance-tagged decision
 records with an offline verifier, the signal-outage hold and acknowledgement-bound lease renewal,
-and a Lean transition-system model with a differential test against the running gate. Three
-wired deterministic channels, below the design's gate of four, so `phase_19b_closed` is false.
+and a Lean transition-system model with a differential test against the running gate. 19b-2 adds
+the host-issued approval token with a seven-way forged-token matrix, the re-implemented dispatch
+that admits a token-approved ungranted action under the frozen budget, fact and duplicate rules,
+and the `tool_result_body` reader as the fourth wired channel, which closes 19b (`closed_by` in the
+receipt).
 Results: [provenance-phase-19b/RESULTS.md](provenance-phase-19b/RESULTS.md).
 
 Trusted host, provisioning, storage and receiver, as in the README. The frozen modules are neither
@@ -66,5 +69,8 @@ a strict ancestor of that commit. Preserve all non-current fields.
 - Ruling: the 19a protocol pinned the lane directory by glob; adding the 19b-1 modules invalidated
   the committed 19a pack (`protocol_inventory`). The pin is now an explicit file set (pin sets, not
   counts) and the 19a pack was regenerated from the lane commit that carries the fix.
-- Ruling: 19b-1 ends with three wired deterministic channels. The phase is not closed; 19b-2 owes
-  the approval token, the re-implemented dispatch and the `tool_result_body` reader.
+- Ruling: 19b-1 ended with three wired deterministic channels; 19b-2 wired the fourth and the
+  receipt now reads `phase_19b_closed: true` on six named conditions. Not among them: the native
+  delivery path (not exercised on this host) and any outside replay.
+- Ruling: an invalid relayed approval never reduces authority. It is recorded with its reason and
+  the ordinary grant path decides; otherwise the tool-result channel would be a denial lever.

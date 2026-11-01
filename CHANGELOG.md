@@ -1,5 +1,34 @@
 ## Change Log
 
+## [phase-19b-2] — 2026-11-01 — Phase 19b-2 approval token, forged-token matrix, tool-result channel; 19b closed
+
+**Raouf:**
+
+- **Scope:** Phase 19b-2 in `tools/assurance-provenance/` (approval store and token in `gate19.py`,
+  approved dispatch, tool-result reader, trust mutant, forged-token matrix in `lane.py`, closure
+  conditions in `evidence19b.py`, `tests/test_approval.py`), the regenerated 19b pack, results,
+  declaration ledger. No frozen file, verifier semantics, evidence value or runtime mechanism of
+  any archived phase changed. No version bump. No CI workflow added yet.
+- **Summary:** A host-issued approval `{run, action_key, approver_id, content_digest, expires,
+  nonce}` signed under the operator key and spent once through the host store lets the
+  re-implemented dispatch admit an ungranted action while keeping the frozen budget, blocking-fact,
+  duplicate and reservation rules. Seven forgeries each get their own reason, all blocked with no
+  effect; the genuine token lands and is a replay afterwards. The `tool_result_body` channel is the
+  fourth wired reader: a relayed token is verified, never trusted, and an invalid one is recorded
+  and ignored so the channel cannot reduce authority. The write-anywhere lane now runs fourteen
+  gates over four wired channels and thirteen payloads with zero clean differences and all thirteen
+  reader mutants killed; `phase_19b_closed` is true on six named conditions. The native delivery
+  path was not exercised on this host and the pack says so.
+- **Files changed:** `tools/assurance-provenance/{gate19,rig,awm,payloads,mutants,lane,evidence19b}.py`,
+  `tools/assurance-provenance/tests/{test_approval,test_awm,test_payloads,test_mutants,test_lane,test_evidence19b}.py`,
+  `docs/research/provenance-phase-19b/**`, `docs/research/PROVENANCE_PHASE_19.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 65 tests pass in `tools/assurance-provenance/tests` on macOS (Python 3.12, about
+  twenty minutes); `ruff check` and `ruff format --check` clean; the 19b pack verifies in a fresh
+  process; `prettier --check .` clean. Not run: the native delivery path, the Linux `--replay` chain,
+  `scripts/check.sh`, hosted CI.
+- **Follow-ups:** the CI workflow with the 5Q census re-pin in one commit; the Linux replay run;
+  Phase 19c (forked receiver, credential lanes, approved-input manifest, route corpus, cumulative lane).
+
 ## [phase-19b-1] — 2026-11-01 — Phase 19b-1 write-anywhere lane, provenance records, outage lane, Lean model
 
 **Raouf:**

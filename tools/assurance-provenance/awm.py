@@ -41,8 +41,10 @@ CHANNELS = (
         "id": "tool_result_body",
         "location": "<dir>/tool-result.json",
         "writer": "tool server / agent-reachable",
-        "readers": [],
-        "wired": False,
+        "readers": [
+            "19b-2 approval_from_tool_result (a relayed token is verified, never trusted)"
+        ],
+        "wired": True,
         "deterministic": True,
     },
     {

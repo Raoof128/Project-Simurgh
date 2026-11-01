@@ -18,7 +18,14 @@ class PayloadTests(unittest.TestCase):
             self.assertTrue(p["text"].strip())
             self.assertRegex(p["source_row"], r"^(A|B1|B2|C|D|E|F)-\d+$|^lane$")
             self.assertIn(
-                p["kind"], ("incident", "grant_claim", "stop_claim", "config_claim")
+                p["kind"],
+                (
+                    "incident",
+                    "grant_claim",
+                    "stop_claim",
+                    "config_claim",
+                    "approval_claim",
+                ),
             )
 
     def test_incident_quotes_are_verbatim_in_the_cluster_reports(self):
@@ -33,7 +40,8 @@ class PayloadTests(unittest.TestCase):
     def test_claim_lines_exist(self):
         kinds = {p["kind"] for p in payloads.PAYLOADS}
         self.assertEqual(
-            kinds, {"incident", "grant_claim", "stop_claim", "config_claim"}
+            kinds,
+            {"incident", "grant_claim", "stop_claim", "config_claim", "approval_claim"},
         )
 
 

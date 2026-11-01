@@ -18,10 +18,9 @@ import mutants as mutantmod
 import payloads as payloadmod
 import provenance
 import rig as rigmod
-import successor
 from core import encode
 
-WIRED = ("summary_note", "transcript", "memory_file")
+WIRED = ("summary_note", "transcript", "memory_file", "tool_result_body")
 NOT_WIRED = tuple(
     c["id"] for c in awm.CHANNELS if not c["wired"] and c["deterministic"]
 )
@@ -70,7 +69,7 @@ def _credential_only(base, name, channel, text):
 def write_anywhere(base):
     base = Path(base)
     base.mkdir(parents=True, exist_ok=True)
-    gates = [("composed_successor", successor.Pipeline, "clean", None)] + [
+    gates = [("composed_successor", gate19.ProvenancePipeline, "clean", None)] + [
         (m.__name__, m, m.kind, m.channel) for m in mutantmod.all_mutants(WIRED)
     ]
     rows, mutant_report, records = [], [], []
@@ -235,7 +234,12 @@ def outage(base):
         rig.close()
     # 4. self-asserted stop: a no-reader statement for the clean gate, a killed mutant as the test
     clean, _ = _run(
-        base, "sas-clean", successor.Pipeline, "summary_note", "STOP", "summary_note"
+        base,
+        "sas-clean",
+        gate19.ProvenancePipeline,
+        "summary_note",
+        "STOP",
+        "summary_note",
     )
     mutant_cls = mutantmod.mutant("text_stop", "summary_note")
     mut, _ = _run(base, "sas-mut", mutant_cls, "summary_note", "STOP", "summary_note")
@@ -304,3 +308,69 @@ def outage(base):
         ),
     }
     return result
+
+
+FORGERIES = (
+    ("approval_signature", "key", None),
+    ("approval_action", "action_key", "a"),
+    ("approval_digest", "content_digest", "0" * 64),
+    ("approval_run", "run", "other-run"),
+    ("approval_expired", "expires", rigmod.CLOCK - 1),
+    ("approval_approver", "approver_id", "nobody"),
+    ("approval_schema", "extra", "field"),
+)
+
+
+def approval_matrix(base):
+    """The forged-token matrix (design §4.1): one distinct reason per forgery, every forgery
+    blocked with no effect, the genuine token admits the ungranted action, and a spent token is
+    a replay. Also the native decision string a caller would hand to the frozen delivery."""
+    import json
+
+    base = Path(base)
+    base.mkdir(parents=True, exist_ok=True)
+    rig = rigmod.ProvenanceRig(base / "matrix", gate_cls=gate19.ProvenancePipeline)
+    try:
+        good = rig.mint("b", approver_id="operator-1", nonce="matrix-1")
+        rows = []
+        for reason, field, value in FORGERIES:
+            token = json.loads(json.dumps(good))
+            key = rigmod.OPERATOR
+            if field == "key":
+                key = b"q" * 32
+            else:
+                token["payload"][field] = value
+            token["signature"] = gate19.sign_payload(token["payload"], key)
+            rows.append(
+                {
+                    "forgery": reason,
+                    "verify": rig.verify_approval(rig.actions["b"], token),
+                    "verdict": rig.dispatch("b", approval=token),
+                    "effects": len(rig.effects()),
+                    "native_decision": rig.native_decision("b", token),
+                }
+            )
+        positive = {
+            "verify": rig.verify_approval(rig.actions["b"], good),
+            "native_decision": rig.native_decision("b", good),
+            "verdict": rig.dispatch("b", approval=good),
+            "effects": len(rig.effects()),
+            "replay_after_spend": rig.verify_approval(rig.actions["b"], good),
+        }
+        reasons = [r["verify"] for r in rows]
+        return {
+            "rows": rows,
+            "positive_control": positive,
+            "distinct_reasons": len(set(reasons)) == len(reasons),
+            "all_forgeries_blocked": all(
+                r["verdict"] == "blocked" and r["effects"] == 0 for r in rows
+            ),
+            "native_path_exercised": False,
+            "note": (
+                "approved_decision is the string a native caller hands to the frozen "
+                "native_delivery; that delivery needs the Agents SDK and a Linux worker and was "
+                "not exercised on this host"
+            ),
+        }
+    finally:
+        rig.close()

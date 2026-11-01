@@ -18,19 +18,19 @@ class LaneTests(unittest.TestCase):
 
     def test_headline(self):
         r = self.result
-        self.assertEqual(r["wired_deterministic_channels"], 3)
+        self.assertEqual(r["wired_deterministic_channels"], 4)
         self.assertEqual(r["clean_differences"], 0)
-        self.assertEqual(r["kill_count"], 9)
-        self.assertEqual(r["mutants_total"], 9)
+        self.assertEqual(r["kill_count"], 13)
+        self.assertEqual(r["mutants_total"], 13)
         self.assertEqual(sorted(r["not_wired"]), sorted(lane.NOT_WIRED))
 
     def test_rows_cover_every_gate_channel_payload(self):
         rows = self.result["rows"]
         gates = {row["gate"] for row in rows}
         self.assertIn("composed_successor", gates)
-        self.assertEqual(len(gates), 10)
+        self.assertEqual(len(gates), 14)
         wired_rows = [r for r in rows if r["wired"]]
-        self.assertEqual(len(wired_rows), 10 * 3 * len(lane.PAYLOADS))
+        self.assertEqual(len(wired_rows), 14 * 4 * len(lane.PAYLOADS))
         clean_unwired = [
             r for r in rows if not r["wired"] and r["gate"] == "composed_successor"
         ]
@@ -63,6 +63,8 @@ class LaneTests(unittest.TestCase):
                 self.assertIn("stop_claim", m["killed_by"])
             if m["kind"] == "config_budget":
                 self.assertIn("config_claim", m["killed_by"])
+            if m["kind"] == "tool_result_trust":
+                self.assertIn("approval_claim", m["killed_by"])
 
     def test_provenance_records_verify(self):
         self.assertGreater(self.result["provenance"]["records"], 0)
@@ -80,6 +82,21 @@ class LaneTests(unittest.TestCase):
     def test_determinism(self):
         again = lane.write_anywhere(Path(self.tmp.name) / "wa2")
         self.assertEqual(lane.wire(again), lane.wire(self.result))
+
+
+class ApprovalMatrixTests(unittest.TestCase):
+    def test_matrix(self):
+        tmp = tempfile.TemporaryDirectory(prefix="p19b-matrix-")
+        self.addCleanup(tmp.cleanup)
+        m = lane.approval_matrix(Path(tmp.name) / "m")
+        self.assertEqual(len(m["rows"]), 7)
+        self.assertTrue(m["distinct_reasons"])
+        self.assertTrue(m["all_forgeries_blocked"])
+        self.assertTrue(all(r["native_decision"] == "reject" for r in m["rows"]))
+        self.assertEqual(m["positive_control"]["verdict"], "observed")
+        self.assertEqual(m["positive_control"]["native_decision"], "approve")
+        self.assertEqual(m["positive_control"]["replay_after_spend"], "approval_replay")
+        self.assertIs(m["native_path_exercised"], False)
 
 
 class OutageTests(unittest.TestCase):

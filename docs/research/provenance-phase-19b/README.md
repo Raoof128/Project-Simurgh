@@ -1,9 +1,9 @@
-# Phase 19b-1 evidence
+# Phase 19b evidence
 
 Write-anywhere differential lane, stop/lease/outage lane and the Lean model, over the successor
 pipeline. See [RESULTS.md](RESULTS.md) and [the declaration](../PROVENANCE_PHASE_19.md).
 
-Reproduce (Python 3.12, this checkout; no key, no model; about eight minutes, the lanes re-execute):
+Reproduce (Python 3.12, this checkout; no key, no model; about twelve minutes, the lanes re-execute):
 
 ```sh
 /opt/anaconda3/bin/python -B tools/assurance-provenance/evidence19b.py verify \
@@ -11,10 +11,10 @@ Reproduce (Python 3.12, this checkout; no key, no model; about eight minutes, th
   --expected-root "$(cat docs/research/provenance-phase-19b/ROOT.sha256)"
 ```
 
-Expected: a receipt with `"verified": true`, `"kill_count": 9`, `"clean_differences": 0`,
-`"wired_deterministic_channels": 3`, `"phase_19b_closed": false`.
+Expected: a receipt with `"verified": true`, `"kill_count": 13`, `"clean_differences": 0`,
+`"wired_deterministic_channels": 4`, `"phase_19b_closed": true`.
 
-Tests (about ten minutes; the evidence tests run the lanes twice):
+Tests (about twenty minutes; the evidence tests run the lanes twice):
 
 ```sh
 cd tools/assurance-provenance && /opt/anaconda3/bin/python -m unittest discover -s tests -v

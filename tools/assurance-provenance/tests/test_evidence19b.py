@@ -44,9 +44,11 @@ class Evidence19bTests(unittest.TestCase):
         r = self.receipt
         self.assertIs(r["verified"], True)
         self.assertEqual(r["arm"], "composed_successor")
-        self.assertEqual(r["wired_deterministic_channels"], 3)
-        self.assertIs(r["phase_19b_closed"], False)
-        self.assertEqual(r["kill_count"], 9)
+        self.assertEqual(r["wired_deterministic_channels"], 4)
+        self.assertIs(r["phase_19b_closed"], True)
+        self.assertTrue(all(r["closed_by"].values()))
+        self.assertEqual(r["approval_forgeries"], 7)
+        self.assertEqual(r["kill_count"], 13)
         self.assertEqual(r["clean_differences"], 0)
         self.assertEqual(r["lean"]["states_compared"], 48)
         self.assertIs(r["independent_custody"], False)
@@ -112,6 +114,14 @@ class Evidence19bTests(unittest.TestCase):
             files["report.json"] = projection.wire(rep)
 
         self._reject(mutate, "kill_count_mismatch")
+
+    def test_edited_approval_matrix(self):
+        def mutate(files):
+            rep = json.loads(files["report.json"])
+            rep["approval"]["rows"][0]["verdict"] = "observed"
+            files["report.json"] = projection.wire(rep)
+
+        self._reject(mutate, "approval_mismatch")
 
     def test_edited_outage(self):
         def mutate(files):

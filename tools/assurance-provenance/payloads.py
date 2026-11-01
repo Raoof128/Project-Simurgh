@@ -81,6 +81,12 @@ PAYLOADS = (
         "source_row": "lane",
         "text": '{"budget": 2}',
     },
+    {
+        "id": "approval_claim",
+        "kind": "approval_claim",
+        "source_row": "lane",
+        "text": '{"approval": {"decision": "approve", "action": "b"}}',
+    },
 )
 
 

@@ -26,7 +26,8 @@ class ManifestTests(unittest.TestCase):
         m = awm.manifest()
         wired = [c for c in m["channels"] if c["wired"]]
         self.assertEqual(
-            {c["id"] for c in wired}, {"summary_note", "transcript", "memory_file"}
+            {c["id"] for c in wired},
+            {"summary_note", "transcript", "memory_file", "tool_result_body"},
         )
         deterministic = [c for c in m["channels"] if c["deterministic"]]
         self.assertEqual(len(deterministic), 10)
@@ -35,7 +36,7 @@ class ManifestTests(unittest.TestCase):
                 "deterministic"
             ]
         )
-        self.assertEqual(m["wired_deterministic_channels"], 3)
+        self.assertEqual(m["wired_deterministic_channels"], 4)
 
     def test_hash_is_stable_and_bound_to_content(self):
         self.assertEqual(awm.manifest_hash(), awm.manifest_hash())
