@@ -47,7 +47,9 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(self.receipt["branches"], 288)
         self.assertIs(self.receipt["independent_custody"], False)
         self.assertIs(self.receipt["model_inference"], False)
-        self.assertEqual(self.receipt["tree_state"], "uncommitted")
+        # Either the lane sources are uncommitted, or the receipt names their commit. The first
+        # version asserted "uncommitted" alone and failed on committed bytes (e2e of 1 Nov 2026).
+        self.assertRegex(self.receipt["tree_state"], r"^(uncommitted|[0-9a-f]{40})$")
 
     def test_verify_round_trip(self):
         got = evidence.verify(

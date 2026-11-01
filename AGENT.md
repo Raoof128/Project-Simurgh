@@ -14,6 +14,22 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-01 (Australia/Sydney) — 19a evidence test accepts a committed tree state
+
+**Raouf:**
+
+- **Scope:** One assertion in `tools/assurance-provenance/tests/test_evidence.py` and the regenerated
+  19a pack (its protocol pins that test file). No runtime, verifier semantics or frozen surface changed.
+- **Summary:** The 1 Nov end-to-end run on a clean worktree of the branch head found the 19a evidence
+  test asserting `tree_state == "uncommitted"`, which is true only in a dirty tree; on committed bytes
+  the receipt names the lane commit. The assertion now accepts either form. The run otherwise passed:
+  ruff, prettier, whitespace, the Lean gate (40 at floor 40), all three packs verified in fresh
+  processes, the successor suite, and 86 of 87 namespace tests (this one failing).
+- **Files changed:** `tools/assurance-provenance/tests/test_evidence.py`, `docs/research/provenance-phase-19a/**` (regenerated), `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `test_evidence.py` 8 passed on the clean checkout; the regenerated 19a pack verifies
+  in a fresh process and its receipt names the lane commit.
+- **Follow-ups:** none for this edit.
+
 ### 2026-11-01 (Australia/Sydney) — P19-LEAN01: the Stage 5S floor-count test becomes a monotone bound
 
 **Raouf:**
