@@ -268,3 +268,9 @@ docs/research/provenance-phase-19g/protocol.json
 docs/research/provenance-phase-19g/report.json
 docs/research/provenance-phase-19g/receipt.json
 docs/research/provenance-phase-19g/incident-record.json
+
+# P19-FORMAT06: Phase 19e source-bound machine evidence; bytes preserved; verify with tools/assurance-provenance/evidence19e.py.
+docs/research/provenance-phase-19e/protocol.json
+docs/research/provenance-phase-19e/report.json
+docs/research/provenance-phase-19e/receipt.json
+docs/research/provenance-phase-19e/spend-declaration.json

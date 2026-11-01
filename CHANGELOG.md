@@ -1,5 +1,30 @@
 ## Change Log
 
+## [phase-19e-instrument] — 2026-11-01 — Phase 19e capture instrument without spend
+
+**Raouf:**
+
+- **Scope:** Phase 19e as an instrument in `tools/assurance-provenance/` (`capture19.py`, `evidence19e.py`,
+  two test files), the 19e pack with the `IOU-19-SPEND` declaration, plan, results, `.prettierignore`
+  (P19-FORMAT06), the declaration ledger and both logs. No model called, no spend, no frozen file, no
+  workflow change. No version bump.
+- **Summary:** Three framings of the 24 Phase 17 tasks (baseline unchanged; evaluation and deployment
+  add one trusted-channel line above the untrusted source), 144 message digests committed; the 19a
+  awareness rule kept outside the outcome count; a Wilson-per-arm and Newcombe-difference emission-shift
+  estimator with a floor-or-ceiling flag; a deterministic scripted control with declared rates that the
+  estimator recovers; the spend declaration (three models, 504-generation cap, stop rule, authorisation
+  `required_not_given`); the informed-attacker bundle at `not_run`. The capture itself is owed.
+- **Files changed:** `tools/assurance-provenance/{capture19,evidence19e}.py`,
+  `tools/assurance-provenance/tests/{test_capture19,test_evidence19e}.py`,
+  `docs/research/provenance-phase-19e/**`, `docs/research/PROVENANCE_PHASE_19.md`,
+  `docs/superpowers/plans/2026-11-01-phase-19e-capture-instrument.md`, `.prettierignore`, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** 15 tests across the two 19e files pass; three named mutations plus a wrong root
+  rejected with distinct reasons; `ruff` clean; `prettier --check` clean; the earlier packs still verify
+  (their pinned sets are unchanged). Not run: any model, the hosted workflow (nothing pushed).
+- **Follow-ups:** the capture under `IOU-19-SPEND` once the owner authorises it (models, cap and stop
+  rule are in `spend-declaration.json`); 19f handoff package.
+
 ## [phase-19g] — 2026-11-01 — Phase 19g seeded incident drill, deployer incident record, deployer profile and evaluator kit
 
 **Raouf:**
