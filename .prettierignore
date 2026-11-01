@@ -257,3 +257,8 @@ docs/research/provenance-phase-19b/receipt.json
 docs/research/provenance-phase-19c/protocol.json
 docs/research/provenance-phase-19c/report.json
 docs/research/provenance-phase-19c/receipt.json
+
+# P19-FORMAT04: Phase 19d source-bound machine evidence; bytes preserved; verify (Linux only) with tools/assurance-provenance/evidence19d.py.
+docs/research/provenance-phase-19d/protocol.json
+docs/research/provenance-phase-19d/report.json
+docs/research/provenance-phase-19d/receipt.json

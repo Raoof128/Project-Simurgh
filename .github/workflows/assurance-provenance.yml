@@ -14,6 +14,7 @@ on:
       - "docs/research/provenance-phase-19a/**"
       - "docs/research/provenance-phase-19b/**"
       - "docs/research/provenance-phase-19c/**"
+      - "docs/research/provenance-phase-19d/**"
   pull_request:
     paths:
       - ".github/workflows/assurance-provenance.yml"
@@ -23,6 +24,7 @@ on:
       - "docs/research/provenance-phase-19a/**"
       - "docs/research/provenance-phase-19b/**"
       - "docs/research/provenance-phase-19c/**"
+      - "docs/research/provenance-phase-19d/**"
   workflow_dispatch:
 
 permissions:
@@ -68,3 +70,8 @@ jobs:
           python -c "import json; r = json.load(open('receipt-19b.json')); assert r['phase_19b_closed'] is True, r; print('19b verified, closed')"
           python -B tools/assurance-provenance/evidence19c.py verify docs/research/provenance-phase-19c/evidence.zip --expected-root "$(cat docs/research/provenance-phase-19c/ROOT.sha256)" > receipt-19c.json
           python -c "import json; r = json.load(open('receipt-19c.json')); assert r['new_reasons'] == 8, r; print('19c verified')"
+      - name: Run the Phase 19d namespace egress lane and verify its pack (user namespaces via sudo)
+        run: |
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 >/dev/null 2>&1 || true
+          sudo -E env "PATH=$PATH" python -B tools/assurance-provenance/evidence19d.py verify docs/research/provenance-phase-19d/evidence.zip --expected-root "$(cat docs/research/provenance-phase-19d/ROOT.sha256)" > receipt-19d.json
+          python -c "import json; r = json.load(open('receipt-19d.json')); assert r['all_hold'] is True and r['routes_in_fresh_namespace'] == [], r; print('19d verified in a namespace')"

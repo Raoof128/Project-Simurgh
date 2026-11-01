@@ -1,5 +1,35 @@
 ## Change Log
 
+## [phase-19d] — 2026-11-01 — Phase 19d namespace launcher and network-layer canary
+
+**Raouf:**
+
+- **Scope:** Phase 19d in `tools/assurance-provenance/` (`egress19.py`, `lanes19d.py`, `evidence19d.py`,
+  three test files), the 19d pack, plan, results, `docs/assurance/egress/ERRATA.md` (dated errata; the
+  egress README is not edited), one new workflow step with the census re-pinned in the same commit,
+  `.prettierignore` (P19-FORMAT04), the declaration ledger and both logs. No frozen file, verifier
+  semantics or evidence value of any archived phase changed. No version bump.
+- **Summary:** A worker inside `unshare --user --map-root-user --net` has loopback only and no route;
+  its one path is the parent-owned proxy over a Unix socket, which canonicalises, follows redirects
+  itself, applies destination and role allowlists and forwards only to the owned loopback receiver.
+  Nine cases hold with zero movement of the namespace's kernel counters; a direct socket to the
+  receiver's own address fails with `ENETUNREACH` before any segment exists; a live-reader control
+  inside the same kind of namespace moves the counters, so zero is a reading, not a dead gauge. The
+  shared-filesystem covert channel is measured in bits per second and reported as not eliminated.
+  Linux only: tests skip (not pass) elsewhere, `run` and `verify` refuse with `host_cannot_namespace`,
+  and the pack was produced in a privileged Linux container on the authoring Mac.
+- **Files changed:** `tools/assurance-provenance/{egress19,lanes19d,evidence19d}.py`,
+  `tools/assurance-provenance/tests/{test_egress19,test_lanes19d,test_evidence19d}.py`,
+  `docs/research/provenance-phase-19d/**`, `docs/assurance/egress/ERRATA.md`,
+  `.github/workflows/assurance-provenance.yml`, `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json`
+  (`current` only), `docs/research/PROVENANCE_PHASE_19.md`,
+  `docs/superpowers/plans/2026-11-01-phase-19d-namespace-egress.md`, `.prettierignore`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** in a privileged `python:3.12-slim` container (linuxkit kernel, aarch64): the egress,
+  lane and evidence suites pass; on macOS the namespace tests skip and the off-host refusal tests pass;
+  `ruff` clean; census checker set-identical after the pin; `prettier --check` clean. Not run: the
+  hosted workflow (nothing pushed).
+- **Follow-ups:** first hosted run of the 19d step (confirms `sudo` suffices on the runner); 19e, 19f, 19g.
+
 ## [phase-19-ci01] — 2026-11-01 — Phase 19 workflow and the Stage 5Q census re-pin (P19-CI01)
 
 **Raouf:**

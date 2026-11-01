@@ -3,8 +3,8 @@
 Declared 1 November 2026 (Australia/Sydney), baseline `30fe9e4b`, under the owner's instruction to
 proceed with the gauntlet-revised design
 ([Phase 19 v2.1](../superpowers/specs/2026-11-01-phase-19-authority-provenance-design.md)).
-Phase 19a, 19b and 19c are executed here; 19d–19g are declared scope and are not implemented by
-this entry.
+Phase 19a, 19b, 19c and 19d are executed here; 19e–19g are declared scope and are not implemented
+by this entry.
 
 ## Design and scope
 
@@ -34,6 +34,13 @@ receiver with two effect classes for the route corpus, per-call and running limi
 revocation and grant scope. Every lane is receiver-direct and drives the frozen receiver on the same
 bytes. Results: [provenance-phase-19c/RESULTS.md](provenance-phase-19c/RESULTS.md).
 
+Phase 19d ([plan](../superpowers/plans/2026-11-01-phase-19d-namespace-egress.md)) runs a worker
+inside a Linux user and network namespace with no route, a parent-owned Unix-socket proxy as its
+only path, per-namespace kernel counters as the canary and a live-reader control. Nine cases hold;
+the covert-filesystem channel is measured and reported, not closed. Linux only; the pack was produced
+in a privileged Linux container on the authoring Mac. Results:
+[provenance-phase-19d/RESULTS.md](provenance-phase-19d/RESULTS.md).
+
 Trusted host, provisioning, storage and receiver, as in the README. The frozen modules are neither
 edited nor imported except for the optional Linux replay chain. Recomputing the project's own
 archive is not custody evidence.
@@ -41,9 +48,10 @@ archive is not custody evidence.
 ## Write scope and gate lifecycle
 
 Add `tools/assurance-provenance/**`, `docs/research/provenance-phase-19a/**`,
-`docs/research/provenance-phase-19b/**`, `docs/research/provenance-phase-19c/**`, `proofs/phase19/**`, this ledger and the
+`docs/research/provenance-phase-19b/**`, `docs/research/provenance-phase-19c/**`, `docs/research/provenance-phase-19d/**`,
+`docs/assurance/egress/ERRATA.md`, `proofs/phase19/**`, this ledger and the
 Phase 19 design, plan, plug-in map and gauntlet records under `docs/superpowers/`. Modify
-`.prettierignore` (P19-FORMAT01, 02 and 03: evidence files, bytes preserved), `AGENT.md`,
+`.prettierignore` (P19-FORMAT01 to 04: evidence files, bytes preserved), `AGENT.md`,
 `CHANGELOG.md`, and `scripts/check-lean-proofs.mjs` (floor 39→40, in the commit that adds the proof).
 Modify nothing frozen. The CI workflow `.github/workflows/assurance-provenance.yml` is added under P19-CI01 in one commit
 with the Stage 5Q census re-pin, after this declaration.
@@ -93,6 +101,11 @@ that file. This declaration commit must be a strict ancestor of that edit.
   and two as ordinary steps; `current` gained exactly those three ids (48 → 51), `baseline` untouched. The workflow installs elan so the Lean differential test runs
   rather than skips, and chains the frozen Phase 17 replay through the 19a verifier on Linux x86_64,
   which the authoring host could not. No hosted run has executed yet; the first run's receipt is owed.
+- Ruling: 19d's canary is the absence (no route, `ENETUNREACH`, zero counter movement) with a
+  live-reader control, because a fresh network namespace fails a connect before any segment is
+  built; the design's "counters move" expectation was wrong and the probe corrected it. The 19d
+  workflow step runs under `sudo` because hosted Ubuntu runners may restrict unprivileged user
+  namespaces; the census gained that step's id in the same commit.
 - Ruling: 19c is receiver-direct by design (gauntlet M5). The strawman is a power check and G22 is
   not paid. A POSIX leading double slash is not a receiver's canonical form; the canonicaliser
   collapses it.

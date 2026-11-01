@@ -86,8 +86,8 @@
     ]
   },
   "current": {
-    "as_of": "2026-11-01 phase 19 provenance CI extension (P19-CI01)",
-    "entry_count": 51,
+    "as_of": "2026-11-01 phase 19d namespace egress step (P19-CI01)",
+    "entry_count": 52,
     "why": "the LIVE census, re-pinned by each stage that adds workflow steps. `baseline` is NOT touched: it is the v2.53.0 measurement the Q1-F002 finding cites, and a later stage may never move it to go green (5S-F015).",
     "gate_problems": [
       {
@@ -117,6 +117,10 @@
       {
         "gate_id": "assurance-provenance.yml::Install elan (pinned toolchain from proofs/phase19/lean-toolchain)",
         "reason_code": "unclassifiable_step"
+      },
+      {
+        "gate_id": "assurance-provenance.yml::Run the Phase 19d namespace egress lane and verify its pack (user namespaces via sudo)",
+        "reason_code": "missing_committed_universe_query"
       },
       {
         "gate_id": "assurance-provenance.yml::Verify the Phase 19a pack and chain the frozen Phase 17 replay through it",
