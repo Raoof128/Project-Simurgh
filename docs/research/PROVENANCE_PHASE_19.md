@@ -4,8 +4,8 @@ Declared 1 November 2026 (Australia/Sydney), baseline `30fe9e4b`, under the owne
 proceed with the gauntlet-revised design
 ([Phase 19 v2.1](../superpowers/specs/2026-11-01-phase-19-authority-provenance-design.md)).
 Phase 19a, 19b, 19c, 19d and 19g are executed here; 19e is executed as an instrument without spend
-(the capture itself is owed under `IOU-19-SPEND`); 19f is declared scope and is not implemented by
-this entry.
+(the capture itself is owed under `IOU-19-SPEND`); 19f is executed as a handoff package (the
+outside replay itself is owed under `IOU-19-OPERATOR`).
 
 ## Design and scope
 
@@ -56,6 +56,13 @@ rates that the estimator recovers, the `IOU-19-SPEND` declaration (models, scope
 authorisation not given) and the informed-attacker bundle at `not_run`. Results:
 [provenance-phase-19e/RESULTS.md](provenance-phase-19e/RESULTS.md).
 
+Phase 19f ([plan](../superpowers/plans/2026-11-01-phase-19f-outside-operator-handoff.md)) commits the
+outside-operator handoff package: a document generated from the committed receipts with custody rules,
+one verify command per executed phase and the expected fields (host-dependent fields excluded), a
+discrepancy template, a field-by-field comparator for returned receipts and a status that reads `owed`
+until a receipt is reviewed. No pack: nothing ran that a pack could bind. Package:
+[provenance-phase-19f/README.md](provenance-phase-19f/README.md).
+
 Trusted host, provisioning, storage and receiver, as in the README. The frozen modules are neither
 edited nor imported except for the optional Linux replay chain. Recomputing the project's own
 archive is not custody evidence.
@@ -64,9 +71,9 @@ archive is not custody evidence.
 
 Add `tools/assurance-provenance/**`, `docs/research/provenance-phase-19a/**`,
 `docs/research/provenance-phase-19b/**`, `docs/research/provenance-phase-19c/**`, `docs/research/provenance-phase-19d/**`,
-`docs/research/provenance-phase-19g/**`, `docs/research/provenance-phase-19e/**`, `docs/assurance/egress/ERRATA.md`, `proofs/phase19/**`, this ledger and the
+`docs/research/provenance-phase-19g/**`, `docs/research/provenance-phase-19e/**`, `docs/research/provenance-phase-19f/**`, `docs/assurance/egress/ERRATA.md`, `proofs/phase19/**`, this ledger and the
 Phase 19 design, plan, plug-in map and gauntlet records under `docs/superpowers/`. Modify
-`.prettierignore` (P19-FORMAT01 to 06: evidence files, bytes preserved), `AGENT.md`,
+`.prettierignore` (P19-FORMAT01 to 07: evidence files and the generated handoff, bytes preserved), `AGENT.md`,
 `CHANGELOG.md`, and `scripts/check-lean-proofs.mjs` (floor 39→40, in the commit that adds the proof).
 Modify nothing frozen. The CI workflow `.github/workflows/assurance-provenance.yml` is added under P19-CI01 in one commit
 with the Stage 5Q census re-pin, after this declaration.
@@ -135,3 +142,8 @@ that file. This declaration commit must be a strict ancestor of that edit.
   none was given. The framing line is trusted-channel text above the untrusted source, so a shift
   could not be read as source-obedience. The scripted control is a positive control for the
   estimator and is not evidence about any model; the receipt says `model_inference: false`.
+- Ruling: 19f ships as a package because the replay needs a person. The comparator excludes only
+  `tree_state`, `host` and `replay`; the manifest root and every count must match on the operator's
+  machine. A received receipt does not pay `IOU-19-OPERATOR`; the review with every discrepancy
+  published does. The generated handoff is exempt from prettier (P19-FORMAT07) because its test
+  asserts byte equality with the render.

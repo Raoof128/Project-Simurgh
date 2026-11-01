@@ -1,5 +1,29 @@
 ## Change Log
 
+## [phase-19f-package] — 2026-11-01 — Phase 19f outside-operator handoff package
+
+**Raouf:**
+
+- **Scope:** Phase 19f as a handoff package in `tools/assurance-provenance/` (`handoff19.py`, one test
+  file), `docs/research/provenance-phase-19f/**` (generated `HANDOFF.md`, `discrepancy-template.json`,
+  README, empty `operator-receipts/`), plan, `.prettierignore` (P19-FORMAT07), the declaration ledger and
+  both logs. No pack, no model, no frozen file, no workflow change. No version bump.
+- **Summary:** The outside-operator replay is the first custody evidence and needs a person. The package
+  renders the handoff from the committed receipts of 19a–19e and 19g (custody rules, one verify command
+  per phase, expected fields with `tree_state`, `host` and `replay` excluded, run times and host
+  requirements), commits a discrepancy template, compares a returned receipt field by field (differs or
+  missing) and reports `IOU-19-OPERATOR` as `owed` until a receipt is reviewed. The committed receipts
+  compare to themselves as empty.
+- **Files changed:** `tools/assurance-provenance/handoff19.py`, `tools/assurance-provenance/tests/test_handoff19.py`,
+  `docs/research/provenance-phase-19f/**`, `docs/research/PROVENANCE_PHASE_19.md`,
+  `docs/superpowers/plans/2026-11-01-phase-19f-outside-operator-handoff.md`, `.prettierignore`, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** 6 tests pass (handoff byte-equal to the render; template committed; comparator finds a
+  changed root and a missing field; committed receipts compare empty; status `owed`); `ruff` clean;
+  `prettier --check` clean. Not run: the replay (needs the classmate), the hosted workflow (nothing pushed).
+- **Follow-ups:** publish the commit, hand `HANDOFF.md` to the classmate, commit the returned receipt
+  unchanged and publish the comparator output (`IOU-19-OPERATOR`).
+
 ## [phase-19e-instrument] — 2026-11-01 — Phase 19e capture instrument without spend
 
 **Raouf:**
