@@ -147,3 +147,7 @@ that file. This declaration commit must be a strict ancestor of that edit.
   machine. A received receipt does not pay `IOU-19-OPERATOR`; the review with every discrepancy
   published does. The generated handoff is exempt from prettier (P19-FORMAT07) because its test
   asserts byte equality with the render.
+- Ruling: the 19e and 19g packs verify in one added workflow step; the census classified it as
+  `missing_committed_universe_query` like the other pack-verify steps and `current` gained exactly
+  that id (52 → 53) in the same commit, `baseline` untouched. The workflow's path filters gained the
+  two evidence directories.

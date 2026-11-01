@@ -21,6 +21,9 @@
 - **Verification:** 6 tests pass (handoff byte-equal to the render; template committed; comparator finds a
   changed root and a missing field; committed receipts compare empty; status `owed`); `ruff` clean;
   `prettier --check` clean. Not run: the replay (needs the classmate), the hosted workflow (nothing pushed).
+- **Workflow (same session, next commit):** one step verifying the 19e and 19g packs added to
+  `.github/workflows/assurance-provenance.yml`, path filters extended, Stage 5Q census `current` 52 → 53
+  (`baseline` untouched) in the same commit; checker set-identical after the pin.
 - **Follow-ups:** publish the commit, hand `HANDOFF.md` to the classmate, commit the returned receipt
   unchanged and publish the comparator output (`IOU-19-OPERATOR`).
 

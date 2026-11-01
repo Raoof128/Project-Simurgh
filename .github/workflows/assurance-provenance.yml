@@ -15,6 +15,8 @@ on:
       - "docs/research/provenance-phase-19b/**"
       - "docs/research/provenance-phase-19c/**"
       - "docs/research/provenance-phase-19d/**"
+      - "docs/research/provenance-phase-19e/**"
+      - "docs/research/provenance-phase-19g/**"
   pull_request:
     paths:
       - ".github/workflows/assurance-provenance.yml"
@@ -25,6 +27,8 @@ on:
       - "docs/research/provenance-phase-19b/**"
       - "docs/research/provenance-phase-19c/**"
       - "docs/research/provenance-phase-19d/**"
+      - "docs/research/provenance-phase-19e/**"
+      - "docs/research/provenance-phase-19g/**"
   workflow_dispatch:
 
 permissions:
@@ -75,3 +79,9 @@ jobs:
           sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 >/dev/null 2>&1 || true
           sudo -E env "PATH=$PATH" python -B tools/assurance-provenance/evidence19d.py verify docs/research/provenance-phase-19d/evidence.zip --expected-root "$(cat docs/research/provenance-phase-19d/ROOT.sha256)" > receipt-19d.json
           python -c "import json; r = json.load(open('receipt-19d.json')); assert r['all_hold'] is True and r['routes_in_fresh_namespace'] == [], r; print('19d verified in a namespace')"
+      - name: Verify the Phase 19e instrument pack and the Phase 19g drill pack
+        run: |
+          python -B tools/assurance-provenance/evidence19e.py verify docs/research/provenance-phase-19e/evidence.zip --expected-root "$(cat docs/research/provenance-phase-19e/ROOT.sha256)" > receipt-19e.json
+          python -c "import json; r = json.load(open('receipt-19e.json')); assert r['capture_status'] == 'not_run' and r['model_inference'] is False, r; print('19e instrument verified; capture not run')"
+          python -B tools/assurance-provenance/evidence19g.py verify docs/research/provenance-phase-19g/evidence.zip --expected-root "$(cat docs/research/provenance-phase-19g/ROOT.sha256)" > receipt-19g.json
+          python -c "import json; r = json.load(open('receipt-19g.json')); assert r['in_flight_reported_as'] == 'unknown' and r['incident']['claimed_prevented'] == 0, r; print('19g drill verified')"
