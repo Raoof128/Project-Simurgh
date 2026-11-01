@@ -1,5 +1,27 @@
 ## Change Log
 
+## [phase-19-ci01] — 2026-11-01 — Phase 19 workflow and the Stage 5Q census re-pin (P19-CI01)
+
+**Raouf:**
+
+- **Scope:** `.github/workflows/assurance-provenance.yml` (new) and the Stage 5Q census pin
+  `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json` (`current` only, `baseline`
+  untouched), in one commit under P19-CI01, after the declaration that names it. The declaration
+  ledger and both logs. No frozen Python surface, verifier, evidence value or proof changed.
+- **Summary:** The workflow is paths-scoped to the Phase 19 namespace, the successor and the three
+  evidence directories. It installs the pinned elan toolchain so the Lean differential test runs
+  rather than skips, installs the hash-locked replay dependencies, runs the namespace suite,
+  verifies the 19a pack with `--replay` so the frozen Phase 17 replay is chained on Linux x86_64 (the
+  authoring host could not), and verifies the 19b and 19c packs with their closure and reason-count
+  assertions. The census measured the new problem gate ids from the file itself and `current` was
+  re-pinned to exactly those; the checker reports set-identical.
+- **Files changed:** `.github/workflows/assurance-provenance.yml`,
+  `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json`,
+  `docs/research/PROVENANCE_PHASE_19.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** YAML parses; `checkProblemGateSet.mjs` set-identical after the pin; the 5Q tests
+  that read the pin pass; `prettier --check` clean. Not run: the hosted workflow itself (no push).
+- **Follow-ups:** the first hosted run's receipt, including the chained replay result; 19d–19g.
+
 ## [phase-19a-e2e] — 2026-11-01 — 19a evidence test accepts a committed tree state
 
 **Raouf:**

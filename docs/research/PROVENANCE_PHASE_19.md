@@ -45,9 +45,10 @@ Add `tools/assurance-provenance/**`, `docs/research/provenance-phase-19a/**`,
 Phase 19 design, plan, plug-in map and gauntlet records under `docs/superpowers/`. Modify
 `.prettierignore` (P19-FORMAT01, 02 and 03: evidence files, bytes preserved), `AGENT.md`,
 `CHANGELOG.md`, and `scripts/check-lean-proofs.mjs` (floor 39→40, in the commit that adds the proof).
-Modify nothing frozen. The CI workflow `.github/workflows/assurance-provenance.yml` is **not** added by this entry.
+Modify nothing frozen. The CI workflow `.github/workflows/assurance-provenance.yml` is added under P19-CI01 in one commit
+with the Stage 5Q census re-pin, after this declaration.
 
-**P19-CI01 (declared, not yet exercised).** When the workflow is added, that single commit may modify
+**P19-CI01 (exercised 1 Nov 2026).** When the workflow is added, that single commit may modify
 only `current` in `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json` for the exact
 new CI identities measured by `measureGateCensus.mjs` against the draft workflow (Phase 9 added one
 identity for its step; the count here is measured, not assumed), and must carry a `paths:` filter on
@@ -87,6 +88,10 @@ that file. This declaration commit must be a strict ancestor of that edit.
 - Ruling: 19b-1 ended with three wired deterministic channels; 19b-2 wired the fourth and the
   receipt now reads `phase_19b_closed: true` on six named conditions. Not among them: the native
   delivery path (not exercised on this host) and any outside replay.
+- Ruling: the workflow's five run steps are the gate ids the census measured; `current` gained
+  exactly those, `baseline` untouched. The workflow installs elan so the Lean differential test runs
+  rather than skips, and chains the frozen Phase 17 replay through the 19a verifier on Linux x86_64,
+  which the authoring host could not. No hosted run has executed yet; the first run's receipt is owed.
 - Ruling: 19c is receiver-direct by design (gauntlet M5). The strawman is a power check and G22 is
   not paid. A POSIX leading double slash is not a receiver's canonical form; the canonicaliser
   collapses it.
