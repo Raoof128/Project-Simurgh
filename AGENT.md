@@ -14,6 +14,32 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-01 (Australia/Sydney) — P19-LEAN01: the Stage 5S floor-count test becomes a monotone bound
+
+**Raouf:**
+
+- **Scope:** One Stage 5S Node test, `tests/unit/llmShield/stage5s/theoremSet.test.js` `[5s-t26]`, two
+  assertions, under the authority row P19-LEAN01 added to `docs/research/PROVENANCE_PHASE_19.md` one
+  commit earlier. No proof, verifier, evidence value or frozen Python surface changed. No version bump.
+- **Summary:** The full quality gate run on the Phase 19 branch failed `npm test` on `[5s-t26]`,
+  which pinned the Lean floor at exactly 39 and the gate's discovered count at exactly 39. The proof
+  Phase 19 adds (`proofs/phase19/AuthorityProvenance.lean`), with the floor raised to 40 as the gate
+  script instructs the adding task to do, breaks both. That is a count pin of the Q1-F002 species the
+  gate-lifecycle doctrine names (pin sets, not counts). The two assertions are now monotone bounds:
+  the floor is at least 39, and the discovered count is at least the floor the gate reports; the
+  escape-hatch and type-check assertions are unchanged. The declaration commit `0204d9ba` precedes
+  the edit `7c3fee65`.
+- **Files changed:** `docs/research/PROVENANCE_PHASE_19.md`, `tests/unit/llmShield/stage5s/theoremSet.test.js`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `node --test tests/unit/llmShield/stage5s/theoremSet.test.js` 10 passed; `node
+  scripts/check-lean-proofs.mjs` 40 proofs at floor 40; `scripts/check.sh` on the branch head with a
+  Python that has pytest: 144 passed, 5 skipped, 1 failed (the Linux Rust daemon Xvfb readiness
+  step, which passes standalone on both `main` and the branch, 4 of 4, and failed only under
+  concurrent load; the 19 Oct smoke report records the same readiness flake). The first gate run
+  also failed the AgentDojo step for lack of pytest in the gate's `python3`; the suite passes 181 of
+  181 as the gate runs it with an interpreter that has pytest.
+- **Follow-ups:** none for this edit. The Phase 19 follow-ups (CI workflow with the 5Q census
+  re-pin, Linux replay for 19a, 19d–19g) stand.
+
 ### 2026-11-01 (Australia/Sydney) — Phase 19c: forked receiver, credential and manifest lanes, route corpus, cumulative lane
 
 **Raouf:**
