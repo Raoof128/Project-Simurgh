@@ -3,8 +3,8 @@
 Declared 1 November 2026 (Australia/Sydney), baseline `30fe9e4b`, under the owner's instruction to
 proceed with the gauntlet-revised design
 ([Phase 19 v2.1](../superpowers/specs/2026-11-01-phase-19-authority-provenance-design.md)).
-Phase 19a, 19b, 19c and 19d are executed here; 19e–19g are declared scope and are not implemented
-by this entry.
+Phase 19a, 19b, 19c, 19d and 19g are executed here; 19e and 19f are declared scope and are not
+implemented by this entry.
 
 ## Design and scope
 
@@ -41,6 +41,13 @@ the covert-filesystem channel is measured and reported, not closed. Linux only; 
 in a privileged Linux container on the authoring Mac. Results:
 [provenance-phase-19d/RESULTS.md](provenance-phase-19d/RESULTS.md).
 
+Phase 19g ([plan](../superpowers/plans/2026-11-01-phase-19g-evaluator-kit-and-deployer-profile.md)) runs a
+seeded incident drill on the successor rig (plant, detect, admit-in-flight, stop, revoke, preserve,
+in-flight fate, intervals) and generates a deployer incident record from receiver and host snapshots
+against a committed schema that fixes `claimed_prevented` at zero. Two attested documents sit beside
+the pack: the deployer profile and the embedded-evaluator kit; their delivery is owed. Results:
+[provenance-phase-19g/RESULTS.md](provenance-phase-19g/RESULTS.md).
+
 Trusted host, provisioning, storage and receiver, as in the README. The frozen modules are neither
 edited nor imported except for the optional Linux replay chain. Recomputing the project's own
 archive is not custody evidence.
@@ -49,9 +56,9 @@ archive is not custody evidence.
 
 Add `tools/assurance-provenance/**`, `docs/research/provenance-phase-19a/**`,
 `docs/research/provenance-phase-19b/**`, `docs/research/provenance-phase-19c/**`, `docs/research/provenance-phase-19d/**`,
-`docs/assurance/egress/ERRATA.md`, `proofs/phase19/**`, this ledger and the
+`docs/research/provenance-phase-19g/**`, `docs/assurance/egress/ERRATA.md`, `proofs/phase19/**`, this ledger and the
 Phase 19 design, plan, plug-in map and gauntlet records under `docs/superpowers/`. Modify
-`.prettierignore` (P19-FORMAT01 to 04: evidence files, bytes preserved), `AGENT.md`,
+`.prettierignore` (P19-FORMAT01 to 05: evidence files, bytes preserved), `AGENT.md`,
 `CHANGELOG.md`, and `scripts/check-lean-proofs.mjs` (floor 39→40, in the commit that adds the proof).
 Modify nothing frozen. The CI workflow `.github/workflows/assurance-provenance.yml` is added under P19-CI01 in one commit
 with the Stage 5Q census re-pin, after this declaration.
@@ -111,3 +118,8 @@ that file. This declaration commit must be a strict ancestor of that edit.
   collapses it.
 - Ruling: an invalid relayed approval never reduces authority. It is recorded with its reason and
   the ordinary grant path decides; otherwise the tool-result channel would be a denial lever.
+- Ruling: 19g's drill reports the admitted-then-dropped attempt as `unknown` and the record's
+  `claimed_prevented` is a schema constant of zero; a prevention claim for an unknown outcome is the
+  exact wording the labs' cards use and the lane refuses it. Snapshot digests are reported, not
+  compared, because they vary with the sqlite build. The deployer profile and the evaluator kit are
+  attested; nobody outside the project has read them yet.

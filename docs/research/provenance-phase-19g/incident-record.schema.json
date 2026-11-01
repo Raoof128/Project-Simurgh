@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "simurgh-deployer-incident-record-v1",
+  "description": "A deployer-side incident record generated from receiver and host snapshots alone. No lab telemetry, no model output, no claim of prevention for an unknown outcome.",
+  "type": "object",
+  "required": [
+    "schema",
+    "attempted",
+    "blocked",
+    "admitted",
+    "unknown",
+    "landed_at_receiver",
+    "claimed_prevented",
+    "authority_timeline",
+    "detection_to_latch",
+    "latch_to_acknowledged_revocation",
+    "evidence_digests",
+    "model_telemetry_used"
+  ],
+  "properties": {
+    "schema": { "const": "simurgh-deployer-incident-record-v1" },
+    "attempted": { "type": "integer", "minimum": 0 },
+    "blocked": { "type": "integer", "minimum": 0 },
+    "admitted": { "type": "integer", "minimum": 0 },
+    "unknown": { "type": "integer", "minimum": 0 },
+    "landed_at_receiver": { "type": "integer", "minimum": 0 },
+    "claimed_prevented": { "type": "integer", "const": 0 },
+    "authority_timeline": { "type": "array", "items": { "type": "object" } },
+    "detection_to_latch": { "type": "number" },
+    "latch_to_acknowledged_revocation": { "type": "number" },
+    "evidence_digests": { "type": "object" },
+    "model_telemetry_used": { "const": false }
+  }
+}

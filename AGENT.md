@@ -14,6 +14,34 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-01 (Australia/Sydney) — Phase 19g: seeded incident drill, deployer incident record, deployer profile and evaluator kit
+
+**Raouf:**
+
+- **Scope:** Phase 19g in `tools/assurance-provenance/` (`drill19.py`, `incident19.py`, `evidence19g.py`,
+  three test files), the 19g pack with the generated deployer incident record and its committed schema,
+  the two attested documents (`DEPLOYER_PROFILE.md`, `EVALUATOR_KIT.md`), plan, results,
+  `.prettierignore` (P19-FORMAT05), the declaration ledger and both logs. No frozen file, verifier
+  semantics or evidence value of any archived phase changed. No workflow change. No version bump.
+- **Summary:** A seeded incident drill on the successor rig: the child plants an ungranted action
+  (blocked, zero effects), the signed provenance record names the missing grant input, an admitted
+  attempt whose acknowledgement is dropped is reported `unknown` and never as prevented, the host
+  latches the route and every route holds, the gateway records the signed revocation acknowledgement,
+  host and receiver tables are digested before and after, and both detection-to-action intervals are
+  reported in fixture clock units. The deployer incident record is generated from snapshots alone
+  against a schema that fixes `claimed_prevented` at zero and `model_telemetry_used` at false. The
+  deployer profile maps eight lab-measured harm classes to the deployer control and the Phase 19 lane
+  that evidences it; the evaluator kit maps frozen Stages 5I and 5J to the published acceptance
+  criteria and adds a signed independence-and-funding disclosure field. Both documents are attested.
+- **Files changed:** `tools/assurance-provenance/{drill19,incident19,evidence19g}.py`,
+  `tools/assurance-provenance/tests/{test_drill19,test_incident19,test_evidence19g}.py`,
+  `docs/research/provenance-phase-19g/**`, `docs/research/PROVENANCE_PHASE_19.md`,
+  `docs/superpowers/plans/2026-11-01-phase-19g-evaluator-kit-and-deployer-profile.md`, `.prettierignore`,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 13 tests across the three 19g files pass (`python -m unittest discover -s tools/assurance-provenance/tests -p "test_*19.py"` and `test_incident19.py`, `test_evidence19g.py`); six named mutations plus a wrong root rejected with distinct reasons; `ruff` clean; `prettier --check` clean; the 19a–19d packs still verify (their pinned sets are unchanged). Not run: the hosted workflow (nothing pushed).
+- **Follow-ups:** deliver the evaluator kit to an evaluator and record the reply (`IOU-19-KIT`); 19e as an
+  instrument without spend; 19f handoff package.
+
 ### 2026-11-01 (Australia/Sydney) — Phase 19d: namespace launcher and network-layer canary
 
 **Raouf:**
