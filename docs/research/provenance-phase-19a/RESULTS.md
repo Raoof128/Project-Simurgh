@@ -84,6 +84,10 @@ them against the real archive.
 - The projection rules were written with the archive open and are reported, not scored against a
   held-out set (`protocol.json`, `informed_authoring`).
 - The frozen replay chain (`--replay`) needs Linux x86_64, Python 3.12, the hash-locked
-  dependencies and full Git history; this pack was produced without it.
+  dependencies and full Git history; this pack was produced without it. The hosted workflow later
+  ran it against this pack: run `41623244388` at `94b8217b` returned `frozen_replay_chained` with
+  `replay.result: verified`, and that receipt is committed unchanged in
+  [the hosted receipts](../provenance-phase-19-hosted/README.md). It is the project's own runner,
+  not an outside operator.
 - The receipt's `tree_state` names the commit of the lane sources; the protocol binds their hashes.
   The pack itself is committed after it is produced, so its own commit is not in the receipt.

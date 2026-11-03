@@ -182,3 +182,25 @@ not pay `IOU-19-OPERATOR`. This declaration commit must be a strict ancestor of 
   `missing_committed_universe_query` like the other pack-verify steps and `current` gained exactly
   that id (52 → 53) in the same commit, `baseline` untouched. The workflow's path filters gained the
   two evidence directories.
+- Ruling: the first hosted run (`41306753664`, `e58f9688`) passed the suite (135 tests, 10 skipped)
+  and verified 19a with the frozen replay chained, 19b, 19c, 19d and 19e, and refused 19g with
+  `incident_digest_mismatch`. The 19g verifier compared snapshot digest values that the protocol
+  declares reported, not compared. Repaired under P19-REPAIR01: the record's digest inventory is
+  compared and the values are reported, with a regression test that emulates another sqlite build.
+  The pack regenerated from `e8bff1ed` (root `2fa16e8d…`) differs from the refused one only in the
+  three re-bound source digests, the snapshot digest values, `protocol_sha256`, the root and
+  `tree_state`. It verified on the authoring Mac under sqlite 3.45.3 and 3.53.1; under 3.53.1 the
+  refused pack and verifier reproduce the refusal.
+- Ruling: P19-CI02 exercised in `94b8217b`. The census measured the same 58 steps with the same
+  classification and the checker stayed set-identical (53). The second hosted run (`41623244388`,
+  `94b8217b`, `ubuntu-24.04`, CPython 3.12.15) passed every step (suite 138 tests, 10 skipped) and
+  its six receipts are committed byte for byte in `provenance-phase-19-hosted/` with the artifact
+  digest. The 19a receipt reads `frozen_replay_chained` with `replay.result: verified`: the Linux
+  x86_64 replay this ledger owed ran on the project's own hosted runner. That is recomputation by
+  the project, not custody, and `IOU-19-OPERATOR` stays owed.
+- Ruling: the hosted 19a receipt exposed a comparator defect in 19f. The handoff tells a Linux
+  operator to add `--replay`; the comparator excluded `replay` but compared `kind`, which follows
+  from it, so the instructed run would have been published as a discrepancy. Fixed in `6a93b39a`:
+  the expected `kind` follows the operator's own verified replay and no other pairing, and the
+  handoff states the rule. `handoff19.py` is not pinned by any pack protocol, so no pack changed.
+  The six hosted receipts compare with no discrepancy.

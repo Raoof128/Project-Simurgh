@@ -14,6 +14,46 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-03 (Australia/Sydney) — Phase 19: hosted runs read, 19g verifier repaired, receipts retained
+
+**Raouf:**
+
+- **Scope:** Branch `phase-19/authority-provenance`, under the owner's instruction to proceed with every
+  repair possible. Declarations P19-REPAIR01 and P19-CI02 in the ledger; `incident19.py`, `handoff19.py`
+  and three test files in `tools/assurance-provenance/`; the regenerated 19g pack and its results
+  paragraph; the re-rendered 19f handoff; one upload step in `.github/workflows/assurance-provenance.yml`;
+  the hosted receipts in `docs/research/provenance-phase-19-hosted/`; a 19a results note;
+  `.prettierignore` (P19-FORMAT08); both logs. No frozen file changed; the Stage 5Q census `current` is
+  unchanged. No version bump.
+- **Summary:** The first hosted run (`41306753664`, `e58f9688`) verified 19a with the frozen replay
+  chained, 19b, 19c, 19d and 19e, and refused 19g with `incident_digest_mismatch`. Cause:
+  `incident19.verify_record` compared sqlite file-byte digests, which carry the sqlite version in every
+  header, although the 19g protocol declares them reported, not compared. Reproduced on the Mac with
+  Python 3.12.4 and sqlite 3.45.3, repaired test-first (inventory compared, values reported), and the
+  pack regenerated from the fix commit (root `6e534e5c…` → `2fa16e8d…`). P19-CI02 added a receipt upload
+  step with no `run:` scalar, so the census is unchanged. The second hosted run (`41623244388`,
+  `94b8217b`) passed every step, and its six receipts are committed byte for byte. The 19a receipt is
+  the Linux replay the ledger owed (`frozen_replay_chained`, `replay.result: verified`), run on the
+  project's own runner, not by an outside operator. That receipt also exposed a 19f comparator defect:
+  the instructed `--replay` run would have read as a `kind` discrepancy. Fixed in `6a93b39a`; the six
+  hosted receipts now compare clean.
+- **Files changed:** `docs/research/PROVENANCE_PHASE_19.md`, `tools/assurance-provenance/incident19.py`,
+  `tools/assurance-provenance/handoff19.py`, `tools/assurance-provenance/tests/{test_incident19,test_evidence19g,test_handoff19}.py`,
+  `docs/research/provenance-phase-19g/{protocol,report,receipt,incident-record}.json`,
+  `docs/research/provenance-phase-19g/{evidence.zip,ROOT.sha256,RESULTS.md}`,
+  `docs/research/provenance-phase-19f/HANDOFF.md`, `.github/workflows/assurance-provenance.yml`,
+  `docs/research/provenance-phase-19-hosted/**`, `docs/research/provenance-phase-19a/RESULTS.md`,
+  `.prettierignore`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the regression tests failed first with the hosted error. On the Mac: suite 138 ok, 10
+  skipped (namespace tests); `check.sh` 144 pass, 0 fail, 6 skip (four opt-in live runs; Docker not
+  running; no `pytest` on the default `python3`), 2 informational; the 19g pack verifies under sqlite
+  3.45.3 and 3.53.1; census checker set-identical (53) with the same 58-step classification before and
+  after; `ruff` and `prettier` clean. Hosted run `41623244388`: suite 138 ok, 10 skipped; all six packs
+  verified; artifact zip sha256 `f6aac818…` matched the upload step and the API.
+- **Follow-ups:** the Quality Gate on `main` is red from Stage 5R's parity driver (audit E-5). The repair is
+  PR #148 (Stage 5R Annex A1), green on the hosted gate. This branch's own pull request needs that fix on
+  `main` first. `IOU-19-SPEND`, `IOU-19-OPERATOR` and `IOU-19-KIT` remain owed.
+
 ### 2026-11-01 (Australia/Sydney) — Phase 19 close-out: final e2e and first push
 
 **Raouf:**

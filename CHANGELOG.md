@@ -1,5 +1,24 @@
 ## Change Log
 
+## [phase-19-hosted] — 2026-11-03 — Phase 19 hosted runs read; 19g verifier repaired; receipts retained
+
+**Raouf:**
+
+- **Scope:** Branch `phase-19/authority-provenance`: P19-REPAIR01 (19g verifier and regenerated pack),
+  P19-CI02 (receipt upload step, census unchanged), the 19f comparator repair, the committed hosted
+  receipts and both logs. No frozen file changed. No version bump.
+- **Summary:** Hosted run `41306753664` refused the 19g pack because its verifier compared sqlite-build
+  dependent digests the protocol declares reported, not compared. Repaired test-first, and the pack was
+  regenerated (root `2fa16e8d…`). Hosted run `41623244388` at `94b8217b` verified all six packs, including
+  19a with the frozen Phase 17 replay chained on Linux x86_64. Its receipts are committed unchanged in
+  `docs/research/provenance-phase-19-hosted/`. The 19f comparator now expects the replay-chained 19a
+  `kind` when the operator's replay verified.
+- **Files changed:** see the matching `AGENT.md` entry.
+- **Verification:** Mac suite 138 ok, 10 skipped; `check.sh` 144 pass, 0 fail, 6 skip; hosted suite 138 ok,
+  10 skipped, all packs verified; artifact digest matched; census checker set-identical (53).
+- **Follow-ups:** PR #148 (Stage 5R Annex A1) repairs the red Quality Gate on `main` and must merge before
+  this branch's pull request can pass it. `IOU-19-SPEND`, `IOU-19-OPERATOR`, `IOU-19-KIT` remain owed.
+
 ## [phase-19-closeout] — 2026-11-01 — Phase 19 final e2e and first push of the branch
 
 **Raouf:**
