@@ -111,6 +111,19 @@ re-rendering the 19f handoff from the regenerated receipt. The refused pack (roo
 stays in history at `9d1ae938`. No other pinned source, no frozen file and no workflow step
 changes. This declaration commit must be a strict ancestor of the repair.
 
+**P19-CI02 (receipt retention).** The workflow writes each phase's receipt on the runner and
+discards it, so the first hosted run's 19a `--replay` outcome survives only as one printed
+assertion line in the job log. This declaration authorises one named step at the end of
+`.github/workflows/assurance-provenance.yml` that uploads `receipt-19*.json` as a run artifact under
+`if: always()`, pinned to the `actions/upload-artifact` commit the repository already uses
+(`ea165f8d…`, v4.6.2). The step has no `run:` scalar, so `measureGateCensus.mjs` measures no new
+identity: `current` in the Stage 5Q problem-gate set is not modified and the checker must stay
+set-identical (53). It further authorises committing the receipts of the first green run after that
+step, unchanged, under `docs/research/provenance-phase-19-hosted/` with the run id, commit and
+artifact digest, and exempting those bytes from prettier (P19-FORMAT08). A hosted receipt is the
+project's own runner recomputing the project's own evidence: it is not custody evidence and does
+not pay `IOU-19-OPERATOR`. This declaration commit must be a strict ancestor of the workflow edit.
+
 | Field                         | Declaration                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | active_phase                  | Phase 19a projection verifier (19b–19g declared)                                                                    |
