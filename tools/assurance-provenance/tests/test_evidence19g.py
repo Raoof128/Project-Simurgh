@@ -1,9 +1,11 @@
+import hashlib
 import json
 import sys
 import tempfile
 import unittest
 import zipfile
 from pathlib import Path
+from unittest import mock
 
 HERE = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(HERE))
@@ -55,6 +57,22 @@ class Evidence19gTests(unittest.TestCase):
             True,
         )
 
+    def test_verify_on_another_sqlite_build(self):
+        # The hosted Linux run failed here: the verifier compared snapshot digests that the
+        # protocol declares reported-not-compared. Emulate a host whose sqlite writes other bytes.
+        real = ev.drill19.digests
+
+        def other_build(rig):
+            return {
+                k: hashlib.sha256(b"other-build:" + v.encode()).hexdigest()
+                for k, v in real(rig).items()
+            }
+
+        with mock.patch.object(ev.drill19, "digests", other_build):
+            r = ev.verify(self.out / "evidence.zip", self.root, protocol=self.proto)
+        self.assertIs(r["verified"], True)
+        self.assertIs(r["digests_compared"], False)
+
     def test_wrong_root(self):
         with self.assertRaises(ValueError):
             ev.verify(self.out / "evidence.zip", "0" * 64, protocol=self.proto)
@@ -91,6 +109,9 @@ class Evidence19gTests(unittest.TestCase):
         def count(rep):
             rep["incident"]["unknown"] = 0
 
+        def digest_dropped(rep):
+            rep["incident"]["evidence_digests"].pop("service")
+
         def sidecar_only(files):
             rec = json.loads(files["incident.json"])
             rec["unknown"] = 0
@@ -101,6 +122,7 @@ class Evidence19gTests(unittest.TestCase):
         self._reject(edit(prevented), "incident_prevention_claimed")
         self._reject(edit(landed), "plant_landed")
         self._reject(edit(count), "incident_count_mismatch:unknown")
+        self._reject(edit(digest_dropped), "incident_digest_inventory")
         self._reject(sidecar_only, "sidecar_member_mismatch")
 
 

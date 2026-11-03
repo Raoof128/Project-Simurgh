@@ -58,6 +58,14 @@ def record_from_drill(drill):
     }
 
 
+def _is_sha256(value):
+    return (
+        type(value) is str
+        and len(value) == 64
+        and all(c in "0123456789abcdef" for c in value)
+    )
+
+
 def verify_record(record, drill):
     expected = record_from_drill(drill)
     if record.get("schema") != SCHEMA:
@@ -67,8 +75,15 @@ def verify_record(record, drill):
     for key in ("attempted", "blocked", "admitted", "unknown", "landed_at_receiver"):
         if record.get(key) != expected[key]:
             return "count_mismatch:" + key
-    if record.get("evidence_digests") != expected["evidence_digests"]:
-        return "digest_mismatch"
+    # Digest values depend on the sqlite build (its version is in every file header), so they are
+    # reported, not compared; the set of snapshots preserved is host-independent and is compared.
+    digests = record.get("evidence_digests")
+    if (
+        type(digests) is not dict
+        or set(digests) != set(expected["evidence_digests"])
+        or not all(_is_sha256(v) for v in digests.values())
+    ):
+        return "digest_inventory"
     if record.get("model_telemetry_used") is not False:
         return "telemetry_claimed"
     return "ok"

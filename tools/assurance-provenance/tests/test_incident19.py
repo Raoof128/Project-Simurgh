@@ -1,3 +1,4 @@
+import hashlib
 import json
 import sys
 import tempfile
@@ -46,6 +47,26 @@ class IncidentRecordTests(unittest.TestCase):
         self.assertEqual(
             incident19.verify_record(bad, self.drill), "prevention_claimed"
         )
+
+    def test_digest_values_are_reported_not_compared(self):
+        # Another sqlite build writes different file bytes for the same rows (the library version
+        # sits in every file header), so a fresh drill elsewhere yields different digest values.
+        other = json.loads(json.dumps(self.drill))
+        for step in other["steps"]:
+            if step["step"] == "preserve":
+                step["after"] = {
+                    k: hashlib.sha256(b"other-build:" + v.encode()).hexdigest()
+                    for k, v in step["after"].items()
+                }
+        self.assertEqual(incident19.verify_record(self.rec, other), "ok")
+
+    def test_digest_inventory_is_checked(self):
+        bad = json.loads(json.dumps(self.rec))
+        bad["evidence_digests"].pop("service")
+        self.assertEqual(incident19.verify_record(bad, self.drill), "digest_inventory")
+        bad = json.loads(json.dumps(self.rec))
+        bad["evidence_digests"]["service"] = "not-a-digest"
+        self.assertEqual(incident19.verify_record(bad, self.drill), "digest_inventory")
 
 
 if __name__ == "__main__":
