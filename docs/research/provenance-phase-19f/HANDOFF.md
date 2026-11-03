@@ -49,6 +49,9 @@ Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay`
 }
 ```
 
+With `--replay`, a receipt whose `replay.result` is `verified` reads `kind`: `frozen_replay_chained`;
+the comparator expects that pairing, and the committed `kind` otherwise.
+
 ### 19b
 
 Host: any host with Python 3.12; the Lean differential test needs lean 4.15 on the path. Time: about twelve (the lanes re-execute) minute(s).

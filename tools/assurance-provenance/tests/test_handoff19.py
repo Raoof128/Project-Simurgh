@@ -47,6 +47,28 @@ class HandoffTests(unittest.TestCase):
             kinds, {("manifest_sha256", "differs"), ("new_reasons", "missing")}
         )
 
+    def test_check_follows_the_operators_own_replay_for_19a_kind(self):
+        # The handoff tells a Linux x86_64 operator to add --replay; 19a's kind then reads
+        # frozen_replay_chained (the hosted run at 94b8217b did exactly this). That is not a
+        # discrepancy, but only when the operator's own receipt shows the replay verified.
+        chained = handoff19.committed_receipt("19a")
+        chained["replay"] = {"kind": "frozen_replay", "result": "verified"}
+        chained["kind"] = "frozen_replay_chained"
+        self.assertEqual(handoff19.check("19a", chained), [])
+
+        unverified = dict(
+            chained, replay={"kind": "frozen_replay", "result": "not_run"}
+        )
+        self.assertEqual(
+            [(d["field"], d["kind"]) for d in handoff19.check("19a", unverified)],
+            [("kind", "differs")],
+        )
+        mislabelled = dict(chained, kind="hash_bound_projection")
+        self.assertEqual(
+            [(d["field"], d["kind"]) for d in handoff19.check("19a", mislabelled)],
+            [("kind", "differs")],
+        )
+
     def test_status_is_owed(self):
         s = handoff19.status()
         self.assertEqual(s["iou"], "IOU-19-OPERATOR")

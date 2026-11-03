@@ -15,6 +15,9 @@ ROOT = projection.ROOT
 DOCS = ROOT / "docs/research/provenance-phase-19f"
 RECEIPTS_DIR = DOCS / "operator-receipts"
 EXCLUDED = ("tree_state", "host", "replay")
+# 19a's ``kind`` is a function of its replay result (``evidence.receipt_for``), and the replay is
+# host-dependent, so the expected kind follows the operator's own replay rather than the author's.
+REPLAY_CHAINED_KIND = {"19a": "frozen_replay_chained"}
 PHASES = (
     {
         "id": "19a",
@@ -80,10 +83,22 @@ def expected_fields(pid):
     return {k: v for k, v in committed_receipt(pid).items() if k not in EXCLUDED}
 
 
+def expected_for(pid, receipt):
+    want = expected_fields(pid)
+    replay = receipt.get("replay")
+    if (
+        pid in REPLAY_CHAINED_KIND
+        and type(replay) is dict
+        and replay.get("result") == "verified"
+    ):
+        want["kind"] = REPLAY_CHAINED_KIND[pid]
+    return want
+
+
 def check(pid, receipt):
     """Every field that differs from, or is missing against, the committed receipt."""
     out = []
-    for key, want in expected_fields(pid).items():
+    for key, want in expected_for(pid, receipt).items():
         if key not in receipt:
             out.append({"field": key, "expected": want, "got": None, "kind": "missing"})
         elif projection.wire(receipt[key]) != projection.wire(want):
@@ -176,6 +191,13 @@ def render():
             "```",
             "",
         ]
+        if p["id"] in REPLAY_CHAINED_KIND:
+            lines += [
+                f"With `--replay`, a receipt whose `replay.result` is `verified` reads `kind`: "
+                f"`{REPLAY_CHAINED_KIND[p['id']]}`;",
+                "the comparator expects that pairing, and the committed `kind` otherwise.",
+                "",
+            ]
     lines += [
         "## Tests",
         "",
