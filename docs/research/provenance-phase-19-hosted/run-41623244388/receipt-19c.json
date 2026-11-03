@@ -1,0 +1,1 @@
+{"arm": "receiver_direct_fork", "independent_custody": false, "manifest_sha256": "235f6e7d20acddf619f6601100c067de8ae354cd3d30cddf78da17dc82e8dda6", "model_inference": false, "new_reasons": 8, "pays_G22": false, "route_variants": 7, "strawman_admits_at_least_one": true, "transport_forked": false, "tree_state": "94b8217b104eaaa54749facc49fdf1d658b14e60", "verified": true}
