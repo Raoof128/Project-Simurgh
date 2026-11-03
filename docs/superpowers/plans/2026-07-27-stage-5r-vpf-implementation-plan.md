@@ -15,7 +15,8 @@ frozen_bytes            17472
 frozen_domain           simurgh.vpf.frozen-block.v1
 
 post_freeze_spec_commit 5c422087   the Task 18 amendment (N7); §§2-5 untouched throughout
-full_spec_digest        96185cdf78d70819ce91ee3a34528ba0e5ee08611c1443bb12e07aaa834a8c7b
+post_freeze_annex       A1         2026-11-03, the parity receipt is written only on request (E-5)
+full_spec_digest        ad17b5d1390a34d83bc568b2b3dd08d4fe0bb0c2deb5e599bc59258f349bc4da
 full_spec_domain        simurgh.vpf.full-spec.v1
 
 recompute both          node tools/simurgh-attestation/stage5r/node/computeFreezeReceipt.mjs

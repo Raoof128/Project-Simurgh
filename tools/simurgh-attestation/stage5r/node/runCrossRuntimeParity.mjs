@@ -3,7 +3,12 @@
 // Stage 5R — Task 25: the cross-runtime parity driver.
 //
 // Usage:
-//   node tools/simurgh-attestation/stage5r/node/runCrossRuntimeParity.mjs
+//   node tools/simurgh-attestation/stage5r/node/runCrossRuntimeParity.mjs [--write]
+//
+// THE COMMITTED RECEIPT IS WRITTEN ONLY UNDER --write (Annex A1). It is a signed release-surface
+// member and names the browser binary of the host that produced it, so a reproduce run on any other
+// host that rewrote it changed signed bytes (audit E-5). Without the flag every evaluator still runs
+// and the exit code is unchanged; nothing is written.
 //
 // FOUR evaluators, and the first is what makes the others mean anything:
 //
@@ -47,7 +52,8 @@ const BROWSERS = [
 ];
 
 /** @returns {number} exit code */
-export async function main() {
+export async function main(argv = process.argv.slice(2)) {
+  const write = argv.includes("--write");
   const manifest = buildManifest();
   const committed = JSON.parse(readFileSync(join(REPO, MANIFEST), "utf8"));
   if (canonicalJson(manifest) !== canonicalJson(committed)) {
@@ -164,13 +170,15 @@ export async function main() {
       "claim; parity verified with one runtime unmeasured is a false one.",
   };
 
-  const out = join(REPO, OUT);
-  mkdirSync(dirname(out), { recursive: true });
-  writeFileSync(out, `${canonicalJson(receipt)}\n`, "utf8");
+  if (write) {
+    const out = join(REPO, OUT);
+    mkdirSync(dirname(out), { recursive: true });
+    writeFileSync(out, `${canonicalJson(receipt)}\n`, "utf8");
+  }
 
   process.stdout.write(
     [
-      `wrote ${OUT}`,
+      write ? `wrote ${OUT}` : `not written: ${OUT} (only --write regenerates it)`,
       `  node core  ${results.node_core.ok}`,
       `  portable   ${results.portable.ok}`,
       `  python     ${results.python ? results.python.ok : "UNAVAILABLE"}`,

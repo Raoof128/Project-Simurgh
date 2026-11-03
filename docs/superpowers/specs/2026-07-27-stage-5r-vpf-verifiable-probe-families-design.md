@@ -1240,3 +1240,75 @@ frozen_bytes     17472
 The receipt fields are written by the **second** commit and live outside the frozen span, which is
 what makes recording them possible at all: were they inside §§2–5, writing the digest down would
 change the thing the digest describes. A test asserts that property directly rather than trusting it.
+
+---
+
+## Annex A1 — the parity receipt is written only on request (post-freeze, 2026-11-03)
+
+### A1.1 The defect
+
+`tools/simurgh-attestation/stage5r/node/runCrossRuntimeParity.mjs` writes
+`docs/research/llm-shield/evidence/stage-5r/parity/cross-runtime-parity.json` on every run, and the
+reproduce script runs it before the unit tests. The receipt records `browser_binary`, the first
+browser found on the host that ran it, and the committed copy names the authoring Mac's Chrome. On
+any host without that path the run rewrites a release-surface member (`parity_output_root`) with
+other bytes, and the unit test _the committed surface and signature verify, members first_ then
+refuses the signed surface.
+
+On `main` at `30fe9e4b` the Quality Gate failed in exactly this way (run `41167174560`): committed
+`89a4adf0…`, rebuilt `8ada8d33…`, and the only difference was `browser_binary`, which read
+`chromium`. The CI dirty-tree check failed beside it. The defect is as old as the driver. Two masks
+hid it until the 31 October audit repairs removed them: an `&& echo` after the unit tests, and no
+dirty-tree check in `scripts/check-e2e.sh`. Audit finding **E-5** recorded the overwrite as disclosed
+and stage-owned.
+
+### A1.2 The amendment
+
+The driver writes the committed receipt only when it is invoked with `--write`. Without the flag it
+runs all four evaluators, prints the same summary, returns the same exit code (non-zero unless
+two-runtime parity holds) and writes nothing. No reproduce path passes `--write`. The receipt is
+signed historical evidence, so regenerating it stays outside every reproduce path.
+
+This follows the in-repo precedent: Stage 5Q's parity driver writes its receipt only under
+`--write`, and its reproduce script never passes the flag.
+
+### A1.3 The exact surface
+
+Exhaustive. A path absent here is not authorised by this annex, and an operation not listed is not
+authorised on a path that is listed.
+
+| Path                                                                    | Operation | Purpose                                                                                       | Finding                |
+| ----------------------------------------------------------------------- | --------- | --------------------------------------------------------------------------------------------- | ---------------------- |
+| `tools/simurgh-attestation/stage5r/node/runCrossRuntimeParity.mjs`      | modify    | write the receipt only under `--write`                                                        | E-5; run `41167174560` |
+| `tests/unit/llmShield/stage5r/parityReceiptWrite.test.js`               | add       | a bare run leaves the receipt's bytes and mtime untouched; no reproduce path passes `--write` | E-5; run `41167174560` |
+| `docs/superpowers/plans/2026-07-27-stage-5r-vpf-implementation-plan.md` | modify    | re-pin `full_spec_digest` over this annex                                                     | the amendment pin      |
+| this spec                                                               | modify    | this annex, after the freeze block                                                            | E-5                    |
+
+§§2–5 stay byte-identical and the freeze digest `64fe8e76…` does not move. The reproduce script,
+`scripts/check-e2e.sh`, `.github/workflows/stage-5r-checks.yml`, the committed receipt, the release
+surface, its signature, the attestation and the instrument lock are not touched.
+
+### A1.4 Lifecycle declaration for the amended behaviour
+
+```text
+active_phase                   post-release maintenance of Stage 5R
+protected_surface              the committed parity receipt, release-surface member parity_output_root
+next_phase_behaviour           none: only 5R-owned paths change, and no other stage's branch is judged
+maintenance_behaviour          any further change to the driver's write behaviour needs a later numbered annex
+sunset_or_migration_condition  a versioned, host-neutral successor receipt re-signed by the owner
+anti_vacuity_condition         the unit test spawns the driver and fails if the receipt's mtime moves;
+                               on 30fe9e4b it failed with "the driver wrote the committed receipt"
+```
+
+### A1.5 What this annex does not do
+
+- It does not change the browser semantics. A missing or failing browser still records three-runtime
+  parity as false, and the run still returns zero when two-runtime parity holds. That is the other
+  half of E-5, unchanged and still disclosed.
+- It does not make the receipt host-neutral. The committed copy still names the authoring host's
+  browser, which is why it must never be rewritten by a reproduce run.
+- `verifyTransition.mjs` also writes a tracked file (`transition/baseline.json`). It is deterministic
+  and not signed-bound today, and this annex does not change it.
+
+**Authority.** The owner's instruction of 3 November 2026 to proceed with every repair that can be
+made. The commit carrying this annex is a strict ancestor of the commit performing the repair.
