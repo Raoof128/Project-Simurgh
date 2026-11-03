@@ -85,3 +85,12 @@ jobs:
           python -c "import json; r = json.load(open('receipt-19e.json')); assert r['capture_status'] == 'not_run' and r['model_inference'] is False, r; print('19e instrument verified; capture not run')"
           python -B tools/assurance-provenance/evidence19g.py verify docs/research/provenance-phase-19g/evidence.zip --expected-root "$(cat docs/research/provenance-phase-19g/ROOT.sha256)" > receipt-19g.json
           python -c "import json; r = json.load(open('receipt-19g.json')); assert r['in_flight_reported_as'] == 'unknown' and r['incident']['claimed_prevented'] == 0, r; print('19g drill verified')"
+      - name: Retain the Phase 19 receipts
+        # P19-CI02: keep the receipts this runner produced; no run scalar, so the census measures no new step.
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: phase-19-receipts
+          path: receipt-19*.json
+          if-no-files-found: warn
+          retention-days: 90
