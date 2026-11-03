@@ -33,11 +33,19 @@ deployers responsible for (D-16); it is produced here without any lab's cooperat
 
 Compared: each step's named outcome fields (verdicts, latch and acknowledgement flags, the in-flight
 status, both intervals) and the record's seven count and telemetry fields. Reported, not compared:
-snapshot digests (they depend on the sqlite build) and the context-event payloads. Mutations rejected:
-a dropped step (`step_inventory`), a relabelled plant verdict (`step_mismatch:plant`), a claimed
-prevention (`incident_prevention_claimed`), a plant marked as landed (`plant_landed`), an edited count
-(`incident_count_mismatch:unknown`), a sidecar edited alone (`sidecar_member_mismatch`), plus
+snapshot digest values (they depend on the sqlite build) and the context-event payloads. The
+record must still name every snapshot the fresh drill takes, each value a sha256 hex string.
+Mutations rejected: a dropped step (`step_inventory`), a relabelled plant verdict
+(`step_mismatch:plant`), a claimed prevention (`incident_prevention_claimed`), a plant marked as
+landed (`plant_landed`), an edited count (`incident_count_mismatch:unknown`), a dropped snapshot
+digest (`incident_digest_inventory`), a sidecar edited alone (`sidecar_member_mismatch`), plus
 `protocol_binding`, `source_binding:<path>` and a wrong root.
+
+The first hosted run refused the pack committed at `9d1ae938` (root `6e534e5c…`) with
+`incident_digest_mismatch`: the verifier then compared the digest values the protocol declares
+reported, and the Linux runner's sqlite writes different file bytes. The repair and this pack were
+made under P19-REPAIR01 in [the declaration](../PROVENANCE_PHASE_19.md); the steps, counts and
+intervals are unchanged.
 
 ## 4. The documents
 
