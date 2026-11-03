@@ -93,6 +93,24 @@ authorises changing those two assertions to monotone bounds (floor at least 39; 
 least the floor; the gate must still report zero escape hatches and all type-check) and nothing else in
 that file. This declaration commit must be a strict ancestor of that edit.
 
+**P19-REPAIR01 (bounded repair authority for the 19g verifier).** The first hosted run of the
+workflow (run `41306753664`, `ubuntu-latest`, Python 3.12, commit `e58f9688`) verified the 19a pack
+with the frozen Phase 17 replay chained and the 19b, 19c, 19d and 19e packs, and refused the 19g
+pack with `incident_digest_mismatch`. Cause: `incident19.verify_record` compared the record's
+`evidence_digests` values with a fresh drill's, although the 19g protocol, results and receipt
+declare snapshot digests reported, not compared. The values are sha256 of sqlite file bytes and
+sqlite writes its library version into every file header, so they agree only on the sqlite build
+that produced the pack (reproduced on the authoring Mac with Python 3.12.4 and sqlite 3.45.3). This
+declaration authorises, and nothing else: in `tools/assurance-provenance/incident19.py`, replacing
+that value comparison with an inventory check (the fresh drill's snapshot names, each value a sha256
+hex string; reason `digest_inventory`); the matching tests in `tests/test_incident19.py` and
+`tests/test_evidence19g.py`, including a cross-build regression; regenerating the 19g pack
+(`protocol.json`, `report.json`, `incident-record.json`, `receipt.json`, `evidence.zip`,
+`ROOT.sha256`) from the commit that carries the fix; the verifier paragraph of the 19g results; and
+re-rendering the 19f handoff from the regenerated receipt. The refused pack (root `6e534e5c…`)
+stays in history at `9d1ae938`. No other pinned source, no frozen file and no workflow step
+changes. This declaration commit must be a strict ancestor of the repair.
+
 | Field                         | Declaration                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | active_phase                  | Phase 19a projection verifier (19b–19g declared)                                                                    |
