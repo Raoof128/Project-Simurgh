@@ -17,10 +17,11 @@ import { pathToFileURL, fileURLToPath } from "node:url";
 
 import { GATE_REASONS, auditCorpus } from "./lib/leanProofGate.mjs";
 
+// Raised from 39 to 40 in Phase 19, in the task that ADDS proofs/phase19/AuthorityProvenance.lean.
 // Raised from 38 to 39 in Stage 5S, in the task that ADDS the proof (§13, B12). Without the bump,
 // deleting 5S's only proof later returns the repository to 38, the count guard stays green, and
 // directory coverage silently loses a whole directory.
-const DEFAULT_FLOOR = 39;
+const DEFAULT_FLOOR = 40;
 
 // The axiom sweep, appended to a scratch copy of each proof. Text can be hidden from a regex
 // (audit E-1: `private axiom`, a macro expanding to `sorryAx`); the kernel's own axiom census

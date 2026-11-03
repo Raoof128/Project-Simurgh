@@ -124,14 +124,22 @@ test("[5s-t26] the repo floor was raised to 39 IN this task", () => {
   const gate = readFileSync(GATE, "utf8");
   const floor = /const DEFAULT_FLOOR = (\d+);/.exec(gate);
   assert.ok(floor, "the gate declares no floor");
-  assert.equal(Number(floor[1]), 39, "the floor was not raised alongside the proof");
+  // A monotone bound, not an exact count (P19-LEAN01; gate-lifecycle.md "pin sets, not counts"):
+  // 5S raised the floor to 39 and every later task that adds a proof raises it further.
+  assert.ok(Number(floor[1]) >= 39, "the floor was lowered below the 5S value");
 });
 
 test("[5s-t26] the repo-wide gate passes, and counts this directory", { skip: NO_LEAN }, () => {
   const out = execFileSync(process.execPath, [GATE], { encoding: "utf8" });
   assert.match(out, /0 escape hatches/);
   assert.match(out, /all type-check/);
-  assert.match(out, /39 Lean proof\(s\)/);
+  const counted = /(\d+) Lean proof\(s\) discovered under proofs\/ \(floor (\d+)\)/.exec(out);
+  assert.ok(counted, "the gate did not report a discovered count and a floor");
+  assert.ok(Number(counted[2]) >= 39, "the floor reported by the gate fell below 39");
+  assert.ok(
+    Number(counted[1]) >= Number(counted[2]),
+    "the gate counted fewer proofs than its floor"
+  );
 });
 
 test("[5s-t26] the skip above is not a hole — a CI job installs the toolchain AND runs the gate", () => {

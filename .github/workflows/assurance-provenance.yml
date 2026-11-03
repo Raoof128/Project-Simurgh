@@ -1,0 +1,96 @@
+name: Assurance provenance (Phase 19)
+
+# Phase 19 lanes over the unpinned successor and the forked receiver, plus the Linux x86_64
+# replay chain the 19a receipt could not run on the authoring host. Paths are scoped to the
+# namespace and its evidence (P19-CI01); the Stage 5Q census pins every step of this file.
+
+on:
+  push:
+    paths:
+      - ".github/workflows/assurance-provenance.yml"
+      - "tools/assurance-provenance/**"
+      - "tools/assurance-composed-successor/**"
+      - "proofs/phase19/**"
+      - "docs/research/provenance-phase-19a/**"
+      - "docs/research/provenance-phase-19b/**"
+      - "docs/research/provenance-phase-19c/**"
+      - "docs/research/provenance-phase-19d/**"
+      - "docs/research/provenance-phase-19e/**"
+      - "docs/research/provenance-phase-19g/**"
+  pull_request:
+    paths:
+      - ".github/workflows/assurance-provenance.yml"
+      - "tools/assurance-provenance/**"
+      - "tools/assurance-composed-successor/**"
+      - "proofs/phase19/**"
+      - "docs/research/provenance-phase-19a/**"
+      - "docs/research/provenance-phase-19b/**"
+      - "docs/research/provenance-phase-19c/**"
+      - "docs/research/provenance-phase-19d/**"
+      - "docs/research/provenance-phase-19e/**"
+      - "docs/research/provenance-phase-19g/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  provenance-lanes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+      - name: Install elan (pinned toolchain from proofs/phase19/lean-toolchain)
+        run: |
+          curl -sSfL -o "$RUNNER_TEMP/elan.tar.gz" https://github.com/leanprover/elan/releases/download/v4.2.4/elan-x86_64-unknown-linux-gnu.tar.gz
+          echo "42b94d4244e8353142c456ec0e4ca6528fd898a6c604d4059f494e706e431f63  $RUNNER_TEMP/elan.tar.gz" | sha256sum -c -
+          tar xzf "$RUNNER_TEMP/elan.tar.gz"
+          ./elan-init -y --default-toolchain "$(cat proofs/phase19/lean-toolchain)"
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Install the hash-locked replay dependencies and preflight the host
+        run: |
+          python -m pip install --require-hashes --only-binary=:all: -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock
+          python -m pip check
+          python -B tools/replay-preflight/preflight.py
+      - name: Validate Phase 19 lanes (projection, write-anywhere, approval, outage, receiver, Lean differential)
+        run: python -m unittest discover -s tools/assurance-provenance/tests -v
+      - name: Verify the Phase 19a pack and chain the frozen Phase 17 replay through it
+        run: |
+          python -B tools/assurance-provenance/evidence.py verify docs/research/provenance-phase-19a/evidence.zip --expected-root "$(cat docs/research/provenance-phase-19a/ROOT.sha256)" --replay > receipt-19a.json
+          python -c "import json; r = json.load(open('receipt-19a.json')); assert r['replay']['result'] == 'verified', r; print('19a verified with the frozen replay chained')"
+      - name: Verify the Phase 19b and 19c packs
+        run: |
+          python -B tools/assurance-provenance/evidence19b.py verify docs/research/provenance-phase-19b/evidence.zip --expected-root "$(cat docs/research/provenance-phase-19b/ROOT.sha256)" > receipt-19b.json
+          python -c "import json; r = json.load(open('receipt-19b.json')); assert r['phase_19b_closed'] is True, r; print('19b verified, closed')"
+          python -B tools/assurance-provenance/evidence19c.py verify docs/research/provenance-phase-19c/evidence.zip --expected-root "$(cat docs/research/provenance-phase-19c/ROOT.sha256)" > receipt-19c.json
+          python -c "import json; r = json.load(open('receipt-19c.json')); assert r['new_reasons'] == 8, r; print('19c verified')"
+      - name: Run the Phase 19d namespace egress lane and verify its pack (user namespaces via sudo)
+        run: |
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 >/dev/null 2>&1 || true
+          sudo -E env "PATH=$PATH" python -B tools/assurance-provenance/evidence19d.py verify docs/research/provenance-phase-19d/evidence.zip --expected-root "$(cat docs/research/provenance-phase-19d/ROOT.sha256)" > receipt-19d.json
+          python -c "import json; r = json.load(open('receipt-19d.json')); assert r['all_hold'] is True and r['routes_in_fresh_namespace'] == [], r; print('19d verified in a namespace')"
+      - name: Verify the Phase 19e instrument pack and the Phase 19g drill pack
+        run: |
+          python -B tools/assurance-provenance/evidence19e.py verify docs/research/provenance-phase-19e/evidence.zip --expected-root "$(cat docs/research/provenance-phase-19e/ROOT.sha256)" > receipt-19e.json
+          python -c "import json; r = json.load(open('receipt-19e.json')); assert r['capture_status'] == 'not_run' and r['model_inference'] is False, r; print('19e instrument verified; capture not run')"
+          python -B tools/assurance-provenance/evidence19g.py verify docs/research/provenance-phase-19g/evidence.zip --expected-root "$(cat docs/research/provenance-phase-19g/ROOT.sha256)" > receipt-19g.json
+          python -c "import json; r = json.load(open('receipt-19g.json')); assert r['in_flight_reported_as'] == 'unknown' and r['incident']['claimed_prevented'] == 0, r; print('19g drill verified')"
+      - name: Retain the Phase 19 receipts
+        # P19-CI02: keep the receipts this runner produced; no run scalar, so the census measures no new step.
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: phase-19-receipts
+          path: receipt-19*.json
+          if-no-files-found: warn
+          retention-days: 90
