@@ -128,6 +128,74 @@ the commit that carries the fix; the probe paragraph of the 19d results; and re-
 handoff from the regenerated receipt. Until it is exercised, the suite on a host without `python` on
 `PATH` fails that one test, and this ledger says so.
 
+**P19-REPAIR03 (bounded repair authority after the 8 Nov 2026 strict audit; declared before any
+repair commit).** A six-lane line-by-line audit of Phase 19 on `main` at `47fbd6b6` (report retained
+with the session; findings reproduced by the lead before inclusion) found three blocking and twelve
+major defects. This declaration authorises, and nothing else, the following, each with a reproducing
+test written first:
+
+1. `gate19.py`: `dispatch_approved` re-runs the frozen admission (`Session.authority`, actor active,
+   source match, checkpoint, configured-action equality) and replaces only the grant-set term; the
+   token payload gains `actor` and `verify` gains `approval_actor`; every decode and arithmetic error
+   in `verify`, `approval_from_tool_result` and `ack_renewal` is a schema refusal, never an exception;
+   `approved_decision` spends the nonce it approves; relayed bodies are length-capped.
+2. `provenance.py`, `lane.py`: an approval-admitted dispatch emits an `operator_signed_approval`
+   input naming the token digest; `decision_id` is unique per lane; `verify_records` raises
+   `ValueError` only; `impl_hash` covers `gate19.py`, `rig.py` and `lane.py`.
+3. `evidence19b.py`: `closed_by` gains floors (at least 13 mutants, at least 7 forgeries, at least 4
+   wired channels) and `lean_differential_passed_on_this_host`; the receipt reports the verifying
+   host's Lean result and the enumeration count as measured; `states_compared` is computed.
+4. `receiver19.py`, `lanes19c.py`: `canonical` keeps case for paths; the effect payload carries the
+   canonical resource; the holder-proof helper returns `None` on mismatch and `send` refuses; the
+   route corpus gains alias rows of a granted resource and an identity-canonical ablation that must
+   fail; the strawman sentence is corrected in the results.
+5. `egress19.py`, `lanes19d.py`: the proxy's role comes from the socket it serves, never from the
+   request; every exception in `_serve` is a `malformed` decision with a log line and a recv
+   timeout; methods are allow-listed; `canonical_url` keeps IPv6 brackets and decodes to a fixed
+   point; `covert_probe` runs under `sys.executable` and a non-zero exit fails the lane
+   (P19-REPAIR02 is exercised here); a reachable-Unix-socket probe is added and reported, not
+   compared.
+6. `evidence19d.py`, `evidence19e.py`, `evidence19g.py`: every receipt field derives from the
+   verifying host's recomputation (`actual`), never from the saved report; `compare` binds the whole
+   report after normalising only the fields each results file names as host-dependent; the 19d
+   receipt gains `unix_sockets_reachable` (reported); the 19e compare binds the spend declaration,
+   models, cap, stop rule and informed-attacker digests; the 19g compare binds every step field
+   except the snapshot digest values.
+7. `drill19.py`, `incident19.py`: the interval fields are renamed `*_logical_steps` and described
+   as scripted sequencing checks; the third verdict is read from the stop step; the record's
+   description says "from the drill's dispatch verdicts and the receiver's effect count".
+8. `capture19.py`: the framing note moves to the system role; the awareness rule matches whole
+   words and excludes the framing text; the Llama note reads 22 of 24; temperature and seed are
+   declared.
+9. `handoff19.py`: `check` flags unexpected fields; the handoff states the venv, preflight,
+   namespace-host and Lean recipes and the comparator's limits.
+10. `projection.py` is pinned by every pack. The Lean model gains an approval input and a `held`
+    enumeration; the differential passes tokens.
+11. `.github/workflows/assurance-provenance.yml`: the user-namespace sysctl runs before the unit
+    tests; path filters gain every pinned dependency; the Stage 5Q census is re-pinned by set in
+    the same commit for any new step identity.
+12. Regenerating the 19b, 19c, 19e and 19g packs on the authoring host and the 19d pack on a
+    namespace host from the commit that carries the fixes; re-rendering the 19f handoff; the
+    results, README, deployer profile and evaluator kit sentences the audit listed as false; the
+    hosted README's corroboration sentence; and the IOU settlement below.
+
+Write scope additionally includes `docs/research/provenance-phase-19-hosted/**`, and the
+`.prettierignore` entries are P19-FORMAT01 to 08. No frozen file changes. This declaration commit
+must be a strict ancestor of every repair commit.
+
+**IOU settlement (8 Nov 2026).** The design minted ten IOUs; this ledger had named three. Status of
+each: `IOU-19-LEAN` and `IOU-19-REFINEMENT` paid in 19b (`06d499f4`: model, differential) with the
+closure dependence added under REPAIR03; `IOU-19-NETNS` paid in 19d (`decdf0f6`: launcher);
+`IOU-19-DRILL` paid in 19g (`e8bff1ed`: a recomputable drill, exceeding the design's "attested");
+`IOU-19-CANARY` (second-operator canary) folded into `IOU-19-OPERATOR`, owed; `IOU-19-GPTOSS` folded
+into `IOU-19-SPEND`, owed; `IOU-19-JUDGE-LEDGER` owed to a separate stage, not Phase 19;
+`IOU-19-SPEND`, `IOU-19-OPERATOR`, `IOU-19-KIT` owed as before. P19-CI01's "single commit" was
+exceeded: `current` changed in `25839d5e`, `decdf0f6` and `5b7382d1`; the two later changes were
+ruled after the fact and are recorded here as an overrun, not a widening. Authorship: every Phase 19
+commit was co-authored by a model agent (Claude Opus 5.5 or Claude Mythos 5.1) under the owner's
+instruction; the four gauntlet reviews were model reviews; no human outside the owner has read the
+work.
+
 **P19-CI02 (receipt retention).** The workflow writes each phase's receipt on the runner and
 discards it, so the first hosted run's 19a `--replay` outcome survives only as one printed
 assertion line in the job log. This declaration authorises one named step at the end of
