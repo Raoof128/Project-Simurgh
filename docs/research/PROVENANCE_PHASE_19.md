@@ -111,6 +111,23 @@ re-rendering the 19f handoff from the regenerated receipt. The refused pack (roo
 stays in history at `9d1ae938`. No other pinned source, no frozen file and no workflow step
 changes. This declaration commit must be a strict ancestor of the repair.
 
+**P19-REPAIR02 (bounded repair authority for the 19d covert probe; declared 8 Nov 2026, owed, not
+yet exercised).** The replay on `portfolio-droplet` (Ubuntu 24.04.3, x86_64, CPython 3.12.3, commit
+`6a10a4b9`) verified every pack and failed one suite test,
+`test_lanes19d.Lanes19dTests.test_covert_probe_reported_not_closed`, with `0 not greater than 0`.
+Cause, confirmed by running the probe alone on that host: `lanes19d.covert_probe` runs `python -c`
+inside the
+namespace while every other 19d worker runs `sys.executable`; stock Ubuntu ships `python3` only, so
+`unshare` exits 127 (`failed to execute python`), the file is never written and the probe reports
+`bytes_delivered: 0` with the exit code discarded. The 19d `verify` passed because the probe is
+reported, not compared (results §3), so the receipt stands and the hidden assumption is the lane's.
+This declaration authorises, and nothing else: in `tools/assurance-provenance/lanes19d.py`, running
+the probe under `sys.executable` and raising on a non-zero exit (reason `covert_probe_failed`); a test
+for that failure path in `tests/test_lanes19d.py`; regenerating the 19d pack on a namespace host from
+the commit that carries the fix; the probe paragraph of the 19d results; and re-rendering the 19f
+handoff from the regenerated receipt. Until it is exercised, the suite on a host without `python` on
+`PATH` fails that one test, and this ledger says so.
+
 **P19-CI02 (receipt retention).** The workflow writes each phase's receipt on the runner and
 discards it, so the first hosted run's 19a `--replay` outcome survives only as one printed
 assertion line in the job log. This declaration authorises one named step at the end of
@@ -208,3 +225,17 @@ not pay `IOU-19-OPERATOR`. This declaration commit must be a strict ancestor of 
   `--write`) merged to `main` at `ccd50943` with a green hosted gate; `main` merged into this branch
   at `1ea82c8f` without conflict (four Stage 5R files only; 391 Stage 5R unit tests pass locally).
   PR #149 is re-checked on that head. `IOU-19-SPEND`, `IOU-19-OPERATOR` and `IOU-19-KIT` are unchanged.
+- Ruling (8 Nov 2026, second host): with PR #149 merged (`937ec70b`), the six packs were replayed
+  on `portfolio-droplet`, the owner's own virtual machine (Ubuntu 24.04.3, x86_64, 2 vCPU, 2 GB,
+  CPython 3.12.3, SQLite 3.45.1), from a fresh clone of `6a10a4b9` with the hash-locked dependency
+  set in a venv and `replay-preflight` passing. All six verified; 19a with the frozen Phase 17 chain
+  replayed (`frozen_replay_chained`, `replay.result: verified`); `handoff19.py check` reports no
+  discrepancy for any of them, and each differs from its hosted counterpart only in `tree_state`.
+  The receipts are committed byte for byte in `provenance-phase-19-hosted/droplet-portfolio-2026-11-08/`.
+  The host is the project's and the session that drove it was the project's agent with the
+  project's key, so this is a second project-operated host, a third machine class beside the hosted
+  runner and the authoring Mac (bare VM, root, namespaces without `sudo`, no Docker, no Lean). It
+  does not pay `IOU-19-OPERATOR`, and `IOU-19-SPEND` and `IOU-19-KIT` are unchanged. The lane suite
+  on that host: 139 tests, 3 skipped (no Lean toolchain; the two off-host refusal tests), one
+  failure, `test_lanes19d.Lanes19dTests.test_covert_probe_reported_not_closed`, whose cause was
+  confirmed on the host and whose bounded repair is declared as P19-REPAIR02 and owed.

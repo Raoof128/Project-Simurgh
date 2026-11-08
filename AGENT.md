@@ -14,6 +14,37 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-08 (Australia/Sydney) — Phase 19: packs replayed on the owner's droplet (second project host)
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/droplet-replay-receipts` off `main` (`937ec70b`). Six replay receipts
+  from `portfolio-droplet` committed unchanged under
+  `docs/research/provenance-phase-19-hosted/droplet-portfolio-2026-11-08/`, a section in that
+  directory's README, one ledger ruling, both logs. No source, evidence pack, workflow or frozen file
+  changed; the Stage 5Q census `current` is unchanged. No version bump.
+- **Summary:** the owner asked for the replay on their own droplet and, on 8 Nov, ruled that the
+  Sentinel `portfolio-droplet-root` key may drive that one box with plain `ssh` for project jobs
+  (recipe: `sentinel-ssh` skill §7). A fresh clone of `6a10a4b9` with the hash-locked dependency set
+  in a venv verified every pack, 19a with the frozen Phase 17 chain replayed; the 19f comparator
+  reports no discrepancy for any receipt, and each differs from the hosted receipt only in
+  `tree_state`. The ledger records it as a second project-operated host: a third machine class (bare
+  VM, root, namespaces without `sudo`, no Docker, no Lean) and not custody, so `IOU-19-OPERATOR`
+  stays owed. The lane suite there: 139 tests, 3 skipped, one failure, `test_lanes19d.Lanes19dTests.test_covert_probe_reported_not_closed`: the probe hardcodes
+  `python`, which stock Ubuntu lacks, and discards the exit code, so it reports zero bytes; `verify`
+  passed because the probe is reported, not compared. `lanes19d.py` is pinned by the 19d protocol,
+  so the fix needs a pack regeneration and is declared as P19-REPAIR02, owed, not done here.
+- **Files changed:** the six `receipt-19*.json`, `docs/research/provenance-phase-19-hosted/README.md`,
+  `docs/research/PROVENANCE_PHASE_19.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** on the host, `pip check` clean, `replay-preflight` passed, six `verify` runs and
+  six `handoff19.py check` runs with `[]`; locally, `handoff19.py check` on the committed copies (six
+  `[]`), sha256 of each copy equal to the host's `sha256sum`, `scripts/check.sh` (result in the PR).
+- **Follow-ups:** exercise P19-REPAIR02 (probe under `sys.executable`, fail on non-zero exit, regenerate
+  the 19d pack on a namespace host, re-render the 19f handoff). The three IOUs still need people: `IOU-19-SPEND` (owner's authorisation),
+  `IOU-19-OPERATOR` (a classmate's replay through the 19f handoff), `IOU-19-KIT` (an evaluator reads the
+  kit). `/root/simurgh-replay` (368 MB) and the receipts directory were left on the droplet for a
+  re-check and can be removed.
+
 ### 2026-11-08 (Australia/Sydney) — Phase 19: PR #148 merged, main merged into the branch
 
 **Raouf:**
