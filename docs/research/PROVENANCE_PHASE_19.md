@@ -319,7 +319,7 @@ not pay `IOU-19-OPERATOR`. This declaration commit must be a strict ancestor of 
   The proxy's role is the socket's, hostile lines are `malformed` decisions, methods are
   allow-listed; the 19d lane probes filesystem Unix sockets. The 19d, 19e and 19g receipts derive
   from the verifying host and their comparisons bind the whole report minus the named
-  host-dependent fields. Packs regenerated: 19b root `b1b60458…` (tree `d7b37242`), 19c
+  host-dependent fields. Packs regenerated: 19b root `ac086a43…` (tree `11d0dae1`), 19c
   `dd0fb73b…` (212f34e6), 19d `aa44eb45…` (d7b37242, produced on
   `portfolio-droplet`: eleven cases hold, covert probe 262,144 bytes, five daemon sockets reachable
   from inside the namespace and reported), 19e `cd74f489…` (212f34e6), 19g

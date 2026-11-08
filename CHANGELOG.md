@@ -16,7 +16,7 @@
   (96 states, with host approvals); the receiver keeps path case and records the canonical resource;
   the proxy's role is the socket's and hostile lines are decisions; the 19d lane measures and reports
   reachable daemon sockets; the drill's intervals are named as scripted steps and the record's counts
-  derive from verdicts. Packs: 19b `b1b60458…`, 19c `dd0fb73b…`, 19d `aa44eb45…` (droplet),
+  derive from verdicts. Packs: 19b `ac086a43…`, 19c `dd0fb73b…`, 19d `aa44eb45…` (droplet),
   19e `cd74f489…`, 19g `b8d68621…`. The 2026 lab gap hunt proposes G34–G38.
 - **Files changed:** as above.
 - **Verification:** lane tests green on the Mac and (19d) on the droplet; Lean proofs and differential

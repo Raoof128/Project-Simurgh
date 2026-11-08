@@ -84,7 +84,7 @@ python -B tools/assurance-provenance/evidence19b.py verify \
   --expected-root "$(cat docs/research/provenance-phase-19b/ROOT.sha256)"
 ```
 
-Expected root: `b1b6045830bf2de42c8827cff74d5133795733a2fcfc52a3ede43ded425a93bf`.
+Expected root: `ac086a4379f37bd4177328080bd9c49a23d17ac705c7b7209d2c0fe250c8d404`.
 
 Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay` are not compared):
 
@@ -111,7 +111,7 @@ Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay`
     "states_compared": 96,
     "type_checked_on_this_host": true
   },
-  "manifest_sha256": "b1b6045830bf2de42c8827cff74d5133795733a2fcfc52a3ede43ded425a93bf",
+  "manifest_sha256": "ac086a4379f37bd4177328080bd9c49a23d17ac705c7b7209d2c0fe250c8d404",
   "model_inference": false,
   "mutants_total": 13,
   "phase_19b_closed": true,

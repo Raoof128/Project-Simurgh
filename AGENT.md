@@ -37,7 +37,7 @@ one machine's local agent configuration:
   All of it is repaired under the declaration, test-first, and the results files now say what the code
   does. The 2026 gap hunt mapped 25 lab needs (5 covered under scope, 11 partial, 6 not covered, 3 not
   ours), proposed G34–G38 and listed twelve 2026 lab pages not yet in Zurvan.
-- **Files changed:** see scope; packs: 19b `b1b60458…`, 19c `dd0fb73b…`, 19d `aa44eb45…`
+- **Files changed:** see scope; packs: 19b `ac086a43…`, 19c `dd0fb73b…`, 19d `aa44eb45…`
   (droplet), 19e `cd74f489…`, 19g `b8d68621…`.
 - **Verification:** every lane test file green on the authoring Mac (namespace tests skip there) and
   the 19d files green on the droplet with namespaces; Lean type-checks (`check-lean-proofs.mjs` 40
