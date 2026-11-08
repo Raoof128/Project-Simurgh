@@ -196,6 +196,32 @@ commit was co-authored by a model agent (Claude Opus 5.5 or Claude Mythos 5.1) u
 instruction; the four gauntlet reviews were model reviews; no human outside the owner has read the
 work.
 
+**P19-REPAIR04 (bounded authority for the two machine-closable items the 8 Nov 2026 audit left open;
+declared before any repair commit).** After P19-REPAIR03 the ledger said two things were measured but
+not closed by any machine: the 19d namespace confined IP routing only (the Docker engine and
+systemd-resolved were reachable over filesystem Unix sockets from inside it on a stock Ubuntu host),
+and the hosted workflow read the expected pack roots from the same checkout it verified. This
+declaration authorises, and nothing else:
+
+1. `egress19.py`: the worker launch adds mount, PID and IPC namespaces, mounts a private `tmpfs`
+   over `/run` and `/dev/shm` before the worker starts, and drops every capability except
+   `CAP_NET_ADMIN` (the live-reader control brings loopback up); `can_namespace` is true only where
+   that whole launch works. The work directory stays shared by design (the measured covert channel).
+2. `lanes19d.py`, `evidence19d.py`: the socket probe's `eliminated` follows what it measured and
+   names its residual (sockets elsewhere on the shared filesystem); the namespace description and
+   the non-claims say what is now hidden and what is not; a test inside the namespace asserts PID 1,
+   empty `/run` and `/dev/shm`, and the single capability.
+3. `.github/workflows/assurance-provenance.yml`: one step compares each committed `ROOT.sha256`
+   with the repository variable `PHASE19_ROOTS` (set outside any pull request by the owner's
+   account) and fails on a mismatch or an unset variable; the Stage 5Q census is re-pinned by set in
+   the same commit if the step is a problem gate.
+4. Regenerating the 19d pack on a namespace host from the commit that carries the fix; the 19d
+   results, README and the deployer profile; re-rendering the 19f handoff; the hosted README; this
+   ledger's ruling; both logs.
+
+Not authorised: seccomp, a minimal root filesystem, hiding the work directory, or any change to
+another lane's source. This declaration commit must be a strict ancestor of every repair commit.
+
 **P19-CI02 (receipt retention).** The workflow writes each phase's receipt on the runner and
 discards it, so the first hosted run's 19a `--replay` outcome survives only as one printed
 assertion line in the job log. This declaration authorises one named step at the end of
