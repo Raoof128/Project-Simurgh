@@ -1,8 +1,10 @@
 """Phase 19d: namespace launcher, parent-owned proxy and network-layer canary (design §4.4).
 
-Linux only. The worker runs under ``unshare --user --map-root-user --net`` and so has loopback
-only; its one sanctioned route is the parent's proxy over a Unix socket, which the filesystem
-carries across namespaces and TCP does not. The proxy canonicalises the destination, follows
+Linux only. The worker runs under ``unshare --user --map-root-user --net --mount --pid --fork
+--ipc`` with a private tmpfs over ``/run`` and ``/dev/shm`` and every capability but
+``CAP_NET_ADMIN`` dropped (P19-REPAIR04), and so has loopback only and no daemon socket in sight;
+its one sanctioned route is the parent's proxy over a Unix socket in the lane's own work directory,
+which the filesystem carries across namespaces and TCP does not. The proxy canonicalises the destination, follows
 redirects itself, applies the parent-owned destination and role allowlists, and forwards only to
 the owned receiver on the parent's loopback. The canary is the namespace's own kernel counters
 (``/proc/<pid>/net/snmp``) read before and after a case, beside the proxy's decision log.
@@ -23,7 +25,25 @@ import urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-UNSHARE = ["unshare", "--user", "--map-root-user", "--net"]
+UNSHARE = [
+    "unshare",
+    "--user",
+    "--map-root-user",
+    "--net",
+    "--mount",
+    "--pid",
+    "--fork",
+    "--ipc",
+]
+# Inside the namespaces, before the worker starts: hide the runtime socket directories behind a
+# private tmpfs, then drop every capability except CAP_NET_ADMIN (the live-reader control brings
+# loopback up). The work directory stays shared by design: that is the measured covert channel.
+HARDEN = (
+    "mount -t tmpfs -o nosuid,nodev,noexec,size=1m none /run"
+    " && mount -t tmpfs -o nosuid,nodev,noexec,size=1m none /dev/shm"
+    " && exec setpriv --bounding-set=-all,+net_admin --inh-caps=-all,+net_admin"
+    ' --ambient-caps=+net_admin "$@"'
+)
 DECISIONS = (
     "forwarded",
     "forward_failed",
@@ -82,15 +102,14 @@ def decode_request(raw):
 
 
 def can_namespace():
-    if platform.system() != "Linux" or shutil.which("unshare") is None:
+    """True only where the whole hardened launch works: user, net, mount, pid and ipc namespaces,
+    the tmpfs mounts and ``setpriv``."""
+    if platform.system() != "Linux" or not all(
+        shutil.which(t) for t in ("unshare", "setpriv")
+    ):
         return False
     try:
-        return (
-            subprocess.run(
-                [*UNSHARE, "true"], capture_output=True, timeout=10
-            ).returncode
-            == 0
-        )
+        return in_namespace(["true"], timeout=10)[0] == 0
     except (OSError, subprocess.SubprocessError):
         return False
 
@@ -98,7 +117,7 @@ def can_namespace():
 def in_namespace(argv, *, env=None, timeout=60):
     """Run ``argv`` inside a fresh user+net namespace; return (returncode, stdout, stderr)."""
     proc = subprocess.run(
-        [*UNSHARE, *argv],
+        [*UNSHARE, "sh", "-c", HARDEN, "harden", *argv],
         capture_output=True,
         text=True,
         timeout=timeout,

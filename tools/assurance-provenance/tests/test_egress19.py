@@ -194,6 +194,23 @@ class NamespaceTests(unittest.TestCase):
             out["counter_delta"], {k: 0 for k in out["counter_delta"]}, out
         )
 
+    def test_namespace_is_hardened(self):
+        code, out, err = egress19.in_namespace(
+            [
+                "python3",
+                "-c",
+                "import os,json;print(json.dumps({'pid':os.getpid(),'run':os.listdir('/run'),"
+                "'shm':os.listdir('/dev/shm'),'cap':open('/proc/self/status').read()"
+                ".split('CapEff:')[1].split()[0]}))",
+            ]
+        )
+        self.assertEqual(code, 0, err)
+        state = json.loads(out.strip().splitlines()[-1])
+        self.assertEqual(state["pid"], 1)
+        self.assertEqual(state["run"], [])
+        self.assertEqual(state["shm"], [])
+        self.assertEqual(int(state["cap"], 16), 1 << 12)  # CAP_NET_ADMIN only
+
     def test_counter_reader_is_live_inside_the_namespace(self):
         out = egress19.run_worker({"kind": "loopback_probe"})
         self.assertTrue(out["connected"])

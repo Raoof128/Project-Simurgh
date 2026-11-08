@@ -58,7 +58,7 @@ def build_protocol():
     return {
         "schema": PROTOCOL_SCHEMA,
         "arm": "namespace_egress",
-        "namespace": "unshare --user --map-root-user --net; worker reaches the parent only over a Unix socket",
+        "namespace": "unshare --user --map-root-user --net --mount --pid --fork --ipc; tmpfs over /run and /dev/shm; capabilities dropped except CAP_NET_ADMIN; worker reaches the parent only over a Unix socket in the work directory",
         "cases": [c[0] for c in lanes19d.CASES]
         + ["same_destination_other_tool", "mutable_tool_server_destination"],
         "decisions": list(egress19.DECISIONS),
@@ -106,7 +106,7 @@ def build_report(work):
         "non_claims": [
             "one namespace on one host; the canary is per-namespace kernel counters and the proxy log",
             "the covert-channel probe reports a shared-filesystem channel and does not close it",
-            "the namespace confines IP routing only; filesystem Unix sockets to privileged daemons are probed and reported, not closed",
+            "the namespace hides the runtime socket directories and confines IP routing, PIDs and IPC; sockets elsewhere on the shared filesystem are not hidden, and the probe reports only the paths it checked",
             "the second-operator canary is attested, not recomputable",
             "kernel release, timings, the live-reader counter values and the socket-probe results are reported, not compared",
         ],
@@ -128,7 +128,9 @@ def _normalise(report):
     lane["host"] = None
     for row in lane.get("rows") or []:
         if "receiver_port" in row:
-            row["receiver_port"] = None  # the owned receiver binds an ephemeral loopback port
+            row["receiver_port"] = (
+                None  # the owned receiver binds an ephemeral loopback port
+            )
     for key in ("seconds", "bits_per_second_observed"):
         if type(lane.get("covert_probe")) is dict:
             lane["covert_probe"][key] = None

@@ -161,9 +161,9 @@ def run_all(base):
         return {
             "host": host_info(),
             "namespace": {
-                "mode": "unshare --user --map-root-user --net",
+                "mode": "unshare --user --map-root-user --net --mount --pid --fork --ipc; tmpfs over /run and /dev/shm; capabilities dropped except CAP_NET_ADMIN",
                 "routes_in_fresh_namespace": rows[0]["routes"],
-                "confines": "IP routing only; mount, PID and IPC namespaces, capabilities and the filesystem are shared with the parent",
+                "confines": "IP routing, the runtime socket directories, PIDs and IPC; the rest of the filesystem (including the work directory) is shared with the parent by design",
             },
             "rows": rows,
             "all_hold": all(r["holds"] for r in rows),
@@ -238,10 +238,12 @@ def unix_socket_probe(paths=egress19.WELL_KNOWN_SOCKETS):
     if code != 0:
         raise RuntimeError(f"socket_probe_failed:{code}:{err[:200]}")
     results = json.loads(out.strip().splitlines()[-1])
+    reachable = sorted(p for p, v in results.items() if v == "reachable")
     return {
         "checked": list(paths),
         "results": results,
-        "reachable": sorted(p for p, v in results.items() if v == "reachable"),
-        "eliminated": False,
-        "note": "the namespace confines IP routing; a filesystem Unix socket to a privileged daemon is a channel the lane reports and does not close",
+        "reachable": reachable,
+        "eliminated": not reachable,
+        "residual": "sockets outside /run and /dev/shm on the shared filesystem are not hidden; the probe lists what it checked",
+        "note": "the runtime socket directories are hidden behind a private tmpfs inside the namespace (P19-REPAIR04); before it, the Docker engine and systemd-resolved were reachable from inside on a stock Ubuntu host",
     }

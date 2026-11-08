@@ -51,7 +51,8 @@ def _synthetic_lane(host, outsegs, reachable):
             for p in egress19.WELL_KNOWN_SOCKETS
         },
         "reachable": sorted(reachable),
-        "eliminated": False,
+        "eliminated": not reachable,
+        "residual": "fixture",
         "note": "fixture",
     }
     for row in lane["rows"]:
@@ -100,7 +101,9 @@ class CompareAndReceiptTests(unittest.TestCase):
             r["unix_sockets_reachable"],
             ["/run/systemd/resolve/io.systemd.Resolve", "/var/run/docker.sock"],
         )
-        self.assertIs(r["unix_socket_egress_eliminated"], False)
+        self.assertIs(
+            r["unix_socket_egress_eliminated"], False
+        )  # the fixture host exposes two
         self.assertIn("unix_socket_probe.reachable", r["reported_not_compared"])
 
     def test_substantive_differences_are_rejected(self):

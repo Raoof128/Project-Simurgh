@@ -92,6 +92,28 @@ jobs:
           python -c "import sys; sys.path.insert(0, 'tools/assurance-provenance'); import egress19; print('can_namespace:', egress19.can_namespace())"
       - name: Validate Phase 19 lanes (projection, write-anywhere, approval, outage, receiver, Lean differential, namespace)
         run: python -m unittest discover -s tools/assurance-provenance/tests -v
+      - name: Check the committed pack roots against the repository's expected roots
+        # P19-REPAIR04: the roots the verifiers are asked for come from a repository variable set
+        # outside any pull request, so a coordinated PR that regenerates code, pack and root
+        # together no longer passes on its own say-so. Unset or mismatched is a failure.
+        env:
+          PHASE19_ROOTS: ${{ vars.PHASE19_ROOTS }}
+        run: |
+          python - <<'PY'
+          import json, os, pathlib, sys
+          raw = os.environ.get("PHASE19_ROOTS", "")
+          if not raw:
+              sys.exit("PHASE19_ROOTS is not set: the expected roots must come from outside the checkout")
+          expected = json.loads(raw)
+          bad = []
+          for phase in ("19a", "19b", "19c", "19d", "19e", "19g"):
+              committed = pathlib.Path(f"docs/research/provenance-phase-{phase}/ROOT.sha256").read_text().strip()
+              if expected.get(phase) != committed:
+                  bad.append((phase, expected.get(phase), committed))
+          if bad:
+              sys.exit("expected-root mismatch: " + json.dumps(bad))
+          print("expected roots match the committed ROOT.sha256 files for six packs")
+          PY
       - name: Verify the Phase 19a pack and chain the frozen Phase 17 replay through it
         run: |
           python -B tools/assurance-provenance/evidence.py verify docs/research/provenance-phase-19a/evidence.zip --expected-root "$(cat docs/research/provenance-phase-19a/ROOT.sha256)" --replay > receipt-19a.json
