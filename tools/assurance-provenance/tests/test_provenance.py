@@ -59,6 +59,48 @@ class ProvenanceTests(unittest.TestCase):
             provenance.verify_records(bad, self.rig)
         self.assertEqual(str(ctx.exception), "provenance_mismatch")
 
+    def test_approval_admitted_record_names_the_token(self):
+        import gate19
+
+        tmp = tempfile.TemporaryDirectory(prefix="p19b-prov-appr-")
+        self.addCleanup(tmp.cleanup)
+        rig = rigmod.ProvenanceRig(Path(tmp.name), gate_cls=gate19.ProvenancePipeline)
+        self.addCleanup(rig.close)
+        token = rig.mint("b", approver_id="operator-1", nonce="prov-1")
+        verdict = rig.dispatch("b", approval=token)
+        self.assertEqual(verdict, "observed")
+        row = provenance.record(rig, "b", verdict, 7, approval=token)
+        kinds = [i["kind"] for i in row["authority_inputs"]]
+        self.assertIn("approval", kinds)
+        approval_input = [
+            i for i in row["authority_inputs"] if i["kind"] == "approval"
+        ][0]
+        self.assertEqual(approval_input["class"], "operator_signed_approval")
+        self.assertEqual(approval_input["source_digest"], provenance.sha(token))
+        self.assertEqual(row["approval_digest"], provenance.sha(token))
+        self.assertEqual(provenance.verify_records([row], rig), 1)
+        # a record that hides the token behind an ordinary row is a mismatch
+        bad = provenance.clone([row])
+        bad[0]["approval_digest"] = None
+        bad[0]["signature"] = provenance.sign(bad[0], rigmod.OPERATOR)
+        with self.assertRaises(ValueError) as ctx:
+            provenance.verify_records(bad, rig)
+        self.assertEqual(str(ctx.exception), "provenance_mismatch")
+
+    def test_non_string_signature_is_a_value_error(self):
+        bad = provenance.clone(self.rows)
+        bad[0]["signature"] = 5
+        with self.assertRaises(ValueError) as ctx:
+            provenance.verify_records(bad, self.rig)
+        self.assertEqual(str(ctx.exception), "provenance_signature")
+
+    def test_decision_ids_are_distinct_across_the_lane(self):
+        import lane
+
+        ids = [r["decision_id"] for r in self.rows]
+        self.assertEqual(len(set(ids)), len(ids))
+        self.assertIn("decision_base", lane._run.__code__.co_varnames)
+
     def test_tampered_signature_is_rejected(self):
         bad = provenance.clone(self.rows)
         bad[1]["verdict"] = "blocked"

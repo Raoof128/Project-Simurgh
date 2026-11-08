@@ -28,6 +28,7 @@ PHASE_19D_FILES = (
     "egress19.py",
     "lanes19d.py",
     "evidence19d.py",
+    "projection.py",
     "tests/test_egress19.py",
     "tests/test_lanes19d.py",
     "tests/test_evidence19d.py",

@@ -28,6 +28,7 @@ PHASE_19G_FILES = (
     "drill19.py",
     "incident19.py",
     "evidence19g.py",
+    "projection.py",
     "tests/test_drill19.py",
     "tests/test_incident19.py",
     "tests/test_evidence19g.py",
@@ -36,11 +37,14 @@ STEP_FIELDS = {
     "plant": ("verdict", "effects_after", "action"),
     "detect": ("provenance_record",),
     "admit_in_flight": ("verdict", "action"),
-    "stop": ("latched", "all_routes_blocked"),
+    "stop": ("latched", "retry_after_latch", "all_routes_blocked"),
     "revoke": ("acknowledged", "retry_after_revoke"),
     "preserve": (),
     "in_flight_fate": ("attempt_status", "receiver_effects", "reported_as"),
-    "intervals": ("plant_to_latch", "latch_to_acknowledged_revocation"),
+    "intervals": (
+        "plant_to_latch_logical_steps",
+        "latch_to_acknowledged_revocation_logical_steps",
+    ),
 }
 RECORD_FIELDS = (
     "attempted",
@@ -159,9 +163,11 @@ def receipt_for(report, manifest_root):
         "all_routes_blocked": steps["stop"]["all_routes_blocked"],
         "revocation_acknowledged": steps["revoke"]["acknowledged"],
         "in_flight_reported_as": steps["in_flight_fate"]["reported_as"],
-        "plant_to_latch": steps["intervals"]["plant_to_latch"],
-        "latch_to_acknowledged_revocation": steps["intervals"][
-            "latch_to_acknowledged_revocation"
+        "plant_to_latch_logical_steps": steps["intervals"][
+            "plant_to_latch_logical_steps"
+        ],
+        "latch_to_acknowledged_revocation_logical_steps": steps["intervals"][
+            "latch_to_acknowledged_revocation_logical_steps"
         ],
         "incident": {k: report["incident"][k] for k in RECORD_FIELDS},
         "compared": {

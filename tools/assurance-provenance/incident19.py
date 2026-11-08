@@ -16,7 +16,7 @@ def record_from_drill(drill):
     verdicts = [
         steps["plant"]["verdict"],
         steps["admit_in_flight"]["verdict"],
-        "blocked",  # the retry of b after the latch, recorded in the stop step
+        steps["stop"]["retry_after_latch"],
         steps["revoke"]["retry_after_revoke"],
     ]
     return {
@@ -49,10 +49,16 @@ def record_from_drill(drill):
                 "acknowledged": steps["revoke"]["acknowledged"],
             },
         ],
-        "detection_to_latch": steps["intervals"]["plant_to_latch"],
-        "latch_to_acknowledged_revocation": steps["intervals"][
-            "latch_to_acknowledged_revocation"
+        "detection_to_latch_logical_steps": steps["intervals"][
+            "plant_to_latch_logical_steps"
         ],
+        "latch_to_acknowledged_revocation_logical_steps": steps["intervals"][
+            "latch_to_acknowledged_revocation_logical_steps"
+        ],
+        "counts_derived_from": (
+            "the drill's four dispatch verdicts and the receiver's effect count; the snapshot "
+            "digests are an inventory of what was preserved, not an input to any count"
+        ),
         "evidence_digests": steps["preserve"]["after"],
         "model_telemetry_used": False,
     }

@@ -71,7 +71,8 @@ class Evidence19bTests(unittest.TestCase):
             "proofs/phase19/AuthorityProvenance.lean",
         ):
             self.assertIn(needle, names)
-        self.assertNotIn("tools/assurance-provenance/projection.py", names)
+        self.assertIn("tools/assurance-provenance/projection.py", names)
+        self.assertIn("tools/assurance-provenance/leanstates.py", names)
         self.assertEqual(proto["awm_hash"], self.receipt["awm_hash"])
 
     def _reject(self, mutate, reason):

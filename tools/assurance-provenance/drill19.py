@@ -92,6 +92,7 @@ def run_drill(base):
                 "step": "stop",
                 "time": t_latch,
                 "latched": signal.state()["terminal"],
+                "retry_after_latch": retry_b,
                 "all_routes_blocked": retry_b == "blocked"
                 and any(k.startswith("dispatch_sibling") for k in events),
                 "pipeline_events_tail": events[-3:],
@@ -140,9 +141,13 @@ def run_drill(base):
         steps.append(
             {
                 "step": "intervals",
-                "plant_to_latch": t_latch - t_plant,
-                "latch_to_acknowledged_revocation": t_ack - t_latch,
-                "unit": "logical clock units under the fixed fixture clock",
+                "plant_to_latch_logical_steps": t_latch - t_plant,
+                "latch_to_acknowledged_revocation_logical_steps": t_ack - t_latch,
+                "unit": "scripted steps of the fixture clock",
+                "measures": (
+                    "the order of the drill's steps, not a latency: the drill advances the "
+                    "fixture clock itself and calls the latch directly (P19-REPAIR03)"
+                ),
             }
         )
         return {

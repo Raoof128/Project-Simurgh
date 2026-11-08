@@ -69,6 +69,13 @@ class HandoffTests(unittest.TestCase):
             [("kind", "differs")],
         )
 
+    def test_check_flags_an_unexpected_field(self):
+        receipt = dict(handoff19.committed_receipt("19c"), failures=[])
+        out = handoff19.check("19c", receipt)
+        self.assertEqual(
+            [(d["field"], d["kind"]) for d in out], [("failures", "unexpected")]
+        )
+
     def test_status_is_owed(self):
         s = handoff19.status()
         self.assertEqual(s["iou"], "IOU-19-OPERATOR")

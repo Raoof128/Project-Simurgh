@@ -96,14 +96,26 @@ def expected_for(pid, receipt):
 
 
 def check(pid, receipt):
-    """Every field that differs from, or is missing against, the committed receipt."""
+    """Every field that differs from, is missing against, or is absent from the committed receipt
+    (an unexpected field is a discrepancy too, P19-REPAIR03)."""
     out = []
-    for key, want in expected_for(pid, receipt).items():
+    want_all = expected_for(pid, receipt)
+    for key, want in want_all.items():
         if key not in receipt:
             out.append({"field": key, "expected": want, "got": None, "kind": "missing"})
         elif projection.wire(receipt[key]) != projection.wire(want):
             out.append(
                 {"field": key, "expected": want, "got": receipt[key], "kind": "differs"}
+            )
+    for key in sorted(receipt):
+        if key not in want_all and key not in EXCLUDED:
+            out.append(
+                {
+                    "field": key,
+                    "expected": None,
+                    "got": receipt[key],
+                    "kind": "unexpected",
+                }
             )
     return out
 

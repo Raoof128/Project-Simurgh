@@ -21,6 +21,7 @@ PROTOCOL_SCHEMA = "simurgh-phase19e-protocol-v1"
 PHASE_19E_FILES = (
     "capture19.py",
     "evidence19e.py",
+    "projection.py",
     "tests/test_capture19.py",
     "tests/test_evidence19e.py",
 )

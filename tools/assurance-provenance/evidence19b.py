@@ -16,6 +16,7 @@ from pathlib import Path
 
 import awm
 import lane
+import leanstates
 import projection
 from projection import loads, read_pack, sha, wire, write_pack
 
@@ -33,6 +34,8 @@ PHASE_19B_FILES = (
     "provenance.py",
     "gate19.py",
     "lane.py",
+    "leanstates.py",
+    "projection.py",
     "evidence19b.py",
     "tests/test_awm.py",
     "tests/test_payloads.py",
@@ -111,8 +114,11 @@ def check_protocol(path):
 
 
 def lean_section():
+    """Type-check and run the differential on THIS host (P19-REPAIR03). Both values are ``None``
+    without ``lean``; the verifier reports them per host and the receipt never copies the pack's."""
     lean_file = ROOT / "proofs/phase19/AuthorityProvenance.lean"
     checked = None
+    diff = None
     if shutil.which("lean"):
         out = subprocess.run(
             ["lean", str(lean_file)],
@@ -121,6 +127,7 @@ def lean_section():
             cwd=lean_file.parent,
         )
         checked = out.returncode == 0 and not out.stdout.strip()
+        diff = leanstates.differential()
     return {
         "file": "proofs/phase19/AuthorityProvenance.lean",
         "sha256": sha(lean_file.read_bytes()),
@@ -132,11 +139,17 @@ def lean_section():
             "admittedInImage",
         ],
         "type_checked_on_this_host": checked,
-        "states_compared": 48,
+        "states_compared": leanstates.state_count(),
+        "differential_passed_on_this_host": None
+        if diff is None
+        else not diff["mismatches"],
+        "differential_mismatches_on_this_host": None
+        if diff is None
+        else diff["mismatches"],
         "differential_test": "tools/assurance-provenance/tests/test_lean_differential.py",
         "bound": (
-            "the model is tied to the Python gate only by the differential test over the "
-            "enumerated states; held is not enumerated"
+            "the model is tied to the Python gate only by the differential over the enumerated "
+            "states, run on the verifying host; held is not enumerated"
         ),
     }
 
@@ -146,16 +159,24 @@ def build_report(work):
     wa = lane.write_anywhere(work / "wa")
     outage = lane.outage(work / "outage")
     approval = lane.approval_matrix(work / "approval")
+    lean = lean_section()
+    # floors, not self-comparisons (P19-REPAIR03): an emptied mutant or forgery set does not close
     closed_by = {
         "wired_deterministic_channels_at_least_4": wa["wired_deterministic_channels"]
         >= 4,
-        "every_mutant_killed": wa["kill_count"] == wa["mutants_total"],
+        "at_least_13_mutants_every_one_killed": wa["mutants_total"] >= 13
+        and wa["kill_count"] == wa["mutants_total"],
         "zero_clean_differences": wa["clean_differences"] == 0,
-        "forgeries_distinct_and_blocked": approval["distinct_reasons"]
+        "at_least_8_forgeries_distinct_and_blocked": len(approval["rows"]) >= 8
+        and approval["distinct_reasons"]
         and approval["all_forgeries_blocked"],
         "positive_control_lands": approval["positive_control"]["verdict"] == "observed",
         "outage_pair_holds": outage["outage_exact_action"]["verdict"] == "blocked"
         and outage["no_outage_control"]["verdict"] == "observed",
+        "lean_differential_passed_on_this_host": lean[
+            "differential_passed_on_this_host"
+        ]
+        is True,
     }
     return {
         "schema": SCHEMA,
@@ -164,7 +185,7 @@ def build_report(work):
         "write_anywhere": wa,
         "outage": outage,
         "approval": approval,
-        "lean": lean_section(),
+        "lean": lean,
         "wired_deterministic_channels": wa["wired_deterministic_channels"],
         "phase_19b_closed": all(closed_by.values()),
         "closed_by": closed_by,
@@ -214,6 +235,9 @@ def receipt_for(report, manifest_root):
             "sha256": report["lean"]["sha256"],
             "states_compared": report["lean"]["states_compared"],
             "type_checked_on_this_host": report["lean"]["type_checked_on_this_host"],
+            "differential_passed_on_this_host": report["lean"][
+                "differential_passed_on_this_host"
+            ],
         },
         "manifest_sha256": manifest_root,
         "independent_custody": False,
@@ -239,9 +263,13 @@ def _tree_state():
 
 
 def _normalise_for_compare(report):
-    # the Lean host check is host-dependent and is reported, not compared
+    # the Lean host checks are host-dependent and are reported per host, not compared
     out = json.loads(wire(report))
     out["lean"]["type_checked_on_this_host"] = None
+    out["lean"]["differential_passed_on_this_host"] = None
+    out["lean"]["differential_mismatches_on_this_host"] = None
+    out["closed_by"]["lean_differential_passed_on_this_host"] = None
+    out["phase_19b_closed"] = None
     return out
 
 
@@ -262,7 +290,8 @@ def verify(pack, expected_root, *, protocol=None):
     for name, project in SIDECARS.items():
         if wire(loads(files[name])) != wire(project(saved)):
             raise ValueError("sidecar_member_mismatch")
-    return receipt_for(saved, expected_root)
+    # the receipt describes THIS host's recomputation, never the pack's saved values
+    return receipt_for(actual, expected_root)
 
 
 def run(out, *, protocol=None):
