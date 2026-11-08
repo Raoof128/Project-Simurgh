@@ -42,8 +42,9 @@ The frozen receiver has no manifest and no load route.
 ## 3. Route corpus (receiver-direct)
 
 Denied canonical effect: `write_path` on `/etc/passwd`. Seven lab-authored variants, each
-canonicalised by the receiver (repeated percent-decoding, case folding, dot-segment removal,
-duplicate-slash collapse including the leading pair, trailing slash stripped):
+canonicalised by the receiver (percent-decoding to a fixed point, dot-segment removal,
+duplicate-slash collapse including the leading pair, trailing slash stripped; since P19-REPAIR03
+case is significant for paths, so `/ETC/PASSWD` is its own canonical form):
 
 | Variant              | Resource                     | Fork            | `naive_string_filter_demo` |
 | -------------------- | ---------------------------- | --------------- | -------------------------- |
@@ -55,11 +56,32 @@ duplicate-slash collapse including the leading pair, trailing slash stripped):
 | duplicate slashes    | `//etc//passwd`              | `effect_denied` | admitted                   |
 | trailing slash       | `/etc/passwd/`               | `effect_denied` | admitted                   |
 
-The positive control (`write_path` on the allowed `/workdir/notes.txt`) lands. The strawman denies
-the exact bytes of the canonical path only and admits every variant, which is the power check: the
-lane can tell a canonicalising receiver from a string filter. The strawman is authored here and is
-not a comparator; this lane does not pay G22. The frozen receiver has only `send_report`, so every
-variant is `request` there.
+The positive control (`write_path` on the allowed `/workdir/notes.txt`) lands. These seven rows are
+refused by the allow-list whatever the canonicaliser does: with the canonicaliser replaced by the
+identity every verdict above is unchanged (8 Nov 2026 audit), so they do not by themselves tell a
+canonicalising receiver from a string filter. What does is the granted-alias corpus added under
+P19-REPAIR03, aliases of the granted `/workdir/notes.txt`:
+
+| Alias            | Resource                    | Fork            | Under identity canonical |
+| ---------------- | --------------------------- | --------------- | ------------------------ |
+| dot segment      | `/workdir/./notes.txt`      | `observed`      | `effect_denied`          |
+| duplicate slash  | `/workdir//notes.txt`       | `observed`      | `effect_denied`          |
+| percent-encoded  | `/workdir/%6eotes.txt`      | `observed`      | `effect_denied`          |
+| parent traversal | `/tmp/../workdir/notes.txt` | `observed`      | `effect_denied`          |
+| trailing slash   | `/workdir/notes.txt/`       | `observed`      | `effect_denied`          |
+| case variant     | `/WORKDIR/NOTES.TXT`        | `effect_denied` | `effect_denied`          |
+| NUL suffix       | `/workdir/notes.txt%00.png` | `effect_denied` | `effect_denied`          |
+
+The five admitted aliases are refused when canonicalisation is removed
+(`canonicalisation_is_load_bearing: true`), and every admitted effect records the canonical resource
+with the requested bytes beside it, so a consumer never acts on an alias. The case variant is a
+different file on a case-sensitive filesystem and is refused: before the repair the receiver folded
+case and would have admitted it under the lower-case grant. The strawman denies the exact bytes of
+the canonical denied path only and admits every variant by construction; a plausible one-line
+filter (decode once, normalise, fold case) refuses five of the seven and admits `double_encoded` and
+`duplicate_slashes`, which is the fairer comparison and is reported as `single_decode_filter_admits`.
+Neither is a comparator; this lane does not pay G22. The frozen receiver has only `send_report`, so
+every variant is `request` there.
 
 ## 4. Cumulative lane
 

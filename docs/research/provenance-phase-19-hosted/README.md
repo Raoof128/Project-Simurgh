@@ -81,4 +81,10 @@ What they show:
   recorded production host (`aarch64`, `linuxkit`), not the verifying machine, and the 19f
   comparator excludes it for that reason.
 - Field by field, each receipt differs from its hosted counterpart in `run-41623244388/` only in
-  `tree_state`.
+  `tree_state`. Read with care: before P19-REPAIR03 the 19b, 19d, 19e and 19g verifiers copied the
+  fields the receipt reports from the saved pack rather than from the verifying host (the 19b
+  receipt here says Lean type-checked on a host with no Lean, and the 19d receipt names the pack's
+  Docker Desktop host), so "only `tree_state` differs" corroborates less than it reads: the fields
+  that could have differed were never recomputed. Both receipt sets here predate the repair and
+  describe the packs of their day; the repaired verifiers derive every receipt field from the
+  recomputation.

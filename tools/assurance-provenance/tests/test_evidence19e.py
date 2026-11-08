@@ -80,6 +80,20 @@ class Evidence19eTests(unittest.TestCase):
         self._reject(edit(flip), "scripted_mismatch")
         self._reject(edit(claim), "capture_claimed")
 
+        # P19-REPAIR03: the declaration is bound, and the receipt comes from the recomputation
+        def cap(rep):
+            rep["spend"]["budget_cap_generations"] = 10**9
+
+        def granted(rep):
+            rep["spend"]["authorisation"] = "granted"
+
+        def attacker(rep):
+            rep["informed_attacker"]["source_digests"] = {"gate19.py": "0" * 64}
+
+        self._reject(edit(cap), "report_mismatch")
+        self._reject(edit(granted), "report_mismatch")
+        self._reject(edit(attacker), "report_mismatch")
+
 
 if __name__ == "__main__":
     unittest.main()

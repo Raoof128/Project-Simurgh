@@ -2,7 +2,8 @@ name: Assurance provenance (Phase 19)
 
 # Phase 19 lanes over the unpinned successor and the forked receiver, plus the Linux x86_64
 # replay chain the 19a receipt could not run on the authoring host. Paths are scoped to the
-# namespace and its evidence (P19-CI01); the Stage 5Q census pins every step of this file.
+# namespace, every source the packs pin, and the evidence (P19-CI01, P19-REPAIR03); the Stage 5Q
+# census pins every step NAME of this file (step bodies are not census events).
 
 on:
   push:
@@ -11,6 +12,16 @@ on:
       - "tools/assurance-provenance/**"
       - "tools/assurance-composed-successor/**"
       - "proofs/phase19/**"
+      - "tools/assurance-composed/**"
+      - "tools/assurance-context/**"
+      - "tools/assurance-signals/**"
+      - "tools/assurance-credentials/**"
+      - "tools/assurance-connector/**"
+      - "tools/assurance-transfer/**"
+      - "tools/assurance-sdk/requirements.lock"
+      - "tools/assurance-workflow/requirements.lock"
+      - "tools/replay-preflight/**"
+      - "docs/research/transfer-phase-17/**"
       - "docs/research/provenance-phase-19a/**"
       - "docs/research/provenance-phase-19b/**"
       - "docs/research/provenance-phase-19c/**"
@@ -23,6 +34,16 @@ on:
       - "tools/assurance-provenance/**"
       - "tools/assurance-composed-successor/**"
       - "proofs/phase19/**"
+      - "tools/assurance-composed/**"
+      - "tools/assurance-context/**"
+      - "tools/assurance-signals/**"
+      - "tools/assurance-credentials/**"
+      - "tools/assurance-connector/**"
+      - "tools/assurance-transfer/**"
+      - "tools/assurance-sdk/requirements.lock"
+      - "tools/assurance-workflow/requirements.lock"
+      - "tools/replay-preflight/**"
+      - "docs/research/transfer-phase-17/**"
       - "docs/research/provenance-phase-19a/**"
       - "docs/research/provenance-phase-19b/**"
       - "docs/research/provenance-phase-19c/**"
@@ -62,7 +83,14 @@ jobs:
           python -m pip install --require-hashes --only-binary=:all: -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock
           python -m pip check
           python -B tools/replay-preflight/preflight.py
-      - name: Validate Phase 19 lanes (projection, write-anywhere, approval, outage, receiver, Lean differential)
+      - name: Enable unprivileged user namespaces so the 19d lane tests run rather than skip
+        # P19-REPAIR03: before this step moved ahead of the tests, every namespace test skipped on the
+        # hosted runner and the 19d unit tests ran nowhere (the cause behind P19-REPAIR02).
+        run: |
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 >/dev/null 2>&1 || true
+          sudo sysctl -w kernel.unprivileged_userns_clone=1 >/dev/null 2>&1 || true
+          python -c "import sys; sys.path.insert(0, 'tools/assurance-provenance'); import egress19; print('can_namespace:', egress19.can_namespace())"
+      - name: Validate Phase 19 lanes (projection, write-anywhere, approval, outage, receiver, Lean differential, namespace)
         run: python -m unittest discover -s tools/assurance-provenance/tests -v
       - name: Verify the Phase 19a pack and chain the frozen Phase 17 replay through it
         run: |

@@ -132,12 +132,14 @@ def lean_section():
         "file": "proofs/phase19/AuthorityProvenance.lean",
         "sha256": sha(lean_file.read_bytes()),
         "theorems": [
+            "admitsImpliesAuthorised",
             "admitsImpliesRegistered",
             "agentStepPreservesAuthority",
             "agentBytesIrrelevant",
             "resumeBytesIrrelevant",
             "admittedInImage",
         ],
+        "model_inputs": "registered set, host approval (one-shot, spent on admission), held, terminal, paused, budget, blocking fact",
         "type_checked_on_this_host": checked,
         "states_compared": leanstates.state_count(),
         "differential_passed_on_this_host": None

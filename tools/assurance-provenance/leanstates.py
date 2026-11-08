@@ -11,6 +11,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
+import gate19
 import rig as rigmod
 
 ROOT = rigmod.ROOT
@@ -19,12 +20,22 @@ ACTION_ID = {"a": 1, "b": 2}
 
 
 def enumeration():
-    for registered, proposal, terminal, paused, fact, consumed in itertools.product(
-        (("a",), ("a", "b")), ("a", "b"), (0, 1), (0, 1), (0, 1), (0, 1)
+    """States the rig can set: registered set, proposal, terminal latch, lapsed lease, blocking
+    fact, consumed budget, and (P19-REPAIR03) whether the host approved the proposal."""
+    for (
+        registered,
+        proposal,
+        terminal,
+        paused,
+        fact,
+        consumed,
+        approved,
+    ) in itertools.product(
+        (("a",), ("a", "b")), ("a", "b"), (0, 1), (0, 1), (0, 1), (0, 1), (0, 1)
     ):
         if consumed and registered == ("a",):
             continue  # budget can only be consumed by the other registered action
-        yield registered, proposal, terminal, paused, fact, consumed
+        yield registered, proposal, terminal, paused, fact, consumed, approved
 
 
 def state_count():
@@ -39,10 +50,12 @@ def lean_table():
     source = LEAN_FILE.read_text()
     cases = list(enumeration())
     lines = ["open Simurgh.Phase19 in", "#eval do"]
-    for registered, proposal, terminal, paused, fact, consumed in cases:
+    for registered, proposal, terminal, paused, fact, consumed, approved in cases:
         regs = "[" + ", ".join(str(ACTION_ID[r]) for r in registered) + "]"
+        appr = f"some {ACTION_ID[proposal]}" if approved else "none"
         state = (
-            f"{{ registered := {regs}, held := false, terminal := {str(bool(terminal)).lower()}, "
+            f"{{ registered := {regs}, approved := {appr}, held := false, "
+            f"terminal := {str(bool(terminal)).lower()}, "
             f"paused := {str(bool(paused)).lower()}, budget := {0 if consumed else 1}, "
             f"blockingFact := {str(bool(fact)).lower()} : State }}"
         )
@@ -67,8 +80,10 @@ def lean_table():
     return dict(zip(cases, [v == "true" for v in values]))
 
 
-def gate_verdict(base, registered, proposal, terminal, paused, fact, consumed):
-    r = rigmod.ProvenanceRig(base)
+def gate_verdict(
+    base, registered, proposal, terminal, paused, fact, consumed, approved
+):
+    r = rigmod.ProvenanceRig(base, gate_cls=gate19.ProvenancePipeline)
     try:
         # the rig delegated ["a"] to child; the second registered actor holds ["a", "b"]
         if registered == ("a", "b"):
@@ -94,7 +109,19 @@ def gate_verdict(base, registered, proposal, terminal, paused, fact, consumed):
             )
         if paused:
             r.now = rigmod.CLOCK + 31
-        status = r.pipe.resume(actor).dispatch(r.actions[proposal])["status"]
+        token = None
+        if approved:
+            token = r.mint(
+                proposal,
+                approver_id="operator-1",
+                nonce="lean-" + proposal,
+                actor=actor,
+            )
+        session = r.pipe.resume(actor)
+        if token is None:
+            status = session.dispatch(r.actions[proposal])["status"]
+        else:
+            status = session.dispatch(r.actions[proposal], approval=token)["status"]
         return status == "observed"
     finally:
         r.close()

@@ -110,6 +110,13 @@ def compare(saved, actual):
         raise ValueError("shift_mismatch")
     if not capture19.recovered(s):
         raise ValueError("control_not_recovered")
+    # P19-REPAIR03: the whole report is bound (declaration, cap, models, stop rule, framing lines,
+    # informed-attacker digests, non-claims); nothing in it is host-dependent
+    s_all, a_all = loads(wire(saved)), loads(wire(actual))
+    s_all.pop("protocol_sha256", None)
+    a_all.pop("protocol_sha256", None)
+    if wire(s_all) != wire(a_all):
+        raise ValueError("report_mismatch")
 
 
 def receipt_for(report, manifest_root):
@@ -150,11 +157,13 @@ def verify(pack, expected_root, *, protocol=None):
         raise ValueError("report_schema")
     if saved.get("protocol_sha256") != protocol_digest:
         raise ValueError("protocol_binding")
-    compare(saved, build_report())
+    actual = build_report()
+    compare(saved, actual)
     for name, project in SIDECARS.items():
         if wire(loads(files[name])) != wire(project(saved)):
             raise ValueError("sidecar_member_mismatch")
-    return receipt_for(saved, expected_root)
+    # the receipt describes THIS host's recomputation, never the pack's saved values
+    return receipt_for(actual, expected_root)
 
 
 def run(out, *, protocol=None):

@@ -57,15 +57,20 @@ Every effect at the receiver has a gateway record. That is an architectural iden
 the gateway writes the intent before any network call and is the receiver's only caller, so the
 no-record count can move only under an injected omission. The twelve `unknown` records per model
 are the four seeded prior effects of the `unknown_prior` fixture, counted once per control. The
-verifier's mutation suite shows the count is live: inflating one `record_observed` is rejected with
-`coverage_mismatch`.
+verifier rejects an inflated `record_observed` with `coverage_mismatch`. The count itself moves
+with the archive (emptying the gateway intents in a scratch copy moves `no_record` from 0 to 23),
+which no committed test exercises; the 8 Nov 2026 audit noted the earlier sentence here drew that
+conclusion from the mutation suite, which mutates the stored report, not the archive.
 
 ## 4. Judge-free row and the forced-call citation
 
 - `judge_free`: 0 of 288 outcomes are scored by any model. Basis: outcomes are receiver SQLite effects
-  and code oracles; a grep for `judge` or `grader` across `tools/assurance-*` and `tools/safety-study`
-  is empty. This is a reported row, not a differentiator: AgentDojo and AgentSecBench are judge-free
-  by design. Lab oversight numbers cited in the gap hunt are model-judged.
+  and code oracles; no model is wired anywhere in the frozen studies, and `model_scored_outcomes` is
+  a constant zero by construction, not a count. A grep for `judge` or `grader` across the frozen
+  `tools/assurance-*` studies and `tools/safety-study` is empty once the Phase 19 lane itself (which
+  names the words in this rule and its tests) is excluded; the pre-repair sentence here omitted that
+  qualification. This is a reported row, not a differentiator: AgentDojo and AgentSecBench are
+  judge-free by design. Lab oversight numbers cited in the gap hunt are model-judged.
 - Forced calls: the archive holds no forced-call rows. The cited result is `VALIDATION.md` line 10,
   "15 passed, including forced calls in all eight lifecycle states", a unit-test receipt from the
   Phase 17 freeze, reproduced in `report.json` as `kind: cited_unit_test_result`.
@@ -76,7 +81,11 @@ Five mutations of the pack, each with its own reason: a dropped split row (`row_
 relabelled split (`split_mismatch`), an inflated coverage count (`coverage_mismatch`), an edited
 awareness count (`sidecar_mismatch`), and an edited protocol source hash (`source_binding:<path>`).
 A wrong root is `manifest_root`. The tests in `tools/assurance-provenance/tests/` exercise all of
-them against the real archive.
+them against the real archive. Six further reject paths are implemented and not exercised by a
+test (`sidecar_member_mismatch`, `protocol_binding`, `archive_binding`, `pack_inventory`,
+`report_schema`, `report_mismatch`); `compare()` is exhaustive, so a full re-sign fails on
+`report_mismatch` whatever leaf is edited (0 of 3,195 forged leaves accepted in the 8 Nov 2026
+audit).
 
 ## 6. Limits
 

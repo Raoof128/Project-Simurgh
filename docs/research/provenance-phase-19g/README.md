@@ -16,6 +16,7 @@ Expected: `"verified": true`, `"plant_verdict": "blocked"`, `"plant_landed": fal
 `"stop_latched": true`, `"revocation_acknowledged": true`, `"in_flight_reported_as": "unknown"`,
 `"incident": {"claimed_prevented": 0, ...}`, `"digests_compared": false`.
 
-`incident-record.json` is the deployer incident record the drill generated, validated against
-`incident-record.schema.json`. Its schema fixes `claimed_prevented` at zero and
-`model_telemetry_used` at false.
+`incident-record.json` is the deployer incident record the drill generated, in the shape of
+`incident-record.schema.json` (the verifier checks the counts, the digest inventory and the
+constants; no JSON-Schema validator runs in the repository). Its schema fixes `claimed_prevented`
+at zero and `model_telemetry_used` at false, and names its two interval fields as scripted steps.
