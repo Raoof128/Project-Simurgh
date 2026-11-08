@@ -1,5 +1,25 @@
 ## Change Log
 
+## [phase-19-droplet] — 2026-11-08 — Phase 19 packs replayed on the owner's droplet; receipts retained
+
+**Raouf:**
+
+- **Scope:** docs and evidence copies only: six replay receipts from `portfolio-droplet` under
+  `docs/research/provenance-phase-19-hosted/droplet-portfolio-2026-11-08/`, a README section, one
+  ledger ruling, both logs. No source, pack, workflow or frozen file changed; census unchanged.
+- **Summary:** every Phase 19 pack verified on the owner's own x86_64 virtual machine from a fresh
+  clone of `6a10a4b9` with the hash-locked dependencies; 19a with the frozen Phase 17 chain replayed.
+  The 19f comparator reports no discrepancy; each receipt differs from the hosted one only in
+  `tree_state`. Recorded as a second project-operated host, not custody: `IOU-19-OPERATOR` stays owed.
+  Suite there: 139 tests, 3 skipped, one failure (`test_lanes19d.Lanes19dTests.test_covert_probe_reported_not_closed`): the probe hardcodes `python`, absent on
+  stock Ubuntu, and reports zero bytes instead of failing; declared P19-REPAIR02, owed.
+- **Files changed:** the six `receipt-19*.json`, the hosted README, `docs/research/PROVENANCE_PHASE_19.md`,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** six `verify` and six `handoff19.py check` runs on the host (`[]` each); the same
+  comparator runs locally on the committed copies; sha256 of each copy equal to the host's.
+- **Follow-ups:** P19-REPAIR02 (needs a 19d pack regeneration); `IOU-19-SPEND`, `IOU-19-OPERATOR`,
+  `IOU-19-KIT` unchanged.
+
 ## [phase-19-sync] — 2026-11-08 — PR #148 merged to main; main merged into the Phase 19 branch
 
 **Raouf:**
