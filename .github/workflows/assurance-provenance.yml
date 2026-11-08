@@ -78,6 +78,10 @@ jobs:
           tar xzf "$RUNNER_TEMP/elan.tar.gz"
           ./elan-init -y --default-toolchain "$(cat proofs/phase19/lean-toolchain)"
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          # install the pinned toolchain here, not lazily on the first `lean` call inside the test step,
+          # so a download failure fails this step with its own message (P19-REPAIR04 follow-up)
+          "$HOME/.elan/bin/elan" toolchain install "$(cat proofs/phase19/lean-toolchain)"
+          "$HOME/.elan/bin/lean" --version
       - name: Install the hash-locked replay dependencies and preflight the host
         run: |
           python -m pip install --require-hashes --only-binary=:all: -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock
