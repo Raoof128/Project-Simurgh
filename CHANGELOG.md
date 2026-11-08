@@ -1,5 +1,33 @@
 ## Change Log
 
+## [phase-19-repair-05] — 2026-11-08 — Handoff comparator and 19b test follow the handoff's own words; resilient Lean install (P19-CI03)
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/handoff19.py`, `tests/test_handoff19.py`,
+  `tests/test_evidence19b.py` (pinned by 19b, so the 19b pack is regenerated), the re-rendered
+  handoff and template, `scripts/install-elan-toolchain` with the Phase 19 workflow and
+  `stage-1-checks.yml` calling it, the ledger (P19-CI03, P19-REPAIR05, two rulings), both logs. No
+  frozen file; census set-identical.
+- **Summary:** the first second-host review of the handoff package (owner-authorised host, no Lean:
+  both release hosts answered 504) returned three findings and all three were real: the comparator
+  compared the 19d socket list and, on a Lean-less host, four Lean-dependent 19b fields that the
+  handoff said were not compared; `test_evidence19b` required Lean although the handoff calls it
+  optional; nothing warned that a venv under a private home fails inside `unshare --map-root-user`.
+  The comparator now reports host-dependent fields under `not_compared` with the value and reason
+  (with Lean present every 19b field is still compared), the test asserts closure against whether
+  `lean` is on the path, and the handoff says exactly what the code does. The hosted gates install
+  Lean through one script with retries and a sha256-pinned GitHub fallback (`af71a256…`). 19b root
+  `a5e74ff4…` replaces `ac086a43…`; `PHASE19_ROOTS` updated.
+- **Files changed:** as above.
+- **Verification:** 12 handoff tests green (four new, written first and seen failing); the 19b
+  receipt test green with Lean (regeneration host) and without it (Lean stripped from PATH); the
+  regenerated pack verified back; comparator `[]` for the six committed receipts; census 58/53
+  set-identical; the installer's primary and fallback paths on the droplet; hosted checks on the PR.
+- **Follow-ups:** `tests/e2e/stage24_25_smoke.mjs` matches forbidden terms as substrings over the
+  whole audit JSON and failed once on CI with `pid` (passes locally 3/3); a key-based match is owed
+  outside this PR. The three IOUs still need people.
+
 ## [phase-19-repair-04] — 2026-11-08 — Hardened 19d namespace; CI expected roots from a repository variable
 
 **Raouf:**

@@ -442,3 +442,21 @@ every repair commit.
   declaration records (`a814c6f0` edited the step before a declaration named it) stands here; the
   body it introduced is gone. `stage-4-lean-proofs.yml`, `stage-5q-checks.yml` and
   `stage-5s-checks.yml` keep their inline lines until their own pull requests.
+- Ruling (8 Nov 2026, P19-REPAIR05 exercised): the reviewer's three findings were checked against
+  the source and all three held. `handoff19.check` now leaves the named host-dependent fields out of
+  both sides and the `check` command prints them under `not_compared` with the operator's value
+  and the reason (19d: `unix_sockets_reachable`, `unix_socket_egress_eliminated`; 19b: the two
+  `*_on_this_host` Lean fields, `closed_by.lean_differential_passed_on_this_host` and
+  `phase_19b_closed`, only when the receipt's `lean.type_checked_on_this_host` is `null`); with Lean
+  present a failed differential is a discrepancy, and the test asserts that. Four handoff tests were
+  written first and failed for the stated reasons; twelve pass. `test_evidence19b` asserts closure
+  and the Lean fields against whether `lean` is on the path and every other closure term
+  unconditionally; it passed on the Mac with Lean and with Lean stripped from `PATH` (220 s). The
+  19b pack was regenerated from `f95a666e`, the commit that carries the test edit: root
+  `a5e74ff44c766e63e6068b1905b62e93516f8d3ea512a62702e6017dfb4df352` replaces `ac086a43…`,
+  `phase_19b_closed: true`, 96 states, 13 mutants killed, 8 forgeries; it verified back from its
+  committed path and `PHASE19_ROOTS` carries the new root. The handoff and template were
+  re-rendered and the test that pins them passes. The reviewer's run is an owner-controlled
+  second-host replay; `IOU-19-OPERATOR` stays owed. Recorded, not repaired here: the Stage 2.4/2.5
+  smoke's substring match for forbidden terms failed once on the hosted gate with `pid` and passes
+  locally; a key-based match is owed outside this authority.

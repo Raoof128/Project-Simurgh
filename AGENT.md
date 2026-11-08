@@ -14,6 +14,37 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-08 (Australia/Sydney) — Phase 19: P19-REPAIR05 after the first second-host review; P19-CI03 resilient Lean install
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/repair-04-hardening` (PR #152). Declarations first (`d8c6adf8` P19-CI03,
+  `4483994b` P19-REPAIR05), then `scripts/install-elan-toolchain` wired into the Phase 19 workflow and
+  `stage-1-checks.yml`; `handoff19.py`, `tests/test_handoff19.py`, `tests/test_evidence19b.py`, the
+  re-rendered handoff and template, the regenerated 19b pack, two rulings, both logs. No frozen file;
+  census set-identical.
+- **Summary:** the owner's reviewer replayed the six packs at `e4270f8a` on an owner-authorised Linux
+  host without Lean (both release hosts 504) and reported: three 19b and one 19d comparator
+  discrepancies the handoff had promised away, a 19b test that requires Lean, and privileged namespace
+  runs failing from a venv under a private home. Each was checked against the source and confirmed.
+  The comparator now names its host-dependent fields per phase and prints them under `not_compared`
+  with the operator's value and the reason (19d: the two socket fields; 19b: the four Lean-dependent
+  fields, only when the receipt says Lean was absent); the test asserts closure against whether `lean`
+  is on the path and every other closure term unconditionally; the handoff states the comparator's
+  behaviour, the Linux install route and the unmapped-uid rule. Separately, the hosted gates install
+  Lean through one script that retries the release host and falls back to a sha256-pinned GitHub
+  tarball, after both checks on the PR failed in that step. 19b root `a5e74ff4…` (tree
+  `f95a666e`).
+- **Files changed:** as above.
+- **Verification:** handoff tests 12/12 (four new, failing first); 19b receipt test green with and
+  without Lean on the Mac; pack verified back; comparator `[]` for all six committed receipts; census
+  58 steps / 53 problems before and after; installer primary and fallback on `portfolio-droplet` from
+  fresh homes; hosted checks on the PR.
+- **Follow-ups:** the Stage 2.4/2.5 smoke's substring match for forbidden terms (one CI failure on
+  `pid`, local 3/3 green) is owed a key-based match outside this PR. `IOU-19-SPEND`,
+  `IOU-19-OPERATOR`, `IOU-19-KIT` need people; the reviewer's run is owner-controlled and does not pay
+  `IOU-19-OPERATOR`.
+
 ### 2026-11-08 (Australia/Sydney) — Phase 19: P19-REPAIR04, hardened 19d namespace and an expected-root source outside the checkout
 
 **Raouf:**
