@@ -149,7 +149,9 @@ class Evidence19dTests(unittest.TestCase):
         r = self.receipt
         self.assertIs(r["verified"], True)
         self.assertEqual(r["cases"], 11)
-        self.assertIs(r["unix_socket_egress_eliminated"], False)
+        # P19-REPAIR04: the probed socket directories are hidden inside the namespace
+        self.assertIs(r["unix_socket_egress_eliminated"], True)
+        self.assertEqual(r["unix_sockets_reachable"], [])
         self.assertGreater(r["covert_probe_bytes_delivered"], 0)
         self.assertIsInstance(r["unix_sockets_reachable"], list)
         self.assertIs(r["all_hold"], True)
