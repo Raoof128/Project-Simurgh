@@ -116,7 +116,7 @@ def build_report(work):
 HOST_DEPENDENT = (
     "host, rows[].receiver_port, covert_probe.seconds, covert_probe.bits_per_second_observed, "
     "live_reader_control.counter_delta, live_reader_control.routes_after_lo_up, "
-    "unix_socket_probe.results, unix_socket_probe.reachable"
+    "unix_socket_probe.results, unix_socket_probe.reachable, unix_socket_probe.eliminated"
 )
 
 
@@ -140,6 +140,7 @@ def _normalise(report):
     if type(lane.get("unix_socket_probe")) is dict:
         lane["unix_socket_probe"]["results"] = None
         lane["unix_socket_probe"]["reachable"] = None
+        lane["unix_socket_probe"]["eliminated"] = None
     out.pop("protocol_sha256", None)
     return out
 
