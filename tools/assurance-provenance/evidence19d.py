@@ -114,7 +114,7 @@ def build_report(work):
 
 
 HOST_DEPENDENT = (
-    "host, covert_probe.seconds, covert_probe.bits_per_second_observed, "
+    "host, rows[].receiver_port, covert_probe.seconds, covert_probe.bits_per_second_observed, "
     "live_reader_control.counter_delta, live_reader_control.routes_after_lo_up, "
     "unix_socket_probe.results, unix_socket_probe.reachable"
 )
@@ -126,6 +126,9 @@ def _normalise(report):
     out = loads(wire(report))
     lane = out.get("lane") or {}
     lane["host"] = None
+    for row in lane.get("rows") or []:
+        if "receiver_port" in row:
+            row["receiver_port"] = None  # the owned receiver binds an ephemeral loopback port
     for key in ("seconds", "bits_per_second_observed"):
         if type(lane.get("covert_probe")) is dict:
             lane["covert_probe"][key] = None
