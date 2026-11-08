@@ -18,6 +18,23 @@ EXCLUDED = ("tree_state", "host", "replay")
 # 19a's ``kind`` is a function of its replay result (``evidence.receipt_for``), and the replay is
 # host-dependent, so the expected kind follows the operator's own replay rather than the author's.
 REPLAY_CHAINED_KIND = {"19a": "frozen_replay_chained"}
+# Host-dependent receipt fields, reported with the operator's value and never compared
+# (P19-REPAIR05: the handoff said so before the comparator did). Dotted paths name nested fields.
+HOST_DEPENDENT = {
+    "19d": {
+        "unix_sockets_reachable": "which daemon sockets a host still exposes inside the namespace is the host's",
+        "unix_socket_egress_eliminated": "follows unix_sockets_reachable on the operator's host",
+    },
+}
+# 19b's Lean checks run on the operator's host; where `lean` is absent the receipt reports them
+# null and closure false for that host. Only then are these four reported, not compared; with Lean
+# present every 19b field is compared.
+LEAN_ABSENT_FIELDS = {
+    "lean.type_checked_on_this_host": "lean absent on the operator's host",
+    "lean.differential_passed_on_this_host": "lean absent on the operator's host",
+    "closed_by.lean_differential_passed_on_this_host": "lean absent on the operator's host",
+    "phase_19b_closed": "closure needs the Lean differential on the operator's host; lean was absent",
+}
 PHASES = (
     {
         "id": "19a",
@@ -95,11 +112,60 @@ def expected_for(pid, receipt):
     return want
 
 
+def _lean_absent(receipt):
+    lean = receipt.get("lean")
+    return type(lean) is dict and lean.get("type_checked_on_this_host") is None
+
+
+def host_dependent(pid, receipt):
+    """Dotted field -> reason, for the fields the operator's receipt reports but the comparator
+    does not compare on this phase and this host."""
+    fields = dict(HOST_DEPENDENT.get(pid, {}))
+    if pid == "19b" and _lean_absent(receipt):
+        fields.update(LEAN_ABSENT_FIELDS)
+    return fields
+
+
+def _lookup(obj, path):
+    for part in path.split("."):
+        if type(obj) is not dict or part not in obj:
+            return False, None
+        obj = obj[part]
+    return True, obj
+
+
+def _without(obj, paths):
+    out = json.loads(json.dumps(obj))
+    for path in paths:
+        parts = path.split(".")
+        node = out
+        for part in parts[:-1]:
+            node = node.get(part) if type(node) is dict else None
+            if node is None:
+                break
+        if type(node) is dict:
+            node.pop(parts[-1], None)
+    return out
+
+
+def not_compared(pid, receipt):
+    """What the operator's receipt says for every field this comparison does not check, with the
+    reason. Printed next to the discrepancies so nothing is waived silently."""
+    out = {}
+    for path, reason in host_dependent(pid, receipt).items():
+        present, got = _lookup(receipt, path)
+        out[path] = {"got": got if present else None, "present": present, "reason": reason}
+    return out
+
+
 def check(pid, receipt):
     """Every field that differs from, is missing against, or is absent from the committed receipt
-    (an unexpected field is a discrepancy too, P19-REPAIR03)."""
+    (an unexpected field is a discrepancy too, P19-REPAIR03), the host-dependent fields of
+    ``host_dependent`` left out of both sides."""
     out = []
-    want_all = expected_for(pid, receipt)
+    skipped = host_dependent(pid, receipt)
+    want_all = _without(expected_for(pid, receipt), skipped)
+    receipt = _without(receipt, skipped)
     for key, want in want_all.items():
         if key not in receipt:
             out.append({"field": key, "expected": want, "got": None, "kind": "missing"})
@@ -133,7 +199,7 @@ def discrepancy_template():
                 "verifier_output": "<the JSON the verifier printed, verbatim>",
                 "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check "
                 + p["id"]
-                + " <receipt.json>>",
+                + " <receipt.json>  (a JSON object: discrepancies, not_compared)>",
                 "refused": "<host_cannot_namespace or similar, if the verifier refused>",
             }
             for p in PHASES
@@ -186,17 +252,30 @@ def render():
         "  -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock`, then",
         "  `.venv/bin/python -B tools/replay-preflight/preflight.py` must print `preflight passed`. The",
         "  clone needs full history (`git clone`, not a tarball): the replay checks the Phase 17 freeze commit.",
-        "- 19b: Lean 4.15.0 on PATH (`proofs/phase19/lean-toolchain`; `elan` installs it) for the Lean fields;",
-        "  without it the receipt reports them `null` and `phase_19b_closed: false` for your host, which is",
-        "  expected and is excluded from the comparison.",
-        "- 19d: a Linux host where `unshare --user --map-root-user --net true` succeeds. Expect the verifier",
-        "  to list which well-known Unix sockets your host exposes inside the namespace",
-        "  (`unix_sockets_reachable`); that list is yours and is reported, not compared.",
+        "- 19b: Lean 4.15.0 on PATH (`proofs/phase19/lean-toolchain`) for the Lean fields. On Linux x86_64",
+        "  `bash scripts/install-elan-toolchain proofs/phase19/lean-toolchain` installs elan and the pinned",
+        "  toolchain, and falls back to a sha256-pinned GitHub release tarball when `releases.lean-lang.org`",
+        "  is down; elsewhere `elan` installs it. Without Lean the receipt reports",
+        "  `lean.type_checked_on_this_host` and `lean.differential_passed_on_this_host` as `null`,",
+        "  `closed_by.lean_differential_passed_on_this_host: false` and `phase_19b_closed: false` for your",
+        "  host; the comparator then lists those four under `not_compared` with the reason instead of",
+        "  comparing them, and 19b closure is verified only on a host with Lean. Every other 19b field is",
+        "  compared either way. `tests/test_evidence19b.py` asserts closure only where `lean` is on the path.",
+        "- 19d: a Linux host where `unshare --user --map-root-user --net true` succeeds and `setpriv` exists.",
+        "  Run it, and the namespace tests, with an interpreter an unmapped uid can execute (`/usr/bin/python3`,",
+        "  or a venv outside a private home directory): inside `unshare --map-root-user` every uid but yours",
+        "  is unmapped, and a venv under a `0750` home fails with `worker_failed:126 … Permission denied`.",
+        "  Expect the verifier to list which well-known Unix sockets your host still exposes inside the",
+        "  hardened namespace (`unix_sockets_reachable`, and `unix_socket_egress_eliminated` with it); that",
+        "  list is yours and the comparator reports it under `not_compared`, never as a discrepancy.",
         "",
         "## What the comparator does and does not check",
         "",
         "`handoff19.py check` compares every receipt field except `tree_state`, `host` and `replay` with the",
-        "committed receipt and flags a missing, differing or unexpected field. It cannot see whether the",
+        "committed receipt and flags a missing, differing or unexpected field. It prints a JSON object:",
+        "`discrepancies` (that list) and `not_compared` (the host-dependent fields it left out, with your",
+        "value and the reason: for 19d the two socket fields; for 19b the four Lean-dependent fields, and",
+        "only when your receipt says Lean was absent). Nothing else is waived. It cannot see whether the",
         "`--replay` run happened: a receipt whose `replay.result` says `verified` is taken at its word and",
         "then expected to read `kind: frozen_replay_chained`. Your verbatim verifier output and your note",
         "are what make that claim checkable; the comparator alone does not.",
@@ -240,8 +319,9 @@ def render():
         "```",
         "",
         "About thirty minutes on a laptop, under thirty on a hosted runner. The Lean differential test and the",
-        "19d namespace tests skip, not pass, where their host requirement is unmet; the receipt you return",
-        "should say which skipped.",
+        "19d namespace tests skip, not pass, where their host requirement is unmet, and `test_evidence19b`",
+        "asserts 19b closure only where `lean` is on the path; the receipt you return should say which",
+        "skipped and whether Lean was present.",
         "",
         "## Returning the receipt",
         "",
@@ -252,7 +332,8 @@ def render():
         "python -B tools/assurance-provenance/handoff19.py check 19b <your-19b-receipt.json>",
         "```",
         "",
-        "An empty list is no discrepancy. Your file will be committed under",
+        "An empty `discrepancies` list is no discrepancy; `not_compared` is published with it. Your file",
+        "will be committed under",
         "`docs/research/provenance-phase-19f/operator-receipts/` unchanged, with your name as you give it.",
         "",
     ]
@@ -276,9 +357,13 @@ def main():
     elif args.command == "status":
         print(json.dumps(status(), indent=2, sort_keys=True))
     else:
+        receipt = json.loads(args.receipt.read_text())
         print(
             json.dumps(
-                check(args.phase, json.loads(args.receipt.read_text())),
+                {
+                    "discrepancies": check(args.phase, receipt),
+                    "not_compared": not_compared(args.phase, receipt),
+                },
                 indent=2,
                 sort_keys=True,
             )

@@ -1,4 +1,5 @@
 import json
+import shutil
 import sys
 import tempfile
 import unittest
@@ -45,13 +46,18 @@ class Evidence19bTests(unittest.TestCase):
         self.assertIs(r["verified"], True)
         self.assertEqual(r["arm"], "composed_successor")
         self.assertEqual(r["wired_deterministic_channels"], 4)
-        self.assertIs(r["phase_19b_closed"], True)
-        self.assertTrue(all(r["closed_by"].values()), r["closed_by"])
-        self.assertIn("at_least_13_mutants_every_one_killed", r["closed_by"])
-        self.assertIn("lean_differential_passed_on_this_host", r["closed_by"])
+        # Closure needs the Lean differential on THIS host; without `lean` the receipt says so
+        # (null checks, closure false) and the handoff calls that expected (P19-REPAIR05).
+        lean_here = shutil.which("lean") is not None
+        self.assertIs(r["phase_19b_closed"], lean_here)
+        closed_by = dict(r["closed_by"])
+        self.assertIn("at_least_13_mutants_every_one_killed", closed_by)
+        self.assertIs(closed_by.pop("lean_differential_passed_on_this_host"), lean_here)
+        self.assertTrue(all(closed_by.values()), closed_by)
         self.assertEqual(r["approval_forgeries"], 8)
         self.assertEqual(r["lean"]["states_compared"], 96)
-        self.assertIs(r["lean"]["differential_passed_on_this_host"], True)
+        self.assertIs(r["lean"]["type_checked_on_this_host"], True if lean_here else None)
+        self.assertIs(r["lean"]["differential_passed_on_this_host"], True if lean_here else None)
         self.assertEqual(r["kill_count"], 13)
         self.assertEqual(r["clean_differences"], 0)
         self.assertIs(r["independent_custody"], False)
