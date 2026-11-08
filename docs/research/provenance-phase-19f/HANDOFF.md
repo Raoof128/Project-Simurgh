@@ -160,7 +160,7 @@ python -B tools/assurance-provenance/evidence19d.py verify \
   --expected-root "$(cat docs/research/provenance-phase-19d/ROOT.sha256)"
 ```
 
-Expected root: `aa44eb458fe25ef1f74e9292a4cbad976a4f8d095f66b295ba5ea32c2deb5501`.
+Expected root: `458f80e22b2b4d17accdec4bfec1567a626736cb8cced51cac8989113d102a45`.
 
 Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay` are not compared):
 
@@ -184,19 +184,13 @@ Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay`
   "covert_probe_bytes_delivered": 262144,
   "independent_custody": false,
   "live_reader_moved": true,
-  "manifest_sha256": "aa44eb458fe25ef1f74e9292a4cbad976a4f8d095f66b295ba5ea32c2deb5501",
+  "manifest_sha256": "458f80e22b2b4d17accdec4bfec1567a626736cb8cced51cac8989113d102a45",
   "model_inference": false,
   "receiver_effects": 1,
-  "reported_not_compared": "host, rows[].receiver_port, covert_probe.seconds, covert_probe.bits_per_second_observed, live_reader_control.counter_delta, live_reader_control.routes_after_lo_up, unix_socket_probe.results, unix_socket_probe.reachable",
+  "reported_not_compared": "host, rows[].receiver_port, covert_probe.seconds, covert_probe.bits_per_second_observed, live_reader_control.counter_delta, live_reader_control.routes_after_lo_up, unix_socket_probe.results, unix_socket_probe.reachable, unix_socket_probe.eliminated",
   "routes_in_fresh_namespace": [],
-  "unix_socket_egress_eliminated": false,
-  "unix_sockets_reachable": [
-    "/run/containerd/containerd.sock",
-    "/run/dbus/system_bus_socket",
-    "/run/docker.sock",
-    "/run/systemd/resolve/io.systemd.Resolve",
-    "/var/run/docker.sock"
-  ],
+  "unix_socket_egress_eliminated": true,
+  "unix_sockets_reachable": [],
   "verified": true
 }
 ```

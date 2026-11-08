@@ -14,6 +14,28 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-08 (Australia/Sydney) — Phase 19: P19-REPAIR04, hardened 19d namespace and an expected-root source outside the checkout
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/repair-04-hardening` off `main` (`e4270f8a`). Declaration first
+  (`d3e1b8c5`), then `egress19.py`, `lanes19d.py`, `evidence19d.py`, two 19d test files, the workflow,
+  the 19d results and README, the deployer profile, the hosted README, the regenerated 19d pack, the
+  re-rendered handoff, this ledger's ruling, both logs. The repository variable `PHASE19_ROOTS` was set
+  from the owner's account with the six committed roots. No frozen file; census set-identical.
+- **Summary:** the owner asked that everything a machine can do be done, leaving only the human IOUs.
+  The two machine-closable items the audit left open are closed: the namespace adds mount, PID and IPC
+  isolation, hides the runtime socket directories and drops every capability but `CAP_NET_ADMIN`
+  (on the droplet the socket probe goes from five reachable daemons to none), and the hosted gate now
+  takes its expected roots from a variable outside any pull request. The twelve 2026 lab pages the gap
+  hunt found missing were ingested into Zurvan (index and graph rebuilt).
+- **Files changed:** as above; 19d root `458f80e2…` (tree `270fb96e`).
+- **Verification:** the three 19d test files green on the droplet (hardening test included) and on the
+  Mac (namespace parts skip); the pack verified at creation and again; comparator `[]` for all six
+  receipts; census set-identical; YAML parses; the hosted checks on the PR.
+- **Follow-ups:** `IOU-19-SPEND`, `IOU-19-OPERATOR`, `IOU-19-KIT` need people. Not done: seccomp, a
+  minimal root, hiding the work directory; G34–G38 are new build work.
+
 ### 2026-11-08 (Australia/Sydney) — Phase 19: strict audit, P19-REPAIR03, packs regenerated, 2026 gap hunt
 
 **Raouf:**

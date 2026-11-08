@@ -356,3 +356,15 @@ not pay `IOU-19-OPERATOR`. This declaration commit must be a strict ancestor of 
   completeness). What this repair does not do: the namespace is still IP-only (the socket channel is
   measured, not closed); the drill is still scripted (now labelled so); the trust root is still read
   from the checkout; `IOU-19-SPEND`, `IOU-19-OPERATOR` and `IOU-19-KIT` are unchanged.
+- Ruling (8 Nov 2026, P19-REPAIR04 exercised): the 19d worker now runs in user, network, mount, PID
+  and IPC namespaces with a private `tmpfs` over `/run` and `/dev/shm` and `CAP_NET_ADMIN` as its
+  only capability; a test inside the namespace asserts PID 1, no socket under either directory and
+  the single capability, and it passes on `portfolio-droplet`, where the previous pack had reached
+  five daemon sockets. The regenerated 19d pack (root `458f80e2…`, tree `270fb96e`, produced on the
+  droplet) reports `unix_sockets_reachable: []` and `unix_socket_egress_eliminated: true` for the
+  probed list, with the residual named (sockets outside the two hidden directories and the shared
+  work directory). The hosted workflow now compares each committed `ROOT.sha256` with the repository
+  variable `PHASE19_ROOTS`, set from the owner's account outside any pull request; the census is
+  set-identical (the step asserts no completeness). Still not done, and said so: seccomp, a minimal
+  root, hiding the work directory; the drill stays scripted; the three IOUs are unchanged and need
+  people.

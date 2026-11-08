@@ -1,5 +1,21 @@
 ## Change Log
 
+## [phase-19-repair-04] — 2026-11-08 — Hardened 19d namespace; CI expected roots from a repository variable
+
+**Raouf:**
+
+- **Scope:** the 19d launcher, lane and verifier, two 19d tests, the workflow, 19d docs, the deployer
+  profile, the hosted README, the regenerated 19d pack, the handoff, the ledger, both logs. No frozen
+  file; census unchanged. Repository variable `PHASE19_ROOTS` set outside the PR.
+- **Summary:** mount, PID and IPC namespaces, a private tmpfs over `/run` and `/dev/shm`, and a single
+  capability close the daemon-socket channel the audit measured (five reachable on the droplet before,
+  none after); the hosted gate compares the committed roots with a variable it cannot change. 19d root
+  `458f80e2…`. Twelve 2026 lab pages ingested into Zurvan.
+- **Files changed:** as above.
+- **Verification:** 19d tests green on the droplet and the Mac; pack verified twice; comparator `[]`;
+  census set-identical; hosted checks on the PR.
+- **Follow-ups:** the three IOUs need people; seccomp and a minimal root are not done.
+
 ## [phase-19-repair-03] — 2026-11-08 — Phase 19 strict audit repaired (P19-REPAIR03); packs regenerated; 2026 gap hunt
 
 **Raouf:**
