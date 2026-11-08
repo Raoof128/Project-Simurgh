@@ -235,6 +235,30 @@ artifact digest, and exempting those bytes from prettier (P19-FORMAT08). A hoste
 project's own runner recomputing the project's own evidence: it is not custody evidence and does
 not pay `IOU-19-OPERATOR`. This declaration commit must be a strict ancestor of the workflow edit.
 
+**P19-CI03 (toolchain install resilience; declared 8 Nov 2026 before the edit).** Every hosted gate
+that needs `lean` installs the toolchain with the same five inline lines, and each of them asks
+`releases.lean-lang.org` once. On 8 Nov 2026 that host answered 502 and 504 for hours; the Phase 19
+workflow and the Stage 1 quality gate on PR #152 failed in their install steps for a reason that had
+nothing to do with the repository (runs `42468683455`, `42468683397`). This declaration authorises,
+and nothing else: one new script, `scripts/install-elan-toolchain`, that fetches the pinned elan
+release (sha256 checked, curl retries), asks elan for the toolchain named by a `lean-toolchain` file
+up to six times, and when the release host is still down fetches `lean-4.15.0-linux.tar.zst` from the
+Lean GitHub release page, checks it against a sha256 pinned in the script
+(`af71a2569a9f68337de2434829b3008cd8e32c436e9cb6bd8c84a2c2ba3585c9`, measured on 8 Nov 2026 from
+both hosts, identical) and links it into elan under the pinned toolchain name; replacing the inline
+body of the elan step in `.github/workflows/assurance-provenance.yml` and of the Lean step in
+`.github/workflows/stage-1-checks.yml` with a call to it; adding the script to the Phase 19
+workflow's path filters; the ruling; both logs. The fallback pins what elan does not: elan verifies
+no digest the repository chose. The script carries no `.sh` suffix because the Stage 5Q census
+treats a named `*.sh` in a `run:` body as an enumerated artifact; both steps must classify exactly as
+they do today and the problem-gate set must stay set-identical (53). Not authorised:
+`stage-4-lean-proofs.yml` (F001's live premise, spec §14.2), `stage-5q-checks.yml` and
+`stage-5s-checks.yml` (5Q Annex A5.3: their own single-file pull requests), any other step, any
+change under `tools/`. Recorded against this ledger's own rule: `a814c6f0` made the elan step
+install the toolchain eagerly before any declaration named that edit; this declaration replaces
+that step body and the lapse stands in the ruling. This declaration commit must be a strict
+ancestor of the edit.
+
 | Field                         | Declaration                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | active_phase                  | Phase 19a projection verifier (19b–19g declared)                                                                    |
