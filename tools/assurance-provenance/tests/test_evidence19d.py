@@ -145,7 +145,10 @@ class Evidence19dTests(unittest.TestCase):
     def test_receipt(self):
         r = self.receipt
         self.assertIs(r["verified"], True)
-        self.assertEqual(r["cases"], 9)
+        self.assertEqual(r["cases"], 11)
+        self.assertIs(r["unix_socket_egress_eliminated"], False)
+        self.assertGreater(r["covert_probe_bytes_delivered"], 0)
+        self.assertIsInstance(r["unix_sockets_reachable"], list)
         self.assertIs(r["all_hold"], True)
         self.assertEqual(r["receiver_effects"], 1)
         self.assertEqual(r["routes_in_fresh_namespace"], [])

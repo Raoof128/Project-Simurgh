@@ -31,7 +31,11 @@ class Lanes19dTests(unittest.TestCase):
 
     def test_every_case_holds(self):
         by = {row["case"]: row for row in self.r["rows"]}
-        self.assertEqual(len(by), 9)
+        self.assertEqual(
+            len(by), 11
+        )  # nine cases plus self_declared_role and method_not_allowed
+        self.assertEqual(by["self_declared_role"]["decision"], "malformed")
+        self.assertEqual(by["method_not_allowed"]["decision"], "method_not_allowed")
         for name, row in by.items():
             self.assertTrue(
                 row["holds"],
