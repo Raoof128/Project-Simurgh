@@ -204,3 +204,7 @@ not pay `IOU-19-OPERATOR`. This declaration commit must be a strict ancestor of 
   the expected `kind` follows the operator's own verified replay and no other pairing, and the
   handoff states the rule. `handoff19.py` is not pinned by any pack protocol, so no pack changed.
   The six hosted receipts compare with no discrepancy.
+- Ruling (8 Nov 2026): PR #148 (Stage 5R parity driver writes its signed receipt only under
+  `--write`) merged to `main` at `ccd50943` with a green hosted gate; `main` merged into this branch
+  at `1ea82c8f` without conflict (four Stage 5R files only; 391 Stage 5R unit tests pass locally).
+  PR #149 is re-checked on that head. `IOU-19-SPEND`, `IOU-19-OPERATOR` and `IOU-19-KIT` are unchanged.

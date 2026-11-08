@@ -1,5 +1,19 @@
 ## Change Log
 
+## [phase-19-sync] — 2026-11-08 — PR #148 merged to main; main merged into the Phase 19 branch
+
+**Raouf:**
+
+- **Scope:** branch maintenance only: PR #148 merged to `main` (its gate was green), `main` merged into
+  `phase-19/authority-provenance` (`1ea82c8f`, no conflicts, four Stage 5R files), PR #149 re-checked on
+  the new head. Ledger ruling and both logs. No Phase 19 source, evidence or frozen file changed.
+- **Summary:** the Quality Gate on PR #149 had failed only for the Stage 5R receipt rewrite inherited
+  from `main` (audit E-5); with #148 merged, the branch now carries the repaired driver and its test.
+- **Files changed:** `docs/research/PROVENANCE_PHASE_19.md`, `AGENT.md`, `CHANGELOG.md` (plus the merge commit).
+- **Verification:** `node --test tests/unit/llmShield/stage5r/*.test.js` 391 pass; hosted checks on PR #149
+  pending at the time of this entry and reported in the PR.
+- **Follow-ups:** mark #149 ready and merge once every check is green; the three IOUs still need people.
+
 ## [phase-19-hosted] — 2026-11-03 — Phase 19 hosted runs read; 19g verifier repaired; receipts retained
 
 **Raouf:**
