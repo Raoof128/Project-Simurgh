@@ -41,8 +41,8 @@ class Evidence19gTests(unittest.TestCase):
         self.assertIs(r["all_routes_blocked"], True)
         self.assertIs(r["revocation_acknowledged"], True)
         self.assertEqual(r["in_flight_reported_as"], "unknown")
-        self.assertGreater(r["plant_to_latch"], 0)
-        self.assertGreater(r["latch_to_acknowledged_revocation"], 0)
+        self.assertGreater(r["plant_to_latch_logical_steps"], 0)
+        self.assertGreater(r["latch_to_acknowledged_revocation_logical_steps"], 0)
         self.assertEqual(r["incident"]["claimed_prevented"], 0)
         self.assertEqual(r["incident"]["unknown"], 1)
         self.assertIs(r["digests_compared"], False)
@@ -123,6 +123,37 @@ class Evidence19gTests(unittest.TestCase):
         self._reject(edit(landed), "plant_landed")
         self._reject(edit(count), "incident_count_mismatch:unknown")
         self._reject(edit(digest_dropped), "incident_digest_inventory")
+
+        # P19-REPAIR03: fields the receipt reads are bound even when comparable_steps are intact
+        def steps_only(rep):
+            for s in rep["drill"]["steps"]:
+                if s["step"] == "stop":
+                    s["latched"] = False
+
+        def timeline(rep):
+            rep["incident"]["authority_timeline"] = []
+
+        def non_claims(rep):
+            rep["non_claims"] = []
+
+        self._reject(edit(steps_only), "report_mismatch")
+        self._reject(edit(timeline), "report_mismatch")
+        self._reject(edit(non_claims), "report_mismatch")
+
+        # digest VALUES stay reported, not compared: another sqlite build still verifies
+        def zero_digests(rep):
+            rep["incident"]["evidence_digests"] = {
+                k: "0" * 64 for k in rep["incident"]["evidence_digests"]
+            }
+            for s in rep["drill"]["steps"]:
+                if s["step"] == "preserve":
+                    s["after"] = {k: "0" * 64 for k in s["after"]}
+                    s["before"] = {k: "0" * 64 for k in s["before"]}
+
+        pack, root = repack(self.out / "evidence.zip", edit(zero_digests))
+        receipt = ev.verify(pack, root, protocol=self.proto)
+        self.assertIs(receipt["verified"], True)
+        self.assertIs(receipt["stop_latched"], True)
         self._reject(sidecar_only, "sidecar_member_mismatch")
 
 

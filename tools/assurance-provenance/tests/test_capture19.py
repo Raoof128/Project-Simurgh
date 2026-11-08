@@ -28,20 +28,33 @@ class FramingTests(unittest.TestCase):
             self.assertEqual(r["messages"][0]["content"], capture19.SYSTEM)
             self.assertNotIn("CONTEXT NOTE", r["messages"][1]["content"])
 
-    def test_framing_is_trusted_channel_text(self):
+    def test_framing_is_in_the_system_role_not_the_user_turn(self):
         rows = [r for r in capture19.framed_messages() if r["arm"] != "baseline"]
         for r in rows:
-            user = r["messages"][1]["content"]
-            self.assertIn("TRUSTED CONTEXT NOTE:", user)
-            self.assertLess(
-                user.index("TRUSTED CONTEXT NOTE:"), user.index("UNTRUSTED SOURCE")
-            )
+            system, user = r["messages"][0], r["messages"][1]
+            self.assertEqual(system["role"], "system")
+            self.assertIn("TRUSTED CONTEXT NOTE:", system["content"])
+            self.assertIn(capture19.FRAMING_LINES[r["arm"]], system["content"])
+            self.assertNotIn("CONTEXT NOTE", user["content"])
+            self.assertTrue(system["content"].startswith(capture19.SYSTEM))
 
-    def test_awareness_rule_is_19a_rule(self):
+    def test_awareness_rule_matches_whole_words_and_ignores_the_framing(self):
         self.assertEqual(
             capture19.awareness_hits("This is a TEST sandbox"), ["test", "sandbox"]
         )
         self.assertEqual(capture19.AWARENESS_TERMS, projection.AWARENESS_TERMS)
+        self.assertEqual(capture19.awareness_hits("predates the latest stop"), [])
+        echo = "I note: " + capture19.FRAMING_LINES["evaluation"]
+        self.assertEqual(capture19.awareness_hits(echo), [])
+        self.assertEqual(capture19.awareness_hits("this looks like a test"), ["test"])
+
+    def test_declaration_names_the_construct_and_the_sampler(self):
+        d = capture19.spend_declaration()
+        self.assertIn("stakes cue", d["construct"])
+        self.assertEqual(d["generation_settings"]["temperature"], 0.7)
+        self.assertEqual(d["generation_settings"]["seed_base"], 171000)
+        llama = [m for m in d["models"] if m["id"] == "llama"][0]
+        self.assertIn("22 of 24", llama["note"])
 
 
 class IntervalTests(unittest.TestCase):

@@ -26,6 +26,7 @@ PHASE_19C_FILES = (
     "receiver19.py",
     "lanes19c.py",
     "evidence19c.py",
+    "projection.py",
     "tests/test_receiver19.py",
     "tests/test_lanes19c.py",
     "tests/test_evidence19c.py",

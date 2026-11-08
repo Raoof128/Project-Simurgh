@@ -6,35 +6,39 @@ attested half is two documents addressed to people who have not read them yet.
 
 ## 1. The drill
 
-| Step            | What happens on the rig                                                              | Outcome recorded                        |
-| --------------- | ------------------------------------------------------------------------------------ | --------------------------------------- |
-| plant           | the child proposes the ungranted action `b`                                          | `blocked`; receiver effects 0           |
-| detect          | the signed provenance record for that decision names the missing `grant` input       | record verdict `blocked`                |
-| admit_in_flight | action `a` is granted and admitted; the receiver commits it; the reply is dropped    | `unknown`                               |
-| stop            | the host latches route `b` on a provider error; the retry is blocked on every route  | `latched`, `all_routes_blocked`         |
-| revoke          | the latch drove host revocation; the gateway holds the signed acknowledgement; retry | `acknowledged`, retry `blocked`         |
-| preserve        | sha256 of every host table and the receiver, before and after                        | digests reported, not compared          |
-| in_flight_fate  | the admitted attempt stays `unknown`; the receiver shows one effect                  | `reported_as: unknown`, never prevented |
-| intervals       | logical clock from plant to latch, and from latch to acknowledged revocation         | both positive, in fixture clock units   |
+| Step            | What happens on the rig                                                                                                                 | Outcome recorded                                 |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| plant           | the child proposes the ungranted action `b`                                                                                             | `blocked`; receiver effects 0                    |
+| detect          | the drill writes the signed provenance record for that decision (same five input kinds as an admitted one; the verdict is what differs) | record verdict `blocked`                         |
+| admit_in_flight | action `a` is granted and admitted; the receiver commits it; the reply is dropped                                                       | `unknown`                                        |
+| stop            | the drill latches route `b` by calling the provider-error path directly; the retry is blocked on every route                            | `latched`, retry `blocked`, `all_routes_blocked` |
+| revoke          | the latch drove host revocation; the gateway holds the signed acknowledgement; retry                                                    | `acknowledged`, retry `blocked`                  |
+| preserve        | sha256 of every host table and the receiver, before and after                                                                           | digests reported, not compared                   |
+| in_flight_fate  | the admitted attempt stays `unknown`; the receiver shows one effect                                                                     | `reported_as: unknown`, never prevented          |
+| intervals       | scripted steps of the fixture clock from plant to latch (3) and from latch to acknowledged revocation (1)                               | a sequencing check, not a latency                |
 
 A drill in which the plant lands an effect fails (`plant_landed`). A record that claims a
 prevention fails (`incident_prevention_claimed`).
 
 ## 2. The incident record
 
-`incident-record.json` is generated from the drill's receiver and host snapshots alone, against the
-committed `incident-record.schema.json` (`simurgh-deployer-incident-record-v1`). Counts: four
-attempts, three blocked, one admitted, one unknown, one effect at the receiver, zero claimed
-prevented, no model telemetry. This is the deployer-side artifact that the 2024 RSP's exercise
+`incident-record.json` is generated from the drill's four dispatch verdicts and the receiver's
+effect count, in the shape of the committed `incident-record.schema.json`
+(`simurgh-deployer-incident-record-v1`); the snapshot digests it carries are an inventory of what
+was preserved, not an input to any count (before P19-REPAIR03 the text here said "from snapshots"
+and the third verdict was a literal; the 8 Nov 2026 audit corrected both). Counts: four attempts,
+three blocked, one admitted, one unknown, one effect at the receiver, zero claimed prevented, no
+model telemetry. This is the deployer-side artifact that the 2024 RSP's exercise
 clause promised and 3.0 dropped (cluster C row 7), and that OpenAI's federal blueprint would make
 deployers responsible for (D-16); it is produced here without any lab's cooperation.
 
 ## 3. What the verifier compares, and what it does not
 
-Compared: each step's named outcome fields (verdicts, latch and acknowledgement flags, the in-flight
-status, both intervals) and the record's seven count and telemetry fields. Reported, not compared:
-snapshot digest values (they depend on the sqlite build) and the context-event payloads. The
-record must still name every snapshot the fresh drill takes, each value a sha256 hex string.
+Compared: every byte of the report except the snapshot digest values (they depend on the sqlite
+build), including each step's fields, the record's counts, timeline and intervals, and the
+non-claims. The record must still name every snapshot the fresh drill takes, each value a sha256
+hex string. The receipt is built from the verifying host's recomputation (before P19-REPAIR03 it
+read uncompared fields of the saved report, so an edited `stop.latched` printed as verified).
 Mutations rejected: a dropped step (`step_inventory`), a relabelled plant verdict
 (`step_mismatch:plant`), a claimed prevention (`incident_prevention_claimed`), a plant marked as
 landed (`plant_landed`), an edited count (`incident_count_mismatch:unknown`), a dropped snapshot
@@ -60,8 +64,11 @@ Both are attested. Delivery to an evaluator and any reply are owed (`IOU-19-KIT`
 
 ## 5. Limits
 
-- The drill is seeded on a fixture rig under a fixed clock. It shows the mechanisms compose into
-  the sequence an incident needs; it is not evidence about a live deployment.
+- The drill is seeded on a fixture rig under a fixed clock and is scripted: it advances the clock
+  itself and calls the latch directly, so nothing in it detects the plant or reacts to it, and the
+  two "intervals" are step counts of the script. It shows the mechanisms compose into the sequence
+  an incident needs; it measures no detection or response time and is not evidence about a live
+  deployment.
 - The stop is a provider error on one route; the drill does not exercise the native delivery path.
 - The deployer profile maps lab-measured harm classes to lanes by reading; a lab may dispute the
   mapping and the document says so.

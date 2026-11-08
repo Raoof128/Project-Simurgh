@@ -25,6 +25,9 @@ IMPL_FILES = (
     rigmod.ROOT / "tools/assurance-context/context_gate.py",
     rigmod.ROOT / "tools/assurance-signals/signals.py",
     rigmod.ROOT / "tools/assurance-credentials/gateway.py",
+    rigmod.ROOT / "tools/assurance-provenance/gate19.py",
+    rigmod.ROOT / "tools/assurance-provenance/rig.py",
+    rigmod.ROOT / "tools/assurance-provenance/lane.py",
 )
 
 
@@ -39,7 +42,9 @@ def impl_hash():
     return h.hexdigest()
 
 
-def authority_inputs(rig, route):
+def authority_inputs(rig, route, approval_digest=None):
+    """The inputs the gate consumed for ``route``; with ``approval_digest`` (sha256 of the
+    host-issued token that admitted an ungranted action) the record names that authority too."""
     d = rig.pipe.directory
     grants = rigmod.rows(
         d / "context.sqlite",
@@ -66,7 +71,17 @@ def authority_inputs(rig, route):
             "source_digest": sha(decisions),
         },
         {"kind": "credential", "class": "issuer", "source_digest": sha(policy)},
-    ]
+    ] + (
+        [
+            {
+                "kind": "approval",
+                "class": "operator_signed_approval",
+                "source_digest": approval_digest,
+            }
+        ]
+        if approval_digest
+        else []
+    )
 
 
 def unsigned(row):
@@ -77,14 +92,16 @@ def sign(row, key):
     return hmac.new(key, encode(unsigned(row)).encode(), hashlib.sha256).hexdigest()
 
 
-def record(rig, route, verdict, decision_id, *, key=rigmod.OPERATOR):
+def record(rig, route, verdict, decision_id, *, key=rigmod.OPERATOR, approval=None):
+    approval_digest = sha(approval) if approval is not None else None
     row = {
         "schema": SCHEMA,
         "decision_id": decision_id,
         "action_key": route,
         "verdict": verdict,
         "gate_class": type(rig.pipe).__name__,
-        "authority_inputs": authority_inputs(rig, route),
+        "approval_digest": approval_digest,
+        "authority_inputs": authority_inputs(rig, route, approval_digest),
         "awm_hash": awm.manifest_hash(),
         "impl_hash": impl_hash(),
     }
@@ -100,9 +117,12 @@ def verify_records(rows, rig, *, key=rigmod.OPERATOR):
     for row in rows:
         if type(row) is not dict or row.get("schema") != SCHEMA:
             raise ValueError("provenance_schema")
-        if not hmac.compare_digest(row.get("signature", ""), sign(row, key)):
+        signature = row.get("signature", "")
+        if type(signature) is not str or not hmac.compare_digest(
+            signature.encode(), sign(row, key).encode()
+        ):
             raise ValueError("provenance_signature")
-        expected = authority_inputs(rig, row["action_key"])
+        expected = authority_inputs(rig, row["action_key"], row.get("approval_digest"))
         if encode(row["authority_inputs"]) != encode(expected):
             raise ValueError("provenance_mismatch")
         if row["awm_hash"] != awm.manifest_hash() or row["impl_hash"] != impl_hash():

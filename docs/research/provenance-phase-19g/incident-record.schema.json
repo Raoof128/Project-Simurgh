@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "simurgh-deployer-incident-record-v1",
-  "description": "A deployer-side incident record generated from receiver and host snapshots alone. No lab telemetry, no model output, no claim of prevention for an unknown outcome.",
+  "description": "A deployer-side incident record generated from the drill's dispatch verdicts and the receiver's effect count, with snapshot digests as an inventory of what was preserved. No lab telemetry, no model output, no claim of prevention for an unknown outcome. The two interval fields count scripted steps of the fixture clock, not a latency.",
   "type": "object",
   "required": [
     "schema",
@@ -12,23 +12,63 @@
     "landed_at_receiver",
     "claimed_prevented",
     "authority_timeline",
-    "detection_to_latch",
-    "latch_to_acknowledged_revocation",
+    "detection_to_latch_logical_steps",
+    "latch_to_acknowledged_revocation_logical_steps",
     "evidence_digests",
-    "model_telemetry_used"
+    "model_telemetry_used",
+    "counts_derived_from"
   ],
   "properties": {
-    "schema": { "const": "simurgh-deployer-incident-record-v1" },
-    "attempted": { "type": "integer", "minimum": 0 },
-    "blocked": { "type": "integer", "minimum": 0 },
-    "admitted": { "type": "integer", "minimum": 0 },
-    "unknown": { "type": "integer", "minimum": 0 },
-    "landed_at_receiver": { "type": "integer", "minimum": 0 },
-    "claimed_prevented": { "type": "integer", "const": 0 },
-    "authority_timeline": { "type": "array", "items": { "type": "object" } },
-    "detection_to_latch": { "type": "number" },
-    "latch_to_acknowledged_revocation": { "type": "number" },
-    "evidence_digests": { "type": "object" },
-    "model_telemetry_used": { "const": false }
-  }
+    "schema": {
+      "const": "simurgh-deployer-incident-record-v1"
+    },
+    "attempted": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "blocked": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "admitted": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "unknown": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "landed_at_receiver": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "claimed_prevented": {
+      "type": "integer",
+      "const": 0
+    },
+    "authority_timeline": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "evidence_digests": {
+      "type": "object"
+    },
+    "model_telemetry_used": {
+      "const": false
+    },
+    "detection_to_latch_logical_steps": {
+      "type": "number",
+      "minimum": 0
+    },
+    "latch_to_acknowledged_revocation_logical_steps": {
+      "type": "number",
+      "minimum": 0
+    },
+    "counts_derived_from": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
 }

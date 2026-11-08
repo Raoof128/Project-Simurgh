@@ -177,21 +177,37 @@ class ProvenanceRig:
         return status
 
     # approvals (trusted host operations) ---------------------------------------
-    def mint(self, route, *, approver_id, nonce):
+    def mint(self, route, *, approver_id, nonce, actor=ACTOR):
+        return self.mint_action(
+            self.actions[route], approver_id=approver_id, nonce=nonce, actor=actor
+        )
+
+    def mint_action(self, action, *, approver_id, nonce, actor=ACTOR):
         return self.pipe.approvals.mint(
-            self.actions[route],
+            action,
             approver_id=approver_id,
             nonce=nonce,
             now=self.now,
             key=OPERATOR,
+            actor=actor,
         )
 
+    def dispatch_action(self, action, *, approval=None):
+        return self.session().dispatch(action, approval=approval)["status"]
+
     def verify_approval(self, action, token):
-        return self.pipe.approvals.verify(action, token, now=self.now, key=OPERATOR)
+        return self.pipe.approvals.verify(
+            action, token, now=self.now, key=OPERATOR, actor=ACTOR
+        )
 
     def native_decision(self, route, token):
         return gate19.approved_decision(
-            self.pipe.approvals, self.actions[route], token, now=self.now, key=OPERATOR
+            self.pipe.approvals,
+            self.actions[route],
+            token,
+            now=self.now,
+            key=OPERATOR,
+            actor=ACTOR,
         )
 
     def run_default(self, adapter=None):

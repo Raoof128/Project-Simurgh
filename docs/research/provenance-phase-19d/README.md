@@ -19,5 +19,8 @@ docker run --rm --privileged -v "$PWD":/repo:ro -w /repo python:3.12-slim \
   --expected-root "$(cat docs/research/provenance-phase-19d/ROOT.sha256)"
 ```
 
-Expected: `"verified": true`, `"cases": 9`, `"all_hold": true`, `"routes_in_fresh_namespace": []`,
-`"live_reader_moved": true`, `"covert_channel_eliminated": false`.
+Expected: `"verified": true`, `"cases": 11`, `"all_hold": true`, `"routes_in_fresh_namespace": []`,
+`"live_reader_moved": true`, `"covert_channel_eliminated": false`,
+`"unix_socket_egress_eliminated": false`. `host`, `live_reader_moved` and `unix_sockets_reachable`
+describe the host that ran `verify`; on a stock Ubuntu host with Docker the last lists the Docker
+and resolver sockets.

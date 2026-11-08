@@ -47,8 +47,22 @@ class Lanes19cTests(unittest.TestCase):
         self.assertEqual(rc["denied_canonical"], "/etc/passwd")
         self.assertGreaterEqual(len(rc["variants"]), 6)
         self.assertTrue(all(v["fork"] == "effect_denied" for v in rc["variants"]))
-        self.assertTrue(all(v["canonical"] == "/etc/passwd" for v in rc["variants"]))
+        # case is significant for paths (P19-REPAIR03): the case-fold variant is its own canonical
+        for v in rc["variants"]:
+            expected = v["resource"] if v["variant"] == "case_fold" else "/etc/passwd"
+            self.assertEqual(v["canonical"], expected, v["variant"])
         self.assertTrue(rc["strawman_admits_at_least_one"])
+        # P19-REPAIR03: canonicalisation is exercised by aliases of the GRANTED resource
+        by = {a["alias"]: a for a in rc["granted_aliases"]}
+        self.assertTrue(all(a["holds"] for a in rc["granted_aliases"]), by)
+        self.assertEqual(by["case_variant"]["fork"], "effect_denied")
+        self.assertEqual(by["parent_traversal"]["fork"], "observed")
+        self.assertTrue(
+            rc["effects_record_the_canonical_resource"], rc["stored_effect_resources"]
+        )
+        ab = rc["identity_canonical_ablation"]
+        self.assertTrue(ab["canonicalisation_is_load_bearing"], ab)
+        self.assertIn("parent_traversal", ab["admitted_aliases_refused_under_identity"])
         self.assertTrue(
             any(v["naive_string_filter_demo"] == "admitted" for v in rc["variants"])
         )

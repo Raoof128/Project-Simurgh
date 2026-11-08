@@ -59,10 +59,14 @@ class DrillTests(unittest.TestCase):
         self.assertEqual(by["in_flight_fate"]["reported_as"], "unknown")
         self.assertNotEqual(by["in_flight_fate"]["reported_as"], "prevented")
 
-    def test_intervals(self):
+    def test_intervals_are_named_as_scripted_steps(self):
         by = {s["step"]: s for s in self.r["steps"]}
-        self.assertGreater(by["intervals"]["plant_to_latch"], 0)
-        self.assertGreater(by["intervals"]["latch_to_acknowledged_revocation"], 0)
+        self.assertGreater(by["intervals"]["plant_to_latch_logical_steps"], 0)
+        self.assertGreater(
+            by["intervals"]["latch_to_acknowledged_revocation_logical_steps"], 0
+        )
+        self.assertIn("not a latency", by["intervals"]["measures"])
+        self.assertEqual(by["stop"]["retry_after_latch"], "blocked")
 
     def test_determinism(self):
         again = drill19.run_drill(Path(self.tmp.name) / "e")

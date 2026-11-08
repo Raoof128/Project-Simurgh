@@ -1,5 +1,29 @@
 ## Change Log
 
+## [phase-19-repair-03] — 2026-11-08 — Phase 19 strict audit repaired (P19-REPAIR03); packs regenerated; 2026 gap hunt
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/` (gate, provenance, lane, rig, receiver, 19c/19d lanes, proxy,
+  drill, incident record, capture instrument, five verifiers, handoff, new `leanstates.py`), the Lean
+  model, the 19g schema, the workflow, all Phase 19 results and READMEs, the deployer profile, the
+  hosted README, the handoff, five regenerated packs, a new gap-hunt note, both logs. No frozen file;
+  census unchanged.
+- **Summary:** the 8 Nov strict audit's three blocking and twelve major findings are repaired under a
+  prior bounded declaration, test-first: the approval path keeps every frozen authority term and binds
+  the token to the actor; hostile relayed bodies cannot block granted work; receipts derive from the
+  verifying host and the verifiers bind whole reports; 19b closure has floors and the Lean differential
+  (96 states, with host approvals); the receiver keeps path case and records the canonical resource;
+  the proxy's role is the socket's and hostile lines are decisions; the 19d lane measures and reports
+  reachable daemon sockets; the drill's intervals are named as scripted steps and the record's counts
+  derive from verdicts. Packs: 19b `ac086a43…`, 19c `dd0fb73b…`, 19d `aa44eb45…` (droplet),
+  19e `cd74f489…`, 19g `b8d68621…`. The 2026 lab gap hunt proposes G34–G38.
+- **Files changed:** as above.
+- **Verification:** lane tests green on the Mac and (19d) on the droplet; Lean proofs and differential
+  pass; each pack verified twice; comparator `[]` for all six receipts; ruff, prettier and census clean;
+  suite and quick gate results in the PR.
+- **Follow-ups:** the three IOUs unchanged; the Unix-socket channel is measured, not closed; G34–G38.
+
 ## [phase-19-droplet] — 2026-11-08 — Phase 19 packs replayed on the owner's droplet; receipts retained
 
 **Raouf:**

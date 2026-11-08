@@ -97,6 +97,59 @@ class Receiver19Tests(unittest.TestCase):
             receiver19.canonical("/workdir/%2e%2e/etc//passwd/"), "/etc/passwd"
         )
 
+    def test_paths_are_case_sensitive_and_aliases_store_the_canonical_resource(self):
+        import json as _json
+        import sqlite3 as _sqlite3
+
+        self.store.allow("c1", "write_path", "/workdir/notes.txt")
+        for alias in (
+            "/workdir/./notes.txt",
+            "/tmp/../workdir/notes.txt",
+            "/workdir//notes.txt",
+        ):
+            out = self.send(
+                action(id="al-" + alias, operation="write_path", resource=alias)
+            )
+            self.assertEqual(out["status"], "observed", alias)
+        for other in (
+            "/WORKDIR/NOTES.TXT",
+            "/workdir/Notes.txt",
+            "/workdir/notes.txt%00.png",
+        ):
+            out = self.send(
+                action(id="ot-" + other, operation="write_path", resource=other)
+            )
+            self.assertEqual(out["reason"], "effect_denied", other)
+        db = _sqlite3.connect(self.store.path)
+        stored = {
+            _json.loads(p)["resource"]
+            for (p,) in db.execute("SELECT payload FROM effects")
+        }
+        requested = {r for (r,) in db.execute("SELECT requested_resource FROM effects")}
+        db.close()
+        self.assertEqual(stored, {"/workdir/notes.txt"})
+        self.assertEqual(len(requested), 3)
+
+    def test_holder_binding_never_fails_open_on_a_sentinel(self):
+        import sqlite3 as _sqlite3
+
+        a = action(id="sent-1")
+        k = receiver19.key_for(a)
+        db = _sqlite3.connect(self.store.path)
+        db.execute("UPDATE sessions SET holder_hash='00'")
+        db.commit()
+        db.close()
+        legit = self.store.send(
+            self.sess["secret"],
+            k,
+            a,
+            proof=receiver19.holder_proof(self.sess["holder"], k),
+        )
+        self.assertEqual(legit["reason"], "wrong_binding")
+        for sentinel in ("mismatch", "None", "", "null"):
+            out = self.store.send(self.sess["secret"], k, a, proof=sentinel)
+            self.assertEqual(out["reason"], "wrong_binding", sentinel)
+
     def test_cumulative_limit(self):
         self.store.set_limits("c1", per_call=20, running=35)
         self.assertEqual(

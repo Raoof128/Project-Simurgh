@@ -46,11 +46,14 @@ class Evidence19bTests(unittest.TestCase):
         self.assertEqual(r["arm"], "composed_successor")
         self.assertEqual(r["wired_deterministic_channels"], 4)
         self.assertIs(r["phase_19b_closed"], True)
-        self.assertTrue(all(r["closed_by"].values()))
-        self.assertEqual(r["approval_forgeries"], 7)
+        self.assertTrue(all(r["closed_by"].values()), r["closed_by"])
+        self.assertIn("at_least_13_mutants_every_one_killed", r["closed_by"])
+        self.assertIn("lean_differential_passed_on_this_host", r["closed_by"])
+        self.assertEqual(r["approval_forgeries"], 8)
+        self.assertEqual(r["lean"]["states_compared"], 96)
+        self.assertIs(r["lean"]["differential_passed_on_this_host"], True)
         self.assertEqual(r["kill_count"], 13)
         self.assertEqual(r["clean_differences"], 0)
-        self.assertEqual(r["lean"]["states_compared"], 48)
         self.assertIs(r["independent_custody"], False)
         self.assertIs(r["model_inference"], False)
 
@@ -71,7 +74,8 @@ class Evidence19bTests(unittest.TestCase):
             "proofs/phase19/AuthorityProvenance.lean",
         ):
             self.assertIn(needle, names)
-        self.assertNotIn("tools/assurance-provenance/projection.py", names)
+        self.assertIn("tools/assurance-provenance/projection.py", names)
+        self.assertIn("tools/assurance-provenance/leanstates.py", names)
         self.assertEqual(proto["awm_hash"], self.receipt["awm_hash"])
 
     def _reject(self, mutate, reason):

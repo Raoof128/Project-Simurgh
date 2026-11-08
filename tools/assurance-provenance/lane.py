@@ -32,7 +32,9 @@ def wire(value):
     return encode(value)
 
 
-def _run(base, name, gate_cls, channel, text, adapter, *, records=False):
+def _run(
+    base, name, gate_cls, channel, text, adapter, *, records=False, decision_base=0
+):
     rig = rigmod.ProvenanceRig(Path(base) / name, gate_cls=gate_cls)
     try:
         if channel is not None:
@@ -41,7 +43,7 @@ def _run(base, name, gate_cls, channel, text, adapter, *, records=False):
         rows = []
         if records:
             rows = [
-                provenance.record(rig, route, out["verdicts"][route], i)
+                provenance.record(rig, route, out["verdicts"][route], decision_base + i)
                 for i, route in enumerate(ROUTES)
             ]
             provenance.verify_records(rows, rig)
@@ -76,7 +78,14 @@ def write_anywhere(base):
     clean_differences = 0
     for name, cls, kind, bound in gates:
         baseline, base_rows = _run(
-            base, "base", cls, None, None, None, records=kind == "clean"
+            base,
+            "base",
+            cls,
+            None,
+            None,
+            None,
+            records=kind == "clean",
+            decision_base=len(records),
         )
         records.extend(base_rows)
         killed_by = []
@@ -92,6 +101,7 @@ def write_anywhere(base):
                     payload["text"],
                     channel if wired else None,
                     records=kind == "clean" and wired,
+                    decision_base=len(records),
                 )
                 records.extend(prow)
                 differs = wire(out) != wire(baseline)
@@ -317,6 +327,7 @@ FORGERIES = (
     ("approval_run", "run", "other-run"),
     ("approval_expired", "expires", rigmod.CLOCK - 1),
     ("approval_approver", "approver_id", "nobody"),
+    ("approval_actor", "actor", "someone-else"),
     ("approval_schema", "extra", "field"),
 )
 
@@ -352,11 +363,26 @@ def approval_matrix(base):
             )
         positive = {
             "verify": rig.verify_approval(rig.actions["b"], good),
-            "native_decision": rig.native_decision("b", good),
             "verdict": rig.dispatch("b", approval=good),
             "effects": len(rig.effects()),
             "replay_after_spend": rig.verify_approval(rig.actions["b"], good),
         }
+        # the approval-admitted dispatch leaves a provenance record naming the token as its authority
+        approval_record = provenance.record(
+            rig, "b", positive["verdict"], 0, approval=good
+        )
+        provenance.verify_records([approval_record], rig)
+        positive["provenance_record"] = {
+            "approval_digest": approval_record["approval_digest"],
+            "input_kinds": [i["kind"] for i in approval_record["authority_inputs"]],
+            "classes": sorted(
+                {i["class"] for i in approval_record["authority_inputs"]}
+            ),
+        }
+        # the native decision string spends its nonce: a second one on a fresh token is a replay
+        native = rig.mint("b", approver_id="operator-1", nonce="matrix-native")
+        positive["native_decision"] = rig.native_decision("b", native)
+        positive["native_decision_replay"] = rig.native_decision("b", native)
         reasons = [r["verify"] for r in rows]
         return {
             "rows": rows,

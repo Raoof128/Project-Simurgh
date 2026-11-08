@@ -33,6 +33,7 @@ APPROVAL_REASONS = (
     "approval_digest",
     "approval_expired",
     "approval_approver",
+    "approval_actor",
     "approval_replay",
 )
 APPROVAL_FIELDS = {
@@ -42,7 +43,21 @@ APPROVAL_FIELDS = {
     "content_digest",
     "expires",
     "nonce",
+    "actor",
 }
+RELAY_CAP = 16384
+DECODE_ERRORS = (ValueError, TypeError, OverflowError, RecursionError, AttributeError)
+
+
+def _signature_matches(signature, expected):
+    """Constant-time comparison that never raises: a non-string or non-ASCII signature is simply
+    not the expected one (P19-REPAIR03: a relayed body must not be able to crash the gate)."""
+    if type(signature) is not str:
+        return False
+    try:
+        return hmac.compare_digest(signature.encode(), expected.encode())
+    except DECODE_ERRORS:
+        return False
 
 
 def content_digest(action):
@@ -68,7 +83,7 @@ class ApprovalStore:
             for a in approvers:
                 db.execute("INSERT OR IGNORE INTO approvers VALUES(?)", (a,))
 
-    def mint(self, action, *, approver_id, nonce, now, key):
+    def mint(self, action, *, approver_id, nonce, now, key, actor):
         payload = {
             "run": action["run"],
             "action_key": action["id"],
@@ -76,12 +91,21 @@ class ApprovalStore:
             "content_digest": content_digest(action),
             "expires": now + 30,
             "nonce": nonce,
+            "actor": actor,
         }
         with sqlite3.connect(self.path) as db:
             db.execute("INSERT INTO approvals VALUES(?,?,0)", (nonce, action["id"]))
         return {"payload": payload, "signature": sign_payload(payload, key)}
 
-    def verify(self, action, token, *, now, key):
+    def verify(self, action, token, *, now, key, actor=None):
+        """One reason string, never an exception: every malformed shape is ``approval_schema``.
+        With ``actor`` given, the token must name that actor (``approval_actor``)."""
+        try:
+            return self._verify(action, token, now=now, key=key, actor=actor)
+        except DECODE_ERRORS:
+            return "approval_schema"
+
+    def _verify(self, action, token, *, now, key, actor):
         if type(token) is not dict or set(token) != {"payload", "signature"}:
             return "approval_schema"
         p, signature = token["payload"], token["signature"]
@@ -91,10 +115,12 @@ class ApprovalStore:
             or not identifier(p["nonce"])
             or type(p["expires"]) not in (int, float)
             or not math.isfinite(p["expires"])
+            or abs(p["expires"]) >= 2**53
+            or type(p["actor"]) is not str
             or type(signature) is not str
         ):
             return "approval_schema"
-        if not hmac.compare_digest(signature, sign_payload(p, key)):
+        if not _signature_matches(signature, sign_payload(p, key)):
             return "approval_signature"
         if p["run"] != action["run"]:
             return "approval_run"
@@ -104,6 +130,8 @@ class ApprovalStore:
             return "approval_digest"
         if not now < p["expires"]:
             return "approval_expired"
+        if actor is not None and p["actor"] != actor:
+            return "approval_actor"
         with sqlite3.connect(self.path) as db:
             if not db.execute(
                 "SELECT 1 FROM approvers WHERE id=?", (p["approver_id"],)
@@ -121,21 +149,25 @@ class ApprovalStore:
             db.execute("UPDATE approvals SET used=1 WHERE nonce=?", (nonce,))
 
 
-def approved_decision(store, action, token, *, now, key):
+def approved_decision(store, action, token, *, now, key, actor=None):
     """The string a native caller passes to the frozen ``native_delivery``: ``approve`` only for
-    a token the store verifies. Pure with respect to the native SDK; not exercised natively here."""
-    return (
-        "approve" if store.verify(action, token, now=now, key=key) == "ok" else "reject"
-    )
+    a token the store verifies, and the nonce is spent in the same call so a second decision on the
+    same token is ``reject`` (P19-REPAIR03). Not exercised natively here."""
+    if store.verify(action, token, now=now, key=key, actor=actor) != "ok":
+        return "reject"
+    store.spend(token["payload"]["nonce"])
+    return "approve"
 
 
 def approval_from_tool_result(text):
     """The tool-result reader: a token relayed through an agent-writable channel is parsed and
     returned for verification. It is never trusted as text; a claim without a valid signature
     is just bytes that fail ``verify`` with its own reason."""
+    if type(text) is not str or len(text) > RELAY_CAP:
+        return None
     try:
         value = json.loads(text)
-    except ValueError:
+    except DECODE_ERRORS:
         return None
     if type(value) is dict and type(value.get("approval")) is dict:
         return value["approval"]
@@ -160,7 +192,11 @@ class ProvenanceSession(successor.BoundSession):
             if approval is None:
                 return self.context.dispatch(action)
             reason = pipe.approvals.verify(
-                action, approval, now=pipe.clock(), key=pipe.operator_key
+                action,
+                approval,
+                now=pipe.clock(),
+                key=pipe.operator_key,
+                actor=self.context.actor,
             )
             if reason != "ok":
                 # An invalid relayed token never reduces authority: it is recorded with its
@@ -171,9 +207,11 @@ class ProvenanceSession(successor.BoundSession):
             return self.dispatch_approved(action, approval)
 
     def dispatch_approved(self, action, token):
-        """Re-implements the frozen ``Session.dispatch`` admission with the grant check replaced
-        by a verified host-issued approval. Budget, blocking facts, duplicates and the reservation
-        are kept exactly; the token is spent at reservation. The most reviewed path in Phase 19."""
+        """Re-implements the frozen ``Session.dispatch`` admission with exactly one term replaced:
+        membership of the action in the actor's grant set is replaced by the verified host-issued
+        approval. The actor-active, source-match and checkpoint checks (``authority``), the
+        configured-action equality, blocking facts, duplicates, budget and the reservation are the
+        frozen ones; the token is spent at reservation (P19-REPAIR03)."""
         pipe = self.pipeline
         if not valid(action):
             pipe.record("approval_denied:approval_schema")
@@ -183,14 +221,20 @@ class ProvenanceSession(successor.BoundSession):
         action_id = action["id"]
         with gate.db() as db:
             db.execute("BEGIN IMMEDIATE")
-            if db.execute("SELECT 1 FROM facts WHERE blocking=1").fetchone():
+            authority = self.context.authority(db)
+            if (
+                authority is None
+                or encode(action) != encode(gate.actions.get(action_id))
+                or db.execute("SELECT 1 FROM facts WHERE blocking=1").fetchone()
+            ):
                 gate.event(
                     db,
                     "blocked",
                     actor=self.context.actor,
                     action_id=action_id,
-                    reason="fact",
+                    reason="authority_or_fact",
                 )
+                pipe.record("approval_denied:authority_or_fact")
                 return {"status": "blocked"}
             previous = db.execute(
                 "SELECT status FROM attempts WHERE action_id=?", (action_id,)
@@ -325,8 +369,11 @@ def ack_renewal(signal, key, now, ack_db, ack=None):
         or not math.isfinite(p["expires"])
     ):
         return outstanding
-    expected = hmac.new(key, encode(p).encode(), hashlib.sha256).hexdigest()
-    if not hmac.compare_digest(str(signature), expected):
+    try:
+        expected = hmac.new(key, encode(p).encode(), hashlib.sha256).hexdigest()
+    except DECODE_ERRORS:
+        return outstanding
+    if not _signature_matches(signature, expected):
         return outstanding
     if (
         p["scope"] != signal.scope

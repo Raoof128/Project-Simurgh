@@ -96,14 +96,26 @@ def expected_for(pid, receipt):
 
 
 def check(pid, receipt):
-    """Every field that differs from, or is missing against, the committed receipt."""
+    """Every field that differs from, is missing against, or is absent from the committed receipt
+    (an unexpected field is a discrepancy too, P19-REPAIR03)."""
     out = []
-    for key, want in expected_for(pid, receipt).items():
+    want_all = expected_for(pid, receipt)
+    for key, want in want_all.items():
         if key not in receipt:
             out.append({"field": key, "expected": want, "got": None, "kind": "missing"})
         elif projection.wire(receipt[key]) != projection.wire(want):
             out.append(
                 {"field": key, "expected": want, "got": receipt[key], "kind": "differs"}
+            )
+    for key in sorted(receipt):
+        if key not in want_all and key not in EXCLUDED:
+            out.append(
+                {
+                    "field": key,
+                    "expected": None,
+                    "got": receipt[key],
+                    "kind": "unexpected",
+                }
             )
     return out
 
@@ -167,6 +179,28 @@ def render():
         "- Return the verifier's JSON output verbatim per phase, and a short note naming your OS,",
         "  architecture, Python version, Lean version if any, and the commit.",
         "",
+        "## Host recipes",
+        "",
+        "- 19a with `--replay` (Linux x86_64 only): create a venv and install the hash-locked set first:",
+        "  `python -m venv .venv && .venv/bin/pip install --require-hashes --only-binary=:all:",
+        "  -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock`, then",
+        "  `.venv/bin/python -B tools/replay-preflight/preflight.py` must print `preflight passed`. The",
+        "  clone needs full history (`git clone`, not a tarball): the replay checks the Phase 17 freeze commit.",
+        "- 19b: Lean 4.15.0 on PATH (`proofs/phase19/lean-toolchain`; `elan` installs it) for the Lean fields;",
+        "  without it the receipt reports them `null` and `phase_19b_closed: false` for your host, which is",
+        "  expected and is excluded from the comparison.",
+        "- 19d: a Linux host where `unshare --user --map-root-user --net true` succeeds. Expect the verifier",
+        "  to list which well-known Unix sockets your host exposes inside the namespace",
+        "  (`unix_sockets_reachable`); that list is yours and is reported, not compared.",
+        "",
+        "## What the comparator does and does not check",
+        "",
+        "`handoff19.py check` compares every receipt field except `tree_state`, `host` and `replay` with the",
+        "committed receipt and flags a missing, differing or unexpected field. It cannot see whether the",
+        "`--replay` run happened: a receipt whose `replay.result` says `verified` is taken at its word and",
+        "then expected to read `kind: frozen_replay_chained`. Your verbatim verifier output and your note",
+        "are what make that claim checkable; the comparator alone does not.",
+        "",
         "## Phases",
         "",
     ]
@@ -205,8 +239,9 @@ def render():
         "cd tools/assurance-provenance && python -m unittest discover -s tests -v",
         "```",
         "",
-        "About twenty minutes. The Lean differential test and the 19d namespace tests skip, not pass, where",
-        "their host requirement is unmet; the receipt you return should say which skipped.",
+        "About thirty minutes on a laptop, under thirty on a hosted runner. The Lean differential test and the",
+        "19d namespace tests skip, not pass, where their host requirement is unmet; the receipt you return",
+        "should say which skipped.",
         "",
         "## Returning the receipt",
         "",

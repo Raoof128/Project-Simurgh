@@ -28,6 +28,7 @@ PHASE_19G_FILES = (
     "drill19.py",
     "incident19.py",
     "evidence19g.py",
+    "projection.py",
     "tests/test_drill19.py",
     "tests/test_incident19.py",
     "tests/test_evidence19g.py",
@@ -36,11 +37,14 @@ STEP_FIELDS = {
     "plant": ("verdict", "effects_after", "action"),
     "detect": ("provenance_record",),
     "admit_in_flight": ("verdict", "action"),
-    "stop": ("latched", "all_routes_blocked"),
+    "stop": ("latched", "retry_after_latch", "all_routes_blocked"),
     "revoke": ("acknowledged", "retry_after_revoke"),
     "preserve": (),
     "in_flight_fate": ("attempt_status", "receiver_effects", "reported_as"),
-    "intervals": ("plant_to_latch", "latch_to_acknowledged_revocation"),
+    "intervals": (
+        "plant_to_latch_logical_steps",
+        "latch_to_acknowledged_revocation_logical_steps",
+    ),
 }
 RECORD_FIELDS = (
     "attempted",
@@ -146,6 +150,24 @@ def compare(saved, actual):
     for key in RECORD_FIELDS:
         if saved["incident"].get(key) != actual["incident"][key]:
             raise ValueError("incident_count_mismatch:" + key)
+    # P19-REPAIR03: the whole report is bound; only the snapshot digest VALUES (sqlite-build
+    # dependent) are normalised, their inventory having been checked above
+    if wire(_normalise(saved)) != wire(_normalise(actual)):
+        raise ValueError("report_mismatch")
+
+
+def _normalise(report):
+    out = loads(wire(report))
+    inc = out.get("incident") or {}
+    if type(inc.get("evidence_digests")) is dict:
+        inc["evidence_digests"] = {k: None for k in inc["evidence_digests"]}
+    for step in (out.get("drill") or {}).get("steps") or []:
+        if step.get("step") == "preserve":
+            for side in ("before", "after"):
+                if type(step.get(side)) is dict:
+                    step[side] = {k: None for k in step[side]}
+    out.pop("protocol_sha256", None)
+    return out
 
 
 def receipt_for(report, manifest_root):
@@ -159,9 +181,11 @@ def receipt_for(report, manifest_root):
         "all_routes_blocked": steps["stop"]["all_routes_blocked"],
         "revocation_acknowledged": steps["revoke"]["acknowledged"],
         "in_flight_reported_as": steps["in_flight_fate"]["reported_as"],
-        "plant_to_latch": steps["intervals"]["plant_to_latch"],
-        "latch_to_acknowledged_revocation": steps["intervals"][
-            "latch_to_acknowledged_revocation"
+        "plant_to_latch_logical_steps": steps["intervals"][
+            "plant_to_latch_logical_steps"
+        ],
+        "latch_to_acknowledged_revocation_logical_steps": steps["intervals"][
+            "latch_to_acknowledged_revocation_logical_steps"
         ],
         "incident": {k: report["incident"][k] for k in RECORD_FIELDS},
         "compared": {
@@ -194,7 +218,8 @@ def verify(pack, expected_root, *, protocol=None):
     for name, project in SIDECARS.items():
         if wire(loads(files[name])) != wire(project(saved)):
             raise ValueError("sidecar_member_mismatch")
-    return receipt_for(saved, expected_root)
+    # the receipt describes THIS host's recomputation, never the pack's saved values
+    return receipt_for(actual, expected_root)
 
 
 def run(out, *, protocol=None):

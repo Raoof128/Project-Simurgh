@@ -1,3 +1,4 @@
+import json
 import sys
 import tempfile
 import unittest
@@ -45,11 +46,30 @@ class CanonicalTests(unittest.TestCase):
                 )["decision"],
                 "host_header_mismatch",
             )
+            # a role is a property of the socket, never a request field (P19-REPAIR03)
             self.assertEqual(
                 p.decide({"url": "http://receiver.example/report", "role": "intern"})[
                     "decision"
                 ],
-                "role_not_allowed",
+                "malformed",
+            )
+            self.assertEqual(
+                p.decide({"url": "http://receiver.example/report", "method": "DELETE"})[
+                    "decision"
+                ],
+                "method_not_allowed",
+            )
+            self.assertEqual(
+                p.decide({"url": "http://receiver.example/report", "host_header": 5})[
+                    "decision"
+                ],
+                "malformed",
+            )
+            self.assertEqual(
+                p.decide({"url": "http://evil.example\\@receiver.example/report"})[
+                    "decision"
+                ],
+                "malformed",
             )
             self.assertEqual(
                 p.decide({"url": "http://mirror.example/report"})["decision"],
@@ -58,6 +78,103 @@ class CanonicalTests(unittest.TestCase):
             self.assertEqual(p.decide("garbage")["decision"], "malformed")
         finally:
             p.close()
+
+
+class SocketRoleAndRobustnessTests(unittest.TestCase):
+    """Runs on any POSIX host: the proxy's decision and serve loop need no namespace."""
+
+    def _proxy(self, socket_role):
+        tmp = tempfile.mkdtemp()
+        receiver = egress19.Receiver()
+        self.addCleanup(receiver.close)
+        p = egress19.Proxy(
+            Path(tmp) / "p.sock",
+            allowed=["http://receiver.example/report", "http://ops.example/admin"],
+            roles={egress19.canonical_url("http://ops.example/admin"): {"operator"}},
+            redirects={},
+            receiver_port=receiver.port,
+            socket_role=socket_role,
+        )
+        self.addCleanup(p.close)
+        return p, receiver
+
+    def _ask(self, p, raw, timeout=8):  # above the proxy's own 5 s receive timeout
+        import socket
+
+        s = socket.socket(socket.AF_UNIX)
+        s.settimeout(timeout)
+        s.connect(str(p.path))
+        try:
+            try:
+                s.sendall(raw if isinstance(raw, bytes) else json.dumps(raw).encode())
+            except BrokenPipeError:
+                pass  # the proxy may answer and close before a long line is fully sent
+            return json.loads(s.recv(16384).decode())
+        finally:
+            s.close()
+
+    def test_role_comes_from_the_socket(self):
+        worker, receiver = self._proxy("worker")
+        self.assertEqual(
+            self._ask(worker, {"url": "http://ops.example/admin"})["decision"],
+            "role_not_allowed",
+        )
+        self.assertEqual(
+            self._ask(worker, {"url": "http://ops.example/admin", "role": "operator"})[
+                "decision"
+            ],
+            "malformed",
+        )
+        self.assertEqual(receiver.effects, [])
+        operator, receiver2 = self._proxy("operator")
+        self.assertEqual(
+            self._ask(operator, {"url": "http://ops.example/admin"})["decision"],
+            "forwarded",
+        )
+        self.assertEqual(len(receiver2.effects), 1)
+
+    def test_hostile_lines_are_decisions_and_the_loop_survives(self):
+        p, receiver = self._proxy("worker")
+        hostile = [
+            b'{"url":"http://receiver.example/report","role":["x"]}',
+            b'{"url":"http://receiver.example/report","host_header":5}',
+            b'{"url":"http://receiver.example/report","method":"GET\r\nX: 1"}',
+            b'{"url":"http://receiver.example/report","n":NaN}',
+            b'{"url":"http://evil.example/","url":"http://receiver.example/report"}',
+            b"garbage",
+            b"[" * 20000,
+            b"",
+        ]
+        for raw in hostile:
+            self.assertEqual(self._ask(p, raw)["decision"], "malformed", raw[:40])
+        self.assertEqual(
+            self._ask(p, {"url": "http://receiver.example/report"})["decision"],
+            "forwarded",
+        )
+        self.assertEqual(len(receiver.effects), 1)
+        self.assertEqual(len(p.log), len(hostile) + 1)
+
+    def test_method_is_allow_listed_and_bytes_are_not_a_channel(self):
+        p, receiver = self._proxy("worker")
+        for method in ("DELETE", "get", "SECRETDATA123", "X" * 3000):
+            self.assertEqual(
+                self._ask(
+                    p, {"url": "http://receiver.example/report", "method": method}
+                )["decision"],
+                "method_not_allowed",
+            )
+        self.assertEqual(receiver.effects, [])
+
+    def test_canonical_url_keeps_ipv6_brackets_and_scheme_ports(self):
+        c = egress19.canonical_url
+        self.assertEqual(c("http://[::1]:8080/x"), "http://[::1]:8080/x")
+        self.assertNotEqual(c("http://[::1]:8080/x"), c("http://[::1:8080]/x"))
+        self.assertEqual(c("https://x.example:80/x"), "https://x.example:80/x")
+        self.assertEqual(c("http://x.example:443/x"), "http://x.example:443/x")
+        with self.assertRaises(ValueError):
+            c("http://allowed@evil.example/")
+        with self.assertRaises(ValueError):
+            c("ftp://x.example/")
 
 
 @unittest.skipUnless(

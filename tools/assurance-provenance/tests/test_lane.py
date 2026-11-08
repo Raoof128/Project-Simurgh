@@ -89,7 +89,14 @@ class ApprovalMatrixTests(unittest.TestCase):
         tmp = tempfile.TemporaryDirectory(prefix="p19b-matrix-")
         self.addCleanup(tmp.cleanup)
         m = lane.approval_matrix(Path(tmp.name) / "m")
-        self.assertEqual(len(m["rows"]), 7)
+        self.assertEqual(
+            len(m["rows"]), 8
+        )  # eight forgeries since P19-REPAIR03 (actor)
+        self.assertIn("approval_actor", [r["forgery"] for r in m["rows"]])
+        self.assertEqual(m["positive_control"]["native_decision_replay"], "reject")
+        self.assertIn(
+            "approval", m["positive_control"]["provenance_record"]["input_kinds"]
+        )
         self.assertTrue(m["distinct_reasons"])
         self.assertTrue(m["all_forgeries_blocked"])
         self.assertTrue(all(r["native_decision"] == "reject" for r in m["rows"]))

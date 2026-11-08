@@ -28,6 +28,7 @@ PHASE_19D_FILES = (
     "egress19.py",
     "lanes19d.py",
     "evidence19d.py",
+    "projection.py",
     "tests/test_egress19.py",
     "tests/test_lanes19d.py",
     "tests/test_evidence19d.py",
@@ -105,10 +106,40 @@ def build_report(work):
         "non_claims": [
             "one namespace on one host; the canary is per-namespace kernel counters and the proxy log",
             "the covert-channel probe reports a shared-filesystem channel and does not close it",
+            "the namespace confines IP routing only; filesystem Unix sockets to privileged daemons are probed and reported, not closed",
             "the second-operator canary is attested, not recomputable",
-            "kernel release, timings and the live-reader counter values are reported, not compared",
+            "kernel release, timings, the live-reader counter values and the socket-probe results are reported, not compared",
         ],
     }
+
+
+HOST_DEPENDENT = (
+    "host, rows[].receiver_port, covert_probe.seconds, covert_probe.bits_per_second_observed, "
+    "live_reader_control.counter_delta, live_reader_control.routes_after_lo_up, "
+    "unix_socket_probe.results, unix_socket_probe.reachable"
+)
+
+
+def _normalise(report):
+    """The report with only the fields named in HOST_DEPENDENT blanked (P19-REPAIR03); every
+    other byte is bound by the comparison."""
+    out = loads(wire(report))
+    lane = out.get("lane") or {}
+    lane["host"] = None
+    for row in lane.get("rows") or []:
+        if "receiver_port" in row:
+            row["receiver_port"] = None  # the owned receiver binds an ephemeral loopback port
+    for key in ("seconds", "bits_per_second_observed"):
+        if type(lane.get("covert_probe")) is dict:
+            lane["covert_probe"][key] = None
+    if type(lane.get("live_reader_control")) is dict:
+        lane["live_reader_control"]["counter_delta"] = None
+        lane["live_reader_control"]["routes_after_lo_up"] = None
+    if type(lane.get("unix_socket_probe")) is dict:
+        lane["unix_socket_probe"]["results"] = None
+        lane["unix_socket_probe"]["reachable"] = None
+    out.pop("protocol_sha256", None)
+    return out
 
 
 def compare(saved, actual):
@@ -126,6 +157,8 @@ def compare(saved, actual):
         != actual["lane"]["namespace"]["routes_in_fresh_namespace"]
     ):
         raise ValueError("route_mismatch")
+    if wire(_normalise(saved)) != wire(_normalise(actual)):
+        raise ValueError("report_mismatch")
 
 
 def tree_state():
@@ -155,7 +188,11 @@ def receipt_for(report, manifest_root):
         "live_reader_moved": lane["live_reader_control"]["counter_delta"]["Tcp.OutSegs"]
         >= 1,
         "covert_channel_eliminated": lane["covert_probe"]["eliminated"],
+        "covert_probe_bytes_delivered": lane["covert_probe"]["bytes_delivered"],
+        "unix_sockets_reachable": lane["unix_socket_probe"]["reachable"],
+        "unix_socket_egress_eliminated": lane["unix_socket_probe"]["eliminated"],
         "compared_fields": list(COMPARED),
+        "reported_not_compared": HOST_DEPENDENT,
         "manifest_sha256": manifest_root,
         "independent_custody": False,
         "model_inference": False,
@@ -181,7 +218,8 @@ def verify(pack, expected_root, *, protocol=None):
     for name, project in SIDECARS.items():
         if wire(loads(files[name])) != wire(project(saved)):
             raise ValueError("sidecar_member_mismatch")
-    return receipt_for(saved, expected_root)
+    # the receipt describes THIS host's recomputation, never the pack's saved values
+    return receipt_for(actual, expected_root)
 
 
 def run(out, *, protocol=None):

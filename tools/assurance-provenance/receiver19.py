@@ -72,15 +72,18 @@ def key_for(action):
 
 
 def canonical(resource):
-    """Receiver-side canonical form of a resource: repeated percent-decoding, case folding,
-    dot-segment removal and duplicate-slash collapse for paths, trailing slash stripped."""
+    """Receiver-side canonical form of a resource: percent-decoding to a fixed point, dot-segment
+    removal and duplicate-slash collapse for paths, trailing slash stripped. Case is significant
+    for paths (P19-REPAIR03: on a case-sensitive filesystem ``/A`` and ``/a`` are different objects,
+    so folding would widen a grant); non-path resource labels are folded as before."""
     value = resource
-    for _ in range(3):
+    for _ in range(8):
         decoded = urllib.parse.unquote(value)
         if decoded == value:
             break
         value = decoded
-    value = value.lower()
+    if not value.startswith("/"):
+        value = value.lower()
     if value.startswith("/"):
         # POSIX keeps a leading double slash as implementation-defined; a receiver does not.
         value = "/" + posixpath.normpath(value).lstrip("/")
@@ -117,7 +120,7 @@ class Store19:
             CREATE TABLE state(id INTEGER PRIMARY KEY CHECK(id=1),policy TEXT NOT NULL,issuer TEXT NOT NULL,now INTEGER NOT NULL);
             CREATE TABLE credentials(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,revoked INTEGER NOT NULL,run TEXT NOT NULL,admin_revoked INTEGER NOT NULL);
             CREATE TABLE sessions(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,credential_id TEXT NOT NULL,subject TEXT NOT NULL,tenant TEXT NOT NULL,resource TEXT NOT NULL,expires INTEGER NOT NULL,cancelled INTEGER NOT NULL,holder_hash TEXT NOT NULL);
-            CREATE TABLE effects(key TEXT PRIMARY KEY,payload TEXT NOT NULL,credential_id TEXT NOT NULL,session_id TEXT NOT NULL);
+            CREATE TABLE effects(key TEXT PRIMARY KEY,payload TEXT NOT NULL,credential_id TEXT NOT NULL,session_id TEXT NOT NULL,requested_resource TEXT NOT NULL);
             CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,payload TEXT NOT NULL);
             CREATE TABLE grants(credential_id TEXT NOT NULL,operation TEXT NOT NULL,resource TEXT NOT NULL,PRIMARY KEY(credential_id,operation,resource));
             CREATE TABLE manifest(credential_id TEXT NOT NULL,name TEXT NOT NULL,digest TEXT NOT NULL,PRIMARY KEY(credential_id,name,digest));
@@ -317,9 +320,11 @@ class Store19:
                     reason = "credential_inactive"
             # ---- Phase 19c checks, after every frozen reason ----
             if reason is None:
-                if type(proof) is not str or not hmac.compare_digest(
-                    hashed(proof),
-                    hashed(holder_proof_from_hash(row[7], key, db, row[0], self)),
+                expected_proof = holder_proof_from_hash(row[7], key, db, row[0], self)
+                if (
+                    expected_proof is None
+                    or type(proof) is not str
+                    or not hmac.compare_digest(hashed(proof), hashed(expected_proof))
                 ):
                     reason = "wrong_binding"
                 elif action["run"] != cred[2]:
@@ -358,14 +363,16 @@ class Store19:
             previous = db.execute(
                 "SELECT payload FROM effects WHERE key=?", (key,)
             ).fetchone()
-            payload = encode(action)
+            # the effect records the resource the receiver authorised (the canonical form), and the
+            # bytes the caller sent beside it (P19-REPAIR03): a consumer never acts on an alias
+            payload = encode(dict(action, resource=canonical(action["resource"])))
             if previous and previous[0] != payload:
                 self.event(db, "denied", reason="idempotency_conflict", key=key)
                 return {"status": "denied", "reason": "idempotency_conflict"}
             if previous is None:
                 db.execute(
-                    "INSERT INTO effects VALUES(?,?,?,?)",
-                    (key, payload, row[1], row[0]),
+                    "INSERT INTO effects VALUES(?,?,?,?,?)",
+                    (key, payload, row[1], row[0], action["resource"]),
                 )
                 db.execute(
                     "UPDATE limits SET used=used+? WHERE credential_id=?",
@@ -401,8 +408,8 @@ class Store19:
                 return {"status": "denied", "reason": reason}
             key = hashlib.sha256(("load:" + name + ":" + digest).encode()).hexdigest()
             db.execute(
-                "INSERT OR IGNORE INTO effects VALUES(?,?,?,?)",
-                (key, encode({"load": name, "digest": digest}), row[1], row[0]),
+                "INSERT OR IGNORE INTO effects VALUES(?,?,?,?,?)",
+                (key, encode({"load": name, "digest": digest}), row[1], row[0], name),
             )
             self.event(db, "loaded", name=name, digest=digest, session_id=row[0])
             return {"status": "loaded", "name": name, "digest": digest}
@@ -433,5 +440,7 @@ def holder_proof_from_hash(holder_hash, key, db, session_id, store):
         store.session_key.encode(), ("holder:" + session_id).encode(), hashlib.sha256
     ).hexdigest()
     if hashed(holder) != holder_hash:
-        return "mismatch"
+        return (
+            None  # never a string: a sentinel the caller could present would fail open
+        )
     return holder_proof(holder, key)

@@ -27,7 +27,13 @@ class IncidentRecordTests(unittest.TestCase):
             self.assertIn(key, self.rec, key)
         self.assertEqual(self.rec["schema"], "simurgh-deployer-incident-record-v1")
 
-    def test_counts_from_snapshots(self):
+    def test_counts_from_dispatch_verdicts(self):
+        self.assertIn("dispatch verdicts", self.rec["counts_derived_from"])
+        flipped = json.loads(json.dumps(self.drill))
+        for s in flipped["steps"]:
+            if s["step"] == "stop":
+                s["retry_after_latch"] = "observed"
+        self.assertEqual(incident19.record_from_drill(flipped)["blocked"], 2)
         self.assertEqual(self.rec["attempted"], 4)
         self.assertEqual(self.rec["blocked"], 3)
         self.assertEqual(self.rec["unknown"], 1)

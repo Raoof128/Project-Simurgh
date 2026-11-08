@@ -8,8 +8,10 @@ demonstration of power, not a comparator, and does not pay G22.
 """
 
 import hashlib
+import posixpath
 import shutil
 import sys
+import urllib.parse
 from pathlib import Path
 
 import receiver19
@@ -196,12 +198,70 @@ def naive_string_filter_demo(resource):
     return "denied" if resource == DENIED else "admitted"
 
 
+def single_decode_filter_demo(resource):
+    """A plausible one-line filter: decode once, normalise dot segments, fold case."""
+    return (
+        "denied"
+        if posixpath.normpath(urllib.parse.unquote(resource)).lower() == DENIED
+        else "admitted"
+    )
+
+
+GRANTED = "/workdir/notes.txt"
+# aliases of the GRANTED resource: the rows that exercise canonicalisation (P19-REPAIR03); the
+# `/etc/passwd` variants above are denied by the allow-list whatever the canonicaliser does
+GRANTED_ALIASES = (
+    ("dot_segment", "/workdir/./notes.txt", "observed"),
+    ("duplicate_slash", "/workdir//notes.txt", "observed"),
+    ("percent_encoded", "/workdir/%6eotes.txt", "observed"),
+    ("parent_traversal", "/tmp/../workdir/notes.txt", "observed"),
+    ("trailing_slash", "/workdir/notes.txt/", "observed"),
+    ("case_variant", "/WORKDIR/NOTES.TXT", "effect_denied"),
+    ("nul_suffix", "/workdir/notes.txt%00.png", "effect_denied"),
+)
+
+
+def _alias_rows(p, prefix):
+    rows = []
+    for name, resource, expected in GRANTED_ALIASES:
+        verdict = p.send_fork(
+            action(id=prefix + name, operation="write_path", resource=resource)
+        )
+        rows.append(
+            {
+                "alias": name,
+                "resource": resource,
+                "canonical": receiver19.canonical(resource),
+                "fork": verdict,
+                "expected": expected,
+                "holds": verdict == expected,
+            }
+        )
+    return rows
+
+
+def _stored_resources(p):
+    import json as _json
+    import sqlite3 as _sqlite3
+
+    db = _sqlite3.connect(p.fork.path)
+    try:
+        return sorted(
+            {
+                _json.loads(payload)["resource"]
+                for (payload,) in db.execute("SELECT payload FROM effects")
+            }
+        )
+    finally:
+        db.close()
+
+
 def route_corpus(base):
     p = Pair(base, "route")
     try:
-        p.fork.allow("c1", "write_path", "/workdir/notes.txt")
+        p.fork.allow("c1", "write_path", GRANTED)
         positive = p.send_fork(
-            action(id="w0", operation="write_path", resource="/workdir/notes.txt")
+            action(id="w0", operation="write_path", resource=GRANTED)
         )
         variants = []
         for name, resource, source in VARIANTS:
@@ -217,21 +277,61 @@ def route_corpus(base):
                         )
                     ),
                     "naive_string_filter_demo": naive_string_filter_demo(resource),
+                    "single_decode_filter_demo": single_decode_filter_demo(resource),
                     "frozen": "request (write_path is not a frozen operation)",
                 }
             )
-        return {
-            "denied_canonical": DENIED,
-            "positive_control": {"fork": positive},
-            "variants": variants,
-            "strawman_admits_at_least_one": any(
-                v["naive_string_filter_demo"] == "admitted" for v in variants
-            ),
-            "pays_G22": False,
-            "note": "receiver-direct; gate-side arms are true by construction and are not scored; the strawman is authored",
-        }
+        aliases = _alias_rows(p, "alias-")
+        stored = _stored_resources(p)
     finally:
         p.close()
+    # ablation: with the canonicaliser replaced by the identity, the admitted aliases must be
+    # refused; a corpus that cannot tell the two apart would be a string filter in disguise
+    real = receiver19.canonical
+    receiver19.canonical = lambda value: value
+    try:
+        q = Pair(base, "route-ablation")
+        try:
+            q.fork.allow("c1", "write_path", GRANTED)
+            ablated = _alias_rows(q, "ablated-")
+        finally:
+            q.close()
+    finally:
+        receiver19.canonical = real
+    admitted_aliases = [a["alias"] for a in aliases if a["fork"] == "observed"]
+    ablation_flips = [
+        a["alias"]
+        for a, b in zip(aliases, ablated)
+        if a["fork"] == "observed" and b["fork"] != "observed"
+    ]
+    return {
+        "denied_canonical": DENIED,
+        "positive_control": {"fork": positive},
+        "variants": variants,
+        "granted": GRANTED,
+        "granted_aliases": aliases,
+        "effects_record_the_canonical_resource": stored == [GRANTED],
+        "stored_effect_resources": stored,
+        "identity_canonical_ablation": {
+            "rows": ablated,
+            "admitted_aliases_refused_under_identity": ablation_flips,
+            "canonicalisation_is_load_bearing": bool(admitted_aliases)
+            and sorted(ablation_flips) == sorted(admitted_aliases),
+        },
+        "strawman_admits_at_least_one": any(
+            v["naive_string_filter_demo"] == "admitted" for v in variants
+        ),
+        "single_decode_filter_admits": [
+            v["variant"]
+            for v in variants
+            if v["single_decode_filter_demo"] == "admitted"
+        ],
+        "pays_G22": False,
+        "note": (
+            "receiver-direct; the /etc/passwd variants are refused by the allow-list and do not "
+            "exercise the canonicaliser; the granted-alias rows and the identity ablation do"
+        ),
+    }
 
 
 def cumulative_lane(base):

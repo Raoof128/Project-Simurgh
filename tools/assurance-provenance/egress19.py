@@ -26,14 +26,59 @@ from pathlib import Path
 UNSHARE = ["unshare", "--user", "--map-root-user", "--net"]
 DECISIONS = (
     "forwarded",
+    "forward_failed",
     "destination_not_allowed",
     "final_destination_not_allowed",
     "host_header_mismatch",
     "role_not_allowed",
+    "method_not_allowed",
     "redirect_limit",
     "malformed",
 )
 ENETUNREACH = 101
+REQUEST_FIELDS = {"url", "host_header", "method"}
+METHODS = ("GET", "POST")
+RECV_CAP = 16384
+# filesystem-reachable Unix sockets a network namespace does not confine; probed and reported
+WELL_KNOWN_SOCKETS = (
+    "/var/run/docker.sock",
+    "/run/docker.sock",
+    "/run/systemd/resolve/io.systemd.Resolve",
+    "/run/dbus/system_bus_socket",
+    "/run/systemd/journal/socket",
+    "/var/run/nscd/socket",
+    "/run/containerd/containerd.sock",
+    "/run/podman/podman.sock",
+)
+
+
+def _strict_pairs(pairs):
+    keys = [k for k, _ in pairs]
+    if len(keys) != len(set(keys)):
+        raise ValueError("duplicate_key")
+    return dict(pairs)
+
+
+def _reject_constant(name):
+    raise ValueError("non_finite:" + name)
+
+
+def decode_request(raw):
+    """Strict JSON for the proxy line: one object, no duplicate keys, no NaN/Infinity, only the
+    declared fields with string values. Anything else is ``None`` (``malformed``)."""
+    try:
+        value = json.loads(
+            raw, object_pairs_hook=_strict_pairs, parse_constant=_reject_constant
+        )
+    except (ValueError, TypeError, RecursionError):
+        return None
+    if type(value) is not dict or not set(value) <= REQUEST_FIELDS:
+        return None
+    if any(type(v) is not str for v in value.values()):
+        return None
+    if "url" not in value:
+        return None
+    return value
 
 
 def can_namespace():
@@ -81,26 +126,34 @@ def snmp():
 
 
 def canonical_url(url):
-    """Lower-case scheme and host, repeated percent-decoding of the path, dot-segment removal,
-    default ports stripped, trailing slash normalised."""
+    """Lower-case scheme and host, percent-decoding of the path to a fixed point, dot-segment
+    removal, the scheme's own default port stripped (and no other), IPv6 brackets kept, trailing
+    slash normalised. Raises ``ValueError`` for shapes no fetcher agrees on (userinfo, a backslash,
+    an undecodable path)."""
+    if "\\" in url:
+        raise ValueError("backslash")
     u = urllib.parse.urlsplit(url.strip())
+    if "@" in u.netloc:
+        raise ValueError("userinfo")
     scheme = u.scheme.lower()
+    if scheme not in ("http", "https"):
+        raise ValueError("scheme")
     host = (u.hostname or "").lower().rstrip(".")
+    if not host:
+        raise ValueError("host")
+    if ":" in host:
+        host = "[" + host + "]"
     port = u.port
-    if (
-        port in (None, 80, 443)
-        or (scheme == "http" and port == 80)
-        or (scheme == "https" and port == 443)
-    ):
-        netloc = host
-    else:
-        netloc = f"{host}:{port}"
+    default = 80 if scheme == "http" else 443
+    netloc = host if port in (None, default) else f"{host}:{port}"
     path = u.path or "/"
-    for _ in range(3):
+    for _ in range(8):
         decoded = urllib.parse.unquote(path)
         if decoded == path:
             break
         path = decoded
+    else:
+        raise ValueError("path_not_fixed_point")
     import posixpath
 
     path = "/" + posixpath.normpath(path).lstrip("/")
@@ -144,11 +197,22 @@ class Proxy:
     {"url": ..., "host_header": ..., "method": ..., "role": ...}. Replies with a JSON decision."""
 
     def __init__(
-        self, path, *, allowed, roles, redirects, receiver_port, max_redirects=4
+        self,
+        path,
+        *,
+        allowed,
+        roles,
+        redirects,
+        receiver_port,
+        max_redirects=4,
+        socket_role="worker",
     ):
         self.path = Path(path)
         self.allowed = {canonical_url(u) for u in allowed}
         self.roles = roles  # canonical url -> set of allowed roles
+        # the role is a property of the socket the proxy serves, never a field of the request
+        # (P19-REPAIR03): a worker cannot declare itself an operator
+        self.socket_role = socket_role
         self.redirects = {
             canonical_url(k): v for k, v in redirects.items()
         }  # short -> target
@@ -162,18 +226,30 @@ class Proxy:
         threading.Thread(target=self._serve, daemon=True).start()
 
     def decide(self, request):
+        if (
+            type(request) is not dict
+            or not set(request) <= REQUEST_FIELDS
+            or "url" not in request
+            or any(type(v) is not str for v in request.values())
+        ):
+            return {"decision": "malformed"}
         try:
             url = canonical_url(request["url"])
-            host_header = request.get("host_header")
-            role = request.get("role", "worker")
-        except (KeyError, TypeError, ValueError, AttributeError):
+        except (ValueError, TypeError, AttributeError, IndexError):
             return {"decision": "malformed"}
+        host_header = request.get("host_header")
+        role = self.socket_role
+        if request.get("method", "GET") not in METHODS:
+            return {"decision": "method_not_allowed", "final": url}
         hops = 0
         while url in self.redirects:
             hops += 1
             if hops > self.max_redirects:
                 return {"decision": "redirect_limit", "final": url}
-            url = canonical_url(self.redirects[url])
+            try:
+                url = canonical_url(self.redirects[url])
+            except ValueError:
+                return {"decision": "malformed"}
         if url not in self.allowed:
             return {
                 "decision": "final_destination_not_allowed"
@@ -194,29 +270,43 @@ class Proxy:
                 conn, _ = self.sock.accept()
             except OSError:
                 return
+            request = None
+            verdict = {"decision": "malformed"}
             try:
-                raw = conn.recv(16384).decode("utf-8", "replace")
-                try:
-                    request = json.loads(raw)
-                except ValueError:
-                    request = None
+                conn.settimeout(5)
+                raw = conn.recv(RECV_CAP).decode("utf-8", "replace")
+                request = decode_request(raw)
                 verdict = self.decide(request)
                 if verdict["decision"] == "forwarded":
-                    import urllib.request
-
-                    req = urllib.request.Request(
-                        f"http://127.0.0.1:{self.receiver_port}{urllib.parse.urlsplit(verdict['final']).path}",
-                        method=request.get("method", "GET"),
-                        data=b"" if request.get("method") == "POST" else None,
-                    )
-                    with urllib.request.urlopen(req, timeout=5) as r:
-                        verdict["receiver_status"] = r.status
-                self.log.append({"request": request, **verdict})
-                conn.sendall(json.dumps(verdict).encode())
-            except OSError:
-                pass
+                    verdict = self._forward(request, verdict)
+            except Exception as exc:  # a hostile line is a decision, never a dead loop
+                verdict = {"decision": "malformed", "error": type(exc).__name__}
             finally:
+                self.log.append({"request": request, **verdict})
+                try:
+                    conn.sendall(json.dumps(verdict).encode())
+                except OSError:
+                    pass
                 conn.close()
+
+    def _forward(self, request, verdict):
+        import urllib.request
+
+        method = request.get("method", "GET")
+        req = urllib.request.Request(
+            f"http://127.0.0.1:{self.receiver_port}{urllib.parse.urlsplit(verdict['final']).path}",
+            method=method,
+            data=b"" if method == "POST" else None,
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=5) as r:
+                return {**verdict, "receiver_status": r.status}
+        except (OSError, ValueError) as exc:
+            return {
+                "decision": "forward_failed",
+                "final": verdict["final"],
+                "error": type(exc).__name__,
+            }
 
     def close(self):
         self._stop = True
