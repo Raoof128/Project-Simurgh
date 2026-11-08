@@ -11,10 +11,11 @@ owned receiver on the parent's loopback. A hostile request line is a `malformed`
 before P19-REPAIR03 three such lines killed the serve loop (8 Nov 2026 audit).
 The canary is the namespace's own kernel counters (`/proc/net/snmp`: `Tcp.OutSegs`,
 `Tcp.AttemptFails`, `Tcp.ActiveOpens`, `Udp.OutDatagrams`) read before and after each case, beside
-the proxy's decision log. Linux only: the authoring host is macOS, so this pack was produced in a
-privileged Linux container on that host (`receipt.json` names the kernel and machine); the lane
-refuses to run where the namespace cannot be created, because a pack with nothing run would be an
-empty evaluated range.
+the proxy's decision log. Linux only: the authoring host is macOS, so the first pack was produced in
+a privileged Linux container on that host, and the P19-REPAIR03 pack on `portfolio-droplet`, the
+owner's Ubuntu 24.04 x86_64 virtual machine (`receipt.json` names the kernel and machine of the host
+that ran `verify`); the lane refuses to run where the namespace cannot be created, because a pack
+with nothing run would be an empty evaluated range.
 
 ## 1. What the probe changed in the design
 
@@ -88,8 +89,11 @@ authoring host's facts). `verify` itself runs only where the namespace can be cr
   namespaces with a minimal root, capability dropping and seccomp, which this lane does not do.
 - The live-reader control runs in a separate namespace with `lo` brought up and shows two of the four
   counters moving; the worker reads and differences its own counters.
-- The host for this pack is a Linux VM under Docker Desktop on the authoring Mac, run `--privileged`.
-  A hosted runner needs `sudo` or user namespaces enabled; the workflow step says so.
+- The host for this pack is the owner's Ubuntu 24.04 droplet (the first pack came from a Linux VM
+  under Docker Desktop on the authoring Mac, run `--privileged`). A hosted runner needs `sudo` or
+  user namespaces enabled; the workflow step says so. On the droplet the socket probe reached the
+  Docker engine (two paths), containerd, the system D-Bus and systemd-resolved from inside the
+  namespace; the receipt lists them.
 - The proxy's allowlists are fixtures authored with the cases.
 - The egress study's README:87 ("No namespace/firewall claim") stays as written; the correction is
   in [`docs/assurance/egress/ERRATA.md`](../../assurance/egress/ERRATA.md).

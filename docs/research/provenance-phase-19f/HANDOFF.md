@@ -18,6 +18,28 @@ If anything in this document does not match what you see, that mismatch is the r
 - Return the verifier's JSON output verbatim per phase, and a short note naming your OS,
   architecture, Python version, Lean version if any, and the commit.
 
+## Host recipes
+
+- 19a with `--replay` (Linux x86_64 only): create a venv and install the hash-locked set first:
+  `python -m venv .venv && .venv/bin/pip install --require-hashes --only-binary=:all:
+  -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock`, then
+  `.venv/bin/python -B tools/replay-preflight/preflight.py` must print `preflight passed`. The
+  clone needs full history (`git clone`, not a tarball): the replay checks the Phase 17 freeze commit.
+- 19b: Lean 4.15.0 on PATH (`proofs/phase19/lean-toolchain`; `elan` installs it) for the Lean fields;
+  without it the receipt reports them `null` and `phase_19b_closed: false` for your host, which is
+  expected and is excluded from the comparison.
+- 19d: a Linux host where `unshare --user --map-root-user --net true` succeeds. Expect the verifier
+  to list which well-known Unix sockets your host exposes inside the namespace
+  (`unix_sockets_reachable`); that list is yours and is reported, not compared.
+
+## What the comparator does and does not check
+
+`handoff19.py check` compares every receipt field except `tree_state`, `host` and `replay` with the
+committed receipt and flags a missing, differing or unexpected field. It cannot see whether the
+`--replay` run happened: a receipt whose `replay.result` says `verified` is taken at its word and
+then expected to read `kind: frozen_replay_chained`. Your verbatim verifier output and your note
+are what make that claim checkable; the comparator alone does not.
+
 ## Phases
 
 ### 19a
@@ -62,19 +84,20 @@ python -B tools/assurance-provenance/evidence19b.py verify \
   --expected-root "$(cat docs/research/provenance-phase-19b/ROOT.sha256)"
 ```
 
-Expected root: `9ca593f2bf6df86a90f0388d5cd0896e29c0f16fe83e0fb5554b8fc65cf855de`.
+Expected root: `b1b6045830bf2de42c8827cff74d5133795733a2fcfc52a3ede43ded425a93bf`.
 
 Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay` are not compared):
 
 ```json
 {
-  "approval_forgeries": 7,
+  "approval_forgeries": 8,
   "arm": "composed_successor",
   "awm_hash": "60155b4cd82f296a41d2168dc60e12ea47406760a741b0a5cc3f5e08362ca757",
   "clean_differences": 0,
   "closed_by": {
-    "every_mutant_killed": true,
-    "forgeries_distinct_and_blocked": true,
+    "at_least_13_mutants_every_one_killed": true,
+    "at_least_8_forgeries_distinct_and_blocked": true,
+    "lean_differential_passed_on_this_host": true,
     "outage_pair_holds": true,
     "positive_control_lands": true,
     "wired_deterministic_channels_at_least_4": true,
@@ -83,11 +106,12 @@ Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay`
   "independent_custody": false,
   "kill_count": 13,
   "lean": {
-    "sha256": "639b08a467740f7080ad0934dca28d01b864df157fe0d21a8fdcd16c57314cc2",
-    "states_compared": 48,
+    "differential_passed_on_this_host": true,
+    "sha256": "3f7a4559d8e10192983c128cef2fa9fa24debfab2bd38e787f50f86e3ca93ba0",
+    "states_compared": 96,
     "type_checked_on_this_host": true
   },
-  "manifest_sha256": "9ca593f2bf6df86a90f0388d5cd0896e29c0f16fe83e0fb5554b8fc65cf855de",
+  "manifest_sha256": "b1b6045830bf2de42c8827cff74d5133795733a2fcfc52a3ede43ded425a93bf",
   "model_inference": false,
   "mutants_total": 13,
   "phase_19b_closed": true,
@@ -107,7 +131,7 @@ python -B tools/assurance-provenance/evidence19c.py verify \
   --expected-root "$(cat docs/research/provenance-phase-19c/ROOT.sha256)"
 ```
 
-Expected root: `235f6e7d20acddf619f6601100c067de8ae354cd3d30cddf78da17dc82e8dda6`.
+Expected root: `dd0fb73b8a4af89f218dc1a60c7d74b6c14b8ff9cc6cab5226b21f2df614bcc1`.
 
 Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay` are not compared):
 
@@ -115,7 +139,7 @@ Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay`
 {
   "arm": "receiver_direct_fork",
   "independent_custody": false,
-  "manifest_sha256": "235f6e7d20acddf619f6601100c067de8ae354cd3d30cddf78da17dc82e8dda6",
+  "manifest_sha256": "dd0fb73b8a4af89f218dc1a60c7d74b6c14b8ff9cc6cab5226b21f2df614bcc1",
   "model_inference": false,
   "new_reasons": 8,
   "pays_G22": false,
@@ -136,7 +160,7 @@ python -B tools/assurance-provenance/evidence19d.py verify \
   --expected-root "$(cat docs/research/provenance-phase-19d/ROOT.sha256)"
 ```
 
-Expected root: `72a7b20d05defe5a7b2270d15df6e1924e655075ba9f8d14f4aa5f4262cf5604`.
+Expected root: `aa44eb458fe25ef1f74e9292a4cbad976a4f8d095f66b295ba5ea32c2deb5501`.
 
 Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay` are not compared):
 
@@ -144,7 +168,7 @@ Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay`
 {
   "all_hold": true,
   "arm": "namespace_egress",
-  "cases": 9,
+  "cases": 11,
   "compared_fields": [
     "case",
     "request",
@@ -157,12 +181,22 @@ Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay`
     "errno"
   ],
   "covert_channel_eliminated": false,
+  "covert_probe_bytes_delivered": 262144,
   "independent_custody": false,
   "live_reader_moved": true,
-  "manifest_sha256": "72a7b20d05defe5a7b2270d15df6e1924e655075ba9f8d14f4aa5f4262cf5604",
+  "manifest_sha256": "aa44eb458fe25ef1f74e9292a4cbad976a4f8d095f66b295ba5ea32c2deb5501",
   "model_inference": false,
   "receiver_effects": 1,
+  "reported_not_compared": "host, rows[].receiver_port, covert_probe.seconds, covert_probe.bits_per_second_observed, live_reader_control.counter_delta, live_reader_control.routes_after_lo_up, unix_socket_probe.results, unix_socket_probe.reachable",
   "routes_in_fresh_namespace": [],
+  "unix_socket_egress_eliminated": false,
+  "unix_sockets_reachable": [
+    "/run/containerd/containerd.sock",
+    "/run/dbus/system_bus_socket",
+    "/run/docker.sock",
+    "/run/systemd/resolve/io.systemd.Resolve",
+    "/var/run/docker.sock"
+  ],
   "verified": true
 }
 ```
@@ -177,7 +211,7 @@ python -B tools/assurance-provenance/evidence19e.py verify \
   --expected-root "$(cat docs/research/provenance-phase-19e/ROOT.sha256)"
 ```
 
-Expected root: `3e363e78498861fdf4ebf9f512c7ddcb6661c99601130fbedc8a7ac83f6f3746`.
+Expected root: `cd74f4899415fd4cc2eedd5e843560a8f4b913758e1fb369397711d6fd422d0b`.
 
 Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay` are not compared):
 
@@ -194,7 +228,7 @@ Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay`
   "framed_messages": 144,
   "independent_custody": false,
   "informed_attacker": "not_run",
-  "manifest_sha256": "3e363e78498861fdf4ebf9f512c7ddcb6661c99601130fbedc8a7ac83f6f3746",
+  "manifest_sha256": "cd74f4899415fd4cc2eedd5e843560a8f4b913758e1fb369397711d6fd422d0b",
   "model_inference": false,
   "scripted_control": {
     "arms": {
@@ -242,7 +276,7 @@ python -B tools/assurance-provenance/evidence19g.py verify \
   --expected-root "$(cat docs/research/provenance-phase-19g/ROOT.sha256)"
 ```
 
-Expected root: `2fa16e8d6ec34b2b044b0010c9035d8d415beb3526bc0c19586676c3dfccc14f`.
+Expected root: `b8d68621b8f548107a2c99eb20300e7a438c7dac7ea58a0620503e4d82fcdca1`.
 
 Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay` are not compared):
 
@@ -274,8 +308,8 @@ Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay`
         "reported_as"
       ],
       "intervals": [
-        "plant_to_latch",
-        "latch_to_acknowledged_revocation"
+        "plant_to_latch_logical_steps",
+        "latch_to_acknowledged_revocation_logical_steps"
       ],
       "plant": [
         "verdict",
@@ -289,6 +323,7 @@ Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay`
       ],
       "stop": [
         "latched",
+        "retry_after_latch",
         "all_routes_blocked"
       ]
     }
@@ -310,11 +345,11 @@ Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay`
     "unknown": 1
   },
   "independent_custody": false,
-  "latch_to_acknowledged_revocation": 1.0,
-  "manifest_sha256": "2fa16e8d6ec34b2b044b0010c9035d8d415beb3526bc0c19586676c3dfccc14f",
+  "latch_to_acknowledged_revocation_logical_steps": 1.0,
+  "manifest_sha256": "b8d68621b8f548107a2c99eb20300e7a438c7dac7ea58a0620503e4d82fcdca1",
   "model_inference": false,
   "plant_landed": false,
-  "plant_to_latch": 3.0,
+  "plant_to_latch_logical_steps": 3.0,
   "plant_verdict": "blocked",
   "revocation_acknowledged": true,
   "stop_latched": true,
@@ -328,8 +363,9 @@ Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay`
 cd tools/assurance-provenance && python -m unittest discover -s tests -v
 ```
 
-About twenty minutes. The Lean differential test and the 19d namespace tests skip, not pass, where
-their host requirement is unmet; the receipt you return should say which skipped.
+About thirty minutes on a laptop, under thirty on a hosted runner. The Lean differential test and the
+19d namespace tests skip, not pass, where their host requirement is unmet; the receipt you return
+should say which skipped.
 
 ## Returning the receipt
 

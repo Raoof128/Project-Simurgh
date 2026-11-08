@@ -54,7 +54,6 @@ class Evidence19bTests(unittest.TestCase):
         self.assertIs(r["lean"]["differential_passed_on_this_host"], True)
         self.assertEqual(r["kill_count"], 13)
         self.assertEqual(r["clean_differences"], 0)
-        self.assertEqual(r["lean"]["states_compared"], 48)
         self.assertIs(r["independent_custody"], False)
         self.assertIs(r["model_inference"], False)
 

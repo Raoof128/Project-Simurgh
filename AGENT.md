@@ -14,6 +14,42 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-08 (Australia/Sydney) — Phase 19: strict audit, P19-REPAIR03, packs regenerated, 2026 gap hunt
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/repair-03-audit` off `main` (`47fbd6b6`). Declaration first
+  (`8d9f5ce8`, P19-REPAIR03 plus the IOU settlement), then the repairs in `tools/assurance-provenance/`
+  (gate19, provenance, lane, rig, receiver19, lanes19c, egress19, lanes19d, drill19, incident19,
+  capture19, evidence19b/c/d/e/g, handoff19, new `leanstates.py`), `proofs/phase19/AuthorityProvenance.lean`,
+  the 19g schema, the workflow, every Phase 19 results file, the deployer profile, the hosted README,
+  the re-rendered handoff, five regenerated packs, `docs/research/GAP_HUNT_LAB_2026-11-08.md`, both
+  logs. No frozen file changed; the Stage 5Q census `current` is unchanged (set-identical). No version bump.
+- **Summary:** the owner asked for a line-by-line audit as a strict lab reviewer, then to fix everything
+  and check the 2026 lab record. Six parallel review lanes found three blocking and twelve major
+  defects (report retained with the session; every blocking and major item reproduced by the lead):
+  a bearer approval token that outlived revocation, a namespace that confines routes but not egress
+  (Docker and systemd-resolved reachable from inside it on a stock Ubuntu host), three verifiers that
+  printed `verified: true` on forged packs, a 19b closure with no floors, Lean theorems true by
+  definition, a route corpus that never exercised canonicalisation, an in-band fail-open sentinel, a
+  proxy whose role was self-declared and whose loop died on hostile input, scripted intervals and a
+  literal verdict sold as "from snapshots", IOUs never settled, and false sentences in the results.
+  All of it is repaired under the declaration, test-first, and the results files now say what the code
+  does. The 2026 gap hunt mapped 25 lab needs (5 covered under scope, 11 partial, 6 not covered, 3 not
+  ours), proposed G34–G38 and listed twelve 2026 lab pages not yet in Zurvan.
+- **Files changed:** see scope; packs: 19b `b1b60458…`, 19c `dd0fb73b…`, 19d `aa44eb45…`
+  (droplet), 19e `cd74f489…`, 19g `b8d68621…`.
+- **Verification:** every lane test file green on the authoring Mac (namespace tests skip there) and
+  the 19d files green on the droplet with namespaces; Lean type-checks (`check-lean-proofs.mjs` 40
+  proofs, standard axioms) and the differential passes 96 states; each regenerated pack verified at
+  creation and again from its committed path; `handoff19.py check` reports `[]` for all six;
+  `ruff check` and `ruff format --check` clean; `prettier --check` clean; census set-identical; the
+  full suite, the installed 19b verify and `scripts/check.sh --quick` results are in the PR.
+- **Follow-ups:** `IOU-19-SPEND`, `IOU-19-OPERATOR`, `IOU-19-KIT` unchanged. Not done and said so:
+  closing the Unix-socket channel (mount/PID namespaces, a minimal root, capability drop, seccomp);
+  an independent copy of the pack roots for CI; G34–G38. The twelve 2026 lab pages should be ingested
+  into Zurvan.
+
 ### 2026-11-08 (Australia/Sydney) — Phase 19: packs replayed on the owner's droplet (second project host)
 
 **Raouf:**

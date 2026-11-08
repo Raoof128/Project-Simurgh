@@ -307,3 +307,26 @@ not pay `IOU-19-OPERATOR`. This declaration commit must be a strict ancestor of 
   on that host: 139 tests, 3 skipped (no Lean toolchain; the two off-host refusal tests), one
   failure, `test_lanes19d.Lanes19dTests.test_covert_probe_reported_not_closed`, whose cause was
   confirmed on the host and whose bounded repair is declared as P19-REPAIR02 and owed.
+- Ruling (8 Nov 2026, P19-REPAIR03 exercised): every item of the declaration landed in the commits
+  after `8d9f5ce8` on `phase-19/repair-03-audit`, each behind a reproducing test. The approved path
+  re-runs the frozen admission and replaces only the grant-set term; tokens are actor-bound (eighth
+  forgery `approval_actor`); hostile relayed bodies are schema refusals; the native decision spends
+  its nonce; approvals leave a provenance input. The 19b closure has floors and the Lean differential
+  on the verifying host (96 states with host approvals, 0 mismatches); the Lean model carries the
+  approval input, so "admitted implies registered or approved" is now what both the proof and the
+  gate say. The receiver keeps path case, records the canonical resource, and never fails open on a
+  sentinel; the route corpus has granted-alias rows and an identity ablation that flips five of them.
+  The proxy's role is the socket's, hostile lines are `malformed` decisions, methods are
+  allow-listed; the 19d lane probes filesystem Unix sockets. The 19d, 19e and 19g receipts derive
+  from the verifying host and their comparisons bind the whole report minus the named
+  host-dependent fields. Packs regenerated: 19b root `b1b60458…` (tree `d7b37242`), 19c
+  `dd0fb73b…` (212f34e6), 19d `aa44eb45…` (d7b37242, produced on
+  `portfolio-droplet`: eleven cases hold, covert probe 262,144 bytes, five daemon sockets reachable
+  from inside the namespace and reported), 19e `cd74f489…` (212f34e6), 19g
+  `b8d68621…` (212f34e6); 19a unchanged (no pinned file changed). The 19f handoff is
+  re-rendered and the comparator reports no discrepancy for the six committed receipts. P19-REPAIR02
+  is paid inside this repair. The workflow runs the namespace sysctl before the tests and its path
+  filters cover every pinned dependency; the census is set-identical (the new step asserts no
+  completeness). What this repair does not do: the namespace is still IP-only (the socket channel is
+  measured, not closed); the drill is still scripted (now labelled so); the trust root is still read
+  from the checkout; `IOU-19-SPEND`, `IOU-19-OPERATOR` and `IOU-19-KIT` are unchanged.
