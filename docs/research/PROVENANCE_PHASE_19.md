@@ -392,3 +392,14 @@ ancestor of the edit.
   set-identical (the step asserts no completeness). Still not done, and said so: seccomp, a minimal
   root, hiding the work directory; the drill stays scripted; the three IOUs are unchanged and need
   people.
+- Ruling (8 Nov 2026, P19-CI03 exercised): `scripts/install-elan-toolchain` replaces the inline
+  elan lines in the Phase 19 workflow and the Stage 1 quality gate. On `portfolio-droplet`, with a
+  fresh home directory each time, the primary path installed `leanprover/lean4:v4.15.0` through elan
+  in 41 s and the forced fallback (`ELAN_INSTALL_FORCE_FALLBACK=1`) fetched the GitHub release
+  tarball, matched the pinned digest `af71a256…`, linked it under the same name in 28 s, and a
+  one-line theorem compiled from a directory whose `lean-toolchain` names that version, with no
+  further download. The census measured the same 58 steps and the same 53 problem ids before and
+  after (both steps classify as they did; the script name carries no `.sh`). The lapse the
+  declaration records (`a814c6f0` edited the step before a declaration named it) stands here; the
+  body it introduced is gone. `stage-4-lean-proofs.yml`, `stage-5q-checks.yml` and
+  `stage-5s-checks.yml` keep their inline lines until their own pull requests.

@@ -21,18 +21,28 @@ one machine's local agent configuration:
 - **Scope:** branch `phase-19/repair-04-hardening` off `main` (`e4270f8a`). Declaration first
   (`d3e1b8c5`), then `egress19.py`, `lanes19d.py`, `evidence19d.py`, two 19d test files, the workflow,
   the 19d results and README, the deployer profile, the hosted README, the regenerated 19d pack, the
-  re-rendered handoff, this ledger's ruling, both logs. The repository variable `PHASE19_ROOTS` was set
-  from the owner's account with the six committed roots. No frozen file; census set-identical.
+  re-rendered handoff, this ledger's ruling, both logs. Then, after both hosted checks on the PR failed
+  in their Lean install steps during a release-host outage, a second declaration (P19-CI03,
+  `d8c6adf8`) and `scripts/install-elan-toolchain`, wired into the Phase 19 workflow and
+  `stage-1-checks.yml`. The repository variable `PHASE19_ROOTS` was set from the owner's account with
+  the six committed roots. No frozen file; census set-identical.
 - **Summary:** the owner asked that everything a machine can do be done, leaving only the human IOUs.
   The two machine-closable items the audit left open are closed: the namespace adds mount, PID and IPC
   isolation, hides the runtime socket directories and drops every capability but `CAP_NET_ADMIN`
   (on the droplet the socket probe goes from five reachable daemons to none), and the hosted gate now
   takes its expected roots from a variable outside any pull request. The twelve 2026 lab pages the gap
-  hunt found missing were ingested into Zurvan (index and graph rebuilt).
+  hunt found missing were ingested into Zurvan (index and graph rebuilt). The toolchain installer
+  retries `releases.lean-lang.org` and, when it stays down, fetches the same release tarball from
+  GitHub, checks it against a digest pinned in the script (elan pins none) and links it under the
+  pinned name; the three stage workflows that share the inline lines are out of its scope (F001's
+  premise; 5Q Annex A5.3) and keep them until their own pull requests.
 - **Files changed:** as above; 19d root `458f80e2…` (tree `270fb96e`).
 - **Verification:** the three 19d test files green on the droplet (hardening test included) and on the
   Mac (namespace parts skip); the pack verified at creation and again; comparator `[]` for all six
-  receipts; census set-identical; YAML parses; the hosted checks on the PR.
+  receipts; census set-identical (58 steps, 53 problems, before and after the installer); YAML parses;
+  prettier and shellcheck clean; the installer's primary and forced-fallback paths run on the droplet
+  from fresh homes (41 s and 28 s) and a theorem compiles from the fallback; the hosted checks on the
+  PR.
 - **Follow-ups:** `IOU-19-SPEND`, `IOU-19-OPERATOR`, `IOU-19-KIT` need people. Not done: seccomp, a
   minimal root, hiding the work directory; G34–G38 are new build work.
 

@@ -125,12 +125,11 @@ jobs:
         # The comment sits INSIDE the step: the census attributes text BETWEEN steps to the
         # preceding one, and these words above the line made `sudo sysctl` read as a completeness
         # gate and added a census entry.
-        run: |
-          curl -sSfL -o "$RUNNER_TEMP/elan.tar.gz" https://github.com/leanprover/elan/releases/download/v4.2.4/elan-x86_64-unknown-linux-gnu.tar.gz
-          echo "42b94d4244e8353142c456ec0e4ca6528fd898a6c604d4059f494e706e431f63  $RUNNER_TEMP/elan.tar.gz" | sha256sum -c -
-          tar xzf "$RUNNER_TEMP/elan.tar.gz"
-          ./elan-init -y --default-toolchain "$(cat proofs/stage4m/lean-toolchain)"
-          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+        #
+        # One shared installer (scripts/install-elan-toolchain): pinned elan, the toolchain asked
+        # for with retries, and a sha256-pinned GitHub release tarball when releases.lean-lang.org
+        # is down, as it was for hours on 8 Nov 2026.
+        run: bash scripts/install-elan-toolchain proofs/stage4m/lean-toolchain
 
       - name: Run Stage 1 check suite
         run: ./scripts/check.sh

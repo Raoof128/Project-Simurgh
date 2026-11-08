@@ -1,0 +1,117 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# Install elan and ONE pinned Lean toolchain on a hosted Linux x86_64 runner, surviving an outage
+# of the Lean release host.
+#
+#   bash scripts/install-elan-toolchain <path to a lean-toolchain file>
+#
+# Why this exists (P19-REPAIR04 follow-up, 2026-11-08): every workflow that needs `lean` ran the
+# same five inline lines, and each of them downloads the toolchain from releases.lean-lang.org
+# exactly once. On 8 Nov that host answered 502/504 for hours, and every gate that needed a proof
+# failed for a reason that had nothing to do with the repository. This script:
+#
+#   1. fetches the pinned elan release from GitHub (sha256 checked, curl retries);
+#   2. asks elan for the toolchain up to ELAN_INSTALL_ATTEMPTS times, 30 s apart;
+#   3. if the release host is still down, fetches the same release tarball from the Lean GitHub
+#      release page, checks it against a sha256 PINNED HERE, and links it into elan under the
+#      pinned toolchain name — so `lean-toolchain` files resolve to it without any further download.
+#
+# The fallback is at least as strong as the primary: elan does not verify the toolchain tarball
+# against anything the repository pins; this script does.
+#
+# The file has no `.sh` suffix on purpose. The Stage 5Q gate census (tools/simurgh-attestation/
+# stage5q/core/censusGate.mjs) reads every workflow `run:` body and treats a named `*.sh` as an
+# enumerated artifact; a suffix here would reclassify two install steps and change the pinned
+# census set for a change that is only about how a download is retried.
+
+set -euo pipefail
+
+usage() { echo "usage: bash scripts/install-elan-toolchain <lean-toolchain file>" >&2; exit 2; }
+[ $# -eq 1 ] || usage
+[ -f "$1" ] || { echo "install-elan-toolchain: no such file: $1" >&2; exit 2; }
+
+toolchain="$(tr -d '[:space:]' < "$1")"          # leanprover/lean4:v4.15.0
+version="${toolchain##*:}"                         # v4.15.0
+case "$(uname -s)-$(uname -m)" in
+  Linux-x86_64) ;;
+  *) echo "install-elan-toolchain: only Linux x86_64 runners are supported (got $(uname -s)-$(uname -m))" >&2; exit 2 ;;
+esac
+
+ELAN_VERSION="v4.2.4"
+ELAN_SHA256="42b94d4244e8353142c456ec0e4ca6528fd898a6c604d4059f494e706e431f63"
+ELAN_INSTALL_ATTEMPTS="${ELAN_INSTALL_ATTEMPTS:-6}"
+ELAN_INSTALL_PAUSE="${ELAN_INSTALL_PAUSE:-30}"
+
+# sha256 of lean-<version>-linux.tar.zst as published on the Lean GitHub release page. Add a row
+# when a lean-toolchain file moves to a new version; an unpinned version has no fallback and the
+# script says so instead of trusting an unchecked download.
+lean_release_sha256() {
+  case "$1" in
+    v4.15.0) echo "af71a2569a9f68337de2434829b3008cd8e32c436e9cb6bd8c84a2c2ba3585c9" ;;
+    *) echo "" ;;
+  esac
+}
+
+tmp="${RUNNER_TEMP:-${TMPDIR:-/tmp}}"
+home="${HOME:?HOME must be set}"
+elan="$home/.elan/bin/elan"
+
+fetch() { # url dest
+  curl -sSfL --retry 5 --retry-delay 10 --retry-all-errors --connect-timeout 20 --max-time 900 -o "$2" "$1"
+}
+
+log() { echo "install-elan-toolchain: $*"; }
+
+# 1. elan itself, pinned.
+if [ ! -x "$elan" ]; then
+  fetch "https://github.com/leanprover/elan/releases/download/${ELAN_VERSION}/elan-x86_64-unknown-linux-gnu.tar.gz" "$tmp/elan.tar.gz"
+  echo "${ELAN_SHA256}  $tmp/elan.tar.gz" | sha256sum -c -
+  mkdir -p "$tmp/elan-bin"
+  tar xzf "$tmp/elan.tar.gz" -C "$tmp/elan-bin"
+  # `none`: do not download the toolchain here, where a failure would be reported as elan's and
+  # could not be retried or routed to the fallback.
+  "$tmp/elan-bin/elan-init" -y --no-modify-path --default-toolchain none >/dev/null
+fi
+[ -z "${GITHUB_PATH:-}" ] || echo "$home/.elan/bin" >> "$GITHUB_PATH"
+
+installed() { "$elan" run "$toolchain" lean --version >/dev/null 2>&1; }
+
+# 2. the release host, with retries.
+if [ "${ELAN_INSTALL_FORCE_FALLBACK:-0}" = "1" ]; then
+  log "primary skipped (ELAN_INSTALL_FORCE_FALLBACK=1)"
+else
+  attempt=1
+  while ! installed; do
+    if "$elan" toolchain install "$toolchain"; then break; fi
+    if [ "$attempt" -ge "$ELAN_INSTALL_ATTEMPTS" ]; then
+      log "release host failed ${ELAN_INSTALL_ATTEMPTS} times; trying the GitHub release tarball"
+      break
+    fi
+    attempt=$((attempt + 1))
+    log "release host failed; attempt ${attempt}/${ELAN_INSTALL_ATTEMPTS} in ${ELAN_INSTALL_PAUSE}s"
+    sleep "$ELAN_INSTALL_PAUSE"
+  done
+fi
+
+# 3. the GitHub release tarball, pinned, linked under the same toolchain name.
+if ! installed; then
+  expected="$(lean_release_sha256 "$version")"
+  if [ -z "$expected" ]; then
+    log "no pinned sha256 for ${version}; add one to lean_release_sha256 before relying on the fallback" >&2
+    exit 1
+  fi
+  asset="lean-${version#v}-linux.tar.zst"
+  fetch "https://github.com/leanprover/lean4/releases/download/${version}/${asset}" "$tmp/$asset"
+  echo "${expected}  $tmp/$asset" | sha256sum -c -
+  dest="$home/.elan/linked/${toolchain//[\/:]/--}"
+  rm -rf "$dest"; mkdir -p "$dest"
+  tar --zstd -xf "$tmp/$asset" -C "$dest" --strip-components=1
+  "$elan" toolchain uninstall "$toolchain" >/dev/null 2>&1 || true
+  "$elan" toolchain link "$toolchain" "$dest"
+  log "toolchain ${toolchain} linked from the GitHub release tarball (sha256 ${expected:0:12}…)"
+fi
+
+"$elan" default "$toolchain" >/dev/null
+installed || { log "toolchain ${toolchain} is still not runnable" >&2; exit 1; }
+"$home/.elan/bin/lean" --version
