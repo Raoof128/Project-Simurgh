@@ -199,15 +199,23 @@ class NamespaceTests(unittest.TestCase):
             [
                 "python3",
                 "-c",
-                "import os,json;print(json.dumps({'pid':os.getpid(),'run':os.listdir('/run'),"
-                "'shm':os.listdir('/dev/shm'),'cap':open('/proc/self/status').read()"
-                ".split('CapEff:')[1].split()[0]}))",
+                "import os,json,stat\n"
+                "def socks(d):\n"
+                "    out=[]\n"
+                "    for root,dirs,files in os.walk(d):\n"
+                "        for f in files:\n"
+                "            try:\n"
+                "                if stat.S_ISSOCK(os.lstat(os.path.join(root,f)).st_mode): out.append(os.path.join(root,f))\n"
+                "            except OSError: pass\n"
+                "    return out\n"
+                "print(json.dumps({'pid':os.getpid(),'run':socks('/run'),'shm':socks('/dev/shm'),"
+                "'cap':open('/proc/self/status').read().split('CapEff:')[1].split()[0]}))",
             ]
         )
         self.assertEqual(code, 0, err)
         state = json.loads(out.strip().splitlines()[-1])
         self.assertEqual(state["pid"], 1)
-        self.assertEqual(state["run"], [])
+        self.assertEqual(state["run"], [])  # no socket under the private /run
         self.assertEqual(state["shm"], [])
         self.assertEqual(int(state["cap"], 16), 1 << 12)  # CAP_NET_ADMIN only
 

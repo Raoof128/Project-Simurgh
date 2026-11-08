@@ -88,3 +88,6 @@ What they show:
   that could have differed were never recomputed. Both receipt sets here predate the repair and
   describe the packs of their day; the repaired verifiers derive every receipt field from the
   recomputation.
+  The 19d pack was regenerated again under P19-REPAIR04 with the hardened namespace; the droplet
+  receipt here (and the P19-REPAIR03 pack's receipt before it) show the five daemon sockets that were
+  reachable before that repair.
