@@ -259,6 +259,45 @@ install the toolchain eagerly before any declaration named that edit; this decla
 that step body and the lapse stands in the ruling. This declaration commit must be a strict
 ancestor of the edit.
 
+**P19-REPAIR05 (bounded repair authority after the first second-host review of the handoff
+package; declared 8 Nov 2026 before any repair commit).** The owner's reviewer replayed the six
+packs at `e4270f8a` on an owner-authorised host (MUM spare, Linux x86_64, Python 3.12.3, Lean
+unavailable because both release hosts answered 504) and returned three findings against the
+handoff, each confirmed against the source here: (i) `HANDOFF.md` says absent Lean results are
+excluded from the comparison and the 19d socket list is reported, not compared, while
+`handoff19.check` excludes only `tree_state`, `host` and `replay`, so a Lean-less host reads three
+19b discrepancies and any Linux host reads one 19d discrepancy that the document promised away;
+(ii) `tests/test_evidence19b.py::test_outputs_and_receipt` asserts `phase_19b_closed` is true
+unconditionally, so the suite the handoff calls optional-Lean fails without Lean (147 passed, 1
+failed, 11 skipped on that host); (iii) privileged namespace runs from a venv under a private home
+directory fail with `worker_failed:126 … Permission denied` because `unshare --map-root-user` leaves
+every other uid unmapped, and nothing told the operator so. This declaration authorises, and
+nothing else:
+
+1. `handoff19.py`: the comparator names its host-dependent fields per phase and reports them
+   instead of comparing them: for 19d `unix_sockets_reachable` and `unix_socket_egress_eliminated`;
+   for 19b, only when the operator's receipt says Lean was absent (`lean.type_checked_on_this_host`
+   is `null`), the two `*_on_this_host` Lean fields, `closed_by.lean_differential_passed_on_this_host`
+   and `phase_19b_closed`. With Lean present every 19b field is compared as today. The `check`
+   command prints the discrepancies and, separately, the reported-not-compared fields with the
+   operator's values and the reason; the rendered handoff says exactly what the code does, names
+   `scripts/install-elan-toolchain` as the Linux x86_64 route to Lean, and tells the operator to run
+   the namespace tests with an interpreter an unmapped uid can execute. Tests first, in
+   `tests/test_handoff19.py`.
+2. `tests/test_evidence19b.py`: `test_outputs_and_receipt` asserts closure and the Lean fields
+   against whether `lean` is on the path of the host running it, and asserts every other closure
+   term unconditionally. The file is pinned by the 19b protocol, so the 19b pack is regenerated
+   last, from the commit that carries the edit, on a host with Lean; the new root replaces
+   `ac086a43…` in the handoff, the repository variable `PHASE19_ROOTS`, the ledger and both logs.
+3. Re-rendering `HANDOFF.md`; the ruling; both logs. The Desktop package for the reviewer is a copy
+   of the committed handoff and follows the merge commit.
+
+Not authorised: any change to a lane, verifier, the Lean model, the gate, the protocols or any
+other pinned source; weakening what the comparator compares when Lean is present; any change to
+the review package the reviewer produced. The reviewer's run is an owner-controlled second-host
+replay and does not pay `IOU-19-OPERATOR`. This declaration commit must be a strict ancestor of
+every repair commit.
+
 | Field                         | Declaration                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | active_phase                  | Phase 19a projection verifier (19b–19g declared)                                                                    |
