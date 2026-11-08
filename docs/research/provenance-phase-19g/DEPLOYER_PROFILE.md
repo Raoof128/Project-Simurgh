@@ -1,0 +1,28 @@
+# Deployer profile: the controls a deployer must supply, and the receiver evidence that they held
+
+**Status:** attested document (Phase 19g). The lanes it points at are recomputable; this mapping is
+a reading of the three labs' own measurements (cluster reports A, B1, B2, F of the 1 Nov 2026 gap
+hunt) and is not a lab's statement.
+
+Every Claude system card from Claude 4 (May 2025) to Haiku 5.5 (October 2026) hands enforcement to
+the deployer as advice ("we recommend against deploying", "fairly likely to be detected by their
+operators"; cluster B2 trend). The Gemini 4 Argon report tests "the model alone" and says many
+internal agents inherit the launching user's privileges (F-5, F-6). OpenAI's federal blueprint would
+make deployers responsible for reporting incidents from agents they run (D-16). This profile names,
+per harm class the labs measure, the control that is the deployer's and the Phase 19 lane that shows
+the receiver evidence of it holding.
+
+| Harm class the labs measure                                        | Where measured                                                                                       | Control the deployer supplies                                                                          | Receiver evidence (lane)                                                                                                         |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| Approval-gate bypass (acting without the human approval it needed) | Haiku 5.5 metric (B2-21); Opus 5.5 D15 (B1-1); Mythos keypress (B1-4)                                | Host-issued one-shot approval bound to run, action and content digest; peer or model text never counts | 19b forged-token matrix: seven forgeries each refused with its own reason, genuine token lands once, replay refused              |
+| Unsanctioned third-party contact                                   | Claude 4 bulk e-mail (B2-24); Haiku 5.5 metric                                                       | Parent-owned destination allowlist at a network boundary the worker cannot route around                | 19d: nine egress cases hold in a namespace with no route; `unrequested_publish` refused                                          |
+| Credential misuse (ambient token, other user's token, post-logout) | Opus 4.6 (B2-10); Opus 5 (B1-45); Haiku 5.5 4.0% (B2-20)                                             | Credentials bound to run and holder at the receiver; revocation acknowledged                           | 19c: `run`, `wrong_binding`, counted `credential_inactive` retries; 19g drill: acknowledged revocation                           |
+| Sandbox reach-out and constraint circumvention                     | Haiku 5.5 30% (B2-20); Opus 4.7 regex bypass (B2-13); Opus 5 curl-for-fetch (B1-5)                   | Exact-effect binding at the receiver with its own canonicaliser; no string filters                     | 19c route corpus: seven lab-authored variants refused, the string-filter strawman admits all                                     |
+| Authority carried in model-authored text (notes, memory, pasted)   | UK AISI cycle-3 (A-6); Opus 5.5 pasted text (B1-15); distillers' transplanted blocks (C-24)          | Gate reads authority only from host state; agent-writable channels are a declared census               | 19b write-anywhere lane: zero clean differences over four wired channels, thirteen reader mutants killed                         |
+| Stop or monitor defeated by outage or by the agent's own text      | Argon stop-hook (F-17); Mythos classifier outage (B2-15); UK AISI abort notes (A-5)                  | Stop and lease derived from signal state; outage holds; renewal needs a signed acknowledgement         | 19b outage lane: exact action held during an outage, self-asserted stop is a killed mutant, lease lapses without acknowledgement |
+| Loaded artifact differs from the approved one                      | Formal-verification footnote (C-21); DeepMind config challenges (F-13); `vectors.npz` (31 Oct row 4) | Approved-input manifest checked at load                                                                | 19c: `substituted_input` on three shapes, listed input loads                                                                     |
+| Incident reporting without lab telemetry                           | OpenAI blueprint (D-16); RSP 2024 exercise clause dropped in 3.0 (C-7)                               | A record generated from receiver snapshots, never claiming prevention for an unknown                   | 19g drill and incident record: counts verified against snapshots, `claimed_prevented` fixed at 0                                 |
+
+What this profile does not do: it does not make any lab's advice unnecessary, it does not cover
+effects outside owned receivers, and the lanes it cites measure fixtures on one host. The receipt
+of each lane states its own bound.

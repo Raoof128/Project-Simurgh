@@ -1,5 +1,369 @@
 ## Change Log
 
+## [phase-19-sync] — 2026-11-08 — PR #148 merged to main; main merged into the Phase 19 branch
+
+**Raouf:**
+
+- **Scope:** branch maintenance only: PR #148 merged to `main` (its gate was green), `main` merged into
+  `phase-19/authority-provenance` (`1ea82c8f`, no conflicts, four Stage 5R files), PR #149 re-checked on
+  the new head. Ledger ruling and both logs. No Phase 19 source, evidence or frozen file changed.
+- **Summary:** the Quality Gate on PR #149 had failed only for the Stage 5R receipt rewrite inherited
+  from `main` (audit E-5); with #148 merged, the branch now carries the repaired driver and its test.
+- **Files changed:** `docs/research/PROVENANCE_PHASE_19.md`, `AGENT.md`, `CHANGELOG.md` (plus the merge commit).
+- **Verification:** `node --test tests/unit/llmShield/stage5r/*.test.js` 391 pass; hosted checks on PR #149
+  pending at the time of this entry and reported in the PR.
+- **Follow-ups:** mark #149 ready and merge once every check is green; the three IOUs still need people.
+
+## [phase-19-hosted] — 2026-11-03 — Phase 19 hosted runs read; 19g verifier repaired; receipts retained
+
+**Raouf:**
+
+- **Scope:** Branch `phase-19/authority-provenance`: P19-REPAIR01 (19g verifier and regenerated pack),
+  P19-CI02 (receipt upload step, census unchanged), the 19f comparator repair, the committed hosted
+  receipts and both logs. No frozen file changed. No version bump.
+- **Summary:** Hosted run `41306753664` refused the 19g pack because its verifier compared sqlite-build
+  dependent digests the protocol declares reported, not compared. Repaired test-first, and the pack was
+  regenerated (root `2fa16e8d…`). Hosted run `41623244388` at `94b8217b` verified all six packs, including
+  19a with the frozen Phase 17 replay chained on Linux x86_64. Its receipts are committed unchanged in
+  `docs/research/provenance-phase-19-hosted/`. The 19f comparator now expects the replay-chained 19a
+  `kind` when the operator's replay verified.
+- **Files changed:** see the matching `AGENT.md` entry.
+- **Verification:** Mac suite 138 ok, 10 skipped; `check.sh` 144 pass, 0 fail, 6 skip; hosted suite 138 ok,
+  10 skipped, all packs verified; artifact digest matched; census checker set-identical (53).
+- **Follow-ups:** PR #148 (Stage 5R Annex A1) repairs the red Quality Gate on `main` and must merge before
+  this branch's pull request can pass it. `IOU-19-SPEND`, `IOU-19-OPERATOR`, `IOU-19-KIT` remain owed.
+
+## [phase-19-closeout] — 2026-11-01 — Phase 19 final e2e and first push of the branch
+
+**Raouf:**
+
+- **Scope:** Phase 19 close-out on branch `phase-19/authority-provenance`: final end-to-end verification at
+  `5b7382d1` and the first push of the branch to `origin`. Logs only; no source, evidence or frozen file
+  changed in this entry.
+- **Summary:** With 19a–19g all committed, the full `tools/assurance-provenance` suite, `scripts/check.sh`
+  and every committed pack were re-run from the branch head. The first suite run died with
+  `No space left on device` (the authoring Mac's data volume was at 100%); only this session's own scratch
+  extracts were deleted and the suite was re-run clean. The branch is pushed so the hosted workflow
+  `.github/workflows/assurance-provenance.yml` runs for the first time; its receipt is owed and is not
+  claimed here.
+- **Files changed:** `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** suite 125 ok / 10 skipped (Linux namespace tests on macOS); `check.sh` 146 pass, 0 fail,
+  4 skip, 2 informational; packs 19a, 19b (closed), 19c, 19e, 19g verify on macOS; 19d verifies in a
+  privileged `python:3.12-slim` container; census checker set-identical (53); `ruff` and `prettier` clean.
+- **Follow-ups:** read the first hosted run and record its outcome in the declaration ledger; open the PR
+  when the owner asks; `IOU-19-SPEND`, `IOU-19-OPERATOR`, `IOU-19-KIT` remain owed.
+
+## [phase-19f-package] — 2026-11-01 — Phase 19f outside-operator handoff package
+
+**Raouf:**
+
+- **Scope:** Phase 19f as a handoff package in `tools/assurance-provenance/` (`handoff19.py`, one test
+  file), `docs/research/provenance-phase-19f/**` (generated `HANDOFF.md`, `discrepancy-template.json`,
+  README, empty `operator-receipts/`), plan, `.prettierignore` (P19-FORMAT07), the declaration ledger and
+  both logs. No pack, no model, no frozen file, no workflow change. No version bump.
+- **Summary:** The outside-operator replay is the first custody evidence and needs a person. The package
+  renders the handoff from the committed receipts of 19a–19e and 19g (custody rules, one verify command
+  per phase, expected fields with `tree_state`, `host` and `replay` excluded, run times and host
+  requirements), commits a discrepancy template, compares a returned receipt field by field (differs or
+  missing) and reports `IOU-19-OPERATOR` as `owed` until a receipt is reviewed. The committed receipts
+  compare to themselves as empty.
+- **Files changed:** `tools/assurance-provenance/handoff19.py`, `tools/assurance-provenance/tests/test_handoff19.py`,
+  `docs/research/provenance-phase-19f/**`, `docs/research/PROVENANCE_PHASE_19.md`,
+  `docs/superpowers/plans/2026-11-01-phase-19f-outside-operator-handoff.md`, `.prettierignore`, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** 6 tests pass (handoff byte-equal to the render; template committed; comparator finds a
+  changed root and a missing field; committed receipts compare empty; status `owed`); `ruff` clean;
+  `prettier --check` clean. Not run: the replay (needs the classmate), the hosted workflow (nothing pushed).
+- **Workflow (same session, next commit):** one step verifying the 19e and 19g packs added to
+  `.github/workflows/assurance-provenance.yml`, path filters extended, Stage 5Q census `current` 52 → 53
+  (`baseline` untouched) in the same commit; checker set-identical after the pin.
+- **Follow-ups:** publish the commit, hand `HANDOFF.md` to the classmate, commit the returned receipt
+  unchanged and publish the comparator output (`IOU-19-OPERATOR`).
+
+## [phase-19e-instrument] — 2026-11-01 — Phase 19e capture instrument without spend
+
+**Raouf:**
+
+- **Scope:** Phase 19e as an instrument in `tools/assurance-provenance/` (`capture19.py`, `evidence19e.py`,
+  two test files), the 19e pack with the `IOU-19-SPEND` declaration, plan, results, `.prettierignore`
+  (P19-FORMAT06), the declaration ledger and both logs. No model called, no spend, no frozen file, no
+  workflow change. No version bump.
+- **Summary:** Three framings of the 24 Phase 17 tasks (baseline unchanged; evaluation and deployment
+  add one trusted-channel line above the untrusted source), 144 message digests committed; the 19a
+  awareness rule kept outside the outcome count; a Wilson-per-arm and Newcombe-difference emission-shift
+  estimator with a floor-or-ceiling flag; a deterministic scripted control with declared rates that the
+  estimator recovers; the spend declaration (three models, 504-generation cap, stop rule, authorisation
+  `required_not_given`); the informed-attacker bundle at `not_run`. The capture itself is owed.
+- **Files changed:** `tools/assurance-provenance/{capture19,evidence19e}.py`,
+  `tools/assurance-provenance/tests/{test_capture19,test_evidence19e}.py`,
+  `docs/research/provenance-phase-19e/**`, `docs/research/PROVENANCE_PHASE_19.md`,
+  `docs/superpowers/plans/2026-11-01-phase-19e-capture-instrument.md`, `.prettierignore`, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** 15 tests across the two 19e files pass; three named mutations plus a wrong root
+  rejected with distinct reasons; `ruff` clean; `prettier --check` clean; the earlier packs still verify
+  (their pinned sets are unchanged). Not run: any model, the hosted workflow (nothing pushed).
+- **Follow-ups:** the capture under `IOU-19-SPEND` once the owner authorises it (models, cap and stop
+  rule are in `spend-declaration.json`); 19f handoff package.
+
+## [phase-19g] — 2026-11-01 — Phase 19g seeded incident drill, deployer incident record, deployer profile and evaluator kit
+
+**Raouf:**
+
+- **Scope:** Phase 19g in `tools/assurance-provenance/` (`drill19.py`, `incident19.py`, `evidence19g.py`,
+  three test files), the 19g pack with the generated deployer incident record and its committed schema,
+  the two attested documents (`DEPLOYER_PROFILE.md`, `EVALUATOR_KIT.md`), plan, results,
+  `.prettierignore` (P19-FORMAT05), the declaration ledger and both logs. No frozen file, verifier
+  semantics or evidence value of any archived phase changed. No workflow change. No version bump.
+- **Summary:** A seeded incident drill on the successor rig: the child plants an ungranted action
+  (blocked, zero effects), the signed provenance record names the missing grant input, an admitted
+  attempt whose acknowledgement is dropped is reported `unknown` and never as prevented, the host
+  latches the route and every route holds, the gateway records the signed revocation acknowledgement,
+  host and receiver tables are digested before and after, and both detection-to-action intervals are
+  reported in fixture clock units. The deployer incident record is generated from snapshots alone
+  against a schema that fixes `claimed_prevented` at zero and `model_telemetry_used` at false. The
+  deployer profile maps eight lab-measured harm classes to the deployer control and the Phase 19 lane
+  that evidences it; the evaluator kit maps frozen Stages 5I and 5J to the published acceptance
+  criteria and adds a signed independence-and-funding disclosure field. Both documents are attested.
+- **Files changed:** `tools/assurance-provenance/{drill19,incident19,evidence19g}.py`,
+  `tools/assurance-provenance/tests/{test_drill19,test_incident19,test_evidence19g}.py`,
+  `docs/research/provenance-phase-19g/**`, `docs/research/PROVENANCE_PHASE_19.md`,
+  `docs/superpowers/plans/2026-11-01-phase-19g-evaluator-kit-and-deployer-profile.md`, `.prettierignore`,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 13 tests across the three 19g files pass (`python -m unittest discover -s tools/assurance-provenance/tests -p "test_*19.py"` and `test_incident19.py`, `test_evidence19g.py`); six named mutations plus a wrong root rejected with distinct reasons; `ruff` clean; `prettier --check` clean; the 19a–19d packs still verify (their pinned sets are unchanged). Not run: the hosted workflow (nothing pushed).
+- **Follow-ups:** deliver the evaluator kit to an evaluator and record the reply (`IOU-19-KIT`); 19e as an
+  instrument without spend; 19f handoff package.
+
+## [phase-19d] — 2026-11-01 — Phase 19d namespace launcher and network-layer canary
+
+**Raouf:**
+
+- **Scope:** Phase 19d in `tools/assurance-provenance/` (`egress19.py`, `lanes19d.py`, `evidence19d.py`,
+  three test files), the 19d pack, plan, results, `docs/assurance/egress/ERRATA.md` (dated errata; the
+  egress README is not edited), one new workflow step with the census re-pinned in the same commit,
+  `.prettierignore` (P19-FORMAT04), the declaration ledger and both logs. No frozen file, verifier
+  semantics or evidence value of any archived phase changed. No version bump.
+- **Summary:** A worker inside `unshare --user --map-root-user --net` has loopback only and no route;
+  its one path is the parent-owned proxy over a Unix socket, which canonicalises, follows redirects
+  itself, applies destination and role allowlists and forwards only to the owned loopback receiver.
+  Nine cases hold with zero movement of the namespace's kernel counters; a direct socket to the
+  receiver's own address fails with `ENETUNREACH` before any segment exists; a live-reader control
+  inside the same kind of namespace moves the counters, so zero is a reading, not a dead gauge. The
+  shared-filesystem covert channel is measured in bits per second and reported as not eliminated.
+  Linux only: tests skip (not pass) elsewhere, `run` and `verify` refuse with `host_cannot_namespace`,
+  and the pack was produced in a privileged Linux container on the authoring Mac.
+- **Files changed:** `tools/assurance-provenance/{egress19,lanes19d,evidence19d}.py`,
+  `tools/assurance-provenance/tests/{test_egress19,test_lanes19d,test_evidence19d}.py`,
+  `docs/research/provenance-phase-19d/**`, `docs/assurance/egress/ERRATA.md`,
+  `.github/workflows/assurance-provenance.yml`, `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json`
+  (`current` only), `docs/research/PROVENANCE_PHASE_19.md`,
+  `docs/superpowers/plans/2026-11-01-phase-19d-namespace-egress.md`, `.prettierignore`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** in a privileged `python:3.12-slim` container (linuxkit kernel, aarch64): the egress,
+  lane and evidence suites pass; on macOS the namespace tests skip and the off-host refusal tests pass;
+  `ruff` clean; census checker set-identical after the pin; `prettier --check` clean. Not run: the
+  hosted workflow (nothing pushed).
+- **Follow-ups:** first hosted run of the 19d step (confirms `sudo` suffices on the runner); 19e, 19f, 19g.
+
+## [phase-19-ci01] — 2026-11-01 — Phase 19 workflow and the Stage 5Q census re-pin (P19-CI01)
+
+**Raouf:**
+
+- **Scope:** `.github/workflows/assurance-provenance.yml` (new) and the Stage 5Q census pin
+  `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json` (`current` only, `baseline`
+  untouched), in one commit under P19-CI01, after the declaration that names it. The declaration
+  ledger and both logs. No frozen Python surface, verifier, evidence value or proof changed.
+- **Summary:** The workflow is paths-scoped to the Phase 19 namespace, the successor and the three
+  evidence directories. It installs the pinned elan toolchain so the Lean differential test runs
+  rather than skips, installs the hash-locked replay dependencies, runs the namespace suite,
+  verifies the 19a pack with `--replay` so the frozen Phase 17 replay is chained on Linux x86_64 (the
+  authoring host could not), and verifies the 19b and 19c packs with their closure and reason-count
+  assertions. The census measured the new problem gate ids from the file itself and `current` was
+  re-pinned to exactly those; the checker reports set-identical.
+- **Files changed:** `.github/workflows/assurance-provenance.yml`,
+  `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json`,
+  `docs/research/PROVENANCE_PHASE_19.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** YAML parses; `checkProblemGateSet.mjs` set-identical after the pin; the 5Q tests
+  that read the pin pass; `prettier --check` clean. Not run: the hosted workflow itself (no push).
+- **Follow-ups:** the first hosted run's receipt, including the chained replay result; 19d–19g.
+
+## [phase-19a-e2e] — 2026-11-01 — 19a evidence test accepts a committed tree state
+
+**Raouf:**
+
+- **Scope:** One assertion in `tools/assurance-provenance/tests/test_evidence.py` and the regenerated
+  19a pack (its protocol pins that test file). No runtime, verifier semantics or frozen surface changed.
+- **Summary:** The 1 Nov end-to-end run on a clean worktree of the branch head found the 19a evidence
+  test asserting `tree_state == "uncommitted"`, which is true only in a dirty tree; on committed bytes
+  the receipt names the lane commit. The assertion now accepts either form. The run otherwise passed:
+  ruff, prettier, whitespace, the Lean gate (40 at floor 40), all three packs verified in fresh
+  processes, the successor suite, and 86 of 87 namespace tests (this one failing).
+- **Files changed:** `tools/assurance-provenance/tests/test_evidence.py`, `docs/research/provenance-phase-19a/**` (regenerated), `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `test_evidence.py` 8 passed on the clean checkout; the regenerated 19a pack verifies
+  in a fresh process and its receipt names the lane commit.
+- **Follow-ups:** none for this edit.
+
+## [phase-19-lean01] — 2026-11-01 — Stage 5S floor-count test becomes a monotone bound (P19-LEAN01)
+
+**Raouf:**
+
+- **Scope:** One Stage 5S Node test, `tests/unit/llmShield/stage5s/theoremSet.test.js` `[5s-t26]`, two
+  assertions, under the authority row P19-LEAN01 added to `docs/research/PROVENANCE_PHASE_19.md` one
+  commit earlier. No proof, verifier, evidence value or frozen Python surface changed. No version bump.
+- **Summary:** The full quality gate run on the Phase 19 branch failed `npm test` on `[5s-t26]`,
+  which pinned the Lean floor at exactly 39 and the gate's discovered count at exactly 39. The proof
+  Phase 19 adds (`proofs/phase19/AuthorityProvenance.lean`), with the floor raised to 40 as the gate
+  script instructs the adding task to do, breaks both. That is a count pin of the Q1-F002 species the
+  gate-lifecycle doctrine names (pin sets, not counts). The two assertions are now monotone bounds:
+  the floor is at least 39, and the discovered count is at least the floor the gate reports; the
+  escape-hatch and type-check assertions are unchanged. The declaration commit `0204d9ba` precedes
+  the edit `7c3fee65`.
+- **Files changed:** `docs/research/PROVENANCE_PHASE_19.md`, `tests/unit/llmShield/stage5s/theoremSet.test.js`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `node --test tests/unit/llmShield/stage5s/theoremSet.test.js` 10 passed; `node
+  scripts/check-lean-proofs.mjs` 40 proofs at floor 40; `scripts/check.sh` on the branch head with a
+  Python that has pytest: 144 passed, 5 skipped, 1 failed (the Linux Rust daemon Xvfb readiness
+  step, which passes standalone on both `main` and the branch, 4 of 4, and failed only under
+  concurrent load; the 19 Oct smoke report records the same readiness flake). The first gate run
+  also failed the AgentDojo step for lack of pytest in the gate's `python3`; the suite passes 181 of
+  181 as the gate runs it with an interpreter that has pytest.
+- **Follow-ups:** none for this edit. The Phase 19 follow-ups (CI workflow with the 5Q census
+  re-pin, Linux replay for 19a, 19d–19g) stand.
+
+## [phase-19c] — 2026-11-01 — Phase 19c forked receiver, credential and manifest lanes, route corpus, cumulative lane
+
+**Raouf:**
+
+- **Scope:** Phase 19c in `tools/assurance-provenance/` (`receiver19.py`, `lanes19c.py`,
+  `evidence19c.py`, three test files), the 19c evidence pack, plan, results, declaration ledger,
+  `.prettierignore` (P19-FORMAT03). The frozen receiver is forked, not edited; no frozen file,
+  verifier semantics, evidence value or runtime mechanism of any archived phase changed. No version
+  bump. No CI workflow yet.
+- **Summary:** The forked receiver adds eight reasons after the six frozen ones. Receiver-direct
+  lanes show: a credential for another run lands on the frozen receiver and is `run` on the fork; a
+  bearer replayed without holder proof lands frozen and is `wrong_binding` on the fork; a write under
+  a comment-only grant is `grant_scope`; a regenerated spec, an edited config and a run-cache
+  `vectors.npz` are `substituted_input` (G28); seven lab-authored route variants all canonicalise to
+  the denied path and are `effect_denied` while the authored strawman admits every one (power check,
+  not a comparator; G22 unpaid); three sub-limit calls cross a running limit on the third
+  (`cumulative_limit_exceeded`) where the frozen receiver lands all three; administrative revocation
+  with a technically valid credential is `admin_revoked`. The HTTP transport is not forked.
+- **Files changed:** `tools/assurance-provenance/{receiver19,lanes19c,evidence19c}.py`,
+  `tools/assurance-provenance/tests/{test_receiver19,test_lanes19c,test_evidence19c}.py`,
+  `docs/research/provenance-phase-19c/**`, `docs/research/PROVENANCE_PHASE_19.md`,
+  `docs/superpowers/plans/2026-11-01-phase-19c-forked-receiver.md`, `.prettierignore`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 11 receiver, 6 lane and 4 evidence tests pass (seconds); the namespace's 86 tests
+  pass; `ruff check` and `ruff format --check` clean; the 19c pack verifies in a fresh process;
+  `prettier --check .` clean. Not run: `scripts/check.sh`, hosted CI, the Linux replay chain.
+- **Follow-ups:** the CI workflow with the 5Q census re-pin in one commit; the Linux replay run for
+  19a; 19d (namespace launcher and packet canary), 19e (capture arms), 19f (outside operator), 19g
+  (evaluator kit and deployer profile).
+
+## [phase-19b-2] — 2026-11-01 — Phase 19b-2 approval token, forged-token matrix, tool-result channel; 19b closed
+
+**Raouf:**
+
+- **Scope:** Phase 19b-2 in `tools/assurance-provenance/` (approval store and token in `gate19.py`,
+  approved dispatch, tool-result reader, trust mutant, forged-token matrix in `lane.py`, closure
+  conditions in `evidence19b.py`, `tests/test_approval.py`), the regenerated 19b pack, results,
+  declaration ledger. No frozen file, verifier semantics, evidence value or runtime mechanism of
+  any archived phase changed. No version bump. No CI workflow added yet.
+- **Summary:** A host-issued approval `{run, action_key, approver_id, content_digest, expires,
+  nonce}` signed under the operator key and spent once through the host store lets the
+  re-implemented dispatch admit an ungranted action while keeping the frozen budget, blocking-fact,
+  duplicate and reservation rules. Seven forgeries each get their own reason, all blocked with no
+  effect; the genuine token lands and is a replay afterwards. The `tool_result_body` channel is the
+  fourth wired reader: a relayed token is verified, never trusted, and an invalid one is recorded
+  and ignored so the channel cannot reduce authority. The write-anywhere lane now runs fourteen
+  gates over four wired channels and thirteen payloads with zero clean differences and all thirteen
+  reader mutants killed; `phase_19b_closed` is true on six named conditions. The native delivery
+  path was not exercised on this host and the pack says so.
+- **Files changed:** `tools/assurance-provenance/{gate19,rig,awm,payloads,mutants,lane,evidence19b}.py`,
+  `tools/assurance-provenance/tests/{test_approval,test_awm,test_payloads,test_mutants,test_lane,test_evidence19b}.py`,
+  `docs/research/provenance-phase-19b/**`, `docs/research/PROVENANCE_PHASE_19.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 65 tests pass in `tools/assurance-provenance/tests` on macOS (Python 3.12, about
+  twenty minutes); `ruff check` and `ruff format --check` clean; the 19b pack verifies in a fresh
+  process; `prettier --check .` clean. Not run: the native delivery path, the Linux `--replay` chain,
+  `scripts/check.sh`, hosted CI.
+- **Follow-ups:** the CI workflow with the 5Q census re-pin in one commit; the Linux replay run;
+  Phase 19c (forked receiver, credential lanes, approved-input manifest, route corpus, cumulative lane).
+
+## [phase-19b-1] — 2026-11-01 — Phase 19b-1 write-anywhere lane, provenance records, outage lane, Lean model
+
+**Raouf:**
+
+- **Scope:** Phase 19b-1 in `tools/assurance-provenance/` (seven new modules, eight new test files),
+  `proofs/phase19/AuthorityProvenance.lean`, the 19b-1 evidence pack, the 19b plan, the declaration
+  ledger, `.prettierignore` (P19-FORMAT02), `scripts/check-lean-proofs.mjs` floor 39→40. The 19a
+  protocol now pins an explicit file set instead of a directory glob and its pack is regenerated.
+  No frozen file, verifier semantics, evidence value or runtime mechanism of any archived phase
+  changed. No version bump. No CI workflow added yet.
+- **Summary:** The Agent-Writable Manifest lists eleven channels with their readers; three are
+  wired through disciplined resume adapters. The write-anywhere lane writes twelve payloads (nine
+  quoted verbatim from the lab reports) into each wired channel and finds zero differences in the
+  clean successor's verdicts, receiver effects and authority-state hash, while all nine reader
+  mutants (textual grant, textual stop, agent-writable budget) are killed. Each clean dispatch
+  writes a signed provenance-tagged decision record that an offline verifier recomputes from the
+  host tables. The outage lane holds the exact approved action during a signal-store outage
+  (`dispatch_signal_unavailable`), records that an outage after reservation leaves the attempt
+  `unknown` with the budget consumed, treats the self-asserted stop as a no-reader statement with
+  the mutant as the test, and binds lease renewal after an `unrelated` alert to a signed
+  acknowledgement. The Lean model proves four properties of the admission chain and a differential
+  test matches it to the running gate on 48 states. Three wired channels, not four: 19b is not
+  closed.
+- **Files changed:** `tools/assurance-provenance/{awm,payloads,rig,mutants,provenance,gate19,lane,evidence19b}.py`,
+  `tools/assurance-provenance/evidence.py` (explicit 19a pins), `tools/assurance-provenance/tests/*`,
+  `proofs/phase19/{AuthorityProvenance.lean,lean-toolchain}`, `scripts/check-lean-proofs.mjs`,
+  `docs/research/provenance-phase-19b/**`, `docs/research/provenance-phase-19a/**` (regenerated),
+  `docs/research/PROVENANCE_PHASE_19.md`, `docs/superpowers/plans/2026-11-01-phase-19b-write-anywhere-lane.md`,
+  `proofs/README.md`, `.prettierignore`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 57 tests pass in `tools/assurance-provenance/tests` on macOS (Python 3.12, about
+  ten minutes); `ruff check` and `ruff format --check` clean; `node scripts/check-lean-proofs.mjs`
+  reports 40 proofs at floor 40 with zero escape hatches; both packs verify in a fresh process;
+  `prettier --check .` clean. Not run: the Linux `--replay` chain for 19a, `scripts/check.sh`, hosted CI.
+- **Follow-ups:** 19b-2 (signed approval token at `native_resume`, re-implemented dispatch for a
+  token-approved unregistered action, forged-token reason-code matrix, `tool_result_body` reader);
+  the CI workflow and 5Q census re-pin in one commit; the Linux replay run.
+
+## [phase-19a] — 2026-11-01 — Phase 19a projection verifier; Phase 19 authority provenance declared
+
+**Raouf:**
+
+- **Scope:** New research namespace `tools/assurance-provenance/` (Phase 19a projection verifier) and
+  its evidence pack `docs/research/provenance-phase-19a/`; Phase 19 declaration, design (v2.1 after a
+  four-review gauntlet), plan, plug-in map and gauntlet records; the 31 Oct and 1 Nov Zurvan gap hunts.
+  No frozen file, verifier semantics, evidence value, code, score, tag or runtime mechanism changed.
+  No version bump. No CI workflow added yet (P19-CI01 declared, not exercised).
+- **Summary:** Phase 19a recomputes four projections from the frozen Phase 17 archive for the
+  `composed_frozen` arm: the per-generation-and-control split (Luna's zero restricted-state effects
+  are 24 model declines; Llama's 17 restricted-state effects under credential-only become 23 gate
+  blocks under composed), an awareness-flag sidecar reported `evaluable: false` because the
+  instrument elicited no verbalisation, coverage as three counts with an architectural denominator
+  (every receiver effect has a gateway record; the twelve `unknown` records per model are the four
+  seeded `unknown_prior` effects counted per control), and a judge-free row (0 of 288 outcomes
+  model-scored, reported not claimed) beside the forced-call citation (`VALIDATION.md` line 10).
+  The verifier rejects five named mutations and a wrong root with distinct reasons. The frozen
+  modules are not imported on this host; the replay chain runs only with `--replay` on Linux x86_64
+  and the receipt says so (`hash_bound_projection`, `replay.result: not_run`). The design's claims
+  were narrowed by the gauntlet (Species 8→5; "proves", "by construction" and "model-blind" removed).
+- **Files changed:** `tools/assurance-provenance/{projection,evidence}.py`,
+  `tools/assurance-provenance/tests/{test_projection,test_evidence}.py`,
+  `docs/research/provenance-phase-19a/{protocol,report,receipt}.json`, `evidence.zip`, `ROOT.sha256`,
+  `RESULTS.md`, `README.md`, `docs/research/PROVENANCE_PHASE_19.md`,
+  `docs/research/GAP_HUNT_ZURVAN_2026-10-31.md`, `docs/research/GAP_HUNT_ZURVAN_2026-11-01.md`,
+  `docs/research/gap-hunt-zurvan-2026-11-01/**`, `docs/superpowers/specs/2026-11-01-phase-19-*`,
+  `docs/superpowers/specs/2026-11-01-phase-19-gauntlet/**`,
+  `docs/superpowers/plans/2026-11-01-phase-19a-projection-verifier.md`, `.prettierignore`,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `python -m unittest discover -s tools/assurance-provenance/tests` 18 passed on
+  macOS (Python 3.12); `ruff check` and `ruff format --check` clean on the namespace;
+  `evidence.py verify` on the committed pack returns `verified: true` in a fresh process; `prettier
+  --check` clean on every new markdown file and the three evidence JSON files are listed in
+  `.prettierignore` under P19-FORMAT01. Not run: the Linux `--replay` chain, `scripts/check.sh`,
+  hosted CI.
+- **Follow-ups:** Add `.github/workflows/assurance-provenance.yml` and re-pin the Stage 5Q census in
+  one commit after this declaration commit, with gate ids measured by `measureGateCensus.mjs`; run
+  the pack with `--replay` on a Linux x86_64 runner; Phase 19b (agent-writable manifest, reader
+  census and mutants, provenance-tagged decision record, approval token, stop/lease/outage lane,
+  Lean model with differential test) per the design's §6.
+
 ## [Unreleased] — 2026-10-15 — OpenAI reviewer workflow
 
 - Added an isolated synthetic tool-authorization experiment, explicit live Responses API
