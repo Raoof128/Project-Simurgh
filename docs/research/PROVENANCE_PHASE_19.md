@@ -491,3 +491,17 @@ be a strict ancestor of every repair commit.
   second-host replay; `IOU-19-OPERATOR` stays owed. Recorded, not repaired here: the Stage 2.4/2.5
   smoke's substring match for forbidden terms failed once on the hosted gate with `pid` and passes
   locally; a key-based match is owed outside this authority.
+- Ruling (9 Nov 2026, P19-REPAIR06 exercised): the reviewer's one finding held against the source:
+  `_ask` caught only `BrokenPipeError`, and macOS reports the proxy's early close of an oversized
+  line as `EPIPE` or `ENOTCONN` (the reviewer's probe: 80 and 20 of 100 sends, no receive error,
+  100 `malformed` decisions, one forwarded request with one receiver effect). Three tests of
+  `send_tolerating_peer_close` were written first and failed (`NameError`); the helper swallows
+  exactly `EPIPE` and `ENOTCONN`, raises every other `OSError`, and `_ask` uses it with every
+  assertion unchanged (13 pass on the Mac, which only produces `EPIPE`: 12 of 12 hostile-input runs
+  before the change and 6 of 6 after; the three 19d test files green on the droplet). The 19d pack
+  was regenerated from `1f106ef2`, the commit that carries the edit, on the owner's droplet: root
+  `54ef9925760b67741bd16afefbe38a3bae620e7e4584dc59fc3fb7535b9cef63` replaces `458f80e2…`; 11 cases hold,
+  `unix_sockets_reachable: []`, `unix_socket_egress_eliminated: true`; it verified back from its
+  committed path there and `PHASE19_ROOTS` carries the new root. The handoff and template were
+  re-rendered and the test that pins them passes. The reviewer's run is an owner-controlled
+  second-host replay; `IOU-19-OPERATOR` stays owed.

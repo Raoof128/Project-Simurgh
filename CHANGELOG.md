@@ -1,5 +1,29 @@
 ## Change Log
 
+## [phase-19-repair-06] — 2026-11-09 — Hostile-input test helper tolerates the peer's early close on macOS; 19d pack regenerated
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/tests/test_egress19.py` (pinned by 19d, so the 19d pack is
+  regenerated), the re-rendered handoff and template, the ledger (P19-REPAIR06 and its ruling),
+  both logs. No frozen file; no workflow change; census unchanged.
+- **Summary:** the second second-host review (owner-controlled macOS arm64, Lean 4.15.0) verified
+  five packs with zero comparator discrepancies, took the documented 19d refusal, and hit one
+  intermittent error in 164 tests: the hostile-input test's client caught only `BrokenPipeError`,
+  while macOS also reports the proxy's early close of an oversized line as `ENOTCONN` (errno 57;
+  the reviewer's probe saw 80 `EPIPE` and 20 `ENOTCONN` in 100 sends, no receive error, 100
+  `malformed` decisions). The send now goes through `send_tolerating_peer_close`, which swallows
+  exactly those two errnos and raises anything else; every assertion stays. The proxy is unchanged.
+  19d root `54ef9925…` (tree `1f106ef2`) replaces `458f80e2…`; `PHASE19_ROOTS` updated.
+- **Files changed:** as above.
+- **Verification:** three helper tests written first and seen failing; `test_egress19` 13/13 on the
+  Mac and the three 19d test files green on the droplet; the pack verified at creation and again
+  from its committed path on the droplet (`unix_sockets_reachable: []`, eliminated `true`, 11 cases
+  hold); comparator `[]` for the six committed receipts; handoff tests green; quick gate; hosted
+  checks on the PR.
+- **Follow-ups:** unchanged from repair-05 (the Stage 2.4/2.5 smoke's substring match; the
+  `browserExecutable` launch budget under load); the three IOUs still need people.
+
 ## [phase-19-repair-05] — 2026-11-08 — Handoff comparator and 19b test follow the handoff's own words; resilient Lean install (P19-CI03)
 
 **Raouf:**

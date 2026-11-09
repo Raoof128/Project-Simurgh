@@ -14,6 +14,26 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-09 (Australia/Sydney) — Phase 19: P19-REPAIR06 after the second second-host review (macOS)
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/repair-04-hardening` (PR #152). Declaration first (`83c051e5`
+  P19-REPAIR06), then `tests/test_egress19.py` (`1f106ef2`), the regenerated 19d pack, the
+  re-rendered handoff and template, the ruling, both logs. No frozen file; no workflow change.
+- **Summary:** the reviewer replayed the branch at `2f9fe740` on an owner-controlled macOS arm64 host
+  with Lean: five packs verified, zero comparator discrepancies, 19d refused as documented, and one
+  intermittent test error. `_ask` in the hostile-input test caught only `BrokenPipeError`; macOS also
+  reports the proxy's early close of an oversized line as `ENOTCONN`. A small helper now tolerates
+  exactly `EPIPE` and `ENOTCONN` and raises every other `OSError`; the assertions are unchanged and
+  the proxy is untouched. The pinned file forced a 19d regeneration on the droplet from `1f106ef2`:
+  root `54ef9925…` replaces `458f80e2…`, verified back from its committed path.
+- **Files changed:** as above.
+- **Verification:** helper tests red then green; `test_egress19` 13/13 (Mac) and the three 19d files
+  green on the droplet; pack verified twice; comparator `[]` for all six receipts; handoff tests
+  green; quick gate; hosted checks on the PR.
+- **Follow-ups:** as in the repair-05 entry; `IOU-19-SPEND`, `IOU-19-OPERATOR`, `IOU-19-KIT` need people.
+
 ### 2026-11-08 (Australia/Sydney) — Phase 19: P19-REPAIR05 after the first second-host review; P19-CI03 resilient Lean install
 
 **Raouf:**
