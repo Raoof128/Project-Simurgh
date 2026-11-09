@@ -76,6 +76,68 @@ class HandoffTests(unittest.TestCase):
             [(d["field"], d["kind"]) for d in out], [("failures", "unexpected")]
         )
 
+    def test_19d_socket_list_is_reported_not_compared(self):
+        # The handoff tells the operator the socket list is theirs. A host that still exposes a
+        # daemon socket outside the hidden directories is a report, not a discrepancy (P19-REPAIR05).
+        r = handoff19.committed_receipt("19d")
+        r["unix_sockets_reachable"] = ["/var/lib/example/daemon.sock"]
+        r["unix_socket_egress_eliminated"] = False
+        self.assertEqual(handoff19.check("19d", r), [])
+        reported = handoff19.not_compared("19d", r)
+        self.assertEqual(
+            set(reported), {"unix_sockets_reachable", "unix_socket_egress_eliminated"}
+        )
+        self.assertEqual(reported["unix_sockets_reachable"]["got"], ["/var/lib/example/daemon.sock"])
+        self.assertTrue(reported["unix_sockets_reachable"]["reason"])
+
+    def test_19b_lean_host_fields_are_reported_not_compared_without_lean(self):
+        # A Lean-less host reports the Lean checks null and closure false for itself; the handoff
+        # says that is expected. The comparator must say so too, and still compare the rest.
+        r = handoff19.committed_receipt("19b")
+        r["lean"]["type_checked_on_this_host"] = None
+        r["lean"]["differential_passed_on_this_host"] = None
+        r["closed_by"]["lean_differential_passed_on_this_host"] = False
+        r["phase_19b_closed"] = False
+        self.assertEqual(handoff19.check("19b", r), [])
+        reported = handoff19.not_compared("19b", r)
+        self.assertEqual(
+            set(reported),
+            {
+                "lean.type_checked_on_this_host",
+                "lean.differential_passed_on_this_host",
+                "closed_by.lean_differential_passed_on_this_host",
+                "phase_19b_closed",
+            },
+        )
+        # the rest of closed_by and lean are still compared
+        broken = json.loads(json.dumps(r))
+        broken["closed_by"]["outage_pair_holds"] = False
+        broken["lean"]["states_compared"] = 48
+        self.assertEqual(
+            sorted((d["field"], d["kind"]) for d in handoff19.check("19b", broken)),
+            [("closed_by", "differs"), ("lean", "differs")],
+        )
+
+    def test_19b_lean_host_fields_are_compared_with_lean(self):
+        # With Lean present nothing is waived: a failed differential is a discrepancy.
+        r = handoff19.committed_receipt("19b")
+        r["lean"]["differential_passed_on_this_host"] = False
+        r["closed_by"]["lean_differential_passed_on_this_host"] = False
+        r["phase_19b_closed"] = False
+        self.assertEqual(handoff19.not_compared("19b", r), {})
+        self.assertEqual(
+            sorted((d["field"], d["kind"]) for d in handoff19.check("19b", r)),
+            [("closed_by", "differs"), ("lean", "differs"), ("phase_19b_closed", "differs")],
+        )
+
+    def test_handoff_text_matches_the_comparator(self):
+        text = handoff19.render()
+        self.assertIn("scripts/install-elan-toolchain", text)
+        self.assertIn("not_compared", text)
+        self.assertIn("unmapped", text)
+        for f in handoff19.HOST_DEPENDENT["19d"]:
+            self.assertIn(f, text)
+
     def test_status_is_owed(self):
         s = handoff19.status()
         self.assertEqual(s["iou"], "IOU-19-OPERATOR")

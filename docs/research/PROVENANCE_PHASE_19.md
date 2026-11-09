@@ -196,6 +196,32 @@ commit was co-authored by a model agent (Claude Opus 5.5 or Claude Mythos 5.1) u
 instruction; the four gauntlet reviews were model reviews; no human outside the owner has read the
 work.
 
+**P19-REPAIR04 (bounded authority for the two machine-closable items the 8 Nov 2026 audit left open;
+declared before any repair commit).** After P19-REPAIR03 the ledger said two things were measured but
+not closed by any machine: the 19d namespace confined IP routing only (the Docker engine and
+systemd-resolved were reachable over filesystem Unix sockets from inside it on a stock Ubuntu host),
+and the hosted workflow read the expected pack roots from the same checkout it verified. This
+declaration authorises, and nothing else:
+
+1. `egress19.py`: the worker launch adds mount, PID and IPC namespaces, mounts a private `tmpfs`
+   over `/run` and `/dev/shm` before the worker starts, and drops every capability except
+   `CAP_NET_ADMIN` (the live-reader control brings loopback up); `can_namespace` is true only where
+   that whole launch works. The work directory stays shared by design (the measured covert channel).
+2. `lanes19d.py`, `evidence19d.py`: the socket probe's `eliminated` follows what it measured and
+   names its residual (sockets elsewhere on the shared filesystem); the namespace description and
+   the non-claims say what is now hidden and what is not; a test inside the namespace asserts PID 1,
+   empty `/run` and `/dev/shm`, and the single capability.
+3. `.github/workflows/assurance-provenance.yml`: one step compares each committed `ROOT.sha256`
+   with the repository variable `PHASE19_ROOTS` (set outside any pull request by the owner's
+   account) and fails on a mismatch or an unset variable; the Stage 5Q census is re-pinned by set in
+   the same commit if the step is a problem gate.
+4. Regenerating the 19d pack on a namespace host from the commit that carries the fix; the 19d
+   results, README and the deployer profile; re-rendering the 19f handoff; the hosted README; this
+   ledger's ruling; both logs.
+
+Not authorised: seccomp, a minimal root filesystem, hiding the work directory, or any change to
+another lane's source. This declaration commit must be a strict ancestor of every repair commit.
+
 **P19-CI02 (receipt retention).** The workflow writes each phase's receipt on the runner and
 discards it, so the first hosted run's 19a `--replay` outcome survives only as one printed
 assertion line in the job log. This declaration authorises one named step at the end of
@@ -208,6 +234,100 @@ step, unchanged, under `docs/research/provenance-phase-19-hosted/` with the run 
 artifact digest, and exempting those bytes from prettier (P19-FORMAT08). A hosted receipt is the
 project's own runner recomputing the project's own evidence: it is not custody evidence and does
 not pay `IOU-19-OPERATOR`. This declaration commit must be a strict ancestor of the workflow edit.
+
+**P19-CI03 (toolchain install resilience; declared 8 Nov 2026 before the edit).** Every hosted gate
+that needs `lean` installs the toolchain with the same five inline lines, and each of them asks
+`releases.lean-lang.org` once. On 8 Nov 2026 that host answered 502 and 504 for hours; the Phase 19
+workflow and the Stage 1 quality gate on PR #152 failed in their install steps for a reason that had
+nothing to do with the repository (runs `42468683455`, `42468683397`). This declaration authorises,
+and nothing else: one new script, `scripts/install-elan-toolchain`, that fetches the pinned elan
+release (sha256 checked, curl retries), asks elan for the toolchain named by a `lean-toolchain` file
+up to six times, and when the release host is still down fetches `lean-4.15.0-linux.tar.zst` from the
+Lean GitHub release page, checks it against a sha256 pinned in the script
+(`af71a2569a9f68337de2434829b3008cd8e32c436e9cb6bd8c84a2c2ba3585c9`, measured on 8 Nov 2026 from
+both hosts, identical) and links it into elan under the pinned toolchain name; replacing the inline
+body of the elan step in `.github/workflows/assurance-provenance.yml` and of the Lean step in
+`.github/workflows/stage-1-checks.yml` with a call to it; adding the script to the Phase 19
+workflow's path filters; the ruling; both logs. The fallback pins what elan does not: elan verifies
+no digest the repository chose. The script carries no `.sh` suffix because the Stage 5Q census
+treats a named `*.sh` in a `run:` body as an enumerated artifact; both steps must classify exactly as
+they do today and the problem-gate set must stay set-identical (53). Not authorised:
+`stage-4-lean-proofs.yml` (F001's live premise, spec §14.2), `stage-5q-checks.yml` and
+`stage-5s-checks.yml` (5Q Annex A5.3: their own single-file pull requests), any other step, any
+change under `tools/`. Recorded against this ledger's own rule: `a814c6f0` made the elan step
+install the toolchain eagerly before any declaration named that edit; this declaration replaces
+that step body and the lapse stands in the ruling. This declaration commit must be a strict
+ancestor of the edit.
+
+**P19-REPAIR05 (bounded repair authority after the first second-host review of the handoff
+package; declared 8 Nov 2026 before any repair commit).** The owner's reviewer replayed the six
+packs at `e4270f8a` on an owner-authorised host (MUM spare, Linux x86_64, Python 3.12.3, Lean
+unavailable because both release hosts answered 504) and returned three findings against the
+handoff, each confirmed against the source here: (i) `HANDOFF.md` says absent Lean results are
+excluded from the comparison and the 19d socket list is reported, not compared, while
+`handoff19.check` excludes only `tree_state`, `host` and `replay`, so a Lean-less host reads three
+19b discrepancies and any Linux host reads one 19d discrepancy that the document promised away;
+(ii) `tests/test_evidence19b.py::test_outputs_and_receipt` asserts `phase_19b_closed` is true
+unconditionally, so the suite the handoff calls optional-Lean fails without Lean (147 passed, 1
+failed, 11 skipped on that host); (iii) privileged namespace runs from a venv under a private home
+directory fail with `worker_failed:126 … Permission denied` because `unshare --map-root-user` leaves
+every other uid unmapped, and nothing told the operator so. This declaration authorises, and
+nothing else:
+
+1. `handoff19.py`: the comparator names its host-dependent fields per phase and reports them
+   instead of comparing them: for 19d `unix_sockets_reachable` and `unix_socket_egress_eliminated`;
+   for 19b, only when the operator's receipt says Lean was absent (`lean.type_checked_on_this_host`
+   is `null`), the two `*_on_this_host` Lean fields, `closed_by.lean_differential_passed_on_this_host`
+   and `phase_19b_closed`. With Lean present every 19b field is compared as today. The `check`
+   command prints the discrepancies and, separately, the reported-not-compared fields with the
+   operator's values and the reason; the rendered handoff says exactly what the code does, names
+   `scripts/install-elan-toolchain` as the Linux x86_64 route to Lean, and tells the operator to run
+   the namespace tests with an interpreter an unmapped uid can execute. Tests first, in
+   `tests/test_handoff19.py`.
+2. `tests/test_evidence19b.py`: `test_outputs_and_receipt` asserts closure and the Lean fields
+   against whether `lean` is on the path of the host running it, and asserts every other closure
+   term unconditionally. The file is pinned by the 19b protocol, so the 19b pack is regenerated
+   last, from the commit that carries the edit, on a host with Lean; the new root replaces
+   `ac086a43…` in the handoff, the repository variable `PHASE19_ROOTS`, the ledger and both logs.
+3. Re-rendering `HANDOFF.md`; the ruling; both logs. The Desktop package for the reviewer is a copy
+   of the committed handoff and follows the merge commit.
+
+Not authorised: any change to a lane, verifier, the Lean model, the gate, the protocols or any
+other pinned source; weakening what the comparator compares when Lean is present; any change to
+the review package the reviewer produced. The reviewer's run is an owner-controlled second-host
+replay and does not pay `IOU-19-OPERATOR`. This declaration commit must be a strict ancestor of
+every repair commit.
+
+**P19-REPAIR06 (bounded repair authority after the second second-host review of the handoff
+package; declared 9 Nov 2026 before any repair commit).** The owner's reviewer replayed the packs at
+`2f9fe740` on an owner-controlled macOS arm64 host (Python 3.12, Lean 4.15.0): five packs verified
+with zero comparator discrepancies, 19d refused as the handoff documents (`host_cannot_namespace`),
+and the full suite returned 152 passed, 0 failures, 1 error, 11 skipped. The one error is a
+portability defect in a test helper, not in the proxy: `tests/test_egress19.py::_ask` catches only
+`BrokenPipeError` around `sendall`, while macOS also reports the proxy's early close of an oversized
+line as `OSError` errno 57 (`ENOTCONN`). Ten repeats on that host gave nine passes and one error; a
+100-request oversized-input probe recorded 80 `EPIPE` and 20 `ENOTCONN` send errors, no receive
+errors, 100 `malformed` decisions, then one forwarded request with exactly one receiver effect. The
+published Linux run of the same tree (164 tests, 162 passed, 2 refusal-only skips) saw no error.
+This declaration authorises, and nothing else:
+
+1. `tests/test_egress19.py`: the helper's send tolerates exactly the two peer-closed errors `EPIPE`
+   and `ENOTCONN` and re-raises every other `OSError`; every assertion about the returned decision,
+   the receiver's effects, the subsequent valid request and the log length stays. Tests first: a
+   unit test of the tolerant send with a stub socket for each tolerated errno, for the
+   `BrokenPipeError` subclass, and for errors that must still raise.
+2. The file is pinned by the 19d protocol, so the 19d pack is regenerated from the commit that
+   carries the edit, on the owner's droplet (the project host where the hardened namespace runs),
+   and verified back from its committed path; the new root replaces `458f80e2…` in the handoff, the
+   repository variable `PHASE19_ROOTS`, the ledger and both logs.
+3. Re-rendering `HANDOFF.md` and the template; the ruling; both logs. The Desktop package for the
+   reviewer is a copy of the committed handoff and follows the merge commit.
+
+Not authorised: any change to `egress19.py` or to the proxy's behaviour on oversized input, to a
+lane, verifier, the protocols or any other pinned source; tolerating any socket error beyond the two
+named; any change to the review package the reviewer produced. The reviewer's run is an
+owner-controlled second-host replay and does not pay `IOU-19-OPERATOR`. This declaration commit must
+be a strict ancestor of every repair commit.
 
 | Field                         | Declaration                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
@@ -330,3 +450,58 @@ not pay `IOU-19-OPERATOR`. This declaration commit must be a strict ancestor of 
   completeness). What this repair does not do: the namespace is still IP-only (the socket channel is
   measured, not closed); the drill is still scripted (now labelled so); the trust root is still read
   from the checkout; `IOU-19-SPEND`, `IOU-19-OPERATOR` and `IOU-19-KIT` are unchanged.
+- Ruling (8 Nov 2026, P19-REPAIR04 exercised): the 19d worker now runs in user, network, mount, PID
+  and IPC namespaces with a private `tmpfs` over `/run` and `/dev/shm` and `CAP_NET_ADMIN` as its
+  only capability; a test inside the namespace asserts PID 1, no socket under either directory and
+  the single capability, and it passes on `portfolio-droplet`, where the previous pack had reached
+  five daemon sockets. The regenerated 19d pack (root `458f80e2…`, tree `270fb96e`, produced on the
+  droplet) reports `unix_sockets_reachable: []` and `unix_socket_egress_eliminated: true` for the
+  probed list, with the residual named (sockets outside the two hidden directories and the shared
+  work directory). The hosted workflow now compares each committed `ROOT.sha256` with the repository
+  variable `PHASE19_ROOTS`, set from the owner's account outside any pull request; the census is
+  set-identical (the step asserts no completeness). Still not done, and said so: seccomp, a minimal
+  root, hiding the work directory; the drill stays scripted; the three IOUs are unchanged and need
+  people.
+- Ruling (8 Nov 2026, P19-CI03 exercised): `scripts/install-elan-toolchain` replaces the inline
+  elan lines in the Phase 19 workflow and the Stage 1 quality gate. On `portfolio-droplet`, with a
+  fresh home directory each time, the primary path installed `leanprover/lean4:v4.15.0` through elan
+  in 41 s and the forced fallback (`ELAN_INSTALL_FORCE_FALLBACK=1`) fetched the GitHub release
+  tarball, matched the pinned digest `af71a256…`, linked it under the same name in 28 s, and a
+  one-line theorem compiled from a directory whose `lean-toolchain` names that version, with no
+  further download. The census measured the same 58 steps and the same 53 problem ids before and
+  after (both steps classify as they did; the script name carries no `.sh`). The lapse the
+  declaration records (`a814c6f0` edited the step before a declaration named it) stands here; the
+  body it introduced is gone. `stage-4-lean-proofs.yml`, `stage-5q-checks.yml` and
+  `stage-5s-checks.yml` keep their inline lines until their own pull requests.
+- Ruling (8 Nov 2026, P19-REPAIR05 exercised): the reviewer's three findings were checked against
+  the source and all three held. `handoff19.check` now leaves the named host-dependent fields out of
+  both sides and the `check` command prints them under `not_compared` with the operator's value
+  and the reason (19d: `unix_sockets_reachable`, `unix_socket_egress_eliminated`; 19b: the two
+  `*_on_this_host` Lean fields, `closed_by.lean_differential_passed_on_this_host` and
+  `phase_19b_closed`, only when the receipt's `lean.type_checked_on_this_host` is `null`); with Lean
+  present a failed differential is a discrepancy, and the test asserts that. Four handoff tests were
+  written first and failed for the stated reasons; twelve pass. `test_evidence19b` asserts closure
+  and the Lean fields against whether `lean` is on the path and every other closure term
+  unconditionally; it passed on the Mac with Lean and with Lean stripped from `PATH` (220 s). The
+  19b pack was regenerated from `f95a666e`, the commit that carries the test edit: root
+  `a5e74ff44c766e63e6068b1905b62e93516f8d3ea512a62702e6017dfb4df352` replaces `ac086a43…`,
+  `phase_19b_closed: true`, 96 states, 13 mutants killed, 8 forgeries; it verified back from its
+  committed path and `PHASE19_ROOTS` carries the new root. The handoff and template were
+  re-rendered and the test that pins them passes. The reviewer's run is an owner-controlled
+  second-host replay; `IOU-19-OPERATOR` stays owed. Recorded, not repaired here: the Stage 2.4/2.5
+  smoke's substring match for forbidden terms failed once on the hosted gate with `pid` and passes
+  locally; a key-based match is owed outside this authority.
+- Ruling (9 Nov 2026, P19-REPAIR06 exercised): the reviewer's one finding held against the source:
+  `_ask` caught only `BrokenPipeError`, and macOS reports the proxy's early close of an oversized
+  line as `EPIPE` or `ENOTCONN` (the reviewer's probe: 80 and 20 of 100 sends, no receive error,
+  100 `malformed` decisions, one forwarded request with one receiver effect). Three tests of
+  `send_tolerating_peer_close` were written first and failed (`NameError`); the helper swallows
+  exactly `EPIPE` and `ENOTCONN`, raises every other `OSError`, and `_ask` uses it with every
+  assertion unchanged (13 pass on the Mac, which only produces `EPIPE`: 12 of 12 hostile-input runs
+  before the change and 6 of 6 after; the three 19d test files green on the droplet). The 19d pack
+  was regenerated from `1f106ef2`, the commit that carries the edit, on the owner's droplet: root
+  `54ef9925760b67741bd16afefbe38a3bae620e7e4584dc59fc3fb7535b9cef63` replaces `458f80e2…`; 11 cases hold,
+  `unix_sockets_reachable: []`, `unix_socket_egress_eliminated: true`; it verified back from its
+  committed path there and `PHASE19_ROOTS` carries the new root. The handoff and template were
+  re-rendered and the test that pins them passes. The reviewer's run is an owner-controlled
+  second-host replay; `IOU-19-OPERATOR` stays owed.

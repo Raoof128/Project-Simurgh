@@ -12,37 +12,37 @@
   "phases": {
     "19a": {
       "command_run": "",
-      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19a <receipt.json>>",
+      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19a <receipt.json>  (a JSON object: discrepancies, not_compared)>",
       "refused": "<host_cannot_namespace or similar, if the verifier refused>",
       "verifier_output": "<the JSON the verifier printed, verbatim>"
     },
     "19b": {
       "command_run": "",
-      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19b <receipt.json>>",
+      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19b <receipt.json>  (a JSON object: discrepancies, not_compared)>",
       "refused": "<host_cannot_namespace or similar, if the verifier refused>",
       "verifier_output": "<the JSON the verifier printed, verbatim>"
     },
     "19c": {
       "command_run": "",
-      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19c <receipt.json>>",
+      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19c <receipt.json>  (a JSON object: discrepancies, not_compared)>",
       "refused": "<host_cannot_namespace or similar, if the verifier refused>",
       "verifier_output": "<the JSON the verifier printed, verbatim>"
     },
     "19d": {
       "command_run": "",
-      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19d <receipt.json>>",
+      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19d <receipt.json>  (a JSON object: discrepancies, not_compared)>",
       "refused": "<host_cannot_namespace or similar, if the verifier refused>",
       "verifier_output": "<the JSON the verifier printed, verbatim>"
     },
     "19e": {
       "command_run": "",
-      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19e <receipt.json>>",
+      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19e <receipt.json>  (a JSON object: discrepancies, not_compared)>",
       "refused": "<host_cannot_namespace or similar, if the verifier refused>",
       "verifier_output": "<the JSON the verifier printed, verbatim>"
     },
     "19g": {
       "command_run": "",
-      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19g <receipt.json>>",
+      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19g <receipt.json>  (a JSON object: discrepancies, not_compared)>",
       "refused": "<host_cannot_namespace or similar, if the verifier refused>",
       "verifier_output": "<the JSON the verifier printed, verbatim>"
     }

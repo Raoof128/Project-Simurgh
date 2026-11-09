@@ -14,6 +14,89 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-09 (Australia/Sydney) — Phase 19: P19-REPAIR06 after the second second-host review (macOS)
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/repair-04-hardening` (PR #152). Declaration first (`83c051e5`
+  P19-REPAIR06), then `tests/test_egress19.py` (`1f106ef2`), the regenerated 19d pack, the
+  re-rendered handoff and template, the ruling, both logs. No frozen file; no workflow change.
+- **Summary:** the reviewer replayed the branch at `2f9fe740` on an owner-controlled macOS arm64 host
+  with Lean: five packs verified, zero comparator discrepancies, 19d refused as documented, and one
+  intermittent test error. `_ask` in the hostile-input test caught only `BrokenPipeError`; macOS also
+  reports the proxy's early close of an oversized line as `ENOTCONN`. A small helper now tolerates
+  exactly `EPIPE` and `ENOTCONN` and raises every other `OSError`; the assertions are unchanged and
+  the proxy is untouched. The pinned file forced a 19d regeneration on the droplet from `1f106ef2`:
+  root `54ef9925…` replaces `458f80e2…`, verified back from its committed path.
+- **Files changed:** as above.
+- **Verification:** helper tests red then green; `test_egress19` 13/13 (Mac) and the three 19d files
+  green on the droplet; pack verified twice; comparator `[]` for all six receipts; handoff tests
+  green; quick gate; hosted checks on the PR.
+- **Follow-ups:** as in the repair-05 entry; `IOU-19-SPEND`, `IOU-19-OPERATOR`, `IOU-19-KIT` need people.
+
+### 2026-11-08 (Australia/Sydney) — Phase 19: P19-REPAIR05 after the first second-host review; P19-CI03 resilient Lean install
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/repair-04-hardening` (PR #152). Declarations first (`d8c6adf8` P19-CI03,
+  `4483994b` P19-REPAIR05), then `scripts/install-elan-toolchain` wired into the Phase 19 workflow and
+  `stage-1-checks.yml`; `handoff19.py`, `tests/test_handoff19.py`, `tests/test_evidence19b.py`, the
+  re-rendered handoff and template, the regenerated 19b pack, two rulings, both logs. No frozen file;
+  census set-identical.
+- **Summary:** the owner's reviewer replayed the six packs at `e4270f8a` on an owner-authorised Linux
+  host without Lean (both release hosts 504) and reported: three 19b and one 19d comparator
+  discrepancies the handoff had promised away, a 19b test that requires Lean, and privileged namespace
+  runs failing from a venv under a private home. Each was checked against the source and confirmed.
+  The comparator now names its host-dependent fields per phase and prints them under `not_compared`
+  with the operator's value and the reason (19d: the two socket fields; 19b: the four Lean-dependent
+  fields, only when the receipt says Lean was absent); the test asserts closure against whether `lean`
+  is on the path and every other closure term unconditionally; the handoff states the comparator's
+  behaviour, the Linux install route and the unmapped-uid rule. Separately, the hosted gates install
+  Lean through one script that retries the release host and falls back to a sha256-pinned GitHub
+  tarball, after both checks on the PR failed in that step. 19b root `a5e74ff4…` (tree
+  `f95a666e`).
+- **Files changed:** as above.
+- **Verification:** handoff tests 12/12 (four new, failing first); 19b receipt test green with and
+  without Lean on the Mac; pack verified back; comparator `[]` for all six committed receipts; census
+  58 steps / 53 problems before and after; installer primary and fallback on `portfolio-droplet` from
+  fresh homes; hosted checks on the PR.
+- **Follow-ups:** the Stage 2.4/2.5 smoke's substring match for forbidden terms (one CI failure on
+  `pid`, local 3/3 green) is owed a key-based match outside this PR. `IOU-19-SPEND`,
+  `IOU-19-OPERATOR`, `IOU-19-KIT` need people; the reviewer's run is owner-controlled and does not pay
+  `IOU-19-OPERATOR`.
+
+### 2026-11-08 (Australia/Sydney) — Phase 19: P19-REPAIR04, hardened 19d namespace and an expected-root source outside the checkout
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/repair-04-hardening` off `main` (`e4270f8a`). Declaration first
+  (`d3e1b8c5`), then `egress19.py`, `lanes19d.py`, `evidence19d.py`, two 19d test files, the workflow,
+  the 19d results and README, the deployer profile, the hosted README, the regenerated 19d pack, the
+  re-rendered handoff, this ledger's ruling, both logs. Then, after both hosted checks on the PR failed
+  in their Lean install steps during a release-host outage, a second declaration (P19-CI03,
+  `d8c6adf8`) and `scripts/install-elan-toolchain`, wired into the Phase 19 workflow and
+  `stage-1-checks.yml`. The repository variable `PHASE19_ROOTS` was set from the owner's account with
+  the six committed roots. No frozen file; census set-identical.
+- **Summary:** the owner asked that everything a machine can do be done, leaving only the human IOUs.
+  The two machine-closable items the audit left open are closed: the namespace adds mount, PID and IPC
+  isolation, hides the runtime socket directories and drops every capability but `CAP_NET_ADMIN`
+  (on the droplet the socket probe goes from five reachable daemons to none), and the hosted gate now
+  takes its expected roots from a variable outside any pull request. The twelve 2026 lab pages the gap
+  hunt found missing were ingested into Zurvan (index and graph rebuilt). The toolchain installer
+  retries `releases.lean-lang.org` and, when it stays down, fetches the same release tarball from
+  GitHub, checks it against a digest pinned in the script (elan pins none) and links it under the
+  pinned name; the three stage workflows that share the inline lines are out of its scope (F001's
+  premise; 5Q Annex A5.3) and keep them until their own pull requests.
+- **Files changed:** as above; 19d root `458f80e2…` (tree `270fb96e`).
+- **Verification:** the three 19d test files green on the droplet (hardening test included) and on the
+  Mac (namespace parts skip); the pack verified at creation and again; comparator `[]` for all six
+  receipts; census set-identical (58 steps, 53 problems, before and after the installer); YAML parses;
+  prettier and shellcheck clean; the installer's primary and forced-fallback paths run on the droplet
+  from fresh homes (41 s and 28 s) and a theorem compiles from the fallback; the hosted checks on the
+  PR.
+- **Follow-ups:** `IOU-19-SPEND`, `IOU-19-OPERATOR`, `IOU-19-KIT` need people. Not done: seccomp, a
+  minimal root, hiding the work directory; G34–G38 are new build work.
+
 ### 2026-11-08 (Australia/Sydney) — Phase 19: strict audit, P19-REPAIR03, packs regenerated, 2026 gap hunt
 
 **Raouf:**

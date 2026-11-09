@@ -1,5 +1,79 @@
 ## Change Log
 
+## [phase-19-repair-06] — 2026-11-09 — Hostile-input test helper tolerates the peer's early close on macOS; 19d pack regenerated
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/tests/test_egress19.py` (pinned by 19d, so the 19d pack is
+  regenerated), the re-rendered handoff and template, the ledger (P19-REPAIR06 and its ruling),
+  both logs. No frozen file; no workflow change; census unchanged.
+- **Summary:** the second second-host review (owner-controlled macOS arm64, Lean 4.15.0) verified
+  five packs with zero comparator discrepancies, took the documented 19d refusal, and hit one
+  intermittent error in 164 tests: the hostile-input test's client caught only `BrokenPipeError`,
+  while macOS also reports the proxy's early close of an oversized line as `ENOTCONN` (errno 57;
+  the reviewer's probe saw 80 `EPIPE` and 20 `ENOTCONN` in 100 sends, no receive error, 100
+  `malformed` decisions). The send now goes through `send_tolerating_peer_close`, which swallows
+  exactly those two errnos and raises anything else; every assertion stays. The proxy is unchanged.
+  19d root `54ef9925…` (tree `1f106ef2`) replaces `458f80e2…`; `PHASE19_ROOTS` updated.
+- **Files changed:** as above.
+- **Verification:** three helper tests written first and seen failing; `test_egress19` 13/13 on the
+  Mac and the three 19d test files green on the droplet; the pack verified at creation and again
+  from its committed path on the droplet (`unix_sockets_reachable: []`, eliminated `true`, 11 cases
+  hold); comparator `[]` for the six committed receipts; handoff tests green; quick gate; hosted
+  checks on the PR.
+- **Follow-ups:** unchanged from repair-05 (the Stage 2.4/2.5 smoke's substring match; the
+  `browserExecutable` launch budget under load); the three IOUs still need people.
+
+## [phase-19-repair-05] — 2026-11-08 — Handoff comparator and 19b test follow the handoff's own words; resilient Lean install (P19-CI03)
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/handoff19.py`, `tests/test_handoff19.py`,
+  `tests/test_evidence19b.py` (pinned by 19b, so the 19b pack is regenerated), the re-rendered
+  handoff and template, `scripts/install-elan-toolchain` with the Phase 19 workflow and
+  `stage-1-checks.yml` calling it, the ledger (P19-CI03, P19-REPAIR05, two rulings), both logs. No
+  frozen file; census set-identical.
+- **Summary:** the first second-host review of the handoff package (owner-authorised host, no Lean:
+  both release hosts answered 504) returned three findings and all three were real: the comparator
+  compared the 19d socket list and, on a Lean-less host, four Lean-dependent 19b fields that the
+  handoff said were not compared; `test_evidence19b` required Lean although the handoff calls it
+  optional; nothing warned that a venv under a private home fails inside `unshare --map-root-user`.
+  The comparator now reports host-dependent fields under `not_compared` with the value and reason
+  (with Lean present every 19b field is still compared), the test asserts closure against whether
+  `lean` is on the path, and the handoff says exactly what the code does. The hosted gates install
+  Lean through one script with retries and a sha256-pinned GitHub fallback (`af71a256…`). 19b root
+  `a5e74ff4…` replaces `ac086a43…`; `PHASE19_ROOTS` updated.
+- **Files changed:** as above.
+- **Verification:** 12 handoff tests green (four new, written first and seen failing); the 19b
+  receipt test green with Lean (regeneration host) and without it (Lean stripped from PATH); the
+  regenerated pack verified back; comparator `[]` for the six committed receipts; census 58/53
+  set-identical; the installer's primary and fallback paths on the droplet; hosted checks on the PR.
+- **Follow-ups:** `tests/e2e/stage24_25_smoke.mjs` matches forbidden terms as substrings over the
+  whole audit JSON and failed once on CI with `pid` (passes locally 3/3); a key-based match is owed
+  outside this PR. The three IOUs still need people.
+
+## [phase-19-repair-04] — 2026-11-08 — Hardened 19d namespace; CI expected roots from a repository variable
+
+**Raouf:**
+
+- **Scope:** the 19d launcher, lane and verifier, two 19d tests, the workflow, 19d docs, the deployer
+  profile, the hosted README, the regenerated 19d pack, the handoff, the ledger, both logs; then,
+  under P19-CI03, a new `scripts/install-elan-toolchain` and the Lean install step of
+  `stage-1-checks.yml`. No frozen file; census unchanged. Repository variable `PHASE19_ROOTS` set
+  outside the PR.
+- **Summary:** mount, PID and IPC namespaces, a private tmpfs over `/run` and `/dev/shm`, and a single
+  capability close the daemon-socket channel the audit measured (five reachable on the droplet before,
+  none after); the hosted gate compares the committed roots with a variable it cannot change. 19d root
+  `458f80e2…`. Twelve 2026 lab pages ingested into Zurvan. The hosted gates install the Lean
+  toolchain through one shared script that retries the release host and falls back to a
+  sha256-pinned GitHub release tarball (the host answered 502/504 for hours on 8 Nov and failed
+  both checks on the PR).
+- **Files changed:** as above.
+- **Verification:** 19d tests green on the droplet and the Mac; pack verified twice; comparator `[]`;
+  census set-identical; the installer's primary and fallback paths run on the droplet from fresh
+  homes and a proof compiles from the fallback; hosted checks on the PR.
+- **Follow-ups:** the three IOUs need people; seccomp and a minimal root are not done.
+
 ## [phase-19-repair-03] — 2026-11-08 — Phase 19 strict audit repaired (P19-REPAIR03); packs regenerated; 2026 gap hunt
 
 **Raouf:**

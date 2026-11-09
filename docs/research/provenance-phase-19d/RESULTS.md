@@ -1,10 +1,12 @@
 # Phase 19d results: namespace launcher and network-layer canary
 
-**Arm:** `namespace_egress`. A worker runs under `unshare --user --map-root-user --net` and so has
-loopback only and **no IP route**; its sanctioned path is the parent-owned proxy over a Unix socket.
-The namespace confines IP routing and nothing else: mount, PID and IPC namespaces, capabilities and
-the filesystem are shared with the parent, so any filesystem Unix socket the worker's user can open
-is also a path out (section 3). The proxy canonicalises the destination, resolves redirects from its
+**Arm:** `namespace_egress`. A worker runs under `unshare --user --map-root-user --net --mount
+--pid --fork --ipc`, with a private `tmpfs` mounted over `/run` and `/dev/shm` before it starts and
+every capability but `CAP_NET_ADMIN` dropped (P19-REPAIR04), and so has loopback only, **no IP
+route**, no daemon socket in the runtime directories, its own PID space and no shared IPC; its
+sanctioned path is the parent-owned proxy over a Unix socket in the lane's own work directory, which
+stays shared by design (section 3). Before the repair the namespace confined IP routing and nothing
+else, and the 8 Nov 2026 audit reached the Docker engine from inside it. The proxy canonicalises the destination, resolves redirects from its
 own fixture table, applies the parent-owned destination allowlist and the role of the socket it
 serves (never a role the request declares), allows only `GET` and `POST`, and forwards only to an
 owned receiver on the parent's loopback. A hostile request line is a `malformed` decision, logged;
@@ -59,11 +61,14 @@ interpreter start-up, so it is a rate observed once, not a capacity. `eliminated
 One probed overt channel: inside the lane's namespace the worker tries to connect to well-known
 filesystem Unix sockets (the Docker engine, systemd-resolved's varlink socket, the system D-Bus,
 journald, nscd, containerd, podman). The 8 Nov 2026 audit found the Docker engine API and
-systemd-resolved reachable from inside this exact namespace on a stock Ubuntu host, with no route
-and no counter movement; the pack's Docker Desktop host had none of these sockets. The probe's
-results are host-dependent, reported in the receipt as `unix_sockets_reachable`, and not compared;
-`unix_socket_egress_eliminated` is `false`. The namespace confines IP routing, not the filesystem;
-both channels are reported, not closed (cluster D row 2).
+systemd-resolved reachable from inside the pre-repair namespace on a stock Ubuntu host, with no
+route and no counter movement, and the P19-REPAIR03 pack recorded five reachable sockets on the
+droplet. Under P19-REPAIR04 the runtime socket directories are hidden behind a private `tmpfs`, so
+on the same host every probed socket reads `absent` and `unix_socket_egress_eliminated` is `true`
+for the probed list; the residual is named: a socket elsewhere on the shared filesystem (outside
+`/run` and `/dev/shm`) is not hidden, and the probe reports only the paths it checked. The results
+are host-dependent, reported in the receipt, and not compared. The covert filesystem channel through
+the work directory stays open by design (cluster D row 2).
 
 ## 4. What the verifier compares, and what it does not
 
@@ -83,10 +88,11 @@ authoring host's facts). `verify` itself runs only where the namespace can be cr
 
 - One namespace on one host. The second-operator canary is attested, not recomputable (folded into
   `IOU-19-OPERATOR`).
-- The namespace is not a sandbox: it removes IP routes and nothing else. A worker running as the
-  lane's user reaches every filesystem Unix socket that user can open; on a host with a Docker engine
-  that is full host control. The lane measures and reports this; closing it needs mount and PID
-  namespaces with a minimal root, capability dropping and seccomp, which this lane does not do.
+- The namespace is not a full sandbox. It removes IP routes, hides `/run` and `/dev/shm`, gives the
+  worker its own PID and IPC spaces and a single capability; it does not pivot to a minimal root,
+  apply seccomp, or hide the work directory or any socket outside the two hidden directories. The
+  socket probe says what it checked; a test inside the namespace asserts PID 1, empty `/run` and
+  `/dev/shm`, and `CAP_NET_ADMIN` alone.
 - The live-reader control runs in a separate namespace with `lo` brought up and shows two of the four
   counters moving; the worker reads and differences its own counters.
 - The host for this pack is the owner's Ubuntu 24.04 droplet (the first pack came from a Linux VM

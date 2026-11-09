@@ -25,17 +25,30 @@ If anything in this document does not match what you see, that mismatch is the r
   -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock`, then
   `.venv/bin/python -B tools/replay-preflight/preflight.py` must print `preflight passed`. The
   clone needs full history (`git clone`, not a tarball): the replay checks the Phase 17 freeze commit.
-- 19b: Lean 4.15.0 on PATH (`proofs/phase19/lean-toolchain`; `elan` installs it) for the Lean fields;
-  without it the receipt reports them `null` and `phase_19b_closed: false` for your host, which is
-  expected and is excluded from the comparison.
-- 19d: a Linux host where `unshare --user --map-root-user --net true` succeeds. Expect the verifier
-  to list which well-known Unix sockets your host exposes inside the namespace
-  (`unix_sockets_reachable`); that list is yours and is reported, not compared.
+- 19b: Lean 4.15.0 on PATH (`proofs/phase19/lean-toolchain`) for the Lean fields. On Linux x86_64
+  `bash scripts/install-elan-toolchain proofs/phase19/lean-toolchain` installs elan and the pinned
+  toolchain, and falls back to a sha256-pinned GitHub release tarball when `releases.lean-lang.org`
+  is down; elsewhere `elan` installs it. Without Lean the receipt reports
+  `lean.type_checked_on_this_host` and `lean.differential_passed_on_this_host` as `null`,
+  `closed_by.lean_differential_passed_on_this_host: false` and `phase_19b_closed: false` for your
+  host; the comparator then lists those four under `not_compared` with the reason instead of
+  comparing them, and 19b closure is verified only on a host with Lean. Every other 19b field is
+  compared either way. `tests/test_evidence19b.py` asserts closure only where `lean` is on the path.
+- 19d: a Linux host where `unshare --user --map-root-user --net true` succeeds and `setpriv` exists.
+  Run it, and the namespace tests, with an interpreter an unmapped uid can execute (`/usr/bin/python3`,
+  or a venv outside a private home directory): inside `unshare --map-root-user` every uid but yours
+  is unmapped, and a venv under a `0750` home fails with `worker_failed:126 … Permission denied`.
+  Expect the verifier to list which well-known Unix sockets your host still exposes inside the
+  hardened namespace (`unix_sockets_reachable`, and `unix_socket_egress_eliminated` with it); that
+  list is yours and the comparator reports it under `not_compared`, never as a discrepancy.
 
 ## What the comparator does and does not check
 
 `handoff19.py check` compares every receipt field except `tree_state`, `host` and `replay` with the
-committed receipt and flags a missing, differing or unexpected field. It cannot see whether the
+committed receipt and flags a missing, differing or unexpected field. It prints a JSON object:
+`discrepancies` (that list) and `not_compared` (the host-dependent fields it left out, with your
+value and the reason: for 19d the two socket fields; for 19b the four Lean-dependent fields, and
+only when your receipt says Lean was absent). Nothing else is waived. It cannot see whether the
 `--replay` run happened: a receipt whose `replay.result` says `verified` is taken at its word and
 then expected to read `kind: frozen_replay_chained`. Your verbatim verifier output and your note
 are what make that claim checkable; the comparator alone does not.
@@ -84,7 +97,7 @@ python -B tools/assurance-provenance/evidence19b.py verify \
   --expected-root "$(cat docs/research/provenance-phase-19b/ROOT.sha256)"
 ```
 
-Expected root: `ac086a4379f37bd4177328080bd9c49a23d17ac705c7b7209d2c0fe250c8d404`.
+Expected root: `a5e74ff44c766e63e6068b1905b62e93516f8d3ea512a62702e6017dfb4df352`.
 
 Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay` are not compared):
 
@@ -111,7 +124,7 @@ Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay`
     "states_compared": 96,
     "type_checked_on_this_host": true
   },
-  "manifest_sha256": "ac086a4379f37bd4177328080bd9c49a23d17ac705c7b7209d2c0fe250c8d404",
+  "manifest_sha256": "a5e74ff44c766e63e6068b1905b62e93516f8d3ea512a62702e6017dfb4df352",
   "model_inference": false,
   "mutants_total": 13,
   "phase_19b_closed": true,
@@ -160,7 +173,7 @@ python -B tools/assurance-provenance/evidence19d.py verify \
   --expected-root "$(cat docs/research/provenance-phase-19d/ROOT.sha256)"
 ```
 
-Expected root: `aa44eb458fe25ef1f74e9292a4cbad976a4f8d095f66b295ba5ea32c2deb5501`.
+Expected root: `54ef9925760b67741bd16afefbe38a3bae620e7e4584dc59fc3fb7535b9cef63`.
 
 Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay` are not compared):
 
@@ -184,19 +197,13 @@ Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay`
   "covert_probe_bytes_delivered": 262144,
   "independent_custody": false,
   "live_reader_moved": true,
-  "manifest_sha256": "aa44eb458fe25ef1f74e9292a4cbad976a4f8d095f66b295ba5ea32c2deb5501",
+  "manifest_sha256": "54ef9925760b67741bd16afefbe38a3bae620e7e4584dc59fc3fb7535b9cef63",
   "model_inference": false,
   "receiver_effects": 1,
-  "reported_not_compared": "host, rows[].receiver_port, covert_probe.seconds, covert_probe.bits_per_second_observed, live_reader_control.counter_delta, live_reader_control.routes_after_lo_up, unix_socket_probe.results, unix_socket_probe.reachable",
+  "reported_not_compared": "host, rows[].receiver_port, covert_probe.seconds, covert_probe.bits_per_second_observed, live_reader_control.counter_delta, live_reader_control.routes_after_lo_up, unix_socket_probe.results, unix_socket_probe.reachable, unix_socket_probe.eliminated",
   "routes_in_fresh_namespace": [],
-  "unix_socket_egress_eliminated": false,
-  "unix_sockets_reachable": [
-    "/run/containerd/containerd.sock",
-    "/run/dbus/system_bus_socket",
-    "/run/docker.sock",
-    "/run/systemd/resolve/io.systemd.Resolve",
-    "/var/run/docker.sock"
-  ],
+  "unix_socket_egress_eliminated": true,
+  "unix_sockets_reachable": [],
   "verified": true
 }
 ```
@@ -364,8 +371,9 @@ cd tools/assurance-provenance && python -m unittest discover -s tests -v
 ```
 
 About thirty minutes on a laptop, under thirty on a hosted runner. The Lean differential test and the
-19d namespace tests skip, not pass, where their host requirement is unmet; the receipt you return
-should say which skipped.
+19d namespace tests skip, not pass, where their host requirement is unmet, and `test_evidence19b`
+asserts 19b closure only where `lean` is on the path; the receipt you return should say which
+skipped and whether Lean was present.
 
 ## Returning the receipt
 
@@ -376,5 +384,6 @@ run the comparator on each phase and publish every discrepancy, including none:
 python -B tools/assurance-provenance/handoff19.py check 19b <your-19b-receipt.json>
 ```
 
-An empty list is no discrepancy. Your file will be committed under
+An empty `discrepancies` list is no discrepancy; `not_compared` is published with it. Your file
+will be committed under
 `docs/research/provenance-phase-19f/operator-receipts/` unchanged, with your name as you give it.
