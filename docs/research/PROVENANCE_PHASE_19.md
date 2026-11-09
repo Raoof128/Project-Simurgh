@@ -298,6 +298,37 @@ the review package the reviewer produced. The reviewer's run is an owner-control
 replay and does not pay `IOU-19-OPERATOR`. This declaration commit must be a strict ancestor of
 every repair commit.
 
+**P19-REPAIR06 (bounded repair authority after the second second-host review of the handoff
+package; declared 9 Nov 2026 before any repair commit).** The owner's reviewer replayed the packs at
+`2f9fe740` on an owner-controlled macOS arm64 host (Python 3.12, Lean 4.15.0): five packs verified
+with zero comparator discrepancies, 19d refused as the handoff documents (`host_cannot_namespace`),
+and the full suite returned 152 passed, 0 failures, 1 error, 11 skipped. The one error is a
+portability defect in a test helper, not in the proxy: `tests/test_egress19.py::_ask` catches only
+`BrokenPipeError` around `sendall`, while macOS also reports the proxy's early close of an oversized
+line as `OSError` errno 57 (`ENOTCONN`). Ten repeats on that host gave nine passes and one error; a
+100-request oversized-input probe recorded 80 `EPIPE` and 20 `ENOTCONN` send errors, no receive
+errors, 100 `malformed` decisions, then one forwarded request with exactly one receiver effect. The
+published Linux run of the same tree (164 tests, 162 passed, 2 refusal-only skips) saw no error.
+This declaration authorises, and nothing else:
+
+1. `tests/test_egress19.py`: the helper's send tolerates exactly the two peer-closed errors `EPIPE`
+   and `ENOTCONN` and re-raises every other `OSError`; every assertion about the returned decision,
+   the receiver's effects, the subsequent valid request and the log length stays. Tests first: a
+   unit test of the tolerant send with a stub socket for each tolerated errno, for the
+   `BrokenPipeError` subclass, and for errors that must still raise.
+2. The file is pinned by the 19d protocol, so the 19d pack is regenerated from the commit that
+   carries the edit, on the owner's droplet (the project host where the hardened namespace runs),
+   and verified back from its committed path; the new root replaces `458f80e2…` in the handoff, the
+   repository variable `PHASE19_ROOTS`, the ledger and both logs.
+3. Re-rendering `HANDOFF.md` and the template; the ruling; both logs. The Desktop package for the
+   reviewer is a copy of the committed handoff and follows the merge commit.
+
+Not authorised: any change to `egress19.py` or to the proxy's behaviour on oversized input, to a
+lane, verifier, the protocols or any other pinned source; tolerating any socket error beyond the two
+named; any change to the review package the reviewer produced. The reviewer's run is an
+owner-controlled second-host replay and does not pay `IOU-19-OPERATOR`. This declaration commit must
+be a strict ancestor of every repair commit.
+
 | Field                         | Declaration                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | active_phase                  | Phase 19a projection verifier (19b–19g declared)                                                                    |
