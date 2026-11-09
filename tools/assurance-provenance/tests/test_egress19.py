@@ -1,4 +1,6 @@
+import errno
 import json
+import os
 import sys
 import tempfile
 import unittest
@@ -8,6 +10,68 @@ HERE = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(HERE))
 
 import egress19  # noqa: E402
+
+PEER_CLOSED = (errno.EPIPE, errno.ENOTCONN)
+
+
+def send_tolerating_peer_close(sock, data):
+    """Send ``data``; swallow only the errors a peer's early close produces.
+
+    The proxy answers and closes an oversized line before the client has sent all of it.
+    Linux reports the remainder as ``EPIPE`` (``BrokenPipeError``); macOS reports ``EPIPE``
+    or ``ENOTCONN`` (errno 57). Returns the tolerated errno, or ``None`` when every byte
+    went. Any other ``OSError`` is raised unchanged."""
+    try:
+        sock.sendall(data)
+    except OSError as exc:
+        if exc.errno not in PEER_CLOSED:
+            raise
+        return exc.errno
+    return None
+
+
+class _StubSocket:
+    """Only what ``send_tolerating_peer_close`` touches: ``sendall``."""
+
+    def __init__(self, exc=None):
+        self.exc = exc
+        self.sent = []
+
+    def sendall(self, data):
+        if self.exc is not None:
+            raise self.exc
+        self.sent.append(data)
+
+
+class PeerCloseToleranceTests(unittest.TestCase):
+    """The proxy answers and closes an oversized line before the client has sent all of it;
+    Linux reports the rest as EPIPE, macOS as EPIPE or ENOTCONN (errno 57). Nothing else is
+    tolerated."""
+
+    def test_a_clean_send_returns_none_and_sends(self):
+        sock = _StubSocket()
+        self.assertIsNone(send_tolerating_peer_close(sock, b"x"))
+        self.assertEqual(sock.sent, [b"x"])
+
+    def test_epipe_and_enotconn_are_tolerated(self):
+        for code in (errno.EPIPE, errno.ENOTCONN):
+            sock = _StubSocket(OSError(code, os.strerror(code)))
+            self.assertEqual(send_tolerating_peer_close(sock, b"x"), code, code)
+        sock = _StubSocket(BrokenPipeError(errno.EPIPE, os.strerror(errno.EPIPE)))
+        self.assertEqual(send_tolerating_peer_close(sock, b"x"), errno.EPIPE)
+
+    def test_other_socket_errors_still_raise(self):
+        for code in (
+            errno.ECONNRESET,
+            errno.ECONNREFUSED,
+            errno.EBADF,
+            errno.ETIMEDOUT,
+        ):
+            sock = _StubSocket(OSError(code, os.strerror(code)))
+            with self.assertRaises(OSError, msg=code):
+                send_tolerating_peer_close(sock, b"x")
+        with self.assertRaises(OSError):
+            send_tolerating_peer_close(_StubSocket(OSError("no errno")), b"x")
 
 
 class CanonicalTests(unittest.TestCase):
@@ -105,10 +169,11 @@ class SocketRoleAndRobustnessTests(unittest.TestCase):
         s.settimeout(timeout)
         s.connect(str(p.path))
         try:
-            try:
-                s.sendall(raw if isinstance(raw, bytes) else json.dumps(raw).encode())
-            except BrokenPipeError:
-                pass  # the proxy may answer and close before a long line is fully sent
+            # the proxy may answer and close before a long line is fully sent (EPIPE on
+            # Linux; EPIPE or ENOTCONN on macOS); the answer is still there to be read
+            send_tolerating_peer_close(
+                s, raw if isinstance(raw, bytes) else json.dumps(raw).encode()
+            )
             return json.loads(s.recv(16384).decode())
         finally:
             s.close()
