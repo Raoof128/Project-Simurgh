@@ -357,6 +357,43 @@ any pinned source; any change to the review package the reviewer produced. The r
 owner-controlled replay on a host that ran an earlier one and does not pay `IOU-19-OPERATOR`. This
 declaration commit must be a strict ancestor of every repair commit.
 
+**P19-OPERATOR01 (bounded authority to receive, review and answer the first outside-operator
+receipt; declared 10 Nov 2026 before any commit that acts on it).** An operator returned a filled
+receipt for `c7d7ceec`, run alone on a macOS x86_64 machine the author has not touched (Python
+3.12.16, no Lean): 19a, 19b, 19c, 19e and 19g `verified: true` with their committed roots, 19d the
+documented `host_cannot_namespace` refusal, the operator's own comparator output empty for each
+verified phase. The author recomputed the comparator on the returned outputs and got the same. The
+receipt's note returns two mismatches with the handoff, both reproduced here before this
+declaration: (i) the handoff lists 19b and 19g as "any host with Python 3.12", but both import the
+frozen successor chain, whose `assurance-signals/signals.py` imports `openai` at module load, so a
+bare interpreter exits with `ModuleNotFoundError` before verifying anything; (ii) the hash-locked
+set the handoff names for `--replay` cannot serve as the workaround on that host, because
+`cryptography==50.0.2` publishes no macOS x86_64 wheel. The operator installed `openai` and its
+dependencies with their hashes from the SDK lock and the two verifies then passed. This
+declaration authorises, and nothing else:
+
+1. Committing the receipt byte for byte under `operator-receipts/`, named by that directory's
+   convention, with the operator's name as given.
+2. `handoff19.py`: a deterministic `review` of a returned receipt (comparator recomputed per phase
+   from the verbatim verifier output, root and commit checks, whether the operator's own comparator
+   output matches, what the receipt did not exercise), committed under `operator-reviews/` and
+   asserted equal to its recomputation; a `status` that distinguishes owed, received and reviewed
+   and names what no outside receipt has yet exercised; the handoff's status line generated from
+   it. Tests first.
+3. `tools/assurance-provenance/requirements-verify.lock`: the packages 19b, 19g and the lane tests
+   need to import, each entry copied byte for byte from `tools/assurance-sdk/requirements.lock`
+   (a test asserts it), installable where the full set is not; the handoff names it for 19b, 19g
+   and the suite, and says the full set is Linux x86_64 only. No frozen or pinned file is edited
+   and no import is removed.
+4. Re-rendering `HANDOFF.md`; the 19f and receipts READMEs; `.prettierignore` entries for the
+   byte-preserved receipt and review; the ruling; both logs. The Desktop package follows the merge.
+
+Not authorised: any edit to the receipt; any change to what the comparator compares, to a lane,
+verifier, protocol, pack, root or pinned source; treating the receipt as custody proof beyond what
+it states. The ruling must say what the receipt covers and what stays owed under
+`IOU-19-OPERATOR`, and must carry the operator's own disclosure of how the run was performed. This
+declaration commit must be a strict ancestor of every commit that acts on the receipt.
+
 | Field                         | Declaration                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | active_phase                  | Phase 19a projection verifier (19b–19g declared)                                                                    |
