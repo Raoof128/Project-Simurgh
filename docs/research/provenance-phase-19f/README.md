@@ -1,18 +1,59 @@
-# Phase 19f: outside-operator replay (owed)
+# Phase 19f: outside-operator replay (paid in part)
 
-`IOU-19-OPERATOR`: no outside operator has run any Phase 19 pack. This directory holds the package
-that makes the replay a run of named commands against named expectations:
+`IOU-19-OPERATOR`: one outside operator has replayed five of the six packs. This directory holds the
+package that makes the replay a run of named commands against named expectations, the receipt that
+came back and the author's review of it:
 
 - [HANDOFF.md](HANDOFF.md): generated from the committed receipts; custody rules, one command per
   phase, the expected fields, how to return the receipt.
 - [discrepancy-template.json](discrepancy-template.json): what the operator fills in.
-- `operator-receipts/`: returned receipts, committed unchanged. Empty.
+- [operator-receipts/](operator-receipts/): returned receipts, committed unchanged.
+- [operator-reviews/](operator-reviews/): the author's review of each, recomputable.
 
 Status (recomputable):
 
 ```sh
 python -B tools/assurance-provenance/handoff19.py status
+python -B tools/assurance-provenance/handoff19.py review \
+  docs/research/provenance-phase-19f/operator-receipts/all-Michael-2026-11-10.json
 ```
 
-There is no pack here. Nothing ran that a pack could bind; the first operator receipt is the
-evidence, and its review with every discrepancy published is what pays the IOU.
+## The first receipt (10 Nov 2026, commit `c7d7ceec`)
+
+Run by the operator alone on a macOS 13 x86_64 machine with Python 3.12 and no Lean. The author
+reran the comparator on the returned verifier outputs:
+
+| Phase | Result                                   | Comparator discrepancies | Root matches |
+| ----- | ---------------------------------------- | ------------------------ | ------------ |
+| 19a   | verified (projection; no `--replay`)     | 0                        | yes          |
+| 19b   | verified (four Lean fields not compared) | 0                        | yes          |
+| 19c   | verified                                 | 0                        | yes          |
+| 19d   | refused: `host_cannot_namespace`         | not run                  | not run      |
+| 19e   | verified                                 | 0                        | yes          |
+| 19g   | verified                                 | 0                        | yes          |
+
+The operator's note returned two mismatches with the handoff, both reproduced and answered:
+
+1. 19b and 19g were listed as "any host with Python 3.12" but import `openai` through the frozen
+   successor chain and exit with `ModuleNotFoundError` on a bare interpreter. Answer:
+   [`requirements-verify.lock`](../../../tools/assurance-provenance/requirements-verify.lock), a
+   hash-locked subset of the SDK lock, and a host recipe that names it.
+2. The full hash-locked set has no macOS x86_64 wheel for `cryptography`, so it could not serve as
+   the workaround there. Answer: the handoff now says the full set is Linux x86_64 only.
+
+The note also records what the run did not cover: 19d (refused off Linux), 19a's `--replay`, the
+Lean fields, and the test suite.
+
+## What this pays and what stays owed
+
+The review with every discrepancy published pays the IOU for what the receipt exercised: five
+verifies whose results do not depend on the host. It stays owed for 19d, 19a `--replay`, 19b's Lean
+closure and the test suite, none of which has run outside the author's custody; they need an
+outside Linux x86_64 host.
+
+Limits, in the operator's own words in the receipt: the receipt is signed with a typed name, and
+the commands were typed and run by an AI coding agent on a subscription registered to the author.
+The operator states that the author did not access the machine, see the session or take part.
+The review establishes what the returned outputs say; it cannot establish who produced them.
+
+There is no pack here. Nothing ran that a pack could bind; the receipts are the evidence.

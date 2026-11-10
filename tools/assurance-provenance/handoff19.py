@@ -6,6 +6,7 @@ Nothing here runs a lane; the replay is the operator's.
 """
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
@@ -14,6 +15,16 @@ import projection
 ROOT = projection.ROOT
 DOCS = ROOT / "docs/research/provenance-phase-19f"
 RECEIPTS_DIR = DOCS / "operator-receipts"
+# P19-OPERATOR01: each returned receipt gets a recomputable review beside it.
+REVIEWS_DIR = DOCS / "operator-reviews"
+REVIEW_SCHEMA = "simurgh-outside-operator-review-v1"
+# What 19b, 19g and the lane tests must be able to import (the frozen successor chain imports
+# `openai` at module load); a byte-identical subset of the SDK lock.
+VERIFY_LOCK = ROOT / "tools/assurance-provenance/requirements-verify.lock"
+VERIFY_LOCK_REL = "tools/assurance-provenance/requirements-verify.lock"
+# Beyond the six verifies, what only some hosts can exercise.
+REPLAY_ITEM = "19a --replay"
+LEAN_ITEM = "19b Lean closure"
 EXCLUDED = ("tree_state", "host", "replay")
 # 19a's ``kind`` is a function of its replay result (``evidence.receipt_for``), and the replay is
 # host-dependent, so the expected kind follows the operator's own replay rather than the author's.
@@ -47,7 +58,7 @@ PHASES = (
         "id": "19b",
         "module": "evidence19b.py",
         "docs": "docs/research/provenance-phase-19b",
-        "host": "any host with Python 3.12; the Lean differential test needs lean 4.15 on the path",
+        "host": "any host with Python 3.12 and the verify set (Host recipes); the Lean differential test needs lean 4.15 on the path",
         "time": "three to eight minutes (the lanes re-execute)",
     },
     {
@@ -75,7 +86,7 @@ PHASES = (
         "id": "19g",
         "module": "evidence19g.py",
         "docs": "docs/research/provenance-phase-19g",
-        "host": "any host with Python 3.12",
+        "host": "any host with Python 3.12 and the verify set (Host recipes)",
         "time": "a few seconds",
     },
 )
@@ -209,26 +220,134 @@ def discrepancy_template():
     }
 
 
-def status():
-    files = sorted(
-        p.name
+def review_path(receipt_path):
+    return REVIEWS_DIR / (Path(receipt_path).stem + ".review.json")
+
+
+def outside_items():
+    return sorted([p["id"] for p in PHASES] + [REPLAY_ITEM, LEAN_ITEM])
+
+
+def review(raw):
+    """The author's review of a returned receipt, recomputed from its bytes alone.
+
+    Per phase the comparator is rerun on the operator's verbatim verifier output; nothing the
+    operator reports about their own comparison is taken at its word. ``not_exercised`` lists what
+    this receipt leaves unreplayed: a refused or discrepant phase, 19a's frozen replay, 19b's Lean
+    closure. The review establishes what the returned outputs say, never who produced them."""
+    receipt = json.loads(raw)
+    phases, missing = {}, []
+    returned = receipt.get("phases") if type(receipt.get("phases")) is dict else {}
+    for p in PHASES:
+        pid = p["id"]
+        entry = returned.get(pid) if type(returned.get(pid)) is dict else {}
+        try:
+            out = json.loads(entry.get("verifier_output") or "")
+        except ValueError:
+            out = None
+        if type(out) is not dict:
+            phases[pid] = {"result": "refused", "refused": entry.get("refused", "")}
+            missing.append(pid)
+            continue
+        mine = {"discrepancies": check(pid, out), "not_compared": not_compared(pid, out)}
+        try:
+            theirs = json.loads(entry.get("discrepancies") or "")
+        except ValueError:
+            theirs = None
+        ok = out.get("verified") is True and not mine["discrepancies"]
+        phases[pid] = {
+            "result": "verified" if ok else "discrepant",
+            "discrepancies": mine["discrepancies"],
+            "not_compared": mine["not_compared"],
+            "operator_comparator_matches": theirs == mine,
+            "root_matches": out.get("manifest_sha256") == committed_root(pid),
+            "tree_state_is_commit": out.get("tree_state") == receipt.get("commit"),
+        }
+        if not ok:
+            missing.append(pid)
+        replay = out.get("replay")
+        if pid == "19a" and not (type(replay) is dict and replay.get("result") == "verified"):
+            missing.append(REPLAY_ITEM)
+        if pid == "19b" and _lean_absent(out):
+            missing.append(LEAN_ITEM)
+    return {
+        "schema": REVIEW_SCHEMA,
+        "receipt_sha256": hashlib.sha256(raw).hexdigest(),
+        "operator": receipt.get("operator"),
+        "commit": receipt.get("commit"),
+        "machine": receipt.get("machine"),
+        "phases": phases,
+        "not_exercised": sorted(missing),
+        "custody": "as the operator states it in the receipt's note; not established by this review",
+    }
+
+
+def _receipts():
+    return sorted(
+        p
         for p in RECEIPTS_DIR.glob("*.json")
         if p.is_file() and p.name != "discrepancy-template.json"
     )
+
+
+def _committed_review(path):
+    """The review beside a receipt, or None unless it equals the recomputation."""
+    try:
+        saved = json.loads(review_path(path).read_text())
+        return saved if saved == review(path.read_bytes()) else None
+    except (OSError, ValueError):
+        return None
+
+
+def status():
+    paths = _receipts()
+    reviews = [_committed_review(p) for p in paths]
+    done = [r for r in reviews if r is not None]
+    outstanding = set(outside_items())
+    for r in done:
+        outstanding &= set(r["not_exercised"])
+    if not paths:
+        state = "owed"
+    elif len(done) < len(paths):
+        state = "receipt_received_not_yet_reviewed"
+    else:
+        state = "reviewed_discrepancies_published"
     return {
         "iou": "IOU-19-OPERATOR",
-        "status": "owed" if not files else "receipt_received_not_yet_reviewed",
-        "operator_receipts": files,
-        "note": "a received receipt does not pay the IOU; the review and the published discrepancies do",
+        "status": state,
+        "operator_receipts": [p.name for p in paths],
+        "not_yet_replayed_outside": sorted(outstanding),
+        "note": "a received receipt does not pay the IOU; the review and the published discrepancies do, for what the receipt exercised; what no reviewed receipt exercised stays owed",
     }
+
+
+def status_lines():
+    s = status()
+    head = "Generated by `tools/assurance-provenance/handoff19.py render`; the test asserts this file equals the"
+    if s["status"] == "owed":
+        return [
+            head,
+            "render. Status: `IOU-19-OPERATOR` is owed until a receipt is reviewed and its discrepancies published.",
+        ]
+    if s["status"] == "receipt_received_not_yet_reviewed":
+        return [
+            head,
+            "render. Status: a receipt is received and not yet reviewed; `IOU-19-OPERATOR` is owed.",
+        ]
+    left = ", ".join(s["not_yet_replayed_outside"])
+    return [
+        head,
+        f"render. Status: {len(s['operator_receipts'])} outside receipt(s) reviewed, every discrepancy published under",
+        "`operator-reviews/`. Not yet replayed outside the author's custody, and still owed under `IOU-19-OPERATOR`:",
+        f"{left}." if left else "nothing; every item has been exercised by a reviewed receipt.",
+    ]
 
 
 def render():
     lines = [
         "# Outside-operator handoff: Phase 19 packs",
         "",
-        "Generated by `tools/assurance-provenance/handoff19.py render`; the test asserts this file equals the",
-        "render. Status: `IOU-19-OPERATOR` is owed until a receipt is reviewed and its discrepancies published.",
+        *status_lines(),
         "",
         "## What you are being asked to do",
         "",
@@ -247,7 +366,15 @@ def render():
         "",
         "## Host recipes",
         "",
-        "- 19a with `--replay` (Linux x86_64 only): create a venv and install the hash-locked set first:",
+        "- 19b, 19g and the test suite import the frozen successor chain, which imports `openai` when it",
+        "  loads. No model is called (every receipt says `model_inference: false`), but a bare Python 3.12",
+        "  exits with `ModuleNotFoundError: No module named 'openai'` before verifying anything. Install the",
+        "  verify set first, a hash-locked subset of the SDK lock, and run those commands with its interpreter:",
+        "  `python -m venv .venv-verify && .venv-verify/bin/pip install --require-hashes --only-binary=:all:",
+        f"  -r {VERIFY_LOCK_REL}`. Installed and run on Linux x86_64, macOS arm64 and",
+        "  macOS x86_64. 19a, 19c, 19d and 19e need nothing beyond the standard library.",
+        "- 19a with `--replay` (Linux x86_64 only: the full set has no macOS x86_64 wheel for `cryptography`,",
+        "  so it is not a substitute for the verify set there): create a venv and install the hash-locked set:",
         "  `python -m venv .venv && .venv/bin/pip install --require-hashes --only-binary=:all:",
         "  -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock`, then",
         "  `.venv/bin/python -B tools/replay-preflight/preflight.py` must print `preflight passed`. The",
@@ -318,6 +445,7 @@ def render():
         "cd tools/assurance-provenance && python -m unittest discover -s tests -v",
         "```",
         "",
+        "Run it with the verify-set interpreter (Host recipes); a bare Python 3.12 fails at import.",
         "About thirty minutes on a laptop or a hosted runner, sixty to ninety minutes on a small server. The",
         "Lean differential test and the 19d namespace tests skip, not pass, where their host requirement is",
         "unmet, and `test_evidence19b` asserts 19b closure only where `lean` is on the path; the receipt you",
@@ -335,6 +463,8 @@ def render():
         "An empty `discrepancies` list is no discrepancy; `not_compared` is published with it. Your file",
         "will be committed under",
         "`docs/research/provenance-phase-19f/operator-receipts/` unchanged, with your name as you give it.",
+        "The author's review, recomputed from your file by `handoff19.py review`, is committed beside it under",
+        "`operator-reviews/`; your note is published as you wrote it.",
         "",
     ]
     return "\n".join(lines)
@@ -346,6 +476,8 @@ def main():
     sub.add_parser("render")
     sub.add_parser("template")
     sub.add_parser("status")
+    rev = sub.add_parser("review")
+    rev.add_argument("receipt", type=Path)
     chk = sub.add_parser("check")
     chk.add_argument("phase")
     chk.add_argument("receipt", type=Path)
@@ -356,6 +488,8 @@ def main():
         print(json.dumps(discrepancy_template(), indent=2, sort_keys=True))
     elif args.command == "status":
         print(json.dumps(status(), indent=2, sort_keys=True))
+    elif args.command == "review":
+        print(json.dumps(review(args.receipt.read_bytes()), indent=2, sort_keys=True))
     else:
         receipt = json.loads(args.receipt.read_text())
         print(

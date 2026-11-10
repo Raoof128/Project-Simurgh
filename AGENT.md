@@ -14,6 +14,30 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-10 (Australia/Sydney) — Phase 19: P19-OPERATOR01, the first outside-operator receipt
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/operator-receipt-01`. Declaration first (`65793a84` P19-OPERATOR01),
+  then the receipt committed byte for byte, `handoff19.py` (`review`, a three-state `status`, the
+  generated status line, the verify-set recipe), `tests/test_handoff19.py`,
+  `requirements-verify.lock`, the 19f READMEs, `.prettierignore`, the ruling, both logs.
+- **Summary:** the receipt came back as a zip holding one JSON file; it was listed before extraction,
+  extracted into an empty scratch directory and read as data. Its five verified phases carry the
+  committed roots and reproduce zero comparator discrepancies here; 19d refused as documented. Both
+  handoff mismatches in its note were reproduced before the declaration (a bare Python 3.12 fails
+  19b and 19g with `No module named 'openai'`; `cryptography==50.0.2` has no macOS x86_64 wheel) and
+  answered with a hash-locked verify set copied from the SDK lock and handoff text that names it.
+  The review is code, not prose: it reruns the comparator on the verbatim outputs and a test asserts
+  the committed review equals it. The IOU is recorded as paid for the five host-independent verifies
+  and owed for 19d, 19a `--replay`, 19b's Lean closure and the suite; the operator's own custody
+  disclosure (typed signature; an AI agent on the author's subscription ran the commands) is
+  repeated, not softened.
+- **Files changed:** as above.
+- **Verification:** tests red then green (20); verify set installed and exercised on macOS arm64 and
+  Linux x86_64; all 23 test modules import with it alone; quick gate; hosted checks on the PR.
+- **Follow-ups:** an outside Linux x86_64 replay; `IOU-19-SPEND`, `IOU-19-KIT`.
+
 ### 2026-11-10 (Australia/Sydney) — Phase 19: P19-REPAIR07 after the third owner-controlled replay (clean)
 
 **Raouf:**

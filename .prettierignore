@@ -279,6 +279,9 @@ docs/research/provenance-phase-19e/spend-declaration.json
 # its test asserts byte equality with the render; prettier would re-wrap the embedded receipt JSON.
 docs/research/provenance-phase-19f/HANDOFF.md
 
+# P19-FORMAT09: returned operator receipts are committed byte for byte (P19-OPERATOR01); a test pins the first one's sha256.
+docs/research/provenance-phase-19f/operator-receipts/*.json
+
 # P19-FORMAT08: receipts retained from a hosted run of the Phase 19 workflow (P19-CI02), committed as the
 # artifact's members byte for byte; the README records their sha256.
 docs/research/provenance-phase-19-hosted/**/receipt-19*.json

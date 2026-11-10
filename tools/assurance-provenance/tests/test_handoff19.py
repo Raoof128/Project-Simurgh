@@ -1,5 +1,8 @@
+import hashlib
 import json
+import re
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -148,12 +151,133 @@ class HandoffTests(unittest.TestCase):
         self.assertIn("--replay", handoff19.phase("19a")["time"])
         self.assertIn("sixty to ninety minutes on a small server", text)
 
-    def test_status_is_owed(self):
+    def test_handoff_names_the_verify_set(self):
+        # the first outside receipt: 19b and 19g import `openai` through the frozen successor
+        # chain, and the full hash-locked set does not install on macOS x86_64
+        text = handoff19.render()
+        self.assertIn("tools/assurance-provenance/requirements-verify.lock", text)
+        self.assertIn("ModuleNotFoundError", text)
+        self.assertIn("no macOS x86_64 wheel", text)
+        for pid in ("19b", "19g"):
+            self.assertIn("verify set", handoff19.phase(pid)["host"], pid)
+
+
+def lock_entries(path):
+    """name -> the requirement line and its hash lines, verbatim; comments are not part of a pin."""
+    entries, name = {}, None
+    for line in Path(path).read_text().split("\n"):
+        head = re.match(r"^([A-Za-z0-9_.-]+)==", line)
+        if head:
+            name = head.group(1).lower().replace("_", "-")
+            entries[name] = [line]
+        elif name and line.startswith("    --hash="):
+            entries[name].append(line)
+        elif not line.strip().startswith("#"):
+            name = None
+    return entries
+
+
+class VerifySetTests(unittest.TestCase):
+    def test_every_entry_is_copied_byte_for_byte_from_the_sdk_lock(self):
+        sdk = lock_entries(handoff19.ROOT / "tools/assurance-sdk/requirements.lock")
+        mine = lock_entries(handoff19.VERIFY_LOCK)
+        self.assertIn("openai", mine)
+        self.assertGreaterEqual(len(mine), 14)
+        for name, block in mine.items():
+            self.assertEqual(block, sdk.get(name), name)
+            self.assertGreaterEqual(len(block), 2, name)  # at least one hash
+
+
+FIRST = "all-Michael-2026-11-10.json"
+FIRST_SHA256 = "765c42b19792f70463bfba38d602ac9443f480262400cdc7902ed8bb377f9291"
+
+
+class OperatorReceiptTests(unittest.TestCase):
+    def test_the_first_receipt_is_the_bytes_the_operator_returned(self):
+        raw = (handoff19.RECEIPTS_DIR / FIRST).read_bytes()
+        self.assertEqual(hashlib.sha256(raw).hexdigest(), FIRST_SHA256)
+
+    def test_every_committed_receipt_has_a_review_that_recomputes(self):
+        receipts = sorted(handoff19.RECEIPTS_DIR.glob("*.json"))
+        self.assertTrue(receipts)
+        for path in receipts:
+            committed = json.loads(handoff19.review_path(path).read_text())
+            self.assertEqual(committed, handoff19.review(path.read_bytes()), path.name)
+
+    def test_review_of_the_first_receipt(self):
+        r = handoff19.review((handoff19.RECEIPTS_DIR / FIRST).read_bytes())
+        self.assertEqual(r["receipt_sha256"], FIRST_SHA256)
+        self.assertEqual(r["commit"], "c7d7ceec6b2a589092026f21664bf273cdfcd24d")
+        self.assertEqual(
+            {pid: p["result"] for pid, p in r["phases"].items()},
+            {"19a": "verified", "19b": "verified", "19c": "verified", "19d": "refused",
+             "19e": "verified", "19g": "verified"},
+        )
+        for pid in ("19a", "19b", "19c", "19e", "19g"):
+            p = r["phases"][pid]
+            self.assertEqual(p["discrepancies"], [], pid)
+            self.assertIs(p["operator_comparator_matches"], True, pid)
+            self.assertIs(p["root_matches"], True, pid)
+            self.assertIs(p["tree_state_is_commit"], True, pid)
+        self.assertEqual(len(r["phases"]["19b"]["not_compared"]), 4)
+        self.assertEqual(r["not_exercised"], ["19a --replay", "19b Lean closure", "19d"])
+        self.assertIn("not established", r["custody"])
+
+    def test_review_does_not_take_the_operator_at_their_word(self):
+        receipt = json.loads((handoff19.RECEIPTS_DIR / FIRST).read_text())
+        out = json.loads(receipt["phases"]["19c"]["verifier_output"])
+        out["new_reasons"] = 9
+        receipt["phases"]["19c"]["verifier_output"] = json.dumps(out)
+        r = handoff19.review(json.dumps(receipt).encode())
+        self.assertEqual(r["phases"]["19c"]["result"], "discrepant")
+        self.assertIs(r["phases"]["19c"]["operator_comparator_matches"], False)
+        self.assertIn("19c", r["not_exercised"])
+        out["new_reasons"] = 8
+        out["manifest_sha256"] = "0" * 64
+        receipt["phases"]["19c"]["verifier_output"] = json.dumps(out)
+        r = handoff19.review(json.dumps(receipt).encode())
+        self.assertIs(r["phases"]["19c"]["root_matches"], False)
+        self.assertEqual(r["phases"]["19c"]["result"], "discrepant")
+
+
+class StatusTests(unittest.TestCase):
+    def _dirs(self):
+        tmp = Path(tempfile.mkdtemp())
+        saved = handoff19.RECEIPTS_DIR, handoff19.REVIEWS_DIR
+        self.addCleanup(lambda: setattr(handoff19, "RECEIPTS_DIR", saved[0]))
+        self.addCleanup(lambda: setattr(handoff19, "REVIEWS_DIR", saved[1]))
+        raw = (saved[0] / FIRST).read_bytes()
+        handoff19.RECEIPTS_DIR, handoff19.REVIEWS_DIR = tmp / "receipts", tmp / "reviews"
+        handoff19.RECEIPTS_DIR.mkdir()
+        handoff19.REVIEWS_DIR.mkdir()
+        return raw
+
+    def test_owed_received_reviewed(self):
+        raw = self._dirs()
+        s = handoff19.status()
+        self.assertEqual((s["iou"], s["status"], s["operator_receipts"]), ("IOU-19-OPERATOR", "owed", []))
+        self.assertIn("19d", s["not_yet_replayed_outside"])
+        self.assertIn("owed until a receipt is reviewed", handoff19.render())
+        (handoff19.RECEIPTS_DIR / FIRST).write_bytes(raw)
+        self.assertEqual(handoff19.status()["status"], "receipt_received_not_yet_reviewed")
+        review = handoff19.review(raw)
+        handoff19.review_path(handoff19.RECEIPTS_DIR / FIRST).write_text(json.dumps(review))
+        s = handoff19.status()
+        self.assertEqual(s["status"], "reviewed_discrepancies_published")
+        self.assertEqual(s["not_yet_replayed_outside"], ["19a --replay", "19b Lean closure", "19d"])
+        # a review that no longer matches its receipt is not a review
+        (handoff19.RECEIPTS_DIR / FIRST).write_bytes(raw + b"\n")
+        self.assertEqual(handoff19.status()["status"], "receipt_received_not_yet_reviewed")
+
+    def test_status_as_committed(self):
         s = handoff19.status()
         self.assertEqual(s["iou"], "IOU-19-OPERATOR")
-        self.assertEqual(s["status"], "owed")
-        self.assertEqual(s["operator_receipts"], [])
-
+        self.assertEqual(s["status"], "reviewed_discrepancies_published")
+        self.assertEqual(s["operator_receipts"], [FIRST])
+        self.assertEqual(s["not_yet_replayed_outside"], ["19a --replay", "19b Lean closure", "19d"])
+        text = handoff19.render()
+        self.assertIn("still owed under `IOU-19-OPERATOR`", text)
+        self.assertNotIn("owed until a receipt is reviewed", text)
 
 if __name__ == "__main__":
     unittest.main()
