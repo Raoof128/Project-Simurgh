@@ -14,6 +14,27 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-10 (Australia/Sydney) — Phase 19i and 19j: P19-INJECT01 and P19-REPLAY01
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/injection-and-replay`. 19i: declaration `a1194ffb`, instrument
+  `cadb1a74`, pack `1ad3766c`. 19j: declaration `c7b9ae50`, code `5b775df1`, then the pack. Docs,
+  `.prettierignore`, rulings, both logs.
+- **Summary:** the owner judged, rightly, that running the easy prompts on strong hosted models
+  would only show refusals, and chose the two free experiments with unknown outcomes. 19i was
+  pre-registered like 19h, with one prediction that the data did not establish and one earlier
+  after-the-fact reading that the data contradicted; both are written up as such. Writing 19i's
+  tests exposed a looseness in the 19h decoder (an unwrapped call on the Qwen wire would have been
+  accepted); no output depended on it, 19h's pinned source was left alone, and the note went into
+  the 19h README. 19j imports the frozen Phase 17 trial function for replay only, on Linux, under a
+  declaration that names a 36-generation slice run while the function was being written. A stand-in
+  pipeline lets the replay logic be tested on any host; the real one is tested on Linux and reruns
+  the whole committed pack in the hosted suite.
+- **Files changed:** as above.
+- **Verification:** as in the CHANGELOG entry.
+- **Follow-ups:** the informed-attacker arm and the hosted capture need the owner's yes to spend.
+
 ### 2026-11-10 (Australia/Sydney) — Phase 19h: P19-CAPTURE01, the local small-model capture
 
 **Raouf:**
