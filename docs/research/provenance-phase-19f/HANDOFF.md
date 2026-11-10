@@ -57,7 +57,7 @@ are what make that claim checkable; the comparator alone does not.
 
 ### 19a
 
-Host: any host with Python 3.12; on Linux x86_64 inside the hash-locked venv add --replay. Time: under one minute(s).
+Host: any host with Python 3.12; on Linux x86_64 inside the hash-locked venv add --replay. Time: under a minute; about three minutes with --replay.
 
 ```sh
 python -B tools/assurance-provenance/evidence.py verify \
@@ -89,7 +89,7 @@ the comparator expects that pairing, and the committed `kind` otherwise.
 
 ### 19b
 
-Host: any host with Python 3.12; the Lean differential test needs lean 4.15 on the path. Time: about twelve (the lanes re-execute) minute(s).
+Host: any host with Python 3.12; the Lean differential test needs lean 4.15 on the path. Time: three to eight minutes (the lanes re-execute).
 
 ```sh
 python -B tools/assurance-provenance/evidence19b.py verify \
@@ -136,7 +136,7 @@ Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay`
 
 ### 19c
 
-Host: any host with Python 3.12. Time: about two minute(s).
+Host: any host with Python 3.12. Time: a few seconds.
 
 ```sh
 python -B tools/assurance-provenance/evidence19c.py verify \
@@ -165,7 +165,7 @@ Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay`
 
 ### 19d
 
-Host: Linux with user and network namespaces (sudo or a privileged container); refuses elsewhere with host_cannot_namespace. Time: about one minute(s).
+Host: Linux with user and network namespaces (sudo or a privileged container); refuses elsewhere with host_cannot_namespace. Time: a few seconds.
 
 ```sh
 python -B tools/assurance-provenance/evidence19d.py verify \
@@ -210,7 +210,7 @@ Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay`
 
 ### 19e
 
-Host: any host with Python 3.12. Time: under one minute(s).
+Host: any host with Python 3.12. Time: a few seconds.
 
 ```sh
 python -B tools/assurance-provenance/evidence19e.py verify \
@@ -275,7 +275,7 @@ Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay`
 
 ### 19g
 
-Host: any host with Python 3.12. Time: under one minute(s).
+Host: any host with Python 3.12. Time: a few seconds.
 
 ```sh
 python -B tools/assurance-provenance/evidence19g.py verify \
@@ -370,10 +370,10 @@ Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay`
 cd tools/assurance-provenance && python -m unittest discover -s tests -v
 ```
 
-About thirty minutes on a laptop, under thirty on a hosted runner. The Lean differential test and the
-19d namespace tests skip, not pass, where their host requirement is unmet, and `test_evidence19b`
-asserts 19b closure only where `lean` is on the path; the receipt you return should say which
-skipped and whether Lean was present.
+About thirty minutes on a laptop or a hosted runner, sixty to ninety minutes on a small server. The
+Lean differential test and the 19d namespace tests skip, not pass, where their host requirement is
+unmet, and `test_evidence19b` asserts 19b closure only where `lean` is on the path; the receipt you
+return should say which skipped and whether Lean was present.
 
 ## Returning the receipt
 

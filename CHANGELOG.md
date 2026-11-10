@@ -1,5 +1,26 @@
 ## Change Log
 
+## [phase-19-repair-07] — 2026-11-10 — Handoff time estimates restated from the measured runs; third owner-controlled replay clean
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/handoff19.py` (time phrases only),
+  `tests/test_handoff19.py`, the re-rendered `HANDOFF.md`, the ledger (P19-REPAIR07 and its
+  ruling), both logs. Neither source file is pinned; no pack, root, workflow or frozen file changes.
+- **Summary:** the owner's reviewer replayed `c7d7ceec` from a fresh public clone on an
+  owner-controlled Linux x86_64 host with Lean: six packs verified, zero comparator discrepancies,
+  167 tests with 165 passed and 2 refusal-only skips, the hostile-input regression 20 of 20. The
+  comparator was recomputed here on the returned receipts and matched. The one mismatch was the
+  handoff's time estimates: 19a with `--replay` takes about three minutes where it said under one,
+  and the suite takes sixty to ninety minutes on a small server where it said about thirty. The
+  estimates now follow the three reviews' measurements and the `Time:` line reads as a sentence.
+- **Files changed:** as above.
+- **Verification:** the new test failed on the old text and passes; 13 handoff tests green; handoff
+  equals the render; template unchanged; quick gate; hosted checks on the PR.
+- **Follow-ups:** unchanged (the Stage 2.4/2.5 smoke's substring match; the `browserExecutable`
+  launch budget under load). `IOU-19-SPEND`, `IOU-19-OPERATOR`, `IOU-19-KIT` still need people: this
+  replay ran on the owner's host and does not pay the operator IOU.
+
 ## [phase-19-repair-06] — 2026-11-09 — Hostile-input test helper tolerates the peer's early close on macOS; 19d pack regenerated
 
 **Raouf:**

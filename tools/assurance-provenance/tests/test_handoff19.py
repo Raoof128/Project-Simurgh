@@ -138,6 +138,16 @@ class HandoffTests(unittest.TestCase):
         for f in handoff19.HOST_DEPENDENT["19d"]:
             self.assertIn(f, text)
 
+    def test_time_estimates_follow_the_measured_runs(self):
+        # three reviews measured these: 19a's frozen replay takes minutes, not seconds, and
+        # the suite takes two to three times longer on a small server than on a laptop
+        text = handoff19.render()
+        self.assertNotIn("minute(s)", text)
+        for p in handoff19.PHASES:
+            self.assertIn(f"Time: {p['time']}.", text, p["id"])
+        self.assertIn("--replay", handoff19.phase("19a")["time"])
+        self.assertIn("sixty to ninety minutes on a small server", text)
+
     def test_status_is_owed(self):
         s = handoff19.status()
         self.assertEqual(s["iou"], "IOU-19-OPERATOR")

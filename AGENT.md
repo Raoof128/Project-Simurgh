@@ -14,6 +14,26 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-10 (Australia/Sydney) — Phase 19: P19-REPAIR07 after the third owner-controlled replay (clean)
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/repair-07-handoff-times`. Declaration first (`2825332d` P19-REPAIR07),
+  then `handoff19.py` time phrases, one test in `tests/test_handoff19.py`, the re-rendered handoff,
+  the ruling, both logs. No pinned source, pack, root, workflow or frozen file.
+- **Summary:** the reviewer's replay of `c7d7ceec` on an owner-controlled Linux x86_64 host with Lean
+  returned six verified packs, zero comparator discrepancies and a green suite (167 tests, 165
+  passed, 2 refusal-only skips; hostile-input regression 20 of 20). The delivery's checksums were
+  verified and the comparator recomputed here on the returned receipts with the same output. The
+  one mismatch, the handoff's time estimates, was repaired from the measurements of all three
+  reviews: 19a under a minute or about three with `--replay`, 19b three to eight minutes, the other
+  phases a few seconds, the suite thirty minutes on a laptop or hosted runner and sixty to ninety
+  on a small server.
+- **Files changed:** as above.
+- **Verification:** test red then green; 13 handoff tests; handoff equals render; quick gate; hosted
+  checks on the PR.
+- **Follow-ups:** as in the repair-06 entry; the three IOUs need people.
+
 ### 2026-11-09 (Australia/Sydney) — Phase 19: P19-REPAIR06 after the second second-host review (macOS)
 
 **Raouf:**

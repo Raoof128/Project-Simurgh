@@ -533,3 +533,19 @@ declaration commit must be a strict ancestor of every repair commit.
   committed path there and `PHASE19_ROOTS` carries the new root. The handoff and template were
   re-rendered and the test that pins them passes. The reviewer's run is an owner-controlled
   second-host replay; `IOU-19-OPERATOR` stays owed.
+- Ruling (10 Nov 2026, P19-REPAIR07 exercised): the third owner-controlled replay (at `c7d7ceec`, a
+  fresh public clone on the Linux x86_64 host of the first review, Lean 4.15.0, hardened namespace
+  under sudo) returned six `verified: true` receipts, each carrying its committed root and
+  `tree_state` `c7d7ceec…`; the author recomputed the comparator on the returned receipts and got
+  the reviewer's output byte for byte: zero discrepancies, the two 19d socket fields under
+  `not_compared` (`[]`, `true`), 19a `frozen_replay` verified, 19b closed with Lean type-checked and
+  96 states. The suite ran 167 tests, 165 passed, 2 refusal-only skips; the hostile-input regression
+  repaired under P19-REPAIR06 passed 20 of 20 on Linux. The one returned mismatch, the time
+  estimates, held: `handoff19.py` now states per phase what the three reviews measured (19a under a
+  minute, about three with `--replay`; 19b three to eight minutes; the rest a few seconds) and the
+  suite as about thirty minutes on a laptop or hosted runner and sixty to ninety on a small server.
+  A test written first failed on the old text; 13 handoff tests pass; the handoff was re-rendered
+  and the template is unchanged. No pack, root or pinned source changed. The run is
+  owner-controlled on a host that ran an earlier replay; `IOU-19-OPERATOR` stays owed, and the
+  limits the reviewer restated (19d's filesystem covert channel open, 19c `transport_forked` and
+  `pays_G22` false, 19e not run, 19g delivery owed) are the committed receipts' own.
