@@ -14,6 +14,26 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-10 (Australia/Sydney) — Phase 19h: P19-CAPTURE01, the local small-model capture
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/local-capture-19h`. Declaration (`3e4af6a3`), instrument (`0dfced4c`),
+  then the capture, the pack and its docs, `.prettierignore`, the ruling, both logs.
+- **Summary:** the owner asked whether small models on this Mac could supply the model evidence
+  Phase 19 lacks, and said to do it. The Phase 17 gate runs only on Linux, so the lane is emission
+  only and says so everywhere. The frozen tool schema and parser are re-stated, not imported, and a
+  test reads the frozen file's literals to hold them equal. Output formats were checked on one
+  synthetic prompt outside the task set; the plan and the four pinned files were pushed before the
+  first generation, and the pack was built from that commit. Results are in the 19h README and
+  RESULTS: no framing effect at this sample size, large differences between models, a replication
+  of Phase 17's Llama result in a quantised copy, and a 1B model that fails the contract. Three
+  observations read from the transcripts afterwards are labelled as after the fact.
+- **Files changed:** as above.
+- **Verification:** 14 + 11 + 3 tests; pack verified twice; same-seed recheck identical; quick gate;
+  hosted checks on the PR.
+- **Follow-ups:** gate replay of the proposals on Linux; larger samples; `IOU-19-SPEND` unchanged.
+
 ### 2026-11-10 (Australia/Sydney) — Phase 19: P19-OPERATOR01, the first outside-operator receipt
 
 **Raouf:**

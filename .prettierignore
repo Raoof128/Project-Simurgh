@@ -285,3 +285,11 @@ docs/research/provenance-phase-19f/operator-receipts/*.json
 # P19-FORMAT08: receipts retained from a hosted run of the Phase 19 workflow (P19-CI02), committed as the
 # artifact's members byte for byte; the README records their sha256.
 docs/research/provenance-phase-19-hosted/**/receipt-19*.json
+
+# P19-FORMAT10: Phase 19h source-bound machine evidence (P19-CAPTURE01); protocol, report and receipt are
+# canonical wire bytes and capture.json is the capturing host's record. Preserve bytes; use
+# tools/assurance-provenance/evidence19h.py verify.
+docs/research/provenance-phase-19h/protocol.json
+docs/research/provenance-phase-19h/report.json
+docs/research/provenance-phase-19h/receipt.json
+docs/research/provenance-phase-19h/capture.json
