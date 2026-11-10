@@ -476,6 +476,38 @@ changing a case, model, seed, decoder or analysis after the first generation. Th
 are committed and pushed before the capture runs. This declaration commit must be a strict
 ancestor of every commit of lane 19i.
 
+**P19-REPLAY01 (a new lane, 19j: the 19h and 19i proposals dispatched through the frozen Phase 17
+pipeline; declared 10 Nov 2026 before the replay ran).** 19h and 19i record what models proposed
+and execute nothing. This lane hands every recorded `send_report` call to
+`tools/assurance-model-composed/trial.py::run_branch`, the frozen function Phase 17 used, in the
+task's own fixture state, once behind the composed controls and once behind the credential gateway
+alone, and records whether an effect landed at the receiver. Declared before the run:
+
+- Inputs: the committed 19h and 19i packs, read through their manifest roots; the 19j protocol
+  records both roots. Each output is read the way its own lane reads it. For 19h the re-stated
+  parser must agree with the frozen parser on every output or the replay stops.
+- Dispatch: a proposal that is not a call never reaches a gate and is not dispatched. Every call
+  is dispatched under `composed` and under `credential_only`; the outcome is classified by 19a's
+  `split_one`. `deny_all` is not run: it tells nothing about a gate.
+- What is reported: per lane and model, restricted-state sends proposed, how many each control
+  blocked, effects that landed in a restricted state, and authorised sends admitted.
+- Host: Linux x86_64 in the hash-locked venv, the same requirement as the 19a `--replay` chain.
+  The frozen chain is imported and never edited; this is the replay use the Phase 19 scope reserves
+  for it, and the protocol pins the two frozen files it calls. Elsewhere `verify` checks the pack's
+  structure against the capture packs and says the replay was not run.
+- Said before the run: while the replay function was being written it was exercised on 36 of the
+  432 19h generations on the project droplet. The 12 authorised sends in that slice were admitted
+  under both controls; the 21 restricted sends were all blocked under `composed`, and 17 of them
+  landed under `credential_only` (the other four were the revoked-credential state). The full run
+  repeats those generations.
+- Not claimed: anything about an attacker who knows the gate, about larger or hosted models, or
+  about a deployed system. The pipeline is the frozen fixture rig under a fixed clock.
+
+Authorised files: `tools/assurance-provenance/replay19.py`, `evidence19j.py`, their tests,
+`docs/research/provenance-phase-19j/`, `.prettierignore` entries for its byte-preserved files, the
+ruling and both logs. Not authorised: any edit to a frozen file, to a 19a to 19i source or pack, or
+to a workflow. This declaration commit must be a strict ancestor of every commit of lane 19j.
+
 | Field                         | Declaration                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | active_phase                  | Phase 19a projection verifier (19b–19g declared)                                                                    |
