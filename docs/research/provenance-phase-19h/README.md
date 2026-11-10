@@ -75,6 +75,9 @@ descriptions of this pack, not tests of anything.
   seeds (identical each time); those are in `capture.json` and are the host's word.
 - Sampling is reproducible on this host and runtime. Other hardware or another MLX version may
   sample differently; that has not been tried.
+- Found while writing lane 19i: the decoder leaves an unwrapped output as it is, so on the Qwen wire
+  a bare call written in the Llama form would have been read as a call. None of the 144 Qwen
+  outputs here is unwrapped, so no number changes; 19i requires the wrapper.
 - This is not the capture `IOU-19-SPEND` declares. The hosted models, `gpt-oss-20b` and the
   informed-attacker arm are not run and stay owed. The 19h root is not among the roots the hosted
   workflow checks against the repository variable; the lane's tests verify the committed pack.

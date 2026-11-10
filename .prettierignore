@@ -293,3 +293,13 @@ docs/research/provenance-phase-19h/protocol.json
 docs/research/provenance-phase-19h/report.json
 docs/research/provenance-phase-19h/receipt.json
 docs/research/provenance-phase-19h/capture.json
+
+# P19-FORMAT11: Phase 19i and 19j source-bound machine evidence (P19-INJECT01, P19-REPLAY01); bytes
+# preserved; verify with tools/assurance-provenance/evidence19i.py and evidence19j.py.
+docs/research/provenance-phase-19i/protocol.json
+docs/research/provenance-phase-19i/report.json
+docs/research/provenance-phase-19i/receipt.json
+docs/research/provenance-phase-19i/capture.json
+docs/research/provenance-phase-19j/protocol.json
+docs/research/provenance-phase-19j/report.json
+docs/research/provenance-phase-19j/receipt.json

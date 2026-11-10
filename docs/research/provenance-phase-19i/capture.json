@@ -1,0 +1,119 @@
+{
+ "host": {
+  "chip": "Apple M2",
+  "machine": "arm64",
+  "memory_gb": 8,
+  "release": "27.2.0",
+  "system": "Darwin"
+ },
+ "models": {
+  "llama-3.2-3b-4bit": {
+   "determinism_recheck": {
+    "identical": true,
+    "rows": 6
+   },
+   "files": {
+    ".gitattributes": {
+     "bytes": 1570,
+     "sha256": "34448b82c17d60fec9b65b1f093c115ddbaadc04beb1b0140b6bfed2e012a930"
+    },
+    "README.md": {
+     "bytes": 16295,
+     "sha256": "0e0634c181c7ce3bb40c98d533e3c633025725a66fddf084fa3abbdd08607d13"
+    },
+    "config.json": {
+     "bytes": 1122,
+     "sha256": "c546925585e48f43890d9dc5150df4fec73dd3780d92961c5ace451934cc4cd6"
+    },
+    "model.safetensors": {
+     "bytes": 1807496278,
+     "sha256": "d75e1ee0ea653cc5b76191ec934c7c0d568e94d4e47846619f1f4bc715b7b265"
+    },
+    "model.safetensors.index.json": {
+     "bytes": 45720,
+     "sha256": "2ef31fa0b9dcda01f87835851d5e1d5a39ab6258ae618af6ea864c3747e556e4"
+    },
+    "special_tokens_map.json": {
+     "bytes": 296,
+     "sha256": "6f38c73729248f6c127296386e3cdde96e254636cc58b4169d3fd32328d9a8ec"
+    },
+    "tokenizer.json": {
+     "bytes": 17209920,
+     "sha256": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b"
+    },
+    "tokenizer_config.json": {
+     "bytes": 54558,
+     "sha256": "022d5ae3df4737998ab97d8f31ac2bcb4c06dd8ebe5a8aba2b4aceef1e5ea7d3"
+    }
+   },
+   "finished_utc": "2026-11-10T05:00:34Z",
+   "generations": 168,
+   "repo": "mlx-community/Llama-3.2-3B-Instruct-4bit",
+   "revision": "7f0dc925e0d0afb0322d96f9255cfddf2ba5636e",
+   "started_utc": "2026-11-10T04:50:05Z"
+  },
+  "qwen3-4b-4bit": {
+   "determinism_recheck": {
+    "identical": true,
+    "rows": 6
+   },
+   "files": {
+    ".gitattributes": {
+     "bytes": 1570,
+     "sha256": "34448b82c17d60fec9b65b1f093c115ddbaadc04beb1b0140b6bfed2e012a930"
+    },
+    "README.md": {
+     "bytes": 857,
+     "sha256": "ebb2aa24b01914a5eb2e04bbd7395cb6e740df6adc413047f83d9c01ca273ec3"
+    },
+    "added_tokens.json": {
+     "bytes": 707,
+     "sha256": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680"
+    },
+    "config.json": {
+     "bytes": 937,
+     "sha256": "b5efdcf3b0035a3638e7228dad4d85f5c4a23f156eb7cdb0b44c8366a5d34d9b"
+    },
+    "merges.txt": {
+     "bytes": 1671853,
+     "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+    },
+    "model.safetensors": {
+     "bytes": 2263022529,
+     "sha256": "e240c0bdc0ebb0681bf0da0f98d9719fd6ebe269a3633f81542c13e81345651d"
+    },
+    "model.safetensors.index.json": {
+     "bytes": 63924,
+     "sha256": "f7825defe5865d179c3b593173d37056be5f202dcb7153985cf74e75ecf1628b"
+    },
+    "special_tokens_map.json": {
+     "bytes": 613,
+     "sha256": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd"
+    },
+    "tokenizer.json": {
+     "bytes": 11422654,
+     "sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4"
+    },
+    "tokenizer_config.json": {
+     "bytes": 9706,
+     "sha256": "253153d0738ceb4c668d2eff957714dd2bea0b56de772a9fdccd96cbf517e6a0"
+    },
+    "vocab.json": {
+     "bytes": 2776833,
+     "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+    }
+   },
+   "finished_utc": "2026-11-10T04:50:05Z",
+   "generations": 168,
+   "repo": "mlx-community/Qwen3-4B-4bit",
+   "revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+   "started_utc": "2026-11-10T04:23:50Z"
+  }
+ },
+ "runtime": {
+  "mlx": "0.30.3",
+  "mlx-lm": "0.29.1",
+  "python": "3.12.2",
+  "transformers": "4.46.3"
+ }
+}

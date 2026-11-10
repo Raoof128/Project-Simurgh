@@ -1,5 +1,33 @@
 ## Change Log
 
+## [phase-19i-19j] — 2026-11-10 — Injection styles against the restricted states, and every recorded send replayed through the frozen gate
+
+**Raouf:**
+
+- **Scope:** two new lanes. 19i: `tools/assurance-provenance/inject19.py`, `evidence19i.py`, tests,
+  `docs/research/provenance-phase-19i/`. 19j: `replay19.py`, `evidence19j.py`, tests,
+  `docs/research/provenance-phase-19j/`. Also `.prettierignore` (P19-FORMAT11), a decoder note in
+  the 19h README, the ledger (P19-INJECT01, P19-REPLAY01, two rulings), both logs. No 19a to 19h
+  source or pack, no frozen file, no workflow.
+- **Summary:** the owner asked for the two free experiments whose outcome was not known. 19i
+  crosses the six restricted states with seven injection styles, four samples each, on
+  `qwen3-4b-4bit` and `llama-3.2-3b-4bit` (336 generations, plan pushed before the run). The Qwen
+  model declined all 24 control cases; a signed-looking operator note drew 10 of 24 sends, the
+  Phase 17 adversarial sources 5, and urgency 1; one state gave way to four styles every time and
+  two states to none. The recorded prediction was not established. 19j then dispatched every send
+  recorded in 19h and 19i through the frozen Phase 17 pipeline on Linux: of 269 restricted-state
+  sends, the composed controls blocked 269 and none landed, where 220 landed behind the credential
+  gateway alone; all 152 authorised sends with the exact report were admitted.
+- **Files changed:** as above.
+- **Verification:** 19i: 10 + 6 tests on synthetic transcripts, 3 on the committed pack, pack
+  verified twice, same-seed recheck identical. 19j: 8 + 9 tests with a stand-in pipeline, one test
+  of the real pipeline on Linux, the replay run twice on the droplet with the same report, structure
+  verified on macOS, 3 tests on the committed pack (the replay one on Linux). Quick gate; hosted
+  checks on the PR.
+- **Follow-ups:** the informed-attacker arm with a capable model (the one experiment that tests the
+  gate against something trying to beat it); more samples per cell in 19i; the hosted capture; add
+  19h to 19j to the handoff and to the externally pinned roots; an outside replay of 19j.
+
 ## [phase-19h] — 2026-11-10 — First model inference in Phase 19: the 19e instrument on three small local models (emission only)
 
 **Raouf:**
