@@ -1,5 +1,30 @@
 ## Change Log
 
+## [phase-19h] — 2026-11-10 — First model inference in Phase 19: the 19e instrument on three small local models (emission only)
+
+**Raouf:**
+
+- **Scope:** a new lane. `tools/assurance-provenance/capture19local.py`, `evidence19h.py`, three
+  test files, `docs/research/provenance-phase-19h/` (pack, protocol, report, receipt, transcripts,
+  capture record, README, RESULTS), `.prettierignore` (P19-FORMAT10), the ledger (P19-CAPTURE01 and
+  its ruling), both logs. No 19e source or pack, no other lane, no frozen file, no workflow.
+- **Summary:** with the owner's go-ahead, the 19e emission-shift instrument ran once against
+  `Llama-3.2-3B`, `Llama-3.2-1B` and `Qwen3-4B` (4-bit MLX builds, pinned by revision) on an Apple
+  M2 with 8 GB: 432 generations, no money spent. The plan and the instrument were committed and
+  pushed before the first generation. The framing lines made no measurable difference to any model's
+  restricted-state send rate; the models differ far more than the framings (the 3B model sent in 65
+  of 72 restricted generations, as Phase 17 found for the full-precision model; Qwen declined in 66
+  of 72); the 1B model mostly cannot follow the one-call contract. No proposal was executed: this is
+  about what models propose, not about the gate. It does not pay `IOU-19-SPEND`.
+- **Files changed:** as above.
+- **Verification:** 14 parser, decoder, schedule and analysis tests written first and seen failing;
+  11 pack and verifier tests on synthetic transcripts; three tests on the committed pack; the pack
+  verified at creation and from its committed path (root `899dbe3f…`, tree `0dfced4c`); a
+  same-seed recheck of six prompts per model identical; quick gate; hosted checks on the PR.
+- **Follow-ups:** replay the captured proposals through the gate on Linux; more tasks and trials
+  (24 per arm only sees shifts of about twenty points); the hosted capture, `gpt-oss-20b` and the
+  informed-attacker arm stay owed; add 19h to the handoff and to the externally pinned roots.
+
 ## [phase-19-operator-01] — 2026-11-10 — First outside-operator receipt committed and reviewed; verify set for 19b and 19g
 
 **Raouf:**

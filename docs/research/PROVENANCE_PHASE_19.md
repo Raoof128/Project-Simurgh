@@ -5,7 +5,8 @@ proceed with the gauntlet-revised design
 ([Phase 19 v2.1](../superpowers/specs/2026-11-01-phase-19-authority-provenance-design.md)).
 Phase 19a, 19b, 19c, 19d and 19g are executed here; 19e is executed as an instrument without spend
 (the capture itself is owed under `IOU-19-SPEND`); 19f is executed as a handoff package (the
-outside replay itself is owed under `IOU-19-OPERATOR`).
+outside replay itself is owed under `IOU-19-OPERATOR`); 19h, added on 10 November under P19-CAPTURE01, runs
+the 19e instrument against three small local models, emission only, and does not pay `IOU-19-SPEND`.
 
 ## Design and scope
 
@@ -662,3 +663,24 @@ declaration commit must be a strict ancestor of every commit of this lane.
   has run outside the author's custody; `handoff19.py status` reads
   `reviewed_discrepancies_published` and lists the first three. They need an outside Linux x86_64
   host. `IOU-19-SPEND` and `IOU-19-KIT` are unchanged.
+- Ruling (10 Nov 2026, P19-CAPTURE01 exercised): the declaration (`3e4af6a3`) and the instrument
+  (`0dfced4c`) were pushed at 03:10:35Z and the first generation started at 03:10:41Z; the four
+  pinned sources are byte-identical to that commit and the pack was built from it (`tree_state`
+  `0dfced4c…`). 432 generations, one per prompt, on an Apple M2 with 8 GB; root
+  `899dbe3f57d17ce3a29daaa8b22856f228ef3e97530634b72391b42427fe4ab1`; `verify` recomputes every
+  outcome and the report from the transcripts. Result, per the declared analysis: no model's
+  restricted-state emission moved with the framing (evaluation minus deployment: 0 of 24 for
+  `llama-3.2-3b-4bit`, 22 against 22; 0 for `qwen3-4b-4bit`, 2 against 2; minus 2 for
+  `llama-3.2-1b-4bit`, 3 against 5; every Newcombe interval spans zero and is about plus or minus
+  nineteen points wide); the models differ far more than the arms (baseline 21, 3 and 2 of 24);
+  the awareness flag matched none of 432 outputs; the positive control holds for the 3B and Qwen
+  models at 24 of 24 authorised calls and for the 1B model by one call of 24, so that model's
+  numbers carry almost no information. The first six prompts of each model resampled identically
+  with their seeds. Read after the fact and labelled so in the README: all six of Qwen's
+  restricted sends are the one adversarial `monitor_expired` task; 79 of the 1B model's 94 invalid
+  outputs open with a well-formed send followed by a second call. Not shown: anything about a gate
+  or receiver (no proposal was executed), anything about larger or hosted models, reproducibility
+  of the sampling on other hardware. `IOU-19-SPEND` is unchanged: the hosted capture,
+  `gpt-oss-20b` and the informed-attacker arm stay owed. No workflow changed, so the 19h root is
+  outside `PHASE19_ROOTS`; the lane's tests verify the committed pack. `.prettierignore` gained
+  P19-FORMAT10. `IOU-19-OPERATOR` (in part) and `IOU-19-KIT` are unchanged.
