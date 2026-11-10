@@ -180,7 +180,7 @@ test written first:
     hosted README's corroboration sentence; and the IOU settlement below.
 
 Write scope additionally includes `docs/research/provenance-phase-19-hosted/**`, and the
-`.prettierignore` entries are P19-FORMAT01 to 08. No frozen file changes. This declaration commit
+`.prettierignore` entries are P19-FORMAT01 to 08 (09 added under P19-OPERATOR01). No frozen file changes. This declaration commit
 must be a strict ancestor of every repair commit.
 
 **IOU settlement (8 Nov 2026).** The design minted ten IOUs; this ledger had named three. Status of
@@ -586,3 +586,35 @@ declaration commit must be a strict ancestor of every commit that acts on the re
   owner-controlled on a host that ran an earlier replay; `IOU-19-OPERATOR` stays owed, and the
   limits the reviewer restated (19d's filesystem covert channel open, 19c `transport_forked` and
   `pays_G22` false, 19e not run, 19g delivery owed) are the committed receipts' own.
+- Ruling (10 Nov 2026, P19-OPERATOR01 exercised): the first outside-operator receipt is committed
+  byte for byte as `provenance-phase-19f/operator-receipts/all-Michael-2026-11-10.json` (sha256
+  `765c42b19792f70463bfba38d602ac9443f480262400cdc7902ed8bb377f9291`, pinned by a test, exempt from
+  prettier as P19-FORMAT09) with its review beside it under `operator-reviews/`, recomputed by
+  `handoff19.py review` and asserted equal to the recomputation. What the review finds: at
+  `c7d7ceec`, on a macOS 13 x86_64 machine with Python 3.12.16 and no Lean, the returned outputs of
+  19a (projection, no `--replay`), 19b, 19c, 19e and 19g read `verified: true`, carry the committed
+  roots and that commit as `tree_state`, and give zero discrepancies when the author reruns the
+  comparator on them; the operator's own comparator output equals the author's for all five; 19b's
+  four Lean fields are reported, not compared; 19d refused with `host_cannot_namespace` as the
+  handoff documents. The receipt's note is published as written. Its two mismatches held and are
+  answered: 19b and 19g import `openai` through the frozen successor chain
+  (`assurance-signals/signals.py`) and a bare Python 3.12 exits before verifying, so
+  `tools/assurance-provenance/requirements-verify.lock` now carries the eighteen packages that
+  import needs, each entry byte-identical to the SDK lock (asserted), and the handoff names it for
+  19b, 19g and the suite; and `cryptography==50.0.2` has no macOS x86_64 wheel, so the handoff says
+  the full set is Linux x86_64 only. The verify set was installed with `--require-hashes` into
+  fresh venvs on macOS arm64 and on Linux x86_64 (the project droplet), where 19g verified and 19b
+  imported with it and failed without it; all 23 test modules import with nothing else installed;
+  its wheels resolve for macOS x86_64, the operator's platform. Seven tests were written first and
+  failed; 20 handoff tests pass. No lane, verifier, protocol, pack, root, pinned or frozen file
+  changed. What the receipt does not establish, in the operator's own words: it is signed with a
+  typed name, and the commands were typed and run by an AI coding agent on a subscription
+  registered to the author; the operator states the author did not access the machine, see the
+  session or take part, and this ledger cannot check that either way. The receipt was run one
+  commit before P19-REPAIR07, which changed handoff time text only. `IOU-19-OPERATOR`: under the
+  19f ruling, the review with every discrepancy published pays it for what the receipt exercised,
+  the five verifies whose results do not depend on the host. It stays owed for 19d, 19a `--replay`,
+  19b's Lean closure, the test suite and the second-operator canary folded into it, none of which
+  has run outside the author's custody; `handoff19.py status` reads
+  `reviewed_discrepancies_published` and lists the first three. They need an outside Linux x86_64
+  host. `IOU-19-SPEND` and `IOU-19-KIT` are unchanged.

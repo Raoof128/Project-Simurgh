@@ -1,0 +1,81 @@
+{
+  "commit": "c7d7ceec6b2a589092026f21664bf273cdfcd24d",
+  "custody": "as the operator states it in the receipt's note; not established by this review",
+  "machine": {
+    "arch": "x86_64 (Intel iMac)",
+    "lean": "absent",
+    "os": "macOS 13.7.8 (22H730), Darwin 22.6.0",
+    "python": "CPython 3.12.16 (uv-managed build, already present on this Mac; not supplied by the author)"
+  },
+  "not_exercised": ["19a --replay", "19b Lean closure", "19d"],
+  "operator": "Michael",
+  "phases": {
+    "19a": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19b": {
+      "discrepancies": [],
+      "not_compared": {
+        "closed_by.lean_differential_passed_on_this_host": {
+          "got": false,
+          "present": true,
+          "reason": "lean absent on the operator's host"
+        },
+        "lean.differential_passed_on_this_host": {
+          "got": null,
+          "present": true,
+          "reason": "lean absent on the operator's host"
+        },
+        "lean.type_checked_on_this_host": {
+          "got": null,
+          "present": true,
+          "reason": "lean absent on the operator's host"
+        },
+        "phase_19b_closed": {
+          "got": false,
+          "present": true,
+          "reason": "closure needs the Lean differential on the operator's host; lean was absent"
+        }
+      },
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19c": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19d": {
+      "refused": "host_cannot_namespace (RuntimeError: host_cannot_namespace; exit 1, no JSON on stdout)",
+      "result": "refused"
+    },
+    "19e": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19g": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    }
+  },
+  "receipt_sha256": "765c42b19792f70463bfba38d602ac9443f480262400cdc7902ed8bb377f9291",
+  "schema": "simurgh-outside-operator-review-v1"
+}
