@@ -329,6 +329,34 @@ named; any change to the review package the reviewer produced. The reviewer's ru
 owner-controlled second-host replay and does not pay `IOU-19-OPERATOR`. This declaration commit must
 be a strict ancestor of every repair commit.
 
+**P19-REPAIR07 (bounded repair authority after the third owner-controlled replay of the handoff
+package; declared 10 Nov 2026 before any repair commit).** The owner's reviewer replayed the six
+packs at `c7d7ceec` from a fresh public clone on the owner-controlled Linux x86_64 host that ran the
+first review (Python 3.12.3, Lean 4.15.0, hardened namespace under sudo): six verifiers returned
+`verified: true`, the comparators returned zero discrepancies (the two 19d socket fields reported
+under `not_compared`), the full suite ran 167 tests with 165 passed and 2 refusal-only skips, and
+the hostile-input regression passed 20 of 20. The author recomputed the comparator on the returned
+receipts and matched every root. One mismatch with the handoff was returned, and it holds against
+the three reviews on record: the handoff's time estimates. 19a with `--replay` took 154 s and 176 s
+on that host where the handoff says "under one minute"; the suite took 66 and 81 minutes there
+(the second under shared load) and about 92 on the project droplet, against 26 on the reviewer's
+laptop and 25 on the hosted runner, where the handoff says "about thirty minutes on a laptop, under
+thirty on a hosted runner"; 19c and 19d finish in about a second where it says two minutes and one.
+This declaration authorises, and nothing else:
+
+1. `handoff19.py`: each phase's time estimate is restated from the measured runs, 19a's with and
+   without `--replay`, and the suite sentence names the small-server range beside the laptop and
+   hosted-runner figure; the rendered `Time:` line reads as a sentence. Tests first, in
+   `tests/test_handoff19.py`. Neither file is pinned by any protocol; no pack is regenerated and no
+   root changes.
+2. Re-rendering `HANDOFF.md` and the template; the ruling; both logs. The Desktop package for the
+   reviewer is a copy of the committed handoff and follows the merge commit.
+
+Not authorised: any change to what the comparator compares, to a lane, verifier, protocol, pack or
+any pinned source; any change to the review package the reviewer produced. The reviewer's run is an
+owner-controlled replay on a host that ran an earlier one and does not pay `IOU-19-OPERATOR`. This
+declaration commit must be a strict ancestor of every repair commit.
+
 | Field                         | Declaration                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | active_phase                  | Phase 19a projection verifier (19b–19g declared)                                                                    |
