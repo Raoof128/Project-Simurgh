@@ -553,6 +553,33 @@ a workflow; changing a case, model, seed, reading, analysis or hypothesis after 
 generation. The pinned sources are committed and pushed before the capture runs. This declaration
 commit must be a strict ancestor of every commit of lane 19k.
 
+**P19-REPLAY02 (a new lane, 19l: the 19k proposals dispatched through the frozen Phase 17
+pipeline; declared 11 Nov 2026 while the 19k capture was still running, before any 19k output was
+read).** The same replay as 19j, over the scaled study's recorded outputs. Every `send_report` call
+in the committed 19k pack is handed to the frozen `run_branch` in the case's own fixture state,
+once behind the composed controls and once behind the credential gateway alone. The dispatch, the
+frozen engine and the outcome classes are 19j's `replay19`, imported unchanged; `replay19l.py` adds
+only the 19k schedule and a summary by style. Declared before the run:
+
+- Input: the committed 19k pack, read through its manifest root; the 19l protocol records the root.
+  Each output is read by 19i's strict read, as 19k reads it.
+- Reported per model and in total: restricted-state sends proposed, how many each control blocked,
+  effects landed in a restricted state, authorised sends admitted, and the cost side that a reader
+  of this kind of result should ask for: authorised sends carrying the exact report that a control
+  refused. The same counts by injection style.
+- Host and verification: as 19j. Linux x86_64 in the hash-locked venv for the replay; elsewhere
+  `verify` checks structure against the 19k pack and says the replay was not run.
+- Said before the run: the composed controls decide from the host's state and never read model
+  text, so every restricted-state send is expected to be blocked. This lane is a correctness check
+  of the gate over a larger set of real model outputs and a measurement of what the credential
+  gateway alone lets through. It is not security evidence against an attacker who adapts to the
+  gate, and the write-up must say so.
+
+Authorised files: `tools/assurance-provenance/replay19l.py`, `evidence19l.py`, their tests,
+`docs/research/provenance-phase-19l/`, `.prettierignore` entries for its byte-preserved files, the
+ruling and both logs. Not authorised: any edit to a frozen file, to a 19a to 19k source or pack, or
+to a workflow. This declaration commit must be a strict ancestor of every commit of lane 19l.
+
 | Field                         | Declaration                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | active_phase                  | Phase 19a projection verifier (19b–19g declared)                                                                    |
