@@ -15,8 +15,8 @@ effects from 17/24 to 0/24 while preserving 23/24 active completions.** The same
 with OpenAI `gpt-6-luna` completed 24/24 active trials, but its credential-only baseline already
 produced zero restricted effects. That result establishes no incremental protection for Luna.
 
-**Latest study, November 2026.** Four studies on small local models, each with its plan committed
-before the run. In a confirmatory run of 2,592 generations, all five hypotheses fixed in advance
+**Latest study, November 2026.** The newest work is four studies on small local models, each with
+its plan committed before the run. In a confirmatory run of 2,592 generations, all five hypotheses fixed in advance
 held on the primary model, and how far an injected text moved a model depended on its exact
 wording and on why the action was forbidden. All 1,439 wrong sends the models produced were then
 replayed through the composed controls: none landed and no exact authorized send was refused,

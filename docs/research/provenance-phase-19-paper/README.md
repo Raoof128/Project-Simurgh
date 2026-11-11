@@ -7,7 +7,7 @@
 Appendix A and the Study 3 and Study 4 counts against those packs, so the manuscript cannot drift
 from them unnoticed.
 
-Status, stated plainly:
+Status:
 
 - A draft. It has not been submitted anywhere and has not been peer reviewed.
 - The author line and the section "Use of AI assistance" carry bracketed notes for the author to

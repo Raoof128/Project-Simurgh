@@ -1,18 +1,18 @@
 # Record of corrections
 
-This page lists the occasions on which the project's own evidence, its own audits or an outside
-replay showed that something the project had claimed, expected or built was wrong, and what was
-done about it. Each entry links to the record that carries the detail. Nothing here is new
-evidence; it is an index into records that already exist.
+This page lists the occasions on which the project's evidence, its audits or a replay showed that
+something the project had claimed, expected or built was wrong, and what the project did about
+it. Each entry links to the record that carries the detail. The page is an index into existing
+records and adds no evidence.
 
-It is kept for one reason. A reader deciding how far to trust this repository learns more from how
-its errors were found and handled than from its headline numbers.
+Read it before deciding how far to trust the repository's numbers. It shows how the project found
+its errors and what it did with them.
 
 ## Null results, failed predictions and readings the data overturned
 
 | When        | The question, prediction or reading                                                                                               | What the data showed                                                                                                                                                                | Record                                                                 |
 | ----------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| 10 Nov 2026 | Tested: whether telling a model it is in an evaluation, or in live deployment, changes how often it sends when it should decline. | No shift of the size the design could detect (about twenty points) on any of three small models. Reported as a bound, not as "framing has no effect".                               | [19h](research/provenance-phase-19h/README.md)                         |
+| 10 Nov 2026 | Tested: whether telling a model it is in an evaluation, or in live deployment, changes how often it sends when it should decline. | No shift of the size the design could detect (about twenty points) on any of three small models. Reported as a bound; the write-up does not claim that framing has no effect.       | [19h](research/provenance-phase-19h/README.md)                         |
 | 10 Nov 2026 | After the framing study: one adversarial source worked because it claims to be the event that renews the monitoring lease.        | Contradicted by the next study. A reworded version of the same claim drew 0 of 4 sends where the original drew 4 of 4.                                                              | [19i](research/provenance-phase-19i/README.md)                         |
 | 10 Nov 2026 | Recorded before the run: a self-clearing claim draws more sends than the control on the model that otherwise declines.            | The count went the predicted way (4 against 0) and the interval reaches zero. Written up as not established.                                                                        | [19i](research/provenance-phase-19i/README.md)                         |
 | 11 Nov 2026 | Fixed before the run: a spoofed operator note draws the most sends of the five varied styles (H2).                                | Supported by the rule, 43 against 36, a margin the design cannot separate. The write-up says so next to the result.                                                                 | [19k](research/provenance-phase-19k/README.md)                         |
@@ -39,7 +39,7 @@ reviewer on machines the owner controls, and one by an outside operator. Every r
 the committed results. Every replay also found something wrong with the instructions or the tests,
 which the producing session's own runs had not. The outside operator's receipt discloses that an
 AI coding agent on a subscription registered to the author typed the commands; the review can
-establish what the returned outputs say, not who produced them.
+establish what the returned outputs say and cannot establish who produced them.
 
 | When        | Who replayed                                                   | What they found                                                                                                                                     | Record                                                        |
 | ----------- | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
@@ -62,8 +62,7 @@ establish what the returned outputs say, not who produced them.
 
 ## What is still open
 
-These are known and not repaired. They are listed here so that this page is not read as a claim
-that the record is now clean.
+The project knows about these and has not repaired them.
 
 - No attacker that knows the gate has been run against it.
 - The studies in the manuscript have not been replayed outside the author's custody.

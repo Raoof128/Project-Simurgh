@@ -19,10 +19,19 @@
   suggests questions a reviewer could put to the author. The README now shows the November study
   beside the October one, with the statement that its gate replay is not evidence against an
   adaptive attacker and has not been replayed outside the author's custody.
-- **Files changed:** as above.
+  A prose audit of the manuscript, its README and the two new pages followed: about twenty edits
+  (announcement sentences, two quotable closers, over-long sentences split, passive constructions
+  given an actor) and two corrections of substance. The manuscript's introduction claimed small
+  models "are increasingly used as local agents" with no source, and the claim is removed. The
+  author page said no evaluation exercises context boundaries; Phase 7 did, with scripted
+  proposals and no live model, and the page now says so. Scope statements such as "a correctness
+  check, not evidence against an adaptive attacker" were kept on purpose.
+- **Files changed:** as above, plus `docs/research/provenance-phase-19-paper/PAPER.md` and its
+  README.
 - **Verification:** every relative link in the three edited pages resolves; each dated statement
-  was checked against the ledger, the lane READMEs or `git log`; `prettier` clean; quick gate;
-  hosted checks on the PR.
+  was checked against the ledger, the lane READMEs or `git log`; the manuscript test still holds
+  its tables to the packs; no invisible characters in the edited files; `prettier` clean; quick
+  gate; hosted checks on the PR.
 - **Follow-ups:** none for the machine. The owner should read the two pages.
 
 ## [phase-19k-19l] — 2026-11-11 — The injection study at scale with hypotheses fixed first, its gate replay, eleven lanes in the operator handoff, and a manuscript draft

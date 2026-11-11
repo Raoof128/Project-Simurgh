@@ -1,9 +1,7 @@
 # Author, working method and open problems
 
 This page is for a reader who wants to judge the person and the process behind this repository as
-well as its results. It states who is accountable for the work, how the work is produced, how the
-method has changed since the first commit, and which problems the author cannot settle alone.
-Every dated statement links to the record that supports it.
+well as its results. Every dated statement links to the record that supports it.
 
 ## Who is accountable
 
@@ -18,39 +16,41 @@ This page therefore makes no claim about the author that the repository cannot b
 
 ## How the work is produced
 
-Much of the engineering is done with an AI coding agent (Claude, from Anthropic) working under the
-author's direction. The division of labour, as the records show it:
+An AI coding agent (Claude, from Anthropic) does much of the engineering under the author's
+direction. The records show this division of labour.
 
-- **The author** sets the question and the constraints, chooses which experiments are worth
-  running, authorises each line of work and any cost, and decides what is released. The ledger
-  records these instructions where they shaped a study, for example the choice to run the
-  experiments whose outcome was not known in advance
-  ([Phase 19 ledger](research/PROVENANCE_PHASE_19.md)).
-- **The agent** proposes each plan as a written declaration, writes instruments, verifiers and
-  tests, runs the captures and replays, and drafts the write-ups, including the first draft of
-  the [manuscript](research/provenance-phase-19-paper/PAPER.md).
-- **The record** is how the two are held to account. A declaration is committed before the work
-  it authorises. [AGENT.md](../AGENT.md) logs each change with its scope and verification. Commits
-  made with the agent carry a co-author line: 380 of the 2,275 commits on `main` at
-  11 November 2026, and nearly every non-merge commit since Phase 19 began. An older commit
-  without that line should not be read as evidence that no assistant was used.
+The author sets the question and the constraints, chooses which experiments are worth running,
+authorises each line of work and any cost, and decides what is released. The
+[Phase 19 ledger](research/PROVENANCE_PHASE_19.md) records these instructions where they shaped a
+study, for example the choice to run the experiments whose outcome was not known in advance.
 
-Three consequences follow, and a reviewer should weigh them.
+The agent proposes each plan as a written declaration, writes instruments, verifiers and tests,
+runs the captures and replays, and drafts the write-ups, including the first draft of the
+[manuscript](research/provenance-phase-19-paper/PAPER.md).
 
-1. The volume of code and documents here is not a measure of one person's typing. The questions
-   asked, the experiments chosen, the limits stated and the errors admitted are the better measure.
-2. An agent can be confidently wrong. The safeguards against that are structural: plans fixed
-   before runs, verifiers that recompute every number from raw outputs, tests that pin write-ups
-   to evidence packs, and replays run apart from the session that produced the evidence. The
-   [record of corrections](RECORD_OF_CORRECTIONS.md) shows what those safeguards caught.
-3. The author must be able to explain and defend each design choice without the agent. That is
-   the right thing for a reviewer to test, and the last section suggests where to press.
+The record holds both to account. A declaration is committed before the work it authorises, and
+[AGENT.md](../AGENT.md) logs each change with its scope and verification. Commits made with the
+agent carry a co-author line: 380 of the 2,275 commits on `main` at 11 November 2026, and nearly
+every non-merge commit since Phase 19 began. An older commit without that line may still have had
+an assistant's help.
+
+A reviewer should weigh three consequences.
+
+1. An agent typed most of the code and documents here, so their volume says little about the
+   author. Judge the author by the questions asked, the experiments chosen, the limits stated and
+   the errors admitted.
+2. An agent can be confidently wrong. Four things guard against that: plans fixed before runs,
+   verifiers that recompute every number from raw outputs, tests that pin write-ups to evidence
+   packs, and replays run apart from the session that produced the evidence. The
+   [record of corrections](RECORD_OF_CORRECTIONS.md) shows what they caught.
+3. The author must be able to explain and defend each design choice without the agent. A reviewer
+   should test that, and the last section suggests where to press.
 
 ## How the method has changed
 
 The project began on 3 May 2026 as a privacy-preserving exam-integrity prototype and became a
-study of authority control for AI agents. What changed over six months is how much a reader has
-to take on trust.
+study of authority control for AI agents. Over six months each step cut what a reader has to take
+on trust.
 
 | When             | What was added                                                                                                                                                                     | What a reader no longer has to take on trust                                    | Record                                                                 |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
@@ -65,31 +65,33 @@ to take on trust.
 
 ## Problems the author cannot settle alone
 
-These are the questions where a mentor, a collaborator or access to stronger models would change
-the outcome. Each names what already exists to build on.
+A mentor, a collaborator or access to stronger models would change the outcome of each question
+below. Each item names what already exists to build on.
 
 1. **An attacker that knows the gate.** Every send replayed so far came from a model that was not
-   trying to defeat the control, and defences tested only on fixed attacks are routinely broken by
-   adaptive ones. The fixtures, the replay harness and a declared but unrun informed-attacker arm
-   exist. What is missing is a capable attacking model and someone experienced in adaptive
+   trying to defeat the control, and adaptive attacks break defences that were tested only on
+   fixed ones. The fixtures, the replay harness and a declared but unrun informed-attacker arm
+   exist. The work lacks a capable attacking model, and someone experienced in adaptive
    evaluation to say when the attack was strong enough.
 2. **Stronger models.** All Phase 19 model results are on 4-bit models that fit an 8 GB laptop.
    Whether a spoofed operator note moves a frontier model under the same contract is unknown, and
    unlike a plain refusal test its outcome is not predictable.
-3. **Authority across context boundaries.** The contract tested here fits in one prompt. The
-   harder cases are context compaction and hand-offs between agents, where the state that grants
-   or withdraws authority may no longer be in what the model reads. The host-side state machine
-   exists; an evaluation that exercises those boundaries does not.
+3. **Authority across context boundaries.** The contract tested in Phase 19 fits in one prompt.
+   The harder cases are context compaction and hand-offs between agents, where the state that
+   grants or withdraws authority may no longer be in what the model reads.
+   [Phase 7](research/CONTEXT_PHASE_7.md) tested those transitions with scripted proposals, no
+   live model and no real compaction or agent API. An evaluation with live models whose context is compacted or
+   handed off has not been built.
 4. **Cost on real tasks.** The gate refused no exact authorised send in 217, on fixtures where the
-   authorised action is unambiguous. Its cost on a task benchmark, where legitimate work is messier,
-   has not been measured in this phase.
+   authorised action is unambiguous. Phase 19 did not measure its cost on a task benchmark, where
+   legitimate work is messier.
 5. **Reproduction and review by others.** One outside operator has replayed five earlier packs on
    macOS. The manuscript's studies have not been replayed outside the author's custody, and no
    researcher outside the project has read the manuscript.
 
 ## Where to press
 
-A reviewer who wants to test the author's understanding, and not the agent's output, could ask:
+To test the author's understanding apart from the agent's output, a reviewer could ask:
 
 - Why are the state-cluster intervals the ones to read in the confirmatory study, and which
   results weaken under them?
