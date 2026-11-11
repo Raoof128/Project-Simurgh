@@ -1,5 +1,20 @@
 ## Change Log
 
+## [phase-19m-interrupted] — 2026-11-12 — The 19m capture was cut off by a flat battery; the resume is declared before it happens
+
+**Raouf:**
+
+- **Scope:** the ledger (P19-MODELS02) and both logs. No source, test, pack, workflow or frozen
+  file.
+- **Summary:** the laptop ran flat at 11:14:56 UTC on 11 Nov with `llama-3.2-3b-8bit` at 772 of
+  864 generations. Three models had already ended by their rules. P19-MODELS01 records a model
+  whose process fails as not captured; P19-MODELS02 departs from that for a model the host
+  interrupted. The lines already written are kept and pinned by sha256, the unchanged instrument
+  samples the remaining generations from their seeds, and the results will give each cross-model
+  count with and without the interrupted model.
+- **Verification:** 772 complete lines, no torn last line, digest recorded in the ledger; power
+  log read; capture worktree clean at `72487130`.
+
 ## [phase-19m-declared] — 2026-11-11 — The scaled study on eight more local models: declared, instrument committed, capture running; manuscript on hold
 
 **Raouf:**

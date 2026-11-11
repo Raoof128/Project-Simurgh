@@ -14,6 +14,26 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-12 (Australia/Sydney) — Phase 19m: the capture was cut off by a flat battery; the resume is declared first (P19-MODELS02)
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/more-models-19m`. The ledger (P19-MODELS02) and both logs. No source,
+  test, pack, workflow or frozen file.
+- **Summary:** the overnight capture ended at 11:14:56 UTC on 11 Nov when the laptop ran flat.
+  Three models had ended by their rules (two captured, `qwen2.5-3b-4bit` stopped with no call in
+  its 24 authorised generations). `llama-3.2-3b-8bit` had written 772 of 864 generations. The
+  declared rule would record it as not captured. The host stopped and the model did not fail, so
+  the lane departs from the rule for this model and declares that before resuming: the 772 lines
+  are kept and pinned by digest, the unchanged instrument samples the rest from their seeds, the
+  same-seed recheck compares the new process with the old one, and the results will give each
+  cross-model count with and without this model. The four models that had not started run next.
+- **Verification:** the partial transcript parses line by line with no torn last line (772 rows,
+  last index 771, sha256 `37d0a7ad…d9ac2a5`). The system power log shows the low-power sleep at 1%
+  charge at 22:14:56 +1100. The capture worktree is clean at `72487130`.
+- **Follow-ups:** resume the capture on mains power; a committed test for the 772-line digest goes
+  in with the pack; the ruling lists the interruption.
+
 ### 2026-11-11 (Australia/Sydney) — Phase 19m declared and running: the scaled study on eight more local models; manuscript on hold
 
 **Raouf:**

@@ -654,6 +654,43 @@ the further model results are in. Not authorised: any edit to a frozen file, to 
 or pack, or to a workflow. This declaration commit must be a strict ancestor of every commit of
 lane 19m.
 
+**P19-MODELS02 (a departure from stopping rule (ii) of P19-MODELS01 for a model interrupted by the
+host; declared 12 Nov 2026, before the capture is resumed).** The capture started at 09:42 UTC on
+11 Nov. Three models ended by their rules: `qwen3-0.6b-4bit` and `qwen2.5-1.5b-4bit` were
+captured, and `qwen2.5-3b-4bit` stopped under rule (i) with no call among its 24 authorised
+generations. The fourth, `llama-3.2-3b-8bit`, had written 772 of its 864 generations when the
+laptop, running on battery, reached 1% charge and went into low-power sleep at 11:14:56 UTC. The
+machine then lost power, and the model's process ended with it after about 50 minutes.
+
+Rule (ii) records a model whose process fails as `not_captured`. It was written for a model that
+this machine cannot run. Here the machine stopped and the model did not fail, so the lane departs
+from the rule for this model, and says so before another generation is sampled:
+
+- The 772 lines already written stay as they are. Before the resume their file has sha256
+  `37d0a7ad2b6bd57abb81fb77f8030cbf7e7fbeac350fd083daa632dccd9ac2a5`. The first 772 lines of the
+  finished transcript must have that digest, and a committed test checks it.
+- The capture resumes with the instrument at commit `72487130`, unchanged. It samples generations
+  773 to 864 from their scheduled seeds. Each generation sets its own seed and shares no state
+  with the one before it.
+- The instrument's same-seed recheck then samples the first six generations again, in the new
+  process, and compares them with what the interrupted process wrote. The lane reports the
+  outcome. This is the evidence that a resumed process reproduces the interrupted one.
+- Wherever this model enters a count across models, the results give the count twice: with the
+  model, and with it treated as `not_captured` as rule (ii) would have it.
+- What had been seen when this was written: each finished model's status, the zero calls that
+  stopped `qwen2.5-3b-4bit`, and the last five progress lines of the log, in which
+  `llama-3.2-3b-8bit` sends under `signal_stop` with no injection. No count had been computed for
+  any model.
+- The four models that had not started (`qwen3-4b-8bit`, `qwen2.5-7b-4bit`, `llama-3.1-8b-4bit`,
+  `qwen3-8b-4bit`) run next, in the declared order, under the declared rules.
+- If the host stops again, the interrupted model resumes in the same way, and the ruling lists
+  each interruption with the digest of the lines written before it. A model whose own process
+  fails while the host stays up remains under rule (ii).
+
+Authorised: this paragraph, the committed test named above, both logs. No change to the
+instrument, the schedule, the readers or the analysis. This declaration commit must be a strict
+ancestor of every commit of lane 19m made after it.
+
 | Field                         | Declaration                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | active_phase                  | Phase 19a projection verifier (19b–19g declared)                                                                    |
