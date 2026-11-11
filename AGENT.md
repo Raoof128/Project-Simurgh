@@ -27,7 +27,14 @@ one machine's local agent configuration:
   gives the division of labour between the owner and the AI agent as the records show it, and
   nothing is taken from a CV (finding M36). Writing the pages surfaced an error of this log's
   own: the previous entry called the project's self-assessment "an outside review". It is
-  corrected in place and listed in the corrections record.
+  corrected in place and listed in the corrections record. The owner then asked for a prose audit
+  of the manuscript and the new pages. It made about twenty wording edits and caught two errors
+  of substance: an unsourced claim in the manuscript's introduction, removed, and a statement on
+  the author page that no evaluation exercises context boundaries, which Phase 7 contradicts and
+  which now cites Phase 7. Scope statements that read like a stylistic contrast ("a correctness
+  check, not evidence against an adaptive attacker") were kept, because they are the limits.
+  The manuscript is built from parts kept outside the repository, so wording edits go into the
+  parts and the file is rebuilt; the release tag still points at the earlier wording.
 - **Files changed:** as in the CHANGELOG entry.
 - **Verification:** as in the CHANGELOG entry.
 - **Follow-ups:** the owner to read both pages and adjust any sentence about themselves; the
