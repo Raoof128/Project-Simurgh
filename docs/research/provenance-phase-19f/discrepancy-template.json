@@ -45,6 +45,36 @@
       "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19g <receipt.json>  (a JSON object: discrepancies, not_compared)>",
       "refused": "<host_cannot_namespace or similar, if the verifier refused>",
       "verifier_output": "<the JSON the verifier printed, verbatim>"
+    },
+    "19h": {
+      "command_run": "",
+      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19h <receipt.json>  (a JSON object: discrepancies, not_compared)>",
+      "refused": "<host_cannot_namespace or similar, if the verifier refused>",
+      "verifier_output": "<the JSON the verifier printed, verbatim>"
+    },
+    "19i": {
+      "command_run": "",
+      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19i <receipt.json>  (a JSON object: discrepancies, not_compared)>",
+      "refused": "<host_cannot_namespace or similar, if the verifier refused>",
+      "verifier_output": "<the JSON the verifier printed, verbatim>"
+    },
+    "19j": {
+      "command_run": "",
+      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19j <receipt.json>  (a JSON object: discrepancies, not_compared)>",
+      "refused": "<host_cannot_namespace or similar, if the verifier refused>",
+      "verifier_output": "<the JSON the verifier printed, verbatim>"
+    },
+    "19k": {
+      "command_run": "",
+      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19k <receipt.json>  (a JSON object: discrepancies, not_compared)>",
+      "refused": "<host_cannot_namespace or similar, if the verifier refused>",
+      "verifier_output": "<the JSON the verifier printed, verbatim>"
+    },
+    "19l": {
+      "command_run": "",
+      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19l <receipt.json>  (a JSON object: discrepancies, not_compared)>",
+      "refused": "<host_cannot_namespace or similar, if the verifier refused>",
+      "verifier_output": "<the JSON the verifier printed, verbatim>"
     }
   },
   "schema": "simurgh-outside-operator-receipt-v1",
