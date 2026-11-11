@@ -1,5 +1,43 @@
 ## Change Log
 
+## [phase-19k-19l] — 2026-11-11 — The injection study at scale with hypotheses fixed first, its gate replay, eleven lanes in the operator handoff, and a manuscript draft
+
+**Raouf:**
+
+- **Scope:** two new lanes. 19k: `tools/assurance-provenance/inject19k.py`, `evidence19k.py`,
+  tests, `docs/research/provenance-phase-19k/`. 19l: `replay19l.py`, `evidence19l.py`, tests,
+  `docs/research/provenance-phase-19l/`. Handoff: `handoff19.py`, `tests/test_handoff19.py`,
+  `docs/research/provenance-phase-19f/` (`HANDOFF.md`, `discrepancy-template.json`, the recomputed
+  review, README), `.github/workflows/assurance-provenance.yml` (path filters and the roots list
+  only). New: `docs/research/provenance-phase-19-paper/` and `tests/test_paper19.py`. Also
+  `.prettierignore` (P19-FORMAT12), the ledger (P19-SCALE01, P19-REPLAY02, P19-OPERATOR02, three
+  rulings), both logs. No 19a to 19j source or pack, no frozen file, no workflow step.
+- **Summary:** 19k repeats the injection-style study with five wordings per style, 120
+  generations per style and model, a positive-control block and a third model: 2,592 generations,
+  plan and instrument pushed ten seconds before the first one. On `qwen3-4b-4bit` all five
+  hypotheses fixed in advance are supported (control 0 of 120, operator note 43, urgency 0;
+  `unknown_prior` most moved, `signal_stop` and `credential_revoke` least). The limits are in the
+  README and the ruling: one wording of a style drew 24 of 24 sends and another 0, and the ordering
+  does not carry to `qwen3-1.7b-4bit`. 19l dispatched the 1,240 recorded sends through the frozen
+  Phase 17 pipeline on Linux: of 1,170 restricted-state sends the composed controls blocked 1,170
+  and none landed, where 968 landed behind the credential gateway alone; all 65 authorised sends
+  with the exact report were admitted and none refused. The operator handoff now asks for eleven
+  verifies; the first receipt is unchanged and its recomputed review lists the five new lanes as
+  not in the receipt, so ten items are stated as owed. `PHASE19_ROOTS` holds eleven roots. The
+  manuscript draft states four research questions, compares with 36 cited works and reports the
+  four studies with their limits; its AI-use section is flagged for the owner to confirm.
+- **Files changed:** as above.
+- **Verification:** 19k: tests on synthetic transcripts and on the committed pack, pack verified,
+  same-seed recheck identical for all three models. 19l: tests with a stand-in pipeline, the replay
+  run on the droplet when the pack was built and again from the pack with `verify --replay`,
+  structure verified on macOS and with a bare Python 3.12, five tests on the committed pack.
+  Handoff: 23 tests, the review test asserting the committed review is the recomputation. Paper: 4
+  tests against the packs. Stage 5Q census identical before and after the workflow edit. Quick
+  gate; hosted checks on the PR.
+- **Follow-ups:** the informed-attacker arm with a capable model; the hosted capture; an outside
+  replay of 19h to 19l including `--replay` on an outside Linux x86_64 host; the owner's name and
+  AI-use wording in the manuscript.
+
 ## [maintenance-flaky-tests] — 2026-11-11 — Two intermittent test failures removed at their cause
 
 **Raouf:**

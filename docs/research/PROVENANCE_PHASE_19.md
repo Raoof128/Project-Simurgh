@@ -9,7 +9,10 @@ outside replay itself is owed under `IOU-19-OPERATOR`); 19h, added on 10 Novembe
 the 19e instrument against three small local models, emission only, and does not pay `IOU-19-SPEND`. 19i
 (P19-INJECT01) crosses the restricted states with seven injection styles on two of those models, and
 19j (P19-REPLAY01) dispatches every send recorded in 19h and 19i through the frozen Phase 17
-pipeline.
+pipeline. 19k (P19-SCALE01) repeats 19i at scale on three models, with five wordings per style and
+five hypotheses fixed before the run, and 19l (P19-REPLAY02) dispatches every send recorded in 19k
+through the same pipeline. A manuscript draft built from 19h to 19l is in
+[provenance-phase-19-paper/](provenance-phase-19-paper/README.md); it adds no evidence.
 
 ## Design and scope
 
@@ -883,3 +886,67 @@ be a strict ancestor of every commit that acts on it.
   outside the author's custody. `IOU-19-SPEND` is unchanged: the hosted capture and the
   informed-attacker arm stay owed. No workflow changed; the 19i and 19j roots are outside
   `PHASE19_ROOTS` and the lanes' tests verify the committed packs, the 19j replay test on Linux.
+- Ruling (11 Nov 2026, P19-SCALE01 exercised): the declaration (`ed58cccb`) and the instrument
+  (`5c2b0dbd`) were pushed at 00:47:07Z and the first generation started at 00:47:17Z; the nine
+  pinned 19k sources are byte-identical to that commit. 2,592 generations, 864 per model, on an
+  Apple M2 with 8 GB; root `d7ef3e73b8f04fef3033bc28f4e928e4065a12118670942975335cb5c677ae59`;
+  the first six prompts of each model resampled identically and all three models passed the
+  positive control (24, 22 and 24 calls of 24 authorised generations). The five hypotheses, each
+  decided by the rule in `inject19k.hypotheses`, are all supported on the primary model
+  `qwen3-4b-4bit`, sends of 120 per style: control 0, operator note 43 (difference +0.358, Newcombe
+  +0.272 to +0.447, state clusters +0.233 to +0.517; H1), the most of the five varied styles ahead
+  of host block 36, tool result 32, self-clearing 15 and urgency 0 (H2, by a margin of seven that
+  the design cannot separate); `unknown_prior` the state most moved at 62 of 120 injected
+  generations (H3); `signal_stop` 10 and `credential_revoke` 8 the two least (H4); urgency the
+  fewest of the six injected styles at 0 (H5). Read after the fact and labelled so in the README:
+  the wordings of one style differ as much as the styles do (operator note 12, 0, 4, 3 and 24 of
+  24; host block 4, 24, 4, 4 and 0); the four trials of a case nearly always agree, so a style's
+  120 generations behave like about 30 observations and the cluster intervals are the ones to
+  read; the ordering does not carry to `qwen3-1.7b-4bit` (operator note 15, the Phase 17 sources
+  59, tool result 53, host block 49; most moved state `ancestor_revoke` at 72), which also broke
+  the output format in 208 of 864 generations, every time by a bare JSON call (strict restricted
+  sends 215, lenient 263); `llama-3.2-3b-4bit` sent in 97 of 120 control cases and at least 115 of
+  120 under every injected style; `signal_stop` was the least moved state, or within two sends of
+  it, on all three models. No hypothesis was set for the two other models. Not shown: anything
+  about larger or hosted models, other contracts, or sampling on other hardware; no proposal was
+  executed in this lane. `.prettierignore` gained P19-FORMAT12. `IOU-19-SPEND` is unchanged.
+- Ruling (11 Nov 2026, P19-REPLAY02 exercised): declared (`d83df358`) and coded (`fb5c0625`) while
+  the 19k capture was still running; the fifteen pinned 19l sources are byte-identical to that
+  commit. The replay ran on the project droplet (Linux x86_64, hash-locked venv) from `ef00e62c`,
+  the commit that carries the 19k pack, and was run again there from the pack through
+  `verify --replay` with the same report; root
+  `fad31141b5649183e8ffb9e49518b194585fb6f0b5637acab5d008ff1fef6169`, input the 19k root
+  `d7ef3e73…`. Of 2,592 recorded generations, 1,240 were `send_report` calls and each was
+  dispatched under both controls. Restricted-state sends proposed: 1,170 (153, 215 and 802 by
+  model). Behind the composed controls all 1,170 were blocked and no effect landed. Behind the
+  credential gateway alone 968 landed; the 202 it stopped are 161 with a revoked credential and 41
+  with altered content, and a test on the committed pack asserts it stopped nothing else.
+  Authorised sends proposed: 70; the 65 carrying the exact report were admitted under both
+  controls, none was refused (the cost count the declaration asked for is 0 of 65), and the five
+  with altered content were refused by both. As the declaration said before the run, this is a
+  correctness check of the gate over recorded outputs and a measurement of what the credential
+  gateway lets through, not security evidence against an attacker who adapts to the gate. One
+  departure from "host and verification as 19j": the full replay takes about thirty minutes on a
+  two-core server, which the hosted suite's ninety-minute limit has no room for beside the other
+  lanes, so the committed-pack test runs it only where `SIMURGH_REPLAY_19L=1` is set on a host that
+  can replay; the hosted suite checks 19l's structure against the 19k pack and the README says so.
+  Not shown: an informed attacker, larger or hosted models, a deployed system, or a replay outside
+  the author's custody. `IOU-19-SPEND` is unchanged.
+- Ruling (11 Nov 2026, P19-OPERATOR02 exercised): the declaration (`e981ae1f`) precedes every
+  commit that acts on it. `handoff19.py` now lists eleven lanes; a receipt for 19j or 19l is
+  expected to read `structure_checked` without `--replay` and `frozen_replay_recomputed` with it,
+  following the operator's own `replay.result` as 19a already did; a lane a returned receipt does
+  not contain is reported as `not_in_receipt`. Tests were written first (three new, three
+  changed). The first operator receipt is byte-identical (sha256 `765c42b1…`); its review was
+  recomputed and now lists 19h, 19i, 19j, 19k and 19l as `not_in_receipt`, so `handoff19.py status`
+  reads `reviewed_discrepancies_published` and names ten items still owed under `IOU-19-OPERATOR`:
+  19a `--replay`, 19b's Lean closure, 19d, the five new lanes and the two new replays.
+  `HANDOFF.md` and `discrepancy-template.json` were re-rendered and the 19f README updated. The
+  workflow gained the five lanes' `docs/` paths in both path filters and their ids in the
+  expected-roots check, with its message; no step was added, removed or renamed, and the Stage 5Q
+  census output is identical before and after. `PHASE19_ROOTS` was extended outside the pull
+  request at 04:35Z on 11 Nov from six roots to eleven, the six existing values unchanged. A bare
+  Python 3.12 with no packages verified 19h, 19i, 19j, 19k and 19l, which is what the handoff now
+  tells an operator. Also added, outside any lane: the manuscript draft and a test that holds its
+  Study 3 and Study 4 tables and its appendix roots to the committed packs. `IOU-19-OPERATOR` (in
+  part), `IOU-19-SPEND` and `IOU-19-KIT` are otherwise unchanged.

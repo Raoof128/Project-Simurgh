@@ -14,6 +14,31 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-11 (Australia/Sydney) — Phase 19k and 19l, the handoff for eleven lanes, and a manuscript draft
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/scaled-injection-19k`. 19k: declaration `ed58cccb`, instrument
+  `5c2b0dbd`, pack `ef00e62c`. 19l: declaration `d83df358`, code `fb5c0625`, then the pack.
+  Handoff and roots: declaration `e981ae1f`, then `handoff19.py`, its tests, the 19f files and the
+  provenance workflow's path filters and roots list. A manuscript draft and a test that holds its
+  tables to the packs. Rulings, both logs.
+- **Summary:** the owner asked for the items an outside review named as missing: a paper with a
+  stated question, a comparison with existing work, a larger injection study, and the smaller
+  housekeeping. The scaled study fixed five hypotheses in code before the run and all five held on
+  the primary model; the write-up leads with what limits them (wording variance as large as style
+  variance, no transfer of the ordering to a smaller model of the same family, about 30 effective
+  observations per style). The replay of its 1,240 sends was declared while the capture was still
+  running. The hosted suite checks 19l's structure only, because the full replay would not fit the
+  job's time limit; that departure from "as 19j" is in the ruling. Adding the new lanes to the
+  handoff changed what the status line says is owed from three items to ten, which is the honest
+  number. The paper's AI-use section is left flagged for the owner to confirm in their own words.
+- **Files changed:** as in the CHANGELOG entry.
+- **Verification:** as in the CHANGELOG entry.
+- **Follow-ups:** the informed-attacker arm with a capable model (needs the owner's yes to spend);
+  an outside replay of 19h to 19l, with `--replay` on an outside Linux host; the owner's name and
+  the AI-use wording in the manuscript; a venue and a LaTeX conversion if the owner wants to submit.
+
 ### 2026-11-11 (Australia/Sydney) — Maintenance: the two flaky tests
 
 **Raouf:**
