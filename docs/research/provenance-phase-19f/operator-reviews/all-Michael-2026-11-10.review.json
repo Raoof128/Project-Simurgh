@@ -7,7 +7,18 @@
     "os": "macOS 13.7.8 (22H730), Darwin 22.6.0",
     "python": "CPython 3.12.16 (uv-managed build, already present on this Mac; not supplied by the author)"
   },
-  "not_exercised": ["19a --replay", "19b Lean closure", "19d"],
+  "not_exercised": [
+    "19a --replay",
+    "19b Lean closure",
+    "19d",
+    "19h",
+    "19i",
+    "19j",
+    "19j --replay",
+    "19k",
+    "19l",
+    "19l --replay"
+  ],
   "operator": "Michael",
   "phases": {
     "19a": {
@@ -74,6 +85,21 @@
       "result": "verified",
       "root_matches": true,
       "tree_state_is_commit": true
+    },
+    "19h": {
+      "result": "not_in_receipt"
+    },
+    "19i": {
+      "result": "not_in_receipt"
+    },
+    "19j": {
+      "result": "not_in_receipt"
+    },
+    "19k": {
+      "result": "not_in_receipt"
+    },
+    "19l": {
+      "result": "not_in_receipt"
     }
   },
   "receipt_sha256": "765c42b19792f70463bfba38d602ac9443f480262400cdc7902ed8bb377f9291",

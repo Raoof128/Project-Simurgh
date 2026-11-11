@@ -22,13 +22,31 @@ REVIEW_SCHEMA = "simurgh-outside-operator-review-v1"
 # `openai` at module load); a byte-identical subset of the SDK lock.
 VERIFY_LOCK = ROOT / "tools/assurance-provenance/requirements-verify.lock"
 VERIFY_LOCK_REL = "tools/assurance-provenance/requirements-verify.lock"
-# Beyond the six verifies, what only some hosts can exercise.
+# Beyond the verifies, what only some hosts can exercise.
 REPLAY_ITEM = "19a --replay"
 LEAN_ITEM = "19b Lean closure"
 EXCLUDED = ("tree_state", "host", "replay")
-# 19a's ``kind`` is a function of its replay result (``evidence.receipt_for``), and the replay is
-# host-dependent, so the expected kind follows the operator's own replay rather than the author's.
-REPLAY_CHAINED_KIND = {"19a": "frozen_replay_chained"}
+# A lane's ``kind`` is a function of its replay result (``receipt_for`` in each evidence module),
+# and the replay is host-dependent, so the expected kind follows the operator's own replay rather
+# than the author's. 19a's committed receipt is the unreplayed kind; 19j's and 19l's are the
+# replayed kind (P19-OPERATOR02), so those two also name what a host that cannot replay prints.
+REPLAY_CHAINED_KIND = {
+    "19a": "frozen_replay_chained",
+    "19j": "frozen_replay_recomputed",
+    "19l": "frozen_replay_recomputed",
+}
+STRUCTURE_ONLY_KIND = {"19j": "structure_checked", "19l": "structure_checked"}
+
+
+def replay_item(pid):
+    return pid + " --replay"
+
+
+def _replayed(receipt):
+    replay = receipt.get("replay")
+    return type(replay) is dict and replay.get("result") == "verified"
+
+
 # Host-dependent receipt fields, reported with the operator's value and never compared
 # (P19-REPAIR05: the handoff said so before the comparator did). Dotted paths name nested fields.
 HOST_DEPENDENT = {
@@ -89,7 +107,43 @@ PHASES = (
         "host": "any host with Python 3.12 and the verify set (Host recipes)",
         "time": "a few seconds",
     },
+    {
+        "id": "19h",
+        "module": "evidence19h.py",
+        "docs": "docs/research/provenance-phase-19h",
+        "host": "any host with Python 3.12; no model is run",
+        "time": "a few seconds",
+    },
+    {
+        "id": "19i",
+        "module": "evidence19i.py",
+        "docs": "docs/research/provenance-phase-19i",
+        "host": "any host with Python 3.12; no model is run",
+        "time": "a few seconds",
+    },
+    {
+        "id": "19j",
+        "module": "evidence19j.py",
+        "docs": "docs/research/provenance-phase-19j",
+        "host": "any host with Python 3.12; on Linux x86_64 inside the hash-locked venv add --replay",
+        "time": "a few seconds; about ten minutes with --replay on a two-core server",
+    },
+    {
+        "id": "19k",
+        "module": "evidence19k.py",
+        "docs": "docs/research/provenance-phase-19k",
+        "host": "any host with Python 3.12; no model is run",
+        "time": "a few seconds",
+    },
+    {
+        "id": "19l",
+        "module": "evidence19l.py",
+        "docs": "docs/research/provenance-phase-19l",
+        "host": "any host with Python 3.12; on Linux x86_64 inside the hash-locked venv add --replay",
+        "time": "a few seconds; about thirty minutes with --replay on a two-core server",
+    },
 )
+NUMBER_WORDS = {6: "six", 11: "eleven"}
 
 
 def phase(pid):
@@ -113,13 +167,10 @@ def expected_fields(pid):
 
 def expected_for(pid, receipt):
     want = expected_fields(pid)
-    replay = receipt.get("replay")
-    if (
-        pid in REPLAY_CHAINED_KIND
-        and type(replay) is dict
-        and replay.get("result") == "verified"
-    ):
+    if pid in REPLAY_CHAINED_KIND and _replayed(receipt):
         want["kind"] = REPLAY_CHAINED_KIND[pid]
+    elif pid in STRUCTURE_ONLY_KIND:
+        want["kind"] = STRUCTURE_ONLY_KIND[pid]
     return want
 
 
@@ -165,7 +216,11 @@ def not_compared(pid, receipt):
     out = {}
     for path, reason in host_dependent(pid, receipt).items():
         present, got = _lookup(receipt, path)
-        out[path] = {"got": got if present else None, "present": present, "reason": reason}
+        out[path] = {
+            "got": got if present else None,
+            "present": present,
+            "reason": reason,
+        }
     return out
 
 
@@ -225,7 +280,11 @@ def review_path(receipt_path):
 
 
 def outside_items():
-    return sorted([p["id"] for p in PHASES] + [REPLAY_ITEM, LEAN_ITEM])
+    return sorted(
+        [p["id"] for p in PHASES]
+        + [replay_item(pid) for pid in REPLAY_CHAINED_KIND]
+        + [LEAN_ITEM]
+    )
 
 
 def review(raw):
@@ -233,13 +292,21 @@ def review(raw):
 
     Per phase the comparator is rerun on the operator's verbatim verifier output; nothing the
     operator reports about their own comparison is taken at its word. ``not_exercised`` lists what
-    this receipt leaves unreplayed: a refused or discrepant phase, 19a's frozen replay, 19b's Lean
-    closure. The review establishes what the returned outputs say, never who produced them."""
+    this receipt leaves unreplayed: a phase it does not contain, a refused or discrepant phase, a
+    frozen replay that was not run, 19b's Lean closure. The review establishes what the returned
+    outputs say, never who produced them."""
     receipt = json.loads(raw)
     phases, missing = {}, []
     returned = receipt.get("phases") if type(receipt.get("phases")) is dict else {}
     for p in PHASES:
         pid = p["id"]
+        if pid not in returned:
+            # the receipt predates the lane, or the operator was not asked for it
+            phases[pid] = {"result": "not_in_receipt"}
+            missing.append(pid)
+            if pid in REPLAY_CHAINED_KIND:
+                missing.append(replay_item(pid))
+            continue
         entry = returned.get(pid) if type(returned.get(pid)) is dict else {}
         try:
             out = json.loads(entry.get("verifier_output") or "")
@@ -248,8 +315,13 @@ def review(raw):
         if type(out) is not dict:
             phases[pid] = {"result": "refused", "refused": entry.get("refused", "")}
             missing.append(pid)
+            if pid in REPLAY_CHAINED_KIND:
+                missing.append(replay_item(pid))
             continue
-        mine = {"discrepancies": check(pid, out), "not_compared": not_compared(pid, out)}
+        mine = {
+            "discrepancies": check(pid, out),
+            "not_compared": not_compared(pid, out),
+        }
         try:
             theirs = json.loads(entry.get("discrepancies") or "")
         except ValueError:
@@ -265,9 +337,8 @@ def review(raw):
         }
         if not ok:
             missing.append(pid)
-        replay = out.get("replay")
-        if pid == "19a" and not (type(replay) is dict and replay.get("result") == "verified"):
-            missing.append(REPLAY_ITEM)
+        if pid in REPLAY_CHAINED_KIND and not _replayed(out):
+            missing.append(replay_item(pid))
         if pid == "19b" and _lean_absent(out):
             missing.append(LEAN_ITEM)
     return {
@@ -339,7 +410,9 @@ def status_lines():
         head,
         f"render. Status: {len(s['operator_receipts'])} outside receipt(s) reviewed, every discrepancy published under",
         "`operator-reviews/`. Not yet replayed outside the author's custody, and still owed under `IOU-19-OPERATOR`:",
-        f"{left}." if left else "nothing; every item has been exercised by a reviewed receipt.",
+        f"{left}."
+        if left
+        else "nothing; every item has been exercised by a reviewed receipt.",
     ]
 
 
@@ -351,7 +424,7 @@ def render():
         "",
         "## What you are being asked to do",
         "",
-        "Clone the published commit onto a machine the author has never touched, run six verify commands,",
+        f"Clone the published commit onto a machine the author has never touched, run {NUMBER_WORDS[len(PHASES)]} verify commands,",
         "and send back what they printed. You receive no file from the author other than this repository.",
         "If anything in this document does not match what you see, that mismatch is the result we want.",
         "",
@@ -372,13 +445,20 @@ def render():
         "  verify set first, a hash-locked subset of the SDK lock, and run those commands with its interpreter:",
         "  `python -m venv .venv-verify && .venv-verify/bin/pip install --require-hashes --only-binary=:all:",
         f"  -r {VERIFY_LOCK_REL}`. Installed and run on Linux x86_64, macOS arm64 and",
-        "  macOS x86_64. 19a, 19c, 19d and 19e need nothing beyond the standard library.",
-        "- 19a with `--replay` (Linux x86_64 only: the full set has no macOS x86_64 wheel for `cryptography`,",
+        "  macOS x86_64. 19a, 19c, 19d, 19e, 19h, 19i, 19j, 19k and 19l need nothing beyond the standard",
+        "  library unless `--replay` is added.",
+        "- 19a, 19j and 19l with `--replay` (Linux x86_64 only: the full set has no macOS x86_64 wheel for `cryptography`,",
         "  so it is not a substitute for the verify set there): create a venv and install the hash-locked set:",
         "  `python -m venv .venv && .venv/bin/pip install --require-hashes --only-binary=:all:",
         "  -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock`, then",
         "  `.venv/bin/python -B tools/replay-preflight/preflight.py` must print `preflight passed`. The",
         "  clone needs full history (`git clone`, not a tarball): the replay checks the Phase 17 freeze commit.",
+        "  19j and 19l dispatch every recorded `send_report` call through the frozen pipeline again and",
+        "  compare the whole report; without `--replay` they check the pack's structure against the lanes",
+        "  it replays and print `kind: structure_checked`.",
+        "- 19h, 19i and 19k hold model outputs captured on Apple Silicon. Their verifiers recompute every",
+        "  outcome and statistic from the committed outputs and run no model; they cannot tell whether an",
+        "  output is what a model produced. Recapturing is not part of this handoff.",
         "- 19b: Lean 4.15.0 on PATH (`proofs/phase19/lean-toolchain`) for the Lean fields. On Linux x86_64",
         "  `bash scripts/install-elan-toolchain proofs/phase19/lean-toolchain` installs elan and the pinned",
         "  toolchain, and falls back to a sha256-pinned GitHub release tarball when `releases.lean-lang.org`",
@@ -404,8 +484,9 @@ def render():
         "value and the reason: for 19d the two socket fields; for 19b the four Lean-dependent fields, and",
         "only when your receipt says Lean was absent). Nothing else is waived. It cannot see whether the",
         "`--replay` run happened: a receipt whose `replay.result` says `verified` is taken at its word and",
-        "then expected to read `kind: frozen_replay_chained`. Your verbatim verifier output and your note",
-        "are what make that claim checkable; the comparator alone does not.",
+        "then expected to read `kind: frozen_replay_chained` (19a) or `frozen_replay_recomputed` (19j, 19l).",
+        "Your verbatim verifier output and your note are what make that claim checkable; the comparator",
+        "alone does not.",
         "",
         "## Phases",
         "",
@@ -431,7 +512,14 @@ def render():
             "```",
             "",
         ]
-        if p["id"] in REPLAY_CHAINED_KIND:
+        if p["id"] in STRUCTURE_ONLY_KIND:
+            lines += [
+                f"The committed receipt was produced with `--replay`. Without it `kind` reads "
+                f"`{STRUCTURE_ONLY_KIND[p['id']]}`;",
+                "the comparator expects whichever matches your own `replay.result`.",
+                "",
+            ]
+        elif p["id"] in REPLAY_CHAINED_KIND:
             lines += [
                 f"With `--replay`, a receipt whose `replay.result` is `verified` reads `kind`: "
                 f"`{REPLAY_CHAINED_KIND[p['id']]}`;",

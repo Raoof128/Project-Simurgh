@@ -1,6 +1,6 @@
 # Phase 19f: outside-operator replay (paid in part)
 
-`IOU-19-OPERATOR`: one outside operator has replayed five of the six packs. This directory holds the
+`IOU-19-OPERATOR`: one outside operator has replayed five of the eleven packs. This directory holds the
 package that makes the replay a run of named commands against named expectations, the receipt that
 came back and the author's review of it:
 
@@ -50,6 +50,12 @@ The review with every discrepancy published pays the IOU for what the receipt ex
 verifies whose results do not depend on the host. It stays owed for 19d, 19a `--replay`, 19b's Lean
 closure and the test suite, none of which has run outside the author's custody; they need an
 outside Linux x86_64 host.
+
+Five lanes joined the handoff on 11 Nov 2026 under P19-OPERATOR02, after the first receipt: 19h, 19i
+and 19k (model captures, recomputed from committed outputs) and 19j and 19l (the gate replays of
+those captures, with `--replay` on Linux x86_64). The first receipt predates them, so its review
+lists each as `not_in_receipt` and all five stay owed, with the two replays. The receipt itself is
+unchanged; only the review was recomputed.
 
 Limits, in the operator's own words in the receipt: the receipt is signed with a typed name, and
 the commands were typed and run by an AI coding agent on a subscription registered to the author.

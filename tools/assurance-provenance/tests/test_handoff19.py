@@ -72,6 +72,72 @@ class HandoffTests(unittest.TestCase):
             [("kind", "differs")],
         )
 
+    def test_check_follows_the_operators_own_replay_for_the_replay_lanes(self):
+        # P19-OPERATOR02: 19j's and 19l's committed receipts were produced with --replay. A host
+        # that cannot replay prints structure_checked, and that is not a discrepancy; a receipt
+        # whose kind and replay result disagree is.
+        for pid in ("19j", "19l"):
+            committed = handoff19.committed_receipt(pid)
+            self.assertEqual(committed["kind"], "frozen_replay_recomputed", pid)
+            self.assertEqual(handoff19.check(pid, committed), [], pid)
+            structure = dict(
+                committed,
+                kind="structure_checked",
+                replay={"result": "not_run", "reason": "host_not_linux_x86_64"},
+            )
+            self.assertEqual(handoff19.check(pid, structure), [], pid)
+            claimed = dict(structure, kind="frozen_replay_recomputed")
+            self.assertEqual(
+                [(d["field"], d["kind"]) for d in handoff19.check(pid, claimed)],
+                [("kind", "differs")],
+                pid,
+            )
+            unlabelled = dict(committed, kind="structure_checked")
+            self.assertEqual(
+                [(d["field"], d["kind"]) for d in handoff19.check(pid, unlabelled)],
+                [("kind", "differs")],
+                pid,
+            )
+            totals = dict(structure)
+            totals["composed"] = dict(totals["composed"], effects_in_restricted_state=1)
+            self.assertEqual(
+                [(d["field"], d["kind"]) for d in handoff19.check(pid, totals)],
+                [("composed", "differs")],
+                pid,
+            )
+
+    def test_the_handoff_asks_for_every_lane(self):
+        ids = [p["id"] for p in handoff19.PHASES]
+        self.assertEqual(
+            ids,
+            [
+                "19a",
+                "19b",
+                "19c",
+                "19d",
+                "19e",
+                "19g",
+                "19h",
+                "19i",
+                "19j",
+                "19k",
+                "19l",
+            ],
+        )
+        text = handoff19.render()
+        self.assertIn("run eleven verify commands", text)
+        for pid in ids:
+            self.assertIn(f"### {pid}\n", text)
+        self.assertEqual(
+            handoff19.outside_items(),
+            sorted(
+                ids
+                + ["19a --replay", "19j --replay", "19l --replay", "19b Lean closure"]
+            ),
+        )
+        for pid in ("19j", "19l"):
+            self.assertIn("--replay", handoff19.phase(pid)["time"], pid)
+
     def test_check_flags_an_unexpected_field(self):
         receipt = dict(handoff19.committed_receipt("19c"), failures=[])
         out = handoff19.check("19c", receipt)
@@ -90,7 +156,9 @@ class HandoffTests(unittest.TestCase):
         self.assertEqual(
             set(reported), {"unix_sockets_reachable", "unix_socket_egress_eliminated"}
         )
-        self.assertEqual(reported["unix_sockets_reachable"]["got"], ["/var/lib/example/daemon.sock"])
+        self.assertEqual(
+            reported["unix_sockets_reachable"]["got"], ["/var/lib/example/daemon.sock"]
+        )
         self.assertTrue(reported["unix_sockets_reachable"]["reason"])
 
     def test_19b_lean_host_fields_are_reported_not_compared_without_lean(self):
@@ -130,7 +198,11 @@ class HandoffTests(unittest.TestCase):
         self.assertEqual(handoff19.not_compared("19b", r), {})
         self.assertEqual(
             sorted((d["field"], d["kind"]) for d in handoff19.check("19b", r)),
-            [("closed_by", "differs"), ("lean", "differs"), ("phase_19b_closed", "differs")],
+            [
+                ("closed_by", "differs"),
+                ("lean", "differs"),
+                ("phase_19b_closed", "differs"),
+            ],
         )
 
     def test_handoff_text_matches_the_comparator(self):
@@ -190,6 +262,19 @@ class VerifySetTests(unittest.TestCase):
 
 FIRST = "all-Michael-2026-11-10.json"
 FIRST_SHA256 = "765c42b19792f70463bfba38d602ac9443f480262400cdc7902ed8bb377f9291"
+# What the first receipt left unreplayed, and the five lanes added after it (P19-OPERATOR02).
+STILL_OWED = [
+    "19a --replay",
+    "19b Lean closure",
+    "19d",
+    "19h",
+    "19i",
+    "19j",
+    "19j --replay",
+    "19k",
+    "19l",
+    "19l --replay",
+]
 
 
 class OperatorReceiptTests(unittest.TestCase):
@@ -210,8 +295,19 @@ class OperatorReceiptTests(unittest.TestCase):
         self.assertEqual(r["commit"], "c7d7ceec6b2a589092026f21664bf273cdfcd24d")
         self.assertEqual(
             {pid: p["result"] for pid, p in r["phases"].items()},
-            {"19a": "verified", "19b": "verified", "19c": "verified", "19d": "refused",
-             "19e": "verified", "19g": "verified"},
+            {
+                "19a": "verified",
+                "19b": "verified",
+                "19c": "verified",
+                "19d": "refused",
+                "19e": "verified",
+                "19g": "verified",
+                "19h": "not_in_receipt",
+                "19i": "not_in_receipt",
+                "19j": "not_in_receipt",
+                "19k": "not_in_receipt",
+                "19l": "not_in_receipt",
+            },
         )
         for pid in ("19a", "19b", "19c", "19e", "19g"):
             p = r["phases"][pid]
@@ -220,7 +316,7 @@ class OperatorReceiptTests(unittest.TestCase):
             self.assertIs(p["root_matches"], True, pid)
             self.assertIs(p["tree_state_is_commit"], True, pid)
         self.assertEqual(len(r["phases"]["19b"]["not_compared"]), 4)
-        self.assertEqual(r["not_exercised"], ["19a --replay", "19b Lean closure", "19d"])
+        self.assertEqual(r["not_exercised"], STILL_OWED)
         self.assertIn("not established", r["custody"])
 
     def test_review_does_not_take_the_operator_at_their_word(self):
@@ -239,6 +335,27 @@ class OperatorReceiptTests(unittest.TestCase):
         self.assertIs(r["phases"]["19c"]["root_matches"], False)
         self.assertEqual(r["phases"]["19c"]["result"], "discrepant")
 
+    def test_a_receipt_that_returns_a_replay_lane_is_reviewed_by_its_own_replay(self):
+        receipt = json.loads((handoff19.RECEIPTS_DIR / FIRST).read_text())
+        structure = dict(
+            handoff19.committed_receipt("19j"),
+            kind="structure_checked",
+            replay={"result": "not_run", "reason": "host_not_linux_x86_64"},
+            tree_state=receipt["commit"],
+        )
+        receipt["phases"]["19j"] = {"verifier_output": json.dumps(structure)}
+        r = handoff19.review(json.dumps(receipt).encode())
+        self.assertEqual(r["phases"]["19j"]["result"], "verified")
+        self.assertNotIn("19j", r["not_exercised"])
+        self.assertIn("19j --replay", r["not_exercised"])
+        replayed = dict(
+            structure, kind="frozen_replay_recomputed", replay={"result": "verified"}
+        )
+        receipt["phases"]["19j"] = {"verifier_output": json.dumps(replayed)}
+        r = handoff19.review(json.dumps(receipt).encode())
+        self.assertEqual(r["phases"]["19j"]["result"], "verified")
+        self.assertNotIn("19j --replay", r["not_exercised"])
+
 
 class StatusTests(unittest.TestCase):
     def _dirs(self):
@@ -247,7 +364,10 @@ class StatusTests(unittest.TestCase):
         self.addCleanup(lambda: setattr(handoff19, "RECEIPTS_DIR", saved[0]))
         self.addCleanup(lambda: setattr(handoff19, "REVIEWS_DIR", saved[1]))
         raw = (saved[0] / FIRST).read_bytes()
-        handoff19.RECEIPTS_DIR, handoff19.REVIEWS_DIR = tmp / "receipts", tmp / "reviews"
+        handoff19.RECEIPTS_DIR, handoff19.REVIEWS_DIR = (
+            tmp / "receipts",
+            tmp / "reviews",
+        )
         handoff19.RECEIPTS_DIR.mkdir()
         handoff19.REVIEWS_DIR.mkdir()
         return raw
@@ -255,29 +375,39 @@ class StatusTests(unittest.TestCase):
     def test_owed_received_reviewed(self):
         raw = self._dirs()
         s = handoff19.status()
-        self.assertEqual((s["iou"], s["status"], s["operator_receipts"]), ("IOU-19-OPERATOR", "owed", []))
+        self.assertEqual(
+            (s["iou"], s["status"], s["operator_receipts"]),
+            ("IOU-19-OPERATOR", "owed", []),
+        )
         self.assertIn("19d", s["not_yet_replayed_outside"])
         self.assertIn("owed until a receipt is reviewed", handoff19.render())
         (handoff19.RECEIPTS_DIR / FIRST).write_bytes(raw)
-        self.assertEqual(handoff19.status()["status"], "receipt_received_not_yet_reviewed")
+        self.assertEqual(
+            handoff19.status()["status"], "receipt_received_not_yet_reviewed"
+        )
         review = handoff19.review(raw)
-        handoff19.review_path(handoff19.RECEIPTS_DIR / FIRST).write_text(json.dumps(review))
+        handoff19.review_path(handoff19.RECEIPTS_DIR / FIRST).write_text(
+            json.dumps(review)
+        )
         s = handoff19.status()
         self.assertEqual(s["status"], "reviewed_discrepancies_published")
-        self.assertEqual(s["not_yet_replayed_outside"], ["19a --replay", "19b Lean closure", "19d"])
+        self.assertEqual(s["not_yet_replayed_outside"], STILL_OWED)
         # a review that no longer matches its receipt is not a review
         (handoff19.RECEIPTS_DIR / FIRST).write_bytes(raw + b"\n")
-        self.assertEqual(handoff19.status()["status"], "receipt_received_not_yet_reviewed")
+        self.assertEqual(
+            handoff19.status()["status"], "receipt_received_not_yet_reviewed"
+        )
 
     def test_status_as_committed(self):
         s = handoff19.status()
         self.assertEqual(s["iou"], "IOU-19-OPERATOR")
         self.assertEqual(s["status"], "reviewed_discrepancies_published")
         self.assertEqual(s["operator_receipts"], [FIRST])
-        self.assertEqual(s["not_yet_replayed_outside"], ["19a --replay", "19b Lean closure", "19d"])
+        self.assertEqual(s["not_yet_replayed_outside"], STILL_OWED)
         text = handoff19.render()
         self.assertIn("still owed under `IOU-19-OPERATOR`", text)
         self.assertNotIn("owed until a receipt is reviewed", text)
+
 
 if __name__ == "__main__":
     unittest.main()
