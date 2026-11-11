@@ -12,6 +12,10 @@ Start with [README](README.md) for the research question and runnable demonstrat
 | Inspect failures as a person or an agent       | [Dashboard and CLI](tools/simurgh-explorer/README.md)                                                                                      |
 | See what passed, failed or was excluded        | [Full smoke validation](docs/research/smoke-validation-2026-10-19/RESULTS.md)                                                              |
 | Arrange independent reproduction               | [Handoff](docs/research/CONTINUATION_HANDOFF_2026-10-19.md)                                                                                |
+| Read the newest study (November 2026)          | [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md), [Phase 19 ledger](docs/research/PROVENANCE_PHASE_19.md)              |
+| Recompute or replay Phase 19                   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                 |
+| See how errors were found and handled          | [Record of corrections](docs/RECORD_OF_CORRECTIONS.md)                                                                                     |
+| Judge the author, method and open problems     | [Author, working method and open problems](docs/AUTHOR_AND_METHOD.md)                                                                      |
 | Understand unfinished work                     | [Roadmap](ROADMAP.md)                                                                                                                      |
 | Make a reproducible contribution               | [Contributing](CONTRIBUTING.md), [repository rules](AGENTS.md)                                                                             |
 | Review security, privacy or ethical boundaries | [Security](SECURITY.md), [privacy](PRIVACY.md), [ethics](docs/ETHICS.md)                                                                   |

@@ -14,6 +14,25 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-11 (Australia/Sydney) — Reviewer front door: latest study on the README, record of corrections, author and method
+
+**Raouf:**
+
+- **Scope:** branch `docs/reviewer-front-door`. `README.md`, `DOCUMENTATION.md`, two new pages
+  under `docs/`, one corrected sentence in the entry below, both logs. Documentation only.
+- **Summary:** the README front page still led with the October study and did not mention Phase
+  19, so a reader arriving from a link saw none of the newest work. The owner asked for the
+  project to introduce its author honestly to such a reader. The pages state only what the
+  repository can back: the corrections record indexes existing ledger entries, the author page
+  gives the division of labour between the owner and the AI agent as the records show it, and
+  nothing is taken from a CV (finding M36). Writing the pages surfaced an error of this log's
+  own: the previous entry called the project's self-assessment "an outside review". It is
+  corrected in place and listed in the corrections record.
+- **Files changed:** as in the CHANGELOG entry.
+- **Verification:** as in the CHANGELOG entry.
+- **Follow-ups:** the owner to read both pages and adjust any sentence about themselves; the
+  manuscript's author line and AI-use section still carry notes for the owner.
+
 ### 2026-11-11 (Australia/Sydney) — Phase 19k and 19l, the handoff for eleven lanes, and a manuscript draft
 
 **Raouf:**
@@ -23,9 +42,10 @@ one machine's local agent configuration:
   Handoff and roots: declaration `e981ae1f`, then `handoff19.py`, its tests, the 19f files and the
   provenance workflow's path filters and roots list. A manuscript draft and a test that holds its
   tables to the packs. Rulings, both logs.
-- **Summary:** the owner asked for the items an outside review named as missing: a paper with a
-  stated question, a comparison with existing work, a larger injection study, and the smaller
-  housekeeping. The scaled study fixed five hypotheses in code before the run and all five held on
+- **Summary:** the owner asked for the items that the project's own assessment, made with the AI
+  agent, listed as gaps a reviewer would raise (corrected 11 Nov: this entry first called it "an
+  outside review"; no outside reviewer had read the work): a paper with a stated question, a
+  comparison with existing work, a larger injection study, and the smaller housekeeping. The scaled study fixed five hypotheses in code before the run and all five held on
   the primary model; the write-up leads with what limits them (wording variance as large as style
   variance, no transfer of the ordering to a smaller model of the same family, about 30 effective
   observations per style). The replay of its 1,240 sends was declared while the capture was still
