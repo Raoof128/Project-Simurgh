@@ -14,6 +14,34 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-11 (Australia/Sydney) — Phase 19m declared and running: the scaled study on eight more local models; manuscript on hold
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/more-models-19m`. Declaration `36fb6816` (P19-MODELS01), instrument
+  `72487130` (`inject19m.py`, `evidence19m.py`, their tests, `.prettierignore` P19-FORMAT13), both
+  logs. The capture is in progress when this entry is written; the pack, results and ruling
+  follow in later commits on the same branch.
+- **Summary:** the owner asked for the manuscript to stop until results exist on as many models as
+  possible, including paid and large ones. The free part started first. Eight more local builds
+  run 19k's schedule unchanged, pushed at 09:42:13Z and launched at 09:42:25Z on 11 Nov from a
+  clean worktree at the instrument commit. What 19k could only observe after the fact (signal_stop
+  least moved, wording spread, trial agreement) is declared here as H6 to H8, so on these models
+  it is confirmatory. Stopping rules are fixed in advance so that no model can be dropped once its
+  numbers are seen, and the verifier re-derives each stop from the kept outputs. Two candidates
+  were dropped before the declaration because the runtime could not load their chat templates;
+  only templates were rendered to find that out. The paid part cannot start: no model API key is
+  on this machine. A hosted-model client was written and tested against fake responses in a
+  separate worktree and is deliberately uncommitted until its own declaration names the models,
+  settings and spending cap. The provider documentation read on 11 Nov says current Claude models
+  reject sampling parameters and reason by default, which on the larger ones cannot be switched
+  off, so hosted results will be a separate lane with their own declared settings.
+- **Files changed:** as in the CHANGELOG entry.
+- **Verification:** as in the CHANGELOG entry.
+- **Follow-ups:** build and verify the 19m pack when the capture ends; the owner to supply API
+  keys and a spending cap; then the hosted lane and the informed-attacker lane, each declared
+  before it runs; the manuscript stays untouched until then.
+
 ### 2026-11-11 (Australia/Sydney) — Reviewer front door: latest study on the README, record of corrections, author and method
 
 **Raouf:**

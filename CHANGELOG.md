@@ -1,5 +1,31 @@
 ## Change Log
 
+## [phase-19m-declared] — 2026-11-11 — The scaled study on eight more local models: declared, instrument committed, capture running; manuscript on hold
+
+**Raouf:**
+
+- **Scope:** a new lane, in progress. `tools/assurance-provenance/inject19m.py`, `evidence19m.py`,
+  `tests/test_inject19m.py`, `tests/test_evidence19m.py`, `.prettierignore` (P19-FORMAT13), the
+  ledger (P19-MODELS01), both logs. No 19a to 19l source or pack, no frozen file, no workflow, and
+  no edit to the manuscript, which the owner has put on hold until the further results are in.
+- **Summary:** 19k decided five hypotheses on one model. 19m runs the same 864 generations on
+  eight more local builds: `qwen3-0.6b-4bit`, `qwen2.5-1.5b-4bit`, `qwen2.5-3b-4bit`,
+  `llama-3.2-3b-8bit`, `qwen3-4b-8bit`, `qwen2.5-7b-4bit`, `llama-3.1-8b-4bit` and
+  `qwen3-8b-4bit`. Cases, schedule, seeds, readers and analysis are imported from 19k. Declared
+  before the run: a model stops after the 24 authorised generations if fewer than six are calls;
+  a model that fails or exceeds six hours is recorded as not captured with its partial outputs
+  kept; the hypotheses are decided only for a model with at least 18 authorised calls and at most
+  12 of 120 control sends; H1 to H5 are 19k's rules, H6 to H8 are new and confirmatory here; three
+  predictions name specific models. The pack will carry every raw output, and its verifier
+  refuses a model that was relabelled or dropped after the fact.
+- **Files changed:** as above.
+- **Verification:** 21 tests on synthetic transcripts (14 for the instrument, 7 for the pack),
+  among them the orchestration with a stubbed process and each tamper the verifier must catch;
+  `ruff` clean. No result exists yet: the capture is running and nothing has been packed.
+- **Follow-ups:** the pack, RESULTS, README, a test on the committed pack, the ruling and the
+  eleven-to-twelve roots update when the capture ends; a hosted-model lane and an
+  informed-attacker lane once the owner supplies keys and a spending cap.
+
 ## [docs-reviewer-front-door] — 2026-11-11 — The newest study on the README; a record of corrections; an author and method page
 
 **Raouf:**
