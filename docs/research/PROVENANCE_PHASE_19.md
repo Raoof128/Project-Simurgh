@@ -580,6 +580,32 @@ Authorised files: `tools/assurance-provenance/replay19l.py`, `evidence19l.py`, t
 ruling and both logs. Not authorised: any edit to a frozen file, to a 19a to 19k source or pack, or
 to a workflow. This declaration commit must be a strict ancestor of every commit of lane 19l.
 
+**P19-OPERATOR02 (bounded authority to bring lanes 19h to 19l into the outside-operator handoff
+and the externally pinned roots; declared 11 Nov 2026 before any commit that acts on it).** The
+handoff, its comparator and the hosted roots check were written when Phase 19 had six packs. Five
+more exist (19h, 19i, 19j, 19k, 19l), none has been replayed outside the author's custody, and the
+handoff does not ask an operator for them, so the status line understates what is owed. This
+declaration authorises, and nothing else:
+
+1. `handoff19.py`: the five lanes added to `PHASES` with their host and time; the comparator's
+   replay-dependent `kind` extended to 19j and 19l, whose receipts read `structure_checked` without
+   `--replay` and `frozen_replay_recomputed` with it; `19j --replay` and `19l --replay` added to
+   the items an outside host can exercise; a phase a returned receipt does not contain reported as
+   `not_in_receipt`, apart from a phase the operator's host refused. Tests first.
+2. The review of the first operator receipt recomputed under the new phase list. The receipt is
+   not edited; the review is its recomputation and the test asserts so. The five new lanes appear
+   in it as not exercised, which is what happened.
+3. Re-rendering `HANDOFF.md` and `discrepancy-template.json`; the 19f README.
+4. `.github/workflows/assurance-provenance.yml`: the five lanes' `docs/` paths added to the path
+   filters and their ids to the expected-roots check, with its message. No step is added, removed
+   or renamed, and the Stage 5Q census must be set-identical before and after. The repository
+   variable `PHASE19_ROOTS` gains the five roots, set outside the pull request.
+5. Both logs and the ruling.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to the operator's
+receipt, or any change to what the comparator checks on 19a to 19g. This declaration commit must
+be a strict ancestor of every commit that acts on it.
+
 | Field                         | Declaration                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | active_phase                  | Phase 19a projection verifier (19b–19g declared)                                                                    |
