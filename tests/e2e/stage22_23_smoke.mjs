@@ -5,6 +5,7 @@ import crypto from "node:crypto";
 import { canonicalisePairingPayload } from "../../src/integrity/pairingCanonicalise.js";
 import { canonicaliseProofPayload } from "../../src/integrity/proofCanonicalise.js";
 import { computeNodeIdHash } from "../../src/integrity/proofSignature.js";
+import { forbiddenFieldsIn } from "./forbiddenFields.mjs";
 
 const FORBIDDEN_TERMS = [
   "process_name",
@@ -314,8 +315,7 @@ async function sendTelemetry(baseUrl, sessionId, token, sequence, daemon_proof =
 }
 
 function assertNoForbidden(label, value) {
-  const text = JSON.stringify(value);
-  const found = FORBIDDEN_TERMS.filter((term) => text.includes(term));
+  const found = forbiddenFieldsIn(value, FORBIDDEN_TERMS);
   assertSmoke(found.length === 0, `${label} leaked forbidden local-data fields`, found);
 }
 
