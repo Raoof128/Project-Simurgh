@@ -14,6 +14,20 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-11 (Australia/Sydney) — Maintenance: the two flaky tests
+
+**Raouf:**
+
+- **Scope:** branch `maintenance/flaky-tests`. A shared `forbiddenFieldsIn` helper with a unit test,
+  used by the Stage 2.2/2.3 and 2.4/2.5 smokes; a longer launch budget in the browser stub test.
+- **Summary:** the smoke flake was a substring match over the whole audit JSON catching random
+  identifiers; the helper requires the term to stand as a word in a key or a string value. The
+  browser flake was a race between a 400 ms launch budget and the stub process starting under load;
+  it reproduced one run in six during a model capture and not once in six with a 3 s budget.
+- **Files changed:** as in the CHANGELOG entry.
+- **Verification:** unit test red then green; browser test 6 of 6 under load; both smokes; quick gate.
+- **Follow-ups:** none.
+
 ### 2026-11-10 (Australia/Sydney) — Phase 19i and 19j: P19-INJECT01 and P19-REPLAY01
 
 **Raouf:**

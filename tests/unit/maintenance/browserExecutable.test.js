@@ -65,7 +65,9 @@ test("a browser that never answers fails the LAUNCH budget, naming the step and 
   const { dir, stub, restore } = await silentBrowserStub();
   try {
     await assert.rejects(
-      browserResult(stub, "http://127.0.0.1:1/", { timeoutMs: 30000, launchTimeoutMs: 400 }),
+      // 3 s, not 400 ms: under load the stub's own start can take longer than a short budget,
+      // and the launch then times out before the stub has written the stderr line asserted below
+      browserResult(stub, "http://127.0.0.1:1/", { timeoutMs: 30000, launchTimeoutMs: 3000 }),
       (error) => {
         assert.match(
           error.message,
