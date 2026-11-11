@@ -1,5 +1,39 @@
 ## Change Log
 
+## [docs-reviewer-front-door] — 2026-11-11 — The newest study on the README; a record of corrections; an author and method page
+
+**Raouf:**
+
+- **Scope:** `README.md` (a latest-study paragraph under the headline result with its limits,
+  three rows in the reviewer handoff table, the independent-reproduction line under open work),
+  `DOCUMENTATION.md` (four rows), `docs/RECORD_OF_CORRECTIONS.md` (new),
+  `docs/AUTHOR_AND_METHOD.md` (new), `AGENT.md` (one sentence corrected), both logs. No source,
+  no test, no pack, no workflow, no frozen file.
+- **Summary:** `docs/RECORD_OF_CORRECTIONS.md` indexes, with links, the null results and failed
+  predictions, the defects the project found in its own work, the defects that independent
+  replays found, one departure from a declared plan and one correction to the log itself, and
+  ends with what is still open. `docs/AUTHOR_AND_METHOD.md` names who is accountable, states how
+  the work is produced with an AI coding agent (380 of 2,275 commits on `main` carry a co-author
+  line, nearly every non-merge commit since Phase 19 began), gives a dated account of how the
+  method tightened from May to November, lists five problems the author cannot settle alone and
+  suggests questions a reviewer could put to the author. The README now shows the November study
+  beside the October one, with the statement that its gate replay is not evidence against an
+  adaptive attacker and has not been replayed outside the author's custody.
+  A prose audit of the manuscript, its README and the two new pages followed: about twenty edits
+  (announcement sentences, two quotable closers, over-long sentences split, passive constructions
+  given an actor) and two corrections of substance. The manuscript's introduction claimed small
+  models "are increasingly used as local agents" with no source, and the claim is removed. The
+  author page said no evaluation exercises context boundaries; Phase 7 did, with scripted
+  proposals and no live model, and the page now says so. Scope statements such as "a correctness
+  check, not evidence against an adaptive attacker" were kept on purpose.
+- **Files changed:** as above, plus `docs/research/provenance-phase-19-paper/PAPER.md` and its
+  README.
+- **Verification:** every relative link in the three edited pages resolves; each dated statement
+  was checked against the ledger, the lane READMEs or `git log`; the manuscript test still holds
+  its tables to the packs; no invisible characters in the edited files; `prettier` clean; quick
+  gate; hosted checks on the PR.
+- **Follow-ups:** none for the machine. The owner should read the two pages.
+
 ## [phase-19k-19l] — 2026-11-11 — The injection study at scale with hypotheses fixed first, its gate replay, eleven lanes in the operator handoff, and a manuscript draft
 
 **Raouf:**
