@@ -4,6 +4,7 @@ import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { forbiddenFieldsIn } from "./forbiddenFields.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, "../..");
@@ -275,8 +276,7 @@ async function sendTelemetry(baseUrl, sessionId, token, sequence, daemonProof) {
 }
 
 async function assertNoForbiddenGeneratedData(label, value) {
-  const text = JSON.stringify(value);
-  const found = FORBIDDEN_TERMS.filter((term) => text.includes(term));
+  const found = forbiddenFieldsIn(value, FORBIDDEN_TERMS);
   assertSmoke(found.length === 0, `${label} leaked forbidden local fields`, found);
 }
 

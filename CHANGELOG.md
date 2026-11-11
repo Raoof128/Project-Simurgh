@@ -1,5 +1,27 @@
 ## Change Log
 
+## [maintenance-flaky-tests] — 2026-11-11 — Two intermittent test failures removed at their cause
+
+**Raouf:**
+
+- **Scope:** `tests/e2e/forbiddenFields.mjs` (new), `tests/e2e/stage24_25_smoke.mjs`,
+  `tests/e2e/stage22_23_smoke.mjs`, `tests/unit/maintenance/forbiddenFields.test.js` (new),
+  `tests/unit/maintenance/browserExecutable.test.js`, both logs. No source under `src/`, no gate,
+  no workflow, no frozen file.
+- **Summary:** both follow-ups recorded on 8 November are closed. The Stage 2.4/2.5 and 2.2/2.3
+  smokes tested `JSON.stringify(value).includes(term)` for forbidden local-data field names, so a
+  random base64url challenge that happened to spell `pid` failed the hosted gate once. A leak is a
+  field name, so the term must now stand as a word, in a key or in a string value, bounded by a
+  non-alphanumeric character or the string's edge: `daemon_pid` and `saw pid 4` are still found,
+  `Qk9pidZ3` is not. The check is strictly narrower than the substring test, so nothing that
+  passed before can now fail. The browser stub test gave the launch 400 ms; under load the stub's
+  own start took longer and the launch timed out before the stub wrote the stderr line the test
+  asserts (reproduced one run in six while a model capture was running). The budget is now 3 s.
+- **Files changed:** as above.
+- **Verification:** the new unit test written first and seen failing (module missing), 4 passing;
+  the browser test 6 of 6 under the same load that had failed it; both smokes pass; quick gate.
+- **Follow-ups:** none.
+
 ## [phase-19i-19j] — 2026-11-10 — Injection styles against the restricted states, and every recorded send replayed through the frozen gate
 
 **Raouf:**
