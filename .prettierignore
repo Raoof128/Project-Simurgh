@@ -320,3 +320,10 @@ docs/research/provenance-phase-19m/protocol.json
 docs/research/provenance-phase-19m/report.json
 docs/research/provenance-phase-19m/receipt.json
 docs/research/provenance-phase-19m/capture.json
+
+# P19-FORMAT14: Phase 19n source-bound machine evidence (P19-CHANNELS01); bytes are bound by the
+# pack root and must not be reformatted.
+docs/research/provenance-phase-19n/protocol.json
+docs/research/provenance-phase-19n/report.json
+docs/research/provenance-phase-19n/receipt.json
+docs/research/provenance-phase-19n/capture.json
