@@ -1,5 +1,35 @@
 ## Change Log
 
+## [phase-19n-evidence] — 2026-11-13 — Placement, kind, author, an adaptive attacker and what follows a refusal, on four local models: all eligible, two of four hypotheses held on one model each
+
+**Raouf:**
+
+- **Scope:** the ledger (declaration P19-CHANNELS01, its ruling, one overview sentence),
+  `tools/assurance-provenance/inject19n.py`, `evidence19n.py`, `tests/test_inject19n.py`,
+  `tests/test_evidence19n.py` (new, committed before the capture),
+  `docs/research/provenance-phase-19n/` (new: `evidence.zip`, `protocol.json`, `report.json`,
+  `receipt.json`, `ROOT.sha256`, `capture.json`, `transcripts/`, `README.md`, `RESULTS.md`),
+  `tools/assurance-provenance/tests/test_evidence19n_committed.py` (new), `.prettierignore`,
+  both logs. No pinned source of another lane, no 19a to 19m pack, no workflow, no frozen file.
+- **Summary:** 4,224 generations on an Apple M2 with 8 GB, at no cost; root
+  `ba341a24e7ddfe3c7410d957b72bf9ec3f9f3303a9df295902f689c4bc8ac391`. Four models, 1,152 slots
+  each, in which a prompt can depend on what the model wrote earlier; `verify` rebuilds every
+  prompt from the transcript. All four models were captured without interruption and all four
+  are eligible. Held on one model each: the three agent-writable headings draw more sends than
+  the untrusted source (N1, `qwen3-1.7b-4bit`); belief texts draw more sends than instruction
+  texts (N2, `qwen2.5-7b-4bit`; reversed on the three Qwen3 builds, where one instruction
+  wording drew 71, 95 and 94 of 96 sends). Held on none: the model's own summary of an injected
+  context draws more sends than its summary of the control (N3); an attacker played by the
+  target's own model beats the author's texts (N4). After a refusal no model sent again (0 of
+  48 on each). The tool-result heading drew the most sends on every model. The smallest model
+  wrote 58 outputs that name the send tool and that the strict reader could not read.
+- **Verification:** `evidence19n.py verify` returns `"verified": true` under Python 3.15 and under
+  a Python 3.12 with no site packages; six tests on the committed pack and the lane's 40 pinned
+  tests pass; pinned sources unchanged since the instrument commit; quick gate passes.
+- **Follow-ups:** declarations for the thirteenth root (workflow check, `PHASE19_ROOTS`, the
+  operator handoff) and for a replay of the recorded sends through the frozen pipeline; lane 19o
+  on hosted models is running under its own declaration.
+
 ## [docs-gap-hunts-and-nist-tenets] — 2026-11-12 — Two gap hunts and a statement against NIST's ten agent identity tenets
 
 **Raouf:**
