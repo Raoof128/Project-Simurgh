@@ -1,13 +1,13 @@
 # Cluster B1 — reader B1 (Anthropic frontier system cards)
 
-Path prefix for every page below: `/Users/raoof.r12/Desktop/Raouf/Zurvan/wiki/sources/`. Short names used in the table: **M** = Claude_Mythos_Preview_System_Card.md, **O5** = Claude_Opus_5_System_Card.md, **O55** = Claude_Opus_5_5_System_Card.md. Every quote was checked byte-exact (exactly one occurrence) against the named page by script before this file was written.
+Path prefix for every page below: `[zurvan]/wiki/sources/`. Short names used in the table: **M** = Claude_Mythos_Preview_System_Card.md, **O5** = Claude_Opus_5_System_Card.md, **O55** = Claude_Opus_5_5_System_Card.md. Every quote was checked byte-exact (exactly one occurrence) against the named page by script before this file was written.
 
 ## Pages read
 
-- /Users/raoof.r12/Desktop/Raouf/Zurvan/wiki/sources/Claude*Mythos_Preview_System_Card.md — 463 KB, 515 lines, grep-sampled (sections 3.2, 4.1, 4.2, 4.3.1, 4.5.5, 8.3.2 read in full), duplicate-of: Claude_Mythos_Preview_System_Card*-\_original_release.md (this is the LONGER, corrected version; read this one)
-- /Users/raoof.r12/Desktop/Raouf/Zurvan/wiki/sources/Claude*Mythos_Preview_System_Card*-\_original_release.md — 460 KB, 513 lines, diff-checked only, duplicate-of: the page above. Delta: the later version adds an April 8 and April 14 2026 changelog (typo fixes, a Section 7.9 quote removed because it came from Opus 4.6, Eleos findings corrected, ECI renamed AECI in 2.3.6, CharXiv and USAMO scores for Opus 4.6 revised) and shifts page numbers by one. Every Mythos quote below also appears verbatim in the original release (spot-checked on 4 of the load-bearing ones). The alignment, cyber and prompt-injection text is unchanged.
-- /Users/raoof.r12/Desktop/Raouf/Zurvan/wiki/sources/Claude_Opus_5_5_System_Card.md — 409 KB, 485 lines, grep-sampled (sections 1.5, 3.2, 3.4, 3.5, 5.1, 5.2, 6.1 to 6.6 read in full), dated 22 Sep 2026, duplicate-of: none
-- /Users/raoof.r12/Desktop/Raouf/Zurvan/wiki/sources/Claude_Opus_5_System_Card.md — 325 KB, 413 lines, grep-sampled (sections 3.2, 5.2, 6.1 to 6.4.8, 6.6 read in full), dated 24 Jul 2026, duplicate-of: none (different model from O55)
+- [zurvan]/wiki/sources/Claude*Mythos_Preview_System_Card.md — 463 KB, 515 lines, grep-sampled (sections 3.2, 4.1, 4.2, 4.3.1, 4.5.5, 8.3.2 read in full), duplicate-of: Claude_Mythos_Preview_System_Card*-\_original_release.md (this is the LONGER, corrected version; read this one)
+- [zurvan]/wiki/sources/Claude*Mythos_Preview_System_Card*-\_original_release.md — 460 KB, 513 lines, diff-checked only, duplicate-of: the page above. Delta: the later version adds an April 8 and April 14 2026 changelog (typo fixes, a Section 7.9 quote removed because it came from Opus 4.6, Eleos findings corrected, ECI renamed AECI in 2.3.6, CharXiv and USAMO scores for Opus 4.6 revised) and shifts page numbers by one. Every Mythos quote below also appears verbatim in the original release (spot-checked on 4 of the load-bearing ones). The alignment, cyber and prompt-injection text is unchanged.
+- [zurvan]/wiki/sources/Claude_Opus_5_5_System_Card.md — 409 KB, 485 lines, grep-sampled (sections 1.5, 3.2, 3.4, 3.5, 5.1, 5.2, 6.1 to 6.6 read in full), dated 22 Sep 2026, duplicate-of: none
+- [zurvan]/wiki/sources/Claude_Opus_5_System_Card.md — 325 KB, 413 lines, grep-sampled (sections 3.2, 5.2, 6.1 to 6.4.8, 6.6 read in full), dated 24 Jul 2026, duplicate-of: none (different model from O55)
 
 Dates: Mythos Preview card 7 Apr 2026; Opus 5 card 24 Jul 2026; Opus 5.5 card 22 Sep 2026.
 

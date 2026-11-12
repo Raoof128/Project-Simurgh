@@ -736,7 +736,7 @@ key-free harness. NOT adaptive robustness, NOT live-model safety.
 - [ ] **Step 6: Normalise JSON formatting (Stage 3J CI gotcha) and commit**
 
 ```bash
-cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh
+cd [repo]
 npx prettier --write "docs/research/llm-shield/evidence/stage-3k/*.json"
 git add tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage3k_catalogue.py \
   tools/agentdojo-simurgh-adapter/tests/test_stage3k_evidence_freeze.py \

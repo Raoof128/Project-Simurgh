@@ -145,7 +145,7 @@ describe("pairingSchema constants", () => {
 - [ ] **Step 2: Run test — expect module-not-found**
 
 ```bash
-cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh && node --test tests/unit/integrity/pairingSchema.test.js 2>&1 | tail -5
+cd [repo] && node --test tests/unit/integrity/pairingSchema.test.js 2>&1 | tail -5
 ```
 
 - [ ] **Step 3: Create the module**
@@ -281,7 +281,7 @@ Create `tests/unit/integrity/__fixtures__/golden-pairing-payload.json`:
 - [ ] **Step 4: Generate the expected SHA-256 from your own canonicaliser**
 
 ```bash
-cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh && node --input-type=module -e "
+cd [repo] && node --input-type=module -e "
 import { readFileSync, writeFileSync } from 'node:fs';
 import { canonicalisePairingPayload } from './src/integrity/pairingCanonicalise.js';
 import crypto from 'node:crypto';
@@ -1869,7 +1869,7 @@ func currentIso8601() -> String {
 - [ ] **Step 2: Verify Package.swift builds (test target still works)**
 
 ```bash
-cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tools/simurgh-node-macos && swift build 2>&1 | tail -10
+cd [repo]/tools/simurgh-node-macos && swift build 2>&1 | tail -10
 ```
 
 Expected: build succeeds (or fails with errors about `PairingSigner` — that's expected; Task 13 adds it).
@@ -2134,7 +2134,7 @@ If `currentIso8601()` is already declared in `ProofEnvelope.swift`, Swift will f
 - [ ] **Step 2: Build + run smoke**
 
 ```bash
-cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tools/simurgh-node-macos
+cd [repo]/tools/simurgh-node-macos
 swift build 2>&1 | tail -5
 swift run SimurghNode pair --session smoke_sess --challenge AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA= --key-path /tmp/test-key 2>/dev/null | head -20
 ```
@@ -2174,10 +2174,10 @@ git commit -m "feat(node-macos): add pair subcommand with strict unknown-subcomm
 - [ ] **Step 1: Copy the Node fixture into the Swift test directory**
 
 ```bash
-cp /Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tests/unit/integrity/__fixtures__/golden-pairing-payload.json \
-   /Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/golden-pairing-payload.json
-cp /Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tests/unit/integrity/__fixtures__/golden-pairing-payload.sha256 \
-   /Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/golden-pairing-payload.sha256
+cp [repo]/tests/unit/integrity/__fixtures__/golden-pairing-payload.json \
+   [repo]/tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/golden-pairing-payload.json
+cp [repo]/tests/unit/integrity/__fixtures__/golden-pairing-payload.sha256 \
+   [repo]/tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/golden-pairing-payload.sha256
 ```
 
 - [ ] **Step 2: Update `Package.swift` to ship the new fixture resources**
@@ -2238,7 +2238,7 @@ final class PairingCanonicaliseTests: XCTestCase {
 - [ ] **Step 4: Run `swift test`**
 
 ```bash
-cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tools/simurgh-node-macos && swift test 2>&1 | tail -15
+cd [repo]/tools/simurgh-node-macos && swift test 2>&1 | tail -15
 ```
 
 Expected: 2 tests pass (existing `CanonicaliseTests.testGoldenFixtureMatchesNodeHash` + new pairing test).
@@ -2414,7 +2414,7 @@ fi
 - [ ] **Step 3: Run the full check on macOS**
 
 ```bash
-cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh && ./scripts/check.sh 2>&1 | grep -E "━━━|✓|✗|Summary|Passed|Failed" | tail -30
+cd [repo] && ./scripts/check.sh 2>&1 | grep -E "━━━|✓|✗|Summary|Passed|Failed" | tail -30
 ```
 
 Expected: 32/32 gates pass (was 27 in Stage 2.1; +5 new gates).
@@ -2574,7 +2574,7 @@ git commit -m "docs: Stage 2.2 README + AGENT/CHANGELOG 0.4.2 entries + macOS pa
 - [ ] **Step 1: Run the full check one last time**
 
 ```bash
-cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh && ./scripts/check.sh 2>&1 | tail -10
+cd [repo] && ./scripts/check.sh 2>&1 | tail -10
 ```
 
 Expected: 32/32 gates pass.

@@ -61,7 +61,7 @@
 
 ## Conventions
 
-- **Working directory:** project root `C:\Users\raoof\Desktop\Projects\Project-Simurgh`. All shell commands run from there.
+- **Working directory:** project root `[repo]`. All shell commands run from there.
 - **Shell:** PowerShell available; bash also available via Git for Windows. Smoke scripts use bash (`#!/usr/bin/env bash`).
 - **Test runner:** `npm test` runs `node --test tests/unit/*.test.js tests/unit/**/*.test.js`. Single-file runs: `node --test tests/unit/<file>.test.js`.
 - **Commit cadence:** one commit per task. Co-author trailer: `Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>`.

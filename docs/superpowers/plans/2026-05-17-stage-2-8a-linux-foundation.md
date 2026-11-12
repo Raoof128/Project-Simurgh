@@ -93,8 +93,8 @@ Expected: FAIL with `SyntaxError: The requested module '../../src/device/platfor
 
 ```bash
 git add tests/unit/platformScannerSchemaDispatcher.test.js
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "test(stage-2-8a): red — platformScannerSchema dispatcher missing"
 ```
 
@@ -272,8 +272,8 @@ Expected: PASS.
 
 ```bash
 git add src/device/platformScannerSchema.js tests/unit/platformScannerSchema.test.js tests/unit/platformScannerSchemaDispatcher.test.js
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8a): platformScannerSchema dispatcher + Linux validator"
 ```
 
@@ -382,8 +382,8 @@ Expected: FAIL. First test fails with `unsupported_daemon_version` (because `2.8
 
 ```bash
 git add tests/unit/daemonProofLinux.test.js
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "test(stage-2-8a): red — Linux daemon proof not accepted"
 ```
 
@@ -450,8 +450,8 @@ Expected: all tests pass (273 prior + 2 new = 275 minimum).
 
 ```bash
 git add src/device/daemonProof.js
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8a): accept Linux daemon proofs via dispatcher"
 ```
 
@@ -521,8 +521,8 @@ Expected: FAIL with `does not provide an export named 'createDisplayServerLock'`
 
 ```bash
 git add tests/unit/displayServerLock.test.js
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "test(stage-2-8a): red — display_server session lock missing"
 ```
 
@@ -579,8 +579,8 @@ Expected: PASS (all 5 tests).
 
 ```bash
 git add src/device/daemonState.js
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8a): display_server session lock factory"
 ```
 
@@ -666,8 +666,8 @@ Expected: First test should PASS (Task 4 already accepted Linux platform); secon
 
 ```bash
 git add tests/unit/daemonPairingLinux.test.js
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "test(stage-2-8a): Linux pairing acceptance + unknown-platform regression"
 ```
 
@@ -719,8 +719,8 @@ Expected: FAIL with `does not provide an export named 'buildDaemonProofRejectedE
 
 ```bash
 git add tests/unit/daemonEventsLinux.test.js
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "test(stage-2-8a): red — daemonEvents lacks proof-rejected builder"
 ```
 
@@ -768,8 +768,8 @@ Expected: PASS.
 
 ```bash
 git add src/device/daemonEvents.js
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8a): emit DAEMON_PROOF_REJECTED with display_server_mismatch"
 ```
 
@@ -973,8 +973,8 @@ Expected: build succeeds (may take several minutes on first build).
 
 ```bash
 git add tools/simurgh-daemon-linux/
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8a): Rust daemon crate skeleton with /health endpoint"
 ```
 
@@ -1220,8 +1220,8 @@ Expected: build OK, all tests PASS.
 
 ```bash
 git add tools/simurgh-daemon-linux/
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8a): display session detector + /status endpoint"
 ```
 
@@ -1391,8 +1391,8 @@ Expected: PASS (both tests).
 
 ```bash
 git add tools/simurgh-daemon-linux/
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8a): P-256 identity with XDG state, 0600/0700 perms"
 ```
 
@@ -1579,8 +1579,8 @@ Expected: PASS.
 
 ```bash
 git add tools/simurgh-daemon-linux/
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8a): canonical JSON + P-256 proof builder"
 ```
 
@@ -1701,8 +1701,8 @@ Expected: PASS (all).
 
 ```bash
 git add tools/simurgh-daemon-linux/
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8a): refuse non-local DISPLAY (privacy boundary)"
 ```
 
@@ -1773,8 +1773,8 @@ Expected: PASS.
 
 ```bash
 git add tools/simurgh-daemon-linux/
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "test(stage-2-8a): headless /health + /status integration tests"
 ```
 
@@ -1840,8 +1840,8 @@ Open `tools/simurgh-daemon-linux/src/main.rs`. Confirm `DaemonConfig::default()`
 
 ```bash
 git add tools/simurgh-daemon-linux/
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8a): HTTP body-limit + method-allowlist enforcement"
 ```
 
@@ -1873,8 +1873,8 @@ Expected: all PASS.
 ```bash
 git status
 # If clean, skip. Otherwise commit fmt/clippy adjustments.
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -am "chore(stage-2-8a): cargo fmt + clippy clean"
 ```
 
@@ -1973,8 +1973,8 @@ Expected: PASS. If FAIL, the canonical-JSON or signature shape diverged between 
 
 ```bash
 git add tests/fixtures/stage-2-8/ tests/unit/daemonProofLinuxEndToEnd.test.js tools/simurgh-daemon-linux/src/bin/
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "test(stage-2-8a): Rust-signed Linux proof accepted by Node validator"
 ```
 

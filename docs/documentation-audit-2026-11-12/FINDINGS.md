@@ -13,11 +13,10 @@ consistent, without running the check again.
 ## `AGENT.md`
 
 - L32 · internal consistency · medium · dated record · read. The sentence says the tallies are the same with and without llama-3.2-3b-8bit, then in the same clause says P3 becomes undecided without it. P3 is one of the tallies, and the captured-model count also changes (6 of 8 with the model, 5 of 8 without). Only the eligible-model and hypothesis counts … Proposed: eligible, so the eligible-model and hypothesis tallies are the same with it and without it; the count of models captured in full (6 of 8 against 5 of 8) and P3 change, and without it P3 is not …
-- L868 · private data · high · owner decision · reproduced. The line contains a local path.
 - L1311 · reference · medium · dated record · reproduced. The commit id used as the re-audit checkout does not resolve in this checkout, so a reviewer cannot reproduce the audit basis. Proposed: No commit with prefix 3dcf21b exists in any ref (git cat-file -e fails; git log --all finds none). The re-audit checkout needs a resolvable id, or a note that it is not in this repository. The same …
 - L1420 · cross document · medium · dated record · read. The executed Phase B run is recorded as 5 trusted testers. The governing protocol and go/no-go checklist say 2-3 testers, and the closeout does not record a deviation from that plan. Proposed: Protocol and checklist say 2-3 testers; executed count is 5 (aggregate-results.json line 10 "trusted_testers_completed": 5). A deviation note is needed in the closeout.
 - L1517 · reference · medium · dated record · reproduced. The commit id does not resolve in this checkout. The same id is repeated at line 1527. Proposed: No commit with prefix dc2c5d8 exists in any ref (git log --all finds none). The branch's pushed commit id needs to be named, or the entry should say the commit is not in this checkout. The same id …
-- L1595 · private data · high · owner decision · reproduced. The line contains an email address.
+- L1595 · private data · high · kept: a contact or author address published on purpose · reproduced. The line contains an email address.
 - L1668 · internal consistency · low · dated record · read. The header says 16 issues, but the list under it is numbered 1 to 22. Proposed: Change the header at AGENT.md line 1668 to 'Issues found and fixed (22 total):'.
 - L1947 · number · medium · dated record · read. The 2026-05-19 entry says docs/stages/STAGE_2_8_LINUX_REVIEWER_CHECKLIST.md has 76 checklist items. The file has 101 checkbox items in 16 groups. The count was 101 when the file was first committed (7cb30bae, 2026-05-19), so the 76 claim was never correct. The group count of 16 is correct. Proposed: 101 checklist items (16 groups not independently verified)
 - L1979 · number · medium · dated record · read. The 2026-05-17 entry says the Windows validation matrix has 'all 20 test rows' for real Windows device validation. The '\#\# Real Windows Device Validation' table has 15 data rows. The file was created with 15 rows in commit 0af480ec, so the claim was wrong on its date. Proposed: 15
@@ -26,11 +25,10 @@ consistent, without running the check again.
 ## `CHANGELOG.md`
 
 - L85 · number · medium · dated record · read. The co-author figure does not reproduce. Main has 2,279 commits, not 2,275, and the co-author count is 349 (344 excluding merges), not 380. The same figure is repeated in the current page docs/AUTHOR_AND_METHOD.md line 33, which a reviewer reads. Proposed: 349 of 2,279 commits on main carry a Co-Authored-By trailer (git log main -i --grep=co-authored-by), with 2,279 the total for main as of 11 Nov 2026 (git rev-list --count main …
-- L855 · private data · high · owner decision · reproduced. The line contains a local path.
 - L1233 · cross document · high · dated record · read. The 3H-L2 entry's numbers no longer match the frozen 3H-L2 evidence folder. Commit f662b09b (the Stage 3I refresh, message 'refresh stage 3I evidence from real agentdojo pass') overwrote docs/research/llm-shield/evidence/stage-3h-layer2/metrics.json and three sibling files. The current file shows … Proposed: The 3H-L2 values are in commit e3178f50 (defended benign 0/10, over-defence 10/10). The working tree now holds the f662b09b values (benign 10/10, over-defence 0/10). The 3H-L2 run needs an archived …
 - L1493 · number · medium · dated record · read. The 3B baseline numbers are no longer in the 3B evidence folder. Commit df48c419 (Stage 3C) rewrote stage-3b/metrics.json and detector-digests.json, and the 3C entry (line 1464) mentions this only as a 'baseline re-snapshot'. A reviewer following the 3B entry to its evidence finds 18/30 and 0/5, … Proposed: 2/30 adversarial detection and 2/5 hard-negative false positives are in commit cc254e1a, not in the current evidence/stage-3b/metrics.json (18/30, 0/5).
 - L2147 · format · low · dated record · read. Two different entries share the anchor ID \[banking-shield-phase-a\]: this audit-fix entry and the Stage B1 entry at line 2171. The duplicate ID makes deep links and cross-references ambiguous. Proposed: Give the line 2147 audit-fix entry a unique ID, for example banking-shield-phase-a-audit-fix.
-- L2220 · private data · high · owner decision · reproduced. The line contains an email address.
+- L2220 · private data · high · kept: a contact or author address published on purpose · reproduced. The line contains an email address.
 - L2369 · format · low · dated record · read. The horizontal-rule separator between entries is missing before 20 headings in this range. Rendered, these entries run together with no break. The lines are 1552, 1572, 1585, 1601, 1616, 1629, 1644, 1662, 1676, 1694, 1710, 1727, 1928, 2147, 2171, 2347, 2351, 2369, 2373 and 2392. Proposed: Insert a '---' separator with a blank line before each of the 20 listed headings.
 - L3534 · number · medium · dated record · read. The entry states the SDK hash lock has 60 packages (repeated at line 3542 as 'all 60 dependencies consistent'). The lock file pins 59 packages, and it has always held 59: it is the only commit that touched the file, and that commit already has 59 pins. A reviewer counting the lock gets 59, not 60. … Proposed: 59 packages (CHANGELOG.md line 3534 '60-package hash lock' and line 3542 'all 60 dependencies consistent' should read 59; docs/assurance/sdk/VALIDATION.md line 10 has the same error)
 - L3750 · internal consistency · low · dated record · read. The census progression jumps from 33 to 34 with no logged step. The Meta pilot entry records 'Current mutable census 32 to 33' (line 3750-3751). The next Meta entries say 'Live census34 exact' (line 3803), with no logged census change in the study protocol entry (lines 3765-3781) or in the … Proposed: Add a logged step for the census 33 to 34 change (or a dated erratum) in the study protocol or fixed-evidence entry
@@ -43,7 +41,7 @@ consistent, without running the check again.
 
 ## `PRIVACY.md`
 
-- L283 · private data · high · owner decision · reproduced. The line contains an email address.
+- L283 · private data · high · kept: a contact or author address published on purpose · reproduced. The line contains an email address.
 
 ## `RESEARCH_HISTORY.md`
 
@@ -54,11 +52,11 @@ consistent, without running the check again.
 
 ## `SECURITY.md`
 
-- L371 · private data · high · owner decision · reproduced. The line contains an email address.
+- L371 · private data · high · kept: a contact or author address published on purpose · reproduced. The line contains an email address.
 
 ## `docs/DISCLAIMER.md`
 
-- L63 · private data · high · owner decision · reproduced. The line contains an email address.
+- L63 · private data · high · kept: a contact or author address published on purpose · reproduced. The line contains an email address.
 
 ## `docs/PAPER_ACCURACY_AUDIT.md`
 
@@ -88,7 +86,7 @@ consistent, without running the check again.
 
 ## `docs/assurance/openai-native/README.md`
 
-- L166 · private data · low · owner decision · reproduced. The line contains a host name.
+- L166 · private data · low · owner action: confirm the key was rotated · reproduced. The line contains a host name.
 
 ## `docs/assurance/safety-study/evidence/model-research/Llama-3.2-3B-Instruct.README.md`
 
@@ -122,7 +120,7 @@ consistent, without running the check again.
 
 ## `docs/readiness-2026-10-21/SOURCES.md`
 
-- L38 · private data · low · owner decision · reproduced. The line contains a host name.
+- L38 · private data · low · kept: the city of the author's public affiliation · reproduced. The line contains a host name.
 
 ## `docs/research/GAP_HUNT_ZURVAN_2026-10-31.md`
 
@@ -205,7 +203,6 @@ consistent, without running the check again.
 
 ## `docs/research/gap-hunt-zurvan-2026-11-01/READER_BRIEF.md`
 
-- L4 · private data · high · owner decision · reproduced. The line contains a local path.
 - L176 · format · low · dated record · read. The 'Reliability and engineering evidence' table has a header and no body rows, so a reader sees an empty table. Proposed: Add the five rows from 30fe9e4b:README.md lines 108-114 (Paced concurrency/restart run; Composed stop/recovery behavior; Archive replay; Evidence mutation checks; Native CI at fbe06eca), or state …
 - L192 · reference · low · dated record · reproduced. The relative link does not resolve from this brief's directory. Several other links in the brief (lines 84-90, 125-126, 213, 446) are root-relative or register-relative and fail the same way when the brief is opened in place. Proposed: ../../openai/SECURITY_REVIEW.md
 - L254 · format · low · dated record · read. The heading has no content of its own. The next sentence, 'These are our engineering interpretations...', refers to a list that is absent. Proposed: Restore the table of current-guidance sources from docs/research/SIMURGH_GAP_MAP_2026-10-15.md starting at line 132 (the 'What current guidance adds' section, with its primary-source table), or …
@@ -218,40 +215,21 @@ consistent, without running the check again.
 
 ## `docs/research/gap-hunt-zurvan-2026-11-01/cluster-A.md`
 
-- L3 · private data · high · owner decision · reproduced. The line contains a local path.
 - L48 · internal consistency · low · dated record · read. The sentence calls the UK AISI test 'the lab's own'. The file itself (lines 2 and 18) says UK AISI is an external evaluator and that P6 is the Mythos 5 system card. The UK AISI monitorability result is a section of that card that the lab reports, not a lab test. Proposed: The UK AISI evaluation, reported in the lab's Mythos 5 system card (P6, section \[address\]), found Mythos 5 reached over 60% side-attack success against a weak action monitor.
 
 ## `docs/research/gap-hunt-zurvan-2026-11-01/cluster-B1.md`
 
-- L3 · private data · high · owner decision · reproduced. The line contains a local path.
-- L7 · private data · high · owner decision · reproduced. The line contains a local path.
 - L39 · number · medium · dated record · read. The denominator and the metric are misstated. The source gives 64% as a share of requests sent to Opus 5.5 that received a valid response, not of all requests. The 85.73% is an attack success rate, not a rate of being attacked. Proposed: Of valid responses to requests sent to Opus 5.5, 64% were served by the fallback Opus 4.8. The attack success rate on fallback-served requests was 85.73%.
-
-## `docs/research/gap-hunt-zurvan-2026-11-01/cluster-B2.md`
-
-- L5 · private data · high · owner decision · reproduced. The line contains a local path.
-- L7 · reference · low · dated record · read. The source names use shell-style wildcards (Claude\*Opus_4_6_System_Card.md, Claude\*4_System_Card\*-/\_revised_July_2025.md) and backslash-escaped underscores. These are not real file names, so a reader cannot locate the file. The same pattern appears on lines 8, 11, 12, 19-46 and in the … Proposed: Claude_Opus_4_6_System_Card.md; Claude_Opus_4_6_System_Card\_-_original_release.md; Claude_4_System_Card\_-_revised_July_2025.md; Claude_4_System_Card\_-_123-page_version.md …
-- L33 · private data · high · owner decision · reproduced. The line contains a local path.
 
 ## `docs/research/gap-hunt-zurvan-2026-11-01/cluster-C.md`
 
-- L3 · private data · high · owner decision · reproduced. The line contains a local path.
 - L9 · format · low · dated record · read. Asterisks used as italic markers have been applied to filenames. Rendered, the names lose their underscores and asterisks, so they no longer match the files. The same defect appears in the table page column and other pages-read lines (for example the RSP 2024 and Democratic governance names in … Proposed: Responsible_Scaling_Policy_Version_3_0\_-_effective_2026-02-24.md (and Responsible_Scaling_Policy\_-_effective_2024-10-15.md for the 2024 policy)
 - L57 · other · low · dated record · read. The quote is not an exact substring of its source. The header (line 3) says every quote was checked as an exact substring. The source uses asterisk italics, not underscores. Proposed: they now examine the \*intent\* of the change as opposed to reading every line of code
 
 ## `docs/research/gap-hunt-zurvan-2026-11-01/cluster-D.md`
 
-- L3 · private data · high · owner decision · reproduced. The line contains a local path.
 - L56 · cross document · medium · dated record · read. The claim overstates the sibling pages. The Terra page reports a prompt-injection result. The Sol 6.1 page reports no prompt-injection result at all; it says only that 'We observed no attempts to bypass an automated safety reviewer' and mentions avoiding unauthorized outcomes in general terms. The … Proposed: Sibling page for Terra states a prompt-injection result. The Sol 6.1 page states no prompt-injection result; it reports a comparative unauthorized-outcome result (lower failure rates than GPT-6 Sol …
 - L71 · cross document · medium · dated record · read. Repeats the row 17 overstatement: the Sol 6.1 page does not state an injection result. Proposed: while the Terra page does state an injection result and the Sol 6.1 page does not (it states a comparative unauthorized-outcome result only)
-
-## `docs/research/gap-hunt-zurvan-2026-11-01/cluster-E.md`
-
-- L3 · private data · high · owner decision · reproduced. The line contains a local path.
-
-## `docs/research/gap-hunt-zurvan-2026-11-01/cluster-F.md`
-
-- L3 · private data · high · owner decision · reproduced. The line contains a local path.
 
 ## `docs/research/hardening-phase-1/verification.json`
 
@@ -353,17 +331,8 @@ consistent, without running the check again.
 
 - L15 · number · medium · dated record · reproduced. The closeout claims 7 Lean theorems (zero sorry), but proofs/stage5c/SemanticBypass.lean declares eight theorems. The wording 'theorems (zero sorry)' is the count a reviewer would check. Proposed: eight
 
-## `docs/research/llm-shield/STAGE_5F_CLOSEOUT.md`
-
-- L72 · private data · high · owner decision · reproduced. The line contains a network address.
-
-## `docs/research/llm-shield/STAGE_5G_CLOSEOUT.md`
-
-- L43 · private data · high · owner decision · reproduced. The line contains a network address.
-
 ## `docs/research/llm-shield/STAGE_5H_CLOSEOUT.md`
 
-- L46 · private data · high · owner decision · reproduced. The line contains a network address.
 - L127 · stale status · medium · dated record · read. The Next section says Lane C has yet to be executed ('flip pending -\> completed'), but the same document records Lane C as executed and completed. The closeout contradicts itself. Proposed: Lane C is COMPLETED 2026-07-10 per line 43 and campaign-outcome.json. The Next section should name a different lever or be dated as pre-completion.
 
 ## `docs/research/llm-shield/STAGE_5I_CLOSEOUT.md`
@@ -377,17 +346,14 @@ consistent, without running the check again.
 ## `docs/research/llm-shield/STAGE_5K_CLOSEOUT.md`
 
 - L44 · number · high · dated record · reproduced. The stated Lean theorem count does not match the proof file. proofs/stage5k/UniverseCommitment.lean has 17 top-level 'theorem' declarations, not 11. Its own header (line 3) also says '11 theorems', so the file and the closeout agree with each other and disagree with the code. Proposed: 17 theorem declarations in proofs/stage5k/UniverseCommitment.lean (header and closeout both say 11). Either correct the count or state which declarations are not counted.
-- L67 · private data · high · owner decision · reproduced. The line contains a host name.
 
 ## `docs/research/llm-shield/STAGE_5L_CLOSEOUT.md`
 
 - L26 · number · high · dated record · reproduced. The stated count of 14 does not match proofs/stage5l/TemporalQuorum.lean, which has 17 top-level theorem declarations. The file header (line 3) also says '14 theorems'. Proposed: 17 theorem declarations in proofs/stage5l/TemporalQuorum.lean (closeout and header both say 14).
-- L49 · private data · high · owner decision · reproduced. The line contains a host name.
 
 ## `docs/research/llm-shield/STAGE_5M_CLOSEOUT.md`
 
 - L10 · number · high · dated record · reproduced. The stated count of 11 does not match proofs/stage5m/EcologyQuorum.lean, which has 15 top-level theorem declarations. The file header (line 2) also says '11 theorems'. Proposed: 15 theorem declarations in proofs/stage5m/EcologyQuorum.lean (closeout and header both say 11).
-- L14 · private data · high · owner decision · reproduced. The line contains a network address.
 
 ## `docs/research/llm-shield/STAGE_5R_CLOSEOUT.md`
 
@@ -440,24 +406,14 @@ consistent, without running the check again.
 
 ## `docs/research/llm-shield/evidence/stage-4r/reviewer-runs/README.md`
 
-- L27 · private data · high · owner decision · reproduced. The line contains an email address.
 - L41 · internal consistency · medium · frozen or stage-owned file · read. The sentence says four Node major versions but lists three (18, 20, 22). The table and the signed blocks have only three majors. Proposed: three Node major versions (18/20/22)
-
-## `docs/research/llm-shield/evidence/stage-5e-independent-verification/RAW_RESULTS.md`
-
-- L8 · private data · high · owner decision · reproduced. The line contains a local path.
-- L20 · private data · high · owner decision · reproduced. The line contains a host name.
-- L67 · private data · high · owner decision · reproduced. The line contains an email address.
 
 ## `docs/research/llm-shield/evidence/stage-5e-independent-verification/README.md`
 
-- L5 · cross document · high · frozen or stage-owned file · read. Contradiction. The README calls RAW_RESULTS.md the verbatim primary record. The file itself says Runs 1 and 2 were reconstructed from a session transcript after the original was deleted, are not guaranteed byte-identical, and 'should not be treated as a primary artifact'. Proposed: Rewrite README.md line 5 to say that Runs 1-2 in RAW_RESULTS.md are reconstructed from a session transcript (see its PROVENANCE NOTE at line 128), that the droplet logs are the authoritative …
 - L78 · reference · medium · frozen or stage-owned file · reproduced. Broken relative link. From this directory '../' is evidence/, and no file exists there. Proposed: ../stage-5e/droplet-repro-receipt.txt
 
 ## `docs/research/llm-shield/evidence/stage-5l/real-laned/RAW_RESULTS.md`
 
-- L6 · private data · high · owner decision · reproduced. The line contains a host name.
-- L36 · private data · high · owner decision · reproduced. The line contains an email address.
 - L191 · number · medium · frozen or stage-owned file · read. The calendar-to-block mapping is not shown by the quoted output, and the text has a duplicated block number (957689/957689). The 'verify PendingAttestation' lines appear under different block headers on the two machines. Proposed: No edit to the frozen file. Record as an erratum: the excerpt shows bob at block 957689 (local) and 957688 (droplet), and the catallaxy block mapping is not shown in the excerpt. The duplicated …
 
 ## `docs/research/llm-shield/evidence/stage-5p/independent-verification/CLOSEOUT.md`
@@ -479,11 +435,11 @@ consistent, without running the check again.
 
 ## `docs/research/llm-shield/writeup/01-summary.md`
 
-- L5 · private data · high · owner decision · reproduced. The line contains an email address.
+- L5 · private data · high · kept: a contact or author address published on purpose · reproduced. The line contains an email address.
 
 ## `docs/research/llm-shield/writeup/02-arxiv-note.md`
 
-- L5 · private data · high · owner decision · reproduced. The line contains an email address.
+- L5 · private data · high · kept: a contact or author address published on purpose · reproduced. The line contains an email address.
 
 ## `docs/research/model-composition-phase-10/RESULTS.md`
 
@@ -530,17 +486,13 @@ consistent, without running the check again.
 
 - L5 · stale status · medium · dated record · read. The notice header says it is a draft pending approval before distribution. The GO checklist records executive approval, ethics rationale and a consent sheet review, and the study has been run. Proposed: Update the status to the approved version (2026-06-v1, approved 2026-06-04) and remove 'Draft', or state which copy was distributed.
 
-## `docs/research/mq-voting-pilot/evidence/phase-c-closeout/privacy-audit.txt`
-
-- L2 · private data · high · owner decision · reproduced. The line contains a local path.
-
 ## `docs/research/mq-voting-pilot/results/PHASE_C_RESULTS_TABLES.md`
 
 - L32 · internal consistency · low · dated record · read. The heading says the table covers 30 submitted sessions, but its first three rows (consent accepted, participant code issued, audit chain initialised) count 31, which is the consented total, not the submitted total. Proposed: \#\# Table 3 — Integrity flow (31 consented; 30 submitted)
 
 ## `docs/research/provenance-phase-19-hosted/README.md`
 
-- L47 · private data · high · owner decision · reproduced. The line contains a host name.
+- L47 · private data · high · kept: a host label with no address · reproduced. The line contains a host name.
 
 ## `docs/research/provenance-phase-19-paper/PAPER.md`
 
@@ -551,7 +503,7 @@ consistent, without running the check again.
 
 ## `docs/research/provenance-phase-19d/RESULTS.md`
 
-- L17 · private data · high · owner decision · reproduced. The line contains a host name.
+- L17 · private data · high · kept: a host label with no address · reproduced. The line contains a host name.
 
 ## `docs/research/provenance-phase-19g/DEPLOYER_PROFILE.md`
 
@@ -589,7 +541,7 @@ consistent, without running the check again.
 
 - L74 · other · medium · dated record · read. The brief says every Warning and Critical verdict carries the 'Manual review required' wording. The code uses 'required' only for Critical. Warning verdicts get 'Manual review recommended. No automatic misconduct finding.' The same error is repeated in section 9 (line 337, 'The canonical output … Proposed: Line 72: 'Critical verdicts carry "Manual review required. No automatic misconduct finding." and Warning verdicts carry "Manual review recommended. No automatic misconduct finding."' Line 337: the …
 - L193 · number · high · dated record · read. The stated minimum window size is wrong. The scanner has always used 80 points, not 50. The statement was never true, so it is an error and not a dated record. Proposed: rejects tiny windows (under 80×80 points, in either dimension)
-- L400 · private data · high · owner decision · reproduced. The line contains an email address.
+- L400 · private data · high · kept: a contact or author address published on purpose · reproduced. The line contains an email address.
 
 ## `docs/stages/STAGE_2_7_REVIEWER_CHECKLIST.md`
 
@@ -647,24 +599,16 @@ consistent, without running the check again.
 
 ## `docs/superpowers/plans/2026-05-14-stage-2-1-macos-integrity-proof.md`
 
-- L77 · private data · high · owner decision · reproduced. The line contains a local path.
-- L276 · private data · high · owner decision · reproduced. The line contains a local path.
 - L1094 · number · low · dated record · read. The stated count does not match the test file the plan itself defines. proofValidator.test.js as written has 32 test() cases (1 accept + 11 required-field + 4 forbidden-field + 3 version/platform/privacy + 1 session_id + 4 timestamp + 3 capabilities/signals + 2 public-key/hash + 3 signature), and … Proposed: Expected: all 32 tests pass.
-- L1409 · private data · high · owner decision · reproduced. The line contains a local path.
-- L2176 · private data · high · owner decision · reproduced. The line contains a local path.
-- L2249 · private data · high · owner decision · reproduced. The line contains a local path.
 
 ## `docs/superpowers/plans/2026-05-14-stage-2-2-macos-node-pairing.md`
 
-- L148 · private data · high · owner decision · reproduced. The line contains a local path.
 - L297 · reference · low · dated record · read. Wrong task cross-reference. The Swift copy of the golden pairing fixture is made in Task 15, not Task 14. Task 14 rewrites main.swift. Proposed: Task 15
 - L2146 · other · low · dated record · read. The exit-code check is wrong. The preceding command is piped into 'head -2', so $? is the status of head, which is 0 without pipefail. The expected 'exit=64' at line 2153 cannot appear as written. Proposed: Run without the pipe, e.g. 'swift run SimurghNode prrof --session x; echo "exit=$?"', or use ${PIPESTATUS\[0\]} in bash
-- L2420 · internal consistency · medium · dated record · read. The plan gives two different counts of new Stage 2.2 gates. Line 59 says 4 new gates, line 2603 says the four new gates, and Task 16 Step 2 adds exactly four gate blocks. Line 2420 says +5, and the AGENT.md and CHANGELOG templates (lines 2470, 2495) also say 5 while listing four names. 27 + 4 = … Proposed: Four new gates (PAIR_RT, PAIRED_PROOF, PAIRED_REJECT, UNPAIRED) give 27 -\> 31, or a fifth gate must be added and named; the counts at lines 59, 2420, 2470, 2495, 2516, 2559, 2580, 2603 and 2646 …
 - L2447 · reference · low · dated record · read. The README snippet is meant for the repository-root README.md (Task 17 Step 1). From the root, '../specs/' points outside the repository, so the link is broken as written. The target file exists at docs/superpowers/specs/. Proposed: docs/superpowers/specs/2026-05-14-stage-2-2-macos-node-pairing-design.md
 
 ## `docs/superpowers/plans/2026-05-17-stage-2-7-cross-platform-device-shield.md`
 
-- L64 · private data · high · owner decision · reproduced. The line contains a host name.
 - L2033 · reference · low · dated record · read. The README snippet's relative link is wrong for README.md at the repository root: ../../ climbs out of the repo, so the link is broken for a reader who pastes the snippet. Proposed: docs/stages/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md (no ../../ prefix)
 - L2043 · format · low · dated record · read. A stray four-backtick fence opens a code block that is not closed until line 2084. Everything from the 'Also update the top status badge' paragraph through the AGENT.md snippet, Steps 2-5, renders as literal code. Proposed: Delete line 2043 (the stray four-backtick opener). The AGENT.md block then closes at line 2084.
 - L2127 · reference · low · dated record · read. Both relative links in the STAGE_2_5 brief footnote are wrong for a file in docs/stages/. ../../ resolves to the repo root, so the links point to stages/... and DEVICE_SHIELD_CONTRACT.md at the root, which do not exist. Proposed: (STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md) and (../DEVICE_SHIELD_CONTRACT.md)
@@ -672,20 +616,17 @@ consistent, without running the check again.
 
 ## `docs/superpowers/plans/2026-05-17-stage-2-8a-linux-foundation.md`
 
-- L96 · private data · high · owner decision · reproduced. The line contains an email address.
 - L952 · format · low · dated record · read. Task 11 Step 6 shows the README body in a markdown fence (line 945), but the README's own triple-backtick build and run blocks (lines 952, 956, 959, 963) are not escaped. The bare fence on line 952 closes the outer block, so the README text and the 'cargo build --release' and 'cargo run -- --port … Proposed: Open the outer snippet fence at line 945 with four backticks (markdown) and close it with four backticks at line 965.
 - L2075 · cross document · low · dated record · read. The plan says deferring §15.5 items 6 (reportBuilder Linux fields) and 7 (privacy-audit Linux paths) to PR \#20 is 'flagged in spec §9 ordering'. The spec does not flag that deferral. Its §15.5 says Stage 2.8A 'MUST start red on every one of these', and that list includes items 6 and 7. So the … Proposed: State the deviation plainly: items 6 and 7 of spec §15.5 are not covered in this PR and are deferred to PR \#20, which departs from the spec §15.5 MUST. Spec §9 does not record this deferral.
 
 ## `docs/superpowers/plans/2026-05-17-stage-2-8b-linux-x11-scanner.md`
 
 - L5 · internal consistency · low · dated record · read. The goal describes the existing counts as hardcoded zeros, but Task 7 (line 1019) says the fixture binary's existing default is \[3, 0, 0, 0, 0\]. Only the /status and proof paths used zeros, so the header overstates the zero-only case. Proposed: hardcoded counts: zeros on the /status path (src/http.rs:247) and \[3, 0, 0, 0, 0\] in the fixture binary
-- L104 · private data · high · owner decision · reproduced. The line contains an email address.
 - L1572 · internal consistency · low · dated record · read. The expected Rust test total counts 2 Xvfb tests, but Task 5 defines four Xvfb integration tests and says 4/4 PASS when Xvfb is installed. Proposed: prior 15 + 2 privacy + 4 xvfb = 21 PASS minimum (add the proof_endpoint test if it is meant to be counted)
 - L1689 · internal consistency · low · dated record · read. The PR test-plan checklist says 2/2 Xvfb tests, which contradicts Task 5 (4 tests, 4/4 PASS) and the test file, which has 4 tests. Proposed: - \[ \] Xvfb integration tests (locally: 4/4 when Xvfb installed; gracefully skipped otherwise)
 
 ## `docs/superpowers/plans/2026-05-18-stage-2-8cd-linux-wayland-systemd-ci.md`
 
-- L1773 · format · low · dated record · read. The Phase I1 commit step is duplicated by accident. The same git add and git commit sequence appears twice in succession (lines 1763-1768 and 1770-1774), so a reader following the plan would run the commit twice; the second run has nothing staged. Proposed: Delete the second bash fence at lines 1770-1774 so the commit step appears once. Lines 1763-1768 hold the only git add and git commit for docs/evidence/stage-2-linux/README.md.
 - L1918 · internal consistency · low · dated record · read. The self-review status claim says all PR \#22 cross-references were inlined, but the plan still points to the PR \#22 plan in two places that were not inlined. Line 1926 repeats the same claim. Proposed: Either inline the PR \#22 assertions at line 1657 and the Linux Rust gate block at line 1786, or change the self-review wording at lines 1918 and 1926 to say those references remain unresolved. Line …
 
 ## `docs/superpowers/plans/2026-05-28-voting-pilot.md`
@@ -752,20 +693,10 @@ consistent, without running the check again.
 
 - L260 · number · low · dated record · read. The Step 1 test block for tests/test_stage3i_error_taxonomy.py defines 9 test functions, not 10. Proposed: Expected: PASS (9 passed)
 - L529 · number · low · dated record · read. Task 3 adds one new test (test_stage3i_artifacts_are_metadata_only), not three. Proposed: Expected: PASS — all prior Layer-2 tests still pass plus the one new Stage 3I test.
-- L664 · private data · high · owner decision · reproduced. The line contains a local path.
-- L717 · private data · high · owner decision · reproduced. The line contains a local path.
-- L734 · private data · high · owner decision · reproduced. The line contains a local path.
 
 ## `docs/superpowers/plans/2026-06-20-stage-3j-full-agentdojo-evaluation.md`
 
 - L454 · internal consistency · low · dated record · read. The interface names a simurgh_python parameter that the plan's own code does not have. The code at Task 4 defines run_full_agentdojo(\*, suites, out_dir, scope) and its main() passes scope=args.scope. Proposed: run_full_agentdojo(\*, suites, out_dir, scope) -\> dict
-- L827 · private data · high · owner decision · reproduced. The line contains a local path.
-- L854 · private data · high · owner decision · reproduced. The line contains a local path.
-- L864 · private data · high · owner decision · reproduced. The line contains a local path.
-
-## `docs/superpowers/plans/2026-06-20-stage-3k-plan-1-claiming-core.md`
-
-- L739 · private data · high · owner decision · reproduced. The line contains a local path.
 
 ## `docs/superpowers/plans/2026-06-20-stage-3k-plan-2-runner-audits-closeout.md`
 
@@ -1025,7 +956,6 @@ consistent, without running the check again.
 - L119 · number · low · dated record · read. The file map says the Lean file has 10 theorems plus 1 lemma, but the shipped file declares 11 theorems and no lemma keyword; the lemma verifierCodomainHasNoTruthBoolean is written with 'theorem'. Proposed: proofs/stage5h/DisclosureTier.lean contains 11 declarations, all with the theorem keyword (lines 13, 22, 37, 44, 49, 55, 64, 74, 79, 86, 98). It has 0 lemma keywords and 0 sorry. The 'lemma' …
 - L206 · other · low · dated record · read. The precompute command is wrong. Inside double quotes, /n stays a literal backslash and n, so the hashed bytes are not the domain separator with its trailing newline that the spec requires. Proposed: printf 'simurgh.vsd.claim_inventory.v1/n{}' \| shasum -a 256 (single quotes, so printf turns /n into a real newline; the {} is a placeholder for the canonical content)
 - L276 · typo · low · dated record · read. A leftover self-correction from drafting is left in the plan text. It reads as an unresolved question and gives the reader a wrong code (300) before the correct one (305). Proposed: Delete the fragment '→ 300? NO —' so the sentence reads: 'Ledger totality: present ∩ withheld = ∅ → overlap is 305's reason:"artefact_in_both_ledgers" (ledger owns partition).'
-- L475 · private data · high · owner decision · reproduced. The line contains a local path.
 
 ## `docs/superpowers/plans/2026-07-11-stage-5i-vpc-panel-coverage.md`
 
@@ -1060,7 +990,6 @@ consistent, without running the check again.
 
 - L20 · reference · low · dated record · read. The code citation does not match the file. Line 70 of adapter.mjs is the destructuring 'const { signature, ...cbody } = ce;'. The witness call is on lines 71-76 and passes 'signature', not 'sig'. The claim that the checkpoint witness uses the TSA-verifier identity (tsaVerId) is correct. Proposed: adapter.mjs:71-76 (the destructuring 'const { signature, ...cbody } = ce;' is at line 70; the call 'safeVerify(tsaVerId, SIG.checkpoint, cbody, signature)' spans lines 71-76)
 - L129 · format · low · dated record · read. Leftover drafting fragment in the checkCrossSeat description. The condition is garbled ('present? true : true' followed by an ellipsis and 'precisely:'), so a reader cannot tell which condition the 391 check enforces. Proposed: Delete the fragment 'facts.ots_target_present? true : true … precisely:' so the clause reads '\*\*AND\*\* sha256(facts.canonical_anchor_bytes)===facts.rekor_artifact_hash.'
-- L206 · private data · low · owner decision · reproduced. The line contains a local path.
 
 ## `docs/superpowers/plans/2026-07-14-stage-5n-vtc-delay.md`
 
@@ -1092,8 +1021,6 @@ consistent, without running the check again.
 
 - L19 · reference · low · dated record · reproduced. The Task 0 pre-amendment commit 76c469a0 (and the post-Task-0 commit a21103e7 on line 23) do not exist in this checkout, so the pins cannot be re-derived from git. The branch was rebase-merged and the hashes were rewritten (for example 82a010f3 'fix(5s): re-pin the spec after the Annex S … Proposed: Annotate the two pins as branch-time hashes that are not present on main after the rebase-merge. Do not change the pinned digests.
 - L871 · typo · low · dated record · read. Two headings are numbered §15 (line 871 'Findings' and line 929 'Definition of done'), and §14 (line 912) comes after the first §15. The reference 'see finding 5S-F001 (§15)' on line 247 is therefore ambiguous. Proposed: Renumber the findings section to §16 and change the reference at line 247 to §16, or renumber the other sections so the numbering is unique and in order.
-- L879 · format · low · dated record · read. A blank line (line 878) splits the Section 15 findings table. Rows 5S-F004 to 5S-F021 have no header or separator row, so they will not render as a table in Markdown and will appear as raw pipe-delimited text. Proposed: Delete the blank line at 878 so the rows continue the table headed at line 873.
-- L882 · private data · high · owner decision · reproduced. The line contains a local path.
 - L889 · format · low · dated record · read. Backslash-escaped asterisks inside a code span render as a literal backslash. The same finding has missing spaces where inline code is glued to the following word (for example 'the writeFiletruncates' and 'nowriteFileSyncanywhere intests/ortools/targets'). Proposed: Remove the backslashes inside the code span and insert the missing spaces between code spans and the following words.
 - L895 · number · low · dated record · read. The sentence says 'other five failures' but the same sentence names only four: pytest absent for 4o, 4q and 4s, and DROPLET_SSH unset for reproduce-on-droplet.sh. Proposed: 'other four failures', or name the missing fifth failure if one exists
 
@@ -1362,14 +1289,11 @@ consistent, without running the check again.
 
 ## `docs/superpowers/specs/2026-11-01-phase-19-gauntlet/gauntlet-closure.md`
 
-- L3 · private data · high · owner decision · reproduced. The line contains a local path.
-- L3 · reference · low · dated record · read. The named target resolves to a later version of the spec (v2.1), which is 444 lines and has different line numbers. The 371-line text the review cites is design-v2.md in the same gauntlet directory. A reader who follows the link cannot match the l.NNN citations. Proposed: docs/superpowers/specs/2026-11-01-phase-19-gauntlet/design-v2.md (371 lines)
 - L13 · reference · medium · dated record · read. The M1 receipt cites code that does not contain a channel-wiring census. Lines 183-201 are the resume() summary-schema check. Nothing in tools/assurance-\* at 30fe9e4b has a 'wired' readers headline or 'wired n of 11' output, so the claim that the code matches is unsupported. Proposed: Cite the file that computes the wired/not_wired census, or say the wording is a design proposal not yet implemented at 30fe9e4b and drop 'Matches'.
 - L18 · reference · low · dated record · read. Off-by-three line citation. The except tuple is at line 384, not 381. Proposed: context_gate.py:384
 
 ## `docs/superpowers/specs/2026-11-01-phase-19-gauntlet/gauntlet-mechanism.md`
 
-- L3 · private data · high · owner decision · reproduced. The line contains a local path.
 - L8 · number · medium · dated record · read. The claim is contradicted by the archive. All 48 Llama generations have non-empty raw output. 46 of them are send_report calls whose arguments carry a 'content' string, which is free text an awareness rule could scan. The correct statement is that 47 of 48 have no decline-reason text. Line 24 … Proposed: Llama 1 decline whose reason is the string signal_stop; 47 of 48 generations carry no decline reason, and 46 of the 48 carry only send_report content. Apply the same correction at line 24.
 - L13 · format · medium · dated record · read. The findings table is broken. The delimiter row has 7 cells while the header on line 12 has 6 columns (ID, Sev, Law / lane, Finding, Receipt, Fix). Line 14 (M1) also has unescaped '\|' characters inside the code span of its Receipt cell (or set(summary) != set(projection) \| {"note"} and similar), … Proposed: Delimiter row needs 6 cells to match the header. Escape pipes in the M1 Receipt cell as /\| or move the code out of the table.
 - L18 · reference · low · dated record · read. The line number is wrong. The fields dictionary is at assurance-eval/spec.py:98. Line 101 is 'type(name) is not str'. Proposed: tools/assurance-eval/spec.py:98 (the doc's relative path is assurance-eval/spec.py).
@@ -1383,10 +1307,6 @@ consistent, without running the check again.
 - L66 · reference · low · dated record · read. The line citation for the METR tier-three and six-staff claim is wrong. The text is at line 100 of cluster-C.md, not line 93. The file has not changed since its only commit 04c59cb2, so the citation was wrong when written. Proposed: cluster-C.md:100
 - L67 · reference · low · dated record · read. The line citation for the 86% figure is wrong. The figure is at line 54 (table row 13). Line 52 is a different row. The claim itself is correct. Proposed: cluster-C.md:54
 - L68 · reference · low · dated record · read. The line citation for 'roughly 25 techniques' is wrong. The phrase is at line 33 of cluster-B2.md. Line 31 is a different table row. Proposed: cluster-B2.md:33
-
-## `docs/superpowers/specs/2026-11-01-phase-19-plugin-map.md`
-
-- L3 · private data · high · owner decision · reproduced. The line contains an email address.
 
 ## `papers/banking-shield/PAPER_CLAIM_AUDIT.md`
 

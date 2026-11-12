@@ -1,6 +1,6 @@
 # Phase 19 mechanism-vacuity gauntlet
 
-Target: `docs/superpowers/specs/2026-11-01-phase-19-authority-provenance-design.md`. Repository `/Users/raoof.r12/Desktop/SIM/Project-Simurgh` at main 30fe9e4b, read-only. Every line number below was opened, not taken from the plug-in map. Paths are relative to `tools/` unless they start with `docs/`.
+Target: `docs/superpowers/specs/2026-11-01-phase-19-authority-provenance-design.md`. Repository `[repo]` at main 30fe9e4b, read-only. Every line number below was opened, not taken from the plug-in map. Paths are relative to `tools/` unless they start with `docs/`.
 
 Two measurements were run on the committed Phase 17 archive (`docs/research/transfer-phase-17/evidence.zip`, unpacked into the scratchpad):
 

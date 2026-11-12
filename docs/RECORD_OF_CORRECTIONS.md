@@ -56,11 +56,12 @@ establish what the returned outputs say and cannot establish who produced them.
 
 ## Corrections to the record itself
 
-| When        | What the record said                                                                                                        | Correction                                                                                                                                         |
-| ----------- | --------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 11 Nov 2026 | An agent-log entry (AGENT.md) described the list of gaps that prompted the scaled study as coming from "an outside review". | It was the project's own assessment, made by the author with the AI agent. No outside reviewer had read the work. The entry is corrected in place. |
-| 12 Nov 2026 | The author page said 380 of 2,275 commits carry an AI co-author line.                                                       | The count is 346. Found by the [12 November documentation check](documentation-audit-2026-11-12/README.md) and corrected in place.                 |
-| 12 Nov 2026 | The Phase 19 manuscript said one wording of each style moved the model in every state and trial.                            | True of two of the five styles. Found by the same check; the sentence now names the two.                                                           |
+| When        | What the record said                                                                                                                                           | Correction                                                                                                                                                                                  |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 11 Nov 2026 | An agent-log entry (AGENT.md) described the list of gaps that prompted the scaled study as coming from "an outside review".                                    | It was the project's own assessment, made by the author with the AI agent. No outside reviewer had read the work. The entry is corrected in place.                                          |
+| 12 Nov 2026 | The author page said 380 of 2,275 commits carry an AI co-author line.                                                                                          | The count is 346. Found by the [12 November documentation check](documentation-audit-2026-11-12/README.md) and corrected in place.                                                          |
+| 12 Nov 2026 | The Phase 19 manuscript said one wording of each style moved the model in every state and trial.                                                               | True of two of the five styles. Found by the same check; the sentence now names the two.                                                                                                    |
+| 12 Nov 2026 | Old stage records, plans and evidence transcripts published a server address with its login name, host names, local paths and five reviewers' email addresses. | Redacted in 48 files on the owner's instruction; see the [documentation check](documentation-audit-2026-11-12/README.md#private-data-redacted) for what was replaced and what could not be. |
 
 ## What is still open
 
@@ -70,3 +71,7 @@ The project knows about these and has not repaired them.
 - The studies in the manuscript have not been replayed outside the author's custody.
 - Several findings of the October documentation audit remain open; the [final validation](documentation-audit-2026-10-19/FINAL_VALIDATION.md) points to the manual register for open runtime gaps.
 - No researcher outside the project has reviewed the manuscript.
+- The 12 November documentation check left 645 confirmed findings open, most of them in dated
+  records, and they are [listed](documentation-audit-2026-11-12/FINDINGS.md). Private values it
+  redacted from the current files remain in git history, and five outside reviewers' signed
+  blocks still carry the email address each reviewer declared.

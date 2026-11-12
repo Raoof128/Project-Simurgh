@@ -1,10 +1,13 @@
 # Stage 5L · VTC-Q — independent verification — raw results
 
+> **Redacted 12 November 2026.** A server address, a login name, a key path and host names in this file were replaced with bracketed placeholders.
+> Nothing else changed. See [the documentation check](../../../../../documentation-audit-2026-11-12/README.md#private-data-redacted).
+
 ## Run 1 — local
 
 `node --version`: `v22.16.0`
-`hostname`: `Raoufs-MacBook-Air.local`
-`uname -a`: `Darwin Raoufs-MacBook-Air.local 25.5.0 Darwin Kernel Version 25.5.0: Tue Jun  9 22:27:52 PDT 2026; root:xnu-12377.121.10~1/RELEASE_ARM64_T8112 arm64`
+`hostname`: `[redacted-host]`
+`uname -a`: `Darwin [redacted-host] 25.5.0 Darwin Kernel Version 25.5.0: Tue Jun  9 22:27:52 PDT 2026; root:xnu-12377.121.10~1/RELEASE_ARM64_T8112 arm64`
 
 Command: `bash run.sh`
 
@@ -33,12 +36,12 @@ exit=0
 
 Pack copied to droplet first (did not previously exist there):
 ```
-$ scp -i ~/.ssh/eoi_droplet_ed25519 -o StrictHostKeyChecking=no -r ./stage5l-vtcq-droplet eoiadmin@170.64.167.95:~/stage5l-vtcq-droplet
+$ scp -i [redacted-key-path] -o StrictHostKeyChecking=no -r ./stage5l-vtcq-droplet [redacted-user]@[redacted-ip]:~/stage5l-vtcq-droplet
 ```
 
-Access note: droplet SSH is now key-only (`eoiadmin@170.64.167.95` via `~/.ssh/eoi_droplet_ed25519`);
+Access note: droplet SSH is now key-only (`[redacted-user]@[redacted-ip]` via `[redacted-key-path]`);
 the root password no longer works over SSH (DigitalOcean web console only). Node is installed under
-`/root/.nvm/versions/node/v26.5.0/bin/node` (root's nvm); `/root` is not traversable by `eoiadmin`
+`/root/.nvm/versions/node/v26.5.0/bin/node` (root's nvm); `/root` is not traversable by `[redacted-user]`
 directly, so the run was invoked via passwordless `sudo`:
 
 ```
@@ -46,8 +49,8 @@ $ cd ~/stage5l-vtcq-droplet && sudo env PATH=/root/.nvm/versions/node/v26.5.0/bi
 ```
 
 `node --version` (as run): `v26.5.0`
-`hostname`: `Nexus`
-`uname -a`: `Linux Nexus 6.8.0-134-generic #134-Ubuntu SMP PREEMPT_DYNAMIC Fri Jun 26 18:43:11 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux`
+`hostname`: `[droplet]`
+`uname -a`: `Linux [droplet] 6.8.0-134-generic #134-Ubuntu SMP PREEMPT_DYNAMIC Fri Jun 26 18:43:11 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux`
 
 Raw output:
 ```

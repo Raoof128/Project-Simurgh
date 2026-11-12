@@ -1,5 +1,8 @@
 # Stage 5E VDA — conformance-kit reproduction, 2026-08-01
 
+> **Redacted 12 November 2026.** A login name in this file were replaced with bracketed placeholders.
+> Nothing else changed. See [the documentation check](../../../../documentation-audit-2026-11-12/README.md#private-data-redacted).
+
 **AnthropicSafe First, then ReviewerSafe.**
 
 `RAW_RESULTS.md` beside this file is the operator's own record, committed verbatim. It is the
@@ -50,7 +53,7 @@ present. Six shipped reproduce scripts carried that claim. Repaired by delegatin
 gate, whose escape-hatch scan is source-based and therefore runs with or without a toolchain.
 
 **Run 5's failed first attempt is also evidence.** `sudo` resets `$HOME` to `/root`, so elan
-installed under `eoiadmin` could not resolve its toolchain; the gate returned
+installed under `[redacted-user]` could not resolve its toolchain; the gate returned
 `lean_gate_typecheck_failed` with the elan error as its detail and exit 1. A toolchain that is
 ABSENT is a named skip; a toolchain that is BROKEN is a failure. That distinction now has a field
 witness rather than only a unit test.

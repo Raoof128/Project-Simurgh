@@ -7,8 +7,8 @@
   "independent_reproduction": {
     "verified": true,
     "runs": [
-      { "label": "local", "node": "v22.16.0", "host": "Raoufs-MacBook-Air", "core_public_raw": 0, "core_audit_raw": 0, "quorum_public_raw": 0, "quorum_audit_raw": 0 },
-      { "label": "remote-droplet (Nexus, Ubuntu 24.04)", "node": "v26.5.0", "host": "Nexus", "core_public_raw": 0, "core_audit_raw": 0, "quorum_public_raw": 0, "quorum_audit_raw": 0 }
+      { "label": "local", "node": "v22.16.0", "host": "[redacted-host]", "core_public_raw": 0, "core_audit_raw": 0, "quorum_public_raw": 0, "quorum_audit_raw": 0 },
+      { "label": "remote-droplet ([droplet], Ubuntu 24.04)", "node": "v26.5.0", "host": "[droplet]", "core_public_raw": 0, "core_audit_raw": 0, "quorum_public_raw": 0, "quorum_audit_raw": 0 }
     ],
     "note": "An independent party ran the verify-only droplet pack (public keys only, no private material) on two machines / Node builds. All four checks (core-positive + quorum-confirmed-stub, public + audit) reproduce raw 0, with a byte-identical commitment_session_id."
   },

@@ -1,6 +1,6 @@
 # Cluster D — Reader D (OpenAI safety, security and agent-systems pages)
 
-All paths are under `/Users/raoof.r12/Desktop/Raouf/Zurvan/wiki/sources/`. Every quote in the table was checked by script to occur exactly once, byte for byte, in the named file and to be at most 220 characters. Rows 13 to 16 come from a PDF page that has an invisible U+200B between nearly every word, so those quotes contain U+200B and will only match byte-exact if copied from the file, not retyped.
+All paths are under `[zurvan]/wiki/sources/`. Every quote in the table was checked by script to occur exactly once, byte for byte, in the named file and to be at most 220 characters. Rows 13 to 16 come from a PDF page that has an invisible U+200B between nearly every word, so those quotes contain U+200B and will only match byte-exact if copied from the file, not retyped.
 
 ## Pages read
 

@@ -1,11 +1,14 @@
 # Stage 5E VDA conformance — raw results
 
+> **Redacted 12 November 2026.** A server address, a login name, a key path, host names and local paths in this file were replaced with bracketed placeholders.
+> Nothing else changed. See [the documentation check](../../../../documentation-audit-2026-11-12/README.md#private-data-redacted).
+
 ## Run 1: local (macOS)
 
 Command:
 
 ```
-cd /Users/raoof.r12/Desktop/Raouf/test/simurgh-vda-conformance
+cd [scratch]/simurgh-vda-conformance
 bash run.sh
 ```
 
@@ -17,7 +20,7 @@ v26.5.1
 $ python3 -V
 Python 3.14.6
 $ uname -a
-Darwin Raoufs-MacBook-Air.local 25.6.0 Darwin Kernel Version 25.6.0: Sat Jul 11 15:27:02 PDT 2026; root:xnu-12377.161.13~4/RELEASE_ARM64_T8112 arm64
+Darwin [redacted-host] 25.6.0 Darwin Kernel Version 25.6.0: Sat Jul 11 15:27:02 PDT 2026; root:xnu-12377.161.13~4/RELEASE_ARM64_T8112 arm64
 ```
 
 Output:
@@ -64,20 +67,20 @@ EXIT_CODE=0
 Commands:
 
 ```
-scp -i ~/.ssh/eoi_droplet_ed25519 simurgh-vda-conformance.zip eoiadmin@170.64.167.95:~/
-ssh -i ~/.ssh/eoi_droplet_ed25519 eoiadmin@170.64.167.95 "unzip -oq ~/simurgh-vda-conformance.zip -d ~/"
-ssh -i ~/.ssh/eoi_droplet_ed25519 eoiadmin@170.64.167.95 "cd ~/simurgh-vda-conformance && sudo env PATH=/root/.nvm/versions/node/v26.5.0/bin:\$PATH bash run.sh 2>&1 | tee vda-conformance-\$(hostname)-\$(date +%Y%m%d).log"
+scp -i [redacted-key-path] simurgh-vda-conformance.zip [redacted-user]@[redacted-ip]:~/
+ssh -i [redacted-key-path] [redacted-user]@[redacted-ip] "unzip -oq ~/simurgh-vda-conformance.zip -d ~/"
+ssh -i [redacted-key-path] [redacted-user]@[redacted-ip] "cd ~/simurgh-vda-conformance && sudo env PATH=/root/.nvm/versions/node/v26.5.0/bin:\$PATH bash run.sh 2>&1 | tee vda-conformance-\$(hostname)-\$(date +%Y%m%d).log"
 ```
 
 Environment:
 
 ```
 $ hostname
-Nexus
+[droplet]
 $ uname -a
-Linux Nexus 6.8.0-134-generic #134-Ubuntu SMP PREEMPT_DYNAMIC Fri Jun 26 18:43:11 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+Linux [droplet] 6.8.0-134-generic #134-Ubuntu SMP PREEMPT_DYNAMIC Fri Jun 26 18:43:11 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
 $ whoami
-eoiadmin
+[redacted-user]
 node -v (via /root/.nvm/versions/node/v26.5.0/bin): v26.5.0
 python3 -V: Python 3.12.3
 ```
@@ -121,7 +124,7 @@ PARITY OK — 40 deterministic facts reproduced in Python; 4 slip(s) at referenc
 EXIT_CODE=0
 ```
 
-Log file on droplet: `~/simurgh-vda-conformance/vda-conformance-Nexus-20260801.log` (identical content to above, `eoiadmin` home directory).
+Log file on droplet: `~/simurgh-vda-conformance/vda-conformance-[droplet]-20260801.log` (identical content to above, `[redacted-user]` home directory).
 
 ---
 
@@ -134,7 +137,7 @@ copy of what was read minutes earlier, but it is **not guaranteed byte-identical
 and should not be treated as a primary artifact.
 
 The authoritative copy is the log still on the droplet:
-`~/simurgh-vda-conformance/vda-conformance-Nexus-20260801.log`. Please re-fetch it and replace this
+`~/simurgh-vda-conformance/vda-conformance-[droplet]-20260801.log`. Please re-fetch it and replace this
 file.
 
 Two things about the runs above are worth recording before they are re-quoted:
@@ -168,7 +171,7 @@ and `lean`'s exit-0-on-`sorry` behavior no longer determines the "zero sorry" cl
 Command:
 
 ```
-cd /Users/raoof.r12/Desktop/Raouf/test/simurgh-vda-conformance
+cd [scratch]/simurgh-vda-conformance
 bash run.sh
 ```
 
@@ -180,7 +183,7 @@ v26.5.1
 $ python3 -V
 Python 3.14.6
 $ uname -a
-Darwin Raoufs-MacBook-Air.local 25.6.0 Darwin Kernel Version 25.6.0: Sat Jul 11 15:27:02 PDT 2026; root:xnu-12377.161.13~4/RELEASE_ARM64_T8112 arm64
+Darwin [redacted-host] 25.6.0 Darwin Kernel Version 25.6.0: Sat Jul 11 15:27:02 PDT 2026; root:xnu-12377.161.13~4/RELEASE_ARM64_T8112 arm64
 ```
 
 Output:
@@ -228,20 +231,20 @@ EXIT_CODE=0
 Commands:
 
 ```
-scp -i ~/.ssh/eoi_droplet_ed25519 simurgh-vda-conformance.zip eoiadmin@170.64.167.95:~/
-ssh -i ~/.ssh/eoi_droplet_ed25519 eoiadmin@170.64.167.95 "rm -rf ~/simurgh-vda-conformance && unzip -oq ~/simurgh-vda-conformance.zip -d ~/"
-ssh -i ~/.ssh/eoi_droplet_ed25519 eoiadmin@170.64.167.95 "cd ~/simurgh-vda-conformance && sudo env PATH=/root/.nvm/versions/node/v26.5.0/bin:\$PATH bash run.sh 2>&1 | tee vda-conformance-\$(hostname)-\$(date +%Y%m%d)-newpack.log"
+scp -i [redacted-key-path] simurgh-vda-conformance.zip [redacted-user]@[redacted-ip]:~/
+ssh -i [redacted-key-path] [redacted-user]@[redacted-ip] "rm -rf ~/simurgh-vda-conformance && unzip -oq ~/simurgh-vda-conformance.zip -d ~/"
+ssh -i [redacted-key-path] [redacted-user]@[redacted-ip] "cd ~/simurgh-vda-conformance && sudo env PATH=/root/.nvm/versions/node/v26.5.0/bin:\$PATH bash run.sh 2>&1 | tee vda-conformance-\$(hostname)-\$(date +%Y%m%d)-newpack.log"
 ```
 
 Environment:
 
 ```
 $ hostname
-Nexus
+[droplet]
 $ uname -a
-Linux Nexus 6.8.0-134-generic #134-Ubuntu SMP PREEMPT_DYNAMIC Fri Jun 26 18:43:11 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+Linux [droplet] 6.8.0-134-generic #134-Ubuntu SMP PREEMPT_DYNAMIC Fri Jun 26 18:43:11 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
 $ whoami
-eoiadmin
+[redacted-user]
 node -v (via /root/.nvm/versions/node/v26.5.0/bin): v26.5.0
 python3 -V: Python 3.12.3
 ```
@@ -286,8 +289,8 @@ OK: 1 Lean proof(s) discovered under proofs/stage5e/ (floor 1), 0 escape hatches
 EXIT_CODE=0
 ```
 
-Log file on droplet: `~/simurgh-vda-conformance/vda-conformance-Nexus-20260801-newpack.log` (identical
-content to above, `eoiadmin` home directory).
+Log file on droplet: `~/simurgh-vda-conformance/vda-conformance-[droplet]-20260801-newpack.log` (identical
+content to above, `[redacted-user]` home directory).
 
 Note: droplet has no `lean` toolchain installed, so step 6 there runs the escape-hatch scan only
 (type-check skipped, named as such in the output) — this is the same environment gap as Run 2, now
@@ -304,7 +307,7 @@ deferring that half to CI.
 Commands:
 
 ```
-ssh -i ~/.ssh/eoi_droplet_ed25519 eoiadmin@170.64.167.95 \
+ssh -i [redacted-key-path] [redacted-user]@[redacted-ip] \
   "curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y --default-toolchain leanprover/lean4:v4.15.0"
 ```
 
@@ -316,7 +319,7 @@ Lean (version 4.15.0, x86_64-unknown-linux-gnu, commit 11651562caae, Release)
 leanprover/lean4:v4.15.0
 ```
 
-First rerun attempt (failed) — `sudo env PATH=/root/.nvm/versions/node/v26.5.0/bin:/home/eoiadmin/.elan/bin:$PATH bash run.sh`:
+First rerun attempt (failed) — `sudo env PATH=/root/.nvm/versions/node/v26.5.0/bin:/home/[redacted-user]/.elan/bin:$PATH bash run.sh`:
 
 ```
 -- 6/6 Lean proofs (escape-hatch scan ALWAYS; type-check when lean is present)
@@ -327,7 +330,7 @@ error: no default toolchain configured. run `elan default stable` to install & c
 EXIT_CODE=1
 ```
 
-`sudo` resets `$HOME` to `/root`; elan (installed under `eoiadmin`) resolves its toolchain from
+`sudo` resets `$HOME` to `/root`; elan (installed under `[redacted-user]`) resolves its toolchain from
 `$HOME/.elan`, so root's `sudo` shell found no toolchain even with `lean` on `PATH`. `DROPLET_SETUP.md`
 updated with this finding (§3 note before step 4).
 
@@ -335,7 +338,7 @@ Corrected command:
 
 ```
 cd ~/simurgh-vda-conformance
-sudo env HOME=/home/eoiadmin PATH=/root/.nvm/versions/node/v26.5.0/bin:/home/eoiadmin/.elan/bin:$PATH \
+sudo env HOME=/home/[redacted-user] PATH=/root/.nvm/versions/node/v26.5.0/bin:/home/[redacted-user]/.elan/bin:$PATH \
   bash run.sh 2>&1 | tee vda-conformance-$(hostname)-$(date +%Y%m%d)-newpack-withlean.log
 ```
 
@@ -379,7 +382,7 @@ OK: 1 Lean proof(s) discovered under proofs/stage5e/ (floor 1), 0 escape hatches
 EXIT_CODE=0
 ```
 
-Log file on droplet: `~/simurgh-vda-conformance/vda-conformance-Nexus-20260801-newpack-withlean.log`.
+Log file on droplet: `~/simurgh-vda-conformance/vda-conformance-[droplet]-20260801-newpack-withlean.log`.
 
 All six gates now genuinely execute on both machines — the droplet's step 6/6 previously deferred the
 type-check to CI; it no longer does.

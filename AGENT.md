@@ -14,6 +14,36 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-12 (Australia/Sydney) — Private data redacted from 48 files on the owner's instruction; API-key exposure checked across history
+
+**Raouf:**
+
+- **Scope:** branch `docs/redact-private-data`. 48 files: stage closeouts, plans and specs,
+  gap-hunt notes, evidence transcripts and outcome records under `docs/research/llm-shield/evidence/`
+  and `docs/research/mq-voting-pilot/evidence/`, one paper artefact, one line each in this log and
+  the change log. The audit record and the record of corrections. No test, tool, workflow, pack
+  or signed block.
+- **Summary:** the documentation check found private values already on the public branch, and the
+  owner said to fix them. One script with fixed rules replaced a server address, its login name
+  and key file name, the laptop's and the server's host names, local paths under the home
+  directory, five outside reviewers' email addresses in a manifest, and the owner's personal
+  address in three old plans' git lines. Each replacement is a bracketed placeholder; nothing
+  else in any file changed. Four Markdown evidence files carry a dated note. Left alone, with
+  the reason recorded in the audit README: the five reviewers' signed blocks (the address is
+  inside the signed body), one comment in a stage-owned source file, deliberate contact and
+  author addresses, test inputs, and git history.
+- **API key:** `docs/assurance/openai-native/README.md` records that a key was shared as a chat
+  attachment in October. A search of the whole git history for key and token patterns found
+  test fixtures and nothing real. Rotation is not recorded anywhere and only the account owner
+  can do it.
+- **Verification:** `scripts/check.sh --quick` passes (96 checks); the end-to-end tests of stages
+  4R, 5E, 5H, 5J, 5K, 5L and 5M pass; the reviewer-signature aggregator verifies all six blocks;
+  every edited JSON file parses; no edited file's earlier checksum is pinned by a gate; a rescan
+  finds the redacted values only in the five signed blocks, in tests and in the one stage-owned
+  comment.
+- **Follow-ups for the owner:** rotate the October API key if that has not been done; decide
+  whether the five reviewers should sign again without an address.
+
 ### 2026-11-12 (Australia/Sydney) — Documentation fact check: 871 Markdown files read by agents, then the findings reviewed by the orchestrating agent; 95 corrected, 698 recorded as open
 
 **Raouf:**
@@ -933,7 +963,7 @@ one machine's local agent configuration:
 
 - **Scope:** Documentation-only follow-up to the Stage 5E conformance-pack repair and completed Linux x86_64 droplet run. No verifier, runner, pack content, evidence value, model score, capture claim, or production service changed.
 - **Summary:** Prepended the sanitized droplet log with the two original clean-room findings, the applied repairs, and explicit scope/credential boundaries while preserving the raw droplet output below a separator. The note records the omitted `stage4h/exitCodes.mjs`, the masked `&& echo` shell failures, the fail-closed runner repair, explicit-manifest builder, regression coverage, `74/74` Stage 5E tests, and remote/local ZIP hash match.
-- **Files changed:** `/Users/raoof.r12/Desktop/Raouf/test/simurgh-vda-conformance-fixed-droplet.log`, `AGENT.md`, `CHANGELOG.md`.
+- **Files changed:** `[scratch]/simurgh-vda-conformance-fixed-droplet.log`, `AGENT.md`, `CHANGELOG.md`.
 - **Verification:** Required repair-summary and raw-output markers are present; the original `raw 0`, byte-stability, `unit OK`, Python parity, `K7 OK`, Lean-skip, and `ALL PASS` evidence remains present; the log contains no configured droplet password, address, or username; Prettier and `git diff --check` pass for the project logs.
 - **Follow-ups:** Preserve this annotated log with the fixed ZIP for third-party handoff. The pre-existing non-demo missing-`ANTHROPIC_API_KEY` repository test failure remains separate from Stage 5E.
 

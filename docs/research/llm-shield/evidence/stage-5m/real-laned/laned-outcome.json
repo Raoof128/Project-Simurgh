@@ -2,7 +2,7 @@
   "stage": "5M-VTC-Quorum",
   "lane": "D",
   "kind": "independent-party droplet pack",
-  "pack_path": "~/Desktop/Raouf/test/stage5m-vtcq-droplet/",
+  "pack_path": "[scratch]/stage5m-vtcq-droplet/",
   "pack_files": 65,
   "self_verification": {
     "node_raw": 372,
@@ -21,16 +21,16 @@
     },
     "runs": [
       {
-        "host": "Raoufs-MacBook-Air.local",
+        "host": "[redacted-host]",
         "os": "Darwin 25.5.0 arm64",
         "node": "v22.16.0",
         "party_fingerprint": "sha256:d9c39a106a87a1b1f",
         "lane_d_all_ok": true
       },
       {
-        "host": "Nexus",
+        "host": "[droplet]",
         "os": "Linux 6.8.0-134 x86_64",
-        "ip": "170.64.167.95",
+        "ip": "[redacted-ip]",
         "node": "v26.5.0",
         "party_fingerprint": "sha256:7979f961edefd8496",
         "lane_d_all_ok": true,

@@ -824,7 +824,7 @@ The all-suite wrapper is identical except `SIMURGH_STAGE3J_SCOPE=all-suite`, the
 - [ ] **Step 4: Generate a deterministic CI fixture and run the smokes**
 
 ```bash
-cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh
+cd [repo]
 mkdir -p docs/research/llm-shield/evidence/stage-3j
 cd tools/agentdojo-simurgh-adapter
 python3 -c "
@@ -851,7 +851,7 @@ write_json_artifacts(str(out), build_stage3j_artifacts(rows, rows, scope='all-su
 write_json_artifacts(str(out), build_stage3j_artifacts([r for r in rows if r['suite']=='workspace'],[r for r in rows if r['suite']=='workspace'], scope='workspace'))
 print('wrote fixture')
 "
-cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh
+cd [repo]
 bash scripts/smoke-llm-shield-stage3j-workspace.sh
 bash scripts/smoke-llm-shield-stage3j-all-suite.sh
 ```
@@ -861,7 +861,7 @@ Expected: both end `... smoke: passed`.
 - [ ] **Step 5: Commit**
 
 ```bash
-cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh
+cd [repo]
 chmod +x scripts/smoke-llm-shield-stage3j-*.sh scripts/security-audit-llm-shield-stage3j.sh
 git add scripts/*stage3j* docs/research/llm-shield/evidence/stage-3j/
 git commit -m "feat(llm-shield): add stage 3J audits, smoke gates, and CI fixture"
