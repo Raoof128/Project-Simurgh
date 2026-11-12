@@ -14,6 +14,60 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-13 (Australia/Sydney) — Phase 19n: declaration, instrument, pack, results and ruling (four of four models captured and eligible; two hypotheses held on one model each)
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/channels-19n`. The declaration P19-CHANNELS01 in the ledger,
+  `tools/assurance-provenance/inject19n.py`, `evidence19n.py` and their tests (all committed and
+  pushed before the capture), `docs/research/provenance-phase-19n/` (pack, protocol, report,
+  receipt, root, capture record, four transcripts, README, RESULTS),
+  `tools/assurance-provenance/tests/test_evidence19n_committed.py`, `.prettierignore` entries,
+  the ruling and the overview sentence in the ledger, both logs. No pinned source of another
+  lane, no 19a to 19m pack, no workflow, no frozen file, no manuscript edit.
+- **Summary:** the owner asked on 12 Nov for every upgrade the two gap hunts of that day named.
+  This lane measures them on the four local models that otherwise decline: where an injected
+  text sits (untrusted source, or under a summary, memory-file or tool-result heading), whether
+  it orders the send or misstates the state, whether the model wrote it itself, whether an
+  attacker that sees its own results does better, and what the model does when a send is
+  refused. The capture ran from 09:56Z to 15:52Z on 12 Nov with no interruption. All four
+  models are eligible. N1 (headings draw more sends) held on `qwen3-1.7b-4bit` only. N2 (belief
+  texts draw more than instruction texts) held on `qwen2.5-7b-4bit` only and was reversed on the
+  three Qwen3 builds, against what the declaration expected. N3 (the model's own summary
+  carries the injection) and N4 (the attacker beats the author) held on none. After a refusal
+  no model sent again, 0 of 48 on each. The tool-result heading drew the most sends on every
+  model.
+- **Files changed:** as in the CHANGELOG entry.
+- **Verification:** the pack was built from the clean worktree at `6143a17b` and verifies under
+  Python 3.15 and under a Python 3.12 with no site packages (`"verified": true`, 4224
+  generations). Six new tests on the committed pack pass, among them the decisions and every
+  number the README quotes; the lane's 40 pinned tests still pass; the pinned sources are
+  byte-identical to `6143a17b`. RESULTS.md is rendered from `report.json` by a script, not
+  typed. The new directory was scanned for host names, local paths, addresses and session
+  links: none.
+- **Follow-ups:** the thirteenth root in the workflow, `PHASE19_ROOTS` and `handoff19.py`, and a
+  replay of this lane's sends through the frozen pipeline, each need their own declaration.
+  Lane 19o (the same placement block and 19k's cases on six hosted OpenAI models) is declared
+  on its own branch and running. The manuscript stays on hold.
+
+### 2026-11-12 (Australia/Sydney) — Two gap hunts committed; a tenet-by-tenet statement against NIST's agent identity tenets
+
+**Raouf:**
+
+- **Scope:** branch `docs/nist-tenets`. New: `docs/research/GAP_HUNT_PRIOR_ART_2026-11-12.md`,
+  `docs/research/GAP_HUNT_LAB_2026-11-12.md`, `docs/NIST_AGENT_IDENTITY_TENETS.md`. One row in
+  `DOCUMENTATION.md`. Both logs. No code, test, workflow or pack.
+- **Summary:** the owner asked for another gap hunt and then for one over the Anthropic and
+  OpenAI research pages. The first reads 53 arXiv abstracts, NIST's ten tenets and one Anthropic
+  post; the second reads 105 lab pages. They propose gap candidates G39 to G48. The NIST page
+  takes the ten tenets one at a time against Phase 19: three covered under a stated scope (04,
+  07, 08), three partial (03, 09, 10), four not covered (01, 02, 05, 06). It adds no evidence.
+- **Verification:** every quote in the three documents was checked by script as an exact
+  substring of the fetched source; every number on the NIST page was read from a committed
+  receipt; every relative link resolves; `scripts/check.sh --quick` passes.
+- **Limits:** the hunts read abstracts and keyword-selected sentences, not whole papers or
+  pages. The verdicts are the author's reading of his own repository.
+
 ### 2026-11-12 (Australia/Sydney) — Private data redacted from 48 files on the owner's instruction; API-key exposure checked across history
 
 **Raouf:**
