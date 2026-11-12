@@ -14,6 +14,36 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-13 (Australia/Sydney) — Closeout of the 12 to 13 November run: README brought up to fifteen packs and the three new lanes; ledger note
+
+**Raouf:**
+
+- **Scope:** `README.md` (the latest-study section, the reviewer table, two open-work items),
+  one note at the end of the Phase 19 execution ledger, both logs. No source, test, pack,
+  workflow or frozen file. The manuscript is not edited.
+- **Summary:** the owner asked on the morning of 13 Nov for the logs to be brought up to date
+  and everything committed and pushed. Overnight five pull requests merged (#165 to #169):
+  lane 19n (four local models; placement, kind, author, adaptive attacker, refusal), lane 19o
+  (six hosted OpenAI models, no send in any restricted case, 5.46 USD by the lane's meter),
+  lane 19p (19n's 423 wrong sends replayed through the frozen gate, none landed), and the two
+  changes that put the three packs into the operator handoff and the pinned-roots check. The
+  root README still said twelve packs and eleven verify commands and did not mention the new
+  lanes. It now says fifteen packs, fifteen verify commands of which thirteen need no
+  installed packages, nine packs not yet replayed outside, and gives each new lane one
+  sentence with a link. The ledger gains a note recording the second replay of the 19p pack,
+  the one hosted-gate failure on #166 that passed on rerun, and that `main` was green at
+  `a23938ae`.
+- **Files changed:** `README.md`, `docs/research/PROVENANCE_PHASE_19.md`, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** every number in the new README text was read from the committed receipts
+  (19n: `held_on` N1 1, N2 1, N3 0, N4 0 and no repeated send; 19o: 0 of 720 and 0 of 384 per
+  model; 19p: 423 blocked, 369 landed behind the credential gateway, no exact authorised send
+  refused). `handoff19.py status` reads fifteen items owed. No gate pins the README by
+  checksum and no test quotes the replaced sentences. Quick gate passes.
+- **Follow-ups for the owner:** compare the provider's usage page with the 19o meter; decide on
+  the adaptive-attacker study and its cap; add credit for the other providers if those lanes
+  are to run. The manuscript stays on hold and now has three lanes to add when it reopens.
+
 ### 2026-11-13 (Australia/Sydney) — Phase 19f: lane 19p joins the operator handoff and the pinned roots (P19-OPERATOR05)
 
 **Raouf:**

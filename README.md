@@ -24,6 +24,17 @@ while a credential check alone let 1,188 through. That replay is a correctness c
 outputs. It is not evidence against an attacker who adapts to the gate, and these studies have
 not yet been replayed outside the author's custody.
 
+**Since that draft, 12 to 13 November.** Three further lanes, each declared before it ran, are
+not in the manuscript. [19n](docs/research/provenance-phase-19n/README.md) varied where an
+injected text sits, what it claims and who wrote it, on four local models: two of its four
+hypotheses held on one model each, two held on none, and no model sent again after a refused
+send. [19o](docs/research/provenance-phase-19o/README.md) sent 1,344 fixed prompts to each of six
+hosted OpenAI models: each made every authorized call and none sent in a restricted case (0 of
+1,104 injected generations per model). That is a floor for static texts, not a result about an
+attacker that adapts. [19p](docs/research/provenance-phase-19p/README.md) replayed the 423 wrong
+sends of 19n through the composed controls: none landed and no exact authorized send was
+refused, while a credential check alone let 369 through.
+
 [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) ·
 [Release and archive](https://github.com/Raoof128/Project-Simurgh/releases/tag/phase-19-paper-v1.0) ·
 [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) ·
@@ -241,7 +252,7 @@ and document text as untrusted data when feeding CLI results to an agent.
 | Perform outside reproduction | [Operator handoff](docs/research/CONTINUATION_HANDOFF_2026-10-19.md)                                                                                        | Earlier viewer/export snapshot; use the current runbook for the latest study                |
 | Trace prior work             | [Reviewer index](docs/REVIEWER_INDEX.md) and [research history](RESEARCH_HISTORY.md)                                                                        | Frozen stages, negative results and historical reproduction                                 |
 | Read the newest study        | [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) and [Phase 19 ledger](docs/research/PROVENANCE_PHASE_19.md)                            | Plans committed before each run, hypotheses decided by rule, limits stated with each result |
-| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Eleven verify commands; nine need no installed packages                                     |
+| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Fifteen verify commands; thirteen need no installed packages                                |
 | Judge the process and author | [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) and [author, method and open problems](docs/AUTHOR_AND_METHOD.md)                                    | How errors were found and handled, how AI assistance is used, what remains open             |
 
 The most useful review would challenge the exact-action comparator, admission/revocation
@@ -250,13 +261,15 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
 
 ### Open work
 
-- **Independent reproduction:** one outside operator has replayed five of the twelve Phase 19
+- **Independent reproduction:** one outside operator has replayed five of the fifteen Phase 19
   packs on macOS ([receipt and review](docs/research/provenance-phase-19f/README.md)). The
-  Linux-only parts, the six newer packs and independent evidence custody remain outstanding.
+  Linux-only parts, the nine newer packs and independent evidence custody remain outstanding.
 - **Provider lifecycle:** real provider IAM/revocation and authenticated live safety-alert
   delivery have not been validated by the owned-service experiments.
 - **Model transfer:** broader externally held tasks and adaptive multi-step behavior remain
-  untested; the corrected OpenAI workflow retains one unresolved active refusal.
+  untested; the corrected OpenAI workflow retains one unresolved active refusal. Lane 19o's six
+  hosted models were given static injected texts only; an attacker that adapts to the model or
+  to the gate has not been run.
 - **Operational assurance:** sustained deployment load, interactive desktop capture and
   real-data privacy validation remain separate work.
 - **Security review:** the [19 October local Phase 8 review](docs/research/PHASE_8_REVIEW_2026-10-19.md)

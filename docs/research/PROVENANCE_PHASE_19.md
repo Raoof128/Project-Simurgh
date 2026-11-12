@@ -1561,3 +1561,16 @@ strict ancestor of every commit that acts on it.
   unchanged. A Python 3.12 with no site packages verified 19p's structure, which is what the
   handoff tells an operator who does not add `--replay`. Not changed here: the root README's
   count of Phase 19 packs. The package given to an operator is rebuilt after the merge.
+- Note (13 Nov 2026, after the rulings above; no authority exercised and no pack changed): the
+  committed 19p pack was replayed a second time on the same host, from a checkout of the
+  evidence commit `a57463bc`, with `--replay`, 17:31:13Z to 17:42:44Z on 12 Nov. It read
+  `frozen_replay_recomputed` with the same counts, and the clone was clean afterwards. The
+  job's clone and venv were then removed from the host; its pack and logs are kept there. Lanes
+  19n, 19o and 19p and both handoff changes reached `main` through pull requests #165 to #169
+  (`a23938ae`), where the quality gate, the Phase 19 workflow with fifteen pinned roots and the
+  README replay passed. On #166 the hosted quality gate had failed once: three smoke checks
+  could not start their test server because the port was already in use on the runner. Nothing
+  in that pull request touches those checks, and the same job passed when run again unchanged.
+  The operator package was rebuilt for `a23938ae`. The root README's Phase 19 counts, which
+  the last two rulings left stale, are corrected in the change that carries this note. The
+  provider's bill for lane 19o has still not been compared with the lane's meter.
