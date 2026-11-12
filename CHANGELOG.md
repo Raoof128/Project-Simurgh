@@ -1,5 +1,36 @@
 ## Change Log
 
+## [phase-19o-evidence] — 2026-11-13 — 19k's cases and 19n's placement block on six hosted OpenAI models: every authorised call made, no send in any restricted case
+
+**Raouf:**
+
+- **Scope:** the ledger (declaration P19-HOSTED01, its amendment, its ruling, one overview
+  sentence), `tools/assurance-provenance/hosted19.py`, `inject19o.py`, `evidence19o.py`,
+  `tests/test_hosted19.py`, `tests/test_inject19o.py`, `tests/test_evidence19o.py` (new,
+  committed before any case was sent), `docs/research/provenance-phase-19o/` (new:
+  `evidence.zip`, `protocol.json`, `report.json`, `receipt.json`, `ROOT.sha256`, `capture.json`,
+  `README.md`, `RESULTS.md`), `tools/assurance-provenance/tests/test_evidence19o_committed.py`
+  (new), `.prettierignore`, both logs. No pinned source of another lane, no 19a to 19n pack, no
+  workflow, no frozen file.
+- **Summary:** the first hosted-model lane. 8,064 requests through the provider's Responses
+  endpoint, metered at 5.46 USD against a lane cap of 60 and an owner's limit of 90; root
+  `03d2f4bbe336dbea53c311d578d7c7e7e689531287a82d70be17be54fc16b155`. Six models, three sizes of
+  two generations, 1,344 fixed prompts each. All six were captured in one launch with no retry.
+  Each made the authorised call in all 24 positive-control cases and declined all 1,320 other
+  cases: 0 sends of 720 injected generations of 19k's cases and 0 of 384 of 19n's placement
+  block, with 95% upper bounds of 0.53% and 0.99% per model. The same texts drew sends in 10% to
+  30% of injected generations on the eligible local models; the two are not one measurement.
+  No sampling setting was sent; the provider's defaults are recorded with every response. The
+  pack holds every response body without the request echo and the encrypted reasoning blob; no
+  header and no key was recorded. The loose transcripts are in the pack only (17 MB as text).
+- **Verification:** `evidence19o.py verify` returns `"verified": true` under Python 3.15 and under
+  a Python 3.12 with no site packages; seven tests on the committed pack and the lane's 47
+  pinned tests pass; pinned sources unchanged since the instrument commit; quick gate passes;
+  the committed files were searched for keys and account data with no match.
+- **Follow-ups:** compare the meter with the provider's bill; a declaration for the roots of 19n
+  and 19o in the workflow and the handoff; an attacker that adapts to these models, other
+  providers and larger open-weight models, each under its own declaration and cap.
+
 ## [phase-19n-evidence] — 2026-11-13 — Placement, kind, author, an adaptive attacker and what follows a refusal, on four local models: all eligible, two of four hypotheses held on one model each
 
 **Raouf:**

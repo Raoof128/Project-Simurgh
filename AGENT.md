@@ -14,6 +14,43 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-13 (Australia/Sydney) — Phase 19o: declaration, hosted client, pack, results and ruling (six hosted OpenAI models, no send in any restricted case, 5.46 USD)
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/hosted-openai-19o`, stacked on the 19n branch. The declaration
+  P19-HOSTED01 and its amendment in the ledger, `tools/assurance-provenance/hosted19.py`,
+  `inject19o.py`, `evidence19o.py` and their tests (committed and pushed before any case was
+  sent), `docs/research/provenance-phase-19o/` (pack, protocol, report, receipt, root, capture
+  record, README, RESULTS), `tools/assurance-provenance/tests/test_evidence19o_committed.py`,
+  `.prettierignore` entries, the ruling and the overview sentence in the ledger, both logs. No
+  pinned source of another lane, no 19a to 19n pack, no workflow, no frozen file, no manuscript
+  edit.
+- **Summary:** on 12 Nov the owner authorised up to 90 USD on the OpenAI API, to be used after
+  the 19n capture had finished. This lane caps itself at 60 by its own meter, with a cap per
+  model. It sends 19k's 864 fixed prompts and the 480 of 19n's placement block to `gpt-6-luna`,
+  `gpt-5.6-luna`, `gpt-6.1-terra`, `gpt-6.1-sol`, `gpt-5.6-terra` and `gpt-5.6-sol`. The declared
+  connection check found that the provider refuses function tools on its chat-completions
+  endpoint for these models; the declaration was amended and the client moved to the Responses
+  endpoint before any case was sent. The run started by itself when the 19n capture ended and
+  took 44 minutes. All six models made the authorised call in 24 of 24 cases and declined every
+  restricted case: 0 sends of 720 and of 384 injected generations each. The hypotheses that
+  need a send are not supported; H6 and H8 are met and say nothing. Metered spend 5.46 USD.
+- **Files changed:** as in the CHANGELOG entry.
+- **Verification:** the pack was built from the clean worktree at `a39bb5da` and verifies under
+  Python 3.15 and under a Python 3.12 with no site packages (`"verified": true`, 8064 requests,
+  5.459611 USD). Seven new tests on the committed pack pass, among them that no model spent past
+  its cap, that every response names the model asked for and that no model sent; the lane's 47
+  pinned tests still pass; the pinned sources are byte-identical to `a39bb5da`. RESULTS.md is
+  rendered from `report.json` by a script. The transcripts, the capture record and the new
+  directory were searched for the key values, key patterns, account identifiers, header names,
+  addresses and local paths: none.
+- **Follow-ups:** the provider's bill has not been compared with the meter; the owner can read
+  it on the provider's usage page. The roots of 19n and 19o in the workflow, `PHASE19_ROOTS`
+  and `handoff19.py` need their own declaration. Thirty USD of the owner's limit is unspent
+  beyond this lane's cap, and 54.54 of the cap itself. The adaptive-attacker study, the other
+  providers and the open-weight models on a rented machine wait on credit the owner has to add.
+
 ### 2026-11-13 (Australia/Sydney) — Phase 19n: declaration, instrument, pack, results and ruling (four of four models captured and eligible; two hypotheses held on one model each)
 
 **Raouf:**
