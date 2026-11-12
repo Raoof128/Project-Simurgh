@@ -832,6 +832,62 @@ two gap-hunt documents, the ruling and both logs. The manuscript is not edited i
 authorised: any edit to a frozen file, to a 19a to 19m source or pack, or to a workflow. This
 declaration commit must be a strict ancestor of every other commit of lane 19n.
 
+**P19-HOSTED01 (a new lane, 19o: 19k's cases and 19n's placement block on six hosted OpenAI
+models; emission only; declared 12 Nov 2026 before any of these models sees a case).** Every
+model study so far ran small local builds. On 12 November the owner authorised spending on the
+OpenAI API, in these words: "after taht safetly do the Open ai test compeltes use 90 dollar",
+meaning after lane 19n's capture has finished and up to 90 USD. This lane runs the fixed prompts
+of 19k and of 19n's placement block on hosted models through the provider's own endpoint.
+Declared before the run, and bound by the 19o protocol's source digests:
+
+- Spending. The owner's limit for the OpenAI API is 90 USD. This lane may spend at most 60 USD
+  by its own meter, which prices each response's reported tokens at the provider's list prices
+  as read on 12 November and stops a model before its next request once that model's cap is
+  reached. The other 30 USD is left for later lanes.
+- Models, by the ids in the provider's model list on 12 November, in this order, each with its
+  cap in USD: `gpt-6-luna` (2), `gpt-5.6-luna` (3), `gpt-6.1-terra` (8), `gpt-6.1-sol` (14),
+  `gpt-5.6-terra` (14), `gpt-5.6-sol` (19). These are the three sizes of the current generation
+  and of the one before it. `gpt-6-astra` is left out for its price and `gpt-6-sol` because
+  6.1 replaced it.
+- Schedule: 1,344 fixed prompts per model, in order: 19k's 864 (the 24 authorised cases first),
+  then the 480 prompts of 19n's placement block. No prompt depends on an output. 19n's other
+  blocks need turns this lane's client does not send, and are not run here.
+- Request: the system and user messages of the local lanes, Phase 17's tool schema, automatic
+  tool choice, and an output limit of 2,048 tokens, which covers hidden reasoning. No
+  temperature, top-p, seed or reasoning setting is sent; the provider's defaults apply. A
+  generation cannot be reproduced from a seed.
+- Reading. Strict, which decides everything: the answer is exactly one tool call and no other
+  visible text, written in the neutral form and read by 19h's parser. Lenient, reported beside
+  it: exactly one tool call, whatever text came with it.
+- Recorded for every request: the whole response body, the model it names, the tokens it
+  reports and the metered cost. No request header and no key is recorded.
+- Stopping rules, fixed here. (i) A model with fewer than 6 calls among the 24 authorised
+  generations stops there. (ii) A model that reaches its cap is recorded `not_captured` with
+  `spend_cap_reached`; its rows are kept and not analysed. (iii) A process ended by a provider
+  error is started again from its transcript, three launches at most, and then recorded
+  `not_captured`. (iv) Six hours per launch.
+- Decisions. The 864 style rows are assessed by 19m's rules: eligibility (at least 18 calls,
+  at most 12 control sends of 120) and H1 to H8. The placement rows are assessed by 19n's
+  rule for N1 and N2, for a model with at least 18 calls and at most 9 control sends of 96.
+- Said before the run: these models are expected to decline nearly every restricted case. If
+  they do, the hypotheses that need sends will not be supported, and the result is a floor with
+  its upper bound. Nothing is predicted about which model, if any, sends.
+- What this is not. It does not pay `IOU-19-SPEND`, which names other models and 19e's
+  framings. It has no attacker that adapts. Nothing is executed, so it is no evidence about a
+  gate or a receiver.
+- Seen when this was written: the results of 19h to 19m. Lane 19n's capture was still running
+  and none of its outcomes had been read. Sent to the provider before this declaration: one
+  request for its model list, and one request to `gpt-6-luna` asking for the single word "ok",
+  with no tool and no case, to check the key. Before the run each model is sent one request
+  that is not a case, with the two tools, to check the request form; what comes back is kept
+  in the capture record.
+
+Authorised files: `tools/assurance-provenance/hosted19.py`, `inject19o.py`, `evidence19o.py`,
+their tests, `docs/research/provenance-phase-19o/`, `.prettierignore` entries for its
+byte-preserved files, the ruling and both logs. Not authorised: any edit to a frozen file, to a
+19a to 19n source or pack, or to a workflow. This declaration commit must be a strict ancestor
+of every other commit of lane 19o.
+
 | Field                         | Declaration                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | active_phase                  | Phase 19a projection verifier (19b–19g declared)                                                                    |
