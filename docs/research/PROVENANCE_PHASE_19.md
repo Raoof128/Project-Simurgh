@@ -904,6 +904,33 @@ byte-preserved files, the ruling and both logs. Not authorised: any edit to a fr
 19a to 19n source or pack, or to a workflow. This declaration commit must be a strict ancestor
 of every other commit of lane 19o.
 
+**P19-OPERATOR04 (bounded authority to bring lanes 19n and 19o into the outside-operator handoff
+and the externally pinned roots; declared 13 Nov 2026 before any commit that acts on it).** Lane
+19n is merged (`bc742a05`) with root
+`ba341a24e7ddfe3c7410d957b72bf9ec3f9f3303a9df295902f689c4bc8ac391`. Lane 19o is committed
+(`9bcfb068`) with root `03d2f4bbe336dbea53c311d578d7c7e7e689531287a82d70be17be54fc16b155`; this
+change is stacked on its branch and is merged after it. Neither lane's declaration authorised a
+workflow edit, so the hosted roots check and the handoff still list twelve packs. This
+declaration authorises, and nothing else:
+
+1. `handoff19.py`: 19n and 19o added to `PHASES` with their host and time, the word for
+   fourteen, and both lanes added to the sentence that lists the lanes needing nothing beyond
+   the standard library, which is how each was verified before its ruling. No change to the
+   comparator. Tests first.
+2. The review of the first operator receipt recomputed under the new phase list. The receipt is
+   not edited; 19n and 19o appear in the review as `not_in_receipt`, which is what happened.
+3. Re-rendering `HANDOFF.md` and `discrepancy-template.json`; the 19f README.
+4. `.github/workflows/assurance-provenance.yml`: both lanes' `docs/` paths added to both path
+   filters and their ids to the expected-roots check, with its message. No step is added,
+   removed or renamed, and the Stage 5Q census must be set-identical before and after. The
+   repository variable `PHASE19_ROOTS` gains the two roots, set outside the pull request, the
+   twelve existing values unchanged.
+5. Both logs and the ruling.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to the operator's
+receipt, or any change to what the comparator checks. This declaration commit must be a strict
+ancestor of every commit that acts on it.
+
 | Field                         | Declaration                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | active_phase                  | Phase 19a projection verifier (19b–19g declared)                                                                    |
