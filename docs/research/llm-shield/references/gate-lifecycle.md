@@ -53,7 +53,8 @@ A gate whose `next_phase_behaviour` is "blocks everything" is not shippable. A g
 3. **Scope a CI trigger to the stage's own paths.** A stage's write surface governs that stage's
    branch. Enforced against the whole repository it stops measuring the stage's discipline and starts
    measuring whether anyone has done anything since. Compare Stage 5Q's workflow, which carries a
-   `paths:` filter listing its own files, with Stage 5R's, which did not.
+   `paths:` filter listing its own files, with Stage 5R's as it stood before the
+   Q1-F005 repair, which had none.
 
 4. **An empty evaluated range is not a passing result.** These gates diff `MERGE_BASE..HEAD`. Run
    with the work uncommitted, they examine nothing and print green — which is how the Q1-F001 repair

@@ -3,7 +3,7 @@
 19k fixed five hypotheses about which injected texts move a model that otherwise declines, and
 decided them on one model. This lane runs 19k's schedule, unchanged, on eight more local builds,
 with the stopping rules, the eligibility rule, eight hypotheses and three predictions fixed first.
-Six models were captured in full, one stopped at the positive control, and one could not be run on
+Six models were captured in full, one stopped at the positive control, and one did not finish on
 this machine. 5617 generations on an Apple M2 with 8 GB, at no cost. See [RESULTS.md](RESULTS.md)
 and [the declarations](../PROVENANCE_PHASE_19.md) (P19-MODELS01, P19-MODELS02).
 

@@ -31,7 +31,7 @@ node --test tests/unit/assuranceSdk/*.test.js
 
 Installation needs package-registry access; execution needs no credentials or services.
 Use a new output path: existing reports cannot be overwritten. Omitting `--out` creates
-a unique temporary report directory. The lock pins all 60 dependencies with artifact hashes.
+a unique temporary report directory. The lock pins all 59 dependencies with artifact hashes.
 Verification checks installed versions and source hashes, reruns the complete workload and
 compares the entire report. Source changes, omitted cases, extra assertions and modified
 results fail verification. This is shared-code reproducibility, not historical authentication.

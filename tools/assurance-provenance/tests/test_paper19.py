@@ -57,7 +57,7 @@ class PaperNumbersTests(unittest.TestCase):
             both("credential_only", "effects_in_restricted_state"),
         )
         self.assertEqual(
-            cells("Exact authorised sends admitted, either control"),
+            cells("Exact authorised sends admitted, under both controls"),
             both("composed", "active_sends_admitted"),
         )
         self.assertEqual(

@@ -1,5 +1,28 @@
 ## Change Log
 
+## [docs-fact-check-2026-11-12] — 2026-11-12 — Every Markdown document checked against the repository; 79 findings corrected, 720 recorded as open
+
+**Raouf:**
+
+- **Scope:** 33 corrected documents (root and `docs/` entry points, the Phase 19 ledger overview,
+  the 19m README and RESULTS, the Phase 19 manuscript and its README, assurance and lane
+  READMEs, `docs/DEVICE_SHIELD_CONTRACT.md`, `docs/research/llm-shield/ANTHROPIC_BRIEF.md` and
+  others); new `docs/documentation-audit-2026-11-12/README.md` and `FINDINGS.md`; one row label
+  in `tools/assurance-provenance/tests/test_paper19.py`; both logs.
+- **Summary:** agents read all 871 Markdown files and a second agent tried to refute each
+  finding. 799 findings were confirmed. 79 are corrected here, each checked against the code or
+  the pack first. 720 are left open and listed: 601 in dated records that are not rewritten, 62
+  private-data entries that are the owner's decision, 39 in frozen or stage-owned files, 16 in
+  current documents left for the author, 2 in attested or generated files.
+- **Corrections worth knowing:** the AI co-author commit count on the author page (346, not 380);
+  twelve Phase 19 packs, not eleven; the Linux daemon's licence statement; the manuscript's claim
+  about wordings; the forbidden-field count and event names in the device contract; the
+  classifier-miss breakdown in the Anthropic brief.
+- **Verification:** quick gate passes; document-bound tests pass; the 19g pack verifies; a
+  hand-checked sample of ten open findings was all real.
+- **Limits:** the checking agents are a small model and the open findings were not reviewed one
+  by one. The record says what was found, not that nothing else is wrong.
+
 ## [phase-19f-twelve-lanes] — 2026-11-12 — Lane 19m in the operator handoff and the pinned-roots check
 
 **Raouf:**

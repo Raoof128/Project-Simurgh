@@ -57,4 +57,5 @@ outputs, 28 of them drawn by injected text, where Phase 19 had only scripted one
 - Off Linux, `verify` cannot tell whether a dispatched row's result is what the pipeline returns;
   a test shows a consistently edited row passing the structure check and failing the replay.
 - The protocol pins the two frozen files this lane calls and the roots of the two capture packs.
-  The 19j root is not among the roots the hosted workflow checks against the repository variable.
+  The hosted workflow checks the 19j root against the repository variable `PHASE19_ROOTS`
+  (`.github/workflows/assurance-provenance.yml`, pinned-roots step).

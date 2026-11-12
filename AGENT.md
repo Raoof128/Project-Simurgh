@@ -14,6 +14,42 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-12 (Australia/Sydney) — Documentation fact check: 871 Markdown files read by agents, 79 findings corrected, 720 recorded as open
+
+**Raouf:**
+
+- **Scope:** branch `docs/fact-check-2026-11-12`. 33 documents corrected, among them `README.md`,
+  `PRIVACY.md`, `SECURITY.md`, `ROADMAP.md`, `DOCUMENTATION.md`, `docs/AUTHOR_AND_METHOD.md`,
+  `docs/RECORD_OF_CORRECTIONS.md`, `docs/DEVICE_SHIELD_CONTRACT.md`, the Phase 19 ledger's
+  overview, the 19m README and RESULTS, the Phase 19 manuscript and its README, and several
+  assurance and lane READMEs. New: `docs/documentation-audit-2026-11-12/` (README, FINDINGS).
+  One test label in `tests/test_paper19.py`. No pinned source, pack, frozen or stage-owned file,
+  workflow, operator receipt or dated record was edited.
+- **Summary:** the owner asked for every document to be fact-checked before an outside reviewer
+  reads the repository, with small-model agents doing the reading. A workflow of 283 Claude Haiku
+  agents read all 871 Markdown files in 240 batches, read-only, and a second agent tried to
+  refute each finding: 1,063 reported, 799 confirmed. For the current documents a third agent
+  proposed the exact replacement, and each one was checked against the code or the pack before
+  it was kept. Proposals touching stage-owned tools, paper drafts, pilot governance documents,
+  generated files and a document the 19g pack attests were reverted. The 720 findings left open
+  are listed, with private values masked, in the new audit record. Most are in dated records,
+  which this project does not rewrite.
+- **Errors this found in recent work:** the author page's co-author count (380, should be 346)
+  and a manuscript sentence that claimed for every style what holds for two. Both were written
+  on 11 November and are in the record of corrections.
+- **Files changed:** as in the CHANGELOG entry.
+- **Verification:** `scripts/check.sh --quick` passes (96 checks). The manuscript, handoff and
+  committed-pack tests pass. The 19g pack still verifies. No edited file's earlier checksum is
+  pinned by a gate (two dated inventories record older checksums, as they did before). A random
+  sample of ten open findings was checked by hand and all ten were real. The audit record was
+  scanned for names, addresses, local paths and keys: none.
+- **Follow-ups for the owner:** private data already on the public branch (a server address with
+  its login name and key file name, two outside reviewers' email addresses, local paths) is
+  listed by file and line in the audit record and needs a decision, since most of it sits in
+  evidence files; `docs/assurance/openai-native/README.md` says an API key was shared as a chat
+  attachment and nothing in the repository records its rotation; 16 findings in current
+  documents need the author's judgment.
+
 ### 2026-11-12 (Australia/Sydney) — Phase 19f: lane 19m joins the operator handoff and the pinned roots (P19-OPERATOR03)
 
 **Raouf:**

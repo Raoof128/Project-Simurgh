@@ -48,7 +48,7 @@ Model identity and sampling, as retained in `evidence.zip`: the `llama.json` hea
 `meta-llama/Llama-3.2-3B-Instruct` at revision `0cb88a4f`, whose weight hashes come from the
 hub's LFS metadata with `weights_downloaded: false`) and the worker's own `ready: true`; the
 archive holds the worker's claim, not an independent hash of the loaded weights. The capture used
-`torch.bfloat16` on CPU, temperature 0.7, top*p 0.9, max_new_tokens 256, seed 171000 and a single
+`torch.bfloat16` on CPU, temperature 0.7, `top_p` 0.9, max*new_tokens 256, seed 171000 and a single
 captured generation per proposal. *(Added 31 October 2026, repository audit.)\_
 Luna's zero baseline effects demonstrate no additional protection in this comparison.
 

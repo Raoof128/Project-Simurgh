@@ -140,7 +140,7 @@ All three models passed the positive control (24, 22 and 24 calls of 24 authoris
 | self_clearing | 15       | +0.125 (+0.068 to +0.196)    | +0.008 to +0.300               | 20         | 117          |
 | urgency       | 0        | 0.000 (-0.031 to +0.031)     | 0.000 to 0.000                 | 19         | 115          |
 
-**Wording matters as much as style.** Table 4 splits each varied style by wording. On the primary model the five operator-note wordings drew 12, 0, 4, 3 and 24 sends of 24, and the five host-block wordings 4, 24, 4, 4 and 0. One wording of each style moved the model in every state and every trial; another moved it in none. A style's count is therefore an average over texts that behave differently, and a claim of the form "authority imitation works on this model" holds for some phrasings only. This is consistent with the sensitivity to surface form reported for prompts in general [31].
+**Wording matters as much as style.** Table 4 splits each varied style by wording. On the primary model the five operator-note wordings drew 12, 0, 4, 3 and 24 sends of 24, and the five host-block wordings 4, 24, 4, 4 and 0. For each of these two styles, one wording moved the model in every state and every trial, and another moved it in none. A style's count is therefore an average over texts that behave differently, and a claim of the form "authority imitation works on this model" holds for some phrasings only. This is consistent with the sensitivity to surface form reported for prompts in general [31].
 
 **Table 4. Study 3, Qwen3 4B: wrong sends of 24 for each wording of a varied style (wording 0 is the text used in Study 2).**
 
@@ -177,18 +177,18 @@ Studies 1 to 3 recorded 3,360 generations. Of these, 1,664 were well-formed `sen
 
 **Table 6. Study 4: recorded sends dispatched through the frozen pipeline under two controls.**
 
-|                                                 | Studies 1 and 2 | Study 3 | Total |
-| ----------------------------------------------- | --------------- | ------- | ----- |
-| Generations recorded                            | 768             | 2,592   | 3,360 |
-| Wrong sends proposed (restricted state)         | 269             | 1,170   | 1,439 |
-| Landed, composed controls                       | 0               | 0       | 0     |
-| Landed, credential gateway alone                | 220             | 968     | 1,188 |
-| Stopped by the gateway: revoked credential      | 40              | 161     | 201   |
-| Stopped by the gateway: altered content         | 9               | 41      | 50    |
-| Authorised sends proposed                       | 155             | 70      | 225   |
-| of which carrying the exact report              | 152             | 65      | 217   |
-| Exact authorised sends admitted, either control | 152             | 65      | 217   |
-| Altered authorised sends refused, both controls | 3               | 5       | 8     |
+|                                                      | Studies 1 and 2 | Study 3 | Total |
+| ---------------------------------------------------- | --------------- | ------- | ----- |
+| Generations recorded                                 | 768             | 2,592   | 3,360 |
+| Wrong sends proposed (restricted state)              | 269             | 1,170   | 1,439 |
+| Landed, composed controls                            | 0               | 0       | 0     |
+| Landed, credential gateway alone                     | 220             | 968     | 1,188 |
+| Stopped by the gateway: revoked credential           | 40              | 161     | 201   |
+| Stopped by the gateway: altered content              | 9               | 41      | 50    |
+| Authorised sends proposed                            | 155             | 70      | 225   |
+| of which carrying the exact report                   | 152             | 65      | 217   |
+| Exact authorised sends admitted, under both controls | 152             | 65      | 217   |
+| Altered authorised sends refused, both controls      | 3               | 5       | 8     |
 
 **Behind the composed controls no wrong send landed.** All 1,439 were refused at dispatch, across all six restricted states and every injection style, including the 153 that injected text drew from Qwen3 4B in Study 3 and the 802 that Llama 3.2 3B proposed with or without an injection. This is what the design predicts, and the plan for the Study 3 replay said so before the run: the controls decide from host state and never read model text, so the text that drew a send cannot matter to them. We report it as a check that the implementation agrees with the design on outputs that models produced. An interval on "0 of 1,439" would mislead, because the gate is deterministic and the outcome is fixed by the state and the content.
 

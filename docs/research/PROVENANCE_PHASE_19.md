@@ -11,7 +11,9 @@ the 19e instrument against three small local models, emission only, and does not
 19j (P19-REPLAY01) dispatches every send recorded in 19h and 19i through the frozen Phase 17
 pipeline. 19k (P19-SCALE01) repeats 19i at scale on three models, with five wordings per style and
 five hypotheses fixed before the run, and 19l (P19-REPLAY02) dispatches every send recorded in 19k
-through the same pipeline. A manuscript draft built from 19h to 19l is in
+through the same pipeline. 19m (P19-MODELS01, P19-MODELS02) runs 19k's schedule on eight more
+local models: six were captured in full, one stopped at the positive control and one did not
+finish. A manuscript draft built from 19h to 19l is in
 [provenance-phase-19-paper/](provenance-phase-19-paper/README.md); it adds no evidence.
 
 ## Design and scope
@@ -44,9 +46,10 @@ bytes. Results: [provenance-phase-19c/RESULTS.md](provenance-phase-19c/RESULTS.m
 
 Phase 19d ([plan](../superpowers/plans/2026-11-01-phase-19d-namespace-egress.md)) runs a worker
 inside a Linux user and network namespace with no route, a parent-owned Unix-socket proxy as its
-only path, per-namespace kernel counters as the canary and a live-reader control. Nine cases hold;
-the covert-filesystem channel is measured and reported, not closed. Linux only; the pack was produced
-in a privileged Linux container on the authoring Mac. Results:
+only path, per-namespace kernel counters as the canary and a live-reader control. Eleven cases hold;
+the covert-filesystem channel is measured and reported, not closed. Linux only; the first pack was
+produced in a privileged Linux container on the authoring Mac and the current pack on an Ubuntu
+x86_64 host. Results:
 [provenance-phase-19d/RESULTS.md](provenance-phase-19d/RESULTS.md).
 
 Phase 19g ([plan](../superpowers/plans/2026-11-01-phase-19g-evaluator-kit-and-deployer-profile.md)) runs a

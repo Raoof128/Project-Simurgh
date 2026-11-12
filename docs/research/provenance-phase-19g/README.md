@@ -4,7 +4,8 @@ Seeded incident drill and deployer incident record. See [RESULTS.md](RESULTS.md)
 [DEPLOYER_PROFILE.md](DEPLOYER_PROFILE.md), [EVALUATOR_KIT.md](EVALUATOR_KIT.md) and
 [the declaration](../PROVENANCE_PHASE_19.md).
 
-Verify (any host with Python 3.12; the drill runs on the fixture rig):
+Verify (Python 3.12 with the verify set in `tools/assurance-provenance/requirements-verify.lock`,
+as [the handoff](../provenance-phase-19f/HANDOFF.md) describes; the drill runs on the fixture rig):
 
 ```sh
 python -B tools/assurance-provenance/evidence19g.py verify \

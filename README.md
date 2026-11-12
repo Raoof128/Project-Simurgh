@@ -21,8 +21,8 @@ held on the primary model, and how far an injected text moved a model depended o
 wording and on why the action was forbidden. All 1,439 wrong sends the models produced were then
 replayed through the composed controls: none landed and no exact authorized send was refused,
 while a credential check alone let 1,188 through. That replay is a correctness check over recorded
-outputs. It is not evidence against an attacker who adapts to the gate, and the studies have not
-yet been replayed outside the author's custody.
+outputs. It is not evidence against an attacker who adapts to the gate, and these studies have
+not yet been replayed outside the author's custody.
 
 [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) ·
 [Release and archive](https://github.com/Raoof128/Project-Simurgh/releases/tag/phase-19-paper-v1.0) ·
@@ -250,9 +250,9 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
 
 ### Open work
 
-- **Independent reproduction:** one outside operator has replayed five of the eleven Phase 19
+- **Independent reproduction:** one outside operator has replayed five of the twelve Phase 19
   packs on macOS ([receipt and review](docs/research/provenance-phase-19f/README.md)). The
-  Linux-only parts, the five newer packs and independent evidence custody remain outstanding.
+  Linux-only parts, the six newer packs and independent evidence custody remain outstanding.
 - **Provider lifecycle:** real provider IAM/revocation and authenticated live safety-alert
   delivery have not been validated by the owned-service experiments.
 - **Model transfer:** broader externally held tasks and adaptive multi-step behavior remain
@@ -314,9 +314,9 @@ boundary and record actual checks, failures and skips. Report vulnerabilities pr
 before collecting or publishing data.
 
 The root package and [LICENSE](LICENSE) declare AGPL-3.0-or-later. The Linux daemon manifest
-still declares MIT while its source SPDX headers declare AGPL-3.0-or-later; this unresolved
-[metadata conflict](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m62--linux-implementation-sketches-and-test-scope)
-needs reconciliation before redistribution relying on that manifest. Upstream contributions
+declared MIT when the October audit recorded the
+[metadata conflict](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md#m62--linux-implementation-sketches-and-test-scope);
+it now declares AGPL-3.0-or-later, matching its source SPDX headers. Upstream contributions
 to differently licensed projects require a separate license review. This is a research
 prototype; production readiness, provider endorsement and independent certification are not
 established. OpenAI-related materials are technical review drafts, with no submission implied.

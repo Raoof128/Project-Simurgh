@@ -99,8 +99,8 @@ The ladder has advanced 28 rungs past 4Q to **Stage 5S (`v2.54.0`, patched at `v
 claims are backed by live evidence a reviewer can look up, not just fixtures:
 
 - **A real shipped detector's blind spot, contained.** A live **Llama Guard 4 12B** was run once over a
-  180-case reference set (frozen and signed; never re-run in CI). It missed **138** downstream-injection
-  attacks it structurally cannot see; Simurgh's context/tool/output boundaries **contained 138/138**, with
+  180-case reference set (frozen and signed; never re-run in CI). It missed **138** of 150 malicious cases: all 120 downstream-injection
+  cases it structurally cannot see, plus 18 of 30 direct-input attacks. Simurgh's context/tool/output boundaries **contained 138/138**, with
   a targeted attack-success rate of **0/150** and byte-identical capture across three greedy runs
   (Stage 3V-B). This is a boundary claim — not "Llama Guard is weak."
 - **A live model tried to break the verifier and could not.** In Stage 5L, a live **Claude Sonnet-5**

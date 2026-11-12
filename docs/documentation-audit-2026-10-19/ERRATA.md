@@ -3,7 +3,7 @@
 **19 October 2026.** These notes supplement preserved records. They do not amend original
 measurements, frozen source bindings, signatures or publication bytes. Current navigation and
 mutable guidance are corrected directly; historical wording remains attributable to its original
-revision. Use the [per-file ledger](README.md) to locate every baseline document candidate.
+revision. Use the [per-file ledger](FILES.md) to locate every baseline document candidate.
 
 | ID  | Affected record(s)                                                                                                         | Correction / disposition                                                                                                                                                                                                                  | Current evidence                                                                                                                                                    |
 | --- | -------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

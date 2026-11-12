@@ -1,7 +1,8 @@
 # Simurgh — Stage 4 formal-verification core (Lean 4)
 
 Machine-checked proofs of the load-bearing invariants of the Stage 4 line, checked under the
-pinned toolchain `leanprover/lean4:v4.15.0` (see each dir's `lean-toolchain`). Self-contained:
+pinned toolchain `leanprover/lean4:v4.15.0` (pinned in `proofs/stage4m/lean-toolchain`,
+which CI installs; not every proof directory carries its own pin). Self-contained:
 core Lean 4 only, **no mathlib**. Run locally:
 
 ```
