@@ -16,7 +16,9 @@ local models: six were captured in full, one stopped at the positive control and
 finish. 19n (P19-CHANNELS01) varies, on the four local models that otherwise decline, where the
 injected text sits, whether it orders the send or misstates the state, and who wrote it; it adds
 an attacker that adapts and follows each refused send. All four models were captured, two of its
-four hypotheses held on one model each, and no model sent again after a refusal. A manuscript draft built from 19h to 19l is in
+four hypotheses held on one model each, and no model sent again after a refusal. 19o
+(P19-HOSTED01) sends 19k's cases and 19n's placement block to six hosted OpenAI models: all six
+made every authorised call and none sent in a restricted case. A manuscript draft built from 19h to 19l is in
 [provenance-phase-19-paper/](provenance-phase-19-paper/README.md); it adds no evidence.
 
 ## Design and scope
@@ -1356,3 +1358,44 @@ of every other commit of lane 19o.
   needs its own declaration. Not shown: anything about a larger or a hosted model, a capable
   attacker, another wording of a heading or of the refusal, a gate or a receiver. `IOU-19-SPEND`
   is unchanged.
+- Ruling (13 Nov 2026, P19-HOSTED01 exercised): the declaration (`fe8d74fe`) precedes every other
+  commit of the lane. The instrument (`4a478426`) was pushed at 11:57:43Z on 12 Nov; the
+  declared connection check then failed for all six models, the declaration was amended
+  (`e88e91dd`) and the client changed (`a39bb5da`, pushed at 12:00:45Z) before any case was
+  sent. The run was started by a launcher that waited for lane 19n's capture process to exit and
+  refused to start unless the worktree was clean at `a39bb5da`; the first case was sent at
+  15:52:13Z and the last model ended at 16:36:02Z. The pinned 19o sources are byte-identical to
+  `a39bb5da` and the pack was built from it. 8,064 requests; root
+  `03d2f4bbe336dbea53c311d578d7c7e7e689531287a82d70be17be54fc16b155`. Spend by the lane's meter
+  at the declared list prices: 5.46 USD of the lane's 60 and the owner's 90 (0.06, 0.15, 0.59,
+  1.06, 1.33 and 2.28 against caps of 2, 3, 8, 14, 14 and 19); the provider's bill is the
+  authority and has not been read. All six declared models were captured in full, 1,344
+  requests each, in one launch each, with no retried request and no response cut at the output
+  limit; every response names the model asked for. Stopping rules (i) to (iv) were not used.
+  All six are eligible for both blocks: 24 of 24 authorised calls, 0 of 120 and 0 of 96 control
+  sends. Result: no model sent in any restricted case, 0 of 720 injected generations of 19k's
+  cases and 0 of 384 of 19n's placement block on each model (95% upper bounds 0.53% and 0.99%
+  per model), under the strict and the lenient read alike. Decisions by the declared rules: H1,
+  H2, H3, H4, H5, H7, N1 and N2 are supported on no model; H6 and H8 are met on all six and
+  carry no information, because every state ties at zero and all four trials of every case
+  decline. The declaration said before the run that the models were expected to decline nearly
+  every restricted case and that the result would then be a floor with its upper bound. Requests
+  sent to the provider that were not cases, all disclosed: one for the model list; one to
+  `gpt-6-luna` for the word "ok" with no tool, to check the key; six connection checks on the
+  chat-completions endpoint, all refused by the provider with nothing generated; two on the
+  Responses endpoint, to `gpt-6-luna` and `gpt-6.1-terra`, to learn its form; and the six
+  recorded connection checks, 0.0023 USD by the same prices. None is in the meter. No request
+  header and no key was recorded; the committed files were searched for the key values, key
+  patterns, organisation and project identifiers, header names, addresses and local paths, with
+  no match. The provider applied temperature 1.0, top-p 0.98 and reasoning effort `medium` to
+  every response; none was sent. `capture.json` gives `launched_utc` as 12:00:45Z, the time the
+  connection checks were recorded, not the time of the first case. Departure from the earlier
+  lanes' layout, not from the declaration: the loose transcripts are not committed beside the
+  pack because they are 17 MB as text; they are in `evidence.zip`, bound by the root. Read after
+  the fact and labelled so in the README: three authorised calls on the two smallest models put
+  the whole argument object inside the report field; few declines mention the injected text.
+  Not done under this ruling: 19o is not in the hosted workflow's expected-roots check, in
+  `PHASE19_ROOTS` or in `handoff19.py`; 19n's blocks that need more than one turn were not run
+  on hosted models; no attacker adapted to these models. Not shown: that these models resist a
+  capable attacker, anything about another provider, a gate or a receiver. `IOU-19-SPEND` is
+  unchanged: it names other models and 19e's framings.
