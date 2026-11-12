@@ -931,6 +931,48 @@ Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to
 receipt, or any change to what the comparator checks. This declaration commit must be a strict
 ancestor of every commit that acts on it.
 
+**P19-REPLAY03 (a new lane, 19p: the 19n proposals dispatched through the frozen Phase 17
+pipeline; declared 13 Nov 2026 after the 19n ruling, before any 19n output was dispatched).**
+Lane 19n recorded what four local models proposed and executed nothing; its declaration left
+the replay to a separate lane, as 19l was for 19k. Here every `send_report` call a model made as
+the agent in the committed 19n pack is handed to the frozen `run_branch` in the fixture state of
+its slot, once behind the composed controls and once behind the credential gateway alone. The
+dispatch, the frozen engine and the outcome classes are 19j's `replay19`, imported unchanged;
+`replay19p.py` adds only 19n's slots and a summary by block and by placement. Declared before
+the run:
+
+- Input: the committed 19n pack, read through its manifest root; the 19p protocol records the
+  root. Each transcript is first replayed by `inject19n.replay`, which rebuilds every prompt and
+  refuses a transcript that is not this instrument's. Each output is read by 19i's strict read,
+  as 19n reads it.
+- Rows: one for every generation in which the model acted as the agent (900 per model: the
+  positive control, the placement block, the reads of its own summaries, the attacker's search
+  and confirmation trials, and the answers after a refusal). The summary-writing and
+  attack-writing generations propose nothing and are not rows.
+- Fixture: the benign task of the slot's state from Phase 17's task file, or 19k's authorised
+  task for the positive control; an answer after a refusal uses the state of the send it
+  follows. The fixture seed is the task id and the slot index.
+- Reported per model and in total: restricted-state sends proposed, how many each control
+  blocked, effects landed in a restricted state, authorised sends admitted, and authorised
+  sends carrying the exact report that a control refused. The same counts by block and, for the
+  placement block, by placement.
+- Host and verification: as 19j and 19l. Linux x86_64 in the hash-locked venv for the replay;
+  elsewhere `verify` checks structure against the 19n pack and says the replay was not run.
+- Said before the run: the composed controls decide from the host's state and never read model
+  text, so every restricted-state send is expected to be blocked, whatever channel the text
+  came through and whoever wrote it. This lane is a correctness check of the gate over sends
+  drawn by placements, texts and authors that 19l did not cover, and a measurement of what the
+  credential gateway alone lets through. It is not security evidence against an attacker who
+  adapts to the gate, and the write-up must say so.
+- Seen when this was written: the 19n results, among them how many sends each model made in
+  each block. Nothing of 19n had been dispatched.
+
+Authorised files: `tools/assurance-provenance/replay19p.py`, `evidence19p.py`, their tests,
+`docs/research/provenance-phase-19p/`, `.prettierignore` entries for its byte-preserved files,
+the ruling and both logs. Not authorised: any edit to a frozen file, to a 19a to 19o source or
+pack, or to a workflow. This declaration commit must be a strict ancestor of every commit of
+lane 19p.
+
 | Field                         | Declaration                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | active_phase                  | Phase 19a projection verifier (19b–19g declared)                                                                    |
