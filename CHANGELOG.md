@@ -1,5 +1,19 @@
 ## Change Log
 
+## [docs-gap-hunts-and-nist-tenets] — 2026-11-12 — Two gap hunts and a statement against NIST's ten agent identity tenets
+
+**Raouf:**
+
+- **Scope:** `docs/research/GAP_HUNT_PRIOR_ART_2026-11-12.md`,
+  `docs/research/GAP_HUNT_LAB_2026-11-12.md`, `docs/NIST_AGENT_IDENTITY_TENETS.md`, one row in
+  `DOCUMENTATION.md`, both logs.
+- **Summary:** a prior-art hunt (53 arXiv abstracts, NIST's tenets, one Anthropic post) and a
+  hunt over 105 Anthropic and OpenAI research pages map stated needs to what the repository can
+  show, and propose gap candidates G39 to G48. A new page reads Phase 19 against NIST's ten
+  tenets: three covered under a stated scope, three partial, four not covered.
+- **Verification:** quotes checked by script against the fetched sources; numbers read from
+  committed receipts; links resolve; quick gate passes.
+
 ## [docs-redact-private-data] — 2026-11-12 — Private values replaced with placeholders in 48 files
 
 **Raouf:**
