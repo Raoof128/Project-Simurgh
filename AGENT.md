@@ -14,6 +14,29 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-13 (Australia/Sydney) — Phase 19f: lanes 19n and 19o join the operator handoff and the pinned roots (P19-OPERATOR04)
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/roots-19n-19o`, stacked on the 19o branch. The declaration and
+  ruling in the ledger, `tools/assurance-provenance/handoff19.py` and its test,
+  `docs/research/provenance-phase-19f/` (`HANDOFF.md`, `discrepancy-template.json`, the review of
+  the first receipt, README), `.github/workflows/assurance-provenance.yml`, both logs. No frozen
+  file, no pinned source, no pack, no comparator change, no edit to the operator's receipt.
+- **Summary:** lanes 19n and 19o were merged without touching the workflow, because their
+  declarations did not authorise a workflow edit. This change does the rest under its own
+  declaration. The handoff lists fourteen lanes and tells an operator that 19n and 19o need only
+  Python. The hosted roots check compares fourteen committed roots against the repository
+  variable, and the review of the first receipt lists both lanes as not in the receipt.
+- **Files changed:** as in the CHANGELOG entry.
+- **Verification:** four handoff tests changed first and failed; all 23 pass after the change.
+  The first receipt's sha256 is unchanged. The Stage 5Q gate census is byte-identical before
+  and after the workflow edit (58 steps, 53 problems). `PHASE19_ROOTS` holds fourteen roots,
+  each equal to its committed `ROOT.sha256`, the twelve earlier values unchanged. Quick gate
+  passes.
+- **Follow-ups:** rebuild the operator package on the Desktop after the merge. The root README's
+  count of Phase 19 packs is corrected with the next documentation pass.
+
 ### 2026-11-13 (Australia/Sydney) — Phase 19o: declaration, hosted client, pack, results and ruling (six hosted OpenAI models, no send in any restricted case, 5.46 USD)
 
 **Raouf:**

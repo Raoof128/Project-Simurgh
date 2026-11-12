@@ -1,5 +1,23 @@
 ## Change Log
 
+## [phase-19f-fourteen-lanes] — 2026-11-13 — Lanes 19n and 19o in the operator handoff and the pinned-roots check
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/handoff19.py` and `tests/test_handoff19.py`;
+  `docs/research/provenance-phase-19f/HANDOFF.md`, `discrepancy-template.json`, `README.md` and
+  the review of the first operator receipt; `.github/workflows/assurance-provenance.yml`; the
+  ledger (declaration P19-OPERATOR04 and its ruling); both logs.
+- **Summary:** the operator handoff asks for fourteen verify commands and says that 19n and 19o
+  need nothing beyond the standard library. The hosted workflow watches both lanes' directories
+  and checks fourteen committed roots against the repository variable `PHASE19_ROOTS`, which was
+  extended outside the pull request. The first operator receipt is unchanged; its recomputed
+  review lists the two lanes as not in the receipt, so thirteen items are still owed to an
+  outside operator.
+- **Verification:** 23 handoff tests pass (four changed first); Stage 5Q gate census identical
+  before and after; quick gate passes.
+- **Follow-ups:** rebuild the Desktop operator package after the merge.
+
 ## [phase-19o-evidence] — 2026-11-13 — 19k's cases and 19n's placement block on six hosted OpenAI models: every authorised call made, no send in any restricted case
 
 **Raouf:**

@@ -149,8 +149,22 @@ PHASES = (
         "host": "any host with Python 3.12; no model is run",
         "time": "a few seconds",
     },
+    {
+        "id": "19n",
+        "module": "evidence19n.py",
+        "docs": "docs/research/provenance-phase-19n",
+        "host": "any host with Python 3.12; no model is run",
+        "time": "a few seconds",
+    },
+    {
+        "id": "19o",
+        "module": "evidence19o.py",
+        "docs": "docs/research/provenance-phase-19o",
+        "host": "any host with Python 3.12; no model is run, no network and no key are needed",
+        "time": "a few seconds",
+    },
 )
-NUMBER_WORDS = {6: "six", 11: "eleven", 12: "twelve"}
+NUMBER_WORDS = {6: "six", 11: "eleven", 12: "twelve", 14: "fourteen"}
 
 
 def phase(pid):
@@ -452,7 +466,7 @@ def render():
         "  verify set first, a hash-locked subset of the SDK lock, and run those commands with its interpreter:",
         "  `python -m venv .venv-verify && .venv-verify/bin/pip install --require-hashes --only-binary=:all:",
         f"  -r {VERIFY_LOCK_REL}`. Installed and run on Linux x86_64 and macOS arm64;",
-        "  its wheels also resolve for macOS x86_64. 19a, 19c, 19d, 19e, 19h, 19i, 19j, 19k, 19l and 19m",
+        "  its wheels also resolve for macOS x86_64. 19a, 19c, 19d, 19e, 19h, 19i, 19j, 19k, 19l, 19m, 19n and 19o",
         "  need nothing beyond the standard library unless `--replay` is added.",
         "- 19a, 19j and 19l with `--replay` (Linux x86_64 only: the full set has no macOS x86_64 wheel for `cryptography`,",
         "  so it is not a substitute for the verify set there): create a venv and install the hash-locked set:",

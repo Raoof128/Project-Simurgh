@@ -123,10 +123,13 @@ class HandoffTests(unittest.TestCase):
                 "19k",
                 "19l",
                 "19m",
+                "19n",
+                "19o",
             ],
         )
         text = handoff19.render()
-        self.assertIn("run twelve verify commands", text)
+        self.assertIn("run fourteen verify commands", text)
+        self.assertIn("19k, 19l, 19m, 19n and 19o\n", text)
         for pid in ids:
             self.assertIn(f"### {pid}\n", text)
         self.assertEqual(
@@ -263,7 +266,7 @@ class VerifySetTests(unittest.TestCase):
 
 FIRST = "all-Michael-2026-11-10.json"
 FIRST_SHA256 = "765c42b19792f70463bfba38d602ac9443f480262400cdc7902ed8bb377f9291"
-# What the first receipt left unreplayed, and the lanes added after it (P19-OPERATOR02, 03).
+# What the first receipt left unreplayed, and the lanes added after it (P19-OPERATOR02, 03, 04).
 STILL_OWED = [
     "19a --replay",
     "19b Lean closure",
@@ -276,6 +279,8 @@ STILL_OWED = [
     "19l",
     "19l --replay",
     "19m",
+    "19n",
+    "19o",
 ]
 
 
@@ -310,6 +315,8 @@ class OperatorReceiptTests(unittest.TestCase):
                 "19k": "not_in_receipt",
                 "19l": "not_in_receipt",
                 "19m": "not_in_receipt",
+                "19n": "not_in_receipt",
+                "19o": "not_in_receipt",
             },
         )
         for pid in ("19a", "19b", "19c", "19e", "19g"):
