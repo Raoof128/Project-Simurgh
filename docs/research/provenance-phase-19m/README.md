@@ -3,7 +3,7 @@
 19k fixed five hypotheses about which injected texts move a model that otherwise declines, and
 decided them on one model. This lane runs 19k's schedule, unchanged, on eight more local builds,
 with the stopping rules, the eligibility rule, eight hypotheses and three predictions fixed first.
-Six models were captured in full, one stopped at the positive control, and one could not be run on
+Six models were captured in full, one stopped at the positive control, and one did not finish on
 this machine. 5617 generations on an Apple M2 with 8 GB, at no cost. See [RESULTS.md](RESULTS.md)
 and [the declarations](../PROVENANCE_PHASE_19.md) (P19-MODELS01, P19-MODELS02).
 
@@ -87,6 +87,8 @@ Stopping rule (ii) would record it `not_captured`. The lane departed from the ru
 and declared the departure (P19-MODELS02) before the resume: the 772 lines were pinned by digest,
 the remaining 92 generations were sampled from their scheduled seeds, and the same-seed recheck of
 the first six generations in the new process matched what the interrupted process had written.
+The ledger heads that declaration 12 Nov, the date in Sydney; it was pushed at 19:57:56 UTC on 11
+Nov, and the times in this lane's results are UTC.
 
 Every count across models is therefore given twice in [RESULTS.md](RESULTS.md), section 4. The
 model is not eligible, so the tallies for H1 to H8 are the same both ways. Two things differ: the
@@ -139,7 +141,7 @@ written for. RESULTS.md, section 11, has the times.
 ## Reproduce the capture (Apple Silicon)
 
 ```sh
-pip install mlx-lm    # the capture used mlx 0.30.3, mlx-lm 0.29.1, transformers 4.46.3
+pip install mlx==0.30.3 mlx-lm==0.29.1 transformers==4.46.3    # the versions the capture used
 python -B tools/assurance-provenance/inject19m.py all /tmp/p19m-run
 python -B tools/assurance-provenance/evidence19m.py run --out /tmp/p19m-pack \
   --transcripts /tmp/p19m-run/transcripts --capture /tmp/p19m-run/capture.json

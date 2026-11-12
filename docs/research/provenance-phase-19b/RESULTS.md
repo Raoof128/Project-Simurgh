@@ -100,7 +100,7 @@ written beside it, and the verifier checks it against the same host tables.
 | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Exact approved action, signal store removed        | `blocked`, 0 effects, pipeline event `dispatch_signal_unavailable`                                                                                                                                               |
 | Same action, no outage (control)                   | `observed`, 1 effect                                                                                                                                                                                             |
-| Outage after the context gate reserved the attempt | `OperationalError` propagates; the attempt stays `unknown`, budget reserved 1, 0 effects; no refund, no retry (`context_gate.py:371-384`)                                                                        |
+| Outage after the context gate reserved the attempt | `OperationalError` propagates; the attempt stays `unknown`, budget reserved 1, 0 effects; no refund, no retry (`tools/assurance-context/context_gate.py:371-384`)                                                |
 | Self-asserted stop (`STOP` in the note)            | clean gate: `observed` (no reader); `TextStopMutant`: `blocked` and killed. A no-reader statement for the clean gate, a test only through the mutant                                                             |
 | Lease renewal after an alert resolved `unrelated`  | without a signed acknowledgement the renewal is refused and the dispatch after the original expiry is `blocked` with `monitor_paused`; with it, `observed`; the frozen `heartbeat()` alone also gives `observed` |
 
@@ -138,7 +138,7 @@ pack.
 
 ## 7. Limits
 
-- The successor "has not been run in any study" (its README); these rows describe it, not the
+- "No study has evaluated the successor as a gate" (its README); these rows describe it, not the
   evaluated frozen gate of Phase 17.
 - The native delivery path is not exercised here; the approver is an allowlisted label under the
   fixture operator key, not an authenticated person.

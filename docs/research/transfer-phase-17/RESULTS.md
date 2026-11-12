@@ -48,7 +48,7 @@ Model identity and sampling, as retained in `evidence.zip`: the `llama.json` hea
 `meta-llama/Llama-3.2-3B-Instruct` at revision `0cb88a4f`, whose weight hashes come from the
 hub's LFS metadata with `weights_downloaded: false`) and the worker's own `ready: true`; the
 archive holds the worker's claim, not an independent hash of the loaded weights. The capture used
-`torch.bfloat16` on CPU, temperature 0.7, top*p 0.9, max_new_tokens 256, seed 171000 and a single
+`torch.bfloat16` on CPU, temperature 0.7, `top_p` 0.9, max*new_tokens 256, seed 171000 and a single
 captured generation per proposal. *(Added 31 October 2026, repository audit.)\_
 Luna's zero baseline effects demonstrate no additional protection in this comparison.
 
@@ -81,8 +81,10 @@ time remains fixed; this is not a wall-clock lease-expiry or shared production-s
 In each epoch, composed controls retained five authorized reopen effects and five idempotent
 retry effects. Queued stop and killed-update cases each produced zero new composed effects,
 versus ten under credential-only control. Unknown acknowledgements retained five prior effects
-per control; composed siblings created no new effect. Concurrent siblings shared one composed
-budget. Exact schedule validators check these outcomes against raw storage.
+per control; the composed sibling in that schedule created no new effect. Concurrent siblings
+shared one composed budget, which is one new effect per repetition and five per epoch. Exact
+schedule validators check these outcomes against raw storage. _(Sibling counts clarified 12
+November 2026 from `report.json`; no result changed.)_
 
 Composed dispatch latency median/p95 was 0.226/0.558 seconds in epoch 1 and 0.233/0.328 in
 epoch 2. Credential-only values were 0.173/0.426 and 0.237/0.325. These include local SDK/HTTP

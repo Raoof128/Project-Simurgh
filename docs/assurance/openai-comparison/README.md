@@ -7,7 +7,8 @@ establish that Luna lacks the capability, that Simurgh prevented attacks, or tha
 is required.
 
 The capture follows pre-inference commitment `e4965bbbc6a002129ae2e3ccea335e2a4a8973ac`, without
-prompt changes, repairs, retries or replacement cases. All 432 local control attempts were executed.
+prompt changes, repairs, retries or replacement cases. All 432 local control attempts were replayed: 6 executed, 3 blocked by deny-all,
+and 423 invalid proposals that were not executed.
 
 | Observed metric                         | Earlier Meta study | Luna 6 comparison |
 | --------------------------------------- | -----------------: | ----------------: |
@@ -53,7 +54,8 @@ of 24 cases produce 72 trajectories and at most 144 API requests. Repetition ind
 seeds**; the inherited report's `seed` and `by_seed` keys only group repetitions here.
 
 Settings: exact model `gpt-6-luna`, Responses API, reasoning effort `none`, temperature 0.7,
-top_p 0.9, maximum 128 output tokens, standard service tier, `store:false`. Plain-text JSON,
+top_p 0.9, maximum 128 output tokens, default service tier (`service_tier: default`
+in protocol.json), `store:false`. Plain-text JSON,
 no native function calling, structured-output schema, Markdown repair, action selection or retries.
 The shared logical messages remain unchanged. Different tokenizers and provider templates mean
 128 tokens and the same messages do not make the two model runtimes equivalent. The model ID is

@@ -2,7 +2,7 @@
 
 **Status:** authoritative contract for the Stage 2.7 cross-platform Device Shield.
 **Sources of truth:** `src/device/daemonProof.js`, `docs/schemas/daemon-proof.schema.json`, `docs/schemas/device-scanner-result.schema.json`.
-**Scope:** macOS and Windows. Linux is explicitly rejected as `unsupported_platform` until Stage 2.8 lands.
+**Scope:** macOS and Windows. Linux was rejected as `unsupported_platform` until Stage 2.8 landed. Stage 2.8 has since landed (`docs/stages/STAGE_2_8_LINUX_CLOSEOUT.md`), so the Linux row in section 2 and the `unsupported_platform` row in section 12.1 describe the Stage 2.7 baseline only.
 
 This document is the canonical contract that every Simurgh integrity daemon, server validator, report builder, instructor dashboard, and audit script must honour. It enumerates the exact reason codes produced by `validateDaemonProof` and `validateDaemonPairingPayload` at the Stage 2.7 baseline. If behaviour diverges from this document, the implementation is wrong, not the document.
 
@@ -34,7 +34,7 @@ See `docs/DEVICE_SHIELD_PLATFORM_MATRIX.md` for the full capability matrix.
 
 ## 3. Daemon Endpoints
 
-Both platform daemons expose the same HTTP surface on `127.0.0.1`, bound to a configurable port (macOS default `3031`). Canonical descriptions live in `tools/simurgh-daemon-macos/README.md`; the Windows daemon mirrors them.
+Both platform daemons expose the same HTTP surface on `127.0.0.1`, bound to a configurable port (macOS default `3031`). Canonical descriptions live in `tools/simurgh-daemon-macos/Sources/SimurghDaemon/LocalHttpServer.swift`, which defines the routes; the Windows daemon mirrors them.
 
 | Method | Path           | Purpose                                                                                             |
 | ------ | -------------- | --------------------------------------------------------------------------------------------------- |
@@ -44,7 +44,7 @@ Both platform daemons expose the same HTTP surface on `127.0.0.1`, bound to a co
 | POST   | `/proof`       | Returns a signed proof envelope for the current server-issued challenge. See §5.                    |
 | POST   | `/session/end` | Cleans up per-session daemon state. No proof content.                                               |
 
-Loopback-only binding, method/body/origin guards, and one-shot challenge consumption are enforced by the daemons and re-asserted by the audit gate (`scripts/security-audit-stage-2-5-closeout.sh` and the Stage 2.7 successor).
+Loopback-only binding, method/body/origin guards, and one-shot challenge consumption are enforced by the daemons and re-asserted by the audit gate (`scripts/security-audit-stage-2-4-2-5.sh` and the Stage 2.7 successor).
 
 ---
 
@@ -94,7 +94,7 @@ The proof envelope additionally requires `capture_excluded_window_count` and `he
 | Scanner baseline version      | `2.5.0`                                     | `2.6.0`                                            |
 | Historic-only `scanner_state` | `unsupported_macos_version`                 | never emitted                                      |
 
-The validator pins `scanner_version` per platform (see `validateScannerFields`); a Windows proof claiming `scanner_version: "2.5.0"` is rejected as `invalid_scanner_version`, and vice versa.
+The validator pins `scanner_version` per platform (see `validateScannerSummary` in `src/device/platformScannerSchema.js`, reached through `validateScannerSummaryForPlatform`; the `invalid_scanner_state`, `invalid_scanner_version` and `invalid_scan_timestamp` codes in section 12.1 come from there); a Windows proof claiming `scanner_version: "2.5.0"` is rejected as `invalid_scanner_version`, and vice versa.
 
 ---
 
@@ -119,20 +119,22 @@ Manual-review wording is fixed: _"Manual review recommended. No automatic miscon
 
 ## 9. Privacy Contract
 
-The Device Shield is metadata-only. The validator forbids 29 named raw-local fields anywhere in the proof or pairing payload, scanned recursively through nested objects and arrays via `findForbiddenField`. The current list lives in `src/device/daemonProof.js:26-56`:
+The Device Shield is metadata-only. The validator forbids 38 named raw-local fields anywhere in the proof or pairing payload, scanned recursively through nested objects and arrays via `containsForbiddenLocalFieldDeep`. The current list lives in `src/device/forbiddenLocalFields.js` (`FORBIDDEN_LOCAL_FIELD_NAMES`):
 
 ```text
 device_serial, serial_number, mac_address, username, home_directory,
-process_name, process_id, window_title, raw_window_title, window_handle,
-hwnd, screenshot, screen_pixels, screen_frame, raw_window, raw_process,
-raw_process_name, pid, process_identifier, bundle_path, executable_path,
-file_path, microphone, audio, webcam, typed_content, paste_content,
+process_name, raw_process_name, process_id, process_identifier, pid,
+window_title, raw_window_title, window_handle, hwnd, raw_window,
+raw_process, bundle_path, executable_path, file_path, screenshot,
+screen_pixels, screen_frame, screen_data, webcam, webcam_frame, audio,
+audio_data, microphone, face, face_data, biometric, biometric_data,
+raw_student_name, student_name, typed_content, paste_content,
 answer_text, answer_content
 ```
 
-Any of these keys appearing at any depth causes the proof or pairing payload to be rejected with reason `forbidden_local_field`. The browser SDK is similarly forbidden from forwarding such fields.
+Any of these keys appearing at any depth causes the proof or pairing payload to be rejected with reason `forbidden_local_field`. Keys ending in `_hash`, `_sha256` or `_digest` are never matched, and input nested more than 32 levels deep is rejected the same way. The browser SDK is similarly forbidden from forwarding such fields.
 
-> **Forward link (Task 3 of the Stage 2.7 plan):** This list will be extracted into `src/device/forbiddenLocalFields.js` so the privacy audit, server validator, and security tests share a single source of truth. That module does not yet exist; the list above is canonical until it does.
+> **Note (12 November 2026):** This list now lives in `src/device/forbiddenLocalFields.js` (`FORBIDDEN_LOCAL_FIELD_NAMES`), the single source of truth for the server validator, the privacy audit (`tools/privacy-audit.mjs`) and the security tests. The list above was regenerated from that array.
 
 ---
 
@@ -168,7 +170,7 @@ Forbidden phrases in any report or dashboard rendering (enforced by audit test):
 
 Every accept/reject decision is HMAC-audited as a metadata-only event. The audit envelope never contains raw window titles, HWNDs, PIDs, or process names — only state names, counts, hashes, and reason codes from §12.
 
-Audited event names include `DAEMON_PAIRED`, `DAEMON_PAIR_REJECTED`, `DAEMON_PROOF_ACCEPTED`, `DAEMON_PROOF_REJECTED`, `DAEMON_MISSING` (when `SIMURGH_REQUIRE_DAEMON=true`), and `DEVICE_SCANNER_RISK`.
+Audited event names include `DAEMON_PAIRED`, `DAEMON_MISSING` (when `SIMURGH_REQUIRE_DAEMON=true`), `DAEMON_PROOF_VERIFIED`, `DAEMON_PROOF_REJECTED`, `SCANNER_RISK_DETECTED` and `DEVICE_RISK_ESCALATED`, as defined in `src/device/daemonEvents.js`.
 
 ---
 
@@ -261,9 +263,9 @@ Preserved wording: _"Research prototype only. Manual review recommended. No auto
 | Surface                           | Verifier                                                                                                   |
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------- |
 | Unit suite                        | `npm test`                                                                                                 |
-| Stage 2.3 daemon smoke            | `scripts/smoke-stage-2-3-macos-daemon.sh`                                                                  |
-| Stage 2.4/2.5 macOS scanner smoke | `scripts/smoke-stage-2-5-macos-scanner.sh`                                                                 |
-| Stage 2.5 closeout audit          | `scripts/security-audit-stage-2-5-closeout.sh`                                                             |
+| Stage 2.3 daemon smoke            | `scripts/smoke-stage-2-2-2-3.sh`                                                                           |
+| Stage 2.4/2.5 macOS scanner smoke | `scripts/smoke-stage-2-4-2-5.sh`                                                                           |
+| Stage 2.5 closeout audit          | `scripts/security-audit-stage-2-4-2-5.sh`                                                                  |
 | Stage 2.6 Windows scanner smoke   | `scripts/smoke-stage-2-6-windows-scanner.sh`                                                               |
 | Stage 2.7 cross-platform smoke    | `scripts/smoke-stage-2-7-cross-platform-device-shield.sh` (added by Task 6 of the Stage 2.7 plan)          |
 | Stage 2.7 cross-platform audit    | `scripts/security-audit-stage-2-7-cross-platform-device-shield.sh` (added by Task 7 of the Stage 2.7 plan) |

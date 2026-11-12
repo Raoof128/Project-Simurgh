@@ -21,6 +21,7 @@ Start with [README](README.md) for the research question and runnable demonstrat
 | Review security, privacy or ethical boundaries | [Security](SECURITY.md), [privacy](PRIVACY.md), [ethics](docs/ETHICS.md)                                                                   |
 | Check authoritative guidance reviewed in 2026  | [Source applicability map](docs/documentation-audit-2026-10-19/SOURCES.md)                                                                 |
 | Find a document's audit scope or correction    | [Audit report and per-file ledger](docs/documentation-audit-2026-10-19/README.md), [errata](docs/documentation-audit-2026-10-19/ERRATA.md) |
+| See what the November fact check found         | [12 November check](docs/documentation-audit-2026-11-12/README.md), [open findings](docs/documentation-audit-2026-11-12/FINDINGS.md)       |
 | Reproduce a historical stage                   | [Historical replay guide](docs/HISTORICAL_REPLAY.md)                                                                                       |
 | Read old research or device plans              | [Exact research archive](RESEARCH_HISTORY.md), [exact device roadmap](DEVICE_ROADMAP.md)                                                   |
 

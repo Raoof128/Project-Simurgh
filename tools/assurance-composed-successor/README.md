@@ -19,8 +19,8 @@ evaluated, defects included.
 
 1. **Header case.** `SignalGate.receive` verifies the signature case-insensitively but compared
    `event["id"]` with `headers.get("webhook-id")` case-sensitively, so a genuine signed alert with
-   `Webhook-Id` raised `invalid_webhook_event` and never latched. The successor folds header names
-   to lowercase first (ASCII only, so U+212A cannot fold onto `webhook-id`) and raises
+   `Webhook-Id` raised `invalid_webhook_event` and never latched. The successor folds the three webhook
+   verification headers (see fix 5) to lowercase first (ASCII only, so U+212A cannot fold onto `webhook-id`) and raises
    `ValueError("invalid_webhook")` if two names collide.
 2. **Bindings.** The frozen pipeline hard-wires `response-<name>` and `request-<name>`, so a real
    provider alert resolved as `unrelated`. The successor `Pipeline` requires
@@ -35,7 +35,7 @@ evaluated, defects included.
    file; on Darwin that makes SQLite on the same file fail with "database is locked". The successor
    locks a `<db>.lock` sidecar (created if missing, symlink refused with `ValueError("lock_state")`).
 
-Three further repairs from the 31 October 2026 repository audit (A1-1, A1-2, A1-3):
+Five further repairs from the 31 October 2026 repository audit (A1-1 to A1-4 and A1-8):
 
 5. **Only the three verification headers are folded.** The first version of fix 1 refused the whole
    delivery when any two header names collided after folding, or any name was non-ASCII, even for
@@ -76,7 +76,9 @@ modules the successor imports.
 
 ## Status
 
-No study has been run against the successor. It is a regression-tested repair, not an evaluated
+No study has evaluated the successor as a gate. Phase 19b's lane subclasses it for a differential
+arm and says its rows describe the successor, not the evaluated frozen gate
+([results](../../docs/research/provenance-phase-19b/RESULTS.md)). It is a regression-tested repair, not an evaluated
 gate. A future study that wants the fixed gate freezes this module's sources in its own
 `protocol.json`; it does not re-pin the old ones.
 

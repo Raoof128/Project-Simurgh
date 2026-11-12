@@ -11,7 +11,9 @@ current thesis, blades, or claims.
 of "what happened after a guardrail missed" is injection-centric. These failures originate from the
 agent's own objective, evaluator pressure, or a harmful user request — so the honest broadening is
 _"what happened after an agent was given consequential authority, whatever the origin."_ Recorded
-here; not adopted yet.
+here; not adopted yet. As of 12 November 2026 the deferral condition is met: Stage 5O is frozen
+(tag `v2.50.0-stage-5o-vsc`, see `docs/research/llm-shield/STAGE_5O_CLOSEOUT.md`). The adoption
+decision is still open.
 
 Each fixture names five things: the **authority crossing**, the **concealed consequence**, the
 **evidence Simurgh would require**, the **applicable existing/future blade**, and — non-negotiably —

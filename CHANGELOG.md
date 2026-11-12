@@ -1,5 +1,32 @@
 ## Change Log
 
+## [docs-fact-check-2026-11-12] — 2026-11-12 — Every Markdown document checked against the repository; 95 findings corrected, 698 recorded as open
+
+**Raouf:**
+
+- **Scope:** 41 corrected documents (root and `docs/` entry points, the Phase 19 ledger overview,
+  the 19m README and RESULTS, the Phase 19 manuscript and its README, assurance and lane
+  READMEs, `docs/DEVICE_SHIELD_CONTRACT.md`, `docs/research/llm-shield/ANTHROPIC_BRIEF.md` and
+  others); new `docs/documentation-audit-2026-11-12/README.md` and `FINDINGS.md`; one row label
+  in `tools/assurance-provenance/tests/test_paper19.py`; two sentences in `handoff19.py` with the
+  re-rendered `HANDOFF.md`; both logs.
+- **Summary:** agents read all 871 Markdown files and a second agent tried to refute each
+  finding. 799 findings were confirmed, and the orchestrating agent then reviewed all of them
+  itself. 95 are corrected here, each checked against the code or the pack first, and 6 are
+  rejected as not errors. 698 are left open and listed: 596 in dated records that are not
+  rewritten, 62 private-data entries that are the owner's decision, 39 in frozen or stage-owned
+  files, 1 in a document a pack attests. Scripts reproduced 132 of the open findings; the other
+  566 were read with their evidence and not run again.
+- **Corrections worth knowing:** the AI co-author commit count on the author page (346, not 380);
+  twelve Phase 19 packs, not eleven; the Linux daemon's licence statement; the manuscript's claim
+  about wordings; the operator handoff's platform claim and its list of Python-only lanes; the
+  forbidden-field count and event names in the device contract; the classifier-miss breakdown
+  in the Anthropic brief; two instructions to clone a branch that no longer exists.
+- **Verification:** quick gate passes; document-bound tests pass; the 19g pack verifies; a
+  hand-checked sample of ten open findings was all real.
+- **Limits:** the first-pass agents are a small model, and the second pass reviewed the findings,
+  not the 871 files again. The record says what was found, not that nothing else is wrong.
+
 ## [phase-19f-twelve-lanes] — 2026-11-12 — Lane 19m in the operator handoff and the pinned-roots check
 
 **Raouf:**

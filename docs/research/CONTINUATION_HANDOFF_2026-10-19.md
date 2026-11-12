@@ -22,7 +22,8 @@ ready to give them; their work is not represented as already completed.
 
 ## Short independent reproduction
 
-For current source, clone the full `openai-readiness` branch and record its commit. Follow
+For current source, clone the full `openai-readiness` branch and record its commit. (Note, 12
+November 2026: that branch has since been merged and removed; clone the default branch.) Follow
 [README replay](../../README.md#replay-the-evidence) for the latest transfer and role-correction
 archives, including hash-locked dependencies and expected roots. Do not use a shallow clone.
 

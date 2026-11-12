@@ -83,11 +83,11 @@ What they show:
 - Field by field, each receipt differs from its hosted counterpart in `run-41623244388/` only in
   `tree_state`. Read with care: before P19-REPAIR03 the 19b, 19d, 19e and 19g verifiers copied the
   fields the receipt reports from the saved pack rather than from the verifying host (the 19b
-  receipt here says Lean type-checked on a host with no Lean, and the 19d receipt names the pack's
-  Docker Desktop host), so "only `tree_state` differs" corroborates less than it reads: the fields
+  receipt here says Lean type-checked on a host with no Lean, and the 19d receipt records the pack's
+  host, a linuxkit kernel on aarch64), so "only `tree_state` differs" corroborates less than it reads: the fields
   that could have differed were never recomputed. Both receipt sets here predate the repair and
   describe the packs of their day; the repaired verifiers derive every receipt field from the
   recomputation.
-  The 19d pack was regenerated again under P19-REPAIR04 with the hardened namespace; the droplet
-  receipt here (and the P19-REPAIR03 pack's receipt before it) show the five daemon sockets that were
-  reachable before that repair.
+  The 19d pack was regenerated again under P19-REPAIR04 with the hardened namespace; the P19-REPAIR03
+  pack's receipt (commit `11d0dae1`) shows the five daemon sockets that were reachable before that
+  repair. The droplet receipt here predates that field and does not record them.

@@ -2,8 +2,9 @@
 
 [PAPER.md](PAPER.md) is a workshop-length write-up of four Phase 19 lanes: the framing capture
 (19h), the two injection-style studies (19i exploratory, 19k confirmatory) and the two gate replays
-(19j, 19l). It adds no evidence. Every number in it comes from a committed pack's `report.json` or
-`receipt.json`, and `tools/assurance-provenance/tests/test_paper19.py` checks the pack roots in
+(19j, 19l). It adds no evidence. Every number it reports for those lanes comes from a committed pack's
+`report.json` or `receipt.json`; figures quoted from cited papers and from earlier phases are
+attributed where they appear, and `tools/assurance-provenance/tests/test_paper19.py` checks the pack roots in
 Appendix A and the Study 3 and Study 4 counts against those packs, so the manuscript cannot drift
 from them unnoticed.
 

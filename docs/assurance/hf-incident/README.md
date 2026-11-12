@@ -82,6 +82,8 @@ and three prerequisite skips. CI is configured for replay; hosted CI success is 
    from the [Luna/Llama safety study](../safety-study/README.md). A separately frozen model-driven
    incident scenario and an external operator's replay are still missing.
 
+As of 12 November 2026, items 1 to 3 are taken up, as local experiments, by the successor study [hf-containment](../hf-containment/README.md) (pre-run source commit `fb3b7fe6`), whose model lane is a bounded choice among scripted actions. The model-driven part of item 4 has a successor in [hf-native](../hf-native/README.md). The external operator replay remains open ([REPRODUCE](../hf-containment/REPRODUCE.md)).
+
 The following 1–5 scores are subjective planning judgments, not benchmark measurements:
 
 | Axis                  | Score | Evidence and next artifact                                               |

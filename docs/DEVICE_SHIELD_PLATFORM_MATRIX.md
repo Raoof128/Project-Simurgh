@@ -23,7 +23,7 @@ Rows are capabilities; columns are platforms. `Yes` means the capability is pres
 | Hardware attestation          | No                                | No                                            | No                                      |
 | Automatic misconduct decision | No (manual review only)           | No (manual review only)                       | No                                      |
 
-Linux remains a Stage 2.8+ research target. Stage 2.7 daemons rejecting `platform: "linux"` as `unsupported_platform` is the intended behaviour.
+Linux remains a Stage 2.8+ research target. Stage 2.7 daemons rejecting `platform: "linux"` as `unsupported_platform` is the intended behaviour. Update, 12 November 2026: the Linux rows in this matrix and the Stage 2.8 entries in sections 2.1 and 2.2 describe the Stage 2.7 baseline only. Stage 2.8 has since closed, and the validator in `src/device/platformScannerSchema.js` now accepts `linux`; see `docs/stages/STAGE_2_8_LINUX_CLOSEOUT.md` for its status.
 
 ---
 

@@ -30,7 +30,7 @@ offline-falsifiable stance is the core difference from receipt-only logging.
 
 ## An example rung: Stage 4Q — verifiable friction receipts
 
-_The ladder now runs to **Stage 5S (`v2.54.0`, patched at `v2.54.1`)**. Since 4Q it has added: a
+_The ladder now runs to **Stage 5S (`v2.54.0-stage-5s-vwq`, patched at `v2.54.1`)**. Since 4Q it has added: a
 machine-checkable proof that the evaluation scope was committed **before** review, anchored in a real
 Bitcoin block (957 689) and stress-tested by a live Claude Sonnet-5 adversary that could not break it
 (5L); an exact 3-of-3 TSA + Bitcoin + Rekor quorum banked `externally_anchored` at block 957 782 (5M)
@@ -107,11 +107,11 @@ non-destructive mutation, financial actions, and code actions remain named futur
 
 Simurgh also sweeps a grid of policy operating points and publishes a
 **containment-utility Pareto frontier that re-derives offline from the signed packs alone** (released
-as `v2.15.0`). A point whose evidence fails to verify, or that ran fewer cases to flatter its
+as `v2.15.0-stage-4f-containment-utility-pareto`). A point whose evidence fails to verify, or that ran fewer cases to flatter its
 numbers, is structurally excluded from the frontier. An outsider recomputes the curve with no model
 and no producer access.
 
-An **adaptive red-team campaign** (released as `v2.17.0`) then moves second against the evidence
+An **adaptive red-team campaign** (released as `v2.17.0-stage-4g-adaptive-red-team-campaign`) then moves second against the evidence
 layer across a four-class escape taxonomy: containment escape, verifier deception, out-of-scope
 behaviour, and gate-boundary evasion. Each attempt is sealed and byte-reproducible from a seed, so
 the campaign cannot hide an escape it found, and an unresolved boundary is recorded rather than

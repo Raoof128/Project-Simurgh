@@ -30,7 +30,7 @@ runs the captures and replays, and drafts the write-ups, including the first dra
 
 The record holds both to account. A declaration is committed before the work it authorises, and
 [AGENT.md](../AGENT.md) logs each change with its scope and verification. Commits made with the
-agent carry a co-author line: 380 of the 2,275 commits on `main` at 11 November 2026, and nearly
+agent carry a co-author line: 346 of the 2,275 commits on `main` at 11 November 2026, and nearly
 every non-merge commit since Phase 19 began. An older commit without that line may still have had
 an assistant's help.
 

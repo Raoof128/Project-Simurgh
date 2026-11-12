@@ -49,7 +49,8 @@ The first hosted run refused the pack committed at `9d1ae938` (root `6e534e5c…
 `incident_digest_mismatch`: the verifier then compared the digest values the protocol declares
 reported, and the Linux runner's sqlite writes different file bytes. The repair and this pack were
 made under P19-REPAIR01 in [the declaration](../PROVENANCE_PHASE_19.md); the steps, counts and
-intervals are unchanged.
+intervals are unchanged. The pack was regenerated once more on 8 November under P19-REPAIR03
+(commit `11d0dae1`).
 
 ## 4. The documents
 

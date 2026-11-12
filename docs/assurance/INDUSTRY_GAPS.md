@@ -61,7 +61,7 @@ No company has requested, endorsed or agreed to fund this experiment through the
 The subsequent [incident review](scope/INCIDENT_RESEARCH.md) adds primary 2026 Hugging Face,
 Australian Medicare and OpenAI misalignment disclosures. Its [scope experiment](scope/README.md)
 executes exact HTTP permission and durable-stop checks across 54 local rows, including a retained
-approved-service relay failure. Network-layer egress enforcement remains the next concrete gap.
+approved-service relay failure. Kernel-level egress restriction for that service is now tested in the [kernel egress extension](egress/README.md); selective network namespaces, destination policy and a native launcher remain the next gap.
 
 ## Source provenance
 

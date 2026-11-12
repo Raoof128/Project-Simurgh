@@ -383,6 +383,8 @@ disclosure timing with the maintainer; attribution is optional and can be anonym
 
 ## Security Architecture (v0.4.12)
 
+This section describes the architecture as of the v0.4.12 release (Stage 2.6).
+
 > The trust-boundary table below describes the Stage 1 surface. Stage 2.1 added an Ed25519-signed integrity-proof envelope (`/api/integrity/proofs`); Stage 2.2 added per-session node pairing (`/api/integrity/pairing/{challenge,complete}`); v0.4.3 added rate limiting on the proofs route, cryptographically-reconciled audit hints (`safeParsedPairingHints`), and a constant-time challenge compare. Stage 2.3 adds a localhost daemon proof surface (`/api/device/{challenge,pair}` plus telemetry `daemon_proof`) with P-256 signatures. Stage 2.4 moves the browser bridge into a reusable SDK. Stage 2.5 adds a CoreGraphics-backed, metadata-only macOS scanner summary inside signed daemon proofs. Stage 2.6B validates live Windows `GetWindowDisplayAffinity` detection on Windows 10 Pro build 19045 using a controlled local fixture. This still does not constitute hardware attestation, notarised distribution, MDM/Intune readiness, Windows Service readiness, kernel-level visibility, or a production device-trust claim.
 
 ### Stage 2.3 localhost daemon controls
@@ -547,7 +549,7 @@ Dependency findings are time-dependent. Run the command against the installed lo
 
 Non-claims preserved: research prototype only. No production Linux endpoint deployment, no distro packaging, no system-wide service, no MDM, no hardware attestation, no kernel-level visibility, no universal Wayland surface enumeration, no GPU overlay detection, no automatic misconduct detection.
 
-See [`docs/STAGE_2_8_LINUX_TECHNICAL_BRIEF.md`](docs/stages/STAGE_2_8_LINUX_TECHNICAL_BRIEF.md) for the full security architecture.
+See [`docs/stages/STAGE_2_8_LINUX_TECHNICAL_BRIEF.md`](docs/stages/STAGE_2_8_LINUX_TECHNICAL_BRIEF.md) for the full security architecture.
 
 ## Verification Tools
 

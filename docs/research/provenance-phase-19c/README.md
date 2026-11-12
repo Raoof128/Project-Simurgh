@@ -3,7 +3,7 @@
 Forked receiver and its lanes. See [RESULTS.md](RESULTS.md) and [the declaration](../PROVENANCE_PHASE_19.md).
 
 ```sh
-/opt/anaconda3/bin/python -B tools/assurance-provenance/evidence19c.py verify \
+python -B tools/assurance-provenance/evidence19c.py verify \
   docs/research/provenance-phase-19c/evidence.zip \
   --expected-root "$(cat docs/research/provenance-phase-19c/ROOT.sha256)"
 ```

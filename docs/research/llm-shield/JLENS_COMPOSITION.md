@@ -49,5 +49,6 @@ the layered-monitoring posture the cross-lab CoT-monitorability position paper
 - Public artifact wording stays provider-agnostic; provider names appear only in
   this research memo.
 
-Source ingested in Zurvan: `wiki/sources/verbalizable-representations-global-workspace-anthropic-2026`
+Source ingested in Zurvan, held in the author's local store (not in this repository):
+`wiki/sources/verbalizable-representations-global-workspace-anthropic-2026`
 and the digest `wiki/digests/verbalizable-representations-global-workspace`.

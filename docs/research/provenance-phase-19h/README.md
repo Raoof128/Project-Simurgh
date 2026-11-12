@@ -79,13 +79,14 @@ descriptions of this pack, not tests of anything.
   a bare call written in the Llama form would have been read as a call. None of the 144 Qwen
   outputs here is unwrapped, so no number changes; 19i requires the wrapper.
 - This is not the capture `IOU-19-SPEND` declares. The hosted models, `gpt-oss-20b` and the
-  informed-attacker arm are not run and stay owed. The 19h root is not among the roots the hosted
-  workflow checks against the repository variable; the lane's tests verify the committed pack.
+  informed-attacker arm are not run and stay owed. The hosted workflow checks the 19h root against the
+  repository variable PHASE19_ROOTS (`.github/workflows/assurance-provenance.yml`, the pinned-roots
+  step); the lane's tests verify the committed pack.
 
 ## Reproduce the capture (Apple Silicon)
 
 ```sh
-pip install mlx-lm    # the capture used mlx 0.30.3, mlx-lm 0.29.1, transformers 4.46.3
+pip install mlx==0.30.3 mlx-lm==0.29.1 transformers==4.46.3    # the versions the capture used
 python -B tools/assurance-provenance/capture19local.py /tmp/p19h-run
 python -B tools/assurance-provenance/evidence19h.py run --out /tmp/p19h-pack \
   --transcripts /tmp/p19h-run/transcripts --capture /tmp/p19h-run/capture.json

@@ -14,6 +14,53 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-12 (Australia/Sydney) — Documentation fact check: 871 Markdown files read by agents, then the findings reviewed by the orchestrating agent; 95 corrected, 698 recorded as open
+
+**Raouf:**
+
+- **Scope:** branch `docs/fact-check-2026-11-12`. 41 documents corrected, among them `README.md`,
+  `PRIVACY.md`, `SECURITY.md`, `ROADMAP.md`, `DOCUMENTATION.md`, `docs/AUTHOR_AND_METHOD.md`,
+  `docs/RECORD_OF_CORRECTIONS.md`, `docs/DEVICE_SHIELD_CONTRACT.md`, the Phase 19 ledger's
+  overview, the 19m README and RESULTS, the Phase 19 manuscript and its README, and several
+  assurance and lane READMEs. New: `docs/documentation-audit-2026-11-12/` (README, FINDINGS).
+  One test label in `tests/test_paper19.py`; two sentences in `handoff19.py` and the re-rendered
+  `HANDOFF.md`, under their own declaration (P19-REPAIR08, `b16ad42a`, committed first). No pinned source, pack, frozen or stage-owned file, workflow or operator receipt
+  was edited. Dated records were not rewritten: the 19 October handoff and the Phase 17 results
+  gained a dated note, and the SDK validation record's dependency count was corrected from 60
+  to 59.
+- **Summary:** the owner asked for every document to be fact-checked before an outside reviewer
+  reads the repository, with small-model agents doing the reading. A workflow of 283 Claude Haiku
+  agents read all 871 Markdown files in 240 batches, read-only, and a second agent tried to
+  refute each finding: 1,063 reported, 799 confirmed. For the current documents a third agent
+  proposed the exact replacement, and each one was checked against the code or the pack before
+  it was kept. Proposals touching stage-owned tools, paper drafts, pilot governance documents,
+  generated files and a document the 19g pack attests were reverted. The owner then asked the
+  orchestrating agent to check everything itself. It reviewed all 799 confirmed findings: scripts
+  it wrote reproduced 132 of the open ones and refuted none, it read the rest with their
+  evidence and checked fifteen of those by command, it corrected sixteen more and rejected six
+  as not errors. The 698 findings left open are listed, with private values masked and each
+  marked as reproduced or read, in the new audit record. Most are in dated records, which this
+  project does not rewrite.
+- **Errors this found in recent work:** the author page's co-author count (380, should be 346),
+  a manuscript sentence that claimed for every style what holds for two, and the operator
+  handoff, which said the verify set had run on macOS x86_64 (only its wheels were resolved
+  there) and left lane 19m out of the list of lanes that need only Python. The first two were
+  written on 11 November and are in the record of corrections.
+- **Files changed:** as in the CHANGELOG entry.
+- **Verification:** `scripts/check.sh --quick` passes (96 checks). The manuscript, handoff and
+  committed-pack tests pass. The 19g pack still verifies. No edited file's earlier checksum is
+  pinned by a gate (two dated inventories record older checksums, as they did before). A random
+  sample of ten open findings was checked by hand and all ten were real. The audit record was
+  scanned for names, addresses, local paths and keys: none.
+- **Follow-ups for the owner:** private data already on the public branch (a server address with
+  its login name and key file name, two outside reviewers' email addresses, host names, local
+  paths) is listed by file and line in the audit record and needs a decision, since most of it
+  sits in evidence files; `docs/assurance/openai-native/README.md` says an API key was shared as
+  a chat attachment and nothing in the repository records its rotation; the audit README names
+  four larger open findings the author should read, among them governance facts on which the
+  voting-pilot records disagree; the Desktop operator package must be rebuilt after the merge
+  because the handoff text changed.
+
 ### 2026-11-12 (Australia/Sydney) — Phase 19f: lane 19m joins the operator handoff and the pinned roots (P19-OPERATOR03)
 
 **Raouf:**

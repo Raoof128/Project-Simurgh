@@ -11,7 +11,9 @@ the 19e instrument against three small local models, emission only, and does not
 19j (P19-REPLAY01) dispatches every send recorded in 19h and 19i through the frozen Phase 17
 pipeline. 19k (P19-SCALE01) repeats 19i at scale on three models, with five wordings per style and
 five hypotheses fixed before the run, and 19l (P19-REPLAY02) dispatches every send recorded in 19k
-through the same pipeline. A manuscript draft built from 19h to 19l is in
+through the same pipeline. 19m (P19-MODELS01, P19-MODELS02) runs 19k's schedule on eight more
+local models: six were captured in full, one stopped at the positive control and one did not
+finish. A manuscript draft built from 19h to 19l is in
 [provenance-phase-19-paper/](provenance-phase-19-paper/README.md); it adds no evidence.
 
 ## Design and scope
@@ -44,9 +46,10 @@ bytes. Results: [provenance-phase-19c/RESULTS.md](provenance-phase-19c/RESULTS.m
 
 Phase 19d ([plan](../superpowers/plans/2026-11-01-phase-19d-namespace-egress.md)) runs a worker
 inside a Linux user and network namespace with no route, a parent-owned Unix-socket proxy as its
-only path, per-namespace kernel counters as the canary and a live-reader control. Nine cases hold;
-the covert-filesystem channel is measured and reported, not closed. Linux only; the pack was produced
-in a privileged Linux container on the authoring Mac. Results:
+only path, per-namespace kernel counters as the canary and a live-reader control. Eleven cases hold;
+the covert-filesystem channel is measured and reported, not closed. Linux only; the first pack was
+produced in a privileged Linux container on the authoring Mac and the current pack on an Ubuntu
+x86_64 host. Results:
 [provenance-phase-19d/RESULTS.md](provenance-phase-19d/RESULTS.md).
 
 Phase 19g ([plan](../superpowers/plans/2026-11-01-phase-19g-evaluator-kit-and-deployer-profile.md)) runs a
@@ -70,7 +73,7 @@ discrepancy template, a field-by-field comparator for returned receipts and a st
 until a receipt is reviewed. No pack: nothing ran that a pack could bind. Package:
 [provenance-phase-19f/README.md](provenance-phase-19f/README.md).
 
-Trusted host, provisioning, storage and receiver, as in the README. The frozen modules are neither
+Trusted host, provisioning, storage and receiver, as in the root [README](../../README.md). The frozen modules are neither
 edited nor imported except for the optional Linux replay chain. Recomputing the project's own
 archive is not custody evidence.
 
@@ -713,6 +716,24 @@ Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to
 receipt, or any change to what the comparator checks. This declaration commit must be a strict
 ancestor of every commit that acts on it.
 
+**P19-REPAIR08 (bounded authority to correct two statements in the operator handoff's rendered
+text; declared 12 Nov 2026 before the commit that acts on it).** The 12 November documentation
+check found two statements in the text `handoff19.py` renders that the record does not support.
+The handoff says the verify set was "installed and run on Linux x86_64, macOS arm64 and macOS
+x86_64"; the P19-REPAIR07 ruling records it installed and run on the first two and only its
+wheels resolved for the third. And the list of lanes that "need nothing beyond the standard
+library" stops at 19l, although 19m, added under P19-OPERATOR03, needs nothing else either. This
+declaration authorises, and nothing else:
+
+1. `handoff19.py`: those two sentences corrected. No change to `PHASES`, the comparator, the
+   template or the review.
+2. Re-rendering `HANDOFF.md`.
+3. The ruling and both logs.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, or to the
+operator's receipt. This declaration commit must be a strict ancestor of the commit that acts on
+it.
+
 | Field                         | Declaration                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | active_phase                  | Phase 19a projection verifier (19b–19g declared)                                                                    |
@@ -1115,3 +1136,12 @@ ancestor of every commit that acts on it.
   twelve, the eleven existing values unchanged. A bare Python 3.12 with no packages verified 19m.
   Not changed here: the root README still says "eleven" Phase 19 packs; it is outside this
   declaration and is corrected with the documentation review that follows.
+- Ruling (12 Nov 2026, P19-REPAIR08 exercised): the declaration (`b16ad42a`) precedes the commit
+  that acts on it. `handoff19.py` now says the verify set was installed and run on Linux x86_64
+  and macOS arm64 and that its wheels also resolve for macOS x86_64, which is what the
+  P19-REPAIR07 ruling records, and it lists 19m among the lanes that need nothing beyond the
+  standard library. `HANDOFF.md` was re-rendered; the template, `PHASES`, the comparator and the
+  review of the first receipt are byte-identical; all 23 handoff tests pass. Both statements
+  were found by the 12 November documentation check
+  ([record](../documentation-audit-2026-11-12/README.md)). The package given to an operator is
+  rebuilt after the merge.

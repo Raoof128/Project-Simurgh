@@ -30,8 +30,10 @@ The transfer study and role correction retain synthetic prompts/proposals, provi
 outcomes and local receiver snapshots within their declared protocols. Replaying these archives
 makes no new model request. It does not establish a production retention policy or anonymity.
 
-The [explorer](tools/simurgh-explorer/README.md) loads the earlier Phase 10/14 public projection:
-144 outcomes with deliberate field omissions. Local JSON imports remain in browser memory;
+The [explorer](tools/simurgh-explorer/README.md) defaults to the 288-branch
+[Phase 17 transfer study](docs/research/transfer-phase-17/RESULTS.md), with action text omitted.
+`--study phase10` loads the earlier Phase 10/14 projection: 144 outcomes with deliberate field
+omissions. Local JSON imports remain in browser memory;
 filtered downloads are new copies under the recipient's control. The server serves built assets
 and exposes no upload, provider or command-execution endpoint. Opening a remote source link
 contacts that source, and dependency installation contacts package services.
@@ -234,8 +236,6 @@ Simurgh enforces privacy constraints at the code level:
 
 These are named enforcement paths, not proof of repository-wide coverage. The legacy helper
 exception above illustrates why each ingestion and export route needs separate review.
-
----
 
 ---
 
