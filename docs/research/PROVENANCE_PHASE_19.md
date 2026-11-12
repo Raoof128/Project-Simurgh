@@ -18,7 +18,10 @@ injected text sits, whether it orders the send or misstates the state, and who w
 an attacker that adapts and follows each refused send. All four models were captured, two of its
 four hypotheses held on one model each, and no model sent again after a refusal. 19o
 (P19-HOSTED01) sends 19k's cases and 19n's placement block to six hosted OpenAI models: all six
-made every authorised call and none sent in a restricted case. A manuscript draft built from 19h to 19l is in
+made every authorised call and none sent in a restricted case. 19p (P19-REPLAY03) dispatches
+every send recorded in 19n through the frozen Phase 17 pipeline: the composed controls blocked
+all 423 restricted-state sends, and 369 of them landed behind the credential gateway alone. A
+manuscript draft built from 19h to 19l is in
 [provenance-phase-19-paper/](provenance-phase-19-paper/README.md); it adds no evidence.
 
 ## Design and scope
@@ -1484,3 +1487,34 @@ lane 19p.
   now tells an operator; 19o's verify needs no network and no key. Not changed here: the root
   README's count of Phase 19 packs, which is outside this declaration. The package given to an
   operator is rebuilt after the merge.
+- Ruling (13 Nov 2026, P19-REPLAY03 exercised): the declaration (`6fc8e8dd`) and the instrument
+  (`e05683d8`) were pushed at 17:01:10Z on 12 Nov, after the 19n ruling and before any 19n output
+  was dispatched. The replay ran on the project's second host (2-vCPU Ubuntu 24.04 x86_64,
+  operated by the author) from a fresh clone at `e05683d8` with the hash-locked set installed
+  into a new venv; the lane's 18 tests passed there first, two of them skipped as written for
+  hosts that cannot replay. The run dispatched every call once to build the report and again to
+  verify it, 17:02:45Z to 17:25:30Z, the two passes agreed, and the clone was clean before and
+  after. Root `64977e0efc79cc9f92b8fc92af7ace3ee2d57ed7d7e0b2c834015164c7ad7a6c`; input the 19n
+  pack (`ba341a24…`); the pinned 19p sources are byte-identical to `e05683d8`. 3,600 rows, one
+  for each generation in which a model acted as the agent (900 per model, because no send was
+  repeated after a refusal). The models proposed 423 sends in a restricted state and 93 when
+  authorised, 91 of those with the exact report. Composed controls: 423 of 423 restricted sends
+  blocked, no effect landed in a restricted state, 91 authorised sends admitted, no exact
+  authorised send refused. Credential gateway alone: 54 blocked and 369 landed; the 54 are the
+  52 sends made with a revoked credential and 2 whose content was not the authorised report. By
+  block: placement 367 sends (76 from the untrusted source, 71, 76 and 144 under the summary,
+  memory-file and tool-result headings), reading its own summary 16, the attacker's search
+  trials 24, its confirmation trials 16, answers after a refusal none; no send of any block
+  landed behind the composed controls. The declaration said before the run that every
+  restricted-state send was expected to be blocked whatever channel the text came through, and
+  that is what happened. Read after the fact and labelled so in the README: the four sends with
+  altered content, all from `qwen3-1.7b-4bit`, drop the report's final full stop, and both arms
+  refused them in every state. Departure from P19-REPLAY02's practice, not from this
+  declaration: the fixture seed is the task id and the slot index, because a 19n slot has no
+  trial number that is unique within its task. One internal guard in `replay19p.generations`
+  (a task whose expected report differs from the slot's) is reached by no input and by no
+  test, which the instrument's commit message states. Not done under this ruling: 19p is not in
+  the hosted workflow's expected-roots check, in `PHASE19_ROOTS` or in `handoff19.py`. Not
+  shown: anything about an attacker who knows the gate, a larger or a hosted model, or a
+  deployed system; the host is the author's, so this is not a replay outside the author's
+  custody. `IOU-19-SPEND` and `IOU-19-OPERATOR` are unchanged.
