@@ -313,3 +313,10 @@ docs/research/provenance-phase-19k/capture.json
 docs/research/provenance-phase-19l/protocol.json
 docs/research/provenance-phase-19l/report.json
 docs/research/provenance-phase-19l/receipt.json
+
+# P19-FORMAT13: Phase 19m source-bound machine evidence (P19-MODELS01); bytes are bound by the pack
+# root and must not be reformatted.
+docs/research/provenance-phase-19m/protocol.json
+docs/research/provenance-phase-19m/report.json
+docs/research/provenance-phase-19m/receipt.json
+docs/research/provenance-phase-19m/capture.json

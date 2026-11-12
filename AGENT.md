@@ -14,6 +14,84 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-12 (Australia/Sydney) — Phase 19m: the pack, results and ruling (six of eight models captured, two eligible)
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/more-models-19m`. `docs/research/provenance-phase-19m/` (pack,
+  protocol, report, receipt, root, capture record, eight transcripts, README, RESULTS),
+  `tools/assurance-provenance/tests/test_evidence19m_committed.py`, the ruling in the ledger, both
+  logs. No pinned source, no 19a to 19l pack, no workflow, no frozen file, no manuscript edit.
+- **Summary:** the capture ended at 04:08:42Z on 12 Nov. Six models were captured in full,
+  `qwen2.5-3b-4bit` stopped at the positive control, and `qwen3-8b-4bit` was ended by the
+  operating system for memory at 409 generations and is recorded as not captured, as the declared
+  rule says. Two models are eligible, `qwen3-4b-8bit` and `qwen2.5-7b-4bit`. On them H1, H3, H6,
+  H7 and H8 held on both, H5 on one, H2 and H4 on neither. P1 is not decided, P2 did not hold, P3
+  held. The interrupted model `llama-3.2-3b-8bit` finished after the declared resume: its first
+  772 lines match the digest in the ledger and its same-seed recheck was identical. It is not
+  eligible, so the tallies are the same with it and without it; without it P3 is not decided.
+  The host also slept for about an hour during `qwen2.5-7b-4bit`, which suspended the process
+  and lost nothing; the results disclose it.
+- **Files changed:** as in the CHANGELOG entry.
+- **Verification:** the pack was built from the clean worktree at `72487130` and verifies under
+  Python 3.15 and under a bare Python 3.12 with no packages (`"verified": true`, 5617
+  generations). Six new tests on the committed pack pass, among them the 772-line digest and the
+  tallies recomputed with the interrupted model treated as not captured; the lane's 21 pinned
+  tests still pass; the pinned sources are byte-identical to `72487130`. RESULTS.md is rendered
+  from `report.json` by a script, not typed. The new directory was scanned for host names, local
+  paths, addresses and session links: none.
+- **Follow-ups:** the twelfth root in the workflow, `PHASE19_ROOTS` and `handoff19.py` needs its
+  own declaration and is not in this change. The hosted-model lane and the informed-attacker lane
+  still wait on the owner's API keys and a stated spending cap. The manuscript stays on hold.
+
+### 2026-11-12 (Australia/Sydney) — Phase 19m: the capture was cut off by a flat battery; the resume is declared first (P19-MODELS02)
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/more-models-19m`. The ledger (P19-MODELS02) and both logs. No source,
+  test, pack, workflow or frozen file.
+- **Summary:** the overnight capture ended at 11:14:56 UTC on 11 Nov when the laptop ran flat.
+  Three models had ended by their rules (two captured, `qwen2.5-3b-4bit` stopped with no call in
+  its 24 authorised generations). `llama-3.2-3b-8bit` had written 772 of 864 generations. The
+  declared rule would record it as not captured. The host stopped and the model did not fail, so
+  the lane departs from the rule for this model and declares that before resuming: the 772 lines
+  are kept and pinned by digest, the unchanged instrument samples the rest from their seeds, the
+  same-seed recheck compares the new process with the old one, and the results will give each
+  cross-model count with and without this model. The four models that had not started run next.
+- **Verification:** the partial transcript parses line by line with no torn last line (772 rows,
+  last index 771, sha256 `37d0a7ad…d9ac2a5`). The system power log shows the low-power sleep at 1%
+  charge at 22:14:56 +1100. The capture worktree is clean at `72487130`.
+- **Follow-ups:** resume the capture on mains power; a committed test for the 772-line digest goes
+  in with the pack; the ruling lists the interruption.
+
+### 2026-11-11 (Australia/Sydney) — Phase 19m declared and running: the scaled study on eight more local models; manuscript on hold
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/more-models-19m`. Declaration `36fb6816` (P19-MODELS01), instrument
+  `72487130` (`inject19m.py`, `evidence19m.py`, their tests, `.prettierignore` P19-FORMAT13), both
+  logs. The capture is in progress when this entry is written; the pack, results and ruling
+  follow in later commits on the same branch.
+- **Summary:** the owner asked for the manuscript to stop until results exist on as many models as
+  possible, including paid and large ones. The free part started first. Eight more local builds
+  run 19k's schedule unchanged, pushed at 09:42:13Z and launched at 09:42:25Z on 11 Nov from a
+  clean worktree at the instrument commit. What 19k could only observe after the fact (signal_stop
+  least moved, wording spread, trial agreement) is declared here as H6 to H8, so on these models
+  it is confirmatory. Stopping rules are fixed in advance so that no model can be dropped once its
+  numbers are seen, and the verifier re-derives each stop from the kept outputs. Two candidates
+  were dropped before the declaration because the runtime could not load their chat templates;
+  only templates were rendered to find that out. The paid part cannot start: no model API key is
+  on this machine. A hosted-model client was written and tested against fake responses in a
+  separate worktree and is deliberately uncommitted until its own declaration names the models,
+  settings and spending cap. The provider documentation read on 11 Nov says current Claude models
+  reject sampling parameters and reason by default, which on the larger ones cannot be switched
+  off, so hosted results will be a separate lane with their own declared settings.
+- **Files changed:** as in the CHANGELOG entry.
+- **Verification:** as in the CHANGELOG entry.
+- **Follow-ups:** build and verify the 19m pack when the capture ends; the owner to supply API
+  keys and a spending cap; then the hosted lane and the informed-attacker lane, each declared
+  before it runs; the manuscript stays untouched until then.
+
 ### 2026-11-11 (Australia/Sydney) — Reviewer front door: latest study on the README, record of corrections, author and method
 
 **Raouf:**

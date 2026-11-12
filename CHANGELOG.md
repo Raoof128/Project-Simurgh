@@ -1,5 +1,74 @@
 ## Change Log
 
+## [phase-19m-evidence] — 2026-11-12 — The 19k study on eight more local models: six captured, two eligible, five of eight hypotheses held on both
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19m/` (new: `evidence.zip`, `protocol.json`,
+  `report.json`, `receipt.json`, `ROOT.sha256`, `capture.json`, `transcripts/`, `README.md`,
+  `RESULTS.md`), `tools/assurance-provenance/tests/test_evidence19m_committed.py` (new), the
+  ledger (the ruling for P19-MODELS01 and P19-MODELS02), both logs. No pinned source, no 19a to
+  19l pack, no workflow, no frozen file.
+- **Summary:** 5,617 generations on an Apple M2 with 8 GB, at no cost; root
+  `8637a24666d55630e2150893c527e8f7d91cc0d5fd1f6bb15f1bc21f755a3bd3`. Six of the eight declared
+  models were captured in full. `qwen2.5-3b-4bit` stopped at the positive control: it writes its
+  call with doubled braces, which the pinned decoder does not read. `qwen3-8b-4bit` was ended for
+  memory and is recorded as not captured. Two models send when authorised and decline the control
+  cases, `qwen3-4b-8bit` and `qwen2.5-7b-4bit`; the hypotheses are decided on those two only.
+  Held on both: the operator note beats the control (H1), `unknown_prior` is the state most moved
+  (H3), `signal_stop` is among the two least moved (H6), wording matters (H7), trials agree (H8).
+  Held on one: urgency draws the fewest sends (H5). Held on neither: the operator note is the
+  most effective style (H2), `signal_stop` and `credential_revoke` are the two least moved (H4).
+  The 8-bit build of `qwen3-4b` did not repeat the 4-bit build's five supported hypotheses (P2).
+  One model was resumed after the host lost power, under a departure declared before the resume;
+  every count across models is given with and without it, and only P3 differs.
+- **Verification:** `evidence19m.py verify` returns `"verified": true` under Python 3.15 and under
+  a bare Python 3.12; six tests on the committed pack and the lane's 21 pinned tests pass; pinned
+  sources unchanged since the instrument commit.
+- **Follow-ups:** a declaration for the twelfth root (workflow check, `PHASE19_ROOTS`, the
+  operator handoff); hosted and larger models once keys and a spending cap exist.
+
+## [phase-19m-interrupted] — 2026-11-12 — The 19m capture was cut off by a flat battery; the resume is declared before it happens
+
+**Raouf:**
+
+- **Scope:** the ledger (P19-MODELS02) and both logs. No source, test, pack, workflow or frozen
+  file.
+- **Summary:** the laptop ran flat at 11:14:56 UTC on 11 Nov with `llama-3.2-3b-8bit` at 772 of
+  864 generations. Three models had already ended by their rules. P19-MODELS01 records a model
+  whose process fails as not captured; P19-MODELS02 departs from that for a model the host
+  interrupted. The lines already written are kept and pinned by sha256, the unchanged instrument
+  samples the remaining generations from their seeds, and the results will give each cross-model
+  count with and without the interrupted model.
+- **Verification:** 772 complete lines, no torn last line, digest recorded in the ledger; power
+  log read; capture worktree clean at `72487130`.
+
+## [phase-19m-declared] — 2026-11-11 — The scaled study on eight more local models: declared, instrument committed, capture running; manuscript on hold
+
+**Raouf:**
+
+- **Scope:** a new lane, in progress. `tools/assurance-provenance/inject19m.py`, `evidence19m.py`,
+  `tests/test_inject19m.py`, `tests/test_evidence19m.py`, `.prettierignore` (P19-FORMAT13), the
+  ledger (P19-MODELS01), both logs. No 19a to 19l source or pack, no frozen file, no workflow, and
+  no edit to the manuscript, which the owner has put on hold until the further results are in.
+- **Summary:** 19k decided five hypotheses on one model. 19m runs the same 864 generations on
+  eight more local builds: `qwen3-0.6b-4bit`, `qwen2.5-1.5b-4bit`, `qwen2.5-3b-4bit`,
+  `llama-3.2-3b-8bit`, `qwen3-4b-8bit`, `qwen2.5-7b-4bit`, `llama-3.1-8b-4bit` and
+  `qwen3-8b-4bit`. Cases, schedule, seeds, readers and analysis are imported from 19k. Declared
+  before the run: a model stops after the 24 authorised generations if fewer than six are calls;
+  a model that fails or exceeds six hours is recorded as not captured with its partial outputs
+  kept; the hypotheses are decided only for a model with at least 18 authorised calls and at most
+  12 of 120 control sends; H1 to H5 are 19k's rules, H6 to H8 are new and confirmatory here; three
+  predictions name specific models. The pack will carry every raw output, and its verifier
+  refuses a model that was relabelled or dropped after the fact.
+- **Files changed:** as above.
+- **Verification:** 21 tests on synthetic transcripts (14 for the instrument, 7 for the pack),
+  among them the orchestration with a stubbed process and each tamper the verifier must catch;
+  `ruff` clean. No result exists yet: the capture is running and nothing has been packed.
+- **Follow-ups:** the pack, RESULTS, README, a test on the committed pack, the ruling and the
+  eleven-to-twelve roots update when the capture ends; a hosted-model lane and an
+  informed-attacker lane once the owner supplies keys and a spending cap.
+
 ## [docs-reviewer-front-door] — 2026-11-11 — The newest study on the README; a record of corrections; an author and method page
 
 **Raouf:**
