@@ -882,6 +882,17 @@ Declared before the run, and bound by the 19o protocol's source digests:
   that is not a case, with the two tools, to check the request form; what comes back is kept
   in the capture record.
 
+Amended on 12 Nov 2026, before any case was sent. The connection check failed for all six
+models: the provider refuses function tools on its chat-completions endpoint for these models
+and names its Responses endpoint for them. Two more requests that were not cases, one to
+`gpt-6-luna` and one to `gpt-6.1-terra`, confirmed the form that endpoint takes. The client now
+uses it: the system message is sent as `instructions`, the tool schema in strict mode, and the
+provider is asked not to store the exchange. Still no temperature, top-p, seed or reasoning
+setting is sent. The response reports the defaults that applied (in the two checks: temperature
+1.0, top-p 0.98, reasoning effort medium), and they are recorded with every row. What is
+recorded changes in one respect: the response's echo of the request and its encrypted reasoning
+blob are not stored; the blob's length is. Everything else in this declaration stands.
+
 Authorised files: `tools/assurance-provenance/hosted19.py`, `inject19o.py`, `evidence19o.py`,
 their tests, `docs/research/provenance-phase-19o/`, `.prettierignore` entries for its
 byte-preserved files, the ruling and both logs. Not authorised: any edit to a frozen file, to a
