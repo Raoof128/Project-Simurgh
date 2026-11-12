@@ -1545,3 +1545,19 @@ strict ancestor of every commit that acts on it.
   shown: anything about an attacker who knows the gate, a larger or a hosted model, or a
   deployed system; the host is the author's, so this is not a replay outside the author's
   custody. `IOU-19-SPEND` and `IOU-19-OPERATOR` are unchanged.
+- Ruling (13 Nov 2026, P19-OPERATOR05 exercised): the declaration (`6de8fbf5`) precedes every
+  commit that acts on it. `handoff19.py` now lists fifteen lanes, with 19p a replay lane beside
+  19j and 19l: the expected `kind` follows the operator's own `replay.result`, and
+  `19p --replay` is an item an outside host can exercise. Nothing else about the comparator
+  changed. Tests were changed first (five) and failed before the change. The first operator
+  receipt is byte-identical (sha256 `765c42b1…`); its review was recomputed and lists 19p as
+  `not_in_receipt`, so `handoff19.py status` reads `reviewed_discrepancies_published` and names
+  fifteen items still owed under `IOU-19-OPERATOR`. `HANDOFF.md` and
+  `discrepancy-template.json` were re-rendered and the 19f README updated. The workflow gained
+  19p's `docs/` path in both path filters and its id in the expected-roots check, with its
+  message; no step was added, removed or renamed, and the Stage 5Q census output is identical
+  before and after (58 steps, 53 problems). `PHASE19_ROOTS` was extended outside the pull
+  request at 17:32Z on 12 Nov from fourteen roots to fifteen, the fourteen existing values
+  unchanged. A Python 3.12 with no site packages verified 19p's structure, which is what the
+  handoff tells an operator who does not add `--replay`. Not changed here: the root README's
+  count of Phase 19 packs. The package given to an operator is rebuilt after the merge.
