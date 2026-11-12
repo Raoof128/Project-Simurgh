@@ -320,7 +320,7 @@ Each pack directory holds `protocol.json` (the declared design and the SHA-256 o
 To capture again on Apple Silicon (the outputs will be new samples only if the runtime or weights differ; on the capturing host the first six prompts of each model reproduced exactly):
 
 ```sh
-pip install mlx-lm   # the captures used mlx 0.30.3 and mlx-lm 0.29.1
+pip install mlx==0.30.3 mlx-lm==0.29.1   # the versions the captures used
 python -B tools/assurance-provenance/inject19k.py /tmp/run19k
 ```
 

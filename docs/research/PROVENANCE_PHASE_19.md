@@ -73,7 +73,7 @@ discrepancy template, a field-by-field comparator for returned receipts and a st
 until a receipt is reviewed. No pack: nothing ran that a pack could bind. Package:
 [provenance-phase-19f/README.md](provenance-phase-19f/README.md).
 
-Trusted host, provisioning, storage and receiver, as in the README. The frozen modules are neither
+Trusted host, provisioning, storage and receiver, as in the root [README](../../README.md). The frozen modules are neither
 edited nor imported except for the optional Linux replay chain. Recomputing the project's own
 archive is not custody evidence.
 
@@ -1136,3 +1136,12 @@ it.
   twelve, the eleven existing values unchanged. A bare Python 3.12 with no packages verified 19m.
   Not changed here: the root README still says "eleven" Phase 19 packs; it is outside this
   declaration and is corrected with the documentation review that follows.
+- Ruling (12 Nov 2026, P19-REPAIR08 exercised): the declaration (`b16ad42a`) precedes the commit
+  that acts on it. `handoff19.py` now says the verify set was installed and run on Linux x86_64
+  and macOS arm64 and that its wheels also resolve for macOS x86_64, which is what the
+  P19-REPAIR07 ruling records, and it lists 19m among the lanes that need nothing beyond the
+  standard library. `HANDOFF.md` was re-rendered; the template, `PHASES`, the comparator and the
+  review of the first receipt are byte-identical; all 23 handoff tests pass. Both statements
+  were found by the 12 November documentation check
+  ([record](../documentation-audit-2026-11-12/README.md)). The package given to an operator is
+  rebuilt after the merge.

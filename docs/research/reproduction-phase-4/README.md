@@ -21,8 +21,8 @@ check phase 3's protocol commit. Do not use a ZIP download or shallow checkout.
 
 The runner source was frozen in commit
 `41f26e57f0b226bc48ca374b43a686f5f7713155`; `contract.json` pins 39 source/data files.
-Use the published `openai-readiness` branch including the evidence commit, and record
-the exact checked-out revision. Obtain that revision through a channel you trust:
+Use the published default branch, which contains the merged `openai-readiness` work and the
+evidence commit, and record the exact checked-out revision. Obtain that revision through a channel you trust:
 
 ```sh
 git clone https://github.com/Raoof128/Project-Simurgh.git

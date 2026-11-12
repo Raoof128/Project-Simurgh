@@ -8,8 +8,8 @@ retained outcomes. Supports the complete Phase 14 public export and the versione
 
 The default dataset contains the **288 branches and 96 model generations** from the
 [Phase 17 transfer study](../../docs/research/transfer-phase-17/RESULTS.md), separated by
-`llama` and `luna`. Python 3 reads only two bounded JSON members from the source ZIP without
-extracting files. The CLI option `--study phase10` retains the historical 144-row export.
+`llama` and `luna`. Python 3 reads `manifest.json` and two size-bounded model JSON members from
+the source ZIP without extracting files. The CLI option `--study phase10` retains the historical 144-row export.
 The [provider-role correction](../../docs/research/provider-role-phase-17b/RESULTS.md)
 remains a separate archive/verifier. The eight gap entries
 (six open) describe the dated index, not current repository-wide readiness. For current
@@ -48,7 +48,8 @@ and use Load evidence:
 node tools/simurgh-explorer/index.mjs --detail --output /tmp/simurgh-detail.json
 ```
 
-This includes model output, selected native result and receiver action details with a
+For the default study this includes the captured model output with a source pointer. With
+`--study phase10` it also includes the selected native result and receiver action details with a
 capture pointer/hash. It still omits prompts, tokens, complete events and raw databases.
 Exporting detail does not apply the Phase 14 privacy projection. Review contents before sharing.
 

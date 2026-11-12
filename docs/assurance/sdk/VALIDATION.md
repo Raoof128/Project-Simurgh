@@ -7,7 +7,7 @@ The tested SDKs are openai-agents 0.23.1 and langgraph 1.2.15.
 | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | Full repository `PYTHONDONTWRITEBYTECODE=1 npm test` | 5,122 tests: 5,119 passed, zero failed, three skipped (Chrome/Lean unavailable); includes three new bridge tests             |
 | Python SDK unittest discovery                        | 31 tests passed, including native framework lifecycles, transport failures, controls and replay/tamper checks                |
-| Hash-locked installation                             | All 60 dependencies installed and consistent using both uv and clean pip environments; pip required hashes and binary wheels |
+| Hash-locked installation                             | All 59 dependencies installed and consistent using both uv and clean pip environments; pip required hashes and binary wheels |
 | Saved SDK report in clean pip environment            | Complete fresh replay passed; 102 matrix rows match the original projections                                                 |
 | Native lifecycle probes                              | Three exercised: both rejections and LangGraph edit; one explicitly unsupported OpenAI edit                                  |
 | CLI negative checks                                  | Existing output refused with exit 1 and unchanged bytes; omitted-case report rejected with exit 1                            |

@@ -86,7 +86,7 @@ descriptions of this pack, not tests of anything.
 ## Reproduce the capture (Apple Silicon)
 
 ```sh
-pip install mlx-lm    # the capture used mlx 0.30.3, mlx-lm 0.29.1, transformers 4.46.3
+pip install mlx==0.30.3 mlx-lm==0.29.1 transformers==4.46.3    # the versions the capture used
 python -B tools/assurance-provenance/capture19local.py /tmp/p19h-run
 python -B tools/assurance-provenance/evidence19h.py run --out /tmp/p19h-pack \
   --transcripts /tmp/p19h-run/transcripts --capture /tmp/p19h-run/capture.json

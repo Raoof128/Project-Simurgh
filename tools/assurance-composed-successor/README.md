@@ -76,7 +76,9 @@ modules the successor imports.
 
 ## Status
 
-No study has been run against the successor. It is a regression-tested repair, not an evaluated
+No study has evaluated the successor as a gate. Phase 19b's lane subclasses it for a differential
+arm and says its rows describe the successor, not the evaluated frozen gate
+([results](../../docs/research/provenance-phase-19b/RESULTS.md)). It is a regression-tested repair, not an evaluated
 gate. A future study that wants the fixed gate freezes this module's sources in its own
 `protocol.json`; it does not re-pin the old ones.
 

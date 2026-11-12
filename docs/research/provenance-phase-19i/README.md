@@ -76,7 +76,7 @@ The prediction is not established.
 ## Reproduce the capture (Apple Silicon)
 
 ```sh
-pip install mlx-lm    # the capture used mlx 0.30.3, mlx-lm 0.29.1, transformers 4.46.3
+pip install mlx==0.30.3 mlx-lm==0.29.1 transformers==4.46.3    # the versions the capture used
 python -B tools/assurance-provenance/inject19.py /tmp/p19i-run
 python -B tools/assurance-provenance/evidence19i.py run --out /tmp/p19i-pack \
   --transcripts /tmp/p19i-run/transcripts --capture /tmp/p19i-run/capture.json

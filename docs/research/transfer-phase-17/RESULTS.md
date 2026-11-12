@@ -81,8 +81,10 @@ time remains fixed; this is not a wall-clock lease-expiry or shared production-s
 In each epoch, composed controls retained five authorized reopen effects and five idempotent
 retry effects. Queued stop and killed-update cases each produced zero new composed effects,
 versus ten under credential-only control. Unknown acknowledgements retained five prior effects
-per control; composed siblings created no new effect. Concurrent siblings shared one composed
-budget. Exact schedule validators check these outcomes against raw storage.
+per control; the composed sibling in that schedule created no new effect. Concurrent siblings
+shared one composed budget, which is one new effect per repetition and five per epoch. Exact
+schedule validators check these outcomes against raw storage. _(Sibling counts clarified 12
+November 2026 from `report.json`; no result changed.)_
 
 Composed dispatch latency median/p95 was 0.226/0.558 seconds in epoch 1 and 0.233/0.328 in
 epoch 2. Credential-only values were 0.173/0.426 and 0.237/0.325. These include local SDK/HTTP
