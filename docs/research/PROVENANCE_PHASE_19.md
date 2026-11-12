@@ -716,6 +716,24 @@ Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to
 receipt, or any change to what the comparator checks. This declaration commit must be a strict
 ancestor of every commit that acts on it.
 
+**P19-REPAIR08 (bounded authority to correct two statements in the operator handoff's rendered
+text; declared 12 Nov 2026 before the commit that acts on it).** The 12 November documentation
+check found two statements in the text `handoff19.py` renders that the record does not support.
+The handoff says the verify set was "installed and run on Linux x86_64, macOS arm64 and macOS
+x86_64"; the P19-REPAIR07 ruling records it installed and run on the first two and only its
+wheels resolved for the third. And the list of lanes that "need nothing beyond the standard
+library" stops at 19l, although 19m, added under P19-OPERATOR03, needs nothing else either. This
+declaration authorises, and nothing else:
+
+1. `handoff19.py`: those two sentences corrected. No change to `PHASES`, the comparator, the
+   template or the review.
+2. Re-rendering `HANDOFF.md`.
+3. The ruling and both logs.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, or to the
+operator's receipt. This declaration commit must be a strict ancestor of the commit that acts on
+it.
+
 | Field                         | Declaration                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | active_phase                  | Phase 19a projection verifier (19b–19g declared)                                                                    |
