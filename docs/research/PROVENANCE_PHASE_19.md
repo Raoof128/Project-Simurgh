@@ -691,6 +691,28 @@ Authorised: this paragraph, the committed test named above, both logs. No change
 instrument, the schedule, the readers or the analysis. This declaration commit must be a strict
 ancestor of every commit of lane 19m made after it.
 
+**P19-OPERATOR03 (bounded authority to bring lane 19m into the outside-operator handoff and the
+externally pinned roots; declared 12 Nov 2026 before any commit that acts on it).** Lane 19m is
+merged (`7b8de294`) with root `8637a24666d55630e2150893c527e8f7d91cc0d5fd1f6bb15f1bc21f755a3bd3`.
+P19-MODELS01 authorised no workflow edit, so the hosted roots check and the handoff still list
+eleven packs. This declaration authorises, and nothing else:
+
+1. `handoff19.py`: 19m added to `PHASES` with its host and time, and the word for twelve. No
+   change to the comparator. Tests first.
+2. The review of the first operator receipt recomputed under the new phase list. The receipt is
+   not edited; 19m appears in the review as `not_in_receipt`, which is what happened.
+3. Re-rendering `HANDOFF.md` and `discrepancy-template.json`; the 19f README.
+4. `.github/workflows/assurance-provenance.yml`: 19m's `docs/` path added to both path filters
+   and its id to the expected-roots check, with its message. No step is added, removed or
+   renamed, and the Stage 5Q census must be set-identical before and after. The repository
+   variable `PHASE19_ROOTS` gains the 19m root, set outside the pull request, the eleven existing
+   values unchanged.
+5. Both logs and the ruling.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to the operator's
+receipt, or any change to what the comparator checks. This declaration commit must be a strict
+ancestor of every commit that acts on it.
+
 | Field                         | Declaration                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | active_phase                  | Phase 19a projection verifier (19b–19g declared)                                                                    |
@@ -1080,3 +1102,16 @@ ancestor of every commit of lane 19m made after it.
   through test discovery, and adding the twelfth root needs its own declaration. Not shown:
   anything about a larger or a hosted model, a gate or a receiver, or more than two models that
   decline without an injection. `IOU-19-SPEND` is unchanged.
+- Ruling (12 Nov 2026, P19-OPERATOR03 exercised): the declaration (`57a28837`) precedes every
+  commit that acts on it. `handoff19.py` now lists twelve lanes; the comparator is unchanged.
+  Tests were changed first (four) and failed before the change. The first operator receipt is
+  byte-identical (sha256 `765c42b1…`); its review was recomputed and lists 19m as
+  `not_in_receipt`, so `handoff19.py status` reads `reviewed_discrepancies_published` and names
+  eleven items still owed under `IOU-19-OPERATOR`. `HANDOFF.md` and `discrepancy-template.json`
+  were re-rendered and the 19f README updated. The workflow gained 19m's `docs/` path in both path
+  filters and its id in the expected-roots check, with its message; no step was added, removed or
+  renamed, and the Stage 5Q census output is identical before and after (58 steps, 53 problems).
+  `PHASE19_ROOTS` was extended outside the pull request at 05:14Z on 12 Nov from eleven roots to
+  twelve, the eleven existing values unchanged. A bare Python 3.12 with no packages verified 19m.
+  Not changed here: the root README still says "eleven" Phase 19 packs; it is outside this
+  declaration and is corrected with the documentation review that follows.
