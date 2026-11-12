@@ -142,8 +142,15 @@ PHASES = (
         "host": "any host with Python 3.12; on Linux x86_64 inside the hash-locked venv add --replay",
         "time": "a few seconds; about thirty minutes with --replay on a two-core server",
     },
+    {
+        "id": "19m",
+        "module": "evidence19m.py",
+        "docs": "docs/research/provenance-phase-19m",
+        "host": "any host with Python 3.12; no model is run",
+        "time": "a few seconds",
+    },
 )
-NUMBER_WORDS = {6: "six", 11: "eleven"}
+NUMBER_WORDS = {6: "six", 11: "eleven", 12: "twelve"}
 
 
 def phase(pid):
