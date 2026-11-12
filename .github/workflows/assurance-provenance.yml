@@ -35,6 +35,8 @@ on:
       - "docs/research/provenance-phase-19k/**"
       - "docs/research/provenance-phase-19l/**"
       - "docs/research/provenance-phase-19m/**"
+      - "docs/research/provenance-phase-19n/**"
+      - "docs/research/provenance-phase-19o/**"
   pull_request:
     paths:
       - ".github/workflows/assurance-provenance.yml"
@@ -64,6 +66,8 @@ on:
       - "docs/research/provenance-phase-19k/**"
       - "docs/research/provenance-phase-19l/**"
       - "docs/research/provenance-phase-19m/**"
+      - "docs/research/provenance-phase-19n/**"
+      - "docs/research/provenance-phase-19o/**"
   workflow_dispatch:
 
 permissions:
@@ -118,13 +122,13 @@ jobs:
               sys.exit("PHASE19_ROOTS is not set: the expected roots must come from outside the checkout")
           expected = json.loads(raw)
           bad = []
-          for phase in ("19a", "19b", "19c", "19d", "19e", "19g", "19h", "19i", "19j", "19k", "19l", "19m"):
+          for phase in ("19a", "19b", "19c", "19d", "19e", "19g", "19h", "19i", "19j", "19k", "19l", "19m", "19n", "19o"):
               committed = pathlib.Path(f"docs/research/provenance-phase-{phase}/ROOT.sha256").read_text().strip()
               if expected.get(phase) != committed:
                   bad.append((phase, expected.get(phase), committed))
           if bad:
               sys.exit("expected-root mismatch: " + json.dumps(bad))
-          print("expected roots match the committed ROOT.sha256 files for twelve packs")
+          print("expected roots match the committed ROOT.sha256 files for fourteen packs")
           PY
       - name: Verify the Phase 19a pack and chain the frozen Phase 17 replay through it
         run: |

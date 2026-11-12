@@ -1,6 +1,6 @@
 # Phase 19f: outside-operator replay (paid in part)
 
-`IOU-19-OPERATOR`: one outside operator has replayed five of the twelve packs. This directory holds the
+`IOU-19-OPERATOR`: one outside operator has replayed five of the fourteen packs. This directory holds the
 package that makes the replay a run of named commands against named expectations, the receipt that
 came back and the author's review of it:
 
@@ -60,6 +60,12 @@ unchanged; only the review was recomputed.
 19m (eight more local models on 19k's schedule, recomputed from committed outputs) joined on 12 Nov
 2026 under P19-OPERATOR03. It is also `not_in_receipt` in the review of the first receipt and is
 owed with the rest.
+
+19n (four local models: placement, kind and author of the injected text, an adaptive attacker and
+what follows a refusal) and 19o (the fixed prompts of 19k and of 19n's placement block on six
+hosted models; verifying it needs no network and no key) joined on 13 Nov 2026 under
+P19-OPERATOR04. Both are `not_in_receipt` in the review of the first receipt and are owed with
+the rest.
 
 Limits, in the operator's own words in the receipt: the receipt is signed with a typed name, and
 the commands were typed and run by an AI coding agent on a subscription registered to the author.
