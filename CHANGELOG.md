@@ -1,5 +1,21 @@
 ## Change Log
 
+## [phase-19f-twelve-lanes] — 2026-11-12 — Lane 19m in the operator handoff and the pinned-roots check
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/handoff19.py`, `tests/test_handoff19.py`,
+  `docs/research/provenance-phase-19f/HANDOFF.md`, `discrepancy-template.json`, `README.md`,
+  `operator-reviews/all-Michael-2026-11-10.review.json`,
+  `.github/workflows/assurance-provenance.yml`, the ledger (P19-OPERATOR03 and its ruling), both
+  logs.
+- **Summary:** the handoff now asks an outside operator for twelve packs and the hosted job
+  checks twelve committed roots against `PHASE19_ROOTS`. The first operator receipt is unchanged;
+  its recomputed review lists 19m as not in the receipt. No step was added to or removed from
+  the workflow.
+- **Verification:** 23 handoff tests pass (four changed first); Stage 5Q gate census identical
+  before and after; `PHASE19_ROOTS` extended outside the pull request to twelve roots.
+
 ## [phase-19m-evidence] — 2026-11-12 — The 19k study on eight more local models: six captured, two eligible, five of eight hypotheses held on both
 
 **Raouf:**

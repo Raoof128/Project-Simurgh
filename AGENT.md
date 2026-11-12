@@ -14,6 +14,27 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-12 (Australia/Sydney) — Phase 19f: lane 19m joins the operator handoff and the pinned roots (P19-OPERATOR03)
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/twelfth-root`. Declaration `57a28837`; `handoff19.py` and its test;
+  `docs/research/provenance-phase-19f/` (HANDOFF, template, README, the recomputed review);
+  `.github/workflows/assurance-provenance.yml`; the ruling; both logs. No frozen file, pinned
+  source, pack, operator receipt or comparator change.
+- **Summary:** PR #160 merged lane 19m (`7b8de294`) without touching the workflow, because its
+  declaration did not authorise that. This change does the rest under its own declaration: the
+  handoff asks an outside operator for twelve packs, the hosted job checks twelve committed roots
+  against the repository variable, and the review of the first receipt lists 19m as not in the
+  receipt. Eleven items are now owed under `IOU-19-OPERATOR`.
+- **Files changed:** as in the CHANGELOG entry.
+- **Verification:** the four changed tests failed before the code change and all 23 handoff tests
+  pass after it; `ruff` and `prettier` clean; the workflow YAML parses; the Stage 5Q gate census
+  output is byte-identical before and after; the receipt's sha256 is unchanged; `PHASE19_ROOTS`
+  read back with twelve keys and the eleven earlier values unchanged.
+- **Follow-ups:** the root README's "eleven" goes with the documentation review; the Desktop
+  operator package is rebuilt after the merge.
+
 ### 2026-11-12 (Australia/Sydney) — Phase 19m: the pack, results and ruling (six of eight models captured, two eligible)
 
 **Raouf:**

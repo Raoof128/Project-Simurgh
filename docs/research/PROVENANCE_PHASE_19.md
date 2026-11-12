@@ -1102,3 +1102,16 @@ ancestor of every commit that acts on it.
   through test discovery, and adding the twelfth root needs its own declaration. Not shown:
   anything about a larger or a hosted model, a gate or a receiver, or more than two models that
   decline without an injection. `IOU-19-SPEND` is unchanged.
+- Ruling (12 Nov 2026, P19-OPERATOR03 exercised): the declaration (`57a28837`) precedes every
+  commit that acts on it. `handoff19.py` now lists twelve lanes; the comparator is unchanged.
+  Tests were changed first (four) and failed before the change. The first operator receipt is
+  byte-identical (sha256 `765c42b1…`); its review was recomputed and lists 19m as
+  `not_in_receipt`, so `handoff19.py status` reads `reviewed_discrepancies_published` and names
+  eleven items still owed under `IOU-19-OPERATOR`. `HANDOFF.md` and `discrepancy-template.json`
+  were re-rendered and the 19f README updated. The workflow gained 19m's `docs/` path in both path
+  filters and its id in the expected-roots check, with its message; no step was added, removed or
+  renamed, and the Stage 5Q census output is identical before and after (58 steps, 53 problems).
+  `PHASE19_ROOTS` was extended outside the pull request at 05:14Z on 12 Nov from eleven roots to
+  twelve, the eleven existing values unchanged. A bare Python 3.12 with no packages verified 19m.
+  Not changed here: the root README still says "eleven" Phase 19 packs; it is outside this
+  declaration and is corrected with the documentation review that follows.
