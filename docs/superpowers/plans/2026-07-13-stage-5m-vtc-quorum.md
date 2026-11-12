@@ -203,7 +203,7 @@ Consumes the **Task-1B-assembled full bundle** (via `buildSignedVtcqBundle`, rea
 
 ## Task 16 — droplet-team pack (independent-PARTY reproduction) — digest-only
 
-Assemble `~/Desktop/Raouf/test/stage5m-vtcq-droplet/` (mirrors `stage5l-vtcq-droplet/`): frozen Lane-B evidence + the `stage5m/` verifier + `python/vtcq_quorum_parity.py` + a `README` + `run.sh` that a **separate party on a separate machine** runs to (a) re-verify the real Lane-B bundle → honest `372` (or `0` post-banking), (b) run the independent Python Lane-D over the raw packet → `all_ok`, (c) sign with the party's **distinct** key and compare decision-equivalence. Freeze `evidence/stage-5m/real-laned/laned-outcome.json` with the party's fingerprint (≠ ours) + byte-verified verdict. Digest-only, never CI-gated.
+Assemble `[scratch]/stage5m-vtcq-droplet/` (mirrors `stage5l-vtcq-droplet/`): frozen Lane-B evidence + the `stage5m/` verifier + `python/vtcq_quorum_parity.py` + a `README` + `run.sh` that a **separate party on a separate machine** runs to (a) re-verify the real Lane-B bundle → honest `372` (or `0` post-banking), (b) run the independent Python Lane-D over the raw packet → `all_ok`, (c) sign with the party's **distinct** key and compare decision-equivalence. Freeze `evidence/stage-5m/real-laned/laned-outcome.json` with the party's fingerprint (≠ ours) + byte-verified verdict. Digest-only, never CI-gated.
 
 ## Task 14 — K7 + reproduce + CI wiring (P0 #156)
 

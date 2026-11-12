@@ -1,6 +1,6 @@
 # Cluster F — Reader F (Google DeepMind safety and security documents)
 
-All page names are under `/Users/raoof.r12/Desktop/Raouf/Zurvan/wiki/sources/`. Every quote below was machine-checked as an exact substring of the named page. The Argon report has 86 figures that are NOT transcribed, so every numeric result that lives in a chart is invisible here. Where a section depends on a figure, the row says so.
+All page names are under `[zurvan]/wiki/sources/`. Every quote below was machine-checked as an exact substring of the named page. The Argon report has 86 figures that are NOT transcribed, so every numeric result that lives in a chart is invisible here. Where a section depends on a figure, the row says so.
 
 ## Pages read
 

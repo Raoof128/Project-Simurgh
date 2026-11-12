@@ -1,9 +1,9 @@
 # Documentation fact check, 12 November 2026
 
 A check of every Markdown document in the repository against the repository itself, made before
-an outside reviewer reads it. It corrected 95 findings in current documents and left 698 open,
-most of them in dated records that this project does not rewrite. The open ones are listed in
-[FINDINGS.md](FINDINGS.md).
+an outside reviewer reads it. It corrected 148 findings, 53 of them private values that were
+redacted, and left 645 open, most of them in dated records that this project does not rewrite.
+The open ones are listed in [FINDINGS.md](FINDINGS.md).
 
 This record adds to the [19 October audit](../documentation-audit-2026-10-19/README.md); it does
 not replace it.
@@ -53,7 +53,7 @@ then went through the 799 confirmed findings itself:
 - It checked every proposed correction against the code or the pack before keeping it.
 - It wrote scripts for the findings a script can settle: private-data patterns on the quoted
   line, paths that do not exist, tags and commit ids that do not resolve, and counts of Lean
-  theorem declarations. These reproduced 132 of the open findings and refuted none.
+  theorem declarations. These reproduced 132 of the findings then open and refuted none.
 - It read every other open finding with its evidence. Fifteen of those it also checked by
   command: a random sample of ten (Python `random.seed(19)`, `random.sample(..., 10)` over the
   dated records) and five labelled high severity. All fifteen were real.
@@ -64,8 +64,10 @@ script, before the agents' results were in.
 
 ## What was corrected
 
-95 confirmed findings in 41 documents. A finding counts as corrected when this change edits its
-line or one within three lines of it, or adds a dated note for it. Proposals were dropped where
+148 confirmed findings in 77 files: 95 corrections in 41 documents, and 53 private-data findings
+closed by the redaction described below. A finding counts as corrected when this change edits
+its line or one within three lines of it, adds a dated note for it, or removes the private value
+it quoted. Proposals were dropped where
 the claim could not be confirmed, and where the file is stage-owned, generated, attested by a
 pack, a paper draft or a pilot governance document.
 
@@ -107,19 +109,21 @@ The corrections a reviewer is most likely to have met:
 
 ## What was left open
 
-698 confirmed findings in 286 files, listed in [FINDINGS.md](FINDINGS.md). Each entry says
-whether the second pass reproduced it with a script (132) or read it without running the check
-again (566).
+645 confirmed findings in 277 files, listed in [FINDINGS.md](FINDINGS.md). Each entry says
+whether the second pass reproduced it with a script (85) or read it without running the check
+again (560).
 
 | Why it is open                                                                    | Findings |
 | --------------------------------------------------------------------------------- | -------- |
-| Dated record: a plan, spec, stage document, log entry, paper draft or older audit | 596      |
-| Private data, which is the owner's decision                                       | 62       |
-| Frozen evidence or a stage-owned file                                             | 39       |
+| Dated record: a plan, spec, stage document, log entry, paper draft or older audit | 591      |
+| Frozen evidence or a stage-owned file                                             | 38       |
+| Kept on purpose: a contact or author address                                      | 11       |
+| Kept on purpose: a host label with no address, or the author's city               | 3        |
 | Attested by a pack                                                                | 1        |
+| Owner action: confirm an API key was rotated                                      | 1        |
 
-The first-pass agents labelled 117 of the open findings high severity, 159 medium and 422 low.
-The label is theirs, and many high labels are on private-data entries.
+The first-pass agents labelled 70 of the open findings high severity, 158 medium and 417 low.
+The label is theirs.
 
 Dated records are not edited, by the rule in [AGENTS.md](../../AGENTS.md). Most of their findings
 are small: a code sample in a plan that would not run as written, a link to a file that later
@@ -140,6 +144,45 @@ Some open findings are not small, and the author should read them:
 - `docs/research/provenance-phase-19g/DEPLOYER_PROFILE.md` says every Claude system card hands
   enforcement to the deployer. Its source notes sampled the cards and do not support "every". The
   19g pack attests this document, so it is not edited here.
+
+## Private data redacted
+
+On the owner's instruction, private values were replaced in 48 files, evidence files included,
+by one script with fixed rules. The values are not repeated here.
+
+| What                                                        | Replaced with                                             |
+| ----------------------------------------------------------- | --------------------------------------------------------- |
+| A server's address, its login name and the key file's name  | `[redacted-ip]`, `[redacted-user]`, `[redacted-key-path]` |
+| Host names of the author's laptop and of the server         | `[redacted-host]`, `[droplet]`                            |
+| Local paths under the author's home directory               | `[repo]`, `[zurvan]`, `[scratch]`, `[home]`               |
+| Five outside reviewers' email addresses in one manifest     | `(address withheld)`                                      |
+| The author's personal address in three old plans' git lines | `[redacted-email]`                                        |
+
+Four Markdown evidence files carry a dated note saying what was replaced. Nothing else in any
+file changed, and every edited JSON file still parses. The quick gate, the end-to-end tests of
+the seven stages whose evidence was edited and the reviewer-signature aggregator all pass after
+the change. No edited file's earlier checksum is pinned by a gate.
+
+What the redaction did not change, and why:
+
+- **The five reviewers' signed blocks** (`evidence/stage-4r/reviewer-runs/reviewer-*.json`) still
+  hold the identity string each reviewer declared, with an email address. That string is inside
+  the signed body, so removing it would break the reviewer's signature. Removing it needs the
+  reviewers to sign again under another name, or a decision to keep unverifiable copies.
+- **One comment in a stage-owned source file** (`tools/simurgh-attestation/stage5n/node/realEvidence.mjs`)
+  names a local scratch path. Stage-owned sources are not edited here.
+- **Contact and author addresses** in `SECURITY.md`, `PRIVACY.md`, `docs/DISCLAIMER.md`, two
+  write-ups, one stage brief, the pilot's participant notice and the papers' author blocks are
+  there on purpose.
+- **Test files** contain path and address patterns as test inputs, not as leaks.
+- **Git history** keeps every redacted value. Rewriting it would change the commit ids that the
+  evidence, the ledger and the release tags cite, so it was not done. The values should be
+  treated as disclosed. The repository's own notes say the server accepts key logins only.
+
+An API key was used for two October studies and shared with the agent as a chat attachment
+(`docs/assurance/openai-native/README.md`). A search of the whole git history for key and token
+patterns found test fixtures and nothing real. Whether the key was rotated afterwards is not
+recorded in the repository; only the account owner can confirm or do it.
 
 ## Limits
 

@@ -27,7 +27,7 @@
   },
   "corroborating_runs": [
     { "label": "local", "node": "v22.16.0", "raw": 0, "witness": "this pack's OTS proof (contest_layer_root 286a93aa) upgraded to Bitcoin blocks 957642 + 957644; see RAW_RESULTS.md 'OpenTimestamps confirmation — local'" },
-    { "label": "remote-droplet 170.64.167.95 (Nexus, Ubuntu 24.04)", "node": "v26.5.0", "raw": 0, "witness": "SEPARATE droplet ceremony (contest_layer_root 32c7c87c, distinct proof) also upgraded to the same blocks 957642 + 957644 via distinct merkle paths (OTS batches submitters into one commitment tx); bytes in RAW_RESULTS.md, not committed here" }
+    { "label": "remote-droplet [redacted-ip] ([droplet], Ubuntu 24.04)", "node": "v26.5.0", "raw": 0, "witness": "SEPARATE droplet ceremony (contest_layer_root 32c7c87c, distinct proof) also upgraded to the same blocks 957642 + 957644 via distinct merkle paths (OTS batches submitters into one commitment tx); bytes in RAW_RESULTS.md, not committed here" }
   ],
   "identity_note": "The identity-anchored externally_anchored rung is intentionally NOT pursued — the party requires anonymity, and that rung requires revealing a real identity via Sigstore/OIDC. The de-identified public witness (above) is the honest ceiling for an anonymous party; now that Bitcoin has confirmed, independence stays distinct_key_only with a VERIFIED de-identified public_witness (NOT the identity rung — the score stays Frontier 9.4, not 9.5).",
   "non_claim": "NOT rsp_unredacted_report_compliance; over the Opus 4.6 PUBLIC structure only; ratings are the party's own independent assessments (NOT attributed to METR, Anthropic, or any named reviewer); does not observe the confidential report or Anthropic's real review panel; affiliation axis modeled."

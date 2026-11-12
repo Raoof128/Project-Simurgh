@@ -131,7 +131,7 @@ Checking formatting...
 # todo 0
 # duration_ms 68.079375
 Simurgh privacy audit — scanning for forbidden fields
-  scan   /Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tests/fixtures/stage-2-8/linux-proof.json
+  scan   [repo]/tests/fixtures/stage-2-8/linux-proof.json
 
 [voting-pilot] Scanning evidence exports for ballot-choice forbidden keys
 [voting-pilot] ballot-choice privacy audit: PASS (9 evidence file(s) scanned)
@@ -156,7 +156,7 @@ To address all issues, run:
 Stage 2.4/2.5 E2E smoke: SDK + daemon + scanner + signed proof
 Stage 2.4/2.5 E2E smoke passed
 Simurgh privacy audit — scanning for forbidden fields
-  scan   /Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tests/fixtures/stage-2-8/linux-proof.json
+  scan   [repo]/tests/fixtures/stage-2-8/linux-proof.json
 
 [voting-pilot] Scanning evidence exports for ballot-choice forbidden keys
 [voting-pilot] ballot-choice privacy audit: PASS (9 evidence file(s) scanned)
@@ -209,7 +209,7 @@ Test Suite 'All tests' passed at 2026-05-28 11:00:04.850.
 ↳ Testing Library Version: 1902
 ↳ Target Platform: arm64e-apple-macos14.0
 ✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.
-Another instance of SwiftPM (PID: 38014) is already running using '/Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tools/simurgh-daemon-macos/.build', waiting until that process has finished execution...Building for debugging...
+Another instance of SwiftPM (PID: 38014) is already running using '[repo]/tools/simurgh-daemon-macos/.build', waiting until that process has finished execution...Building for debugging...
 [0/3] Write swift-version--58304C5D6DBC2206.txt
 Build of product 'SimurghDaemon' complete! (0.12s)
 Stage 2.4/2.5 E2E smoke passed.
@@ -224,9 +224,9 @@ unsafe dynamic HTML sink found outside reviewed dashboard/student render paths
 ✓ Stage 2.6 Windows scanner smoke: signed proof + risk + report + audit
 ✗ Stage 2.6 Windows daemon .NET tests
   Determining projects to restore...
-/usr/local/share/dotnet/sdk/7.0.307/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.TargetFrameworkInference.targets(151,5): error NETSDK1045: The current .NET SDK does not support targeting .NET 8.0.  Either target .NET 7.0 or lower, or use a version of the .NET SDK that supports .NET 8.0. [/Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tools/simurgh-daemon-windows/src/SimurghDaemon.Windows/SimurghDaemon.Windows.csproj]
-/usr/local/share/dotnet/sdk/7.0.307/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.TargetFrameworkInference.targets(151,5): error NETSDK1045: The current .NET SDK does not support targeting .NET 8.0.  Either target .NET 7.0 or lower, or use a version of the .NET SDK that supports .NET 8.0. [/Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tools/simurgh-daemon-windows/src/SimurghAffinityFixture/SimurghAffinityFixture.csproj]
-/usr/local/share/dotnet/sdk/7.0.307/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.TargetFrameworkInference.targets(151,5): error NETSDK1045: The current .NET SDK does not support targeting .NET 8.0.  Either target .NET 7.0 or lower, or use a version of the .NET SDK that supports .NET 8.0. [/Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tools/simurgh-daemon-windows/tests/SimurghDaemon.Windows.Tests/SimurghDaemon.Windows.Tests.csproj]
+/usr/local/share/dotnet/sdk/7.0.307/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.TargetFrameworkInference.targets(151,5): error NETSDK1045: The current .NET SDK does not support targeting .NET 8.0.  Either target .NET 7.0 or lower, or use a version of the .NET SDK that supports .NET 8.0. [[repo]/tools/simurgh-daemon-windows/src/SimurghDaemon.Windows/SimurghDaemon.Windows.csproj]
+/usr/local/share/dotnet/sdk/7.0.307/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.TargetFrameworkInference.targets(151,5): error NETSDK1045: The current .NET SDK does not support targeting .NET 8.0.  Either target .NET 7.0 or lower, or use a version of the .NET SDK that supports .NET 8.0. [[repo]/tools/simurgh-daemon-windows/src/SimurghAffinityFixture/SimurghAffinityFixture.csproj]
+/usr/local/share/dotnet/sdk/7.0.307/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.TargetFrameworkInference.targets(151,5): error NETSDK1045: The current .NET SDK does not support targeting .NET 8.0.  Either target .NET 7.0 or lower, or use a version of the .NET SDK that supports .NET 8.0. [[repo]/tools/simurgh-daemon-windows/tests/SimurghDaemon.Windows.Tests/SimurghDaemon.Windows.Tests.csproj]
 
 ━━━ Stage 2.7 cross-platform Device Shield smoke ━━━
 ✗ Stage 2.7 cross-platform Device Shield smoke
@@ -241,10 +241,10 @@ Error: G: audit leaked raw value "4321"
 {
   "snippet": "{\"sessionId\":\"sess_e2ff2fd1e008\",\"generated_at\":\"2026-05-28T01:00:19.154Z\",\"chain_terminator\":\"d57877d5f89b6cc1acb6b199b03a311cc51614c26a6648caf7d7f80c6c02e3c5\",\"entry_count\":7,\"truncated\":false,\"cap\":5000,\"hmac_algorithm\":\"HMAC-SHA256\",\"hmac_key_ephemeral\":true,\"entries\":[{\"seq\":0,\"ts\":1779930019150,\"type\":\"exam_started\",\"payload\":{\"examId\":\"exam_d04ea42d701d\",\"ts\":1779930019150},\"prev\":\"GENESIS\""
 }
-    at assertSmoke (file:///Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tests/e2e/stage27_cross_platform_device_shield_smoke.mjs:9:11)
-    at runScenarioG (file:///Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tests/e2e/stage27_cross_platform_device_shield_smoke.mjs:600:7)
+    at assertSmoke (file://[repo]/tests/e2e/stage27_cross_platform_device_shield_smoke.mjs:9:11)
+    at runScenarioG (file://[repo]/tests/e2e/stage27_cross_platform_device_shield_smoke.mjs:600:7)
     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
-    at async main (file:///Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tests/e2e/stage27_cross_platform_device_shield_smoke.mjs:618:3)
+    at async main (file://[repo]/tests/e2e/stage27_cross_platform_device_shield_smoke.mjs:618:3)
 
 ━━━ Stage 2.7 cross-platform security audit ━━━
 ✓ Stage 2.7 cross-platform security audit: signature/platform/raw-field gates
@@ -260,7 +260,7 @@ Stage 2.6/2.7 closeout cybersecurity audit
 Building for debugging...
 [0/4] Write swift-version--58304C5D6DBC2206.txt
 Build complete! (0.15s)
-Another instance of SwiftPM (PID: 38543) is already running using '/Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tools/simurgh-daemon-macos/.build', waiting until that process has finished execution...Building for debugging...
+Another instance of SwiftPM (PID: 38543) is already running using '[repo]/tools/simurgh-daemon-macos/.build', waiting until that process has finished execution...Building for debugging...
 [0/3] Write swift-version--58304C5D6DBC2206.txt
 Build of product 'SimurghDaemon' complete! (0.12s)
 unsafe dynamic HTML sink found outside reviewed dashboard/student render paths
@@ -299,7 +299,7 @@ Stage 2.6/2.7 closeout cybersecurity audit
 Building for debugging...
 [0/4] Write swift-version--58304C5D6DBC2206.txt
 Build complete! (0.13s)
-Another instance of SwiftPM (PID: 39272) is already running using '/Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tools/simurgh-daemon-macos/.build', waiting until that process has finished execution...Building for debugging...
+Another instance of SwiftPM (PID: 39272) is already running using '[repo]/tools/simurgh-daemon-macos/.build', waiting until that process has finished execution...Building for debugging...
 [0/3] Write swift-version--58304C5D6DBC2206.txt
 Build of product 'SimurghDaemon' complete! (0.11s)
 unsafe dynamic HTML sink found outside reviewed dashboard/student render paths

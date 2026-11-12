@@ -6,7 +6,7 @@
     "verified": true,
     "runs": [
       { "label": "local", "node": "v22.16.0", "public_raw": 0, "audit_raw": 0 },
-      { "label": "remote-droplet (Nexus, Ubuntu 24.04)", "node": "v26.5.0", "public_raw": 0, "audit_raw": 0 }
+      { "label": "remote-droplet ([droplet], Ubuntu 24.04)", "node": "v26.5.0", "public_raw": 0, "audit_raw": 0 }
     ],
     "note": "Two independent machines + Node builds reproduced raw 0 (public + audit) on the committed VUC Lane-A pack, with a byte-identical universe_commitment_digest. VUC's proof is bound to the original review panel, so Lane C independence is REPRODUCTION + de-identified public witness, NOT a distinct-verifier-key ceremony."
   },

@@ -46,7 +46,7 @@ min_confirmations`) — no live node; witness-less path is honestly `pinned_chec
   `evidence/stage-5l/real-laneb/`.
 - **Lane D — REPRODUCTION DONE + witness Bitcoin-CONFIRMED (2026-07-12).** An independent party ran the
   verify-only droplet pack (public keys only) on **two machines / Node builds** (local v22.16.0, droplet
-  Nexus v26.5.0): all four checks reproduce **raw 0** with a byte-identical `commitment_session_id`. Both
+  [droplet] v26.5.0): all four checks reproduce **raw 0** with a byte-identical `commitment_session_id`. Both
   OTS witnesses are **Bitcoin-CONFIRMED** (blocks 957688–957690, calendar-batched with Lane B; distinct
   per-proof Merkle paths; cross-checked vs mempool.space). Evidence: `evidence/stage-5l/real-laned/`.
   **HONEST:** reproduction + witness (VUC Lane-C tier), **NOT** a distinct-key ceremony (droplet is

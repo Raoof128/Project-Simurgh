@@ -43,7 +43,7 @@ both `exit-map.json` goldens + the exitWrapper inline map — regenerated under 
 ## Lane C — real independent-party disclosure (status: COMPLETED 2026-07-10)
 
 The independent droplet team executed **both split roles** on their own machines with their own
-Ed25519 keys (a local host **and** the droplet `170.64.167.95`, Node v26.5.0).
+Ed25519 keys (a local host **and** the droplet `[redacted-ip]`, Node v26.5.0).
 
 - **REVIEW-HOST role (the load-bearing result).** Two unaffiliated hosts independently reran **our**
   committed Lane-A controlled recipe (`aggregate_mean` over `redteam-summary`) from `review-target/`

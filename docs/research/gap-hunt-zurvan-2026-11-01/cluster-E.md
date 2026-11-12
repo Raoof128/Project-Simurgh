@@ -1,6 +1,6 @@
 # Cluster E — reader E (OpenAI threat-intelligence and abuse-disruption reports)
 
-Hunt date 2026-11-01. All paths are under `/Users/raoof.r12/Desktop/Raouf/Zurvan/wiki/sources/`. Every quote in the gap table was machine-checked as a single byte-exact substring of the named page before this file was written. No quoted number is secondary; all come from the primary OpenAI text as ingested.
+Hunt date 2026-11-01. All paths are under `[zurvan]/wiki/sources/`. Every quote in the gap table was machine-checked as a single byte-exact substring of the named page before this file was written. No quoted number is secondary; all come from the primary OpenAI text as ingested.
 
 ## Pages read
 

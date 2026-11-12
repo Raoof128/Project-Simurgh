@@ -101,8 +101,8 @@ Expected: FAIL — `scanner::privacy` module does not exist yet.
 
 ```bash
 git add tools/simurgh-daemon-linux/tests/x11_scanner_tests.rs
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "test(stage-2-8b): red — X11 privacy filter module missing"
 ```
 
@@ -195,8 +195,8 @@ Expected: 2/2 PASS.
 
 ```bash
 git add tools/simurgh-daemon-linux/
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8b): X11 scanner privacy filter (counts-only output)"
 ```
 
@@ -394,8 +394,8 @@ If `x11rb` 0.13 API differs (the API has been stable but check), adjust property
 
 ```bash
 git add tools/simurgh-daemon-linux/
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8b): X11 scanner skeleton reading _NET_CLIENT_LIST + EWMH state"
 ```
 
@@ -428,8 +428,8 @@ Expected: clean. If clippy complains about unused `screen` variable or similar, 
 ```bash
 git status
 # If clean, skip. Otherwise:
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -am "chore(stage-2-8b): clippy clean"
 ```
 
@@ -615,8 +615,8 @@ Expected:
 
 ```bash
 git add tools/simurgh-daemon-linux/
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "test(stage-2-8b): Xvfb integration tests for X11 scanner (gracefully skipped if missing)"
 ```
 
@@ -697,8 +697,8 @@ Expected: all PASS (Xvfb-dependent ones may skip).
 
 ```bash
 git add tools/simurgh-daemon-linux/
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8b): /status endpoint runs X11 scanner when display=x11"
 ```
 
@@ -977,8 +977,8 @@ Expected: all PASS.
 
 ```bash
 git add tools/simurgh-daemon-linux/ src/device/daemonState.js tests/unit/daemonProofLinuxXcountsRollup.test.js
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8b): wire X11 scanner into signed /proof + Linux count rollup"
 ```
 
@@ -1050,8 +1050,8 @@ Expected: PASS — the committed fixture's signature still verifies because the 
 
 ```bash
 git add tools/simurgh-daemon-linux/
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8b): fixture binary uses real X11 scanner when available"
 ```
 
@@ -1166,8 +1166,8 @@ Expected: FAIL — current `buildDeviceIntegritySection` does not emit `display_
 
 ```bash
 git add tests/unit/reportBuilderLinuxDeviceShield.test.js
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "test(stage-2-8b): red — reportBuilder lacks Linux device_integrity fields"
 ```
 
@@ -1257,8 +1257,8 @@ Expected: full suite passes — macOS/Windows report tests must still pass byte-
 
 ```bash
 git add src/academic/reportBuilder.js
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8b): reportBuilder emits Linux device_integrity block"
 ```
 
@@ -1396,8 +1396,8 @@ Expected: 6/6 Linux risk tests PASS; full suite green (macOS/Windows byte-identi
 
 ```bash
 git add src/device/scannerRiskPolicy.js tests/unit/scannerRiskPolicyLinux.test.js
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8b): scannerRiskPolicy maps Linux x11/Wayland signals to Warning"
 ```
 
@@ -1459,8 +1459,8 @@ Expected: FAIL — `DEFAULT_SCAN_DIRS` currently does not include the Linux daem
 
 ```bash
 git add tests/unit/privacyAuditLinux.test.js
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "test(stage-2-8b): red — privacy-audit lacks Linux daemon sweep"
 ```
 
@@ -1534,8 +1534,8 @@ Expected: full suite passes.
 
 ```bash
 git add tools/privacy-audit.mjs
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8b): privacy-audit sweeps Linux daemon + skips target/"
 ```
 
@@ -1576,8 +1576,8 @@ Expected: prior 15 + 2 privacy + 2 xvfb (skipped if no Xvfb) = 19 PASS minimum.
 ```bash
 git status
 # If clean, skip. Otherwise:
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -am "chore(stage-2-8b): cargo fmt + clippy clean"
 ```
 

@@ -1,5 +1,21 @@
 ## Change Log
 
+## [docs-redact-private-data] — 2026-11-12 — Private values replaced with placeholders in 48 files
+
+**Raouf:**
+
+- **Scope:** stage closeouts, plans, specs, gap-hunt notes, evidence transcripts and outcome
+  records, one paper artefact, one line in each log; the 12 November audit record and the record
+  of corrections.
+- **Summary:** a server address with its login name and key file name, host names, local paths,
+  five outside reviewers' email addresses in a manifest and the owner's personal address in old
+  plans are replaced by bracketed placeholders. Nothing else in those files changed. The
+  reviewers' signed blocks, stage-owned sources, tests, deliberate contact addresses and git
+  history are unchanged; the audit README says why.
+- **Verification:** quick gate passes; end-to-end tests of the seven affected stages pass; the
+  reviewer-signature aggregator verifies all six blocks; a history-wide search for API keys and
+  tokens found test fixtures only.
+
 ## [docs-fact-check-2026-11-12] — 2026-11-12 — Every Markdown document checked against the repository; 95 findings corrected, 698 recorded as open
 
 **Raouf:**
@@ -895,7 +911,7 @@
 
 - **Scope:** Documentation-only follow-up to the Stage 5E conformance-pack repair and completed Linux x86_64 droplet run. No verifier, runner, pack content, evidence value, model score, capture claim, or production service changed.
 - **Summary:** Prepended the sanitized droplet log with the two original clean-room findings, the applied repairs, and explicit scope/credential boundaries while preserving the raw droplet output below a separator. The note records the omitted `stage4h/exitCodes.mjs`, the masked `&& echo` shell failures, the fail-closed runner repair, explicit-manifest builder, regression coverage, `74/74` Stage 5E tests, and remote/local ZIP hash match.
-- **Files changed:** `/Users/raoof.r12/Desktop/Raouf/test/simurgh-vda-conformance-fixed-droplet.log`, `AGENT.md`, `CHANGELOG.md`.
+- **Files changed:** `[scratch]/simurgh-vda-conformance-fixed-droplet.log`, `AGENT.md`, `CHANGELOG.md`.
 - **Verification:** Required repair-summary and raw-output markers are present; the original `raw 0`, byte-stability, `unit OK`, Python parity, `K7 OK`, Lean-skip, and `ALL PASS` evidence remains present; the log contains no configured droplet password, address, or username; Prettier and `git diff --check` pass for the project logs.
 - **Follow-ups:** Preserve this annotated log with the fixed ZIP for third-party handoff. The pre-existing non-demo missing-`ANTHROPIC_API_KEY` repository test failure remains separate from Stage 5E.
 

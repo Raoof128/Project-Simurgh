@@ -62,7 +62,7 @@ No Straw Detector · No Tunable Excuse · No Forbidden Claim · No Silent Slip (
 
 The first genuinely independent reproduction in the 3M→5E arc: **independent humans, unaffiliated, on
 their own x86_64 Ubuntu droplet** ran the self-contained conformance pack. Node 26.5.0 / Python 3.12.3.
-Result (sanitized log preserved at `~/Desktop/Raouf/test/simurgh-vda-conformance-fixed-droplet.log`):
+Result (sanitized log preserved at `[scratch]/simurgh-vda-conformance-fixed-droplet.log`):
 **public + audit verify to raw 0**, evidence rebuild is **byte-identical**, stdlib-Python parity
 reproduces **40 deterministic facts**, and the unit / tamper-matrix / K7 gates pass — `ALL PASS`. The
 run is **verify-only**: it does not re-run Prompt Guard (arithmetic over the committed score table, the

@@ -63,8 +63,8 @@ was neither narrowed nor expanded later, verifiably" — **NEVER** "the universe
 
 ## Real Lane C — independent reproduction EXECUTED (2026-07-12)
 
-An independent party ran the verify-only droplet pack (`~/Desktop/Raouf/test/stage5k-vuc-droplet/`) on
-**two independent machines / Node builds** (local v22.16.0, remote droplet Nexus v26.5.0), both reproducing
+An independent party ran the verify-only droplet pack (`[scratch]/stage5k-vuc-droplet/`) on
+**two independent machines / Node builds** (local v22.16.0, remote droplet [droplet] v26.5.0), both reproducing
 **`raw 0` public + audit** with a byte-identical `universe_commitment_digest` (`sha256:01cd6f55…`), and
 OpenTimestamps-stamped `ANCHOR_ME.txt` on both. Committed at
 `docs/research/llm-shield/evidence/stage-5k/real-lanec/` (proof + `lanec-outcome.json`). Verified locally:

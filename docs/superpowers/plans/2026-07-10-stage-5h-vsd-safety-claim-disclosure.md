@@ -472,7 +472,7 @@ verifierPriv})` accepting a returned `disclosure-package.json` (producer-signed 
 artefact bytes + optional host receipt) → attestation → verify raw 0; `writeRealEvidence(outDir, …)`
 → `evidence/stage-5h/real-disclosure/` (verify-only). Unit-test with the fixture keys standing in
 for the foreign ones. **(b) Outbound pack** (mirrors 5G `foreign-capture-pack/`, built AFTER CI is
-green, in `/Users/raoof.r12/Desktop/Raouf/test/`): sign-inventory script + README + OUTPUT_CONTRACT
+green, in `[scratch]/`): sign-inventory script + README + OUTPUT_CONTRACT
 with the roles SPLIT so no party hosts its own claim (gauntlet catch — producer==host for the same
 claim would be grading-own-homework wearing an R1 badge): the droplet team (1) files a claim
 inventory as PRODUCER over their real 5G PG2 capture (cross-attestation chaining: the 5G

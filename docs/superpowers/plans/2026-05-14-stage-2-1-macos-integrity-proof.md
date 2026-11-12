@@ -74,7 +74,7 @@
 
 - [ ] **Step 1: Replace the file contents entirely**
 
-Write `/Users/raoof.r12/Desktop/Raouf/Project-Simurgh/src/integrity/proofSchema.js`:
+Write `[repo]/src/integrity/proofSchema.js`:
 
 ```js
 // Stage 2.1 v1 proof schema constants — purely declarative.
@@ -273,7 +273,7 @@ describe("proofSchema constants", () => {
 - [ ] **Step 3: Run tests**
 
 ```bash
-cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh && node --test tests/unit/integrity/proofSchema.test.js
+cd [repo] && node --test tests/unit/integrity/proofSchema.test.js
 ```
 
 Expected: 9 tests pass.
@@ -1406,7 +1406,7 @@ git commit -m "feat(integrity): add per-session state with N1 strict node contin
 
 - [ ] **Step 1: Add the new constant**
 
-Open `/Users/raoof.r12/Desktop/Raouf/Project-Simurgh/src/academic/academicEvents.js`. Find the existing EVENTS block:
+Open `[repo]/src/academic/academicEvents.js`. Find the existing EVENTS block:
 
 ```js
 export const EVENTS = Object.freeze({
@@ -2173,7 +2173,7 @@ enum ProofSigner {
 If you have Swift on macOS:
 
 ```bash
-cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tools/simurgh-node-macos
+cd [repo]/tools/simurgh-node-macos
 swift build 2>&1 | tail -10
 ```
 
@@ -2246,7 +2246,7 @@ final class CanonicaliseTests: XCTestCase {
 - [ ] **Step 2: Run the Swift test (skip if Swift is not installed)**
 
 ```bash
-cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tools/simurgh-node-macos
+cd [repo]/tools/simurgh-node-macos
 swift test 2>&1 | tail -15
 ```
 

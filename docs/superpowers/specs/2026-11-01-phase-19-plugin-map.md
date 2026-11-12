@@ -1,6 +1,6 @@
 # Simurgh plug-in map for new authorization-runtime lanes
 
-Repo `/Users/raoof.r12/Desktop/SIM/Project-Simurgh`, main @ 30fe9e4b, read-only. Paths below are repo-relative.
+Repo `[repo]`, main @ 30fe9e4b, read-only. Paths below are repo-relative.
 
 Three facts constrain every section:
 

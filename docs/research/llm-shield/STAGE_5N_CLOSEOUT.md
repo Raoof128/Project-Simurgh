@@ -80,7 +80,7 @@ each other and with the proofs, and all three were wrong together. Only real evi
 
 ## Independent verification (external, unprompted)
 
-An independent two-machine pack (local + droplet **Nexus**, x86_64) re-derived **`D_out` = `3c838782…bf0d`
+An independent two-machine pack (local + droplet **[droplet]**, x86_64) re-derived **`D_out` = `3c838782…bf0d`
 from scratch — exact match**, reproduced 10/10 negative controls and `x_T` on **Python 3.14.6** (a version
 outside the set we had documented — parity is wider than claimed), and verified the TSA imprints, Rekor
 logIndexes and elapsed arithmetic offline. It also found four real defects, all verified and fixed:

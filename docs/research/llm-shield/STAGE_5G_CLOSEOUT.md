@@ -40,7 +40,7 @@ prior 5F reproduce still passes (sealed history undisturbed).
 ## Real independent-party foreign capture (executed 2026-07-10)
 
 **An unaffiliated team** (the same group that reproduced 5F) ran `foreign-capture-pack/` on **their own
-machines with their own Ed25519 keys** — a local host **and** the droplet `170.64.167.95` — over the
+machines with their own Ed25519 keys** — a local host **and** the droplet `[redacted-ip]` — over the
 Simurgh-issued challenge. Both runs completed and **agree** (identical `detector_snapshot_digest`,
 `corpus_digest`, `challenge_record_digest`, and per-case labels: `c1 benign`, `c2 malicious` — PG2 flags
 the injection). We ingested their returned `capture-package.json` (`lanec/build-real-evidence.mjs`) into a

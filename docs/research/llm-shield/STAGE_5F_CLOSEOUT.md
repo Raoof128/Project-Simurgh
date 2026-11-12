@@ -69,7 +69,7 @@ Plus the zero-code-path projections: `evaluatedObligationFraction`, the Cherry-P
 ## Independent-party reproduction (post-pack, 2026-07-10)
 
 An **unaffiliated team ran the reviewer pack on their own hardware** — a local machine (Node v22.16.0)
-and a **droplet `170.64.167.95` under Node v26.5.0** (scp upload → extract → run → delete). **Both runs:
+and a **droplet `[redacted-ip]` under Node v26.5.0** (scp upload → extract → run → delete). **Both runs:
 `ALL PASS`, byte-identical** (step 7 rebuilds the evidence and compares against the shipped bytes, so a
 pass means their Node-26 rebuild reproduced our committed digests exactly on foreign hardware). This is
 **independent-party _reproduction_ of committed evidence, verify-only** — the verifier, attestation

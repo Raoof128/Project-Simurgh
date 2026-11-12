@@ -1,7 +1,7 @@
 # Reader brief — Simurgh gap hunt over the 1 Nov 2026 Zurvan paper batch
 
 You are one of several readers. Each reader gets a cluster of ingested source pages under
-`/Users/raoof.r12/Desktop/Raouf/Zurvan/wiki/sources/`. Your job: read them for GAPS that
+`[zurvan]/wiki/sources/`. Your job: read them for GAPS that
 Project Simurgh (an inspectable authorization runtime for AI agents, summarised below) could
 pay, and report them in the paper's OWN words with verbatim quotes.
 

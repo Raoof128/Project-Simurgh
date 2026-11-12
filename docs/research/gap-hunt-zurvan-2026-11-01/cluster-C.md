@@ -1,6 +1,6 @@
 # Cluster C — reader C (Anthropic policy, governance, verification programs, applied-agent reports)
 
-All paths below are under `/Users/raoof.r12/Desktop/Raouf/Zurvan/wiki/sources/`. Every quote was extracted by script from the ingested page and checked as an exact substring (single line, at most 220 characters). Dates are the page's own Date field, or the document's stated date; "undated" means the ingest has no date.
+All paths below are under `[zurvan]/wiki/sources/`. Every quote was extracted by script from the ingested page and checked as an exact substring (single line, at most 220 characters). Dates are the page's own Date field, or the document's stated date; "undated" means the ingest has no date.
 
 Headline: 26 gap rows (slightly over the 25 target; rows 2, 3 and 5 carry the verification-program acceptance question you asked for). Twelve rows carry a `none` sub-part in the register column (3, 4, 5, 6, 9, 10, 13, 14, 17, 18, 21, 26); rows 17, 21 and 26 are wholly unregistered. The densest seams are (a) evaluator and program access whose scope and redaction the evaluated party controls, (b) oversight and coverage numbers only the lab can compute, and (c) forged or substituted context and artifacts.
 

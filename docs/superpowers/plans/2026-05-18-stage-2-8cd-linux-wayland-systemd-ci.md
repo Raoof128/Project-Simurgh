@@ -348,8 +348,8 @@ Expected: FAIL — the second telemetry returns 200 because the server doesn't e
 
 ```bash
 git add tests/unit/displayServerLockServerWiring.test.js
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "test(stage-2-8c): red — display_server_mismatch not enforced live"
 ```
 
@@ -431,8 +431,8 @@ Expected: full suite green (no regression).
 
 ```bash
 git add server.js
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8c): wire display_server_mismatch into /api/telemetry"
 ```
 
@@ -714,8 +714,8 @@ Expected: builds (will fetch zbus on first build).
 
 ```bash
 git add tools/simurgh-daemon-linux/
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8c): Wayland portal scanner (advertised/active, no consent)"
 ```
 
@@ -799,8 +799,8 @@ Expected: 5/5 PASS.
 
 ```bash
 git add tools/simurgh-daemon-linux/tests/wayland_scanner_tests.rs
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "test(stage-2-8c): wayland_summary unit tests"
 ```
 
@@ -913,8 +913,8 @@ Expected: all PASS.
 
 ```bash
 git add tools/simurgh-daemon-linux/
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8c): XWayland scanner with partial coverage label"
 ```
 
@@ -983,8 +983,8 @@ Expected: clean.
 
 ```bash
 git add tools/simurgh-daemon-linux/
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8c): /status + /proof dispatch to wayland/xwayland scanners"
 ```
 
@@ -1076,8 +1076,8 @@ Expected: 3/3 PASS after the SDK edit lands.
 
 ```bash
 git add public/sdk/simurgh-browser-sdk.js tests/unit/browserPackageHintUxOnly.test.js
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8c): browser_package_hint as UX-only SDK signal"
 ```
 
@@ -1156,8 +1156,8 @@ test("[stage-2-8d] lifecycle scripts contain no eval and no curl pipe", () => {
 ```bash
 node --test tests/unit/linuxSystemdScripts.test.js   # expect FAIL
 git add tests/unit/linuxSystemdScripts.test.js
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "test(stage-2-8d): red — Linux systemd user lifecycle missing"
 ```
 
@@ -1196,8 +1196,8 @@ WantedBy=default.target
 ```bash
 node --test tests/unit/linuxSystemdScripts.test.js   # unit-file tests now pass
 git add tools/simurgh-daemon-linux/systemd/
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8d): systemd --user unit for Linux daemon (dev-only)"
 ```
 
@@ -1378,8 +1378,8 @@ chmod +x tools/simurgh-daemon-linux/scripts/*.sh
 if command -v shellcheck >/dev/null 2>&1; then shellcheck tools/simurgh-daemon-linux/scripts/*.sh; fi
 node --test tests/unit/linuxSystemdScripts.test.js
 git add tools/simurgh-daemon-linux/scripts/
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "feat(stage-2-8d): install/uninstall/check/doctor user-unit scripts"
 ```
 
@@ -1410,8 +1410,8 @@ Replace every `if !xvfb_available() { ... return; }` with:
 Three tests need this update.
 
 ```bash
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -am "feat(stage-2-8d): SIMURGH_REQUIRE_XVFB_TESTS promotes Xvfb to mandatory in CI"
 ```
 
@@ -1464,8 +1464,8 @@ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/stage-1-checks.y
 ```
 
 ```bash
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -am "ci(stage-2-8d): Ubuntu Rust + mandatory Xvfb + shellcheck"
 ```
 
@@ -1524,8 +1524,8 @@ test("[stage-2-8d] CI workflow does not echo secrets", () => {
 ```bash
 node --test tests/unit/linuxCiWorkflow.test.js
 git add tests/unit/linuxCiWorkflow.test.js
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "test(stage-2-8d): workflow assertions for CI Rust + Xvfb + shellcheck"
 ```
 
@@ -1585,8 +1585,8 @@ Smoke implementation strategy:
 Wrapper script `scripts/smoke-stage-2-8c-8d-linux-wayland-systemd-ci.sh` follows the exact shape of `scripts/smoke-stage-2-8a-2-8b-linux-foundation-x11.sh` (cd to repo root, boot server with `SIMURGH_DEMO_MODE=1 PORT=33130`, wait for `/health`, run smoke, run privacy audit, declare pass). Use port 33130 to avoid collisions with the 2.7 and 2.8A/B smokes (33127, 33128).
 
 ```bash
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "test(stage-2-8cd): combined Wayland + systemd + CI smoke (16 scenarios)"
 ```
 
@@ -1692,8 +1692,8 @@ echo "Stage 2.8C/D Linux Wayland + systemd + CI cybersecurity audit: pass"
 `chmod +x` it, then run from repo root.
 
 ```bash
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "test(stage-2-8cd): combined cybersecurity audit (16 dimensions)"
 ```
 
@@ -1762,14 +1762,14 @@ the automated guard; this list is the human one.
 
 ```bash
 git add docs/evidence/stage-2-linux/README.md
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "docs(stage-2-8cd): Linux evidence rules README"
 ```
 
 ```bash
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "docs(stage-2-8cd): Linux evidence rules README"
 ```
 
@@ -1794,8 +1794,8 @@ After the existing Stage 2.6/2.7 closeout block, add Stage 2.8A/B + 2.8C/D gate 
 - AGENT.md + CHANGELOG.md: new entries starting with `Raouf:` documenting Stage 2.8C/D scope, files, verification, follow-ups (PR #23 closeout).
 
 ```bash
-GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
-GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="[redacted-email]" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="[redacted-email]" \
 git commit -m "docs(stage-2-8cd): light README/ROADMAP/SECURITY/PRIVACY/AGENT/CHANGELOG"
 ```
 

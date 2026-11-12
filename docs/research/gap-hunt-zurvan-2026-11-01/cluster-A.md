@@ -1,6 +1,6 @@
 # Cluster A — Reader A (Anthropic incident and alignment-risk documents)
 
-All paths below are under `/Users/raoof.r12/Desktop/Raouf/Zurvan/wiki/sources/`. Short names used in the table:
+All paths below are under `[zurvan]/wiki/sources/`. Short names used in the table:
 
 - P1 = `Investigating_unintended_model_actions_in_our_evaluations_and_internal_use.md`
 - P2 = `An_alignment_assessment_of_the_UK_AISI_cybertesting_incident.md`

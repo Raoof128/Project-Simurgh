@@ -661,7 +661,7 @@ console.log("stage3i consistency OK");
 The audits need committed evidence. Until the opt-in external run is executed (Step 6), generate a deterministic fixture that mirrors the frozen 3H-L2 boundary distribution exactly — 10 benign + 20 security, all blocked at `context_guard` (`context_guard: 30, tool_gate: 0`):
 
 ```bash
-cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh
+cd [repo]
 mkdir -p docs/research/llm-shield/evidence/stage-3i
 cd tools/agentdojo-simurgh-adapter
 python3 -c "
@@ -714,7 +714,7 @@ Make it executable: `chmod +x scripts/smoke-llm-shield-stage3i-phase1.sh`
 Run:
 
 ```bash
-cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh
+cd [repo]
 bash scripts/smoke-llm-shield-stage3i-phase1.sh
 ```
 
@@ -731,7 +731,7 @@ stage3i-phase1 smoke: passed
 - [ ] **Step 6: Commit**
 
 ```bash
-cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh
+cd [repo]
 git add scripts/privacy-audit-llm-shield-stage3i.mjs \
         scripts/consistency-audit-llm-shield-stage3i.mjs \
         scripts/smoke-llm-shield-stage3i-phase1.sh \
