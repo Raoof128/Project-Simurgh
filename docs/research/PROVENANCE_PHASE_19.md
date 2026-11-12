@@ -1426,3 +1426,19 @@ ancestor of every commit that acts on it.
   on hosted models; no attacker adapted to these models. Not shown: that these models resist a
   capable attacker, anything about another provider, a gate or a receiver. `IOU-19-SPEND` is
   unchanged: it names other models and 19e's framings.
+- Ruling (13 Nov 2026, P19-OPERATOR04 exercised): the declaration (`ceff9c78`) precedes every
+  commit that acts on it. `handoff19.py` now lists fourteen lanes and names 19n and 19o among
+  those that need nothing beyond the standard library; the comparator is unchanged. Tests were
+  changed first (four) and failed before the change. The first operator receipt is
+  byte-identical (sha256 `765c42b1…`); its review was recomputed and lists 19n and 19o as
+  `not_in_receipt`, so `handoff19.py status` reads `reviewed_discrepancies_published` and names
+  thirteen items still owed under `IOU-19-OPERATOR`. `HANDOFF.md` and
+  `discrepancy-template.json` were re-rendered and the 19f README updated. The workflow gained
+  both lanes' `docs/` paths in both path filters and their ids in the expected-roots check, with
+  its message; no step was added, removed or renamed, and the Stage 5Q census output is
+  identical before and after (58 steps, 53 problems). `PHASE19_ROOTS` was extended outside the
+  pull request at 16:50Z on 12 Nov from twelve roots to fourteen, the twelve existing values
+  unchanged. A Python 3.12 with no site packages verified 19n and 19o, which is what the handoff
+  now tells an operator; 19o's verify needs no network and no key. Not changed here: the root
+  README's count of Phase 19 packs, which is outside this declaration. The package given to an
+  operator is rebuilt after the merge.
