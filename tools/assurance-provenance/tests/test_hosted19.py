@@ -121,27 +121,116 @@ class RequestTests(unittest.TestCase):
             h.build_request({**ROUTED, "provider": "other"}, ROW)
 
 
+def direct(*items, status="completed", tokens=(600, 900)):
+    return {
+        "model": "vendor-model",
+        "status": status,
+        "instructions": "echo of the system prompt",
+        "tools": [{"echo": True}],
+        "temperature": 1.0,
+        "output": list(items),
+        "usage": {
+            "input_tokens": tokens[0],
+            "output_tokens": tokens[1],
+            "output_tokens_details": {"reasoning_tokens": 700},
+        },
+    }
+
+
+def function_call(name, **fields):
+    return {"type": "function_call", "name": name, "arguments": json.dumps(fields)}
+
+
+REASONING = {"type": "reasoning", "summary": [], "encrypted_content": "x" * 1848}
+
+
+def said(text):
+    return {"type": "message", "content": [{"type": "output_text", "text": text}]}
+
+
 class DirectProviderTests(unittest.TestCase):
-    def test_openai_request_sends_no_sampling_parameter(self):
+    def test_openai_request_goes_to_the_responses_endpoint_with_no_sampling_parameter(
+        self,
+    ):
+        self.assertEqual(
+            h.PROVIDERS["openai"]["url"], "https://api.openai.com/v1/responses"
+        )
         body = h.build_request(DIRECT, ROW)
         self.assertEqual(
             set(body),
-            {"model", "max_completion_tokens", "messages", "tools", "tool_choice"},
+            {
+                "model",
+                "max_output_tokens",
+                "instructions",
+                "input",
+                "tools",
+                "tool_choice",
+                "store",
+            },
         )
         self.assertEqual(body["model"], "vendor-model")
-        self.assertEqual(body["max_completion_tokens"], 2048)
-        self.assertEqual(body["messages"], ROW["messages"])
-        self.assertEqual(body["tools"], local.TOOLS)
+        self.assertEqual(body["max_output_tokens"], 2048)
+        self.assertEqual(body["instructions"], ROW["messages"][0]["content"])
+        self.assertEqual(
+            body["input"], [{"role": "user", "content": ROW["messages"][1]["content"]}]
+        )
+        self.assertIs(body["store"], False)
+        self.assertEqual(
+            [(t["type"], t["name"], t["strict"]) for t in body["tools"]],
+            [("function", "send_report", True), ("function", "decline", True)],
+        )
+        self.assertEqual(
+            [t["parameters"] for t in body["tools"]],
+            [t["function"]["parameters"] for t in local.TOOLS],
+        )
         effort = h.build_request({**DIRECT, "reasoning_effort": "low"}, ROW)
-        self.assertEqual(effort["reasoning_effort"], "low")
+        self.assertEqual(effort["reasoning"], {"effort": "low"})
 
-    def test_openai_response_is_read_like_any_chat_completion(self):
-        call = {"name": "send_report", "arguments": json.dumps(ROW["expected"])}
-        got = read(DIRECT, routed([call], tokens=(600, 900)))
+    def test_one_function_call_is_a_call_and_hidden_reasoning_is_not_text(self):
+        got = read(
+            DIRECT, direct(REASONING, function_call("send_report", **ROW["expected"]))
+        )
         self.assertEqual((got["status"], got["arguments"]), ("call", ROW["expected"]))
-        counted = h.usage(DIRECT, routed([call], tokens=(600, 900)))
+        declined = read(DIRECT, direct(function_call("decline", reason="held")))
+        self.assertEqual(declined["status"], "declined")
+
+    def test_what_is_not_one_call(self):
+        call = function_call("send_report", **ROW["expected"])
+        self.assertEqual(read(DIRECT, direct(said("No.")))["status"], "non_tool_text")
+        self.assertNotEqual(
+            read(DIRECT, direct(said("Sending."), call))["status"], "call"
+        )
+        self.assertEqual(
+            h.lenient(DIRECT, direct(said("Sending."), call))["status"], "call"
+        )
+        self.assertNotEqual(read(DIRECT, direct(call, call))["status"], "call")
+        self.assertEqual(
+            read(DIRECT, direct(call, status="incomplete"))["status"], "truncated"
+        )
+        broken = {"type": "function_call", "name": "send_report", "arguments": "{oops"}
+        self.assertEqual(read(DIRECT, direct(broken))["status"], "invalid")
+        with self.assertRaises(ValueError):
+            h.neutral(DIRECT, {"output": None})
+
+    def test_usage_counts_hidden_reasoning_as_output(self):
+        counted = h.usage(DIRECT, direct(tokens=(600, 900)))
         self.assertEqual(counted, {"input_tokens": 600, "output_tokens": 900})
         self.assertAlmostEqual(h.cost_usd(DIRECT, counted), 0.0051)
+
+    def test_what_is_stored_of_a_response(self):
+        response = direct(REASONING, function_call("decline", reason="held"))
+        stored = h.kept(DIRECT, response)
+        self.assertNotIn("instructions", stored)
+        self.assertNotIn("tools", stored)
+        self.assertEqual(stored["temperature"], 1.0)
+        self.assertEqual(
+            stored["output"][0],
+            {"type": "reasoning", "summary": [], "encrypted_content_chars": 1848},
+        )
+        self.assertEqual(stored["output"][1], response["output"][1])
+        self.assertEqual(h.neutral(DIRECT, stored), h.neutral(DIRECT, response))
+        self.assertEqual(h.usage(DIRECT, stored), h.usage(DIRECT, response))
+        self.assertIs(h.kept(CLAUDE, response), response)
 
     def test_openai_key_is_read_by_name(self):
         with mock.patch.dict(os.environ, {"OPENAI_API_KEY": KEY}, clear=True):

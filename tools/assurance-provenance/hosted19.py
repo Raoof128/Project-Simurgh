@@ -29,7 +29,9 @@ PROVIDERS = {
         "version": "2023-06-01",
     },
     "openai": {
-        "url": "https://api.openai.com/v1/chat/completions",
+        # the provider refuses function tools on its chat endpoint for reasoning models
+        # and names this one for them
+        "url": "https://api.openai.com/v1/responses",
         "key_env": "OPENAI_API_KEY",
     },
     "openrouter": {
@@ -60,6 +62,20 @@ def anthropic_tools():
     ]
 
 
+def responses_tools():
+    """The tool schema in the flat form the Responses endpoint takes, in strict mode."""
+    return [
+        {
+            "type": "function",
+            "name": t["function"]["name"],
+            "description": t["function"]["description"],
+            "parameters": t["function"]["parameters"],
+            "strict": True,
+        }
+        for t in local.TOOLS
+    ]
+
+
 def build_request(spec, s):
     """The request body for one schedule row. Sampling parameters are sent only where the
     declaration says the model accepts them."""
@@ -80,20 +96,19 @@ def build_request(spec, s):
             body["thinking"] = spec["thinking"]
         return body
     if spec["provider"] == "openai":
-        # the provider's own endpoint: no sampling parameter is sent, and the output limit
-        # covers hidden reasoning as well as the answer
+        # the provider's own endpoint: no sampling or reasoning parameter is sent, and the
+        # output limit covers hidden reasoning as well as the answer
         body = {
             "model": spec["api_model"],
-            "max_completion_tokens": spec["max_tokens"],
-            "messages": [
-                {"role": "system", "content": system[0]},
-                {"role": "user", "content": turns[0]["content"]},
-            ],
-            "tools": local.TOOLS,
+            "max_output_tokens": spec["max_tokens"],
+            "instructions": system[0],
+            "input": [{"role": "user", "content": turns[0]["content"]}],
+            "tools": responses_tools(),
             "tool_choice": "auto",
+            "store": False,  # the provider is asked not to keep the exchange
         }
         if spec.get("reasoning_effort") is not None:
-            body["reasoning_effort"] = spec["reasoning_effort"]
+            body["reasoning"] = {"effort": spec["reasoning_effort"]}
         return body
     if spec["provider"] == "openrouter":
         body = {
@@ -135,6 +150,29 @@ def _calls_and_text(spec, response):
             if type(b) is dict and b.get("type") == "text"
         )
         return calls, text, response.get("stop_reason") == "max_tokens"
+    if spec["provider"] == "openai":
+        items = response.get("output")
+        if type(items) is not list:
+            raise ValueError("response_shape")
+        calls, text = [], ""
+        for item in items:
+            kind = item.get("type") if type(item) is dict else None
+            if kind == "function_call":
+                arguments = item.get("arguments")
+                try:
+                    arguments = local.strict_loads(arguments)
+                except (ValueError, TypeError, RecursionError):
+                    pass  # left as the provider returned it; the parser reports it
+                calls.append((item.get("name"), arguments))
+            elif kind == "message":
+                for part in item.get("content") or []:
+                    if type(part) is dict and part.get("type") in (
+                        "output_text",
+                        "refusal",
+                    ):
+                        text += str(part.get("text") or part.get("refusal") or "")
+            # a reasoning item is hidden reasoning, not part of the answer
+        return calls, text, response.get("status") == "incomplete"
     choices = response.get("choices")
     if type(choices) is not list or len(choices) != 1:
         raise ValueError("response_shape")
@@ -187,6 +225,25 @@ def lenient(spec, response):
     return local.parse(_one(calls[0]), False)
 
 
+def kept(spec, response):
+    """What is stored of a response. The Responses endpoint echoes the request's
+    instructions and tools and returns hidden reasoning as an opaque encrypted blob; the
+    echoes are dropped (the request is the schedule's) and the blob is replaced by its
+    length. Everything else is stored as it came, the provider's defaults included."""
+    if spec["provider"] != "openai":
+        return response
+    out = {k: v for k, v in response.items() if k not in ("instructions", "tools")}
+    items = []
+    for item in response.get("output") or []:
+        if type(item) is dict and "encrypted_content" in item:
+            blob = item["encrypted_content"]
+            item = {k: v for k, v in item.items() if k != "encrypted_content"}
+            item["encrypted_content_chars"] = len(blob) if type(blob) is str else 0
+        items.append(item)
+    out["output"] = items
+    return out
+
+
 def usage(spec, response):
     """Billable tokens as the provider reported them."""
     u = response.get("usage") or {}
@@ -195,6 +252,12 @@ def usage(spec, response):
             "input_tokens": int(u.get("input_tokens", 0))
             + int(u.get("cache_creation_input_tokens", 0))
             + int(u.get("cache_read_input_tokens", 0)),
+            "output_tokens": int(u.get("output_tokens", 0)),
+        }
+    if spec["provider"] == "openai":
+        # output tokens include hidden reasoning; cached input is metered at the full price
+        return {
+            "input_tokens": int(u.get("input_tokens", 0)),
             "output_tokens": int(u.get("output_tokens", 0)),
         }
     return {
@@ -271,6 +334,7 @@ def capture(spec, out_path, *, rows, cap_usd, spent=0.0, post=_post, log=print):
                 raise SpendCap(spec["id"])
             started = time.monotonic()
             response, attempts = complete(spec, build_request(spec, s), post=post)
+            response = kept(spec, response)
             raw, truncated = neutral(spec, response)
             counted = usage(spec, response)
             row = local.transcript_row(

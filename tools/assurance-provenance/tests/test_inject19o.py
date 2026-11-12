@@ -34,33 +34,39 @@ class Provider:
 
     def __call__(self, url, headers, body, timeout):
         self.requests += 1
-        digest = inject19n.digest(body["messages"])
+        digest = inject19n.digest(
+            [
+                {"role": "system", "content": body["instructions"]},
+                body["input"][0],
+            ]
+        )
         rows = self.by_digest[digest]
         row = rows[self.seen[digest] % len(rows)]
         self.seen[digest] += 1
         reply = self.policy(row)
-        message = {"role": "assistant", "content": None}
+        items = [{"type": "reasoning", "summary": [], "encrypted_content": "x" * 900}]
         if type(reply) is str:
-            message["content"] = reply
+            items.append(
+                {"type": "message", "content": [{"type": "output_text", "text": reply}]}
+            )
         else:
             name, fields = (
                 ("send_report", row["expected"])
                 if reply
                 else ("decline", {"reason": "held"})
             )
-            message["tool_calls"] = [
-                {
-                    "id": "c0",
-                    "type": "function",
-                    "function": {"name": name, "arguments": json.dumps(fields)},
-                }
-            ]
+            items.append(
+                {"type": "function_call", "name": name, "arguments": json.dumps(fields)}
+            )
         payload = {
             "model": self.served,
-            "choices": [{"message": message, "finish_reason": "tool_calls"}],
+            "status": "completed",
+            "instructions": body["instructions"],
+            "tools": body["tools"],
+            "output": items,
             "usage": {
-                "prompt_tokens": self.tokens[0],
-                "completion_tokens": self.tokens[1],
+                "input_tokens": self.tokens[0],
+                "output_tokens": self.tokens[1],
             },
         }
         return 200, {}, json.dumps(payload).encode()
@@ -132,12 +138,13 @@ class DeclarationTests(unittest.TestCase):
         )
 
     def test_a_request_carries_the_prompt_the_tools_and_no_sampling_parameter(self):
-        body = hosted19.build_request(SPEC, SCHEDULE[900])
-        self.assertEqual(body["messages"], SCHEDULE[900]["messages"])
-        self.assertEqual(
-            set(body),
-            {"model", "max_completion_tokens", "messages", "tools", "tool_choice"},
-        )
+        row = SCHEDULE[900]
+        body = hosted19.build_request(SPEC, row)
+        self.assertEqual(body["instructions"], row["messages"][0]["content"])
+        self.assertEqual(body["input"], [row["messages"][1]])
+        for key in ("temperature", "top_p", "seed", "reasoning"):
+            self.assertNotIn(key, body)
+        self.assertEqual(body["max_output_tokens"], 2048)
 
     def test_the_smoke_request_is_not_a_case(self):
         digests = {r["digest"] for r in SCHEDULE}
@@ -148,29 +155,22 @@ class DeclarationTests(unittest.TestCase):
             seen.append(body)
             reply = {
                 "model": "served-model-1",
-                "choices": [
+                "status": "completed",
+                "output": [
                     {
-                        "message": {
-                            "content": None,
-                            "tool_calls": [
-                                {
-                                    "function": {
-                                        "name": "decline",
-                                        "arguments": '{"reason": "check"}',
-                                    }
-                                }
-                            ],
-                        },
-                        "finish_reason": "tool_calls",
+                        "type": "function_call",
+                        "name": "decline",
+                        "arguments": '{"reason": "check"}',
                     }
                 ],
-                "usage": {"prompt_tokens": 100, "completion_tokens": 50},
+                "usage": {"input_tokens": 100, "output_tokens": 50},
             }
             return 200, {}, json.dumps(reply).encode()
 
         with mock.patch.dict(os.environ, {"OPENAI_API_KEY": "sk-test-not-real"}):
             got = o.smoke(SPEC, post=post)
-        self.assertEqual(seen[0]["messages"], o.SMOKE)
+        self.assertEqual(seen[0]["instructions"], o.SMOKE[0]["content"])
+        self.assertEqual(seen[0]["input"], [o.SMOKE[1]])
         self.assertEqual(
             (got["outcome"], got["served_model"]), ("declined", "served-model-1")
         )
@@ -360,6 +360,12 @@ class CaptureTests(unittest.TestCase):
         text = (self.out / "transcripts" / "gpt-6.1-terra.jsonl").read_text()
         self.assertNotIn("sk-test-not-real", text)
         self.assertNotIn("Authorization", text)
+        # the request's echo and the encrypted reasoning blob are not stored
+        stored = self.lines()[30]["response"]
+        self.assertNotIn("instructions", stored)
+        self.assertNotIn("tools", stored)
+        self.assertEqual(stored["output"][0]["encrypted_content_chars"], 900)
+        self.assertNotIn("x" * 100, text)
 
     def test_a_model_that_cannot_call_stops_at_the_positive_control(self):
         provider = Provider(lambda row: active(row) and row["index"] < 5)
