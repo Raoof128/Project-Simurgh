@@ -976,6 +976,33 @@ the ruling and both logs. Not authorised: any edit to a frozen file, to a 19a to
 pack, or to a workflow. This declaration commit must be a strict ancestor of every commit of
 lane 19p.
 
+**P19-OPERATOR05 (bounded authority to bring lane 19p into the outside-operator handoff and the
+externally pinned roots; declared 13 Nov 2026 before any commit that acts on it).** Lane 19p is
+committed (`a57463bc`) with root
+`64977e0efc79cc9f92b8fc92af7ace3ee2d57ed7d7e0b2c834015164c7ad7a6c`; this change is stacked on its
+branch and is merged after it. P19-REPLAY03 authorised no workflow edit, so the hosted roots
+check and the handoff list fourteen packs. This declaration authorises, and nothing else:
+
+1. `handoff19.py`: 19p added to `PHASES` with its host and time, and the word for fifteen. 19p
+   is a replay lane like 19j and 19l: its committed receipt was produced with `--replay`, so
+   the comparator's replay-dependent `kind` is extended to it by the same two table entries,
+   `19p --replay` joins the items an outside host can exercise, and the sentences of the
+   handoff that name 19j and 19l as the replay lanes name 19p with them. No other change to what
+   the comparator checks. Tests first.
+2. The review of the first operator receipt recomputed under the new phase list. The receipt is
+   not edited; 19p appears in the review as `not_in_receipt`, which is what happened.
+3. Re-rendering `HANDOFF.md` and `discrepancy-template.json`; the 19f README.
+4. `.github/workflows/assurance-provenance.yml`: 19p's `docs/` path added to both path filters
+   and its id to the expected-roots check, with its message. No step is added, removed or
+   renamed, and the Stage 5Q census must be set-identical before and after. The repository
+   variable `PHASE19_ROOTS` gains the 19p root, set outside the pull request, the fourteen
+   existing values unchanged.
+5. Both logs and the ruling.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to the operator's
+receipt, or any other change to what the comparator checks. This declaration commit must be a
+strict ancestor of every commit that acts on it.
+
 | Field                         | Declaration                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | active_phase                  | Phase 19a projection verifier (19b–19g declared)                                                                    |
@@ -1518,3 +1545,19 @@ lane 19p.
   shown: anything about an attacker who knows the gate, a larger or a hosted model, or a
   deployed system; the host is the author's, so this is not a replay outside the author's
   custody. `IOU-19-SPEND` and `IOU-19-OPERATOR` are unchanged.
+- Ruling (13 Nov 2026, P19-OPERATOR05 exercised): the declaration (`6de8fbf5`) precedes every
+  commit that acts on it. `handoff19.py` now lists fifteen lanes, with 19p a replay lane beside
+  19j and 19l: the expected `kind` follows the operator's own `replay.result`, and
+  `19p --replay` is an item an outside host can exercise. Nothing else about the comparator
+  changed. Tests were changed first (five) and failed before the change. The first operator
+  receipt is byte-identical (sha256 `765c42b1…`); its review was recomputed and lists 19p as
+  `not_in_receipt`, so `handoff19.py status` reads `reviewed_discrepancies_published` and names
+  fifteen items still owed under `IOU-19-OPERATOR`. `HANDOFF.md` and
+  `discrepancy-template.json` were re-rendered and the 19f README updated. The workflow gained
+  19p's `docs/` path in both path filters and its id in the expected-roots check, with its
+  message; no step was added, removed or renamed, and the Stage 5Q census output is identical
+  before and after (58 steps, 53 problems). `PHASE19_ROOTS` was extended outside the pull
+  request at 17:32Z on 12 Nov from fourteen roots to fifteen, the fourteen existing values
+  unchanged. A Python 3.12 with no site packages verified 19p's structure, which is what the
+  handoff tells an operator who does not add `--replay`. Not changed here: the root README's
+  count of Phase 19 packs. The package given to an operator is rebuilt after the merge.

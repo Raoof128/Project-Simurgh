@@ -20,7 +20,9 @@
     "19l --replay",
     "19m",
     "19n",
-    "19o"
+    "19o",
+    "19p",
+    "19p --replay"
   ],
   "operator": "Michael",
   "phases": {
@@ -111,6 +113,9 @@
       "result": "not_in_receipt"
     },
     "19o": {
+      "result": "not_in_receipt"
+    },
+    "19p": {
       "result": "not_in_receipt"
     }
   },

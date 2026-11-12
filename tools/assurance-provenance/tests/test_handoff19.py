@@ -76,7 +76,7 @@ class HandoffTests(unittest.TestCase):
         # P19-OPERATOR02: 19j's and 19l's committed receipts were produced with --replay. A host
         # that cannot replay prints structure_checked, and that is not a discrepancy; a receipt
         # whose kind and replay result disagree is.
-        for pid in ("19j", "19l"):
+        for pid in ("19j", "19l", "19p"):
             committed = handoff19.committed_receipt(pid)
             self.assertEqual(committed["kind"], "frozen_replay_recomputed", pid)
             self.assertEqual(handoff19.check(pid, committed), [], pid)
@@ -125,21 +125,30 @@ class HandoffTests(unittest.TestCase):
                 "19m",
                 "19n",
                 "19o",
+                "19p",
             ],
         )
         text = handoff19.render()
-        self.assertIn("run fourteen verify commands", text)
-        self.assertIn("19k, 19l, 19m, 19n and 19o\n", text)
+        self.assertIn("run fifteen verify commands", text)
+        self.assertIn("19k, 19l, 19m, 19n, 19o and 19p\n", text)
+        self.assertIn("- 19a, 19j, 19l and 19p with `--replay`", text)
+        self.assertIn("`frozen_replay_recomputed` (19j, 19l, 19p).", text)
         for pid in ids:
             self.assertIn(f"### {pid}\n", text)
         self.assertEqual(
             handoff19.outside_items(),
             sorted(
                 ids
-                + ["19a --replay", "19j --replay", "19l --replay", "19b Lean closure"]
+                + [
+                    "19a --replay",
+                    "19j --replay",
+                    "19l --replay",
+                    "19p --replay",
+                    "19b Lean closure",
+                ]
             ),
         )
-        for pid in ("19j", "19l"):
+        for pid in ("19j", "19l", "19p"):
             self.assertIn("--replay", handoff19.phase(pid)["time"], pid)
 
     def test_check_flags_an_unexpected_field(self):
@@ -266,7 +275,7 @@ class VerifySetTests(unittest.TestCase):
 
 FIRST = "all-Michael-2026-11-10.json"
 FIRST_SHA256 = "765c42b19792f70463bfba38d602ac9443f480262400cdc7902ed8bb377f9291"
-# What the first receipt left unreplayed, and the lanes added after it (P19-OPERATOR02, 03, 04).
+# What the first receipt left unreplayed, and the lanes added after it (P19-OPERATOR02, 03, 04, 05).
 STILL_OWED = [
     "19a --replay",
     "19b Lean closure",
@@ -281,6 +290,8 @@ STILL_OWED = [
     "19m",
     "19n",
     "19o",
+    "19p",
+    "19p --replay",
 ]
 
 
@@ -317,6 +328,7 @@ class OperatorReceiptTests(unittest.TestCase):
                 "19m": "not_in_receipt",
                 "19n": "not_in_receipt",
                 "19o": "not_in_receipt",
+                "19p": "not_in_receipt",
             },
         )
         for pid in ("19a", "19b", "19c", "19e", "19g"):

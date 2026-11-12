@@ -1,5 +1,21 @@
 ## Change Log
 
+## [phase-19f-fifteen-lanes] — 2026-11-13 — Lane 19p in the operator handoff and the pinned-roots check
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/handoff19.py` and `tests/test_handoff19.py`;
+  `docs/research/provenance-phase-19f/HANDOFF.md`, `discrepancy-template.json`, `README.md` and
+  the review of the first operator receipt; `.github/workflows/assurance-provenance.yml`; the
+  ledger (declaration P19-OPERATOR05 and its ruling); both logs.
+- **Summary:** the operator handoff asks for fifteen verify commands and treats 19p as a replay
+  lane beside 19j and 19l. The hosted workflow watches the lane's directory and checks fifteen
+  committed roots against `PHASE19_ROOTS`, extended outside the pull request. The first
+  operator receipt is unchanged; fifteen items are still owed to an outside operator.
+- **Verification:** 23 handoff tests pass (five changed first); Stage 5Q gate census identical
+  before and after; quick gate passes.
+- **Follow-ups:** rebuild the Desktop operator package after the merge.
+
 ## [phase-19p-evidence] — 2026-11-13 — The 19n sends through the frozen Phase 17 pipeline: 423 of 423 restricted sends blocked behind the composed controls, 369 landed behind the credential gateway alone
 
 **Raouf:**
