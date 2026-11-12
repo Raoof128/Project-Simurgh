@@ -14,6 +14,37 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-13 (Australia/Sydney) — Phase 19p: the 19n sends replayed through the frozen gate (423 of 423 blocked behind the composed controls; 369 landed behind the credential gateway alone)
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/replay-19p`, stacked on the roots branch. The declaration
+  P19-REPLAY03 and its ruling in the ledger, `tools/assurance-provenance/replay19p.py`,
+  `evidence19p.py` and their tests (committed and pushed before any dispatch),
+  `docs/research/provenance-phase-19p/` (pack, protocol, report, receipt, root, README,
+  RESULTS), `tools/assurance-provenance/tests/test_evidence19p_committed.py`, `.prettierignore`
+  entries, one overview sentence, both logs. No frozen file, no pinned source of another lane,
+  no 19a to 19o pack, no workflow.
+- **Summary:** lane 19n left the replay of its sends to a separate lane. This one hands each of
+  the 516 `send_report` calls the four local models made as the agent to the frozen Phase 17
+  `run_branch`, in the fixture state of its slot, behind the composed controls and behind the
+  credential gateway alone. It ran on the owner's droplet from a fresh clone at the instrument
+  commit and took 23 minutes for two full passes. Every restricted-state send was blocked behind
+  the composed controls, whether it was drawn by a text in the untrusted source, under a
+  summary, memory-file or tool-result heading, by the model's own summary, or by the attacker's
+  text. Behind the credential gateway alone 369 of the 423 landed. No exact authorised send was
+  refused.
+- **Files changed:** as in the CHANGELOG entry.
+- **Verification:** on the droplet, `evidence19p.py run` built the pack and verified it with a
+  second full dispatch (`"kind": "frozen_replay_recomputed"`). On this machine `verify` checks
+  structure against the 19n pack under Python 3.15 and under a Python 3.12 with no site packages.
+  26 lane tests pass here (one skipped: the full replay, which needs Linux x86_64). Ten of
+  eleven deliberate breaks of the two modules fail a test; the eleventh is a guard no input
+  reaches. Pinned sources byte-identical to `e05683d8`. Quick gate passes.
+- **Follow-ups:** the fifteenth root in the workflow, `PHASE19_ROOTS` and `handoff19.py` needs
+  its own declaration. The result that would say more is an attacker that is shown the gate,
+  which stays owed under `IOU-19-SPEND`.
+
 ### 2026-11-13 (Australia/Sydney) — Phase 19f: lanes 19n and 19o join the operator handoff and the pinned roots (P19-OPERATOR04)
 
 **Raouf:**

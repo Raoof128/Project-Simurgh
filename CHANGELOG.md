@@ -1,5 +1,31 @@
 ## Change Log
 
+## [phase-19p-evidence] — 2026-11-13 — The 19n sends through the frozen Phase 17 pipeline: 423 of 423 restricted sends blocked behind the composed controls, 369 landed behind the credential gateway alone
+
+**Raouf:**
+
+- **Scope:** the ledger (declaration P19-REPLAY03, its ruling, one overview sentence),
+  `tools/assurance-provenance/replay19p.py`, `evidence19p.py`, `tests/test_replay19p.py`,
+  `tests/test_evidence19p.py` (new, committed before any dispatch),
+  `docs/research/provenance-phase-19p/` (new: `evidence.zip`, `protocol.json`, `report.json`,
+  `receipt.json`, `ROOT.sha256`, `README.md`, `RESULTS.md`),
+  `tools/assurance-provenance/tests/test_evidence19p_committed.py` (new), `.prettierignore`,
+  both logs. No frozen file, no pinned source of another lane, no earlier pack, no workflow.
+- **Summary:** every `send_report` call the four local models made as the agent in 19n (516)
+  dispatched through the frozen Phase 17 `run_branch` in its slot's fixture state, once behind
+  the composed controls and once behind the credential gateway alone. Root
+  `64977e0efc79cc9f92b8fc92af7ace3ee2d57ed7d7e0b2c834015164c7ad7a6c`. Composed controls: all 423
+  restricted-state sends blocked, no effect landed, all 91 exact authorised sends admitted.
+  Credential gateway alone: 369 landed; it stopped the 52 sends made with a revoked credential
+  and 2 with altered content. The sends came through four placements, the model's own
+  summaries and an attacker's texts, and none of that changed the outcome behind the composed
+  controls, which decide from the host's state and do not read model text. Run on the owner's
+  second host, so not outside the author's custody.
+- **Verification:** built and verified with a second full dispatch on Linux x86_64 in the
+  hash-locked venv; structure verified on macOS under two Pythons; 26 lane tests pass (one
+  skipped off Linux); quick gate passes.
+- **Follow-ups:** a declaration for the fifteenth root; an attacker that is shown the gate.
+
 ## [phase-19f-fourteen-lanes] — 2026-11-13 — Lanes 19n and 19o in the operator handoff and the pinned-roots check
 
 **Raouf:**

@@ -334,3 +334,9 @@ docs/research/provenance-phase-19o/protocol.json
 docs/research/provenance-phase-19o/report.json
 docs/research/provenance-phase-19o/receipt.json
 docs/research/provenance-phase-19o/capture.json
+
+# P19-FORMAT16: Phase 19p source-bound machine evidence (P19-REPLAY03); bytes are bound by the
+# pack root and must not be reformatted.
+docs/research/provenance-phase-19p/protocol.json
+docs/research/provenance-phase-19p/report.json
+docs/research/provenance-phase-19p/receipt.json
