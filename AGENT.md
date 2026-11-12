@@ -14,6 +14,24 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-12 (Australia/Sydney) — Two gap hunts committed; a tenet-by-tenet statement against NIST's agent identity tenets
+
+**Raouf:**
+
+- **Scope:** branch `docs/nist-tenets`. New: `docs/research/GAP_HUNT_PRIOR_ART_2026-11-12.md`,
+  `docs/research/GAP_HUNT_LAB_2026-11-12.md`, `docs/NIST_AGENT_IDENTITY_TENETS.md`. One row in
+  `DOCUMENTATION.md`. Both logs. No code, test, workflow or pack.
+- **Summary:** the owner asked for another gap hunt and then for one over the Anthropic and
+  OpenAI research pages. The first reads 53 arXiv abstracts, NIST's ten tenets and one Anthropic
+  post; the second reads 105 lab pages. They propose gap candidates G39 to G48. The NIST page
+  takes the ten tenets one at a time against Phase 19: three covered under a stated scope (04,
+  07, 08), three partial (03, 09, 10), four not covered (01, 02, 05, 06). It adds no evidence.
+- **Verification:** every quote in the three documents was checked by script as an exact
+  substring of the fetched source; every number on the NIST page was read from a committed
+  receipt; every relative link resolves; `scripts/check.sh --quick` passes.
+- **Limits:** the hunts read abstracts and keyword-selected sentences, not whole papers or
+  pages. The verdicts are the author's reading of his own repository.
+
 ### 2026-11-12 (Australia/Sydney) — Private data redacted from 48 files on the owner's instruction; API-key exposure checked across history
 
 **Raouf:**
