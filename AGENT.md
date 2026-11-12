@@ -14,6 +14,36 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-12 (Australia/Sydney) — Phase 19m: the pack, results and ruling (six of eight models captured, two eligible)
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/more-models-19m`. `docs/research/provenance-phase-19m/` (pack,
+  protocol, report, receipt, root, capture record, eight transcripts, README, RESULTS),
+  `tools/assurance-provenance/tests/test_evidence19m_committed.py`, the ruling in the ledger, both
+  logs. No pinned source, no 19a to 19l pack, no workflow, no frozen file, no manuscript edit.
+- **Summary:** the capture ended at 04:08:42Z on 12 Nov. Six models were captured in full,
+  `qwen2.5-3b-4bit` stopped at the positive control, and `qwen3-8b-4bit` was ended by the
+  operating system for memory at 409 generations and is recorded as not captured, as the declared
+  rule says. Two models are eligible, `qwen3-4b-8bit` and `qwen2.5-7b-4bit`. On them H1, H3, H6,
+  H7 and H8 held on both, H5 on one, H2 and H4 on neither. P1 is not decided, P2 did not hold, P3
+  held. The interrupted model `llama-3.2-3b-8bit` finished after the declared resume: its first
+  772 lines match the digest in the ledger and its same-seed recheck was identical. It is not
+  eligible, so the tallies are the same with it and without it; without it P3 is not decided.
+  The host also slept for about an hour during `qwen2.5-7b-4bit`, which suspended the process
+  and lost nothing; the results disclose it.
+- **Files changed:** as in the CHANGELOG entry.
+- **Verification:** the pack was built from the clean worktree at `72487130` and verifies under
+  Python 3.15 and under a bare Python 3.12 with no packages (`"verified": true`, 5617
+  generations). Six new tests on the committed pack pass, among them the 772-line digest and the
+  tallies recomputed with the interrupted model treated as not captured; the lane's 21 pinned
+  tests still pass; the pinned sources are byte-identical to `72487130`. RESULTS.md is rendered
+  from `report.json` by a script, not typed. The new directory was scanned for host names, local
+  paths, addresses and session links: none.
+- **Follow-ups:** the twelfth root in the workflow, `PHASE19_ROOTS` and `handoff19.py` needs its
+  own declaration and is not in this change. The hosted-model lane and the informed-attacker lane
+  still wait on the owner's API keys and a stated spending cap. The manuscript stays on hold.
+
 ### 2026-11-12 (Australia/Sydney) — Phase 19m: the capture was cut off by a flat battery; the resume is declared first (P19-MODELS02)
 
 **Raouf:**

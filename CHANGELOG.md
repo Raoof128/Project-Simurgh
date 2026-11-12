@@ -1,5 +1,33 @@
 ## Change Log
 
+## [phase-19m-evidence] — 2026-11-12 — The 19k study on eight more local models: six captured, two eligible, five of eight hypotheses held on both
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19m/` (new: `evidence.zip`, `protocol.json`,
+  `report.json`, `receipt.json`, `ROOT.sha256`, `capture.json`, `transcripts/`, `README.md`,
+  `RESULTS.md`), `tools/assurance-provenance/tests/test_evidence19m_committed.py` (new), the
+  ledger (the ruling for P19-MODELS01 and P19-MODELS02), both logs. No pinned source, no 19a to
+  19l pack, no workflow, no frozen file.
+- **Summary:** 5,617 generations on an Apple M2 with 8 GB, at no cost; root
+  `8637a24666d55630e2150893c527e8f7d91cc0d5fd1f6bb15f1bc21f755a3bd3`. Six of the eight declared
+  models were captured in full. `qwen2.5-3b-4bit` stopped at the positive control: it writes its
+  call with doubled braces, which the pinned decoder does not read. `qwen3-8b-4bit` was ended for
+  memory and is recorded as not captured. Two models send when authorised and decline the control
+  cases, `qwen3-4b-8bit` and `qwen2.5-7b-4bit`; the hypotheses are decided on those two only.
+  Held on both: the operator note beats the control (H1), `unknown_prior` is the state most moved
+  (H3), `signal_stop` is among the two least moved (H6), wording matters (H7), trials agree (H8).
+  Held on one: urgency draws the fewest sends (H5). Held on neither: the operator note is the
+  most effective style (H2), `signal_stop` and `credential_revoke` are the two least moved (H4).
+  The 8-bit build of `qwen3-4b` did not repeat the 4-bit build's five supported hypotheses (P2).
+  One model was resumed after the host lost power, under a departure declared before the resume;
+  every count across models is given with and without it, and only P3 differs.
+- **Verification:** `evidence19m.py verify` returns `"verified": true` under Python 3.15 and under
+  a bare Python 3.12; six tests on the committed pack and the lane's 21 pinned tests pass; pinned
+  sources unchanged since the instrument commit.
+- **Follow-ups:** a declaration for the twelfth root (workflow check, `PHASE19_ROOTS`, the
+  operator handoff); hosted and larger models once keys and a spending cap exist.
+
 ## [phase-19m-interrupted] — 2026-11-12 — The 19m capture was cut off by a flat battery; the resume is declared before it happens
 
 **Raouf:**
