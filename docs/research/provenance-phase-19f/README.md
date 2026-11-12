@@ -1,6 +1,6 @@
 # Phase 19f: outside-operator replay (paid in part)
 
-`IOU-19-OPERATOR`: one outside operator has replayed five of the fourteen packs. This directory holds the
+`IOU-19-OPERATOR`: one outside operator has replayed five of the fifteen packs. This directory holds the
 package that makes the replay a run of named commands against named expectations, the receipt that
 came back and the author's review of it:
 
@@ -66,6 +66,10 @@ what follows a refusal) and 19o (the fixed prompts of 19k and of 19n's placement
 hosted models; verifying it needs no network and no key) joined on 13 Nov 2026 under
 P19-OPERATOR04. Both are `not_in_receipt` in the review of the first receipt and are owed with
 the rest.
+
+19p (every send recorded in 19n dispatched through the frozen Phase 17 pipeline; with `--replay`
+on Linux x86_64) joined on 13 Nov 2026 under P19-OPERATOR05. It is `not_in_receipt` in the review
+of the first receipt; the lane and its `--replay` are owed with the rest.
 
 Limits, in the operator's own words in the receipt: the receipt is signed with a typed name, and
 the commands were typed and run by an AI coding agent on a subscription registered to the author.
