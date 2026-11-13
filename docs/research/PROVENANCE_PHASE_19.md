@@ -24,7 +24,10 @@ all 423 restricted-state sends, and 369 of them landed behind the credential gat
 (P19-DEST01) types every destination in the sessions of a public monitor benchmark by where it
 first entered the session and scores a destination rule on attack and benign sessions alike: the
 rule flagged 7 of 43 attack sessions and 6 of 43 benign ones, and two of its three hypotheses
-did not hold. A
+did not hold. 19t (P19-REDTEAM01) gives two coding agents the gate's source and commits what
+each submits before it is run: 49 of 92 attempts changed the gate's output, 39 only the audit
+and 10 by making a dispatch raise, none landed the undelegated action or changed a verdict, and
+the declared prediction that nothing would change did not hold. A
 manuscript draft built from 19h to 19l is in
 [provenance-phase-19-paper/](provenance-phase-19-paper/README.md); it adds no evidence.
 
@@ -1851,3 +1854,44 @@ declaration commit must be a strict ancestor of every commit of lane 19t.
   workflow's expected-roots check, in `PHASE19_ROOTS` or in `handoff19.py`. Not shown: anything
   about an enforced boundary, about a model, or about sessions written to defeat this rule; the
   host is the author's. No text of the dataset is in the repository.
+- Ruling (13 Nov 2026, P19-REDTEAM01 exercised): the declaration (`0142e4c8`) is an ancestor of
+  every commit of the lane. It was amended four times, each before any submission was
+  committed: the count of reader mutants (`c2b1b2a8`); the Codex seat refused by its provider
+  and a third seat added (`5f791dec`); an attempt that makes a dispatch raise recorded and not
+  fatal (`f99891fb`); a text holding half a surrogate pair hashed, and seven held-back attempts
+  added by the second attacker (`85fe5f78`). The instrument and brief were first committed at
+  `3ba3f22b`, before any attacker was started. The three submissions were committed at
+  `8a99ccae` and pushed at 02:37:35Z on 13 Nov; the run on the project's second host (2-vCPU
+  Ubuntu 24.04 x86_64, operated by the author) started at 02:37:49Z from a clean clone at that
+  commit in a new hash-locked environment, after the lane's 27 tests passed there (one skipped
+  as written). It ran every attempt once to build the report and again to verify it, ending
+  03:07:43Z; the passes agreed and the clone was clean before and after. Root
+  `0096b482e9a4ce62230ee7c4466eb57b7a0094b569a5f9d96899963166611a46`. Submissions: `claude` 46
+  attempts (sha256 `4ec295bf…`), `opus` 46 (`9724bf09…`), `codex` none (`cb3edf9a…`, an empty
+  file written by the author); none refused for format. 92 attempts run. T1 does not hold: 49
+  attempts make the clean gate's output differ from the baseline. 39 differ in the audit alone,
+  from both attackers and through all four channels: a text within the 12,000-character limit
+  of a channel exceeds the 16,384-byte limit on the escaped summary, and
+  `ContextGate.resume` records `summary_schema`. 10 make a dispatch raise: 7 with
+  `sqlite3.ProgrammingError`, from a token signed with the fixture's operator key whose
+  `approver_id` is a list or an object, which `ApprovalStore._verify` passes to a database
+  lookup without checking its type and which `DECODE_ERRORS` does not cover; 3 with
+  `UnicodeEncodeError`, raised by the fixture's own file write on half a surrogate pair before
+  the gate runs. In the 82 attempts whose dispatch completed, the undelegated action was
+  blocked, the delegated one observed, one effect reached the receiver and the authority hash
+  was the baseline's. T2 does not hold, because the Codex seat is empty; `claude` has 30
+  attempts that change a reader mutant and `opus` 37. Read after the fact and labelled so:
+  attempts that changed a mutant while the clean gate's output stayed byte-identical number 14
+  and 4 and between them change all thirteen mutants; the audit-changing attempts change every
+  mutant because the mutants share the clean gate's resume audit, which overstates potency. The
+  author read both causes in the source before writing them down. 21 attempts sign with the
+  fixture's key, which the declaration places outside the attacker's control and `rig.py`
+  publishes; 7 raise and 14 change nothing, ending at `approval_replay`. The author answered
+  two questions from attackers and removed or moved no attempt. Tests: 15 for the instrument,
+  12 for the pack, 6 on the committed pack (one runs only on the replay host by request). 22 of
+  22 and 22 of 22 deliberate breaks caught. A Python 3.12 with no site packages verifies the
+  structure. Owed and not done here: a repair of the two faults under its own declaration; no
+  attempt of this lane is rerun after it. Not done under this ruling: 19t is not in the hosted
+  workflow's expected-roots check, in `PHASE19_ROOTS` or in `handoff19.py`. Not shown:
+  anything about attackers in general, a person, an attacker of another vendor, or a deployed
+  system; the host is the author's.

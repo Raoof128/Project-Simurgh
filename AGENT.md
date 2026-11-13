@@ -14,6 +14,40 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-13 (Australia/Sydney) — Phase 19t: two attackers with the gate's source, submissions committed before they were run (49 of 92 attempts changed the gate's output; none landed the undelegated action)
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/redteam-19t`, stacked on the 19r branch (whose declaration and
+  instrument are in it; its capture is still running). New:
+  `tools/assurance-provenance/redteam19t.py`, `evidence19t.py`, three test files,
+  `docs/research/provenance-phase-19t/` (brief, three submissions, pack, README, results).
+  Edited: the Phase 19 ledger (declaration P19-REDTEAM01, four amendments, ruling, one overview
+  sentence), `.prettierignore` (P19-FORMAT19), both logs. No frozen file, no earlier lane's
+  source or pack, no workflow. The gate is not repaired here.
+- **Summary:** the owner asked for every proposed upgrade. This one gives an attacker the
+  source. Two Claude agents on different models each got a copy of the repository and a
+  committed brief, could run the gate offline without limit, and handed in up to 60 attempts (a
+  channel and a text). The Codex agent was refused by its provider's safeguard and its seat is
+  recorded as empty; the task was not reworded to pass the filter. The files were committed and
+  pushed before the run of record on the Linux host. 49 of 92 attempts change the gate's
+  output, so the declared prediction fails. Two faults were found, by both attackers
+  independently: any channel can put `summary_schema` into the audit (a character limit and a
+  byte limit disagree), and a token signed with the fixture's operator key with a list for
+  `approver_id` makes the approval store raise. No attempt landed the undelegated action,
+  changed a verdict or changed the authority hash. Texts that left the real gate unchanged
+  changed all thirteen naive gates.
+- **Files changed:** the files above, `docs/research/PROVENANCE_PHASE_19.md`,
+  `.prettierignore`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 33 tests (15 instrument, 12 pack, 6 committed pack; one runs only on the
+  replay host). Deliberate breaks: 22 of 22 and 22 of 22 caught. Both causes read in
+  `gate19.py` and `assurance-context/context_gate.py`. Structure verifies on a bare Python
+  3.12; the full rerun was made on the Linux host. Both submission files scanned for keys,
+  addresses, paths and names: no hit. Quick gate passes.
+- **Follow-ups:** repair the two faults under a new declaration and run a second committed
+  round; a human attacker; an attacker from another vendor if the owner obtains the access the
+  provider's notice names; 19t in the operator handoff and the pinned roots.
+
 ### 2026-11-13 (Australia/Sydney) — Phase 19q: a destination rule scored on a public monitor benchmark (7 of 43 attack sessions flagged, 6 of 43 benign; two of three hypotheses did not hold)
 
 **Raouf:**
