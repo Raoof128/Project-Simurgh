@@ -230,6 +230,24 @@ class DispatchTests(unittest.TestCase):
         self.assertFalse(r.hypotheses(s)["T1"]["holds"])
         self.assertEqual(r.kinds({"raised": "X"}, BASELINE), ["raised"])
 
+    def test_a_text_that_is_not_valid_utf8_is_still_run_and_has_a_digest(self):
+        lone = "half a pair: \ud800"
+        files = {
+            "codex": submission(
+                "codex", [{"channel": "transcript", "text": lone, "note": "n"}]
+            ),
+            "claude": EMPTY.replace(b"opus", b"claude"),
+            "opus": EMPTY,
+        }
+        self.assertIn(b"\\ud800", files["codex"])  # the file itself is plain ASCII JSON
+        rows = r.measure(files, StubGate())
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["text_chars"], len(lone))
+        self.assertEqual(
+            rows[0]["text_sha256"], r.sha(lone.encode("utf-8", "surrogatepass"))
+        )
+        self.assertEqual(r.text_digest("plain"), r.sha(b"plain"))
+
     def test_each_gate_is_run_once_for_its_baseline_and_once_per_attempt(self):
         gate = StubGate()
         self.measure(gate)

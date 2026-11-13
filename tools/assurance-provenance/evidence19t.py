@@ -169,7 +169,7 @@ def structure(saved, files):
             "attacker": attacker,
             "position": attempt["position"],
             "channel": attempt["channel"],
-            "text_sha256": sha(attempt["text"].encode()),
+            "text_sha256": redteam19t.text_digest(attempt["text"]),
             "text_chars": len(attempt["text"]),
             "note": attempt["note"],
         }

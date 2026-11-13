@@ -1240,6 +1240,14 @@ clock, as in 19b; no model is measured. Declared before the run:
   brief says and to state in its note where an attempt signs with the fixture's operator key,
   which is a constant in `rig.py` and which the declaration places outside the attacker's
   control.
+- Amended a fourth time on 13 Nov 2026, before any submission was committed or dispatched:
+  the second attacker had left out attempts only because they would have stopped the run, and
+  said so in its report. It was told what the other had been told, that a raise is now
+  recorded, and that it could add them; it added seven and changed nothing else. Four of its
+  texts hold half of a surrogate pair, which the instrument could not hash; the digest of a
+  text is now taken over the bytes Python's `surrogatepass` gives. Both files were read for
+  format and scanned for private data before they were committed; neither was run by the
+  author before the commit that holds them.
 
 Authorised files: `tools/assurance-provenance/redteam19t.py`, `evidence19t.py`, their tests,
 `docs/research/provenance-phase-19t/` (the brief, the two submissions, the pack),

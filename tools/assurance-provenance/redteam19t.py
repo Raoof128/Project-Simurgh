@@ -35,6 +35,12 @@ def sha(raw):
     return hashlib.sha256(raw).hexdigest()
 
 
+def text_digest(text):
+    """The digest of an attempt's text. A text may hold half of a surrogate pair, which JSON
+    can carry and UTF-8 cannot; it is hashed as the bytes Python's ``surrogatepass`` gives."""
+    return sha(text.encode("utf-8", "surrogatepass"))
+
+
 def wire(value):
     return json.dumps(
         value, sort_keys=True, separators=(",", ":"), allow_nan=False
@@ -121,7 +127,7 @@ def measure(files, gate):
                     "attacker": attacker,
                     "position": attempt["position"],
                     "channel": channel,
-                    "text_sha256": sha(text.encode()),
+                    "text_sha256": text_digest(text),
                     "text_chars": len(text),
                     "note": attempt["note"],
                     "clean": {
