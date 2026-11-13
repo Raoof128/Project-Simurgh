@@ -192,6 +192,16 @@ class Evidence19tTests(unittest.TestCase):
 
         self.refused(edit_report(kind), "row_outcome")
 
+        def raised_without_the_kind(report):
+            report["rows"][0]["clean"]["raised"] = "ProgrammingError"
+
+        self.refused(edit_report(raised_without_the_kind), "row_outcome")
+
+        def kind_without_the_class(report):
+            report["rows"][0]["clean"].update(differs=True, kinds=["raised"])
+
+        self.refused(edit_report(kind_without_the_class), "row_outcome")
+
     def test_a_hidden_win_is_caught_by_structure_or_by_replay(self):
         # the gate leaks on one text; a report that hides it is consistent with itself
         leaky = StubGate(leak="nothing")

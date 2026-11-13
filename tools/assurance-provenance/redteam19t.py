@@ -91,7 +91,10 @@ def read_submission(attacker, raw):
 
 
 def kinds(out, baseline):
-    """Which parts of the oracle's output differ from the baseline."""
+    """Which parts of the oracle's output differ from the baseline. A dispatch that raised
+    has no output; that is a difference of its own kind."""
+    if "raised" in out:
+        return ["raised"]
     return [k for k in KEYS if wire(out.get(k)) != wire(baseline.get(k))]
 
 
@@ -124,8 +127,9 @@ def measure(files, gate):
                     "clean": {
                         "differs": bool(differs),
                         "kinds": differs,
-                        "verdicts": clean["verdicts"],
-                        "effects": len(clean["effects"]),
+                        "raised": clean.get("raised"),
+                        "verdicts": clean.get("verdicts", {}),
+                        "effects": len(clean.get("effects", [])),
                     },
                     "mutants_changed": changed,
                     "potent": bool(changed),
@@ -207,9 +211,16 @@ class Gate:
         self._base = Path(tempfile.mkdtemp(prefix="p19t-"))
 
     def run(self, gate, channel, text):
-        out, _ = self._lane._run(
-            self._base, "run", self._classes[gate], channel, text, channel
-        )
+        """The oracle's output, or ``{"raised": <exception class>}`` when dispatching an
+        attempt raises. A baseline that raises is an error of the fixture and propagates."""
+        try:
+            out, _ = self._lane._run(
+                self._base, "run", self._classes[gate], channel, text, channel
+            )
+        except Exception as error:
+            if channel is None:
+                raise
+            return {"raised": type(error).__name__}
         return out
 
     def close(self):

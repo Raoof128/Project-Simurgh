@@ -64,7 +64,7 @@ ROW_KEYS = {
     "mutants_changed",
     "potent",
 }
-CLEAN_KEYS = {"differs", "kinds", "verdicts", "effects"}
+CLEAN_KEYS = {"differs", "kinds", "raised", "verdicts", "effects"}
 
 
 def host_can_replay():
@@ -185,7 +185,9 @@ def structure(saved, files):
             or set(clean) != CLEAN_KEYS
             or type(clean["differs"]) is not bool
             or type(clean["kinds"]) is not list
-            or any(k not in redteam19t.KEYS for k in clean["kinds"])
+            or any(k not in (*redteam19t.KEYS, "raised") for k in clean["kinds"])
+            or not (clean["raised"] is None or type(clean["raised"]) is str)
+            or (clean["raised"] is not None) is not (clean["kinds"] == ["raised"])
             or clean["differs"] is not bool(clean["kinds"])
             or type(clean["verdicts"]) is not dict
             or type(clean["effects"]) is not int

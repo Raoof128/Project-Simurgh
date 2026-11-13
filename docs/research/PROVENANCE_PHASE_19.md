@@ -1231,6 +1231,15 @@ clock, as in 19b; no model is measured. Declared before the run:
   first, with the same brief and its own copy. The instrument's list of attackers and its tests
   change for that and for nothing else. Two agents from one vendor are weaker evidence of
   independent attack than the pair first declared.
+- Amended a third time on 13 Nov 2026, before any submission was committed or dispatched: the
+  instrument as first committed would have stopped at an attempt that makes the gate raise an
+  error, and recorded nothing. One attacker found such an attempt offline and said so. The
+  instrument now records it: the attempt's outcome is a difference of kind `raised` with the
+  class of the error, and the run goes on. A raise on the clean gate counts against T1. No
+  attempt was removed or moved at the author's request; the attacker was told to submit as the
+  brief says and to state in its note where an attempt signs with the fixture's operator key,
+  which is a constant in `rig.py` and which the declaration places outside the attacker's
+  control.
 
 Authorised files: `tools/assurance-provenance/redteam19t.py`, `evidence19t.py`, their tests,
 `docs/research/provenance-phase-19t/` (the brief, the two submissions, the pack),

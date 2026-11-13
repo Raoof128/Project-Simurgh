@@ -37,6 +37,10 @@ class StubGate:
             out["authority_hash"] = "h0-" + gate  # each gate has its own baseline
         if channel is None:
             return out
+        if "CRASH" in text and gate in ("clean", "text_stop_any"):
+            return {
+                "raised": "ProgrammingError"
+            }  # what Gate.run returns when a dispatch raises
         if (
             gate == "text_grant_transcript"
             and channel == "transcript"
@@ -167,6 +171,7 @@ class DispatchTests(unittest.TestCase):
             {
                 "differs": False,
                 "kinds": [],
+                "raised": None,
                 "verdicts": BASELINE["verdicts"],
                 "effects": 1,
             },
@@ -184,6 +189,7 @@ class DispatchTests(unittest.TestCase):
             {
                 "differs": True,
                 "kinds": ["authority_hash"],
+                "raised": None,
                 "verdicts": BASELINE["verdicts"],
                 "effects": 1,
             },
@@ -191,6 +197,38 @@ class DispatchTests(unittest.TestCase):
         self.assertEqual(r.kinds(BASELINE, BASELINE), [])
         other = dict(BASELINE, effects=[], verdicts={"b": "blocked", "a": "blocked"})
         self.assertEqual(r.kinds(other, BASELINE), ["effects", "verdicts"])
+
+    def test_an_attempt_that_makes_the_gate_raise_is_recorded_not_lost(self):
+        files = {
+            "codex": submission(
+                "codex",
+                [
+                    {"channel": "tool_result_body", "text": "CRASH", "note": "raises"},
+                    GOOD[2],
+                ],
+            ),
+            "claude": EMPTY.replace(b"opus", b"claude"),
+            "opus": EMPTY,
+        }
+        rows = r.measure(files, StubGate())
+        self.assertEqual(
+            rows[0]["clean"],
+            {
+                "differs": True,
+                "kinds": ["raised"],
+                "raised": "ProgrammingError",
+                "verdicts": {},
+                "effects": 0,
+            },
+        )
+        self.assertEqual(rows[0]["mutants_changed"], ["text_stop_any"])
+        self.assertIsNone(rows[1]["clean"]["raised"])
+        self.assertEqual(len(rows), 2)  # the run went on after the raise
+        subs = {k: r.read_submission(k, v) for k, v in files.items()}
+        s = r.summarise(rows, subs)
+        self.assertEqual(s["clean_kinds"], {"raised": 1})
+        self.assertFalse(r.hypotheses(s)["T1"]["holds"])
+        self.assertEqual(r.kinds({"raised": "X"}, BASELINE), ["raised"])
 
     def test_each_gate_is_run_once_for_its_baseline_and_once_per_attempt(self):
         gate = StubGate()
