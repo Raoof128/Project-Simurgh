@@ -1,5 +1,23 @@
 ## Change Log
 
+## [phase-19t-2026-11-13] — 2026-11-13 — Lane 19t: attackers with the gate's source; two faults found, the undelegated action never landed
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/redteam19t.py`, `evidence19t.py`, their tests,
+  `docs/research/provenance-phase-19t/`, the Phase 19 ledger, `.prettierignore`, both logs.
+- **Summary:** two coding agents with the whole repository each submitted 46 texts aimed at the
+  Phase 19 gate; the submissions were committed before they were run. 49 of 92 changed the
+  gate's output: 39 put a schema fault into the audit by exceeding a byte limit within a
+  character limit, and 10 made a dispatch raise (7 through a token signed with the fixture's
+  published operator key, 3 in the fixture's own file write). None landed the undelegated
+  action or changed a verdict. The declared prediction that nothing would change did not hold.
+  A third declared attacker was refused by its provider and its seat is empty.
+- **Verification:** 33 tests; 22 of 22 and 22 of 22 deliberate breaks caught; run of record on
+  Linux x86_64 in the hash-locked environment; structure verifies on a bare Python 3.12. Quick
+  gate passes.
+- **Follow-ups:** repair both faults under a new declaration; second committed round.
+
 ## [phase-19q-2026-11-13] — 2026-11-13 — Lane 19q: a destination rule scored on a public monitor benchmark; mostly negative
 
 **Raouf:**
