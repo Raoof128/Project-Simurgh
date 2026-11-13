@@ -1,5 +1,20 @@
 ## Change Log
 
+## [phase-19r-19s-in-progress-2026-11-13] — 2026-11-13 — Lanes 19r and 19s declared and built; captures running and queued
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/cite19r.py`, `evidence19r.py`, `monitor19s.py`,
+  `evidence19s.py`, their tests, a third-party monitor prompt with its licence under
+  `docs/research/provenance-phase-19s/`, the Phase 19 ledger, `.prettierignore`, both logs.
+- **Summary:** 19r asks what a wrong send cites when every send must name its grant, and
+  whether having to cite changes how often a model sends when it should not. 19s asks whether
+  a transcript monitor's score follows the host's state line or the injected text beside it.
+  Both are declared before any generation; neither has a result yet.
+- **Verification:** 62 tests on scripted outputs; deliberate breaks caught except one that
+  cannot change any output.
+- **Follow-ups:** packs, rulings and results when the captures end.
+
 ## [phase-19t-2026-11-13] — 2026-11-13 — Lane 19t: attackers with the gate's source; two faults found, the undelegated action never landed
 
 **Raouf:**

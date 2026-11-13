@@ -14,6 +14,36 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-13 (Australia/Sydney) — Phase 19r and 19s declared and built; their captures are running and queued (no result yet)
+
+**Raouf:**
+
+- **Scope:** branches `phase-19/cite-19r` and `phase-19/monitor-19s` (the second stacked on the
+  first and on 19t). New: `tools/assurance-provenance/cite19r.py`, `evidence19r.py`,
+  `monitor19s.py`, `evidence19s.py`, four test files, and
+  `docs/research/provenance-phase-19s/third-party/sleight-bench/` (a monitor prompt and its
+  licence, copied byte for byte). Edited: the Phase 19 ledger (declarations P19-CITE01 and
+  P19-MONITOR01, one amendment to the second), `.prettierignore` (P19-FORMAT20), both logs. No
+  frozen file, no earlier lane's source or pack, no workflow.
+- **Summary:** two more of the upgrades the owner asked for on 13 Nov are declared and their
+  instruments committed, with no generation seen. 19r: a send must name the grant that
+  authorises it; three arms on 19k's cases, three local models, 768 generations each; the
+  capture started at 02:11Z from a clean worktree at `2231f3cd`. 19s: each of 24 cases is
+  written as two transcripts that differ only in the trusted state line, and a monitor given
+  SLEIGHT-Bench's own prompt scores both; two local models as monitors, 192 generations each;
+  its capture is queued behind 19r's because one local model fits on the machine at a time.
+  This entry records work in progress. Each lane gets its own entry with its result.
+- **Files changed:** the files above, `docs/research/PROVENANCE_PHASE_19.md`, `.prettierignore`,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 35 tests for 19r and 27 for 19s, all on scripted outputs. Deliberate
+  breaks: 19r 33 of 34 in the instrument (the one left cannot change any output) and 16 of 16
+  in the verifier; 19s 23 of 23 and 16 of 16 (the instrument's commit message says 24; the list
+  has 23). Every prompt was rendered with each cached model's own template and counted before
+  any generation.
+- **Follow-ups:** build each pack when its capture ends, with README, results, a test on the
+  committed pack, ruling and logs; then one change that brings 19q, 19r, 19s and 19t into the
+  operator handoff and the pinned roots.
+
 ### 2026-11-13 (Australia/Sydney) — Phase 19t: two attackers with the gate's source, submissions committed before they were run (49 of 92 attempts changed the gate's output; none landed the undelegated action)
 
 **Raouf:**
