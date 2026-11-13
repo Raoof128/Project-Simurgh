@@ -26,6 +26,7 @@
     "19q",
     "19q --dataset",
     "19r",
+    "19s",
     "19t",
     "19t --replay",
     "19u"
@@ -128,6 +129,9 @@
       "result": "not_in_receipt"
     },
     "19r": {
+      "result": "not_in_receipt"
+    },
+    "19s": {
       "result": "not_in_receipt"
     },
     "19t": {

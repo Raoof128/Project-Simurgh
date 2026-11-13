@@ -1,6 +1,6 @@
 # Phase 19f: outside-operator replay (paid in part)
 
-`IOU-19-OPERATOR`: one outside operator has replayed five of the fifteen packs. This directory holds the
+`IOU-19-OPERATOR`: one outside operator has replayed five of the twenty packs. This directory holds the
 package that makes the replay a run of named commands against named expectations, the receipt that
 came back and the author's review of it:
 
@@ -70,6 +70,24 @@ the rest.
 19p (every send recorded in 19n dispatched through the frozen Phase 17 pipeline; with `--replay`
 on Linux x86_64) joined on 13 Nov 2026 under P19-OPERATOR05. It is `not_in_receipt` in the review
 of the first receipt; the lane and its `--replay` are owed with the rest.
+
+Five lanes joined on 13 and 14 Nov 2026 under P19-OPERATOR06: 19q (a destination rule scored on
+a public monitor benchmark; with `--dataset` it recomputes every row from a clone of that
+benchmark), 19r (a send must name its grant; three local models, recomputed from committed
+outputs), 19s (two local models as monitors on twin transcripts that differ only in the trusted
+state; recomputed from committed outputs), 19t (attackers with the gate's source; with
+`--replay` on Linux x86_64 every submitted attempt is run again) and 19u (four hosted Claude
+models; verifying it needs no network and no key). All five are `not_in_receipt` in the review
+of the first receipt and are owed with the rest, together with 19q's `--dataset` and 19t's
+`--replay`.
+
+## Who has agreed to run it next
+
+Two people have agreed to run the handoff: Jacob, on a Linux machine, and Mona, on a Windows
+laptop. They are named by first name with their consent, as the owner relayed it on
+13 Nov 2026. No receipt from either exists, and nothing here is evidence until one is
+returned, committed unchanged and reviewed. The handoff's Windows recipe (WSL2 with Ubuntu) was
+written for the second of these runs and has not been tried by the author.
 
 Limits, in the operator's own words in the receipt: the receipt is signed with a typed name, and
 the commands were typed and run by an AI coding agent on a subscription registered to the author.

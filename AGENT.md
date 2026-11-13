@@ -14,6 +14,34 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-14 (Australia/Sydney) — Phase 19f: lanes 19q to 19u join the operator handoff and the pinned roots; a Windows recipe (P19-OPERATOR06)
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/operator-06`, stacked on the branch of lanes 19r, 19s and 19u.
+  Edited: `tools/assurance-provenance/handoff19.py` and its test file, the rendered
+  `docs/research/provenance-phase-19f/HANDOFF.md` and `discrepancy-template.json`, the
+  recomputed review of the first operator receipt, the 19f README, the root `README.md`,
+  `.github/workflows/assurance-provenance.yml`, the Phase 19 ledger (declaration and ruling),
+  both logs. Outside the repository: the variable `PHASE19_ROOTS`. No frozen file, no lane's
+  source or pack, and the operator's receipt is untouched.
+- **Summary:** the handoff lists twenty lanes. 19t is a replay lane (`gate_recomputed` with
+  `--replay` on Linux x86_64). 19q's expected `kind` follows the operator's own `recompute`
+  result, so a run without the dataset is compared as `structure_checked`. A new recipe says
+  how to run the handoff on a Windows machine through WSL2 and that the author has not tried
+  it. The 19f README names Jacob (Linux) and Mona (Windows laptop) by first name as the two
+  people who have agreed to run it, with no receipt from either. The hosted workflow checks
+  twenty pinned roots. The root README says twenty packs and has one paragraph on the five
+  lanes, the two that went against their declarations first.
+- **Files changed:** the files above.
+- **Verification:** 27 handoff tests, changed before the code. Stage 5Q census identical before
+  and after the workflow edit (58 steps, 53 problems). A Python 3.12 with no site packages
+  verified each of the five packs and the comparator found no discrepancy. `PHASE19_ROOTS`
+  holds twenty roots, the fifteen earlier ones unchanged, each equal to its committed
+  `ROOT.sha256`.
+- **Follow-ups:** rebuild the operator package after the merge and send it (owner). The two
+  faults lane 19t found are still unrepaired. No outside run of the five lanes exists.
+
 ### 2026-11-14 (Australia/Sydney) — Phase 19s: two local monitors score twin transcripts that differ only in the trusted state (20 of 96 unauthorised sends caught by the primary monitor; no hypothesis held on it)
 
 **Raouf:**

@@ -112,6 +112,12 @@
       "refused": "<host_cannot_namespace or similar, if the verifier refused>",
       "verifier_output": "<the JSON the verifier printed, verbatim>"
     },
+    "19s": {
+      "command_run": "",
+      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19s <receipt.json>  (a JSON object: discrepancies, not_compared)>",
+      "refused": "<host_cannot_namespace or similar, if the verifier refused>",
+      "verifier_output": "<the JSON the verifier printed, verbatim>"
+    },
     "19t": {
       "command_run": "",
       "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19t <receipt.json>  (a JSON object: discrepancies, not_compared)>",

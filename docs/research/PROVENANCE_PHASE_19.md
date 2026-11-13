@@ -2188,3 +2188,35 @@ strict ancestor of every commit that acts on it.
   about the monitors the benchmark's authors tested, a frontier model as a monitor, a long
   session, or a gate; the comparison with a host check, which refuses each of these sends by
   reading the state, is between a rule and a judgement and not between two measured systems.
+- Ruling (14 Nov 2026, P19-OPERATOR06 exercised): the declaration (`79aa5724`) precedes every
+  commit that acts on it. It was exercised in two commits: the first (`c8faa623`) while 19s was
+  still being captured, for 19q, 19r, 19t and 19u; the second after the 19s evidence commit
+  (`97010504`) was merged into the branch, for 19s and everything outside `handoff19.py`.
+  `handoff19.py` now lists twenty lanes. 19t is a replay lane beside 19j, 19l and 19p, with the
+  word `gate_recomputed`. 19q has its own pair of table entries: the expected `kind` follows
+  the operator's own `recompute.result`, `recompute` is left out of the comparison for 19q
+  alone, and `19q --dataset` and `19t --replay` are items an outside host can exercise. 19r,
+  19s and 19u are plain lanes. Nothing else about the comparator changed. Tests were changed
+  first (four new, and the lists in four others) and failed before each change; 27 pass. The
+  first operator receipt is byte-identical (sha256 `765c42b1…`); its review was recomputed and
+  lists the five lanes as `not_in_receipt`, so `handoff19.py status` reads
+  `reviewed_discrepancies_published` and names twenty-two items still owed under
+  `IOU-19-OPERATOR`. `HANDOFF.md` and `discrepancy-template.json` were re-rendered: the handoff
+  gained the sentences for 19t's replay and 19q's dataset recomputation, which does not repeat
+  the dataset's key, and a recipe for a Windows machine (WSL2 with Ubuntu) that says the author
+  has run nothing of the handoff on Windows and that WSL2 on an ARM machine is Linux arm64,
+  where no `--replay` is available. The 19f README names by first name the two people who have
+  agreed to run the handoff and says no receipt from either exists. The workflow gained the
+  five lanes' `docs/` paths in both path filters and their ids in the expected-roots check,
+  with its message; no step was added, removed or renamed, and the Stage 5Q census output is
+  identical before and after (58 steps, 53 problems). `PHASE19_ROOTS` was extended outside the
+  pull request at 15:14Z on 13 Nov from fifteen roots to twenty, the fifteen existing values
+  unchanged; the five added are 19q `fcd391ee…`, 19r `5d31169b…`, 19s
+  `035422f5767d0443a8165a5c8c3759d4b8b674d4b6effe80a596fa668b8d5b5d`, 19t `0096b482…` and 19u
+  `05ecedba…`, each equal to the committed `ROOT.sha256`. A Python 3.12 with no site packages
+  verified the structure of each of the five packs and the comparator found no discrepancy in
+  any of the five receipts, which is what the handoff tells an operator who adds neither
+  `--replay` nor `--dataset`. The root README's count of Phase 19 packs and its sentences on
+  the five lanes were updated in the same change. Not done: no one outside the author has run
+  any of the five lanes; the Windows recipe is untried; the package given to an operator is
+  rebuilt after the merge.

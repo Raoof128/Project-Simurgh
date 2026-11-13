@@ -196,13 +196,14 @@ class HandoffTests(unittest.TestCase):
                 "19p",
                 "19q",
                 "19r",
+                "19s",
                 "19t",
                 "19u",
             ],
         )
         text = handoff19.render()
-        self.assertIn("run nineteen verify commands", text)
-        self.assertIn("19o, 19p, 19q, 19r, 19t and 19u\n", text)
+        self.assertIn("run twenty verify commands", text)
+        self.assertIn("19o, 19p, 19q, 19r, 19s, 19t and 19u\n", text)
         self.assertIn("- 19a, 19j, 19l, 19p and 19t with `--replay`", text)
         self.assertIn(
             "`frozen_replay_recomputed` (19j, 19l, 19p) or `gate_recomputed` (19t).",
@@ -385,6 +386,7 @@ STILL_OWED = [
     "19q",
     "19q --dataset",
     "19r",
+    "19s",
     "19t",
     "19t --replay",
     "19u",
@@ -427,6 +429,7 @@ class OperatorReceiptTests(unittest.TestCase):
                 "19p": "not_in_receipt",
                 "19q": "not_in_receipt",
                 "19r": "not_in_receipt",
+                "19s": "not_in_receipt",
                 "19t": "not_in_receipt",
                 "19u": "not_in_receipt",
             },
