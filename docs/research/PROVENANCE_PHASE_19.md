@@ -2220,3 +2220,17 @@ strict ancestor of every commit that acts on it.
   the five lanes were updated in the same change. Not done: no one outside the author has run
   any of the five lanes; the Windows recipe is untried; the package given to an operator is
   rebuilt after the merge.
+- Note (14 Nov 2026, after the rulings above; no authority exercised and no pack changed): the
+  five lanes of the 13 to 14 November set and the handoff change reached `main` through four
+  pull requests: 19q through #171, 19t through #172, 19r, 19s and 19u through #173
+  (`60adef21`, 15:55Z on 13 Nov), and P19-OPERATOR06 through #174 (`1deabcbe`, 16:03Z). On
+  `1deabcbe` the quality gate, the Phase 19 workflow with twenty pinned roots and the README
+  replay passed. The quality-gate run for `60adef21` is recorded as cancelled, not failed: that
+  workflow cancels a run in progress when a newer push to the same branch arrives, #174 merged
+  seven minutes after #173, and the gate then passed on `1deabcbe`, which contains `60adef21`.
+  The other two workflows passed on `60adef21`. The package given to an operator was rebuilt
+  for `1deabcbe`. Still owed and not changed by this note: neither fault that 19t found is
+  repaired; no one outside the author has run any of the five lanes, and `handoff19.py status`
+  names twenty-two items under `IOU-19-OPERATOR`; the Windows recipe is untried; and no
+  provider's usage page has been compared with a lane's meter (5.46 USD for 19o, 3.96 USD for
+  19u, of a 7 USD cap).
