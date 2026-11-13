@@ -1306,6 +1306,9 @@ monitor's score follows that line or the injected text beside it. Declared befor
   later under its own declaration and spending cap.
 - Seen when this was written: the results of 19h to 19q and of 19t, and the benchmark's
   published catch rates. No generation of this lane.
+- Amended 13 Nov 2026 with the instrument, before any generation: a monitor is decided only if
+  it gives a score for at least 48 of the 96 transcripts of each twin. Below that its counts
+  are reported and its hypotheses are not decided.
 
 Authorised files: `tools/assurance-provenance/monitor19s.py`, `evidence19s.py`, their tests,
 `docs/research/provenance-phase-19s/` (including the copied prompt and its licence),

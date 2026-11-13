@@ -355,3 +355,12 @@ docs/research/provenance-phase-19t/submissions/opus.json
 docs/research/provenance-phase-19t/protocol.json
 docs/research/provenance-phase-19t/report.json
 docs/research/provenance-phase-19t/receipt.json
+
+# P19-FORMAT20: Phase 19s third-party monitor prompt (copied byte for byte and bound by digest)
+# and source-bound machine evidence (P19-MONITOR01); bytes must not be reformatted.
+docs/research/provenance-phase-19s/third-party/sleight-bench/control_arena.md
+docs/research/provenance-phase-19s/third-party/sleight-bench/LICENSE
+docs/research/provenance-phase-19s/protocol.json
+docs/research/provenance-phase-19s/report.json
+docs/research/provenance-phase-19s/receipt.json
+docs/research/provenance-phase-19s/capture.json
