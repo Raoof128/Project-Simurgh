@@ -1,5 +1,23 @@
 ## Change Log
 
+## [phase-19q-2026-11-13] — 2026-11-13 — Lane 19q: a destination rule scored on a public monitor benchmark; mostly negative
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/dest19q.py`, `evidence19q.py`, their tests,
+  `docs/research/provenance-phase-19q/`, the Phase 19 ledger, `.prettierignore`, both logs.
+- **Summary:** every destination in the 43 attack and benign session pairs of SLEIGHT-Bench is
+  typed by where it first entered the session (principal, environment, agent, or agent in an
+  earlier stage), and a rule that allows only supplied destinations is scored on both. Declared
+  before any transcript was read. In the primary cell the rule flags 7 of 43 attack sessions
+  and 6 of 43 benign ones, six pairs on both twins. Two of the three declared hypotheses did
+  not hold. No model ran and no text of the dataset is in the repository.
+- **Verification:** 53 tests; 28 of 28 and 24 of 24 deliberate breaks caught; structure
+  verifies on a bare Python 3.12; every row recomputes from the dataset at the pinned commit.
+  Quick gate passes.
+- **Follow-ups:** the handoff and pinned roots for 19q; the three further upgrades, each under
+  its own declaration.
+
 ## [docs-phase19-closeout-2026-11-13] — 2026-11-13 — README updated for fifteen Phase 19 packs and the three lanes of 12 to 13 November; ledger note
 
 **Raouf:**

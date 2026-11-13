@@ -14,6 +14,40 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-13 (Australia/Sydney) — Phase 19q: a destination rule scored on a public monitor benchmark (7 of 43 attack sessions flagged, 6 of 43 benign; two of three hypotheses did not hold)
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/dest-19q`. New: `tools/assurance-provenance/dest19q.py`,
+  `evidence19q.py`, three test files, `docs/research/provenance-phase-19q/`. Edited: the Phase 19
+  ledger (declaration P19-DEST01, ruling, one overview sentence), `.prettierignore`
+  (P19-FORMAT17), both logs. No frozen file, no earlier lane's source or pack, no workflow.
+- **Summary:** on 13 Nov the owner asked how the project stands against the research linked
+  from a lab's residency page, then asked for every proposed upgrade to be added. This is the
+  first: the benchmark SLEIGHT-Bench measures transcript monitors and names egress boundaries
+  as a layer it does not measure, so one rule of that kind is scored on its own sessions. Every
+  destination token in each of 43 attack and benign pairs is typed by where it first entered
+  the session, and three rules are scored under a strict and a lenient reading. The primary
+  cell flags 7 attack sessions and 6 benign ones, six of the seven on both twins. Q1 and Q3 did
+  not hold; Q2 (the rule has a cost) held. The pack says so first. Under the lenient reading,
+  typing a destination by who first wrote it separates the two laundering attacks from their
+  benign twins; that is read after the fact and labelled so.
+- **Dataset handling:** the dataset is MIT-licensed and carries canary strings against
+  inclusion in training corpora. It is not in the repository. Rows hold directory paths,
+  counts, flags and 16-character digests; the verifier refuses any other field. The working
+  copy stays outside the repository.
+- **Files changed:** the files above, `docs/research/PROVENANCE_PHASE_19.md`, `.prettierignore`,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 53 tests (27 instrument, 19 pack, 7 committed pack; one of the last runs
+  only with a copy of the dataset and passes with it). Deliberate breaks: 28 of 28 and 24 of
+  24 caught, after a first run against the verifier that was invalid and is described in the
+  instrument's commit message. A Python 3.12 with no site packages verifies the structure.
+  Every number in the README was read from the committed report. Quick gate passes.
+- **Follow-ups:** bring 19q into the operator handoff and the pinned roots under its own
+  declaration; the remaining upgrades (actions that cite their authority, monitors scored
+  against the host's label, a red team whose attempts are committed before their outcomes).
+  Hosted models for any of them need the owner's yes and a spending cap.
+
 ### 2026-11-13 (Australia/Sydney) — Closeout of the 12 to 13 November run: README brought up to fifteen packs and the three new lanes; ledger note
 
 **Raouf:**
