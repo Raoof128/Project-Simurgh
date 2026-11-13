@@ -1222,6 +1222,15 @@ clock, as in 19b; no model is measured. Declared before the run:
 - Amended 13 Nov 2026, before the instrument and before any attacker was briefed: this
   declaration first said nine mutants, taken from a stale line in `lane.py`'s description. The
   19b pack and `mutants.all_mutants` give thirteen. Nothing else changed.
+- Amended a second time on 13 Nov 2026, after the attackers were started and before any
+  submission existed: the Codex agent was refused by its provider. Its one request was answered
+  with a notice that the content was flagged for possible cybersecurity risk, and it produced
+  nothing. The task was not reworded to get past that filter. The seat stays in the record with
+  an empty submission written by the author to say that nothing was received, so T2 cannot
+  hold. A third seat, `opus`, is added: a second Claude agent on a different model from the
+  first, with the same brief and its own copy. The instrument's list of attackers and its tests
+  change for that and for nothing else. Two agents from one vendor are weaker evidence of
+  independent attack than the pair first declared.
 
 Authorised files: `tools/assurance-provenance/redteam19t.py`, `evidence19t.py`, their tests,
 `docs/research/provenance-phase-19t/` (the brief, the two submissions, the pack),

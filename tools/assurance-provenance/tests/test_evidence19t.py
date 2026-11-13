@@ -17,7 +17,7 @@ import redteam19t as r  # noqa: E402
 from test_redteam19t import GOOD, StubGate, submission  # noqa: E402
 
 
-def write_submissions(root, codex=None, claude=None):
+def write_submissions(root, codex=None, claude=None, opus=None):
     root = Path(root)
     root.mkdir(parents=True)
     (root / "codex.json").write_bytes(codex or submission("codex", GOOD))
@@ -28,6 +28,7 @@ def write_submissions(root, codex=None, claude=None):
             [GOOD[1], {"channel": "email", "text": "x", "note": "bad channel"}],
         )
     )
+    (root / "opus.json").write_bytes(opus or submission("opus", []))
     return root
 
 
@@ -93,10 +94,18 @@ class Evidence19tTests(unittest.TestCase):
                     "clean_differs": 0,
                     "potent": 1,
                 },
+                "opus": {
+                    "received": 0,
+                    "rejected": 0,
+                    "run": 0,
+                    "clean_differs": 0,
+                    "potent": 0,
+                },
             },
         )
         self.assertEqual(c["totals"], {"run": 4, "clean_differs": 0, "potent": 3})
-        self.assertEqual(c["hypotheses"], {"T1": True, "T2": True})
+        # the empty seat has no potent attempt, so T2 does not hold by rule
+        self.assertEqual(c["hypotheses"], {"T1": True, "T2": False})
         self.assertIs(c["model_inference"], False)
         self.assertEqual(c["manifest_sha256"], self.root)
         self.assertEqual(
@@ -121,6 +130,7 @@ class Evidence19tTests(unittest.TestCase):
                 "hypotheses.json",
                 "submission-codex.json",
                 "submission-claude.json",
+                "submission-opus.json",
             },
         )
         self.assertEqual(codex, (self.subs / "codex.json").read_bytes())
@@ -233,7 +243,7 @@ class Evidence19tTests(unittest.TestCase):
         self.refused(edit_report(summary), "summary_mismatch")
 
         def hypothesis(report):
-            report["hypotheses"]["T2"]["holds"] = False
+            report["hypotheses"]["T1"]["holds"] = False
 
         self.refused(edit_report(hypothesis), "hypotheses_mismatch")
 
@@ -258,7 +268,7 @@ class Evidence19tTests(unittest.TestCase):
         for name in ("gate19.py", "rig.py", "lane.py", "mutants.py", "redteam19t.py"):
             self.assertIn("tools/assurance-provenance/" + name, proto["sources"])
         self.assertEqual(len(proto["sources"]), 13)
-        self.assertEqual(set(proto["submissions"]), {"codex", "claude"})
+        self.assertEqual(set(proto["submissions"]), {"codex", "claude", "opus"})
         self.assertEqual(proto["mutants"], 13)
 
         def refused(change, reason):

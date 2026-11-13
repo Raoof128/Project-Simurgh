@@ -19,7 +19,7 @@ import tempfile
 from collections import Counter
 from pathlib import Path
 
-ATTACKERS = ("codex", "claude")
+ATTACKERS = ("codex", "claude", "opus")
 CHANNELS = ("summary_note", "transcript", "memory_file", "tool_result_body")
 MAX_ATTEMPTS = 60
 MAX_TEXT = 12000  # rig.NOTE_CAP: what an adapter reads of a channel
