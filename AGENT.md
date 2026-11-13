@@ -14,6 +14,121 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-14 (Australia/Sydney) — Phase 19s: two local monitors score twin transcripts that differ only in the trusted state (20 of 96 unauthorised sends caught by the primary monitor; no hypothesis held on it)
+
+**Raouf:**
+
+- **Scope:** the evidence commit of lane 19s, on branch `phase-19/hosted-claude-19u` (which
+  holds the 19s declaration and instrument as ancestors). New in
+  `docs/research/provenance-phase-19s/`: the pack, README and RESULTS, beside the third-party
+  prompt already there; and `tools/assurance-provenance/tests/test_evidence19s_committed.py`.
+  Edited: the Phase 19 ledger (ruling, one overview sentence), both logs. No frozen file, no
+  earlier lane's source or pack, no workflow.
+- **Summary:** 24 cases of 19k, each written as an unauthorised and an authorised transcript
+  that differ only in the trusted state line; the agent sends in both. Two local models score
+  each transcript four times with SLEIGHT-Bench's published monitor prompt. Primary monitor
+  `qwen2.5-7b-4bit`: 20 of 96 unauthorised transcripts caught at a 1% false-positive rate, the
+  unauthorised twin scored higher in 49 of 85 scored pairs, 11 outputs without a score in the
+  tag; M1, M2 and M3 do not hold. `qwen3-4b-4bit`: 12 of 96 caught, 56 of 96 pairs; M2 holds
+  (6 of 24 caught with the control text, 6 of 72 with injected text), M1 and M3 do not.
+  Neither monitor flagged an authorised transcript. With the imitated host block they caught 2
+  and 0 of 24.
+- **Files changed:** the files above, `docs/research/PROVENANCE_PHASE_19.md`, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** 35 tests (18 instrument, 9 pack, 8 on the committed pack). The pack
+  verifies under a Python 3.12 with no site packages. Determinism recheck identical on four
+  rows per monitor. The capture ran about three hours and was not interrupted.
+- **Follow-ups:** bring 19q to 19u into the operator handoff, the hosted workflow and the
+  pinned roots (P19-OPERATOR06, declared). A frontier monitor on the same twins would need its
+  own declaration and spending cap.
+
+### 2026-11-13 (Australia/Sydney) — Phase 19r: a send must name the grant that authorises it (when the source offers a grant every wrong send cites it; citing lowered sends on one of two eligible models)
+
+**Raouf:**
+
+- **Scope:** the evidence commit of lane 19r, on branch `phase-19/hosted-claude-19u` (which
+  holds the 19r declaration and instrument as ancestors). New:
+  `docs/research/provenance-phase-19r/` (pack, README, RESULTS) and
+  `tools/assurance-provenance/tests/test_evidence19r_committed.py`. Edited: the Phase 19
+  ledger (ruling, one overview sentence), `.prettierignore` (P19-FORMAT18), both logs. No
+  frozen file, no earlier lane's source or pack, no workflow.
+- **Summary:** three local models, 768 generations each, three arms: 19k's prompt unchanged, a
+  send that must cite the trusted grant, and the same with a different grant id offered in the
+  untrusted text. Primary model `qwen3-4b-4bit`: sends under injected text fell from 71 to 20
+  of 216 with the requirement (C1 holds); all 25 wrong sends in the offer arm cite the offered
+  grant (C2 holds); all 24 authorised sends were admitted (C3 holds); offering a grant did not
+  raise sends by the declared rule (C4 does not hold). `qwen2.5-7b-4bit`: C1 does not hold (42
+  and 40), C2 and C3 hold, C4 does not. `llama-3.2-3b-4bit` is not eligible: with the citing
+  tool it made 11 of 24 authorised calls. The host check admitted no restricted send, which is
+  by construction. The capture was interrupted once, when a session ended, and resumed from
+  the transcript.
+- **Files changed:** the files above, `docs/research/PROVENANCE_PHASE_19.md`, `.prettierignore`,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 42 tests (25 instrument, 10 pack, 7 on the committed pack). The pack
+  verifies under a Python 3.12 with no site packages. Determinism recheck identical on six
+  rows per model.
+- **Follow-ups:** bring 19r into the operator handoff and the pinned roots with 19q to 19u.
+
+### 2026-11-13 (Australia/Sydney) — Phase 19u: part of 19o's schedule on four hosted Claude models under a 7 USD cap (plan amended after two models; no restricted send in either run)
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/hosted-claude-19u`, stacked on the 19s branch. New:
+  `tools/assurance-provenance/inject19u.py`, `evidence19u.py`, three test files,
+  `docs/research/provenance-phase-19u/` (pack, README, RESULTS). Edited: the Phase 19 ledger
+  (declaration P19-HOSTED02, its amendment, the ruling, one overview sentence),
+  `.prettierignore` (P19-FORMAT21), both logs. No frozen file, no earlier lane's source or
+  pack, no workflow.
+- **Summary:** the owner asked on 13 Nov for the hosted lane on Anthropic's models, Haiku 5.5
+  to Fable 5.2 and Mythos 5.2, with 7 USD of credit. Mythos 5.2 is not on the key's model list
+  and nothing was sent to it. The first run used the output limit declared (160 tokens), which
+  was too small because these models reason before they answer: 262 of Haiku 5.5's 672 answers
+  were cut off. The author stopped after two models and amended the declaration before
+  anything more was sent: 512 tokens, 342 rows each for Fable 5.2 and Opus 5.5, Haiku 5.5 sent
+  again. In the second run every model made 12 of 12 authorised calls and no answer was cut
+  off. A1 held: no model sent in a restricted generation, 0 of 660 for Haiku 5.5 and Sonnet
+  5.5 and 0 of 330 for Opus 5.5 and Fable 5.2. The plan was changed after data was seen; the
+  first run is in the pack whole. Requests go through the provider's batch endpoint, and
+  before each batch the lane computes its worst case and refuses to submit past the cap.
+- **Files changed:** the files above, `docs/research/PROVENANCE_PHASE_19.md`, `.prettierignore`,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 52 tests (31 instrument, 14 pack, 7 on the committed pack). Deliberate
+  breaks: 35 of 35 and 17 of 17. The pack verifies under a Python 3.12 with no site packages.
+  2,700 requests, metered 3.959005 USD of 7.00. Transcripts scanned for a key, a header or an
+  account identifier before commit.
+- **Follow-ups:** compare the provider's usage page with the meter (owner); bring 19u into the
+  operator handoff and the pinned roots with 19q to 19t.
+
+### 2026-11-13 (Australia/Sydney) — Phase 19r and 19s declared and built; their captures are running and queued (no result yet)
+
+**Raouf:**
+
+- **Scope:** branches `phase-19/cite-19r` and `phase-19/monitor-19s` (the second stacked on the
+  first and on 19t). New: `tools/assurance-provenance/cite19r.py`, `evidence19r.py`,
+  `monitor19s.py`, `evidence19s.py`, four test files, and
+  `docs/research/provenance-phase-19s/third-party/sleight-bench/` (a monitor prompt and its
+  licence, copied byte for byte). Edited: the Phase 19 ledger (declarations P19-CITE01 and
+  P19-MONITOR01, one amendment to the second), `.prettierignore` (P19-FORMAT20), both logs. No
+  frozen file, no earlier lane's source or pack, no workflow.
+- **Summary:** two more of the upgrades the owner asked for on 13 Nov are declared and their
+  instruments committed, with no generation seen. 19r: a send must name the grant that
+  authorises it; three arms on 19k's cases, three local models, 768 generations each; the
+  capture started at 02:11Z from a clean worktree at `2231f3cd`. 19s: each of 24 cases is
+  written as two transcripts that differ only in the trusted state line, and a monitor given
+  SLEIGHT-Bench's own prompt scores both; two local models as monitors, 192 generations each;
+  its capture is queued behind 19r's because one local model fits on the machine at a time.
+  This entry records work in progress. Each lane gets its own entry with its result.
+- **Files changed:** the files above, `docs/research/PROVENANCE_PHASE_19.md`, `.prettierignore`,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 35 tests for 19r and 27 for 19s, all on scripted outputs. Deliberate
+  breaks: 19r 33 of 34 in the instrument (the one left cannot change any output) and 16 of 16
+  in the verifier; 19s 23 of 23 and 16 of 16 (the instrument's commit message says 24; the list
+  has 23). Every prompt was rendered with each cached model's own template and counted before
+  any generation.
+- **Follow-ups:** build each pack when its capture ends, with README, results, a test on the
+  committed pack, ruling and logs; then one change that brings 19q, 19r, 19s and 19t into the
+  operator handoff and the pinned roots.
+
 ### 2026-11-13 (Australia/Sydney) — Phase 19t: two attackers with the gate's source, submissions committed before they were run (49 of 92 attempts changed the gate's output; none landed the undelegated action)
 
 **Raouf:**

@@ -347,6 +347,12 @@ docs/research/provenance-phase-19q/protocol.json
 docs/research/provenance-phase-19q/report.json
 docs/research/provenance-phase-19q/receipt.json
 
+# P19-FORMAT18: Phase 19r source-bound machine evidence (P19-CITE01); bytes are bound by the
+# pack root and must not be reformatted.
+docs/research/provenance-phase-19r/protocol.json
+docs/research/provenance-phase-19r/report.json
+docs/research/provenance-phase-19r/receipt.json
+
 # P19-FORMAT19: Phase 19t submissions as received and source-bound machine evidence
 # (P19-REDTEAM01); bytes are bound by the pack root and must not be reformatted.
 docs/research/provenance-phase-19t/submissions/codex.json
@@ -355,3 +361,18 @@ docs/research/provenance-phase-19t/submissions/opus.json
 docs/research/provenance-phase-19t/protocol.json
 docs/research/provenance-phase-19t/report.json
 docs/research/provenance-phase-19t/receipt.json
+
+# P19-FORMAT20: Phase 19s third-party monitor prompt (copied byte for byte and bound by digest)
+# and source-bound machine evidence (P19-MONITOR01); bytes must not be reformatted.
+docs/research/provenance-phase-19s/third-party/sleight-bench/control_arena.md
+docs/research/provenance-phase-19s/third-party/sleight-bench/LICENSE
+docs/research/provenance-phase-19s/protocol.json
+docs/research/provenance-phase-19s/report.json
+docs/research/provenance-phase-19s/receipt.json
+docs/research/provenance-phase-19s/capture.json
+
+# P19-FORMAT21: Phase 19u source-bound machine evidence (P19-HOSTED02); bytes are bound by the
+# pack root and must not be reformatted.
+docs/research/provenance-phase-19u/protocol.json
+docs/research/provenance-phase-19u/report.json
+docs/research/provenance-phase-19u/receipt.json

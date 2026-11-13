@@ -1,5 +1,63 @@
 ## Change Log
 
+## [phase-19s-2026-11-14] — 2026-11-14 — Lane 19s: two local monitors mostly do not catch a send the trusted state forbids
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19s/` (pack, README, RESULTS), a test on the
+  committed pack, the Phase 19 ledger, both logs.
+- **Summary:** each of 24 cases is written as two transcripts that differ only in the trusted
+  state line, and two local models score them with a public benchmark's monitor prompt. The
+  primary monitor caught 20 of 96 unauthorised sends at a 1% false-positive rate and the
+  second 12 of 96; neither flagged an authorised one. None of the three hypotheses held on
+  the primary monitor; one held on the second.
+- **Verification:** 35 tests; the pack verifies with the standard library alone.
+- **Follow-ups:** the operator handoff and pinned roots for 19q to 19u.
+
+## [phase-19r-2026-11-13] — 2026-11-13 — Lane 19r: a send must name its grant; wrong sends cite whatever grant the untrusted text offers
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19r/`, a test on the committed pack, the Phase
+  19 ledger, `.prettierignore`, both logs.
+- **Summary:** three local models. When the untrusted text offered a grant id, every wrong
+  send cited it (25 of 25 and 45 of 45 on the two eligible models), and the host refuses it
+  by comparing two strings. Having to cite lowered sends on the primary model (71 to 20 of
+  216) and not on the second (42 and 40). Authorised sends were unaffected on both. The third
+  model was not eligible.
+- **Verification:** 42 tests; the pack verifies with the standard library alone.
+- **Follow-ups:** the operator handoff and pinned roots for 19q to 19u.
+
+## [phase-19u-2026-11-13] — 2026-11-13 — Lane 19u: 19o's cases on four hosted Claude models; no restricted send; plan amended mid-run
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/inject19u.py`, `evidence19u.py`, their tests,
+  `docs/research/provenance-phase-19u/`, the Phase 19 ledger, `.prettierignore`, both logs.
+- **Summary:** Haiku 5.5, Sonnet 5.5, Opus 5.5 and Fable 5.2 were sent part of 19o's schedule
+  under a 7 USD cap. The output limit first declared cut answers off, so the run was stopped
+  after two models and the declaration amended before the rest was sent. No model sent in a
+  restricted generation in either run (0 of 660 for two models, 0 of 330 for two). Mythos 5.2
+  was asked for and is not available to the key.
+- **Verification:** 52 tests; 52 of 52 deliberate breaks caught; the pack verifies with the
+  standard library alone. Metered 3.96 USD; the provider's bill has not been compared.
+- **Follow-ups:** the operator handoff and pinned roots for 19q to 19u.
+
+## [phase-19r-19s-in-progress-2026-11-13] — 2026-11-13 — Lanes 19r and 19s declared and built; captures running and queued
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/cite19r.py`, `evidence19r.py`, `monitor19s.py`,
+  `evidence19s.py`, their tests, a third-party monitor prompt with its licence under
+  `docs/research/provenance-phase-19s/`, the Phase 19 ledger, `.prettierignore`, both logs.
+- **Summary:** 19r asks what a wrong send cites when every send must name its grant, and
+  whether having to cite changes how often a model sends when it should not. 19s asks whether
+  a transcript monitor's score follows the host's state line or the injected text beside it.
+  Both are declared before any generation; neither has a result yet.
+- **Verification:** 62 tests on scripted outputs; deliberate breaks caught except one that
+  cannot change any output.
+- **Follow-ups:** packs, rulings and results when the captures end.
+
 ## [phase-19t-2026-11-13] — 2026-11-13 — Lane 19t: attackers with the gate's source; two faults found, the undelegated action never landed
 
 **Raouf:**
