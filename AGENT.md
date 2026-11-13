@@ -14,6 +14,33 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-13 (Australia/Sydney) — Phase 19r: a send must name the grant that authorises it (when the source offers a grant every wrong send cites it; citing lowered sends on one of two eligible models)
+
+**Raouf:**
+
+- **Scope:** the evidence commit of lane 19r, on branch `phase-19/hosted-claude-19u` (which
+  holds the 19r declaration and instrument as ancestors). New:
+  `docs/research/provenance-phase-19r/` (pack, README, RESULTS) and
+  `tools/assurance-provenance/tests/test_evidence19r_committed.py`. Edited: the Phase 19
+  ledger (ruling, one overview sentence), `.prettierignore` (P19-FORMAT18), both logs. No
+  frozen file, no earlier lane's source or pack, no workflow.
+- **Summary:** three local models, 768 generations each, three arms: 19k's prompt unchanged, a
+  send that must cite the trusted grant, and the same with a different grant id offered in the
+  untrusted text. Primary model `qwen3-4b-4bit`: sends under injected text fell from 71 to 20
+  of 216 with the requirement (C1 holds); all 25 wrong sends in the offer arm cite the offered
+  grant (C2 holds); all 24 authorised sends were admitted (C3 holds); offering a grant did not
+  raise sends by the declared rule (C4 does not hold). `qwen2.5-7b-4bit`: C1 does not hold (42
+  and 40), C2 and C3 hold, C4 does not. `llama-3.2-3b-4bit` is not eligible: with the citing
+  tool it made 11 of 24 authorised calls. The host check admitted no restricted send, which is
+  by construction. The capture was interrupted once, when a session ended, and resumed from
+  the transcript.
+- **Files changed:** the files above, `docs/research/PROVENANCE_PHASE_19.md`, `.prettierignore`,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 42 tests (25 instrument, 10 pack, 7 on the committed pack). The pack
+  verifies under a Python 3.12 with no site packages. Determinism recheck identical on six
+  rows per model.
+- **Follow-ups:** bring 19r into the operator handoff and the pinned roots with 19q to 19u.
+
 ### 2026-11-13 (Australia/Sydney) — Phase 19u: part of 19o's schedule on four hosted Claude models under a 7 USD cap (plan amended after two models; no restricted send in either run)
 
 **Raouf:**

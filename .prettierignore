@@ -347,6 +347,12 @@ docs/research/provenance-phase-19q/protocol.json
 docs/research/provenance-phase-19q/report.json
 docs/research/provenance-phase-19q/receipt.json
 
+# P19-FORMAT18: Phase 19r source-bound machine evidence (P19-CITE01); bytes are bound by the
+# pack root and must not be reformatted.
+docs/research/provenance-phase-19r/protocol.json
+docs/research/provenance-phase-19r/report.json
+docs/research/provenance-phase-19r/receipt.json
+
 # P19-FORMAT19: Phase 19t submissions as received and source-bound machine evidence
 # (P19-REDTEAM01); bytes are bound by the pack root and must not be reformatted.
 docs/research/provenance-phase-19t/submissions/codex.json

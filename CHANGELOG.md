@@ -1,5 +1,19 @@
 ## Change Log
 
+## [phase-19r-2026-11-13] — 2026-11-13 — Lane 19r: a send must name its grant; wrong sends cite whatever grant the untrusted text offers
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19r/`, a test on the committed pack, the Phase
+  19 ledger, `.prettierignore`, both logs.
+- **Summary:** three local models. When the untrusted text offered a grant id, every wrong
+  send cited it (25 of 25 and 45 of 45 on the two eligible models), and the host refuses it
+  by comparing two strings. Having to cite lowered sends on the primary model (71 to 20 of
+  216) and not on the second (42 and 40). Authorised sends were unaffected on both. The third
+  model was not eligible.
+- **Verification:** 42 tests; the pack verifies with the standard library alone.
+- **Follow-ups:** the operator handoff and pinned roots for 19q to 19u.
+
 ## [phase-19u-2026-11-13] — 2026-11-13 — Lane 19u: 19o's cases on four hosted Claude models; no restricted send; plan amended mid-run
 
 **Raouf:**

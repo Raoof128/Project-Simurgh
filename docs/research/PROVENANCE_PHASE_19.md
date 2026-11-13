@@ -24,7 +24,9 @@ all 423 restricted-state sends, and 369 of them landed behind the credential gat
 (P19-DEST01) types every destination in the sessions of a public monitor benchmark by where it
 first entered the session and scores a destination rule on attack and benign sessions alike: the
 rule flagged 7 of 43 attack sessions and 6 of 43 benign ones, and two of its three hypotheses
-did not hold. 19t (P19-REDTEAM01) gives two coding agents the gate's source and commits what
+did not hold. 19r (P19-CITE01) makes a send name the grant that authorises it, on three local
+models: when the untrusted text offered a grant, every wrong send cited it, and having to cite
+lowered sends on the primary model and not on the second. 19t (P19-REDTEAM01) gives two coding agents the gate's source and commits what
 each submits before it is run: 49 of 92 attempts changed the gate's output, 39 only the audit
 and 10 by making a dispatch raise, none landed the undelegated action or changed a verdict, and
 the declared prediction that nothing would change did not hold. 19u (P19-HOSTED02) sends part of
@@ -2068,3 +2070,35 @@ ancestor of every commit of lane 19u.
   these models in a long task with real tools, or a gate; the rates of the four models are not
   a like-for-like comparison with each other or with 19o's; the plan was changed after data
   was seen, and the first run is in the pack whole so that a reader can judge the change.
+- Ruling (13 Nov 2026, P19-CITE01 exercised): the declaration (`39360185`) and the instrument
+  (`2231f3cd`) were pushed before any generation, and the declaration is an ancestor of every
+  commit of the lane. The capture started at 02:11:11Z on 13 Nov from a clean worktree at
+  `2231f3cd` on the author's machine. `qwen3-4b-4bit` finished at 04:40:27Z. The capture was
+  interrupted after 359 rows of `qwen2.5-7b-4bit`, when the session that had launched it ended;
+  the time of the interruption was not recorded. It was started again at 10:06:50Z and resumed
+  from the transcript as the declaration provides, and ended at 12:09:49Z. 768 rows per model,
+  none dropped or generated twice; the determinism recheck was identical on six rows per
+  model. Pack built at `2231f3cd`, root
+  `5d31169b204790f7bd4abbe0dfa32c0c57310705bffea89f1b3512764bef6e98`. Primary model
+  `qwen3-4b-4bit`, eligible: C1 holds (71 sends of 216 in `plain`, 20 in `cite`; difference
+  23.6 points, Newcombe 16.1 to 30.9, state clusters 12.5 to 40.3); C2 holds (25 of 25
+  restricted sends in `cite_offer` cite the offered grant); C3 holds (24 of 24 authorised sends
+  admitted in `cite`); C4 does not hold (25 against 20; the Newcombe interval includes zero).
+  `qwen2.5-7b-4bit`, eligible: C1 does not hold (42 and 40), C2 holds (45 of 45), C3 holds (24
+  of 24), C4 does not hold (45 against 40). `llama-3.2-3b-4bit` is not eligible: 11 calls in
+  the 24 authorised generations of `cite`, where the rule needs 18; its counts are reported
+  (207, 196 and 194 sends of 216; 194 of 194 cite the offered grant) and its hypotheses are
+  not decided. With nothing offered, the primary model's 20 wrong sends all cite the host's
+  own grant, which the trusted block marks as not in force, and all are under the imitated
+  state block; the second model's 40 cite source text (23), something else (15) or the host's
+  grant (2). The host check admitted none of the 899 restricted sends, which is by
+  construction and not a finding. The citing arms differ from `plain` in the system line, a
+  trusted block and the tool at once, so C1 on the primary model is the effect of the three
+  together. Read after the fact and labelled so in the README: on the second model the
+  self-clearing document drew more sends with the requirement than without (14, 23, 27 of
+  72). Tests: 25 for the instrument, 10 for the pack, 7 on the committed pack. 33 of 34 and 16
+  of 16 deliberate breaks caught; the one left cannot change any output. A Python 3.12 with no
+  site packages verifies the pack. Not done under this ruling: 19r is not in the hosted
+  workflow's expected-roots check, in `PHASE19_ROOTS` or in `handoff19.py`. Not shown:
+  anything about a larger or a hosted model, an attacker who adapts to the requirement, or an
+  enforced system; the models ran on the author's machine.
