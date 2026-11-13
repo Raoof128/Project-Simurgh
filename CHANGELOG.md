@@ -1,5 +1,19 @@
 ## Change Log
 
+## [phase-19s-2026-11-14] — 2026-11-14 — Lane 19s: two local monitors mostly do not catch a send the trusted state forbids
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19s/` (pack, README, RESULTS), a test on the
+  committed pack, the Phase 19 ledger, both logs.
+- **Summary:** each of 24 cases is written as two transcripts that differ only in the trusted
+  state line, and two local models score them with a public benchmark's monitor prompt. The
+  primary monitor caught 20 of 96 unauthorised sends at a 1% false-positive rate and the
+  second 12 of 96; neither flagged an authorised one. None of the three hypotheses held on
+  the primary monitor; one held on the second.
+- **Verification:** 35 tests; the pack verifies with the standard library alone.
+- **Follow-ups:** the operator handoff and pinned roots for 19q to 19u.
+
 ## [phase-19r-2026-11-13] — 2026-11-13 — Lane 19r: a send must name its grant; wrong sends cite whatever grant the untrusted text offers
 
 **Raouf:**
