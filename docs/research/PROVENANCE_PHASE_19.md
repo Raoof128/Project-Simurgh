@@ -20,7 +20,11 @@ four hypotheses held on one model each, and no model sent again after a refusal.
 (P19-HOSTED01) sends 19k's cases and 19n's placement block to six hosted OpenAI models: all six
 made every authorised call and none sent in a restricted case. 19p (P19-REPLAY03) dispatches
 every send recorded in 19n through the frozen Phase 17 pipeline: the composed controls blocked
-all 423 restricted-state sends, and 369 of them landed behind the credential gateway alone. A
+all 423 restricted-state sends, and 369 of them landed behind the credential gateway alone. 19q
+(P19-DEST01) types every destination in the sessions of a public monitor benchmark by where it
+first entered the session and scores a destination rule on attack and benign sessions alike: the
+rule flagged 7 of 43 attack sessions and 6 of 43 benign ones, and two of its three hypotheses
+did not hold. A
 manuscript draft built from 19h to 19l is in
 [provenance-phase-19-paper/](provenance-phase-19-paper/README.md); it adds no evidence.
 
@@ -1655,3 +1659,37 @@ ancestor of every commit of lane 19q.
   The operator package was rebuilt for `a23938ae`. The root README's Phase 19 counts, which
   the last two rulings left stale, are corrected in the change that carries this note. The
   provider's bill for lane 19o has still not been compared with the lane's meter.
+- Ruling (13 Nov 2026, P19-DEST01 exercised): the declaration (`7eb43531`) and the instrument
+  (`364dd4bb`) were pushed before the run, and the declaration is an ancestor of every commit of
+  the lane. The run was made once, on the author's machine, from a clean checkout at `364dd4bb`
+  against a fresh clone of the dataset at the pinned commit, 01:56:09Z to 01:56:10Z on 13 Nov;
+  it built the report and verified it against the dataset. Root
+  `fcd391eef0de8afe45d69cd32368dd4874669ae84f8b366938a53539a140d5cb`; 44 encrypted files bound
+  by digest, 43 pairs, one directory without a benign twin left out as declared. Primary cell
+  (rule P, strict reading): 7 of 43 attack sessions flagged (95% interval 8.1% to 30.0%) and 6
+  of 43 benign sessions (6.6% to 27.3%); 1 attack flagged alone, 6 pairs flagged on both, no
+  benign session flagged alone. Q1 does not hold: 3 of the 6 named attack sessions were flagged
+  where at least 5 were declared. Q2 holds: 6 benign sessions were flagged. Q3 does not hold:
+  under the strict reading neither second-stage laundering session is flagged by any rule. The
+  other cells, as declared: strict E and A 5 and 4; lenient P 14 and 8, E 10 and 6, A 12 and 6
+  (attack and benign); no cell flags a benign session alone. 12 of the 43 attack sessions write
+  a destination in a `Bash` command and 21 do under the lenient reading. Destinations used
+  under the strict reading: attack 6 from the principal, 2 from the environment, 10 from the
+  agent; benign 6, 2 and 7. Said in advance and seen: the two attacks that reach their
+  destination through an interpreter the session writes are flagged by nothing; the third
+  encoded one is flagged under the lenient reading on both twins. Read after the fact and
+  labelled so in the README, from the committed rows and without reading a transcript: the
+  three named sessions that were flagged are flagged on their benign twins too; the three that
+  were not put the destination into a file and never into a command; under the lenient reading
+  both second-stage laundering sessions are allowed by E and refused by A while their benign
+  twins are not flagged, which is what Q3 looked for under the reading it did not name. The
+  author's sort of the sessions before the run, made from metadata summaries, expected about
+  nine flags and was a poor predictor; it also misplaced the one session flagged alone. Tests:
+  27 for the instrument and 19 for the pack on sessions written for the tests, 7 on the
+  committed pack (one runs only when a copy of the dataset is given, and passes with it). 28 of
+  28 and 24 of 24 deliberate breaks are caught; a first run of the breaks against the verifier
+  was invalid and is described in the instrument's commit message. A Python 3.12 with no site
+  packages verifies the structure. Not done under this ruling: 19q is not in the hosted
+  workflow's expected-roots check, in `PHASE19_ROOTS` or in `handoff19.py`. Not shown: anything
+  about an enforced boundary, about a model, or about sessions written to defeat this rule; the
+  host is the author's. No text of the dataset is in the repository.
