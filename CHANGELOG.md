@@ -1,5 +1,21 @@
 ## Change Log
 
+## [phase-19f-operator06-2026-11-14] — 2026-11-14 — Operator handoff: twenty lanes, a Windows recipe, twenty pinned roots
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/handoff19.py` and its tests, the rendered handoff and
+  discrepancy template, the review of the first operator receipt, the 19f README, the root
+  README, the Phase 19 workflow, the Phase 19 ledger, both logs.
+- **Summary:** lanes 19q, 19r, 19s, 19t and 19u join the outside-operator handoff and the
+  hosted expected-roots check (P19-OPERATOR06). 19t replays on Linux x86_64; 19q recomputes
+  from the public dataset when an operator supplies it. The handoff gains a recipe for a
+  Windows machine through WSL2, marked as untried. Two more people have agreed to run the
+  handoff; no receipt from either exists.
+- **Verification:** 27 handoff tests; Stage 5Q census identical before and after the workflow
+  edit; each of the five packs verifies with the standard library alone.
+- **Follow-ups:** rebuild and send the operator package.
+
 ## [phase-19s-2026-11-14] — 2026-11-14 — Lane 19s: two local monitors mostly do not catch a send the trusted state forbids
 
 **Raouf:**

@@ -1401,6 +1401,56 @@ the ruling and both logs. Not authorised: any edit to a frozen file, to a 19a to
 pack, or to a workflow; any spending beyond the cap. This declaration commit must be a strict
 ancestor of every commit of lane 19u.
 
+**P19-OPERATOR06 (bounded authority to bring lanes 19q, 19r, 19s, 19t and 19u into the
+outside-operator handoff and the externally pinned roots, and to add a recipe for a Windows
+host; declared 13 Nov 2026 before any commit that acts on it).** 19q and 19t are on `main` with
+roots `fcd391eef0de8afe45d69cd32368dd4874669ae84f8b366938a53539a140d5cb` and
+`0096b482e9a4ce62230ee7c4466eb57b7a0094b569a5f9d96899963166611a46`. 19r (`17a9a5e5`) and 19u
+(`6e7284ca`) are committed with roots
+`5d31169b204790f7bd4abbe0dfa32c0c57310705bffea89f1b3512764bef6e98` and
+`05ecedba1c7020e1a9b186aac7b02b7769c7437fdae7a8b1dff937291b8f68e3`. 19s is declared and built and
+its capture is running: its pack does not exist yet. It joins under this declaration by the
+same entries once its evidence commit exists, and its root is recorded in the ruling. None of
+the five declarations authorised a workflow edit, so the hosted roots check and the handoff
+list fifteen packs. This change is stacked on the branch that carries the three lanes and is
+merged after it. This declaration authorises, and nothing else:
+
+1. `handoff19.py`: the five lanes added to `PHASES` with their hosts and times, and the words
+   for the new counts. 19t is a replay lane like 19j, 19l and 19p: its committed receipt was
+   produced with `--replay` and reads `gate_recomputed`, so it takes the same two table
+   entries with that word, and `19t --replay` joins the items an outside host can exercise.
+   19q's committed receipt was produced with the dataset and reads `dataset_recomputed`;
+   without `--dataset` it reads `structure_checked` and its `recompute` field says so. One new
+   pair of table entries does for 19q's `recompute` what the replay tables do for `replay`:
+   the expected `kind` follows the operator's own `recompute.result`, `recompute` is left out
+   of the comparison for 19q alone as `replay` is for every lane, and `19q --dataset` joins
+   the items an outside host can exercise. 19r, 19s and 19u are plain lanes. No other change
+   to what the comparator checks. Tests first.
+2. The handoff's host recipes: the lists of lanes that need only the standard library and of
+   lanes that replay are extended; 19t's replay and 19q's dataset recomputation each get the
+   sentences an operator needs (19q's needs the `cryptography` package, a clone of the dataset
+   at the pinned commit and the key the dataset's own README publishes; the handoff does not
+   repeat the key). A new recipe for a Windows machine: run everything inside WSL2 with Ubuntu,
+   where the Linux recipes apply. It must say that the author has run nothing of this handoff
+   on Windows, natively or under WSL2, and that on an ARM machine WSL2 is Linux arm64, where
+   no `--replay` is available.
+3. The review of the first operator receipt recomputed under the new phase list. The receipt is
+   not edited; the five lanes appear in the review as `not_in_receipt`, which is what happened.
+4. Re-rendering `HANDOFF.md` and `discrepancy-template.json`; the 19f README, which also names
+   by first name the two people who have agreed to run the handoff, as the owner relayed their
+   consent on 13 Nov, and says that no receipt from either exists.
+5. `.github/workflows/assurance-provenance.yml`: the five lanes' `docs/` paths added to both
+   path filters and their ids to the expected-roots check, with its message. No step is added,
+   removed or renamed, and the Stage 5Q census must be byte-identical before and after. The
+   repository variable `PHASE19_ROOTS` gains the five roots, set outside the pull request, the
+   fifteen existing values unchanged.
+6. The root README's count of Phase 19 packs and its sentences on the five lanes.
+7. Both logs and the ruling.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to the operator's
+receipt, or any other change to what the comparator checks. This declaration commit must be a
+strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
@@ -2138,3 +2188,35 @@ ancestor of every commit of lane 19u.
   about the monitors the benchmark's authors tested, a frontier model as a monitor, a long
   session, or a gate; the comparison with a host check, which refuses each of these sends by
   reading the state, is between a rule and a judgement and not between two measured systems.
+- Ruling (14 Nov 2026, P19-OPERATOR06 exercised): the declaration (`79aa5724`) precedes every
+  commit that acts on it. It was exercised in two commits: the first (`c8faa623`) while 19s was
+  still being captured, for 19q, 19r, 19t and 19u; the second after the 19s evidence commit
+  (`97010504`) was merged into the branch, for 19s and everything outside `handoff19.py`.
+  `handoff19.py` now lists twenty lanes. 19t is a replay lane beside 19j, 19l and 19p, with the
+  word `gate_recomputed`. 19q has its own pair of table entries: the expected `kind` follows
+  the operator's own `recompute.result`, `recompute` is left out of the comparison for 19q
+  alone, and `19q --dataset` and `19t --replay` are items an outside host can exercise. 19r,
+  19s and 19u are plain lanes. Nothing else about the comparator changed. Tests were changed
+  first (four new, and the lists in four others) and failed before each change; 27 pass. The
+  first operator receipt is byte-identical (sha256 `765c42b1…`); its review was recomputed and
+  lists the five lanes as `not_in_receipt`, so `handoff19.py status` reads
+  `reviewed_discrepancies_published` and names twenty-two items still owed under
+  `IOU-19-OPERATOR`. `HANDOFF.md` and `discrepancy-template.json` were re-rendered: the handoff
+  gained the sentences for 19t's replay and 19q's dataset recomputation, which does not repeat
+  the dataset's key, and a recipe for a Windows machine (WSL2 with Ubuntu) that says the author
+  has run nothing of the handoff on Windows and that WSL2 on an ARM machine is Linux arm64,
+  where no `--replay` is available. The 19f README names by first name the two people who have
+  agreed to run the handoff and says no receipt from either exists. The workflow gained the
+  five lanes' `docs/` paths in both path filters and their ids in the expected-roots check,
+  with its message; no step was added, removed or renamed, and the Stage 5Q census output is
+  identical before and after (58 steps, 53 problems). `PHASE19_ROOTS` was extended outside the
+  pull request at 15:14Z on 13 Nov from fifteen roots to twenty, the fifteen existing values
+  unchanged; the five added are 19q `fcd391ee…`, 19r `5d31169b…`, 19s
+  `035422f5767d0443a8165a5c8c3759d4b8b674d4b6effe80a596fa668b8d5b5d`, 19t `0096b482…` and 19u
+  `05ecedba…`, each equal to the committed `ROOT.sha256`. A Python 3.12 with no site packages
+  verified the structure of each of the five packs and the comparator found no discrepancy in
+  any of the five receipts, which is what the handoff tells an operator who adds neither
+  `--replay` nor `--dataset`. The root README's count of Phase 19 packs and its sentences on
+  the five lanes were updated in the same change. Not done: no one outside the author has run
+  any of the five lanes; the Windows recipe is untried; the package given to an operator is
+  rebuilt after the merge.

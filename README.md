@@ -35,6 +35,24 @@ attacker that adapts. [19p](docs/research/provenance-phase-19p/README.md) replay
 sends of 19n through the composed controls: none landed and no exact authorized send was
 refused, while a credential check alone let 369 through.
 
+**Upgrade set, 13 November.** Five more lanes, each declared before it ran. The two that went
+against what was declared come first. [19t](docs/research/provenance-phase-19t/README.md) gave
+two coding agents the gate's source and committed what each submitted before it was run: 49 of
+92 attempts changed the gate's output, against the declared prediction, through two faults that
+are described and not yet repaired. None made the undelegated action land or changed a verdict.
+[19q](docs/research/provenance-phase-19q/README.md) scored a destination rule on a public
+monitor benchmark: it flagged 7 of 43 attack sessions and 6 of 43 benign ones, and two of its
+three hypotheses did not hold. [19u](docs/research/provenance-phase-19u/README.md) sent part of
+19o's schedule to four hosted Claude models. The output limit first declared was too small and
+the plan was amended after two models; no model sent in a restricted generation in either run.
+[19r](docs/research/provenance-phase-19r/README.md) made a send name the grant that authorises
+it, on three local models: when the untrusted text offered a grant, every wrong send cited it,
+and having to cite lowered sends on one of the two eligible models.
+[19s](docs/research/provenance-phase-19s/README.md) wrote each of 24 cases as two transcripts
+that differ only in the trusted state line and had two local models score them as monitors,
+with a public benchmark's prompt: the primary monitor caught 20 of 96 unauthorised sends at a
+1% false-positive rate, and none of the three hypotheses held on it.
+
 [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) ·
 [Release and archive](https://github.com/Raoof128/Project-Simurgh/releases/tag/phase-19-paper-v1.0) ·
 [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) ·
@@ -252,7 +270,7 @@ and document text as untrusted data when feeding CLI results to an agent.
 | Perform outside reproduction | [Operator handoff](docs/research/CONTINUATION_HANDOFF_2026-10-19.md)                                                                                        | Earlier viewer/export snapshot; use the current runbook for the latest study                |
 | Trace prior work             | [Reviewer index](docs/REVIEWER_INDEX.md) and [research history](RESEARCH_HISTORY.md)                                                                        | Frozen stages, negative results and historical reproduction                                 |
 | Read the newest study        | [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) and [Phase 19 ledger](docs/research/PROVENANCE_PHASE_19.md)                            | Plans committed before each run, hypotheses decided by rule, limits stated with each result |
-| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Fifteen verify commands; thirteen need no installed packages                                |
+| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Twenty verify commands; eighteen need no installed packages                                 |
 | Judge the process and author | [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) and [author, method and open problems](docs/AUTHOR_AND_METHOD.md)                                    | How errors were found and handled, how AI assistance is used, what remains open             |
 
 The most useful review would challenge the exact-action comparator, admission/revocation
@@ -261,15 +279,17 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
 
 ### Open work
 
-- **Independent reproduction:** one outside operator has replayed five of the fifteen Phase 19
+- **Independent reproduction:** one outside operator has replayed five of the twenty Phase 19
   packs on macOS ([receipt and review](docs/research/provenance-phase-19f/README.md)). The
-  Linux-only parts, the nine newer packs and independent evidence custody remain outstanding.
+  Linux-only parts, the fourteen newer packs and independent evidence custody remain
+  outstanding. Two more people have agreed to run the handoff; no receipt from either exists.
 - **Provider lifecycle:** real provider IAM/revocation and authenticated live safety-alert
   delivery have not been validated by the owned-service experiments.
 - **Model transfer:** broader externally held tasks and adaptive multi-step behavior remain
-  untested; the corrected OpenAI workflow retains one unresolved active refusal. Lane 19o's six
-  hosted models were given static injected texts only; an attacker that adapts to the model or
-  to the gate has not been run.
+  untested; the corrected OpenAI workflow retains one unresolved active refusal. The six hosted
+  models of lane 19o and the four of lane 19u were given static injected texts only; an
+  attacker that adapts to a model has not been run. Lane 19t's attackers adapted to the gate,
+  not to a model, and the two faults they found are not yet repaired.
 - **Operational assurance:** sustained deployment load, interactive desktop capture and
   real-data privacy validation remain separate work.
 - **Security review:** the [19 October local Phase 8 review](docs/research/PHASE_8_REVIEW_2026-10-19.md)
