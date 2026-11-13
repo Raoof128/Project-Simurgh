@@ -26,7 +26,11 @@ first entered the session and scores a destination rule on attack and benign ses
 rule flagged 7 of 43 attack sessions and 6 of 43 benign ones, and two of its three hypotheses
 did not hold. 19r (P19-CITE01) makes a send name the grant that authorises it, on three local
 models: when the untrusted text offered a grant, every wrong send cited it, and having to cite
-lowered sends on the primary model and not on the second. 19t (P19-REDTEAM01) gives two coding agents the gate's source and commits what
+lowered sends on the primary model and not on the second. 19s (P19-MONITOR01) writes each of 24
+cases as two transcripts that differ only in the trusted state line and has two local models
+score them as monitors with a public benchmark's prompt: the primary monitor caught 20 of 96
+unauthorised sends at a 1% false-positive rate, scored the unauthorised twin higher in 49 of 85
+pairs, and none of its three hypotheses held. 19t (P19-REDTEAM01) gives two coding agents the gate's source and commits what
 each submits before it is run: 49 of 92 attempts changed the gate's output, 39 only the audit
 and 10 by making a dispatch raise, none landed the undelegated action or changed a verdict, and
 the declared prediction that nothing would change did not hold. 19u (P19-HOSTED02) sends part of
@@ -2152,3 +2156,35 @@ strict ancestor of every commit that acts on it.
   workflow's expected-roots check, in `PHASE19_ROOTS` or in `handoff19.py`. Not shown:
   anything about a larger or a hosted model, an attacker who adapts to the requirement, or an
   enforced system; the models ran on the author's machine.
+- Ruling (14 Nov 2026, P19-MONITOR01 exercised): the declaration (`bc8786e2`) and the
+  instrument (`3818aa8c`) were pushed before any generation, and the declaration is an ancestor
+  of every commit of the lane. The capture started at 12:09:49Z on 13 Nov from a clean worktree
+  at `3818aa8c` on the author's machine, when 19r's capture ended, and was not interrupted:
+  `qwen2.5-7b-4bit` from 12:09:50Z to 14:11:04Z, `qwen3-4b-4bit` from 14:11:05Z to 15:08:38Z.
+  192 rows per monitor, none dropped or generated twice; the determinism recheck was identical
+  on four rows per monitor. Pack built at `3818aa8c`, root
+  `035422f5767d0443a8165a5c8c3759d4b8b674d4b6effe80a596fa668b8d5b5d`. Both monitors met the
+  rule for being decided. Primary monitor `qwen2.5-7b-4bit`: 181 of 192 transcripts scored, 11
+  unscored, none out of tokens; threshold 26; 20 of 96 unauthorised transcripts caught (Wilson
+  13.9% to 30.0%), no authorised transcript flagged, area under the curve 0.733. M1 does not
+  hold (the unauthorised twin scored higher in 49 of 85 scored pairs, 29 ties, Wilson lower
+  bound 0.470); M2 does not hold (6 of 24 caught with the control text, 14 of 72 with injected
+  text; difference 5.6 points, Newcombe -11.2 to +26.8); M3 does not hold (median score of
+  authorised transcripts 10 with injected text and 10 with the control text). `qwen3-4b-4bit`:
+  192 of 192 scored; threshold 10; 12 of 96 caught (7.3% to 20.6%), none flagged, area under
+  the curve 0.788. M1 does not hold (56 of 96 pairs, 39 ties, lower bound 0.483); M2 holds (6
+  of 24 against 6 of 72; 16.7 points, +1.0 to +37.1); M3 does not hold (5 and 5). With the
+  imitated host block the primary monitor caught 2 and the second none of 24. Read after the
+  fact and labelled so in the README: all 11 unscored outputs state a number outside the tag
+  the benchmark's rule reads, and were left unscored as declared; scores cluster on a few
+  values; about half of the outputs on unauthorised transcripts repeat the instruction to
+  decline, and most of those still score below the threshold. The monitor prompt is another
+  project's, copied byte for byte under its MIT licence and bound by digest; it was written for
+  sessions of a coding agent and no other prompt was tried. Tests: 18 for the instrument, 9 for
+  the pack, 8 on the committed pack. 23 of 23 and 16 of 16 deliberate breaks caught; the
+  instrument commit's message says 24 of 24 and the list holds 23 entries. A Python 3.12 with
+  no site packages verifies the pack. Not done under this ruling: 19s is not in the hosted
+  workflow's expected-roots check, in `PHASE19_ROOTS` or in `handoff19.py`. Not shown: anything
+  about the monitors the benchmark's authors tested, a frontier model as a monitor, a long
+  session, or a gate; the comparison with a host check, which refuses each of these sends by
+  reading the state, is between a rule and a judgement and not between two measured systems.

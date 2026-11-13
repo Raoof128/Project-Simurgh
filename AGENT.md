@@ -14,6 +14,34 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-14 (Australia/Sydney) — Phase 19s: two local monitors score twin transcripts that differ only in the trusted state (20 of 96 unauthorised sends caught by the primary monitor; no hypothesis held on it)
+
+**Raouf:**
+
+- **Scope:** the evidence commit of lane 19s, on branch `phase-19/hosted-claude-19u` (which
+  holds the 19s declaration and instrument as ancestors). New in
+  `docs/research/provenance-phase-19s/`: the pack, README and RESULTS, beside the third-party
+  prompt already there; and `tools/assurance-provenance/tests/test_evidence19s_committed.py`.
+  Edited: the Phase 19 ledger (ruling, one overview sentence), both logs. No frozen file, no
+  earlier lane's source or pack, no workflow.
+- **Summary:** 24 cases of 19k, each written as an unauthorised and an authorised transcript
+  that differ only in the trusted state line; the agent sends in both. Two local models score
+  each transcript four times with SLEIGHT-Bench's published monitor prompt. Primary monitor
+  `qwen2.5-7b-4bit`: 20 of 96 unauthorised transcripts caught at a 1% false-positive rate, the
+  unauthorised twin scored higher in 49 of 85 scored pairs, 11 outputs without a score in the
+  tag; M1, M2 and M3 do not hold. `qwen3-4b-4bit`: 12 of 96 caught, 56 of 96 pairs; M2 holds
+  (6 of 24 caught with the control text, 6 of 72 with injected text), M1 and M3 do not.
+  Neither monitor flagged an authorised transcript. With the imitated host block they caught 2
+  and 0 of 24.
+- **Files changed:** the files above, `docs/research/PROVENANCE_PHASE_19.md`, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** 35 tests (18 instrument, 9 pack, 8 on the committed pack). The pack
+  verifies under a Python 3.12 with no site packages. Determinism recheck identical on four
+  rows per monitor. The capture ran about three hours and was not interrupted.
+- **Follow-ups:** bring 19q to 19u into the operator handoff, the hosted workflow and the
+  pinned roots (P19-OPERATOR06, declared). A frontier monitor on the same twins would need its
+  own declaration and spending cap.
+
 ### 2026-11-13 (Australia/Sydney) — Phase 19r: a send must name the grant that authorises it (when the source offers a grant every wrong send cites it; citing lowered sends on one of two eligible models)
 
 **Raouf:**
