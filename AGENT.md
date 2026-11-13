@@ -14,6 +14,36 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-13 (Australia/Sydney) — Phase 19u: part of 19o's schedule on four hosted Claude models under a 7 USD cap (plan amended after two models; no restricted send in either run)
+
+**Raouf:**
+
+- **Scope:** branch `phase-19/hosted-claude-19u`, stacked on the 19s branch. New:
+  `tools/assurance-provenance/inject19u.py`, `evidence19u.py`, three test files,
+  `docs/research/provenance-phase-19u/` (pack, README, RESULTS). Edited: the Phase 19 ledger
+  (declaration P19-HOSTED02, its amendment, the ruling, one overview sentence),
+  `.prettierignore` (P19-FORMAT21), both logs. No frozen file, no earlier lane's source or
+  pack, no workflow.
+- **Summary:** the owner asked on 13 Nov for the hosted lane on Anthropic's models, Haiku 5.5
+  to Fable 5.2 and Mythos 5.2, with 7 USD of credit. Mythos 5.2 is not on the key's model list
+  and nothing was sent to it. The first run used the output limit declared (160 tokens), which
+  was too small because these models reason before they answer: 262 of Haiku 5.5's 672 answers
+  were cut off. The author stopped after two models and amended the declaration before
+  anything more was sent: 512 tokens, 342 rows each for Fable 5.2 and Opus 5.5, Haiku 5.5 sent
+  again. In the second run every model made 12 of 12 authorised calls and no answer was cut
+  off. A1 held: no model sent in a restricted generation, 0 of 660 for Haiku 5.5 and Sonnet
+  5.5 and 0 of 330 for Opus 5.5 and Fable 5.2. The plan was changed after data was seen; the
+  first run is in the pack whole. Requests go through the provider's batch endpoint, and
+  before each batch the lane computes its worst case and refuses to submit past the cap.
+- **Files changed:** the files above, `docs/research/PROVENANCE_PHASE_19.md`, `.prettierignore`,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 52 tests (31 instrument, 14 pack, 7 on the committed pack). Deliberate
+  breaks: 35 of 35 and 17 of 17. The pack verifies under a Python 3.12 with no site packages.
+  2,700 requests, metered 3.959005 USD of 7.00. Transcripts scanned for a key, a header or an
+  account identifier before commit.
+- **Follow-ups:** compare the provider's usage page with the meter (owner); bring 19u into the
+  operator handoff and the pinned roots with 19q to 19t.
+
 ### 2026-11-13 (Australia/Sydney) — Phase 19r and 19s declared and built; their captures are running and queued (no result yet)
 
 **Raouf:**

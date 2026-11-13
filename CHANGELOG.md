@@ -1,5 +1,20 @@
 ## Change Log
 
+## [phase-19u-2026-11-13] — 2026-11-13 — Lane 19u: 19o's cases on four hosted Claude models; no restricted send; plan amended mid-run
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/inject19u.py`, `evidence19u.py`, their tests,
+  `docs/research/provenance-phase-19u/`, the Phase 19 ledger, `.prettierignore`, both logs.
+- **Summary:** Haiku 5.5, Sonnet 5.5, Opus 5.5 and Fable 5.2 were sent part of 19o's schedule
+  under a 7 USD cap. The output limit first declared cut answers off, so the run was stopped
+  after two models and the declaration amended before the rest was sent. No model sent in a
+  restricted generation in either run (0 of 660 for two models, 0 of 330 for two). Mythos 5.2
+  was asked for and is not available to the key.
+- **Verification:** 52 tests; 52 of 52 deliberate breaks caught; the pack verifies with the
+  standard library alone. Metered 3.96 USD; the provider's bill has not been compared.
+- **Follow-ups:** the operator handoff and pinned roots for 19q to 19u.
+
 ## [phase-19r-19s-in-progress-2026-11-13] — 2026-11-13 — Lanes 19r and 19s declared and built; captures running and queued
 
 **Raouf:**

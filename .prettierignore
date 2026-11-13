@@ -364,3 +364,9 @@ docs/research/provenance-phase-19s/protocol.json
 docs/research/provenance-phase-19s/report.json
 docs/research/provenance-phase-19s/receipt.json
 docs/research/provenance-phase-19s/capture.json
+
+# P19-FORMAT21: Phase 19u source-bound machine evidence (P19-HOSTED02); bytes are bound by the
+# pack root and must not be reformatted.
+docs/research/provenance-phase-19u/protocol.json
+docs/research/provenance-phase-19u/report.json
+docs/research/provenance-phase-19u/receipt.json

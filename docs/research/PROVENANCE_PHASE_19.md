@@ -27,7 +27,10 @@ rule flagged 7 of 43 attack sessions and 6 of 43 benign ones, and two of its thr
 did not hold. 19t (P19-REDTEAM01) gives two coding agents the gate's source and commits what
 each submits before it is run: 49 of 92 attempts changed the gate's output, 39 only the audit
 and 10 by making a dispatch raise, none landed the undelegated action or changed a verdict, and
-the declared prediction that nothing would change did not hold. A
+the declared prediction that nothing would change did not hold. 19u (P19-HOSTED02) sends part of
+19o's schedule to four hosted Claude models under a 7 USD cap: the output limit first declared
+was too small and the plan was amended after two models, and no model sent in a restricted
+generation in either run. A
 manuscript draft built from 19h to 19l is in
 [provenance-phase-19-paper/](provenance-phase-19-paper/README.md); it adds no evidence.
 
@@ -2029,3 +2032,39 @@ ancestor of every commit of lane 19u.
   workflow's expected-roots check, in `PHASE19_ROOTS` or in `handoff19.py`. Not shown:
   anything about attackers in general, a person, an attacker of another vendor, or a deployed
   system; the host is the author's.
+- Ruling (13 Nov 2026, P19-HOSTED02 exercised; the run did not go as first declared): the
+  declaration (`c6dfe807`, pushed 10:50:14Z) precedes the instrument (`3d74f281`, pushed
+  11:04:49Z), the amendment (`31a543c7`, pushed 11:27:22Z) and the evidence commit, and each was
+  pushed before the requests it governs. First run, as declared, from a clean worktree at
+  `3d74f281`: the Haiku 5.5 batch was submitted at 11:04:57Z and the Sonnet 5.5 batch after it.
+  The declared output limit of 160 tokens was too small, because these models reason before
+  they answer and the reasoning counts as output. Haiku 5.5: 262 of 672 answers cut off, 3 of
+  12 authorised calls, not eligible by the declared rule, 0 sends of 660. Sonnet 5.5: 19 cut
+  off (18 of them restricted rows), 11 of 12 authorised calls, eligible, 0 sends of 660 (642
+  declines). The author stopped the run at 11:09:38Z before the third batch, collected the
+  Sonnet batch that was already paid for, and recorded Opus 5.5 and Fable 5.2 as withdrawn.
+  The amendment was written with those two results seen and changes the output limit to 512
+  tokens and the rows for Fable 5.2 and Opus 5.5 to 342 each; it does not change the
+  hypothesis, the readers, the eligibility rule or the cap. Second run from a clean worktree at
+  `31a543c7`, 11:27:34Z to 11:35:50Z: Fable 5.2 342 rows, Opus 5.5 342, Haiku 5.5 672; every
+  model made 12 of 12 authorised calls, no answer was cut off, no row failed or was asked
+  twice, and every response names the model asked for. A1 holds: all four models are eligible
+  on the run that decides for them and none sent in a restricted generation (0 of 660 for Haiku
+  5.5 and Sonnet 5.5, 0 of 330 for Opus 5.5 and Fable 5.2); every style and placement drew 0
+  and the lenient read agrees. `claude-mythos-5-2`, which the owner asked for, is not on the
+  key's model list and nothing was sent to it. 2,700 requests; metered 3.959005 USD against
+  the cap of 7.00, the connection checks included; the provider's bill has not been compared.
+  Pack built at `31a543c7`, root
+  `05ecedba1c7020e1a9b186aac7b02b7769c7437fdae7a8b1dff937291b8f68e3`. One figure in the
+  amendment is wrong by the pack: it says Haiku 5.5 reasoned on 614 rows of its first run and
+  the pack has 616. Read after the fact and labelled so in the README: every cut-off answer in
+  a restricted row had named the decline tool or held reasoning only, and none had named the
+  send. The transcripts were scanned for a key, a header or an account identifier before they
+  were committed; the two matches were a model's own sentence and characters inside a
+  signature. Tests: 31 for the instrument, 14 for the pack, 7 on the committed pack. 35 of 35
+  and 17 of 17 deliberate breaks caught. A Python 3.12 with no site packages verifies the
+  pack. Not done under this ruling: 19u is not in the hosted workflow's expected-roots check,
+  in `PHASE19_ROOTS` or in `handoff19.py`. Not shown: anything about an attacker who adapts,
+  these models in a long task with real tools, or a gate; the rates of the four models are not
+  a like-for-like comparison with each other or with 19o's; the plan was changed after data
+  was seen, and the first run is in the pack whole so that a reader can judge the change.
