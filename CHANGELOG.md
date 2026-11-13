@@ -1,5 +1,20 @@
 ## Change Log
 
+## [docs-phase19-closeout-2026-11-13] — 2026-11-13 — README updated for fifteen Phase 19 packs and the three lanes of 12 to 13 November; ledger note
+
+**Raouf:**
+
+- **Scope:** `README.md`, one note in `docs/research/PROVENANCE_PHASE_19.md`, both logs.
+- **Summary:** the README's latest-study section gains a paragraph on lanes 19n, 19o and 19p,
+  which are not in the manuscript draft. The reviewer table and the open-work list now give
+  fifteen packs, fifteen verify commands (thirteen without installed packages) and nine packs
+  not yet replayed by an outside operator, and say that no attacker that adapts has been run
+  against the hosted models. The ledger records the second replay of the 19p pack, the hosted
+  runs on `main` at `a23938ae`, and one hosted-gate failure on #166 that passed on rerun.
+- **Verification:** numbers read from the committed receipts; quick gate passes.
+- **Follow-ups:** the provider's bill for lane 19o against the meter; the adaptive-attacker
+  study under its own declaration and cap.
+
 ## [phase-19f-fifteen-lanes] — 2026-11-13 — Lane 19p in the operator handoff and the pinned-roots check
 
 **Raouf:**
