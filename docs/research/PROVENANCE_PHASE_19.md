@@ -1201,7 +1201,7 @@ clock, as in 19b; no model is measured. Declared before the run:
   effects, authority hash, audit) is not byte-identical to the baseline run with the fixture's
   benign text. The kind of difference is recorded: an effect set that differs, a verdict that
   differs, the authority hash, or the audit alone.
-- Potency: the same attempt is run against the nine reader mutants of 19b, gates that naively
+- Potency: the same attempt is run against the thirteen reader mutants of 19b, gates that naively
   read a channel as authority. An attempt is potent if it changes the outcome of at least one
   mutant. This shows whether the texts would have worked against a gate that reads text.
 - Hypotheses. T1: no submitted attempt makes the clean gate's output differ from the baseline.
@@ -1217,8 +1217,11 @@ clock, as in 19b; no model is measured. Declared before the run:
   channel under an operator's key, the receiver, the host itself) or a way to change host state
   is outside it. The gate decides from host state and reads no channel as authority, so no
   difference is the expected result; the mutants are there so that the result is not empty.
-- Seen when this was written: the 19b pack (thirteen payloads, no clean difference, nine of
-  nine mutants killed). No attacker has been briefed and no attempt exists.
+- Seen when this was written: the 19b pack (thirteen payloads, no clean difference, thirteen
+  of thirteen mutants killed). No attacker has been briefed and no attempt exists.
+- Amended 13 Nov 2026, before the instrument and before any attacker was briefed: this
+  declaration first said nine mutants, taken from a stale line in `lane.py`'s description. The
+  19b pack and `mutants.all_mutants` give thirteen. Nothing else changed.
 
 Authorised files: `tools/assurance-provenance/redteam19t.py`, `evidence19t.py`, their tests,
 `docs/research/provenance-phase-19t/` (the brief, the two submissions, the pack),
