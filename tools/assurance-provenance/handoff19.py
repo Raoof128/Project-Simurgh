@@ -28,28 +28,56 @@ LEAN_ITEM = "19b Lean closure"
 EXCLUDED = ("tree_state", "host", "replay")
 # A lane's ``kind`` is a function of its replay result (``receipt_for`` in each evidence module),
 # and the replay is host-dependent, so the expected kind follows the operator's own replay rather
-# than the author's. 19a's committed receipt is the unreplayed kind; 19j's, 19l's and 19p's are
-# the replayed kind (P19-OPERATOR02, 05), so those also name what a host that cannot replay prints.
+# than the author's. 19a's committed receipt is the unreplayed kind; 19j's, 19l's, 19p's and
+# 19t's are the replayed kind (P19-OPERATOR02, 05, 06), so those also name what a host that
+# cannot replay prints.
 REPLAY_CHAINED_KIND = {
     "19a": "frozen_replay_chained",
     "19j": "frozen_replay_recomputed",
     "19l": "frozen_replay_recomputed",
     "19p": "frozen_replay_recomputed",
+    "19t": "gate_recomputed",
 }
 STRUCTURE_ONLY_KIND = {
     "19j": "structure_checked",
     "19l": "structure_checked",
     "19p": "structure_checked",
+    "19t": "structure_checked",
 }
+# 19q's deeper check is a recomputation from the dataset, which the verifier reports in
+# ``recompute`` as the replay lanes report theirs in ``replay`` (P19-OPERATOR06). Its committed
+# receipt is the recomputed kind. ``recompute`` is left out of the comparison for 19q alone.
+RECOMPUTED_KIND = {"19q": "dataset_recomputed"}
+UNRECOMPUTED_KIND = {"19q": "structure_checked"}
+EXCLUDED_FOR = {"19q": ("recompute",)}
 
 
 def replay_item(pid):
     return pid + " --replay"
 
 
+def dataset_item(pid):
+    return pid + " --dataset"
+
+
+def deeper_items(pid):
+    """What an outside host can exercise on a lane beyond its plain verify."""
+    out = [replay_item(pid)] if pid in REPLAY_CHAINED_KIND else []
+    return out + ([dataset_item(pid)] if pid in RECOMPUTED_KIND else [])
+
+
+def excluded(pid):
+    return EXCLUDED + EXCLUDED_FOR.get(pid, ())
+
+
 def _replayed(receipt):
     replay = receipt.get("replay")
     return type(replay) is dict and replay.get("result") == "verified"
+
+
+def _recomputed(receipt):
+    recompute = receipt.get("recompute")
+    return type(recompute) is dict and recompute.get("result") == "verified"
 
 
 # Host-dependent receipt fields, reported with the operator's value and never compared
@@ -175,8 +203,44 @@ PHASES = (
         "host": "any host with Python 3.12; on Linux x86_64 inside the hash-locked venv add --replay",
         "time": "a few seconds; about twelve minutes with --replay on a two-core server",
     },
+    {
+        "id": "19q",
+        "module": "evidence19q.py",
+        "docs": "docs/research/provenance-phase-19q",
+        "host": "any host with Python 3.12; no model is run; to recompute every row from the dataset add --dataset and --key (Host recipes)",
+        "time": "a few seconds",
+    },
+    {
+        "id": "19r",
+        "module": "evidence19r.py",
+        "docs": "docs/research/provenance-phase-19r",
+        "host": "any host with Python 3.12; no model is run",
+        "time": "a few seconds",
+    },
+    {
+        "id": "19t",
+        "module": "evidence19t.py",
+        "docs": "docs/research/provenance-phase-19t",
+        "host": "any host with Python 3.12; on Linux x86_64 inside the hash-locked venv add --replay",
+        "time": "a few seconds; about fifteen minutes with --replay on a two-core server",
+    },
+    {
+        "id": "19u",
+        "module": "evidence19u.py",
+        "docs": "docs/research/provenance-phase-19u",
+        "host": "any host with Python 3.12; no model is run, no network and no key are needed",
+        "time": "a few seconds",
+    },
 )
-NUMBER_WORDS = {6: "six", 11: "eleven", 12: "twelve", 14: "fourteen", 15: "fifteen"}
+NUMBER_WORDS = {
+    6: "six",
+    11: "eleven",
+    12: "twelve",
+    14: "fourteen",
+    15: "fifteen",
+    19: "nineteen",
+    20: "twenty",
+}
 
 
 def phase(pid):
@@ -195,7 +259,7 @@ def committed_root(pid):
 
 
 def expected_fields(pid):
-    return {k: v for k, v in committed_receipt(pid).items() if k not in EXCLUDED}
+    return {k: v for k, v in committed_receipt(pid).items() if k not in excluded(pid)}
 
 
 def expected_for(pid, receipt):
@@ -204,6 +268,10 @@ def expected_for(pid, receipt):
         want["kind"] = REPLAY_CHAINED_KIND[pid]
     elif pid in STRUCTURE_ONLY_KIND:
         want["kind"] = STRUCTURE_ONLY_KIND[pid]
+    if pid in RECOMPUTED_KIND:
+        want["kind"] = (
+            RECOMPUTED_KIND[pid] if _recomputed(receipt) else UNRECOMPUTED_KIND[pid]
+        )
     return want
 
 
@@ -273,7 +341,7 @@ def check(pid, receipt):
                 {"field": key, "expected": want, "got": receipt[key], "kind": "differs"}
             )
     for key in sorted(receipt):
-        if key not in want_all and key not in EXCLUDED:
+        if key not in want_all and key not in excluded(pid):
             out.append(
                 {
                     "field": key,
@@ -315,7 +383,7 @@ def review_path(receipt_path):
 def outside_items():
     return sorted(
         [p["id"] for p in PHASES]
-        + [replay_item(pid) for pid in REPLAY_CHAINED_KIND]
+        + [item for p in PHASES for item in deeper_items(p["id"])]
         + [LEAN_ITEM]
     )
 
@@ -337,8 +405,7 @@ def review(raw):
             # the receipt predates the lane, or the operator was not asked for it
             phases[pid] = {"result": "not_in_receipt"}
             missing.append(pid)
-            if pid in REPLAY_CHAINED_KIND:
-                missing.append(replay_item(pid))
+            missing += deeper_items(pid)
             continue
         entry = returned.get(pid) if type(returned.get(pid)) is dict else {}
         try:
@@ -348,8 +415,7 @@ def review(raw):
         if type(out) is not dict:
             phases[pid] = {"result": "refused", "refused": entry.get("refused", "")}
             missing.append(pid)
-            if pid in REPLAY_CHAINED_KIND:
-                missing.append(replay_item(pid))
+            missing += deeper_items(pid)
             continue
         mine = {
             "discrepancies": check(pid, out),
@@ -372,6 +438,8 @@ def review(raw):
             missing.append(pid)
         if pid in REPLAY_CHAINED_KIND and not _replayed(out):
             missing.append(replay_item(pid))
+        if pid in RECOMPUTED_KIND and not _recomputed(out):
+            missing.append(dataset_item(pid))
         if pid == "19b" and _lean_absent(out):
             missing.append(LEAN_ITEM)
     return {
@@ -478,9 +546,10 @@ def render():
         "  verify set first, a hash-locked subset of the SDK lock, and run those commands with its interpreter:",
         "  `python -m venv .venv-verify && .venv-verify/bin/pip install --require-hashes --only-binary=:all:",
         f"  -r {VERIFY_LOCK_REL}`. Installed and run on Linux x86_64 and macOS arm64;",
-        "  its wheels also resolve for macOS x86_64. 19a, 19c, 19d, 19e, 19h, 19i, 19j, 19k, 19l, 19m, 19n, 19o and 19p",
-        "  need nothing beyond the standard library unless `--replay` is added.",
-        "- 19a, 19j, 19l and 19p with `--replay` (Linux x86_64 only: the full set has no macOS x86_64 wheel for `cryptography`,",
+        "  its wheels also resolve for macOS x86_64. 19a, 19c, 19d, 19e, 19h, 19i, 19j, 19k, 19l, 19m, 19n,",
+        "  19o, 19p, 19q, 19r, 19t and 19u",
+        "  need nothing beyond the standard library unless `--replay` or `--dataset` is added.",
+        "- 19a, 19j, 19l, 19p and 19t with `--replay` (Linux x86_64 only: the full set has no macOS x86_64 wheel for `cryptography`,",
         "  so it is not a substitute for the verify set there): create a venv and install the hash-locked set:",
         "  `python -m venv .venv && .venv/bin/pip install --require-hashes --only-binary=:all:",
         "  -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock`, then",
@@ -488,7 +557,17 @@ def render():
         "  clone needs full history (`git clone`, not a tarball): the replay checks the Phase 17 freeze commit.",
         "  19j, 19l and 19p dispatch every recorded `send_report` call through the frozen pipeline again and",
         "  compare the whole report; without `--replay` they check the pack's structure against the lanes",
-        "  it replays and print `kind: structure_checked`.",
+        "  it replays and print `kind: structure_checked`. 19t runs every attempt its attackers submitted",
+        "  against the Phase 19 gate and thirteen naive gates again and compares the whole report; without",
+        "  `--replay` it checks every row against the committed submissions and prints `kind: structure_checked`.",
+        "- 19q with `--dataset` recomputes every row from the benchmark it measures, which is not in this",
+        "  repository. Clone `https://github.com/safety-research/sleight-bench`, check out the commit that",
+        "  `docs/research/provenance-phase-19q/protocol.json` names, install the `cryptography` package",
+        "  (the full set above has it; the verify set does not) and add",
+        "  `--dataset <the clone> --key <key>`, where the key is the key that the dataset's README publishes;",
+        "  this document does not repeat it. The receipt then reads `kind: dataset_recomputed`. Without",
+        "  `--dataset` the verifier checks every row's shape and recomputes the summary from the rows, and",
+        "  prints `kind: structure_checked` with `recompute.result: not_run`.",
         "- 19h, 19i and 19k hold model outputs captured on Apple Silicon. Their verifiers recompute every",
         "  outcome and statistic from the committed outputs and run no model; they cannot tell whether an",
         "  output is what a model produced. Recapturing is not part of this handoff.",
@@ -508,16 +587,28 @@ def render():
         "  Expect the verifier to list which well-known Unix sockets your host still exposes inside the",
         "  hardened namespace (`unix_sockets_reachable`, and `unix_socket_egress_eliminated` with it); that",
         "  list is yours and the comparator reports it under `not_compared`, never as a discrepancy.",
+        "- Windows: the author has run nothing of this handoff on Windows, natively or under WSL2, so every",
+        "  line of this recipe is untested. The route we expect to work is WSL2 with Ubuntu on an Intel or",
+        "  AMD machine, which is Linux x86_64: install git and Python 3.12 inside Ubuntu, clone inside the",
+        "  Linux file system (your Ubuntu home, not under `/mnt/c`), and follow the Linux recipes above,",
+        "  `--replay` included. 19d needs user and network namespaces, which WSL2 may or may not allow; a",
+        "  refusal with `host_cannot_namespace` is a result, not a failure of yours. On an ARM machine WSL2",
+        "  is Linux arm64: no `--replay` is available there, and the verify set has not been installed on",
+        "  that platform by the author. If you run natively on Windows instead, say so in your note. Where",
+        "  this recipe is wrong, the place it went wrong is what we want to hear.",
         "",
         "## What the comparator does and does not check",
         "",
-        "`handoff19.py check` compares every receipt field except `tree_state`, `host` and `replay` with the",
+        "`handoff19.py check` compares every receipt field except `tree_state`, `host` and `replay` (and, for",
+        "19q alone, `recompute`) with the",
         "committed receipt and flags a missing, differing or unexpected field. It prints a JSON object:",
         "`discrepancies` (that list) and `not_compared` (the host-dependent fields it left out, with your",
         "value and the reason: for 19d the two socket fields; for 19b the four Lean-dependent fields, and",
         "only when your receipt says Lean was absent). Nothing else is waived. It cannot see whether the",
         "`--replay` run happened: a receipt whose `replay.result` says `verified` is taken at its word and",
-        "then expected to read `kind: frozen_replay_chained` (19a) or `frozen_replay_recomputed` (19j, 19l, 19p).",
+        "then expected to read `kind: frozen_replay_chained` (19a),",
+        "`frozen_replay_recomputed` (19j, 19l, 19p) or `gate_recomputed` (19t).",
+        "19q is handled the same way through `recompute.result` and `dataset_recomputed`.",
         "Your verbatim verifier output and your note are what make that claim checkable; the comparator",
         "alone does not.",
         "",
@@ -538,7 +629,9 @@ def render():
             "",
             f"Expected root: `{committed_root(p['id'])}`.",
             "",
-            "Expected receipt fields (host-dependent fields `tree_state`, `host` and `replay` are not compared):",
+            "Expected receipt fields (host-dependent fields "
+            + ", ".join(f"`{k}`" for k in excluded(p["id"])[:-1])
+            + f" and `{excluded(p['id'])[-1]}` are not compared):",
             "",
             "```json",
             json.dumps(expected_fields(p["id"]), indent=2, sort_keys=True),
@@ -557,6 +650,13 @@ def render():
                 f"With `--replay`, a receipt whose `replay.result` is `verified` reads `kind`: "
                 f"`{REPLAY_CHAINED_KIND[p['id']]}`;",
                 "the comparator expects that pairing, and the committed `kind` otherwise.",
+                "",
+            ]
+        elif p["id"] in RECOMPUTED_KIND:
+            lines += [
+                f"The committed receipt was produced with `--dataset`. Without it `kind` reads "
+                f"`{UNRECOMPUTED_KIND[p['id']]}`;",
+                "the comparator expects whichever matches your own `recompute.result`.",
                 "",
             ]
     lines += [

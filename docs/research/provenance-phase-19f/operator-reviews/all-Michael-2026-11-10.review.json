@@ -22,7 +22,13 @@
     "19n",
     "19o",
     "19p",
-    "19p --replay"
+    "19p --replay",
+    "19q",
+    "19q --dataset",
+    "19r",
+    "19t",
+    "19t --replay",
+    "19u"
   ],
   "operator": "Michael",
   "phases": {
@@ -116,6 +122,18 @@
       "result": "not_in_receipt"
     },
     "19p": {
+      "result": "not_in_receipt"
+    },
+    "19q": {
+      "result": "not_in_receipt"
+    },
+    "19r": {
+      "result": "not_in_receipt"
+    },
+    "19t": {
+      "result": "not_in_receipt"
+    },
+    "19u": {
       "result": "not_in_receipt"
     }
   },

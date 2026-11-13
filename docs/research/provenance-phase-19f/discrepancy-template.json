@@ -99,6 +99,30 @@
       "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19p <receipt.json>  (a JSON object: discrepancies, not_compared)>",
       "refused": "<host_cannot_namespace or similar, if the verifier refused>",
       "verifier_output": "<the JSON the verifier printed, verbatim>"
+    },
+    "19q": {
+      "command_run": "",
+      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19q <receipt.json>  (a JSON object: discrepancies, not_compared)>",
+      "refused": "<host_cannot_namespace or similar, if the verifier refused>",
+      "verifier_output": "<the JSON the verifier printed, verbatim>"
+    },
+    "19r": {
+      "command_run": "",
+      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19r <receipt.json>  (a JSON object: discrepancies, not_compared)>",
+      "refused": "<host_cannot_namespace or similar, if the verifier refused>",
+      "verifier_output": "<the JSON the verifier printed, verbatim>"
+    },
+    "19t": {
+      "command_run": "",
+      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19t <receipt.json>  (a JSON object: discrepancies, not_compared)>",
+      "refused": "<host_cannot_namespace or similar, if the verifier refused>",
+      "verifier_output": "<the JSON the verifier printed, verbatim>"
+    },
+    "19u": {
+      "command_run": "",
+      "discrepancies": "<output of: python -B tools/assurance-provenance/handoff19.py check 19u <receipt.json>  (a JSON object: discrepancies, not_compared)>",
+      "refused": "<host_cannot_namespace or similar, if the verifier refused>",
+      "verifier_output": "<the JSON the verifier printed, verbatim>"
     }
   },
   "schema": "simurgh-outside-operator-receipt-v1",

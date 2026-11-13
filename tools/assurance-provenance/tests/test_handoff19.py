@@ -27,7 +27,7 @@ class HandoffTests(unittest.TestCase):
     def test_expected_fields_exclude_host_dependent(self):
         for p in handoff19.PHASES:
             fields = handoff19.expected_fields(p["id"])
-            for k in handoff19.EXCLUDED:
+            for k in handoff19.excluded(p["id"]):
                 self.assertNotIn(k, fields)
             self.assertEqual(
                 fields["manifest_sha256"], handoff19.committed_root(p["id"])
@@ -106,6 +106,74 @@ class HandoffTests(unittest.TestCase):
                 pid,
             )
 
+    def test_check_follows_the_operators_own_replay_for_19t(self):
+        # P19-OPERATOR06: 19t's committed receipt was produced with --replay and reads
+        # gate_recomputed. The same two table entries as 19j, 19l and 19p, with that word.
+        committed = handoff19.committed_receipt("19t")
+        self.assertEqual(committed["kind"], "gate_recomputed")
+        self.assertEqual(handoff19.check("19t", committed), [])
+        structure = dict(
+            committed,
+            kind="structure_checked",
+            replay={"result": "not_run", "reason": "host_not_linux_x86_64"},
+        )
+        self.assertEqual(handoff19.check("19t", structure), [])
+        claimed = dict(structure, kind="gate_recomputed")
+        self.assertEqual(
+            [(d["field"], d["kind"]) for d in handoff19.check("19t", claimed)],
+            [("kind", "differs")],
+        )
+        unlabelled = dict(committed, kind="structure_checked")
+        self.assertEqual(
+            [(d["field"], d["kind"]) for d in handoff19.check("19t", unlabelled)],
+            [("kind", "differs")],
+        )
+        totals = dict(structure, totals=dict(structure["totals"], clean_differs=0))
+        self.assertEqual(
+            [(d["field"], d["kind"]) for d in handoff19.check("19t", totals)],
+            [("totals", "differs")],
+        )
+
+    def test_check_follows_the_operators_own_recomputation_for_19q(self):
+        # P19-OPERATOR06: 19q's committed receipt was produced with the dataset. Without
+        # --dataset the verifier prints structure_checked and says so in `recompute`; that is
+        # not a discrepancy, and a receipt whose kind and recompute result disagree is.
+        committed = handoff19.committed_receipt("19q")
+        self.assertEqual(committed["kind"], "dataset_recomputed")
+        self.assertEqual(committed["recompute"], {"result": "verified"})
+        self.assertEqual(handoff19.check("19q", committed), [])
+        structure = dict(
+            committed,
+            kind="structure_checked",
+            recompute={"result": "not_run", "reason": "no_dataset"},
+        )
+        self.assertEqual(handoff19.check("19q", structure), [])
+        claimed = dict(structure, kind="dataset_recomputed")
+        self.assertEqual(
+            [(d["field"], d["kind"]) for d in handoff19.check("19q", claimed)],
+            [("kind", "differs")],
+        )
+        unlabelled = dict(committed, kind="structure_checked")
+        self.assertEqual(
+            [(d["field"], d["kind"]) for d in handoff19.check("19q", unlabelled)],
+            [("kind", "differs")],
+        )
+        changed = dict(structure, excluded=0)
+        self.assertEqual(
+            [(d["field"], d["kind"]) for d in handoff19.check("19q", changed)],
+            [("excluded", "differs")],
+        )
+        # `recompute` is left out for 19q alone; anywhere else it is an unexpected field
+        self.assertIn("recompute", handoff19.excluded("19q"))
+        self.assertNotIn("recompute", handoff19.excluded("19c"))
+        other = dict(
+            handoff19.committed_receipt("19c"), recompute={"result": "verified"}
+        )
+        self.assertEqual(
+            [(d["field"], d["kind"]) for d in handoff19.check("19c", other)],
+            [("recompute", "unexpected")],
+        )
+
     def test_the_handoff_asks_for_every_lane(self):
         ids = [p["id"] for p in handoff19.PHASES]
         self.assertEqual(
@@ -126,13 +194,24 @@ class HandoffTests(unittest.TestCase):
                 "19n",
                 "19o",
                 "19p",
+                "19q",
+                "19r",
+                "19t",
+                "19u",
             ],
         )
         text = handoff19.render()
-        self.assertIn("run fifteen verify commands", text)
-        self.assertIn("19k, 19l, 19m, 19n, 19o and 19p\n", text)
-        self.assertIn("- 19a, 19j, 19l and 19p with `--replay`", text)
-        self.assertIn("`frozen_replay_recomputed` (19j, 19l, 19p).", text)
+        self.assertIn("run nineteen verify commands", text)
+        self.assertIn("19o, 19p, 19q, 19r, 19t and 19u\n", text)
+        self.assertIn("- 19a, 19j, 19l, 19p and 19t with `--replay`", text)
+        self.assertIn(
+            "`frozen_replay_recomputed` (19j, 19l, 19p) or `gate_recomputed` (19t).",
+            text,
+        )
+        self.assertIn("`dataset_recomputed`", text)
+        self.assertIn("- 19q with `--dataset`", text)
+        # the handoff does not repeat the dataset's key
+        self.assertIn("the key that the dataset's README publishes", text)
         for pid in ids:
             self.assertIn(f"### {pid}\n", text)
         self.assertEqual(
@@ -144,12 +223,23 @@ class HandoffTests(unittest.TestCase):
                     "19j --replay",
                     "19l --replay",
                     "19p --replay",
+                    "19t --replay",
+                    "19q --dataset",
                     "19b Lean closure",
                 ]
             ),
         )
-        for pid in ("19j", "19l", "19p"):
+        for pid in ("19j", "19l", "19p", "19t"):
             self.assertIn("--replay", handoff19.phase(pid)["time"], pid)
+        self.assertIn("--dataset", handoff19.phase("19q")["host"])
+
+    def test_the_handoff_has_a_recipe_for_windows_and_says_it_is_untested(self):
+        # P19-OPERATOR06: one of the people who agreed to run the handoff has a Windows machine.
+        text = handoff19.render()
+        self.assertIn("- Windows:", text)
+        self.assertIn("WSL2", text)
+        self.assertIn("has run nothing of this handoff on Windows", text)
+        self.assertIn("Linux arm64", text)
 
     def test_check_flags_an_unexpected_field(self):
         receipt = dict(handoff19.committed_receipt("19c"), failures=[])
@@ -275,7 +365,7 @@ class VerifySetTests(unittest.TestCase):
 
 FIRST = "all-Michael-2026-11-10.json"
 FIRST_SHA256 = "765c42b19792f70463bfba38d602ac9443f480262400cdc7902ed8bb377f9291"
-# What the first receipt left unreplayed, and the lanes added after it (P19-OPERATOR02, 03, 04, 05).
+# What the first receipt left unreplayed, and the lanes added after it (P19-OPERATOR02 to 06).
 STILL_OWED = [
     "19a --replay",
     "19b Lean closure",
@@ -292,6 +382,12 @@ STILL_OWED = [
     "19o",
     "19p",
     "19p --replay",
+    "19q",
+    "19q --dataset",
+    "19r",
+    "19t",
+    "19t --replay",
+    "19u",
 ]
 
 
@@ -329,6 +425,10 @@ class OperatorReceiptTests(unittest.TestCase):
                 "19n": "not_in_receipt",
                 "19o": "not_in_receipt",
                 "19p": "not_in_receipt",
+                "19q": "not_in_receipt",
+                "19r": "not_in_receipt",
+                "19t": "not_in_receipt",
+                "19u": "not_in_receipt",
             },
         )
         for pid in ("19a", "19b", "19c", "19e", "19g"):
@@ -377,6 +477,27 @@ class OperatorReceiptTests(unittest.TestCase):
         r = handoff19.review(json.dumps(receipt).encode())
         self.assertEqual(r["phases"]["19j"]["result"], "verified")
         self.assertNotIn("19j --replay", r["not_exercised"])
+
+    def test_a_receipt_that_returns_19q_is_reviewed_by_its_own_recomputation(self):
+        receipt = json.loads((handoff19.RECEIPTS_DIR / FIRST).read_text())
+        structure = dict(
+            handoff19.committed_receipt("19q"),
+            kind="structure_checked",
+            recompute={"result": "not_run", "reason": "no_dataset"},
+            tree_state=receipt["commit"],
+        )
+        receipt["phases"]["19q"] = {"verifier_output": json.dumps(structure)}
+        r = handoff19.review(json.dumps(receipt).encode())
+        self.assertEqual(r["phases"]["19q"]["result"], "verified")
+        self.assertNotIn("19q", r["not_exercised"])
+        self.assertIn("19q --dataset", r["not_exercised"])
+        recomputed = dict(
+            structure, kind="dataset_recomputed", recompute={"result": "verified"}
+        )
+        receipt["phases"]["19q"] = {"verifier_output": json.dumps(recomputed)}
+        r = handoff19.review(json.dumps(receipt).encode())
+        self.assertEqual(r["phases"]["19q"]["result"], "verified")
+        self.assertNotIn("19q --dataset", r["not_exercised"])
 
 
 class StatusTests(unittest.TestCase):
