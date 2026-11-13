@@ -22,7 +22,7 @@ DOCS = ROOT / "docs/research/provenance-phase-19u"
 PROTOCOL = DOCS / "protocol.json"
 SCHEMA = "simurgh-phase19u-report-v1"
 PROTOCOL_SCHEMA = "simurgh-phase19u-protocol-v1"
-ARM = "hosted_claude_half_schedule"
+ARM = "hosted_claude_two_runs"
 PHASE_19U_FILES = (
     "capture19.py",
     "capture19local.py",
@@ -41,7 +41,9 @@ PHASE_19U_FILES = (
 NON_CLAIMS = (
     "emission only: no proposal was executed, so nothing here is evidence about a gate or a receiver",
     "fixed texts written by the author; no attacker adapted to these models, and a floor of zero sends says only that these texts did not move them",
-    "half of 19o's schedule, one tool, short tasks; nothing here is about these models in a long task with real tools",
+    "half or a quarter of 19o's schedule, one tool, short tasks; nothing here is about these models in a long task with real tools",
+    "the first run's output limit cut answers off; its rows are reported as they are and its truncated answers are neither sends nor declines",
+    "the models were sent different numbers of rows and two different output limits, so their rates are not a like-for-like comparison",
     "a hosted model cannot be pinned to weights or reproduced from a seed; a row is what the provider returned once",
     "the lane's code was written by a model of the same provider's family under the owner's direction",
     "the spend is the lane's meter at the declared batch prices; the provider's bill is the authority and was not compared here",
@@ -49,16 +51,23 @@ NON_CLAIMS = (
 )
 SIDECARS = {
     "sends.json": lambda r: {
-        m["id"]: (m["analysis"] or {}).get("sends") for m in r["models"]
+        run + "/" + m["id"]: (m["analysis"] or {}).get("sends")
+        for run, models in r["runs"].items()
+        for m in models
     },
     "spend.json": lambda r: r["spend"],
     "hypothesis.json": lambda r: r["hypothesis"],
 }
 MODEL_IDS = inject19u.MODEL_IDS
+RUN_NAMES = tuple(inject19u.RUNS)
 
 
-def member(model_id):
-    return "transcript-" + model_id + ".json"
+def member(run, model_id):
+    return "transcript-" + run + "-" + model_id + ".json"
+
+
+def capture_member(run):
+    return "capture-" + run + ".json"
 
 
 def expected_sources():
@@ -68,32 +77,26 @@ def expected_sources():
 
 
 def declared_models():
-    keys = (
-        "id",
-        "provider",
-        "api_model",
-        "max_tokens",
-        "usd_per_mtok_in",
-        "usd_per_mtok_out",
-    )
+    keys = ("id", "provider", "api_model", "usd_per_mtok_in", "usd_per_mtok_out")
     return [{k: m[k] for k in keys} for m in inject19u.MODELS]
 
 
-def schedule_digest():
-    return sha(wire([s["digest"] for s in inject19u.schedule()]))
+def schedule_digest(divisor):
+    return sha(wire([s["digest"] for s in inject19u.schedule(divisor)]))
 
 
 def _declared():
     return {
         "arm": ARM,
         "models": declared_models(),
+        "runs": {name: dict(run) for name, run in inject19u.RUNS.items()},
+        "deciding": dict(inject19u.DECIDING),
         "not_available": dict(inject19u.NOT_AVAILABLE),
         "cap_usd": inject19u.TOTAL_CAP_USD,
         "input_bound": inject19u.INPUT_BOUND,
         "active": inject19u.ACTIVE,
         "min_calls": inject19u.MIN_CALLS,
-        "schedule_rows": len(inject19u.schedule()),
-        "schedule_digest": schedule_digest(),
+        "schedule_digests": {str(d): schedule_digest(d) for d in (2, 4)},
         "endpoint": inject19u.BATCH_URL,
         "model_inference": True,
         "gate_executed": False,
@@ -133,92 +136,120 @@ def check_protocol(path):
     return sha(raw)
 
 
-def build_report(transcripts, capture):
-    """``transcripts``: model id -> stored rows. ``capture``: the run's own record, bound
-    where the rows can check it (status, row count, metered spend)."""
+def _run_models(run, rows_by_model, capture, before):
+    """One run's models, each bound to the run's own record, and what the run metered."""
+    plan = inject19u.RUNS[run]["rows"]
     recorded = capture.get("models") if type(capture) is dict else None
     if (
         type(recorded) is not dict
-        or set(recorded) != set(MODEL_IDS)
+        or set(recorded) != set(plan)
+        or capture.get("run", "first") != run
         or capture.get("cap_usd") != inject19u.TOTAL_CAP_USD
         or capture.get("pending")
         or type(capture.get("smoke_spent_usd")) not in (int, float)
+        or abs(capture["smoke_spent_usd"] - before) > 1e-6
     ):
-        raise ValueError("capture_binding")
-    if type(transcripts) is not dict or set(transcripts) != set(MODEL_IDS):
+        raise ValueError("capture_binding:" + run)
+    if type(rows_by_model) is not dict or set(rows_by_model) != set(plan):
         raise ValueError("transcript_inventory")
-    models, analyses = [], {}
-    metered = float(capture["smoke_spent_usd"])
-    for spec in inject19u.MODELS:
-        got, rows = recorded[spec["id"]], transcripts[spec["id"]]
+    models, metered = [], 0.0
+    for name, divisor in plan.items():
+        got, rows = recorded[name], rows_by_model[name]
+        whole = len(inject19u.schedule(divisor))
         if (
             type(got) is not dict
             or got.get("status") not in inject19u.STATUSES
             or got.get("rows") != len(rows)
-            or (got["status"] == "captured")
-            is not (len(rows) == len(inject19u.schedule()))
+            or (got["status"] == "captured") is not (len(rows) == whole)
             or (got["status"] == "not_captured") is not (len(rows) == 0)
         ):
-            raise ValueError("capture_binding:" + spec["id"])
-        analysis = inject19u.analyse(spec, rows) if rows else None
-        if analysis:
+            raise ValueError("capture_binding:" + run + "/" + name)
+        analysis = None
+        if rows:
+            analysis = inject19u.analyse(inject19u.spec_for(run, name), rows, divisor)
             if round(analysis["spend"]["metered_usd"], 6) != got.get("spent_usd"):
-                raise ValueError("capture_binding:" + spec["id"])
+                raise ValueError("capture_binding:" + run + "/" + name)
             metered += analysis["spend"]["metered_usd"]
-            if got["status"] == "captured":
-                analyses[spec["id"]] = analysis
         models.append(
             {
-                "id": spec["id"],
-                "api_model": spec["api_model"],
+                "id": name,
                 "status": got["status"],
+                "reason": got.get("reason"),
+                "max_tokens": inject19u.RUNS[run]["max_tokens"],
+                "schedule_rows": whole,
                 "analysis": analysis,
                 "eligibility": inject19u.eligibility(analysis) if analysis else None,
             }
         )
+    return models, metered
+
+
+def build_report(transcripts, captures):
+    """``transcripts``: run -> model id -> stored rows. ``captures``: run -> the run's own
+    record, bound where the rows can check it (status, row count, metered spend) and chained:
+    the second run starts from what the first had metered."""
+    if set(transcripts) != set(RUN_NAMES) or set(captures) != set(RUN_NAMES):
+        raise ValueError("run_inventory")
+    smoke = captures["first"].get("smoke_spent_usd")
+    if type(smoke) not in (int, float):
+        raise ValueError("capture_binding:first")
+    runs, total = {}, float(smoke)
+    for run in RUN_NAMES:
+        runs[run], metered = _run_models(run, transcripts[run], captures[run], total)
+        total += metered
+    analyses = {}
+    for name in MODEL_IDS:
+        decided_in = inject19u.DECIDING[name]
+        record = next(m for m in runs[decided_in] if m["id"] == name)
+        if record["status"] == "captured":
+            analyses[name] = record["analysis"]
+    every = [m for models in runs.values() for m in models if m["analysis"]]
     return {
         "schema": SCHEMA,
         "arm": ARM,
-        "models": models,
+        "runs": runs,
+        "deciding": dict(inject19u.DECIDING),
         "not_available": dict(inject19u.NOT_AVAILABLE),
         "hypothesis": inject19u.hypothesis(analyses),
         "spend": {
             "cap_usd": inject19u.TOTAL_CAP_USD,
-            "smoke_usd": round(float(capture["smoke_spent_usd"]), 6),
-            "metered_usd": round(metered, 6),
-            "within_cap": metered <= inject19u.TOTAL_CAP_USD,
-            "requests": sum(
-                m["analysis"]["spend"]["requests"] for m in models if m["analysis"]
-            ),
+            "smoke_usd": round(float(smoke), 6),
+            "metered_usd": round(total, 6),
+            "within_cap": total <= inject19u.TOTAL_CAP_USD,
+            "requests": sum(m["analysis"]["spend"]["requests"] for m in every),
         },
-        "schedule_digest": schedule_digest(),
-        "generations": sum(m["analysis"]["rows"] for m in models if m["analysis"]),
+        "generations": sum(m["analysis"]["rows"] for m in every),
         "model_inference": True,
         "gate_executed": False,
-        "capture": capture,
+        "captures": captures,
         "non_claims": list(NON_CLAIMS),
     }
 
 
 def receipt_for(report, manifest_root):
     models = {}
-    for m in report["models"]:
-        a = m["analysis"]
-        models[m["id"]] = {
-            "status": m["status"],
-            "eligible": m["eligibility"]["eligible"] if m["eligibility"] else None,
-            "active": a["active"] if a else None,
-            "restricted": {k: a["restricted"][k] for k in ("n", "sent")} if a else None,
-            "outcomes": a["outcomes"] if a else None,
-            "metered_usd": a["spend"]["metered_usd"] if a else 0.0,
-        }
+    for run, listed in report["runs"].items():
+        for m in listed:
+            a = m["analysis"]
+            models[run + "/" + m["id"]] = {
+                "status": m["status"],
+                "eligible": m["eligibility"]["eligible"] if m["eligibility"] else None,
+                "active": a["active"] if a else None,
+                "restricted": {k: a["restricted"][k] for k in ("n", "sent")}
+                if a
+                else None,
+                "outcomes": a["outcomes"] if a else None,
+                "metered_usd": a["spend"]["metered_usd"] if a else 0.0,
+            }
     return {
         "verified": True,
         "arm": ARM,
         "generations": report["generations"],
         "models": models,
+        "deciding": report["deciding"],
         "not_available": report["not_available"],
         "hypothesis": {k: v["holds"] for k, v in report["hypothesis"].items()},
+        "decided_on": report["hypothesis"]["A1"]["eligible"],
         "spend": report["spend"],
         "model_inference": True,
         "gate_executed": False,
@@ -228,19 +259,30 @@ def receipt_for(report, manifest_root):
     }
 
 
+def _members():
+    names = set()
+    for run in RUN_NAMES:
+        names.add(capture_member(run))
+        names.update(member(run, name) for name in inject19u.RUNS[run]["rows"])
+    return names
+
+
 def verify(pack, expected_root, *, protocol=None):
     protocol_digest = check_protocol(protocol or PROTOCOL)
     files = read_pack(Path(pack), expected_root)
-    names = {member(i) for i in MODEL_IDS}
-    if set(files) != {"report.json", "capture.json", *SIDECARS, *names}:
+    if set(files) != {"report.json", *SIDECARS, *_members()}:
         raise ValueError("pack_inventory")
     saved = loads(files["report.json"])
     if type(saved) is not dict or saved.get("schema") != SCHEMA:
         raise ValueError("report_schema")
     if saved.get("protocol_sha256") != protocol_digest:
         raise ValueError("protocol_binding")
-    transcripts = {i: loads(files[member(i)]) for i in MODEL_IDS}
-    actual = build_report(transcripts, loads(files["capture.json"]))
+    transcripts = {
+        run: {n: loads(files[member(run, n)]) for n in inject19u.RUNS[run]["rows"]}
+        for run in RUN_NAMES
+    }
+    captures = {run: loads(files[capture_member(run)]) for run in RUN_NAMES}
+    actual = build_report(transcripts, captures)
     s_all = loads(wire(saved))
     s_all.pop("protocol_sha256", None)
     if wire(s_all) != wire(actual):
@@ -252,29 +294,34 @@ def verify(pack, expected_root, *, protocol=None):
     return receipt_for(actual, expected_root)
 
 
-def read_transcripts(directory):
-    out = {}
-    for model_id in MODEL_IDS:
-        path = Path(directory) / (model_id + ".jsonl")
+def read_run(directory, run):
+    """A run's capture directory as (model id -> rows, capture record)."""
+    directory = Path(directory)
+    rows = {}
+    for name in inject19u.RUNS[run]["rows"]:
+        path = directory / "transcripts" / (name + ".jsonl")
         text = path.read_text() if path.exists() else ""
-        out[model_id] = [json.loads(line) for line in text.splitlines() if line]
-    return out
+        rows[name] = [json.loads(line) for line in text.splitlines() if line]
+    return rows, json.loads((directory / "capture.json").read_text())
 
 
-def run(out, *, transcripts, capture, protocol=None):
+def run(out, *, first, second, protocol=None):
     out = Path(out)
     out.mkdir(parents=True, exist_ok=False)
     proto_path = Path(protocol) if protocol else out / "protocol.json"
     if not proto_path.exists():
         proto_path.write_bytes(wire(build_protocol()))
     protocol_digest = check_protocol(proto_path)
-    rows = read_transcripts(transcripts)
-    meta = json.loads(Path(capture).read_text())
-    report = build_report(rows, meta)
+    transcripts, captures = {}, {}
+    for name, directory in (("first", first), ("second", second)):
+        transcripts[name], captures[name] = read_run(directory, name)
+    report = build_report(transcripts, captures)
     report.update(protocol_sha256=protocol_digest)
-    files = {"report.json": wire(report), "capture.json": wire(meta)}
-    for model_id, model_rows in rows.items():
-        files[member(model_id)] = wire(model_rows)
+    files = {"report.json": wire(report)}
+    for name in RUN_NAMES:
+        files[capture_member(name)] = wire(captures[name])
+        for model_id, rows in transcripts[name].items():
+            files[member(name, model_id)] = wire(rows)
     for name, project in SIDECARS.items():
         files[name] = wire(project(report))
     (out / "report.json").write_bytes(files["report.json"])
@@ -290,17 +337,15 @@ def main():
     sub = parser.add_subparsers(dest="command", required=True)
     launch = sub.add_parser("run")
     launch.add_argument("--out", type=Path, required=True)
-    launch.add_argument("--transcripts", type=Path, required=True)
-    launch.add_argument("--capture", type=Path, required=True)
+    launch.add_argument("--first", type=Path, required=True)
+    launch.add_argument("--second", type=Path, required=True)
     check = sub.add_parser("verify")
     check.add_argument("pack", type=Path)
     check.add_argument("--expected-root", required=True)
     check.add_argument("--protocol", type=Path, default=None)
     args = parser.parse_args()
     if args.command == "run":
-        receipt = run(
-            args.out.resolve(), transcripts=args.transcripts, capture=args.capture
-        )
+        receipt = run(args.out.resolve(), first=args.first, second=args.second)
     else:
         receipt = verify(args.pack, args.expected_root, protocol=args.protocol)
     print(json.dumps(receipt, sort_keys=True))

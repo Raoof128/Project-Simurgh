@@ -48,13 +48,26 @@ class FakeProvider:
     def __init__(self, decide=obedient, *, polls=1):
         self.decide, self.polls = decide, polls
         self.batches, self.calls = {}, []
-        self.rows = {r["index"]: r for r in u.schedule()}
+        self.by_digest = {}
+        for divisor in (2, 4):
+            for r in u.schedule(divisor):
+                self.by_digest[(divisor, r["index"])] = r
 
     def __call__(self, method, url, body):
         self.calls.append((method, url))
         if method == "POST" and url == u.BATCH_URL:
             batch = "msgbatch_%02d" % (len(self.batches) + 1)
-            self.batches[batch] = {"requests": body["requests"], "polled": 0}
+            first = body["requests"][0]["params"]
+            # which schedule a batch is from: the larger limit is the second run's, and in
+            # that run only the 672-row model uses the half schedule
+            quarter = (
+                first["max_tokens"] == 512 and first["model"] != "claude-haiku-5-5"
+            )
+            self.batches[batch] = {
+                "requests": body["requests"],
+                "polled": 0,
+                "divisor": 4 if quarter else 2,
+            }
             return 200, json.dumps(
                 {"id": batch, "processing_status": "in_progress"}
             ).encode()
@@ -64,7 +77,7 @@ class FakeProvider:
             self.current = batch  # a batch's results do not change with what came later
             lines = []
             for request in state["requests"]:
-                row = self.rows[int(request["custom_id"][1:])]
+                row = self.by_digest[(state["divisor"], int(request["custom_id"][1:]))]
                 got = self.decide(row)
                 result = (
                     {"type": got}
@@ -558,6 +571,135 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual(h["A1"]["sent"], {"a": 0, "b": 1})
         self.assertFalse(h["A1"]["holds"])
         self.assertFalse(u.hypothesis({"c": silent})["A1"]["holds"])  # nothing eligible
+
+
+class SecondRunTests(unittest.TestCase):
+    """The run declared in the first amendment: a 512-token limit, because these models
+    reason before they answer and 160 tokens cut the first run's answers off."""
+
+    def test_the_two_runs_as_declared(self):
+        self.assertEqual(
+            u.RUNS["first"],
+            {"max_tokens": 160, "rows": {m: 2 for m in u.MODEL_IDS}},
+        )
+        self.assertEqual(
+            list(u.RUNS["second"]["rows"].items()),
+            [("claude-fable-5-2", 4), ("claude-opus-5-5", 4), ("claude-haiku-5-5", 2)],
+        )
+        self.assertEqual(u.RUNS["second"]["max_tokens"], 512)
+        self.assertEqual(
+            u.DECIDING,
+            {
+                "claude-haiku-5-5": "second",
+                "claude-sonnet-5-5": "first",
+                "claude-opus-5-5": "second",
+                "claude-fable-5-2": "second",
+            },
+        )
+        self.assertEqual(u.spec_for("second", "claude-opus-5-5")["max_tokens"], 512)
+        self.assertEqual(
+            u.spec_for("first", "claude-opus-5-5"), u.model("claude-opus-5-5")
+        )
+
+    def test_every_fourth_trial_is_342_rows(self):
+        rows = u.schedule(4)
+        source = [s for s in inject19o.schedule() if s["trial"] % 4 == 0]
+        self.assertEqual(len(rows), 342)
+        self.assertEqual([r["digest"] for r in rows], [s["digest"] for s in source])
+        self.assertEqual(sum(r["state"] == "active" for r in rows), 12)
+        self.assertEqual(sum(r["block"] == "restricted" for r in rows), 210)
+        self.assertEqual(sum(r["block"] == "placement" for r in rows), 120)
+        self.assertEqual(u.schedule(), u.schedule(2))
+
+    def test_the_second_run_fits_what_the_first_left(self):
+        spent = 0.93191  # the connection checks and the first run, by the meter
+        for name, divisor in u.RUNS["second"]["rows"].items():
+            spec = u.spec_for("second", name)
+            rows = len(u.schedule(divisor))
+            self.assertEqual(u.fit(spec, rows, spent=spent, cap=7.0), rows, name)
+            spent += (
+                rows
+                * (776 * spec["usd_per_mtok_in"] + 300 * spec["usd_per_mtok_out"])
+                / 1e6
+            )
+        self.assertLess(spent, 7.0)
+
+    def test_the_second_run_sends_its_models_in_order_with_the_larger_limit(self):
+        out = Path(tempfile.mkdtemp(prefix="p19u-2-"))
+        fake = FakeProvider(obedient)
+        meta = u.capture_all(
+            out,
+            run="second",
+            http=fake,
+            sleep=lambda _: None,
+            log=lambda _: None,
+            smoke_spent=0.93191,
+        )
+        self.assertEqual(meta["run"], "second")
+        self.assertEqual(
+            [(k, v["status"], v["rows"]) for k, v in meta["models"].items()],
+            [
+                ("claude-fable-5-2", "captured", 342),
+                ("claude-opus-5-5", "captured", 342),
+                ("claude-haiku-5-5", "captured", 672),
+            ],
+        )
+        sizes = [len(b["requests"]) for b in fake.batches.values()]
+        self.assertEqual(sizes, [342, 342, 672])
+        for b in fake.batches.values():
+            self.assertEqual({r["params"]["max_tokens"] for r in b["requests"]}, {512})
+        self.assertEqual(
+            [b["requests"][0]["params"]["model"] for b in fake.batches.values()],
+            ["claude-fable-5-2", "claude-opus-5-5", "claude-haiku-5-5"],
+        )
+        self.assertEqual(
+            meta["models"]["claude-fable-5-2"]["spent_before_usd"], 0.93191
+        )
+        rows = rows_of(out, u.model("claude-fable-5-2"))
+        a = u.analyse(u.spec_for("second", "claude-fable-5-2"), rows, 4)
+        self.assertEqual(
+            (a["rows"], a["active"]["calls"], a["restricted"]["n"]), (342, 12, 330)
+        )
+        with self.assertRaises(ValueError):
+            u.analyse(u.spec_for("second", "claude-fable-5-2"), rows, 2)
+
+    def test_a_directory_belongs_to_one_run(self):
+        out, _, _ = capture(only=["claude-haiku-5-5"])
+        with self.assertRaises(ValueError) as caught:
+            u.capture_all(
+                out,
+                run="second",
+                http=FakeProvider(),
+                sleep=lambda _: None,
+                log=lambda _: None,
+            )
+        self.assertEqual(str(caught.exception), "run_mismatch")
+
+    def test_a_model_withdrawn_by_the_author_is_recorded_and_never_sent(self):
+        out = Path(tempfile.mkdtemp(prefix="p19u-w-"))
+        fake = FakeProvider(obedient)
+        meta = u.capture_all(
+            out,
+            http=fake,
+            sleep=lambda _: None,
+            log=lambda _: None,
+            withdraw=["claude-opus-5-5", "claude-fable-5-2"],
+        )
+        self.assertEqual(len(fake.batches), 2)
+        for name in ("claude-opus-5-5", "claude-fable-5-2"):
+            self.assertEqual(
+                {
+                    k: meta["models"][name][k]
+                    for k in ("status", "reason", "rows", "spent_usd")
+                },
+                {
+                    "status": "not_captured",
+                    "reason": "withdrawn_by_author",
+                    "rows": 0,
+                    "spent_usd": 0.0,
+                },
+            )
+        self.assertEqual(meta["models"]["claude-haiku-5-5"]["status"], "captured")
 
 
 if __name__ == "__main__":

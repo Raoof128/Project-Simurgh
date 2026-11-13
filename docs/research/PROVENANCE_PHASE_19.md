@@ -1365,6 +1365,26 @@ Haiku 5.5 to Fable 5.2 and Mythos 5.2, with 7 USD of credit. Declared before the
 - Seen when this was written: the results of 19h to 19q and 19t; the four connection checks,
   each of which returned one decline call; the token counts. No case of this lane has been
   sent.
+- Amended 13 Nov 2026, after the first two batches came back and before any further request.
+  What happened: these models reason before they answer unless told otherwise, the connection
+  checks did not show it because their prompt was trivial, and the declared output limit of 160
+  tokens was too small. Haiku 5.5 reasoned on 614 of its 672 rows, 262 answers were cut off
+  and it made the authorised call in 3 of 12, so by the declared rule it is not eligible.
+  Sonnet 5.5 reasoned on 23 rows, 19 answers were cut off, it made 11 of 12 authorised calls
+  and sent in none of 660 restricted generations. The author then stopped the run before the
+  third batch. Metered so far: 0.93 USD including the connection checks. The provider's
+  documentation says reasoning cannot be switched off on Opus 5.5 or Fable 5.2, so the limit
+  has to cover it. Changed from here on, as a second run: the output limit is 512 tokens;
+  Fable 5.2 and Opus 5.5 are sent the rows of 19o's schedule whose trial number divides by
+  four, 342 rows each (12 authorised, 210 of 19k's and 120 of 19n's), because the larger limit
+  does not fit the cap on 672; Haiku 5.5 is sent its 672 rows again; the order is Fable, Opus,
+  Haiku, dearest first, so that if the cap bites it bites the cheapest. The cap, the
+  worst-case rule (now with 512 output tokens a row), the readers and the eligibility rule are
+  unchanged. Opus 5.5 and Fable 5.2 are recorded in the first run as withdrawn by the author.
+  A1 is decided for Sonnet 5.5 on the first run and for the other three on the second. The
+  first run's Haiku rows are reported as they are. The models now have different numbers of
+  rows and two different limits; their rates are not a like-for-like comparison, and the
+  write-up must say so.
 
 Authorised files: `tools/assurance-provenance/inject19u.py`, `evidence19u.py`, their tests,
 `docs/research/provenance-phase-19u/`, `.prettierignore` entries for its byte-preserved files,

@@ -68,11 +68,40 @@ def model(model_id):
     raise KeyError(model_id)
 
 
-def schedule():
-    """The rows of 19o's schedule with an even trial number, numbered from zero."""
+# The first run is the declaration's: every model, every second trial, 160 output tokens. It
+# was stopped by the author after two models because these models reason before they answer
+# and 160 tokens cut answers off. The second run is the first amendment's: 512 output tokens,
+# the two dearest models on every fourth trial, in this order.
+RUNS = {
+    "first": {"max_tokens": MAX_TOKENS, "rows": dict.fromkeys(MODEL_IDS, 2)},
+    "second": {
+        "max_tokens": 512,
+        "rows": {
+            "claude-fable-5-2": 4,
+            "claude-opus-5-5": 4,
+            "claude-haiku-5-5": 2,
+        },
+    },
+}
+# the run whose rows decide A1 for each model
+DECIDING = {
+    "claude-haiku-5-5": "second",
+    "claude-sonnet-5-5": "first",
+    "claude-opus-5-5": "second",
+    "claude-fable-5-2": "second",
+}
+
+
+def spec_for(run, model_id):
+    return {**model(model_id), "max_tokens": RUNS[run]["max_tokens"]}
+
+
+def schedule(divisor=2):
+    """The rows of 19o's schedule whose trial number divides by ``divisor``, numbered from
+    zero: 672 for every second trial, 342 for every fourth."""
     rows = []
     for s in inject19o.schedule():
-        if s["trial"] % 2 == 0:
+        if s["trial"] % divisor == 0:
             rows.append({**s, "index": len(rows), "source_index": s["index"]})
     return rows
 
@@ -199,10 +228,20 @@ def _now():
 
 
 def capture_all(
-    out_dir, *, http=_http, sleep=time.sleep, log=print, only=None, smoke_spent=None
+    out_dir,
+    *,
+    run="first",
+    http=_http,
+    sleep=time.sleep,
+    log=print,
+    only=None,
+    smoke_spent=None,
+    withdraw=(),
 ):
-    """Every declared model in order, one batch each and one more for rows without a result.
-    ``smoke_spent`` is what the connection checks cost before the run; it is recorded once."""
+    """Every model of ``run`` in its order, one batch each and one more for rows without a
+    result. ``smoke_spent`` is everything metered before this run started (the connection
+    checks, and for the second run the first run too); it is recorded once. A model named in
+    ``withdraw`` is recorded as withdrawn by the author and nothing is sent for it."""
     out_dir = Path(out_dir)
     (out_dir / "transcripts").mkdir(parents=True, exist_ok=True)
     meta_path = out_dir / "capture.json"
@@ -211,12 +250,16 @@ def capture_all(
     else:
         meta = {
             "launched_utc": _now(),
+            "run": run,
             "cap_usd": TOTAL_CAP_USD,
             "smoke_spent_usd": float(smoke_spent or 0.0),
             "not_available": dict(NOT_AVAILABLE),
             "pending": {},
             "models": {},
         }
+
+    if meta.get("run", "first") != run:
+        raise ValueError("run_mismatch")
 
     def save():
         spent_now = meta["smoke_spent_usd"] + sum(
@@ -227,14 +270,23 @@ def capture_all(
         return spent_now
 
     spent = save()
-    sched = schedule()
-    for spec in MODELS:
-        name = spec["id"]
-        if only and name not in only:
-            continue
+    for name, divisor in RUNS[run]["rows"].items():
+        spec, sched = spec_for(run, name), schedule(divisor)
         if meta["models"].get(name, {}).get("status") in STATUSES:
             continue
         pending = meta["pending"].get(name)
+        if name in withdraw and pending is None:
+            meta["models"][name] = {
+                "status": "not_captured",
+                "reason": "withdrawn_by_author",
+                "rows": 0,
+                "spent_before_usd": round(spent, 6),
+                "spent_usd": 0.0,
+            }
+            spent = save()
+            continue
+        if only and name not in only:
+            continue
         if pending is None:
             count = fit(spec, len(sched), spent=spent, cap=meta["cap_usd"])
             if count == 0:
@@ -322,10 +374,10 @@ def capture_all(
 # --- reading and analysis: no request is sent below this line -------------------------------
 
 
-def judge(spec, rows):
+def judge(spec, rows, divisor=2):
     """Each stored row bound to its slot and read. ``rows`` may be an opening run of the
     schedule, which is what a partial model has."""
-    sched = schedule()
+    sched = schedule(divisor)
     if type(rows) is not list or len(rows) > len(sched):
         raise ValueError("transcript_inventory")
     out = []
@@ -401,8 +453,8 @@ def _groups(rows, key):
     return {name: _tally([j for j in rows if j[key] == name]) for name in names}
 
 
-def analyse(spec, rows):
-    judged = judge(spec, rows)
+def analyse(spec, rows, divisor=2):
+    judged = judge(spec, rows, divisor)
     active = [j for j in judged if j["state"] == "active"]
     restricted = [j for j in judged if j["state"] != "active"]
     sent = sum(1 for j in restricted if j["sent"])
@@ -479,13 +531,17 @@ if __name__ == "__main__":
     cli.add_argument(
         "out", type=Path, help="directory for transcripts/ and capture.json"
     )
+    cli.add_argument("--run", choices=sorted(RUNS), default="first")
     cli.add_argument("--smoke-spent", type=float, default=0.0)
     cli.add_argument("--only", nargs="*")
+    cli.add_argument("--withdraw", nargs="*", default=[])
     args = cli.parse_args()
     inject19o.load_keys()
     capture_all(
         args.out,
+        run=args.run,
         only=args.only,
+        withdraw=args.withdraw,
         smoke_spent=args.smoke_spent,
         log=lambda line: print(line, flush=True),
     )
