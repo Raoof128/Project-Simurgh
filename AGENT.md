@@ -14,6 +14,36 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-14 (Australia/Sydney) — Closeout of the 13 to 14 November upgrade set: five lanes and the handoff change on `main`; ledger note
+
+**Raouf:**
+
+- **Scope:** one note at the end of the Phase 19 execution ledger and both logs. No source,
+  test, pack, workflow, README or frozen file. The manuscript is not edited.
+- **Summary:** the owner asked on the morning of 14 Nov for the logs to be brought up to date
+  and the result committed and pushed. Since the last closeout four pull requests merged
+  (#171 to #174): lane 19q (a destination rule on a public monitor benchmark, mostly
+  negative), lane 19t (two attackers with the gate's source; two faults found, the
+  undelegated action never landed), lane 19r (a send must cite its grant; when the untrusted
+  text offers a grant, every wrong send cites it), lane 19s (two local monitors on twin
+  transcripts; the primary one caught 20 of 96 unauthorised sends and no hypothesis held on
+  it), lane 19u (four hosted Claude models, no restricted send, 3.96 USD of a 7 USD cap), and
+  P19-OPERATOR06, which put the five packs into the operator handoff and the pinned-roots
+  check. The README was brought to twenty packs inside P19-OPERATOR06, so it is not touched
+  here. The ledger gains a note with the merge commits, the three hosted runs that passed on
+  `main` at `1deabcbe`, the one quality-gate run that shows as cancelled on `60adef21` and
+  why, and what is still owed.
+- **Files changed:** `docs/research/PROVENANCE_PHASE_19.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the three runs on `1deabcbe` were read from the hosting service (quality
+  gate, Phase 19 workflow, README replay: all success) and the run on `60adef21` reads
+  cancelled, with the workflow's `cancel-in-progress` setting as the cause. The repository
+  variable holds twenty roots. `handoff19.py status` reads twenty-two items owed. The ledger
+  diff only adds lines. Quick gate passes.
+- **Follow-ups for the owner:** compare each provider's usage page with the lane's meter
+  (19o and 19u); send the operator package to the two people who agreed to run it; decide the
+  order and the cap of the next set, which starts with the repair of the two faults 19t found
+  under its own declaration.
+
 ### 2026-11-14 (Australia/Sydney) — Phase 19f: lanes 19q to 19u join the operator handoff and the pinned roots; a Windows recipe (P19-OPERATOR06)
 
 **Raouf:**

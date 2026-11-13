@@ -1,5 +1,22 @@
 ## Change Log
 
+## [docs-phase19-closeout-2026-11-14] — 2026-11-14 — Closeout of the 13 to 14 November upgrade set; ledger note
+
+**Raouf:**
+
+- **Scope:** one note in `docs/research/PROVENANCE_PHASE_19.md`, both logs.
+- **Summary:** lanes 19q, 19r, 19s, 19t and 19u and the handoff change P19-OPERATOR06 are on
+  `main` (#171 to #174, `1deabcbe`), with twenty packs in the operator handoff and the hosted
+  pinned-roots check. The ledger records the merge commits, the hosted runs that passed on
+  `1deabcbe`, one quality-gate run on `60adef21` that was cancelled by the newer push and not
+  failed, and what is still owed: the two faults 19t found are not repaired, no outside
+  operator has run the five lanes, and no provider's usage page has been compared with a
+  lane's meter.
+- **Verification:** hosted run results read from the hosting service; the ledger diff only
+  adds lines; quick gate passes.
+- **Follow-ups:** the repair of the 19t faults under its own declaration; outside replays of
+  the five lanes.
+
 ## [phase-19f-operator06-2026-11-14] — 2026-11-14 — Operator handoff: twenty lanes, a Windows recipe, twenty pinned roots
 
 **Raouf:**
