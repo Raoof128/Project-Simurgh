@@ -1560,6 +1560,34 @@ ruling and both logs. Not authorised: any edit to a frozen file, to a 19a to 19u
 the operator handoff or to a workflow, which a later declaration covers. This declaration commit
 must be a strict ancestor of every commit that acts on it.
 
+**P19-OPERATOR07 (bounded authority to bring lane 19v into the outside-operator handoff and the
+externally pinned roots; declared 15 Nov 2026 before any commit that acts on it).** 19v is
+committed (`392e12d4`) with root
+`c40c028436c1366b99ed22ebc76392966fd720cd86f7850ddd5a1e58ad7376a2`. Its declaration did not
+authorise a workflow or handoff edit, so the hosted roots check and the handoff list twenty
+packs. This change is stacked on the lane's branch and is merged after it. This declaration
+authorises, and nothing else:
+
+1. `handoff19.py`: 19v added to `PHASES` as a plain lane with its host and time, the word for
+   the new count, and 19v in the list of lanes that need nothing beyond the standard library.
+   Verifying 19v runs no model and needs no GPU, network or key: it replays the committed
+   transcripts. No change to what the comparator checks. Tests first.
+2. The review of the first operator receipt recomputed under the new phase list. The receipt is
+   not edited; 19v appears in the review as `not_in_receipt`, which is what happened.
+3. Re-rendering `HANDOFF.md` and `discrepancy-template.json`; the 19f README's count of packs
+   and its sentence on the lane.
+4. `.github/workflows/assurance-provenance.yml`: 19v's `docs/` path added to both path filters
+   and its id to the expected-roots check, with its message. No step is added, removed or
+   renamed, and the Stage 5Q census must be byte-identical before and after. The repository
+   variable `PHASE19_ROOTS` gains the one root, set outside the pull request, the twenty
+   existing values unchanged.
+5. The root README's count of Phase 19 packs and its sentences on the lane.
+6. Both logs and the ruling.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to the operator's
+receipt, or any other change to what the comparator checks. This declaration commit must be a
+strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
