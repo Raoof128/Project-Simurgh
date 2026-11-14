@@ -14,6 +14,40 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-14 (Australia/Sydney) — Phase 19v declared and built: 19n's study for eight open-weight models on a rented GPU (capture not yet run; no result)
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPENWEIGHT01 in the Phase 19 ledger (its own commit,
+  `4c81d0b6`, before everything else), two new modules and their tests in
+  `tools/assurance-provenance/` (`inject19v.py`, `evidence19v.py`, `tests/test_inject19v.py`,
+  `tests/test_evidence19v.py`) and both logs. No pinned lane source, pack, workflow or frozen
+  file is edited. When this was committed no model of the lane had been loaded and no machine
+  had been rented.
+- **Summary:** the owner decided on 14 Nov that the open-weight lane runs next and accepted a
+  cap of 25 USD on the provider's secure cloud. `inject19v.py` imports 19n's slots, prompts,
+  seeds, analysis and capture loop unchanged and names eight models of 8B to 36B parameters
+  at pinned revisions. Three write a tool call as JSON, which 19h's reader reads. Five write
+  it as function and parameter tags; a new decoder reads that form into the neutral text the
+  Phase 17 parser reads and is bound in place of the pinned readers only inside
+  `reader(spec)`, which restores what it found. The strict read stays the analysis. The
+  sampler draws each token itself (temperature, the smallest set that reaches top_p, one draw
+  from a generator seeded with the slot's seed) inside `generate`, because the library merges
+  a model's shipped generation settings into the settings it is given. The run has a deadline
+  computed from the cap and the machine's hourly price; a model that wrote no row may be run
+  once more; `check` tries the sampler on two small models outside the lane. `evidence19v.py`
+  follows `evidence19n.py` and adds a rental record, a recomputed meter and a table of the
+  three Qwen3 sizes.
+- **Files changed:** `docs/research/PROVENANCE_PHASE_19.md` (declaration), the four new
+  files, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 40 instrument tests (5 of them need torch and were run with it) and 12
+  evidence tests pass; `ruff` is clean; the quick gate passes. On the author's machine, in
+  32-bit precision, the two small models outside the lane gave an identical row when sampled
+  again and the `generate` path equalled a plain loop without a cache token for token. The
+  eight revisions resolve and their templates render with thinking switched off.
+- **Not done:** the capture, the pack, the lane's README and the ruling. The lane is not in
+  the operator handoff or the pinned roots; that needs its own declaration.
+
 ### 2026-11-14 (Australia/Sydney) — Closeout of the 13 to 14 November upgrade set: five lanes and the handoff change on `main`; ledger note
 
 **Raouf:**

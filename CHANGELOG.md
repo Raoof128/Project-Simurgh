@@ -1,5 +1,22 @@
 ## Change Log
 
+## [phase-19v-in-progress-2026-11-14] — 2026-11-14 — Lane 19v declared and built: eight open-weight models on a rented GPU; capture not yet run
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPENWEIGHT01 in `docs/research/PROVENANCE_PHASE_19.md`
+  (`4c81d0b6`), `tools/assurance-provenance/inject19v.py`, `evidence19v.py`, their two test
+  files, both logs.
+- **Summary:** 19n's study, unchanged, for eight open-weight models at pinned revisions and
+  full precision, under a cap of 25 USD. New: a decoder for the function/parameter tool-call
+  form that five of the models write, bound only while such a model is read; a sampler that
+  draws each token itself; a deadline from the cap; one retry for a model that wrote no row;
+  an installation check on two small models outside the lane; a rental record and a
+  recomputed meter in the pack. No model of the lane has seen a case.
+- **Verification:** 40 and 12 tests pass; the installation check passes on the author's
+  machine; quick gate passes.
+- **Follow-ups:** the capture, the pack, the README and the ruling; then the handoff.
+
 ## [docs-phase19-closeout-2026-11-14] — 2026-11-14 — Closeout of the 13 to 14 November upgrade set; ledger note
 
 **Raouf:**
