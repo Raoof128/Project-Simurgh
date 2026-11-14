@@ -1,6 +1,6 @@
 # Phase 19f: outside-operator replay (paid in part)
 
-`IOU-19-OPERATOR`: one outside operator has replayed five of the twenty packs. This directory holds the
+`IOU-19-OPERATOR`: one outside operator has replayed five of the twenty-one packs. This directory holds the
 package that makes the replay a run of named commands against named expectations, the receipt that
 came back and the author's review of it:
 
@@ -80,6 +80,10 @@ state; recomputed from committed outputs), 19t (attackers with the gate's source
 models; verifying it needs no network and no key). All five are `not_in_receipt` in the review
 of the first receipt and are owed with the rest, together with 19q's `--dataset` and 19t's
 `--replay`.
+
+Lane 19v (eight open-weight models at full precision, captured on a rented GPU; verifying it runs
+no model and needs no GPU, network or key) joined on 15 Nov 2026 under P19-OPERATOR07. It is
+`not_in_receipt` in the review of the first receipt and is owed with the rest.
 
 ## Who has agreed to run it next
 

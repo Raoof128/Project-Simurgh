@@ -1560,6 +1560,34 @@ ruling and both logs. Not authorised: any edit to a frozen file, to a 19a to 19u
 the operator handoff or to a workflow, which a later declaration covers. This declaration commit
 must be a strict ancestor of every commit that acts on it.
 
+**P19-OPERATOR07 (bounded authority to bring lane 19v into the outside-operator handoff and the
+externally pinned roots; declared 15 Nov 2026 before any commit that acts on it).** 19v is
+committed (`392e12d4`) with root
+`c40c028436c1366b99ed22ebc76392966fd720cd86f7850ddd5a1e58ad7376a2`. Its declaration did not
+authorise a workflow or handoff edit, so the hosted roots check and the handoff list twenty
+packs. This change is stacked on the lane's branch and is merged after it. This declaration
+authorises, and nothing else:
+
+1. `handoff19.py`: 19v added to `PHASES` as a plain lane with its host and time, the word for
+   the new count, and 19v in the list of lanes that need nothing beyond the standard library.
+   Verifying 19v runs no model and needs no GPU, network or key: it replays the committed
+   transcripts. No change to what the comparator checks. Tests first.
+2. The review of the first operator receipt recomputed under the new phase list. The receipt is
+   not edited; 19v appears in the review as `not_in_receipt`, which is what happened.
+3. Re-rendering `HANDOFF.md` and `discrepancy-template.json`; the 19f README's count of packs
+   and its sentence on the lane.
+4. `.github/workflows/assurance-provenance.yml`: 19v's `docs/` path added to both path filters
+   and its id to the expected-roots check, with its message. No step is added, removed or
+   renamed, and the Stage 5Q census must be byte-identical before and after. The repository
+   variable `PHASE19_ROOTS` gains the one root, set outside the pull request, the twenty
+   existing values unchanged.
+5. The root README's count of Phase 19 packs and its sentences on the lane.
+6. Both logs and the ruling.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to the operator's
+receipt, or any other change to what the comparator checks. This declaration commit must be a
+strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
@@ -2386,3 +2414,23 @@ must be a strict ancestor of every commit that acts on it.
   differ from 19n's and each size is one model; or what the rented machines were. The capture
   record describes the first machine's host and library versions; the second was the same GPU
   type from the same image and job script.
+- Ruling (15 Nov 2026, P19-OPERATOR07 exercised): the declaration (`a60d3f82`) precedes the
+  commit that acts on it. `handoff19.py` now lists twenty-one lanes; 19v is a plain lane beside
+  19r, 19s and 19u, and its line says that verifying it runs no model and needs no GPU, network
+  or key. Nothing about the comparator changed. Tests were changed first (the phase list, the
+  count, the sentence that lists the lanes needing only the standard library, the items still
+  owed and the review) and four failed before the change; 27 pass. The first operator receipt
+  is byte-identical (sha256 `765c42b1…`); its review was recomputed and lists 19v as
+  `not_in_receipt`, so `handoff19.py status` reads `reviewed_discrepancies_published` and
+  names twenty-three items still owed under `IOU-19-OPERATOR`. `HANDOFF.md` and
+  `discrepancy-template.json` were rendered again. The 19f README counts twenty-one packs and
+  has a sentence on the lane. The workflow gained the lane's `docs/` path in both path filters
+  and its id in the expected-roots check, with its message; no step was added, removed or
+  renamed, and the Stage 5Q census output is identical before and after (58 steps, 53
+  problems). `PHASE19_ROOTS` was extended outside the pull request at 17:54Z on 14 Nov from
+  twenty roots to twenty-one, the twenty existing values unchanged and each compared with its
+  committed `ROOT.sha256`; the one added is 19v
+  `c40c028436c1366b99ed22ebc76392966fd720cd86f7850ddd5a1e58ad7376a2`. The root README says
+  twenty-one packs and gained one paragraph on the lane. A Python 3.12 with no site packages
+  verified the 19v pack and the comparator found no discrepancy against the committed receipt.
+  Not done: no one outside the author has run the handoff for 19v or for the other items owed.

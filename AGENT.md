@@ -14,6 +14,32 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-15 (Australia/Sydney) — Phase 19f: lane 19v joins the operator handoff; twenty-one pinned roots in the hosted check
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR07 in the Phase 19 ledger (`a60d3f82`, before the
+  change), `tools/assurance-provenance/handoff19.py` and its test, the files rendered from it
+  in `docs/research/provenance-phase-19f/`, that directory's README, the hosted workflow
+  `assurance-provenance.yml`, the root README, the ruling and both logs.
+- **Summary:** the handoff lists twenty-one lanes. 19v is a plain lane: verifying it replays
+  the committed transcripts and runs no model, so an operator needs no GPU, network or key.
+  The comparator is unchanged. The review of the first operator receipt was recomputed and
+  lists 19v as `not_in_receipt`; the receipt itself is byte-identical. The workflow has the
+  lane's path in both filters and its id in the expected-roots check. The repository variable
+  `PHASE19_ROOTS` holds twenty-one roots, the twenty earlier ones unchanged. The root README
+  counts twenty-one packs and has a paragraph on the lane.
+- **Files changed:** `handoff19.py`, `tests/test_handoff19.py`, `HANDOFF.md`,
+  `discrepancy-template.json`, the review of the first receipt, the 19f README,
+  `.github/workflows/assurance-provenance.yml`, `README.md`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** the handoff tests were changed first and four failed before the code
+  changed; 27 pass. The Stage 5Q census output is identical before and after the workflow
+  edit. A Python 3.12 with no site packages verified the 19v pack and the comparator found
+  no discrepancy. `prettier` is clean and the quick gate passes.
+- **Not done:** no outside operator has run the handoff for 19v. Twenty-three items are owed
+  under `IOU-19-OPERATOR`.
+
 ### 2026-11-15 (Australia/Sydney) — Phase 19v: 19n's study on eight open-weight models at full precision on a rented GPU (three models sent in 2 of 1,152 injected generations, one in 90 of 384; size did not order the results)
 
 **Raouf:**
