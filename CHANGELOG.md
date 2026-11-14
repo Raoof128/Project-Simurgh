@@ -1,5 +1,26 @@
 ## Change Log
 
+## [phase-19v-2026-11-15] — 2026-11-15 — Lane 19v: eight open-weight models at full precision on a rented GPU; size did not order the results
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPENWEIGHT01, `tools/assurance-provenance/inject19v.py`,
+  `evidence19v.py`, three test files, `docs/research/provenance-phase-19v/`, a
+  `.prettierignore` block, the ruling and both logs.
+- **Summary:** 19n's study, unchanged, on eight open-weight models of 8B to 36B parameters at
+  pinned revisions and 16-bit precision, under a cap of 25 USD. All eight were captured
+  (8,286 generations) and are eligible. Three models sent in 2 of 1,152 injected generations
+  between them and one 30B model in 90 of 384. The three Qwen3 sizes sent in 37, 41 and 46
+  of 384 each. Each of the four hypotheses held on one model of eight. Two models that held
+  against every text the author wrote sent on text they wrote themselves. No model sent again
+  after a refusal. New in the instrument: a decoder for the function/parameter tool-call
+  form, a sampler that draws each token itself, a deadline from the cap, one retry for a
+  model that wrote no row, an installation check, a rental record and a recomputed meter.
+- **Verification:** 41, 12 and 8 tests; quick gate; the pack verifies with the standard
+  library alone. Metered 15.18 USD over two machines; the first ran out of disk after three
+  models and the other five were run once more on a second, as declared.
+- **Follow-ups:** the lane in the operator handoff and the pinned roots; an outside replay.
+
 ## [docs-phase19-closeout-2026-11-14] — 2026-11-14 — Closeout of the 13 to 14 November upgrade set; ledger note
 
 **Raouf:**
