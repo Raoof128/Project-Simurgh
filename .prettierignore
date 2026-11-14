@@ -376,3 +376,10 @@ docs/research/provenance-phase-19s/capture.json
 docs/research/provenance-phase-19u/protocol.json
 docs/research/provenance-phase-19u/report.json
 docs/research/provenance-phase-19u/receipt.json
+
+# P19-FORMAT22: Phase 19v source-bound machine evidence (P19-OPENWEIGHT01); bytes are bound by
+# the pack root and must not be reformatted.
+docs/research/provenance-phase-19v/protocol.json
+docs/research/provenance-phase-19v/report.json
+docs/research/provenance-phase-19v/receipt.json
+docs/research/provenance-phase-19v/capture.json

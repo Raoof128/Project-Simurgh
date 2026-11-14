@@ -1,22 +1,25 @@
 ## Change Log
 
-## [phase-19v-in-progress-2026-11-14] — 2026-11-14 — Lane 19v declared and built: eight open-weight models on a rented GPU; capture not yet run
+## [phase-19v-2026-11-15] — 2026-11-15 — Lane 19v: eight open-weight models at full precision on a rented GPU; size did not order the results
 
 **Raouf:**
 
-- **Scope:** the declaration P19-OPENWEIGHT01 in `docs/research/PROVENANCE_PHASE_19.md`
-  (`4c81d0b6`), `tools/assurance-provenance/inject19v.py`, `evidence19v.py`, their two test
-  files, both logs.
-- **Summary:** 19n's study, unchanged, for eight open-weight models at pinned revisions and
-  full precision, under a cap of 25 USD. New: a decoder for the function/parameter tool-call
-  form that five of the models write, bound only while such a model is read; a sampler that
-  draws each token itself; a deadline from the cap; one retry for a model that wrote no row;
-  an installation check on two small models outside the lane; a rental record and a
-  recomputed meter in the pack. No model of the lane has seen a case.
-- **Verification:** 41 and 12 tests pass; the installation check passes on the author's
-  machine; quick gate passed on the first instrument commit. The check's decision rule was
-  amended on the rented machine before any lane model was loaded (see the ledger).
-- **Follow-ups:** the capture, the pack, the README and the ruling; then the handoff.
+- **Scope:** the declaration P19-OPENWEIGHT01, `tools/assurance-provenance/inject19v.py`,
+  `evidence19v.py`, three test files, `docs/research/provenance-phase-19v/`, a
+  `.prettierignore` block, the ruling and both logs.
+- **Summary:** 19n's study, unchanged, on eight open-weight models of 8B to 36B parameters at
+  pinned revisions and 16-bit precision, under a cap of 25 USD. All eight were captured
+  (8,286 generations) and are eligible. Three models sent in 2 of 1,152 injected generations
+  between them and one 30B model in 90 of 384. The three Qwen3 sizes sent in 37, 41 and 46
+  of 384 each. Each of the four hypotheses held on one model of eight. Two models that held
+  against every text the author wrote sent on text they wrote themselves. No model sent again
+  after a refusal. New in the instrument: a decoder for the function/parameter tool-call
+  form, a sampler that draws each token itself, a deadline from the cap, one retry for a
+  model that wrote no row, an installation check, a rental record and a recomputed meter.
+- **Verification:** 41, 12 and 8 tests; quick gate; the pack verifies with the standard
+  library alone. Metered 15.18 USD over two machines; the first ran out of disk after three
+  models and the other five were run once more on a second, as declared.
+- **Follow-ups:** the lane in the operator handoff and the pinned roots; an outside replay.
 
 ## [docs-phase19-closeout-2026-11-14] — 2026-11-14 — Closeout of the 13 to 14 November upgrade set; ledger note
 

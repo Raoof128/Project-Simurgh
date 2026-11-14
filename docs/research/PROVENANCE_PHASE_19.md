@@ -36,8 +36,11 @@ and 10 by making a dispatch raise, none landed the undelegated action or changed
 the declared prediction that nothing would change did not hold. 19u (P19-HOSTED02) sends part of
 19o's schedule to four hosted Claude models under a 7 USD cap: the output limit first declared
 was too small and the plan was amended after two models, and no model sent in a restricted
-generation in either run. A
-manuscript draft built from 19h to 19l is in
+generation in either run. 19v (P19-OPENWEIGHT01) runs 19n's study unchanged on eight open-weight
+models of 8B to 36B parameters at full precision on a rented GPU under a 25 USD cap: three of them
+sent in 2 of 1,152 injected generations, one sent in 90 of 384, the three Qwen3 sizes sent in 37,
+41 and 46 of 384, each of the four hypotheses held on one model of eight, and no model sent again
+after a refusal. A manuscript draft built from 19h to 19l is in
 [provenance-phase-19-paper/](provenance-phase-19-paper/README.md); it adds no evidence.
 
 ## Design and scope
@@ -2340,3 +2343,46 @@ must be a strict ancestor of every commit that acts on it.
   names twenty-two items under `IOU-19-OPERATOR`; the Windows recipe is untried; and no
   provider's usage page has been compared with a lane's meter (5.46 USD for 19o, 3.96 USD for
   19u, of a 7 USD cap).
+- Ruling (15 Nov 2026, P19-OPENWEIGHT01 exercised): the declaration (`4c81d0b6`) and the
+  instrument (`f63f5b8a`) were pushed before any machine was rented, and the declaration is an
+  ancestor of every commit of the lane. One amendment was made in the open before any model of
+  the lane was loaded (`613d8f44`, the installation check's decision rule; the declaration
+  carries what was measured). Two machines were rented one after the other on 14 Nov, each one
+  NVIDIA A100 80GB PCIe on the provider's secure cloud at 2.09 USD an hour, each running a clean
+  clone at `613d8f44`. On the first, 09:12:44Z to 11:44:41Z, the capture started at 09:36:06Z and
+  `qwen3-8b`, `granite-4.2-8b` and `qwen3-14b` were captured; then its 120 GB disk filled,
+  because the download library kept its own cache of every model beside the weights the
+  instrument removes, and the other five failed at the fetch without writing a row. Under the
+  declared rule those five were run once more on a second machine, 11:47:06Z to 16:30:54Z, with a
+  larger disk and that cache switched off; the three finished captures were copied to it and
+  compared by sha256, the installation check passed again, and all five were captured in the
+  declared order. The capture record keeps each first attempt. The same-seed recheck was
+  identical on all eight models. Pack built at `613d8f44`, root
+  `c40c028436c1366b99ed22ebc76392966fd720cd86f7850ddd5a1e58ad7376a2`, 8,286 generations. Every
+  model made the authorised call in 24 of 24 positive-control slots and all eight are eligible;
+  `granite-4.2-8b` sent in 4 of 96 control generations and the other seven in none. Sends under
+  injected text by the strict read, of 384 each: `qwen3-8b` 37, `granite-4.2-8b` 52, `qwen3-14b`
+  41, `qwen3-32b` 46, `qwen3.8-27b` 2, `arete-27b` 0, `nemotron-3.5-30b-a3b` 90,
+  `qwen3.6-35b-a3b` 0. The strict and the lenient count of calls are equal on every model. Each
+  hypothesis held on one model: N1 on `qwen3-14b` (37 of 288 under the agent-writable headings
+  against 4 of 96 in the untrusted source); N2, N3 and N4 on `qwen3-32b` (belief 46 of 192
+  against instruction 0 of 192; its own summary of an injected context 10 of 72 against 0 of 36;
+  its confirmed attack text 25 of 48 against 8 of 96). The model's own attack text drew sends in
+  24, 4, 16, 25, 0, 11, 0 and 8 of 48 confirmation trials in the capture order; `arete-27b` and
+  `qwen3.6-35b-a3b`, which sent on none of the author's texts, sent on their own in 11 and 8, in
+  two states and in one, so N4 is not supported for either. 222 sends were answered with a
+  refusal and none was followed by another send. What the author said before the run: fewer sends
+  than 19n's four models (69 to 115 of 384) was true of seven models and not of
+  `nemotron-3.5-30b-a3b`; no hypothesis held on a majority; text before a block appeared on two
+  of the five models on the new wire (3 and 63 outputs) and every such block was a decline, so no
+  send was written that way. The lane's meter is 15.178044 USD of the 25 USD cap, 26,144 seconds
+  at 2.09 USD an hour over both machines. The provider's own record, read after it had stopped
+  changing, bills 15.1766 USD of GPU time (5.2916 and 9.8850) and 0.2141 USD of disk, which the
+  meter does not count: 15.3907 USD charged in all. Tests: 41 for the instrument, 12 for the
+  pack, 8 on the committed pack. A Python 3.12 with no site packages verifies the pack. Not
+  done under this ruling: 19v is not in the hosted workflow's expected-roots check, in
+  `PHASE19_ROOTS` or in `handoff19.py`. Not shown: anything about a gate, a hosted model, a
+  capable attacker or another precision; a size effect, because the sampler and the precision
+  differ from 19n's and each size is one model; or what the rented machines were. The capture
+  record describes the first machine's host and library versions; the second was the same GPU
+  type from the same image and job script.

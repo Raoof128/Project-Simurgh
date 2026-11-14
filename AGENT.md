@@ -14,43 +14,48 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
-### 2026-11-14 (Australia/Sydney) — Phase 19v declared and built: 19n's study for eight open-weight models on a rented GPU (capture not yet run; no result)
+### 2026-11-15 (Australia/Sydney) — Phase 19v: 19n's study on eight open-weight models at full precision on a rented GPU (three models sent in 2 of 1,152 injected generations, one in 90 of 384; size did not order the results)
 
 **Raouf:**
 
-- **Scope:** the declaration P19-OPENWEIGHT01 in the Phase 19 ledger (its own commit,
-  `4c81d0b6`, before everything else), two new modules and their tests in
-  `tools/assurance-provenance/` (`inject19v.py`, `evidence19v.py`, `tests/test_inject19v.py`,
-  `tests/test_evidence19v.py`) and both logs. No pinned lane source, pack, workflow or frozen
-  file is edited. When this was committed no model of the lane had been loaded and no machine
-  had been rented.
-- **Summary:** the owner decided on 14 Nov that the open-weight lane runs next and accepted a
-  cap of 25 USD on the provider's secure cloud. `inject19v.py` imports 19n's slots, prompts,
-  seeds, analysis and capture loop unchanged and names eight models of 8B to 36B parameters
-  at pinned revisions. Three write a tool call as JSON, which 19h's reader reads. Five write
-  it as function and parameter tags; a new decoder reads that form into the neutral text the
-  Phase 17 parser reads and is bound in place of the pinned readers only inside
-  `reader(spec)`, which restores what it found. The strict read stays the analysis. The
-  sampler draws each token itself (temperature, the smallest set that reaches top_p, one draw
-  from a generator seeded with the slot's seed) inside `generate`, because the library merges
-  a model's shipped generation settings into the settings it is given. The run has a deadline
-  computed from the cap and the machine's hourly price; a model that wrote no row may be run
-  once more; `check` tries the sampler on two small models outside the lane. `evidence19v.py`
-  follows `evidence19n.py` and adds a rental record, a recomputed meter and a table of the
-  three Qwen3 sizes.
-- **Files changed:** `docs/research/PROVENANCE_PHASE_19.md` (declaration), the four new
-  files, `AGENT.md`, `CHANGELOG.md`.
-- **Amended on the rented machine, before any lane model was loaded:** the installation
-  check's token-for-token comparison now decides on the plain transformer only and is
-  reported for the second small model, whose cached and uncached passes run different
-  kernels (one draw of 142 fell on a boundary there). The ledger says what was measured.
-- **Verification:** 41 instrument tests (5 of them need torch and were run with it) and 12
-  evidence tests pass; `ruff` is clean; the quick gate passed on the first instrument commit. On the author's machine, in
-  32-bit precision, the two small models outside the lane gave an identical row when sampled
-  again and the `generate` path equalled a plain loop without a cache token for token. The
-  eight revisions resolve and their templates render with thinking switched off.
-- **Not done:** the capture, the pack, the lane's README and the ruling. The lane is not in
-  the operator handoff or the pinned roots; that needs its own declaration.
+- **Scope:** the declaration P19-OPENWEIGHT01 in the Phase 19 ledger (`4c81d0b6`, before
+  everything else), two new modules and three test files in `tools/assurance-provenance/`
+  (`inject19v.py`, `evidence19v.py`, `tests/test_inject19v.py`, `tests/test_evidence19v.py`,
+  `tests/test_evidence19v_committed.py`), the pack and its pages in
+  `docs/research/provenance-phase-19v/`, a `.prettierignore` block, the ruling, the overview
+  sentence and both logs. No pinned lane source, pack, workflow or frozen file is edited.
+- **Summary:** the owner decided on 14 Nov that the open-weight lane runs next, accepted a
+  cap of 25 USD on the provider's secure cloud and added the credit. `inject19v.py` imports
+  19n's slots, prompts, seeds, analysis and capture loop unchanged and names eight models of
+  8B to 36B parameters at pinned revisions. Three write a tool call as JSON. Five write it as
+  function and parameter tags; a new decoder reads that form and is bound in place of the
+  pinned readers only inside `reader(spec)`. The sampler draws each token itself inside
+  `generate`, because the library merges a model's shipped generation settings into the
+  settings it is given. All eight models were captured, 8,286 generations, and all are
+  eligible. Sends under injected text of 384: 37, 52, 41, 46, 2, 0, 90 and 0 in the capture
+  order. Each of 19n's four hypotheses held on one model. Two models that sent on none of the
+  author's texts sent on text they wrote against themselves (11 and 8 of 48). No model sent
+  again after a refusal (0 of 222). Pack root `c40c0284…`.
+- **What went wrong and was said:** on the first machine the installation check as first
+  written failed before any lane model was loaded; the cause was measured and the check's rule
+  amended in the open (`613d8f44`, with a bullet in the declaration). The same machine's draw
+  ran at a token a second until the CPU threads were limited to four. Its disk then filled
+  after three models, because the download library keeps a cache the instrument does not
+  remove; the other five failed at the fetch without writing a row and were run once more on
+  a second machine under the declared rule. The record keeps each first attempt.
+- **Files changed:** the ledger, the five files under `tools/assurance-provenance/`, the
+  files under `docs/research/provenance-phase-19v/`, `.prettierignore`, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** 41 instrument tests (5 need torch and were run with it), 12 pack tests
+  and 8 tests on the committed pack pass; `ruff` and `prettier` are clean; the quick gate
+  passes; a Python 3.12 with no site packages verifies the pack. Every number in the README
+  is asserted by the committed-pack test or was recomputed from the transcripts. The capture
+  was scanned for anything account-specific before it was committed: one hit, a model's own
+  sentence.
+- **Money:** 15.178044 USD by the lane's meter of the 25 USD cap, over two machines. The
+  provider's own billing record is given in the README beside it.
+- **Not done:** 19v is not in the operator handoff, the hosted expected-roots check or
+  `PHASE19_ROOTS`; that needs its own declaration. No one outside the author has replayed it.
 
 ### 2026-11-14 (Australia/Sydney) — Closeout of the 13 to 14 November upgrade set: five lanes and the handoff change on `main`; ledger note
 
