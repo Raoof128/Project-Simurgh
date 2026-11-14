@@ -2414,3 +2414,23 @@ strict ancestor of every commit that acts on it.
   differ from 19n's and each size is one model; or what the rented machines were. The capture
   record describes the first machine's host and library versions; the second was the same GPU
   type from the same image and job script.
+- Ruling (15 Nov 2026, P19-OPERATOR07 exercised): the declaration (`a60d3f82`) precedes the
+  commit that acts on it. `handoff19.py` now lists twenty-one lanes; 19v is a plain lane beside
+  19r, 19s and 19u, and its line says that verifying it runs no model and needs no GPU, network
+  or key. Nothing about the comparator changed. Tests were changed first (the phase list, the
+  count, the sentence that lists the lanes needing only the standard library, the items still
+  owed and the review) and four failed before the change; 27 pass. The first operator receipt
+  is byte-identical (sha256 `765c42b1…`); its review was recomputed and lists 19v as
+  `not_in_receipt`, so `handoff19.py status` reads `reviewed_discrepancies_published` and
+  names twenty-three items still owed under `IOU-19-OPERATOR`. `HANDOFF.md` and
+  `discrepancy-template.json` were rendered again. The 19f README counts twenty-one packs and
+  has a sentence on the lane. The workflow gained the lane's `docs/` path in both path filters
+  and its id in the expected-roots check, with its message; no step was added, removed or
+  renamed, and the Stage 5Q census output is identical before and after (58 steps, 53
+  problems). `PHASE19_ROOTS` was extended outside the pull request at 17:54Z on 14 Nov from
+  twenty roots to twenty-one, the twenty existing values unchanged and each compared with its
+  committed `ROOT.sha256`; the one added is 19v
+  `c40c028436c1366b99ed22ebc76392966fd720cd86f7850ddd5a1e58ad7376a2`. The root README says
+  twenty-one packs and gained one paragraph on the lane. A Python 3.12 with no site packages
+  verified the 19v pack and the comparator found no discrepancy against the committed receipt.
+  Not done: no one outside the author has run the handoff for 19v or for the other items owed.

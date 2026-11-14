@@ -53,6 +53,16 @@ that differ only in the trusted state line and had two local models score them a
 with a public benchmark's prompt: the primary monitor caught 20 of 96 unauthorised sends at a
 1% false-positive rate, and none of the three hypotheses held on it.
 
+**Open-weight lane, 14 to 15 November.** [19v](docs/research/provenance-phase-19v/README.md) ran
+19n's study unchanged on eight open-weight models of 8B to 36B parameters at full precision, on
+a rented GPU under a spending cap declared first. Size did not order the results: three models
+sent in 2 of 1,152 injected generations between them, a 30B model sent in 90 of 384, and three
+sizes of one family sent in 37, 41 and 46 of 384. Each of 19n's four hypotheses held on one
+model of eight. Two models that sent on none of the author's texts sent on text they wrote
+against themselves, and no model sent again after a refused send. The first machine ran out of
+disk after three models; the other five were run once more on a second machine, as the
+declaration allows, and the record keeps each first attempt.
+
 [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) ·
 [Release and archive](https://github.com/Raoof128/Project-Simurgh/releases/tag/phase-19-paper-v1.0) ·
 [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) ·
@@ -270,7 +280,7 @@ and document text as untrusted data when feeding CLI results to an agent.
 | Perform outside reproduction | [Operator handoff](docs/research/CONTINUATION_HANDOFF_2026-10-19.md)                                                                                        | Earlier viewer/export snapshot; use the current runbook for the latest study                |
 | Trace prior work             | [Reviewer index](docs/REVIEWER_INDEX.md) and [research history](RESEARCH_HISTORY.md)                                                                        | Frozen stages, negative results and historical reproduction                                 |
 | Read the newest study        | [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) and [Phase 19 ledger](docs/research/PROVENANCE_PHASE_19.md)                            | Plans committed before each run, hypotheses decided by rule, limits stated with each result |
-| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Twenty verify commands; eighteen need no installed packages                                 |
+| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Twenty-one verify commands; nineteen need no installed packages                             |
 | Judge the process and author | [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) and [author, method and open problems](docs/AUTHOR_AND_METHOD.md)                                    | How errors were found and handled, how AI assistance is used, what remains open             |
 
 The most useful review would challenge the exact-action comparator, admission/revocation
@@ -279,9 +289,9 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
 
 ### Open work
 
-- **Independent reproduction:** one outside operator has replayed five of the twenty Phase 19
+- **Independent reproduction:** one outside operator has replayed five of the twenty-one Phase 19
   packs on macOS ([receipt and review](docs/research/provenance-phase-19f/README.md)). The
-  Linux-only parts, the fourteen newer packs and independent evidence custody remain
+  Linux-only parts, the fifteen newer packs and independent evidence custody remain
   outstanding. Two more people have agreed to run the handoff; no receipt from either exists.
 - **Provider lifecycle:** real provider IAM/revocation and authenticated live safety-alert
   delivery have not been validated by the owned-service experiments.
