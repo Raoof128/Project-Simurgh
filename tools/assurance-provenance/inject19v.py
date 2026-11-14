@@ -107,6 +107,10 @@ MODELS = (
 )
 MODEL_IDS = tuple(m["id"] for m in MODELS)
 # Two small models that are NOT in the lane, one on each wire, for checking an installation.
+# ``exact`` says whether the plain loop must give the same tokens as ``generate``. It must
+# for the plain transformer. The second model's architecture computes a cached step and an
+# uncached pass with different kernels whose scores differ in the second decimal place, so a
+# draw that falls on a boundary can differ; there the agreement is reported and not decided.
 CHECK_MODELS = (
     {
         "id": "check-qwen3-0.6b",
@@ -114,6 +118,7 @@ CHECK_MODELS = (
         "revision": "c1899de289a04d12100db370d81485cdf75e47ca",
         "wire": "hermes_tool_call",
         "template_kwargs": _NO_THINKING,
+        "exact": True,
     },
     {
         "id": "check-qwen3.5-0.8b",
@@ -121,6 +126,7 @@ CHECK_MODELS = (
         "revision": "2fc06364715b967f1860aea9cf38778875588b17",
         "wire": WIRE,
         "template_kwargs": _NO_THINKING,
+        "exact": False,
     },
 )
 CHECK_SLOTS = 4
@@ -495,10 +501,10 @@ def host():
     }
 
 
-def _check_one(spec, path, *, dtype, device, exact, log):
+def _check_one(spec, path, *, dtype, device, compare, log):
     """CHECK_SLOTS positive-control slots of one small model, the first sampled twice. With
-    ``exact`` the shortest output is also produced by a plain loop that calls the model once
-    per token with no cache and no ``generate``. Returns (identical, equal or None)."""
+    ``compare`` every slot is also produced by a plain loop that calls the model once per
+    token with no cache and no ``generate``. Returns (identical, slots equal or None)."""
     import torch
 
     started = time.monotonic()
@@ -524,58 +530,64 @@ def _check_one(spec, path, *, dtype, device, exact, log):
     resolved, row = pairs[0]
     again = lm.run(resolved)
     same = all(again[k] == row[k] for k in local.RECHECKED)
-    plain = None
-    if exact:
-        resolved, row = min(pairs, key=lambda pair: pair[1]["generated_tokens"])
-        rendered = lm.tokenizer.apply_chat_template(
-            resolved["messages"],
-            tools=local.TOOLS,
-            add_generation_prompt=True,
-            tokenize=False,
-            **spec["template_kwargs"],
-        )
-        ids = lm.tokenizer.encode(rendered, add_special_tokens=False)
-        generator = torch.Generator(device="cpu").manual_seed(resolved["seed"])
-        tokens = []
-        with torch.inference_mode():
-            while len(tokens) < resolved["max_tokens"]:
-                scores = lm.lm(
-                    input_ids=torch.tensor([ids + tokens], device=lm.device)
-                ).logits[0, -1]
-                token = nucleus(
-                    scores.detach().to("cpu", torch.float32),
-                    local.SETTINGS["temperature"],
-                    local.SETTINGS["top_p"],
-                    generator,
-                )
-                if token in lm.ends:
-                    break
-                tokens.append(token)
-        digest = hashlib.sha256(json.dumps(tokens).encode()).hexdigest()
-        plain = digest == row["generated_token_sha256"]
-    log(f"{spec['id']} {dtype} recheck identical {same}; plain loop equal {plain}")
+    equal = None
+    if compare:
+        equal = 0
+        for resolved, row in pairs:
+            rendered = lm.tokenizer.apply_chat_template(
+                resolved["messages"],
+                tools=local.TOOLS,
+                add_generation_prompt=True,
+                tokenize=False,
+                **spec["template_kwargs"],
+            )
+            ids = lm.tokenizer.encode(rendered, add_special_tokens=False)
+            generator = torch.Generator(device="cpu").manual_seed(resolved["seed"])
+            tokens = []
+            with torch.inference_mode():
+                while len(tokens) < resolved["max_tokens"]:
+                    scores = lm.lm(
+                        input_ids=torch.tensor([ids + tokens], device=lm.device)
+                    ).logits[0, -1]
+                    token = nucleus(
+                        scores.detach().to("cpu", torch.float32),
+                        local.SETTINGS["temperature"],
+                        local.SETTINGS["top_p"],
+                        generator,
+                    )
+                    if token in lm.ends:
+                        break
+                    tokens.append(token)
+            digest = hashlib.sha256(json.dumps(tokens).encode()).hexdigest()
+            equal += digest == row["generated_token_sha256"]
+    log(
+        f"{spec['id']} {dtype} recheck identical {same}; plain loop equal on "
+        f"{equal} of {CHECK_SLOTS} slots"
+    )
     del lm
-    return same, plain
+    return same, equal
 
 
 def check_installation(*, dtype=DTYPE, device=None, log=print):
-    """Check an installation on the two small models outside the lane. In 32-bit precision,
-    where a cached and an uncached pass agree closely enough to compare token for token, a
-    slot sampled again must be identical and the ``generate`` path must give the same tokens
-    as the plain loop: that decides the result. In the lane's own precision the same slots
-    are then sampled and reported, which shows the models load and generate in it. Nothing
-    is written."""
+    """Check an installation on the two small models outside the lane, in 32-bit precision.
+    On both, a slot sampled again must be identical. On the one marked ``exact`` every
+    slot's ``generate`` output must also equal the plain loop token for token, which shows
+    that nothing but this instrument's draw chooses a token. On the other the number of
+    slots that agree is reported. In the lane's own precision the same slots are then
+    sampled and reported, which shows the models load and generate in it. Nothing is
+    written."""
     from huggingface_hub import snapshot_download
 
     passed = True
     for spec in CHECK_MODELS:
         path = snapshot_download(spec["repo"], revision=spec["revision"])
-        same, plain = _check_one(
-            spec, path, dtype="float32", device=device, exact=True, log=log
+        same, equal = _check_one(
+            spec, path, dtype="float32", device=device, compare=True, log=log
         )
-        passed = passed and same and plain
+        passed = passed and same and (equal == CHECK_SLOTS or not spec["exact"])
         if dtype != "float32":
-            _check_one(spec, path, dtype=dtype, device=device, exact=False, log=log)
+            _check_one(spec, path, dtype=dtype, device=device, compare=False, log=log)
+    log("installation check " + ("passed" if passed else "FAILED"))
     return passed
 
 

@@ -40,8 +40,12 @@ one machine's local agent configuration:
   three Qwen3 sizes.
 - **Files changed:** `docs/research/PROVENANCE_PHASE_19.md` (declaration), the four new
   files, `AGENT.md`, `CHANGELOG.md`.
-- **Verification:** 40 instrument tests (5 of them need torch and were run with it) and 12
-  evidence tests pass; `ruff` is clean; the quick gate passes. On the author's machine, in
+- **Amended on the rented machine, before any lane model was loaded:** the installation
+  check's token-for-token comparison now decides on the plain transformer only and is
+  reported for the second small model, whose cached and uncached passes run different
+  kernels (one draw of 142 fell on a boundary there). The ledger says what was measured.
+- **Verification:** 41 instrument tests (5 of them need torch and were run with it) and 12
+  evidence tests pass; `ruff` is clean; the quick gate passed on the first instrument commit. On the author's machine, in
   32-bit precision, the two small models outside the lane gave an identical row when sampled
   again and the `generate` path equalled a plain loop without a cache token for token. The
   eight revisions resolve and their templates render with thinking switched off.

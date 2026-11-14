@@ -13,8 +13,9 @@
   draws each token itself; a deadline from the cap; one retry for a model that wrote no row;
   an installation check on two small models outside the lane; a rental record and a
   recomputed meter in the pack. No model of the lane has seen a case.
-- **Verification:** 40 and 12 tests pass; the installation check passes on the author's
-  machine; quick gate passes.
+- **Verification:** 41 and 12 tests pass; the installation check passes on the author's
+  machine; quick gate passed on the first instrument commit. The check's decision rule was
+  amended on the rented machine before any lane model was loaded (see the ledger).
 - **Follow-ups:** the capture, the pack, the README and the ruling; then the handoff.
 
 ## [docs-phase19-closeout-2026-11-14] — 2026-11-14 — Closeout of the 13 to 14 November upgrade set; ledger note

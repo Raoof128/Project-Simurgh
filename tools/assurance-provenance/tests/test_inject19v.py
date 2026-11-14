@@ -127,6 +127,39 @@ class DeclarationTests(unittest.TestCase):
         for m in v.CHECK_MODELS:
             self.assertRegex(m["revision"], r"^[0-9a-f]{40}$")
         self.assertEqual(v.CHECK_SLOTS, 4)
+        # token-for-token agreement with the plain loop decides on the plain transformer
+        self.assertEqual([m["exact"] for m in v.CHECK_MODELS], [True, False])
+
+    def test_the_installation_check_decides_as_declared(self):
+        seen = []
+
+        def one(spec, path, *, dtype, device, compare, log):
+            seen.append((spec["id"], dtype, compare))
+            return outcome[spec["id"]] if compare else (True, None)
+
+        fake = mock.Mock(snapshot_download=lambda *a, **k: "/w")
+        for outcome, want in (
+            ({"check-qwen3-0.6b": (True, 4), "check-qwen3.5-0.8b": (True, 3)}, True),
+            ({"check-qwen3-0.6b": (True, 3), "check-qwen3.5-0.8b": (True, 4)}, False),
+            ({"check-qwen3-0.6b": (False, 4), "check-qwen3.5-0.8b": (True, 4)}, False),
+            ({"check-qwen3-0.6b": (True, 4), "check-qwen3.5-0.8b": (False, 4)}, False),
+        ):
+            seen.clear()
+            with (
+                mock.patch.object(v, "_check_one", one),
+                mock.patch.dict(sys.modules, {"huggingface_hub": fake}),
+            ):
+                got = v.check_installation(log=lambda _: None)
+            self.assertIs(got, want, outcome)
+            self.assertEqual(
+                seen,
+                [
+                    ("check-qwen3-0.6b", "float32", True),
+                    ("check-qwen3-0.6b", "bfloat16", False),
+                    ("check-qwen3.5-0.8b", "float32", True),
+                    ("check-qwen3.5-0.8b", "bfloat16", False),
+                ],
+            )
 
     def test_the_instrument_is_19ns(self):
         self.assertIs(v.base, n)

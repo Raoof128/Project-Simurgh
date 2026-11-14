@@ -1535,6 +1535,21 @@ before the run, and bound by the 19v protocol's source digests:
   small models named above, four positive-control slots each. No model of this lane has been loaded
   and none has seen a case. The instrument was drafted before this declaration was committed; it is
   committed after it and is bound by the protocol.
+- Amended 14 Nov 2026, on the rented machine and before any model of the lane was loaded. What
+  happened: the installation check as first written required the `generate` path and the plain loop
+  to give the same tokens on both small models. On `Qwen/Qwen3-0.6B` they did. On
+  `Qwen/Qwen3.5-0.8B` they did on three of four slots, and on the fourth the last token differed.
+  Measured there: that model's architecture computes a cached step and an uncached pass with
+  different kernels; in 32-bit precision their scores differed by up to 0.011 on the slot measured,
+  against 0.0001 on the plain transformer; and the two tokens at the difference had probabilities
+  0.17 and 0.11, so one draw fell on a boundary. A slot sampled twice by the same path was
+  identical on both models. Changed: the check requires the token-for-token agreement on the plain
+  transformer only and reports it for the other model; that a slot sampled again is identical is
+  still required of both. Also found: on a host with 252 processor cores the draw, which runs on
+  the CPU, took about a second a token until the job's environment limited the CPU threads to four,
+  which changes no arithmetic of the instrument. Of the three optional kernels,
+  `flash-linear-attention` installed and `causal-conv1d` and `mamba-ssm` did not build. The meter
+  runs from the machine's creation and includes all of this.
 
 Authorised files: `tools/assurance-provenance/inject19v.py`, `evidence19v.py`, their tests,
 `docs/research/provenance-phase-19v/`, `.prettierignore` entries for its byte-preserved files, the
