@@ -1,0 +1,133 @@
+{
+  "commit": "c24b47ce9f159b2424ed800f9ebbc41eb1795c5e",
+  "custody": "as the operator states it in the receipt's note; not established by this review",
+  "machine": {
+    "arch": "AMD64",
+    "lean": "absent",
+    "os": "Microsoft Windows 10 Pro build 19045",
+    "python": "3.12.10"
+  },
+  "not_exercised": [
+    "19a",
+    "19a --replay",
+    "19b",
+    "19b Lean closure",
+    "19c",
+    "19d",
+    "19e",
+    "19g",
+    "19h",
+    "19i",
+    "19j",
+    "19j --replay",
+    "19k",
+    "19l",
+    "19l --replay",
+    "19m",
+    "19n",
+    "19o",
+    "19p",
+    "19p --replay",
+    "19q",
+    "19q --dataset",
+    "19r",
+    "19s",
+    "19t",
+    "19t --replay",
+    "19u",
+    "19v",
+    "19w"
+  ],
+  "operator": "Mona",
+  "phases": {
+    "19a": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence.py\", line 275, in <module>\n    main()\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence.py\", line 263, in main\n    verify(\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence.py\", line 183, in verify\n    protocol_digest = check_protocol(protocol or PROTOCOL)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence.py\", line 97, in check_protocol\n    raise ValueError(\"protocol_inventory\")\nValueError: protocol_inventory",
+      "result": "refused"
+    },
+    "19b": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19b.py\", line 18, in <module>\n    import lane\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\lane.py\", line 16, in <module>\n    import gate19\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\gate19.py\", line 23, in <module>\n    import successor  # noqa: E402\n    ^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-composed-successor\\successor.py\", line 21, in <module>\n    import fcntl\nModuleNotFoundError: No module named 'fcntl'",
+      "result": "refused"
+    },
+    "19c": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19c.py\", line 226, in <module>\n    main()\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19c.py\", line 219, in main\n    verify(args.pack, args.expected_root, protocol=args.protocol),\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19c.py\", line 164, in verify\n    protocol_digest = check_protocol(protocol or PROTOCOL)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19c.py\", line 85, in check_protocol\n    raise ValueError(\"protocol_inventory\")\nValueError: protocol_inventory",
+      "result": "refused"
+    },
+    "19d": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19d.py\", line 273, in <module>\n    main()\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19d.py\", line 266, in main\n    verify(args.pack, args.expected_root, protocol=args.protocol),\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19d.py\", line 208, in verify\n    raise RuntimeError(\"host_cannot_namespace\")\nRuntimeError: host_cannot_namespace",
+      "result": "refused"
+    },
+    "19e": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19e.py\", line 212, in <module>\n    main()\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19e.py\", line 205, in main\n    verify(args.pack, args.expected_root, protocol=args.protocol),\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19e.py\", line 151, in verify\n    protocol_digest = check_protocol(protocol or PROTOCOL)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19e.py\", line 70, in check_protocol\n    raise ValueError(\"protocol_inventory\")\nValueError: protocol_inventory",
+      "result": "refused"
+    },
+    "19g": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19g.py\", line 15, in <module>\n    import drill19\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\drill19.py\", line 14, in <module>\n    import gate19\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\gate19.py\", line 23, in <module>\n    import successor  # noqa: E402\n    ^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-composed-successor\\successor.py\", line 21, in <module>\n    import fcntl\nModuleNotFoundError: No module named 'fcntl'",
+      "result": "refused"
+    },
+    "19h": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19h.py\", line 255, in <module>\n    main()\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19h.py\", line 250, in main\n    receipt = verify(args.pack, args.expected_root, protocol=args.protocol)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19h.py\", line 178, in verify\n    protocol_digest = check_protocol(protocol or PROTOCOL)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19h.py\", line 94, in check_protocol\n    raise ValueError(\"protocol_inventory\")\nValueError: protocol_inventory",
+      "result": "refused"
+    },
+    "19i": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19i.py\", line 265, in <module>\n    main()\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19i.py\", line 260, in main\n    receipt = verify(args.pack, args.expected_root, protocol=args.protocol)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19i.py\", line 188, in verify\n    protocol_digest = check_protocol(protocol or PROTOCOL)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19i.py\", line 111, in check_protocol\n    raise ValueError(\"protocol_inventory\")\nValueError: protocol_inventory",
+      "result": "refused"
+    },
+    "19j": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19j.py\", line 317, in <module>\n    main()\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19j.py\", line 310, in main\n    receipt = verify(\n              ^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19j.py\", line 240, in verify\n    protocol_digest = check_protocol(protocol or PROTOCOL, sources)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19j.py\", line 85, in check_protocol\n    raise ValueError(\"protocol_inventory\")\nValueError: protocol_inventory",
+      "result": "refused"
+    },
+    "19k": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19k.py\", line 281, in <module>\n    main()\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19k.py\", line 276, in main\n    receipt = verify(args.pack, args.expected_root, protocol=args.protocol)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19k.py\", line 204, in verify\n    protocol_digest = check_protocol(protocol or PROTOCOL)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19k.py\", line 121, in check_protocol\n    raise ValueError(\"protocol_inventory\")\nValueError: protocol_inventory",
+      "result": "refused"
+    },
+    "19l": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19l.py\", line 281, in <module>\n    main()\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19l.py\", line 274, in main\n    receipt = verify(\n              ^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19l.py\", line 204, in verify\n    protocol_digest = check_protocol(protocol or PROTOCOL, sources)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19l.py\", line 87, in check_protocol\n    raise ValueError(\"protocol_inventory\")\nValueError: protocol_inventory",
+      "result": "refused"
+    },
+    "19m": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19m.py\", line 303, in <module>\n    main()\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19m.py\", line 298, in main\n    receipt = verify(args.pack, args.expected_root, protocol=args.protocol)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19m.py\", line 225, in verify\n    protocol_digest = check_protocol(protocol or PROTOCOL)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19m.py\", line 114, in check_protocol\n    raise ValueError(\"protocol_inventory\")\nValueError: protocol_inventory",
+      "result": "refused"
+    },
+    "19n": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19n.py\", line 368, in <module>\n    main()\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19n.py\", line 363, in main\n    receipt = verify(args.pack, args.expected_root, protocol=args.protocol)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19n.py\", line 290, in verify\n    protocol_digest = check_protocol(protocol or PROTOCOL)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19n.py\", line 175, in check_protocol\n    raise ValueError(\"protocol_inventory\")\nValueError: protocol_inventory",
+      "result": "refused"
+    },
+    "19o": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19o.py\", line 348, in <module>\n    main()\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19o.py\", line 343, in main\n    receipt = verify(args.pack, args.expected_root, protocol=args.protocol)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19o.py\", line 270, in verify\n    protocol_digest = check_protocol(protocol or PROTOCOL)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19o.py\", line 144, in check_protocol\n    raise ValueError(\"protocol_inventory\")\nValueError: protocol_inventory",
+      "result": "refused"
+    },
+    "19p": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19p.py\", line 284, in <module>\n    main()\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19p.py\", line 277, in main\n    receipt = verify(\n              ^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19p.py\", line 207, in verify\n    protocol_digest = check_protocol(protocol or PROTOCOL, sources)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19p.py\", line 90, in check_protocol\n    raise ValueError(\"protocol_inventory\")\nValueError: protocol_inventory",
+      "result": "refused"
+    },
+    "19q": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19q.py\", line 307, in <module>\n    main()\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19q.py\", line 296, in main\n    receipt = verify(\n              ^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19q.py\", line 224, in verify\n    protocol_digest, proto = check_protocol(protocol or PROTOCOL, given)\n                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19q.py\", line 117, in check_protocol\n    raise ValueError(\"protocol_inventory\")\nValueError: protocol_inventory",
+      "result": "refused"
+    },
+    "19r": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19r.py\", line 323, in <module>\n    main()\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19r.py\", line 318, in main\n    receipt = verify(args.pack, args.expected_root, protocol=args.protocol)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19r.py\", line 246, in verify\n    protocol_digest = check_protocol(protocol or PROTOCOL)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19r.py\", line 140, in check_protocol\n    raise ValueError(\"protocol_inventory\")\nValueError: protocol_inventory",
+      "result": "refused"
+    },
+    "19s": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19s.py\", line 319, in <module>\n    main()\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19s.py\", line 314, in main\n    receipt = verify(args.pack, args.expected_root, protocol=args.protocol)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19s.py\", line 242, in verify\n    protocol_digest = check_protocol(protocol or PROTOCOL)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19s.py\", line 136, in check_protocol\n    or any(wire(p.get(k)) != wire(v) for k, v in _declared().items())\n                                                 ^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19s.py\", line 111, in _declared\n    \"schedule_digest\": schedule_digest(),\n                       ^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19s.py\", line 82, in schedule_digest\n    return sha(wire([s[\"digest\"] for s in monitor19s.schedule(monitor19s.prompt())]))\n                                                              ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\monitor19s.py\", line 78, in prompt\n    raise ValueError(\"prompt_binding\")\nValueError: prompt_binding",
+      "result": "refused"
+    },
+    "19t": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19t.py\", line 335, in <module>\n    main()\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19t.py\", line 328, in main\n    receipt = verify(\n              ^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19t.py\", line 248, in verify\n    protocol_digest = check_protocol(protocol or PROTOCOL, subs)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19t.py\", line 121, in check_protocol\n    raise ValueError(\"protocol_inventory\")\nValueError: protocol_inventory",
+      "result": "refused"
+    },
+    "19u": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19u.py\", line 355, in <module>\n    main()\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19u.py\", line 350, in main\n    receipt = verify(args.pack, args.expected_root, protocol=args.protocol)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19u.py\", line 271, in verify\n    protocol_digest = check_protocol(protocol or PROTOCOL)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19u.py\", line 127, in check_protocol\n    raise ValueError(\"protocol_inventory\")\nValueError: protocol_inventory",
+      "result": "refused"
+    },
+    "19v": {
+      "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19v.py\", line 365, in <module>\n    main()\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19v.py\", line 360, in main\n    receipt = verify(args.pack, args.expected_root, protocol=args.protocol)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19v.py\", line 287, in verify\n    protocol_digest = check_protocol(protocol or PROTOCOL)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19v.py\", line 149, in check_protocol\n    raise ValueError(\"protocol_inventory\")\nValueError: protocol_inventory",
+      "result": "refused"
+    },
+    "19w": {
+      "result": "not_in_receipt"
+    }
+  },
+  "receipt_sha256": "c3ddbce786d622d258e3d3a46041a2cd423eaccec78cfb2239c830766c65a7f4",
+  "schema": "simurgh-outside-operator-review-v1"
+}

@@ -392,3 +392,7 @@ docs/research/provenance-phase-19w/receipt.json
 docs/research/provenance-phase-19w/audit.json
 docs/research/provenance-phase-19w/labels.json
 docs/research/provenance-phase-19w/captures/claude-haiku-5-5.json
+
+# P19-FORMAT24: a file an operator returned beside a receipt is committed byte for byte (P19-OPERATOR09);
+# the 19f README names it.
+docs/research/provenance-phase-19f/operator-receipts/*.attachments/**
