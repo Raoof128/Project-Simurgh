@@ -1659,6 +1659,27 @@ digests:
   with the one above); a keyword screen of the cases' goals. No run of this lane has been made.
   The lane's instrument is written after this declaration and committed before the first run.
 
+**P19-CONTROL01, amendment one (15 Nov 2026, after the stage-one run and before any pack): a
+record is identified by its environment and its case id.** The stage-one run finished on 15 Nov
+with one repeat: 90 run logs, all scored, at 0.7659 USD by the lane's meter, of which the judge
+took 0.4541. The repeat rule then refused the second repeat, as declared. Reading the result
+showed a defect in the instrument, not in the run. Seven case ids of the benchmark are each used
+in two environments (`HO1`, `HO2`, `M1`, `M2`, `M3`, `CM1`, `CM2`). `capture19w.collect` keyed a
+record by case id and repeat, so it kept one record for each shared id and wrote 83 records, and
+it recorded the other seven as superseded logs. `evidence19w` demanded 90 distinct case ids in
+the audit and would have refused the real audit. The lane's tests used ids that did not repeat.
+The first records file, 83 lines, is kept by the author and is not the lane's evidence. Its
+SHA-256 is `a0cca6f293c336d3b7a7d6e4b479466768a4842414716ced8e8c8500106c378f`.
+
+Authorised by this amendment, and nothing else: `control19w.count`, `capture19w.collect` and
+`evidence19w` identify a case by its environment and id; a firing run and a label are named by
+model, environment, case and repeat; `capture19w` gains a command that rebuilds the records from
+the run logs already on disk without calling a model. Tests for a shared id are written first.
+Not changed: the benchmark, the 90 run logs, the counting rule, the interval's draws and seed,
+the audit rule, the prices, the cap and the repeat rule. The records are rebuilt from the same
+logs, and each carries its log's SHA-256. Stage one stands at one repeat of the declared three;
+the two repeats that did not start are reported as not run.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
