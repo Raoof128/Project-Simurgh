@@ -2579,3 +2579,20 @@ strict ancestor of every commit that acts on it.
   the owner's decision. This is one repeat on one model that is not among the paper's five: it
   shows the formula can be true with no attack on this model and does not measure how often on
   any model of the paper. The lane is not in the operator handoff or the pinned roots.
+- Ruling (15 Nov 2026, P19-OPERATOR08 exercised): the declaration (`7600f275`) precedes the
+  commit that acts on it. `handoff19.py` lists twenty-two lanes; 19w is a plain lane whose
+  verification runs no model and no benchmark. The handoff tests were changed first and four
+  failed before the code changed; 27 pass. The comparator is unchanged. The first operator
+  receipt is byte-identical (sha256 `765c42b1…`); its review was recomputed and lists 19w as
+  `not_in_receipt`, and `handoff19.py status` names twenty-four items still owed under
+  `IOU-19-OPERATOR`. `HANDOFF.md` and `discrepancy-template.json` were rendered again. The 19f
+  README counts twenty-two packs and has a sentence on the lane. The workflow gained the lane's
+  `docs/` path in both path filters and its id in the expected-roots check, with its message;
+  no step was added, removed or renamed, and the Stage 5Q census output is identical before and
+  after (58 steps, 53 problems). `PHASE19_ROOTS` was extended outside the pull request at 01:22Z
+  on 15 Nov from twenty-one roots to twenty-two, the twenty-one existing values unchanged and
+  each compared with its committed `ROOT.sha256`; the one added is 19w
+  `dd77de3e5ee53666396b7b11078864bad20aac75c8e808f960f13b577000599f`. The root README says
+  twenty-two packs and gained one paragraph on the lane. A Python 3.12 with no site packages
+  verified the 19w pack. Not done: no one outside the author has run the handoff for 19w or for
+  the other items owed.

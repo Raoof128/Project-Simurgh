@@ -1,5 +1,20 @@
 ## Change Log
 
+## [phase-19f-operator08-2026-11-15] — 2026-11-15 — Lane 19w in the operator handoff; twenty-two pinned roots
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR08, `handoff19.py` and its test, the rendered handoff
+  files, the 19f README, the hosted workflow, the root README, the ruling and both logs.
+- **Summary:** the handoff, the hosted expected-roots check and `PHASE19_ROOTS` cover
+  twenty-two packs. 19w is a plain lane whose verification runs no model and no benchmark. The
+  comparator and the first operator receipt are unchanged; the receipt's review lists 19w as
+  `not_in_receipt`.
+- **Verification:** 27 handoff tests, changed before the code; the Stage 5Q census is
+  byte-identical before and after the workflow edit; quick gate; a bare Python 3.12 verifies
+  the pack.
+- **Follow-ups:** an outside replay of the twenty-four items still owed.
+
 ## [phase-19w-2026-11-15] — 2026-11-15 — Lane 19w, stage one: the attack formula with no attack, 3 of 90 runs on Haiku 5.5
 
 **Raouf:**

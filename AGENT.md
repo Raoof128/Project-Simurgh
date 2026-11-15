@@ -14,6 +14,31 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-15 (Australia/Sydney) — Phase 19f: lane 19w joins the operator handoff; twenty-two pinned roots in the hosted check
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR08 in the Phase 19 ledger (`7600f275`, before the
+  change), `tools/assurance-provenance/handoff19.py` and its test, the files rendered from it
+  in `docs/research/provenance-phase-19f/`, that directory's README, the hosted workflow
+  `assurance-provenance.yml`, the root README, the ruling and both logs.
+- **Summary:** the handoff lists twenty-two lanes. 19w is a plain lane: verifying it
+  recomputes the counts from the committed records and runs no model and no benchmark. The
+  comparator is unchanged. The review of the first operator receipt was recomputed and lists
+  19w as `not_in_receipt`; the receipt itself is byte-identical. The workflow has the lane's
+  path in both filters and its id in the expected-roots check. The repository variable
+  `PHASE19_ROOTS` holds twenty-two roots, the twenty-one earlier ones unchanged. The root
+  README counts twenty-two packs and has a paragraph on the lane.
+- **Files changed:** `handoff19.py`, `tests/test_handoff19.py`, `HANDOFF.md`,
+  `discrepancy-template.json`, the review of the first receipt, the 19f README,
+  `.github/workflows/assurance-provenance.yml`, `README.md`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** the handoff tests were changed first and four failed before the code
+  changed; 27 pass. The Stage 5Q census output is identical before and after the workflow
+  edit. A Python 3.12 with no site packages verified the 19w pack. `prettier` is clean and
+  the quick gate passes.
+- **Follow-ups:** an outside replay of the twenty-four items still owed.
+
 ### 2026-11-15 (Australia/Sydney) — Phase 19w: stage-one pack and results (the benchmark's attack formula was true in 3 of 90 runs with no injection, Haiku 5.5, one repeat)
 
 **Raouf:**

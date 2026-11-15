@@ -63,6 +63,15 @@ against themselves, and no model sent again after a refused send. The first mach
 disk after three models; the other five were run once more on a second machine, as the
 declaration allows, and the record keeps each first attempt.
 
+**No-attack control, 15 November.** [19w](docs/research/provenance-phase-19w/README.md) ran a
+published prompt-injection benchmark (arXiv 2611.07640) with nothing planted, to count how often
+its attack check is true anyway. On Claude Haiku 5.5 it was true in 3 of 90 runs, each time
+because the model itself decided the attacker's side of a question the task asks it to decide.
+This is one repeat on one model that is not among the paper's five: it shows that a no-attack
+baseline is needed and does not measure one for the paper's models. Two of the three things the
+author said before the run did not hold, and a defect in the lane's own record-keeping was found
+after the run and amended in the open. Both are in the record.
+
 [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) ·
 [Release and archive](https://github.com/Raoof128/Project-Simurgh/releases/tag/phase-19-paper-v1.0) ·
 [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) ·
@@ -280,7 +289,7 @@ and document text as untrusted data when feeding CLI results to an agent.
 | Perform outside reproduction | [Operator handoff](docs/research/CONTINUATION_HANDOFF_2026-10-19.md)                                                                                        | Earlier viewer/export snapshot; use the current runbook for the latest study                |
 | Trace prior work             | [Reviewer index](docs/REVIEWER_INDEX.md) and [research history](RESEARCH_HISTORY.md)                                                                        | Frozen stages, negative results and historical reproduction                                 |
 | Read the newest study        | [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) and [Phase 19 ledger](docs/research/PROVENANCE_PHASE_19.md)                            | Plans committed before each run, hypotheses decided by rule, limits stated with each result |
-| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Twenty-one verify commands; nineteen need no installed packages                             |
+| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Twenty-two verify commands; twenty need no installed packages                               |
 | Judge the process and author | [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) and [author, method and open problems](docs/AUTHOR_AND_METHOD.md)                                    | How errors were found and handled, how AI assistance is used, what remains open             |
 
 The most useful review would challenge the exact-action comparator, admission/revocation
@@ -289,9 +298,9 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
 
 ### Open work
 
-- **Independent reproduction:** one outside operator has replayed five of the twenty-one Phase 19
+- **Independent reproduction:** one outside operator has replayed five of the twenty-two Phase 19
   packs on macOS ([receipt and review](docs/research/provenance-phase-19f/README.md)). The
-  Linux-only parts, the fifteen newer packs and independent evidence custody remain
+  Linux-only parts, the sixteen newer packs and independent evidence custody remain
   outstanding. Two more people have agreed to run the handoff; no receipt from either exists.
 - **Provider lifecycle:** real provider IAM/revocation and authenticated live safety-alert
   delivery have not been validated by the owned-service experiments.

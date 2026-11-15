@@ -245,6 +245,13 @@ PHASES = (
         "host": "any host with Python 3.12; no model is run and no GPU, network or key is needed",
         "time": "a few seconds",
     },
+    {
+        "id": "19w",
+        "module": "evidence19w.py",
+        "docs": "docs/research/provenance-phase-19w",
+        "host": "any host with Python 3.12; no model or benchmark is run and no network or key is needed",
+        "time": "a few seconds",
+    },
 )
 NUMBER_WORDS = {
     6: "six",
@@ -255,6 +262,7 @@ NUMBER_WORDS = {
     19: "nineteen",
     20: "twenty",
     21: "twenty-one",
+    22: "twenty-two",
 }
 
 
@@ -562,7 +570,7 @@ def render():
         "  `python -m venv .venv-verify && .venv-verify/bin/pip install --require-hashes --only-binary=:all:",
         f"  -r {VERIFY_LOCK_REL}`. Installed and run on Linux x86_64 and macOS arm64;",
         "  its wheels also resolve for macOS x86_64. 19a, 19c, 19d, 19e, 19h, 19i, 19j, 19k, 19l, 19m, 19n,",
-        "  19o, 19p, 19q, 19r, 19s, 19t, 19u and 19v",
+        "  19o, 19p, 19q, 19r, 19s, 19t, 19u, 19v and 19w",
         "  need nothing beyond the standard library unless `--replay` or `--dataset` is added.",
         "- 19a, 19j, 19l, 19p and 19t with `--replay` (Linux x86_64 only: the full set has no macOS x86_64 wheel for `cryptography`,",
         "  so it is not a substitute for the verify set there): create a venv and install the hash-locked set:",
