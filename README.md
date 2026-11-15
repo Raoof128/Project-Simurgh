@@ -21,8 +21,9 @@ held on the primary model, and how far an injected text moved a model depended o
 wording and on why the action was forbidden. All 1,439 wrong sends the models produced were then
 replayed through the composed controls: none landed and no exact authorized send was refused,
 while a credential check alone let 1,188 through. That replay is a correctness check over recorded
-outputs. It is not evidence against an attacker who adapts to the gate, and these studies have
-not yet been replayed outside the author's custody.
+outputs. It is not evidence against an attacker who adapts to the gate. One outside operator has
+since recomputed these studies from their committed outputs and rerun the gate replays on a Linux
+machine, with no discrepancy ([receipts and reviews](docs/research/provenance-phase-19f/README.md)).
 
 **Since that draft, 12 to 13 November.** Three further lanes, each declared before it ran, are
 not in the manuscript. [19n](docs/research/provenance-phase-19n/README.md) varied where an
@@ -298,10 +299,15 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
 
 ### Open work
 
-- **Independent reproduction:** one outside operator has replayed five of the twenty-two Phase 19
-  packs on macOS ([receipt and review](docs/research/provenance-phase-19f/README.md)). The
-  Linux-only parts, the sixteen newer packs and independent evidence custody remain
-  outstanding. Two more people have agreed to run the handoff; no receipt from either exists.
+- **Independent reproduction:** one outside operator has replayed twenty-one of the twenty-two
+  Phase 19 packs on Ubuntu x86_64 with no discrepancy, including the five frozen-gate replays,
+  the Lean check and the namespace probe, and the test suite passed there. A second ran the
+  handoff natively on Windows 10, where every verifier refused; the causes are published and
+  the handoff now lists native Windows as unsupported. An earlier receipt covers five packs on
+  macOS ([receipts and reviews](docs/research/provenance-phase-19f/README.md)). Still
+  outstanding: lane 19w, one dataset recomputation, a second Linux host, and independent
+  evidence custody, since the author's side asked both operators and each signed with a typed
+  name.
 - **Provider lifecycle:** real provider IAM/revocation and authenticated live safety-alert
   delivery have not been validated by the owned-service experiments.
 - **Model transfer:** broader externally held tasks and adaptive multi-step behavior remain

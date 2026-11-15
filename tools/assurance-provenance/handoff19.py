@@ -63,7 +63,8 @@ def dataset_item(pid):
 def deeper_items(pid):
     """What an outside host can exercise on a lane beyond its plain verify."""
     out = [replay_item(pid)] if pid in REPLAY_CHAINED_KIND else []
-    return out + ([dataset_item(pid)] if pid in RECOMPUTED_KIND else [])
+    out += [dataset_item(pid)] if pid in RECOMPUTED_KIND else []
+    return out + ([LEAN_ITEM] if pid == "19b" else [])
 
 
 def excluded(pid):
@@ -407,7 +408,6 @@ def outside_items():
     return sorted(
         [p["id"] for p in PHASES]
         + [item for p in PHASES for item in deeper_items(p["id"])]
-        + [LEAN_ITEM]
     )
 
 
@@ -463,7 +463,7 @@ def review(raw):
             missing.append(replay_item(pid))
         if pid in RECOMPUTED_KIND and not _recomputed(out):
             missing.append(dataset_item(pid))
-        if pid == "19b" and _lean_absent(out):
+        if pid == "19b" and (not ok or _lean_absent(out)):
             missing.append(LEAN_ITEM)
     return {
         "schema": REVIEW_SCHEMA,
@@ -550,6 +550,8 @@ def render():
         "",
         f"Clone the published commit onto a machine the author has never touched, run {NUMBER_WORDS[len(PHASES)]} verify commands,",
         "and send back what they printed. You receive no file from the author other than this repository.",
+        "If a copy of this document reaches you as a file, compare it with the repository's copy at that",
+        "commit, use the repository's, and name the file in your receipt.",
         "If anything in this document does not match what you see, that mismatch is the result we want.",
         "",
         "## Custody rules",
@@ -619,6 +621,14 @@ def render():
         "  is Linux arm64: no `--replay` is available there, and the verify set has not been installed on",
         "  that platform by the author. If you run natively on Windows instead, say so in your note. Where",
         "  this recipe is wrong, the place it went wrong is what we want to hear.",
+        "- Native Windows is not a host these verifiers support. One outside operator ran every command",
+        "  on Windows 10 without WSL2 (the third receipt) and every verifier refused before printing a",
+        "  receipt: seventeen with `protocol_inventory` (each pack's source list is compared with paths",
+        "  that carry backslashes there), 19s with `prompt_binding` (git checked a pinned prompt file out",
+        "  with CRLF line endings), 19b and 19g with `No module named 'fcntl'` and 19d with",
+        "  `host_cannot_namespace`. The path and `fcntl` causes sit in modules the packs pin by digest, so",
+        "  they are recorded here, not patched, and a line-ending rule alone would make no verifier pass.",
+        "  Nobody has yet tried the WSL2 route.",
         "",
         "## What the comparator does and does not check",
         "",
@@ -689,11 +699,17 @@ def render():
         "cd tools/assurance-provenance && python -m unittest discover -s tests -v",
         "```",
         "",
-        "Run it with the verify-set interpreter (Host recipes); a bare Python 3.12 fails at import.",
+        "On Linux x86_64 run it with the full hash-locked set (the `--replay` recipe under Host recipes):",
+        "two frozen-replay tests run on that platform and import `agents`, which the verify set does not",
+        "hold, so under the verify set they error with `No module named 'agents'` (found by the second",
+        "outside receipt). On other hosts run it with the verify-set interpreter; a bare Python 3.12",
+        "fails at import.",
         "About thirty minutes on a laptop or a hosted runner, sixty to ninety minutes on a small server. The",
         "Lean differential test and the 19d namespace tests skip, not pass, where their host requirement is",
         "unmet, and `test_evidence19b` asserts 19b closure only where `lean` is on the path; the receipt you",
-        "return should say which skipped and whether Lean was present.",
+        "return should say which skipped and whether Lean was present. On native Windows the suite does not",
+        "pass: four tests in `test_egress19` error for want of `AF_UNIX` instead of skipping, with the",
+        "refusals listed under Host recipes (found by the third outside receipt).",
         "",
         "## Returning the receipt",
         "",
@@ -704,14 +720,35 @@ def render():
         "python -B tools/assurance-provenance/handoff19.py check 19b <your-19b-receipt.json>",
         "```",
         "",
+        "A verifier that refuses prints no JSON, so there is nothing to compare: `check` then exits with",
+        "`not a verifier receipt`, and the refusal itself goes under `refused` for that phase.",
         "An empty `discrepancies` list is no discrepancy; `not_compared` is published with it. Your file",
         "will be committed under",
         "`docs/research/provenance-phase-19f/operator-receipts/` unchanged, with your name as you give it.",
         "The author's review, recomputed from your file by `handoff19.py review`, is committed beside it under",
-        "`operator-reviews/`; your note is published as you wrote it.",
+        "`operator-reviews/`; your note is published as you wrote it. One thing is changed first: where a",
+        "path in your file names your user folder, that name is replaced by `<redacted>`, and the",
+        "sha256 of the file as you returned it is published beside the committed one.",
         "",
     ]
     return "\n".join(lines)
+
+
+def load_receipt(path):
+    """A verifier's receipt from a file, or a plain refusal when the file holds none.
+
+    A verifier that refuses prints nothing on stdout, so the file an operator saved is empty or
+    holds a traceback. The comparator has nothing to compare then and says so."""
+    try:
+        receipt = json.loads(Path(path).read_text())
+    except ValueError:
+        receipt = None
+    if type(receipt) is not dict:
+        raise SystemExit(
+            f"not a verifier receipt: {path} holds no JSON object; if the verifier refused, "
+            "record its last line under `refused` for that phase"
+        )
+    return receipt
 
 
 def main():
@@ -735,7 +772,7 @@ def main():
     elif args.command == "review":
         print(json.dumps(review(args.receipt.read_bytes()), indent=2, sort_keys=True))
     else:
-        receipt = json.loads(args.receipt.read_text())
+        receipt = load_receipt(args.receipt)
         print(
             json.dumps(
                 {

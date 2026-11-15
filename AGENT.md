@@ -14,6 +14,48 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-16 (Australia/Sydney) — Phase 19f: two outside receipts filed and reviewed (twenty-one packs verified on an outside Linux host; every verifier refused on native Windows)
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR09 in the Phase 19 ledger (committed before the
+  change), two returned operator receipts and one returned summary, their reviews,
+  `tools/assurance-provenance/handoff19.py` and its test, the rendered `HANDOFF.md`, the 19f
+  README and the receipts README, the sentences on outside reproduction in the root README,
+  `docs/AUTHOR_AND_METHOD.md` and `docs/RECORD_OF_CORRECTIONS.md`, `.prettierignore`, the
+  ruling and both logs.
+- **Summary:** both receipts are for commit `c24b47ce`, so neither holds 19w. Jacob's, from
+  Ubuntu 26.04 x86_64 with Lean: the comparator finds no discrepancy in any of twenty-one
+  lanes, the five frozen-gate replays return `verified`, 19b closes with Lean and 19d ran its
+  namespace probe. His test-suite run found that the handoff named the wrong dependency set
+  for Linux x86_64: 723 tests give 2 errors under the verify set and pass under the full set.
+  Mona's, from Windows 10 run natively: every verifier refused, for four causes that the
+  receipt names and the author confirmed in the code. `handoff19.py status` now lists two
+  items owed under `IOU-19-OPERATOR`: 19w and 19q's `--dataset` recomputation.
+- **Changes to the tool:** the review rule now lists 19b's Lean closure as unexercised when
+  19b is refused, absent or discrepant (a gap found while reviewing the third receipt);
+  `check` exits with `not a verifier receipt` on a file with no JSON object; the handoff text
+  names the full set for the test suite on Linux x86_64, says native Windows is not a
+  supported host and why, and says what to do with a copy of the document that arrives as a
+  file. What the comparator checks in a verifier's receipt is unchanged.
+- **Files changed:** `operator-receipts/all-Jacob-2026-11-15.json`,
+  `operator-receipts/all-Mona-2026-11-15.json`, one attachment, two reviews, `handoff19.py`,
+  `tests/test_handoff19.py`, `HANDOFF.md`, two READMEs under 19f, `README.md`,
+  `docs/AUTHOR_AND_METHOD.md`, `docs/RECORD_OF_CORRECTIONS.md`, `.prettierignore`, the ledger,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** ten tests were added before the code they test; 37 pass. Each committed
+  receipt's sha256 is pinned by a test and each committed review equals its recomputation. `prettier` is clean
+  and the quick gate passes.
+- **One receipt is not byte for byte as returned:** on the owner's instruction the operator's
+  Windows user folder name is replaced by `<redacted>` in 105 places in Mona's receipt before
+  it is committed. Nothing else in it is changed, the sha256 of the file as returned is
+  published, and the handoff now says this is done.
+- **Not done:** nothing here was run on Windows by the author, and the Windows causes are
+  recorded, not patched, because they sit in modules the packs pin. Jacob's two test logs are
+  not committed (the repository ignores `*.log`); their sha256 values are in the 19f README.
+- **Follow-ups:** an outside run of 19w and of 19q's `--dataset`; the WSL2 route; a second
+  Linux host.
+
 ### 2026-11-15 (Australia/Sydney) — Phase 19f: lane 19w joins the operator handoff; twenty-two pinned roots in the hosted check
 
 **Raouf:**

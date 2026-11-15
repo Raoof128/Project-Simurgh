@@ -1,5 +1,26 @@
 ## Change Log
 
+## [phase-19f-operator09-2026-11-16] — 2026-11-16 — Two outside receipts reviewed: twenty-one packs verified on an outside Linux host
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR09, two returned receipts and their reviews,
+  `handoff19.py` and its test, the rendered handoff, the 19f READMEs, three documents'
+  sentences on outside reproduction, `.prettierignore`, the ruling and both logs.
+- **Summary:** an outside operator replayed twenty-one packs on Ubuntu x86_64 with no
+  discrepancy, including five frozen-gate replays, the Lean closure and the namespace probe,
+  and found that the handoff named the wrong dependency set for the test suite there. A
+  second operator ran the handoff natively on Windows 10, where every verifier refused; the
+  four causes are published and the handoff lists native Windows as unsupported. Two items
+  stay owed: 19w and 19q's `--dataset` recomputation.
+- **Fixed:** the review rule could let two receipts that never ran Lean clear 19b's Lean
+  closure between them; `handoff19.py check` answered a refusal with a traceback.
+- **Changed before filing:** the operator's Windows user folder name in the third receipt is
+  replaced by `<redacted>` (105 places); the sha256 of the file as returned is published.
+- **Verification:** 37 handoff tests, ten added before the code; receipts pinned by sha256;
+  quick gate.
+- **Follow-ups:** an outside run of 19w and of 19q's `--dataset`; the WSL2 route.
+
 ## [phase-19f-operator08-2026-11-15] — 2026-11-15 — Lane 19w in the operator handoff; twenty-two pinned roots
 
 **Raouf:**

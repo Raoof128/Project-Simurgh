@@ -35,18 +35,22 @@ its errors and what it did with them.
 ## Defects that independent replays found
 
 These replays were run apart from the session that produced the evidence: three by the owner's
-reviewer on machines the owner controls, and one by an outside operator. Every replay reproduced
-the committed results. Every replay also found something wrong with the instructions or the tests,
-which the producing session's own runs had not. The outside operator's receipt discloses that an
-AI coding agent on a subscription registered to the author typed the commands; the review can
-establish what the returned outputs say and cannot establish who produced them.
+reviewer on machines the owner controls, and three by outside operators. Every replay that could
+run the verifiers reproduced the committed results; one, natively on Windows, could run none of
+them. Every replay also found something wrong with the instructions, the tools or the tests,
+which the producing session's own runs had not. The first outside receipt discloses that an AI
+coding agent on a subscription registered to the author typed the commands. The owner asked all
+three outside operators. A review can establish what the returned outputs say and cannot
+establish who produced them.
 
-| When        | Who replayed                                                   | What they found                                                                                                                                     | Record                                                        |
-| ----------- | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| 8 Nov 2026  | The owner's reviewer, owner-controlled Linux host              | The comparator checked host-dependent fields the handoff said it would not; a test required a toolchain the handoff called optional (P19-REPAIR05). | [Ledger](research/PROVENANCE_PHASE_19.md)                     |
-| 9 Nov 2026  | The owner's reviewer, owner-controlled macOS host              | A test helper did not tolerate an error code that macOS returns when a peer closes early (P19-REPAIR06).                                            | [Ledger](research/PROVENANCE_PHASE_19.md)                     |
-| 10 Nov 2026 | The owner's reviewer, owner-controlled Linux host, fresh clone | The handoff's time estimates were too low by a factor of two to three on small servers (P19-REPAIR07).                                              | [Ledger](research/PROVENANCE_PHASE_19.md)                     |
-| 10 Nov 2026 | An outside operator on their own machine                       | Two verifiers needed a package the handoff did not mention, and the locked dependency set had no build for one platform (P19-OPERATOR01).           | [Receipt and review](research/provenance-phase-19f/README.md) |
+| When        | Who replayed                                                   | What they found                                                                                                                                                                                                                                                              | Record                                                        |
+| ----------- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| 8 Nov 2026  | The owner's reviewer, owner-controlled Linux host              | The comparator checked host-dependent fields the handoff said it would not; a test required a toolchain the handoff called optional (P19-REPAIR05).                                                                                                                          | [Ledger](research/PROVENANCE_PHASE_19.md)                     |
+| 9 Nov 2026  | The owner's reviewer, owner-controlled macOS host              | A test helper did not tolerate an error code that macOS returns when a peer closes early (P19-REPAIR06).                                                                                                                                                                     | [Ledger](research/PROVENANCE_PHASE_19.md)                     |
+| 10 Nov 2026 | The owner's reviewer, owner-controlled Linux host, fresh clone | The handoff's time estimates were too low by a factor of two to three on small servers (P19-REPAIR07).                                                                                                                                                                       | [Ledger](research/PROVENANCE_PHASE_19.md)                     |
+| 10 Nov 2026 | An outside operator on their own machine                       | Two verifiers needed a package the handoff did not mention, and the locked dependency set had no build for one platform (P19-OPERATOR01).                                                                                                                                    | [Receipt and review](research/provenance-phase-19f/README.md) |
+| 15 Nov 2026 | An outside operator, Ubuntu x86_64, own machine                | The handoff named the wrong dependency set for the test suite on Linux x86_64: two frozen-replay tests need a package the smaller set does not hold. All twenty-one packs verified (P19-OPERATOR09).                                                                         | [Receipt and review](research/provenance-phase-19f/README.md) |
+| 15 Nov 2026 | An outside operator, Windows 10 run natively, own machine      | Every verifier refused: path separators in the source lists, converted line endings on a pinned file, a Unix-only import, no namespaces. The comparator answered a refusal with a traceback, and four tests errored where the handoff said they would skip (P19-OPERATOR09). | [Receipt and review](research/provenance-phase-19f/README.md) |
 
 ## Departures from a declared plan
 

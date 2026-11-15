@@ -1708,6 +1708,41 @@ Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to
 receipt, or any other change to what the comparator checks. This declaration commit must be a
 strict ancestor of every commit that acts on it.
 
+**P19-OPERATOR09 (bounded authority to file two returned operator receipts, publish their
+reviews and answer what they found; declared 16 Nov 2026 before any commit that acts on it).**
+Two receipts for commit `c24b47ce` (twenty-one packs, before 19w joined) reached the author on
+16 Nov 2026 through the owner, both dated 15 Nov 2026. One is from Jacob, run on Ubuntu 26.04
+x86_64 (sha256 `2bc73f6c17ff012413e9d95a3767b1dd1d077c444a909726ff8038fa6f75e17f`). The other
+is from Mona, run natively on Windows 10
+(sha256 `e4f22c47edb7d7472e21d5e0ad5b959273d16e8f4b17b20968c442617bf710a4`). This declaration
+authorises, and nothing else:
+
+1. The two receipts committed under the handoff's `operator-receipts/` naming rule, and the
+   test-suite summary Jacob returned with his, unchanged, in a folder beside it with a
+   `.prettierignore` line. Jacob's receipt is committed unchanged. Mona's holds the name of the
+   operator's Windows user folder in every command line; on the owner's instruction each of the
+   105 occurrences is replaced by `<redacted>` before the file is committed, nothing else in it
+   is changed, and the sha256 above, of the file as returned, is published beside the committed
+   one. The handoff text gains a sentence saying this is done. The two test logs he returned are not committed, because the
+   repository ignores `*.log`; their sha256 values are published.
+2. The review of each, recomputed by `handoff19.py review`, committed under `operator-reviews/`.
+3. `handoff19.py`, tests first. The review rule lists 19b's Lean closure as unexercised when
+   19b is refused, absent or discrepant: without that, two receipts that never ran Lean could
+   clear the item between them. `check` exits with a plain message when its file holds no JSON
+   object. The handoff text gains what the receipts found: the dependency set the test suite
+   needs on Linux x86_64, what native Windows did, what to do with a copy of the document that
+   arrives as a file, and where a refusal is recorded. No change to what the comparator checks
+   in a verifier's receipt.
+4. Re-rendering `HANDOFF.md`; the 19f README and the receipts README.
+5. The sentences on outside reproduction in the root README, `docs/AUTHOR_AND_METHOD.md` and
+   `docs/RECORD_OF_CORRECTIONS.md`.
+6. Both logs and the ruling.
+
+Not authorised: any other edit to a receipt, any edit to a frozen file, or to a lane's pinned source or pack,
+so the causes of the Windows refusals are recorded and not patched; any change to the workflow
+or to `PHASE19_ROOTS`; any statement about who produced a receipt beyond what the receipt
+says. This declaration commit must be a strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
@@ -2596,3 +2631,32 @@ strict ancestor of every commit that acts on it.
   twenty-two packs and gained one paragraph on the lane. A Python 3.12 with no site packages
   verified the 19w pack. Not done: no one outside the author has run the handoff for 19w or for
   the other items owed.
+- Ruling (16 Nov 2026, P19-OPERATOR09 exercised): the declaration (`155c39b5`) precedes the
+  commit that acts on it. Two receipts for commit `c24b47ce` are committed. Jacob's is
+  unchanged, as `all-Jacob-2026-11-15.json` (sha256 `2bc73f6c…`), with the test-suite summary
+  he returned beside it. Mona's is `all-Mona-2026-11-15.json` (sha256 `c3ddbce7…`): the file as
+  returned (sha256 `e4f22c47…`) with the operator's Windows user folder name replaced by
+  `<redacted>` in 105 places on the owner's instruction, and nothing else changed. A test pins
+  each committed file, and a reader cannot check that the substitution is the only difference.
+  The review of Jacob's receipt, from Ubuntu 26.04 x86_64 with Lean 4.15.0: twenty-one lanes
+  verified, no discrepancy, every root and `tree_state` matching, the operator's comparator
+  output equal to the author's on every lane; 19a, 19j, 19l, 19p and 19t returned
+  `replay.result: verified`, 19b closed with Lean and 19d ran its namespace probe. It leaves
+  19w and 19q's `--dataset` unexercised. The review of Mona's receipt, from Windows 10 run
+  natively: twenty-one lanes refused (seventeen `protocol_inventory`, 19s `prompt_binding`,
+  19b and 19g `No module named 'fcntl'`, 19d `host_cannot_namespace`) and nothing exercised.
+  `handoff19.py status` names two items still owed under `IOU-19-OPERATOR`, down from
+  twenty-four. Found by the receipts and answered: the handoff named the verify set for the
+  test suite, and on Linux x86_64 two frozen-replay tests need the full set (723 tests: 2
+  errors under the verify set, all pass under the full set, on the operator's machine);
+  native Windows is not a host the verifiers support; `check` answered a refusal with a
+  traceback and now exits with a plain message; both operators were sent a copy of the
+  handoff as a file, which the handoff said would not happen, and it now says what to do with
+  one. Found by the author while reviewing: the review rule did not list 19b's Lean closure
+  as unexercised when 19b was refused or absent; fixed, with the third review recomputed.
+  Ten tests were added, each before the code or file it tests, and each failed first except
+  two that pin a receipt already in place; 37 pass. The comparator's checks on a verifier's
+  receipt, the workflow and `PHASE19_ROOTS` are unchanged, and the first receipt and its
+  review are byte-identical. Not done: nothing was run on Windows by the author; the Windows
+  causes are recorded, not patched; Jacob's two test logs are not committed (sha256 values in
+  the 19f README); no one outside the author has run 19w, 19q's `--dataset` or the WSL2 route.

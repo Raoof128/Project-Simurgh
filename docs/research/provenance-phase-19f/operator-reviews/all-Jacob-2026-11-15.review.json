@@ -1,0 +1,198 @@
+{
+  "commit": "c24b47ce9f159b2424ed800f9ebbc41eb1795c5e",
+  "custody": "as the operator states it in the receipt's note; not established by this review",
+  "machine": {
+    "arch": "x86_64",
+    "lean": "Lean 4.15.0 (x86_64-unknown-linux-gnu, commit 11651562caae)",
+    "os": "Ubuntu 26.04.1 LTS (Resolute Raccoon), Linux 7.0.0-43-generic",
+    "python": "CPython 3.12.16 (uv-managed standalone build)"
+  },
+  "not_exercised": ["19q --dataset", "19w"],
+  "operator": "Jacob",
+  "phases": {
+    "19a": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19b": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19c": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19d": {
+      "discrepancies": [],
+      "not_compared": {
+        "unix_socket_egress_eliminated": {
+          "got": true,
+          "present": true,
+          "reason": "follows unix_sockets_reachable on the operator's host"
+        },
+        "unix_sockets_reachable": {
+          "got": [],
+          "present": true,
+          "reason": "which daemon sockets a host still exposes inside the namespace is the host's"
+        }
+      },
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19e": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19g": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19h": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19i": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19j": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19k": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19l": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19m": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19n": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19o": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19p": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19q": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19r": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19s": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19t": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19u": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19v": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19w": {
+      "result": "not_in_receipt"
+    }
+  },
+  "receipt_sha256": "2bc73f6c17ff012413e9d95a3767b1dd1d077c444a909726ff8038fa6f75e17f",
+  "schema": "simurgh-outside-operator-review-v1"
+}
