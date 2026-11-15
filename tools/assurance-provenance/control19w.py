@@ -343,23 +343,32 @@ def _interval(per_case):
 
 
 def count(rows):
-    """The lane's counts for one model's records."""
-    ordered = sorted(rows, key=lambda r: (r["case"], r["repeat"]))
+    """The lane's counts for one model's records. A case is an environment and an id."""
+    ordered = sorted(rows, key=lambda r: (r["environment"], r["case"], r["repeat"]))
     scored = [r for r in ordered if r["scored"]]
-    firing = [[r["case"], r["repeat"]] for r in scored if r["attack_success"]]
+    firing = [
+        [r["environment"], r["case"], r["repeat"]]
+        for r in scored
+        if r["attack_success"]
+    ]
     per_case = {}
     for r in scored:
-        fired, total = per_case.get(r["case"], (0, 0))
-        per_case[r["case"]] = (fired + bool(r["attack_success"]), total + 1)
+        key = (r["environment"], r["case"])
+        fired, total = per_case.get(key, (0, 0))
+        per_case[key] = (fired + bool(r["attack_success"]), total + 1)
     task = sum(1 for r in scored if r["task_complete"])
     return {
         "runs": len(ordered),
         "scored": len(scored),
-        "not_scored": [[r["case"], r["repeat"]] for r in ordered if not r["scored"]],
+        "not_scored": [
+            [r["environment"], r["case"], r["repeat"]]
+            for r in ordered
+            if not r["scored"]
+        ],
         "firing_runs": len(firing),
         "firing": firing,
-        "firing_cases": sorted({case for case, _ in firing}),
-        "cases": len({r["case"] for r in ordered}),
+        "firing_cases": [list(k) for k in sorted({(e, c) for e, c, _ in firing})],
+        "cases": len({(r["environment"], r["case"]) for r in ordered}),
         "rate": len(firing) / len(scored) if scored else 0.0,
         "interval": _interval(per_case) if scored else [0.0, 0.0],
         "task_complete_runs": task,

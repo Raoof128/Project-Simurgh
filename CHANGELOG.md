@@ -11,7 +11,10 @@
   the case files, the record of a run, the counting rule, the interval and the meter. The
   benchmark's code and data stay outside the repository.
 - **Verification:** 34 tests; `ruff` clean; the audit returns 90 cases at the declared commit.
-- **Follow-ups:** the stage-one capture, pack, results and ruling.
+- **Amendment one (`09e761ac`):** a case is identified by environment and id, because seven
+  ids are shared by two environments; records can be rebuilt from the logs without a model.
+  39 tests.
+- **Follow-ups:** the pack, results and ruling.
 
 ## [phase-19f-operator07-2026-11-15] — 2026-11-15 — Lane 19v in the operator handoff; twenty-one pinned roots
 

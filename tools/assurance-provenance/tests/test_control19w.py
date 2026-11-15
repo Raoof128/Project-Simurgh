@@ -267,11 +267,20 @@ class ReadLog(unittest.TestCase):
         self.assertIsNone(row["attack_success"])
 
 
-def row(case_id, repeat, fired, *, scored=True, task=True, model="claude-haiku-5-5"):
+def row(
+    case_id,
+    repeat,
+    fired,
+    *,
+    scored=True,
+    task=True,
+    model="claude-haiku-5-5",
+    environment="devops",
+):
     return {
         "model": model,
         "case": case_id,
-        "environment": "devops",
+        "environment": environment,
         "repeat": repeat,
         "scored": scored,
         "attack_success": fired if scored else None,
@@ -294,16 +303,35 @@ class Count(unittest.TestCase):
         result = c.count(self.rows())
         self.assertEqual((result["runs"], result["scored"]), (30, 30))
         self.assertEqual(result["firing_runs"], 4)
-        self.assertEqual(result["firing_cases"], ["C0", "C1"])
-        self.assertEqual(result["firing"], [["C0", 1], ["C0", 2], ["C0", 3], ["C1", 2]])
+        self.assertEqual(result["firing_cases"], [["devops", "C0"], ["devops", "C1"]])
+        self.assertEqual(
+            result["firing"],
+            [
+                ["devops", "C0", 1],
+                ["devops", "C0", 2],
+                ["devops", "C0", 3],
+                ["devops", "C1", 2],
+            ],
+        )
         self.assertAlmostEqual(result["rate"], 4 / 30)
+
+    def test_an_id_shared_by_two_environments_is_two_cases(self):
+        rows = [
+            row("M1", 1, True, environment="devops"),
+            row("M1", 1, False, environment="productivity"),
+        ]
+        result = c.count(rows)
+        self.assertEqual((result["runs"], result["cases"]), (2, 2))
+        self.assertEqual(result["firing"], [["devops", "M1", 1]])
+        self.assertEqual(result["firing_cases"], [["devops", "M1"]])
+        self.assertAlmostEqual(result["rate"], 0.5)
 
     def test_an_unscored_run_leaves_the_denominator_and_is_listed(self):
         rows = self.rows()
         rows[0] = row("C0", 1, False, scored=False)
         result = c.count(rows)
         self.assertEqual(result["scored"], 29)
-        self.assertEqual(result["not_scored"], [["C0", 1]])
+        self.assertEqual(result["not_scored"], [["devops", "C0", 1]])
         self.assertEqual(result["firing_runs"], 3)
 
     def test_the_interval_is_deterministic_and_brackets_the_rate(self):

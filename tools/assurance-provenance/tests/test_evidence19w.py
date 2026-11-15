@@ -14,6 +14,12 @@ import projection  # noqa: E402
 
 MODEL = "claude-haiku-5-5"
 FIRING = {("C00", 1), ("C00", 3), ("C07", 2)}
+SHARED = "C03"  # this id is also used by a second environment, as in the benchmark
+
+
+def case_id(index):
+    # two environments share one id, as seven ids do in the benchmark
+    return SHARED if index == 4 else f"C{index:02d}"
 
 
 def audit():
@@ -23,8 +29,8 @@ def audit():
         cases.append(
             {
                 "environment": c.ENVIRONMENTS[index % 3],
-                "id": f"C{index:02d}",
-                "formula": f"C{index:02d}_I1",
+                "id": case_id(index),
+                "formula": f"{case_id(index)}_I1",
                 "class": kind,
                 "class_if_negative_true": kind,
                 "checks": {},
@@ -37,7 +43,7 @@ def rows():
     out = []
     for index in range(c.CASES):
         for repeat in (1, 2, 3):
-            case = f"C{index:02d}"
+            case = case_id(index)
             out.append(
                 {
                     "model": MODEL,
@@ -45,7 +51,7 @@ def rows():
                     "case": case,
                     "repeat": repeat,
                     "scored": True,
-                    "attack_success": (case, repeat) in FIRING,
+                    "attack_success": (f"C{index:02d}", repeat) in FIRING,
                     "attack_partial": False,
                     "task_complete": True,
                     "quadrant": "SECURE_SUCCESS",
@@ -71,7 +77,10 @@ def rows():
 
 def labels():
     return {
-        f"{MODEL}|{case}|{repeat}": {"label": "task_failure", "note": "n"}
+        ev.label_key(MODEL, c.ENVIRONMENTS[int(case[1:]) % 3], case, repeat): {
+            "label": "task_failure",
+            "note": "n",
+        }
         for case, repeat in FIRING
     }
 
@@ -139,7 +148,9 @@ class Pack(unittest.TestCase):
             {MODEL: rows()}, {MODEL: capture(rows())}, audit(), labels()
         )
         model = report["models"][0]
-        self.assertEqual(model["counts"]["firing_cases"], ["C00", "C07"])
+        self.assertEqual(
+            model["counts"]["firing_cases"], [["devops", "C00"], ["marketplace", "C07"]]
+        )
         self.assertEqual(
             model["firing_cases_by_class"], {"bound": 0, "open": 2, "open_judged": 0}
         )
@@ -147,7 +158,13 @@ class Pack(unittest.TestCase):
     def test_every_firing_run_needs_exactly_one_declared_label(self):
         missing = labels()
         missing.pop(next(iter(missing)))
-        extra = {**labels(), f"{MODEL}|C50|1": {"label": "scorer", "note": ""}}
+        extra = {
+            **labels(),
+            ev.label_key(MODEL, "productivity", "C50", 1): {
+                "label": "scorer",
+                "note": "",
+            },
+        }
         wrong = {k: {"label": "bad_luck", "note": ""} for k in labels()}
         for bad, code in (
             (missing, "labels_cover"),
@@ -173,6 +190,21 @@ class Pack(unittest.TestCase):
             ev.build_report(
                 {"gpt-x": rows()}, {"gpt-x": capture(rows())}, audit(), labels()
             )
+
+    def test_an_id_shared_by_two_environments_is_accepted_and_kept_apart(self):
+        shared = [r for r in audit()["cases"] if r["id"] == SHARED]
+        self.assertEqual(len(shared), 2)
+        report = ev.build_report(
+            {MODEL: rows()}, {MODEL: capture(rows())}, audit(), labels()
+        )
+        self.assertEqual(report["models"][0]["counts"]["cases"], 90)
+        self.assertEqual(report["models"][0]["counts"]["runs"], 270)
+
+    def test_the_same_environment_and_id_twice_in_the_audit_is_refused(self):
+        twice = audit()
+        twice["cases"][1] = dict(twice["cases"][0])
+        with self.assertRaises(ValueError):
+            ev.build_report({MODEL: rows()}, {MODEL: capture(rows())}, twice, labels())
 
     def test_an_audit_that_is_not_ninety_cases_is_refused(self):
         short = audit()

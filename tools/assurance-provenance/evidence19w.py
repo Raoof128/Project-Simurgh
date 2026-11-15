@@ -85,8 +85,8 @@ def capture_member(model):
     return "capture-" + model + ".json"
 
 
-def label_key(row):
-    return f"{row['model']}|{row['case']}|{row['repeat']}"
+def label_key(model, environment, case, repeat):
+    return f"{model}|{environment}|{case}|{repeat}"
 
 
 def expected_sources():
@@ -141,16 +141,18 @@ def check_protocol(path):
 def _check_audit(audit):
     if type(audit) is not dict or set(audit) != {"data_sha256", "cases"}:
         raise ValueError("audit_shape")
-    ids = [row["id"] for row in audit["cases"]]
-    if len(ids) != control19w.CASES or len(set(ids)) != len(ids):
-        raise ValueError("audit_cases")
+    by_case = {}
     for row in audit["cases"]:
         if (
             row["class"] not in control19w.CLASSES
+            or row["class_if_negative_true"] not in control19w.CLASSES
             or row["environment"] not in control19w.ENVIRONMENTS
         ):
             raise ValueError("audit_class")
-    return {row["id"]: row for row in audit["cases"]}
+        by_case[(row["environment"], row["id"])] = row
+    if len(audit["cases"]) != control19w.CASES or len(by_case) != control19w.CASES:
+        raise ValueError("audit_cases")
+    return by_case
 
 
 def _model_report(model, rows, capture, by_case, labels):
@@ -163,11 +165,9 @@ def _model_report(model, rows, capture, by_case, labels):
         raise ValueError("capture_shape:" + model)
     seen = set()
     for row in rows:
-        key = (row["case"], row["repeat"])
-        if row["model"] != model or row["case"] not in by_case or key in seen:
+        key = (row["environment"], row["case"], row["repeat"])
+        if row["model"] != model or key[:2] not in by_case or key in seen:
             raise ValueError("transcript_row:" + model)
-        if by_case[row["case"]]["environment"] != row["environment"]:
-            raise ValueError("transcript_environment:" + model)
         if (
             type(row["repeat"]) is not int
             or not 1 <= row["repeat"] <= capture["declared_repeats"]
@@ -175,7 +175,7 @@ def _model_report(model, rows, capture, by_case, labels):
             raise ValueError("transcript_repeat:" + model)
         seen.add(key)
     counts = control19w.count(rows)
-    firing_keys = {f"{model}|{case}|{repeat}" for case, repeat in counts["firing"]}
+    firing_keys = {label_key(model, *entry) for entry in counts["firing"]}
     mine = {k: v for k, v in labels.items() if k.split("|")[0] == model}
     if set(mine) != firing_keys:
         raise ValueError("labels_cover:" + model)
@@ -185,8 +185,8 @@ def _model_report(model, rows, capture, by_case, labels):
             raise ValueError("label_value:" + model)
         tally[value["label"]] += 1
     by_class = {kind: 0 for kind in control19w.CLASSES}
-    for case in counts["firing_cases"]:
-        by_class[by_case[case]["class"]] += 1
+    for environment, case in counts["firing_cases"]:
+        by_class[by_case[(environment, case)]["class"]] += 1
     usage = {}
     for row in rows:
         control19w.add_usage(usage, row["usage"])

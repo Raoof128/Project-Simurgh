@@ -4,6 +4,7 @@ Run with the benchmark's Python environment, from anywhere:
 
     python capture19w.py run --benchmark <clone> --out <dir> --model claude-haiku-5-5
     python capture19w.py audit --benchmark <clone> > audit.json
+    python capture19w.py records --benchmark <clone> --out <dir> --model claude-haiku-5-5
 
 ``run`` refuses a clone that is not at the declared commit, a model whose stage is not
 authorised, and a repeat that the meter does not allow. It calls the benchmark's ``run_eval``
@@ -70,7 +71,7 @@ def collect(out, model, repeats):
                 ):
                     control19w.add_usage(usage, row["usage"])
                     control19w.add_usage(by_repeat.setdefault(repeat, {}), row["usage"])
-                    key = (row["case"], repeat)
+                    key = (environment, row["case"], repeat)
                     old = kept.get(key)
                     if old is not None:
                         superseded += 1
@@ -134,6 +135,24 @@ def write_outputs(out, model, rows, record):
     (out / "captures" / (model + ".json")).write_text(
         json.dumps(record, indent=1, sort_keys=True) + "\n"
     )
+
+
+def rebuild(out, model, *, data_sha256):
+    """Rebuild the records and the capture record from the run logs on disk. No model."""
+    out = Path(out)
+    declared = control19w.STAGES[model]["repeats"]
+    timeline_path = out / "timeline.json"
+    timeline = (
+        {int(k): v for k, v in json.loads(timeline_path.read_text()).items()}
+        if timeline_path.exists()
+        else {}
+    )
+    rows, usage, superseded, by_repeat = collect(out, model, declared)
+    record = capture_record(
+        model, rows, usage, superseded, by_repeat, data_sha256, timeline
+    )
+    write_outputs(out, model, rows, record)
+    return record
 
 
 def _prepare(benchmark, out):
@@ -230,9 +249,20 @@ def main():
     launch.add_argument("--model", required=True)
     look = sub.add_parser("audit")
     look.add_argument("--benchmark", type=Path, required=True)
+    again = sub.add_parser("records")
+    again.add_argument("--benchmark", type=Path, required=True)
+    again.add_argument("--out", type=Path, required=True)
+    again.add_argument("--model", required=True)
     args = parser.parse_args()
     if args.command == "run":
         run(args.benchmark, args.out, args.model)
+    elif args.command == "records":
+        if control19w.benchmark_commit(args.benchmark) != control19w.BENCHMARK_COMMIT:
+            raise SystemExit("the benchmark clone is not at the declared commit")
+        record = rebuild(
+            args.out, args.model, data_sha256=control19w.data_digest(args.benchmark)
+        )
+        print(json.dumps({"repeats": record["repeats"]}, sort_keys=True))
     else:
         if control19w.benchmark_commit(args.benchmark) != control19w.BENCHMARK_COMMIT:
             raise SystemExit("the benchmark clone is not at the declared commit")

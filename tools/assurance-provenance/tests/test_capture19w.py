@@ -64,6 +64,31 @@ class Collect(unittest.TestCase):
         self.assertEqual(superseded, 1)
         self.assertEqual(usage[MODEL]["input"], 2000)
 
+    def test_an_id_shared_by_two_environments_keeps_both_records(self):
+        with tempfile.TemporaryDirectory() as d:
+            put(d, "devops", 1, "a.eval", [sample("M1", attack=False, task=True)])
+            put(d, "productivity", 1, "b.eval", [sample("M1", attack=True, task=False)])
+            rows, _, superseded, _ = cap.collect(d, MODEL, 3)
+        self.assertEqual(
+            [(r["environment"], r["case"]) for r in rows],
+            [("devops", "M1"), ("productivity", "M1")],
+        )
+        self.assertEqual(superseded, 0)
+
+    def test_the_records_can_be_rebuilt_from_logs_without_a_model(self):
+        with tempfile.TemporaryDirectory() as d:
+            put(d, "devops", 1, "a.eval", [sample("M1", attack=False, task=True)])
+            put(d, "productivity", 1, "b.eval", [sample("M1", attack=True, task=False)])
+            (Path(d) / "timeline.json").write_text(json.dumps({"1": {"started": "t0"}}))
+            record = cap.rebuild(d, MODEL, data_sha256="0" * 64)
+            lines = (
+                (Path(d) / "transcripts" / (MODEL + ".jsonl")).read_text().splitlines()
+            )
+        self.assertEqual(len(lines), 2)
+        self.assertEqual(record["repeats"][0]["runs"], 2)
+        self.assertEqual(record["repeats"][0]["started"], "t0")
+        self.assertEqual(record["superseded_logs"], 0)
+
     def test_a_scored_record_is_not_replaced_by_a_later_unscored_one(self):
         with tempfile.TemporaryDirectory() as d:
             put(d, "devops", 1, "1.eval", [sample("A1", attack=False, task=True)])

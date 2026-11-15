@@ -35,8 +35,14 @@ one machine's local agent configuration:
 - **Verification:** 34 tests pass; the control tests were written and seen to fail before
   the module existed. `ruff` is clean. The audit was run on the benchmark at the declared
   commit and returns 90 cases.
-- **Follow-ups:** the stage-one capture on Haiku 5.5, the pack, the results and the ruling.
-  Stages two and three need a cap from the owner.
+- **Amendment one (`09e761ac`, after the stage-one run):** seven case ids of the benchmark are
+  used in two environments each, and the instrument keyed a record by case id alone, so it
+  wrote 83 records for 90 scored logs. `count`, `collect` and the pack now identify a case by
+  environment and id, and `capture19w.py records` rebuilds the records from the logs on disk
+  without a model. The counting rule is unchanged. 39 tests; the shared-id tests were written
+  first and failed.
+- **Follow-ups:** the pack, the results and the ruling. Stage one ran one repeat of three
+  (the repeat rule refused the second). Stages two and three need a cap from the owner.
 
 ### 2026-11-15 (Australia/Sydney) — Phase 19f: lane 19v joins the operator handoff; twenty-one pinned roots in the hosted check
 
