@@ -14,6 +14,61 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-15 (Australia/Sydney) — Phase 19w: stage-one pack and results (the benchmark's attack formula was true in 3 of 90 runs with no injection, Haiku 5.5, one repeat)
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19w/` (pack, records, capture record, audit,
+  labels, README, RESULTS, NOTICE), a test of the committed pack, `.prettierignore`
+  (P19-FORMAT23), the ruling in the Phase 19 ledger and both logs. No pinned source changed
+  after the pack was built.
+- **Summary:** one repeat of the benchmark's 90 cases ran on `claude-haiku-5-5` with nothing
+  planted. The benchmark's own attack formula was true in three runs (marketplace `OM3` and
+  `OM7`, productivity `DIV2`); all 90 runs were scored and the interval is 0.0% to 7.8%. In
+  each of the three the model reached the outcome the case's attacker wants by its own
+  judgement and gave reasons. The meter is 0.7659 USD of a 1.00 USD cap, and the repeat rule
+  refused the second repeat. Two of the three things said before the run did not hold, and
+  the results page says so. Stages two and three are not authorised and did not run.
+- **Files changed:** the 19w documentation folder, `tests/test_evidence19w_committed.py`,
+  `.prettierignore`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 45 lane tests pass. A Python 3.12 with no site packages verifies the pack
+  at root `dd77de3e…`; with a clone of the benchmark at the declared commit the audit
+  recomputes to the pack's. The records were scanned for a key, a local path and the
+  account's name; the only address-like strings are the benchmark's fictional ones.
+- **Follow-ups:** the two further repeats and stages two and three need a cap from the owner;
+  the attacked runs for the firing cases; whether to write to the benchmark's authors; the
+  operator handoff and pinned roots under their own declaration.
+
+### 2026-11-15 (Australia/Sydney) — Phase 19w: instrument for a no-attack control on a published prompt-injection benchmark (committed before any run)
+
+**Raouf:**
+
+- **Scope:** the declaration P19-CONTROL01 in the Phase 19 ledger (`ca2e832b`, before this
+  change), three new modules in `tools/assurance-provenance/` and their tests, and both logs.
+  No model has been run for the lane. No frozen file, pinned lane source or pack is touched.
+- **Summary:** lane 19w asks how often the attack formula of the task-tampering benchmark
+  (arXiv 2611.07640) is true in a run with no injection. `control19w.py` holds what is fixed
+  before the run: the benchmark's commit, the model-free audit of its 90 case files, the
+  reader that turns a run log into a record of what the model wrote, the counting rule, the
+  interval, the prices and the repeat rule. `capture19w.py` calls the benchmark's own runner
+  in its no-injection mode and meters it; it refuses any model but stage one's.
+  `evidence19w.py` builds and verifies the pack. The benchmark's code and data are not in
+  this repository, and a record never holds a tool result.
+- **Files changed:** `tools/assurance-provenance/control19w.py`, `capture19w.py`,
+  `evidence19w.py`, `tests/test_control19w.py`, `tests/test_capture19w.py`,
+  `tests/test_evidence19w.py`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 34 tests pass; the control tests were written and seen to fail before
+  the module existed. `ruff` is clean. The audit was run on the benchmark at the declared
+  commit and returns 90 cases.
+- **Amendment one (`09e761ac`, after the stage-one run):** seven case ids of the benchmark are
+  used in two environments each, and the instrument keyed a record by case id alone, so it
+  wrote 83 records for 90 scored logs. `count`, `collect` and the pack now identify a case by
+  environment and id, and `capture19w.py records` rebuilds the records from the logs on disk
+  without a model. The counting rule is unchanged. 39 tests; the shared-id tests were written
+  first and failed.
+- **Follow-ups:** the pack, the results and the ruling. Stage one ran one repeat of three
+  (the repeat rule refused the second). Stages two and three need a cap from the owner.
+
 ### 2026-11-15 (Australia/Sydney) — Phase 19f: lane 19v joins the operator handoff; twenty-one pinned roots in the hosted check
 
 **Raouf:**

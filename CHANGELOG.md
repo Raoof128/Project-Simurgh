@@ -1,5 +1,35 @@
 ## Change Log
 
+## [phase-19w-2026-11-15] — 2026-11-15 — Lane 19w, stage one: the attack formula with no attack, 3 of 90 runs on Haiku 5.5
+
+**Raouf:**
+
+- **Scope:** the 19w pack and its documents, a committed-pack test, `.prettierignore`, the
+  ruling and both logs.
+- **Summary:** with no injection, the benchmark's attack formula was true in 3 of 90 scored
+  runs on `claude-haiku-5-5` (interval 0.0% to 7.8%), each time by the model's own stated
+  judgement. One repeat of three ran, for 0.7659 USD of a 1.00 USD cap. Pack root
+  `dd77de3e…`.
+- **Verification:** 45 tests; a bare Python 3.12 verifies the pack; the audit recomputes from
+  a clone at the declared commit.
+- **Follow-ups:** further repeats and the other two models need a cap from the owner.
+
+## [phase-19w-instrument-2026-11-15] — 2026-11-15 — Lane 19w: instrument for a no-attack control on a published benchmark
+
+**Raouf:**
+
+- **Scope:** `control19w.py`, `capture19w.py`, `evidence19w.py` and their tests, after the
+  declaration P19-CONTROL01 (`ca2e832b`) and before any run of the lane.
+- **Summary:** the lane measures how often the task-tampering benchmark's attack formula is
+  true with no injection. The instrument fixes the benchmark commit, a model-free audit of
+  the case files, the record of a run, the counting rule, the interval and the meter. The
+  benchmark's code and data stay outside the repository.
+- **Verification:** 34 tests; `ruff` clean; the audit returns 90 cases at the declared commit.
+- **Amendment one (`09e761ac`):** a case is identified by environment and id, because seven
+  ids are shared by two environments; records can be rebuilt from the logs without a model.
+  39 tests.
+- **Follow-ups:** the pack, results and ruling.
+
 ## [phase-19f-operator07-2026-11-15] — 2026-11-15 — Lane 19v in the operator handoff; twenty-one pinned roots
 
 **Raouf:**
