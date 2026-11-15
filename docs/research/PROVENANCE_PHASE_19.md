@@ -1680,6 +1680,34 @@ the audit rule, the prices, the cap and the repeat rule. The records are rebuilt
 logs, and each carries its log's SHA-256. Stage one stands at one repeat of the declared three;
 the two repeats that did not start are reported as not run.
 
+**P19-OPERATOR08 (bounded authority to bring lane 19w into the outside-operator handoff and the
+externally pinned roots; declared 15 Nov 2026 before any commit that acts on it).** 19w is
+committed (`d4a5d583`) with root
+`dd77de3e5ee53666396b7b11078864bad20aac75c8e808f960f13b577000599f`. Its declaration did not
+authorise a workflow or handoff edit, so the hosted roots check and the handoff list twenty-one
+packs. This change is stacked on the lane's branch and is merged after it. This declaration
+authorises, and nothing else:
+
+1. `handoff19.py`: 19w added to `PHASES` as a plain lane with its host and time, the word for
+   the new count, and 19w in the list of lanes that need nothing beyond the standard library.
+   Verifying 19w runs no model and no benchmark and needs no network or key: it recomputes the
+   counts from the committed records. No change to what the comparator checks. Tests first.
+2. The review of the first operator receipt recomputed under the new phase list. The receipt is
+   not edited; 19w appears in the review as `not_in_receipt`, which is what happened.
+3. Re-rendering `HANDOFF.md` and `discrepancy-template.json`; the 19f README's count of packs
+   and its sentence on the lane.
+4. `.github/workflows/assurance-provenance.yml`: 19w's `docs/` path added to both path filters
+   and its id to the expected-roots check, with its message. No step is added, removed or
+   renamed, and the Stage 5Q census must be byte-identical before and after. The repository
+   variable `PHASE19_ROOTS` gains the one root, set outside the pull request, the twenty-one
+   existing values unchanged.
+5. The root README's count of Phase 19 packs and its sentences on the lane.
+6. Both logs and the ruling.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to the operator's
+receipt, or any other change to what the comparator checks. This declaration commit must be a
+strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
