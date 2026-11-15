@@ -383,3 +383,12 @@ docs/research/provenance-phase-19v/protocol.json
 docs/research/provenance-phase-19v/report.json
 docs/research/provenance-phase-19v/receipt.json
 docs/research/provenance-phase-19v/capture.json
+
+# P19-FORMAT23: Phase 19w source-bound machine evidence (P19-CONTROL01); bytes are bound by
+# the pack root and must not be reformatted.
+docs/research/provenance-phase-19w/protocol.json
+docs/research/provenance-phase-19w/report.json
+docs/research/provenance-phase-19w/receipt.json
+docs/research/provenance-phase-19w/audit.json
+docs/research/provenance-phase-19w/labels.json
+docs/research/provenance-phase-19w/captures/claude-haiku-5-5.json

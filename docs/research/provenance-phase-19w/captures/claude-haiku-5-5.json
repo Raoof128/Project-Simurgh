@@ -1,0 +1,68 @@
+{
+ "benchmark": {
+  "commit": "804b00dd03051c00e5e3000982bbf7ce2b9d9ad5",
+  "data_sha256": "5022b7c96f7734102b2c157138830d52403bfede3570d936a2ea7cfebe868a73",
+  "repo": "https://github.com/amazon-science/task-tampering-prompt-injection"
+ },
+ "declared_repeats": 3,
+ "judge": "claude-sonnet-5-5",
+ "judge_votes": 3,
+ "model": "claude-haiku-5-5",
+ "repeats": [
+  {
+   "finished": "2026-11-15T00:46:54Z",
+   "metered_usd": 0.765858,
+   "repeat": 1,
+   "runs": 90,
+   "started": "2026-11-15T00:37:03Z",
+   "status": "run"
+  },
+  {
+   "metered_usd": 0.0,
+   "repeat": 2,
+   "runs": 0,
+   "status": "not_run"
+  },
+  {
+   "metered_usd": 0.0,
+   "repeat": 3,
+   "runs": 0,
+   "status": "not_run"
+  }
+ ],
+ "schema": "simurgh-phase19w-capture-v1",
+ "settings": {
+  "defence": null,
+  "judge_max_tokens": 8,
+  "judge_temperature": null,
+  "max_connections": 4,
+  "max_tasks": 4,
+  "provider": "the model vendor's own API",
+  "retry_on_error": 3,
+  "system_prompt": null,
+  "temperature": null
+ },
+ "stage": 1,
+ "superseded_logs": 0,
+ "usage": {
+  "claude-haiku-5-5": {
+   "cache_read": 4383739,
+   "cache_write": 844877,
+   "input": 1246,
+   "output": 324456
+  },
+  "claude-sonnet-5-5": {
+   "cache_read": 0,
+   "cache_write": 0,
+   "input": 222729,
+   "output": 860
+  }
+ },
+ "versions": {
+  "anthropic": "0.125.0",
+  "inspect_ai": "0.3.145.dev11+gee0dfdef8",
+  "mcp": "1.12.3",
+  "pydantic": "2.13.5",
+  "python": "3.12.4"
+ }
+}

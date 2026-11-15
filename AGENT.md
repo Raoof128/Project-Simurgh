@@ -14,6 +14,31 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-15 (Australia/Sydney) — Phase 19w: stage-one pack and results (the benchmark's attack formula was true in 3 of 90 runs with no injection, Haiku 5.5, one repeat)
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19w/` (pack, records, capture record, audit,
+  labels, README, RESULTS, NOTICE), a test of the committed pack, `.prettierignore`
+  (P19-FORMAT23), the ruling in the Phase 19 ledger and both logs. No pinned source changed
+  after the pack was built.
+- **Summary:** one repeat of the benchmark's 90 cases ran on `claude-haiku-5-5` with nothing
+  planted. The benchmark's own attack formula was true in three runs (marketplace `OM3` and
+  `OM7`, productivity `DIV2`); all 90 runs were scored and the interval is 0.0% to 7.8%. In
+  each of the three the model reached the outcome the case's attacker wants by its own
+  judgement and gave reasons. The meter is 0.7659 USD of a 1.00 USD cap, and the repeat rule
+  refused the second repeat. Two of the three things said before the run did not hold, and
+  the results page says so. Stages two and three are not authorised and did not run.
+- **Files changed:** the 19w documentation folder, `tests/test_evidence19w_committed.py`,
+  `.prettierignore`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 45 lane tests pass. A Python 3.12 with no site packages verifies the pack
+  at root `dd77de3e…`; with a clone of the benchmark at the declared commit the audit
+  recomputes to the pack's. The records were scanned for a key, a local path and the
+  account's name; the only address-like strings are the benchmark's fictional ones.
+- **Follow-ups:** the two further repeats and stages two and three need a cap from the owner;
+  the attacked runs for the firing cases; whether to write to the benchmark's authors; the
+  operator handoff and pinned roots under their own declaration.
+
 ### 2026-11-15 (Australia/Sydney) — Phase 19w: instrument for a no-attack control on a published prompt-injection benchmark (committed before any run)
 
 **Raouf:**
