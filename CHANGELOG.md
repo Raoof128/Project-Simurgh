@@ -1,5 +1,18 @@
 ## Change Log
 
+## [phase-19w-instrument-2026-11-15] — 2026-11-15 — Lane 19w: instrument for a no-attack control on a published benchmark
+
+**Raouf:**
+
+- **Scope:** `control19w.py`, `capture19w.py`, `evidence19w.py` and their tests, after the
+  declaration P19-CONTROL01 (`ca2e832b`) and before any run of the lane.
+- **Summary:** the lane measures how often the task-tampering benchmark's attack formula is
+  true with no injection. The instrument fixes the benchmark commit, a model-free audit of
+  the case files, the record of a run, the counting rule, the interval and the meter. The
+  benchmark's code and data stay outside the repository.
+- **Verification:** 34 tests; `ruff` clean; the audit returns 90 cases at the declared commit.
+- **Follow-ups:** the stage-one capture, pack, results and ruling.
+
 ## [phase-19f-operator07-2026-11-15] — 2026-11-15 — Lane 19v in the operator handoff; twenty-one pinned roots
 
 **Raouf:**

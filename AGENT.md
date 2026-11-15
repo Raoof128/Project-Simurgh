@@ -14,6 +14,30 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-15 (Australia/Sydney) — Phase 19w: instrument for a no-attack control on a published prompt-injection benchmark (committed before any run)
+
+**Raouf:**
+
+- **Scope:** the declaration P19-CONTROL01 in the Phase 19 ledger (`ca2e832b`, before this
+  change), three new modules in `tools/assurance-provenance/` and their tests, and both logs.
+  No model has been run for the lane. No frozen file, pinned lane source or pack is touched.
+- **Summary:** lane 19w asks how often the attack formula of the task-tampering benchmark
+  (arXiv 2611.07640) is true in a run with no injection. `control19w.py` holds what is fixed
+  before the run: the benchmark's commit, the model-free audit of its 90 case files, the
+  reader that turns a run log into a record of what the model wrote, the counting rule, the
+  interval, the prices and the repeat rule. `capture19w.py` calls the benchmark's own runner
+  in its no-injection mode and meters it; it refuses any model but stage one's.
+  `evidence19w.py` builds and verifies the pack. The benchmark's code and data are not in
+  this repository, and a record never holds a tool result.
+- **Files changed:** `tools/assurance-provenance/control19w.py`, `capture19w.py`,
+  `evidence19w.py`, `tests/test_control19w.py`, `tests/test_capture19w.py`,
+  `tests/test_evidence19w.py`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 34 tests pass; the control tests were written and seen to fail before
+  the module existed. `ruff` is clean. The audit was run on the benchmark at the declared
+  commit and returns 90 cases.
+- **Follow-ups:** the stage-one capture on Haiku 5.5, the pack, the results and the ruling.
+  Stages two and three need a cap from the owner.
+
 ### 2026-11-15 (Australia/Sydney) — Phase 19f: lane 19v joins the operator handoff; twenty-one pinned roots in the hosted check
 
 **Raouf:**
