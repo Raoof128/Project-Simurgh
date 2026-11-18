@@ -14,6 +14,26 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-18 (Australia/Sydney) — Phase 19x: connection check passed for all eight models and the judge (no run yet)
+
+**Raouf:**
+
+- **Scope:** a note in the Phase 19 ledger and both logs. No code, no pinned source and no
+  pack is touched; the instrument commit `e53f7f30` is unchanged.
+- **Summary:** the declared connection check ran on 18 Nov. The judge and all eight models
+  passed, each agent model calling the one tool, the four OpenAI models on the Responses
+  endpoint. The first attempt failed for the four OpenAI models on the author's machine
+  before a connection was opened: version 3.54.0 of that vendor's client library does not
+  work with the framework at the benchmark's pinned commit. Version 2.54.0 is installed in
+  the private environment and the second attempt passed. The check is metered at under one
+  cent. The owner considered adding Claude Fable 5.2 and left it out on cost.
+- **Files changed:** `docs/research/PROVENANCE_PHASE_19.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the lane's 50 tests pass on the unchanged instrument; `prettier` is
+  clean. The repository's quick gate was not run again for this change, which is three
+  Markdown files; it passed on `e53f7f30` (96 steps).
+- **Not done:** every run of the lane. The owner starts them.
+- **Follow-ups:** the runs, the labels, the pack, results and ruling.
+
 ### 2026-11-18 (Australia/Sydney) — Phase 19x: instrument for the no-attack control on eight models from two vendors (committed before any run)
 
 **Raouf:**

@@ -1,5 +1,18 @@
 ## Change Log
 
+## [phase-19x-connection-check-2026-11-18] — 2026-11-18 — Lane 19x: connection check passed for all eight models
+
+**Raouf:**
+
+- **Scope:** a ledger note and both logs; no code change.
+- **Summary:** the judge and all eight models passed the declared connection check, the
+  OpenAI models on the Responses endpoint. A first attempt failed for the OpenAI models
+  before any connection, because version 3.54.0 of that vendor's client library does not
+  work with the framework at the benchmark's pinned commit; version 2.54.0 does. Under one
+  cent by the lane's meter. Claude Fable 5.2 was considered and left out on cost.
+- **Verification:** 50 lane tests on the unchanged instrument; `prettier` clean.
+- **Follow-ups:** the runs.
+
 ## [phase-19x-instrument-2026-11-18] — 2026-11-18 — Lane 19x: instrument for the no-attack control on eight models from two vendors
 
 **Raouf:**

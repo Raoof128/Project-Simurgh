@@ -2757,3 +2757,22 @@ protocol's source digests:
   review are byte-identical. Not done: nothing was run on Windows by the author; the Windows
   causes are recorded, not patched; Jacob's two test logs are not committed (sha256 values in
   the 19f README); no one outside the author has run 19w, 19q's `--dataset` or the WSL2 route.
+- Note (18 Nov 2026, P19-CONTROL02, the connection check; no run of the lane has been made):
+  the declaration (`d0ca3e86`) and the instrument (`e53f7f30`) were pushed at 00:01:30Z. The
+  connection check ran at 01:28:55Z. The judge and the four Anthropic models passed: each
+  model called the one tool, and `claude-sonnet-4-5-20250929` accepted temperature 0. The four
+  OpenAI models failed with a `TypeError` raised on the author's machine before a connection
+  was opened, so no request reached that vendor. The cause was the environment and not the
+  instrument: version 3.54.0 of the vendor's client library hands the framework's HTTP layer
+  a timeout object that the framework at the benchmark's pinned commit cannot use. The
+  author replaced it with version 2.54.0 in the private environment, and at 01:30:12Z the
+  judge and the four OpenAI models passed on the Responses endpoint, each calling the tool.
+  The instrument commit is unchanged. All nine first entries and five second entries are
+  kept, the four failures among them, and go into the pack; a model's latest entry decides.
+  The check is metered at 0.0066 USD at Anthropic and 0.0018 USD at OpenAI, which puts the
+  lane's meter at 0.7725 and 0.0018 USD. Versions at the check: Python 3.12.4, the framework
+  at `0.3.145.dev11+gee0dfdef8`, `anthropic` 0.125.0, `openai` 2.54.0, `mcp` 1.12.3,
+  `pydantic` 2.13.5. The owner asked the same day whether Claude Fable 5.2 should be added;
+  at 8 and 40 USD per million tokens the author put one repeat at 23 to 35 USD, and the
+  owner left it out. The lane stays at the eight declared models. Not done: every run. The
+  owner starts them.
