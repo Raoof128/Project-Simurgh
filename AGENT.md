@@ -14,6 +14,45 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-18 (Australia/Sydney) — Phase 19x: instrument for the no-attack control on eight models from two vendors (committed before any run)
+
+**Raouf:**
+
+- **Scope:** the declaration P19-CONTROL02 in the Phase 19 ledger (`d0ca3e86`, before this
+  change), three new modules in `tools/assurance-provenance/` and their tests, and both logs.
+  No model has been run for the lane and no request has been sent to one. Lane 19w, its pack
+  and its three modules are not touched; no frozen file or pinned source is touched.
+- **Summary:** lane 19x asks 19w's question of more models: how often the task-tampering
+  benchmark's attack formula is true in a run with no injection. It is a new lane because
+  19w's pack pins its instrument and its root is externally pinned. `control19x.py` imports
+  19w's audit, reader, counting rule and interval unchanged and adds the eight models in run
+  order (Haiku 5.5, Sonnet 5.5, Sonnet 4.5 and Opus 5.5; GPT-6 Luna, GPT-6.1 Terra, GPT-6.2
+  Sol and GPT-6.2 Astra), each vendor's prices, a cap of 80.00 USD at each vendor and the
+  start rule, whose unit is one environment of one repeat. `capture19x.py` runs the
+  benchmark's own runner, meters every log of the lane at both vendors before each unit,
+  stops a vendor's chain at the first unit that does not fit, halts it when a unit comes
+  back more than a third unscored or with a case missing, sends an OpenAI model to the
+  Responses endpoint through the library's own option, and refuses a model that has not
+  passed the declared connection check. `evidence19x.py` builds and verifies the pack, with a
+  table of how many models each case fires on and no rate pooled over models. Haiku 5.5's
+  first repeat is 19w's ninety records, held to the digest of that pack's member.
+- **Files changed:** `tools/assurance-provenance/control19x.py`, `capture19x.py`,
+  `evidence19x.py`, `tests/test_control19x.py`, `tests/test_capture19x.py`,
+  `tests/test_evidence19x.py`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 50 lane tests pass (16, 20 and 14); each module's tests were written
+  before the module. With 19w's they are 95. `ruff` is clean. A dry run outside the
+  repository drove the benchmark's real runner, tool servers and scorer with the library's
+  mock model in place of agent and judge: 90 logs, 90 scored records, 31, 31 and 28 cases per
+  environment as declared. All eight models were constructed offline with a placeholder key:
+  the four OpenAI models take the Responses endpoint only through the wrapper. The audit
+  recomputed at the declared commit equals the 19w pack's member, and the records rebuilt
+  from 19w's ninety logs have that pack's digest. The lane's meter on those logs reads
+  0.765858 USD, as 19w's did.
+- **Not done:** the connection check and every run. Nothing here shows that either vendor
+  accepts the requests the runner will send; the check is what finds that out.
+- **Follow-ups:** the connection check, the runs, the labels, the pack, results and ruling;
+  the operator handoff and pinned roots under their own declaration.
+
 ### 2026-11-16 (Australia/Sydney) — Phase 19f: two outside receipts filed and reviewed (twenty-one packs verified on an outside Linux host; every verifier refused on native Windows)
 
 **Raouf:**

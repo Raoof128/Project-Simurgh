@@ -1,5 +1,23 @@
 ## Change Log
 
+## [phase-19x-instrument-2026-11-18] — 2026-11-18 — Lane 19x: instrument for the no-attack control on eight models from two vendors
+
+**Raouf:**
+
+- **Scope:** `control19x.py`, `capture19x.py`, `evidence19x.py` and their tests, after the
+  declaration P19-CONTROL02 (`d0ca3e86`) and before any run of the lane. Lane 19w is not
+  touched.
+- **Summary:** the lane repeats 19w's measurement, the benchmark's attack formula with no
+  injection, on four Anthropic and four OpenAI models. The instrument reuses 19w's audit,
+  record, counting rule and interval and adds the models, both vendors' prices, a cap of
+  80.00 USD at each vendor, a start rule checked before every environment of every repeat, a
+  halt on a unit that comes back mostly unscored, a connection check that must pass before a
+  model runs, and a cross-model table with no pooled rate. The benchmark's code and data stay outside the repository.
+- **Verification:** 50 tests; `ruff` clean; a dry run of the benchmark's own runner with a
+  mock model produced 90 scored records; the audit and 19w's ninety records recompute to the
+  19w pack's digests. No request has been sent to a model.
+- **Follow-ups:** the connection check, the runs, the pack, results and ruling.
+
 ## [phase-19f-operator09-2026-11-16] — 2026-11-16 — Two outside receipts reviewed: twenty-one packs verified on an outside Linux host
 
 **Raouf:**
