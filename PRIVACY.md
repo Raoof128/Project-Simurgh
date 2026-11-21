@@ -88,7 +88,7 @@ preserved banking implementation.
 
 > **Stage 2.7 note:** The canonical list of forbidden raw-field names now lives in [`src/device/forbiddenLocalFields.js`](src/device/forbiddenLocalFields.js) and is enforced recursively by the daemon proof validator, the privacy audit CLI (`tools/privacy-audit.mjs`), and the Stage 2.7 security audit gate. Any new field added to that list automatically tightens the privacy contract across both macOS and Windows.
 
-> **Stage 2.8C/D note:** The Linux daemon counts-only contract is preserved in Stage 2.8C/D. The Wayland portal probe reads only the `AvailableSourceTypes` property (an integer bitmask); no session, stream, or PipeWire handle is ever opened. `browser_package_hint` is UX-only and client-side — it is not collected, stored, transmitted to the server, or referenced in any server module. No new field categories were introduced.
+> **Stage 2.8C/D note:** The Linux daemon counts-only contract is preserved in Stage 2.8C/D. The Wayland portal probe reads only the `AvailableSourceTypes` property (an integer bitmask); no session, stream, or PipeWire handle is ever opened. `browser_package_hint` is UX-only and client-side. It is not collected, stored, transmitted to the server, or referenced in any server module. No new field categories were introduced.
 
 The sections below describe the academic/device collection policy and modern daemon contracts.
 They must be read with the legacy-helper exception above and the component-specific implementation
@@ -101,31 +101,31 @@ evidence; policy intent alone does not establish enforcement.
 The academic/device telemetry policy permits **behavioural metadata only**. Typed answer
 and pasted text content are excluded from that pipeline.
 
-| Signal                                               | Collected              | Purpose                                                             |
-| ---------------------------------------------------- | ---------------------- | ------------------------------------------------------------------- |
-| Keystroke count per window                           | ✅                     | Typing cadence analysis                                             |
-| Characters typed (count only)                        | ✅                     | Cognitive load signal                                               |
-| Effective WPM                                        | ✅                     | Superhuman cadence detection                                        |
-| Focus loss count                                     | ✅                     | Context-switch detection                                            |
-| Time off window (ms)                                 | ✅                     | Off-task duration signal                                            |
-| Paste count                                          | ✅                     | Paste frequency                                                     |
-| Paste length (chars, no content)                     | ✅                     | Bulk paste detection                                                |
-| Maximum idle gap (ms)                                | ✅                     | Idle-then-paste pattern                                             |
-| Keydown timing intervals                             | ✅ (capped at 200)     | Rhythm analysis                                                     |
-| Helper connection status                             | ✅                     | Countermeasure A attestation                                        |
-| Display-affinity alerts                              | ✅                     | Invisible window detection                                          |
-| Node ID hash (SHA-256 of Ed25519 pubkey)             | ✅                     | Stage 2.1/2.2 — node continuity check                               |
-| Node public key (base64)                             | ✅                     | Stage 2.2 — paired-session signature verification                   |
-| Pairing challenge hash                               | ✅                     | Stage 2.2 — pairing audit trail                                     |
-| Proof / pairing signatures (verify-only)             | ✅ (not stored as raw) | Stage 2.1/2.2 — Ed25519 verification; raw bytes never enter audit   |
-| Capability flags (booleans)                          | ✅                     | Stage 2.1 — node capability summary                                 |
-| Node uptime / window count / capture-excluded count  | ✅                     | Stage 2.1 — numeric signals                                         |
-| Daemon node hash and version                         | ✅                     | Stage 2.3 — localhost daemon proof verification                     |
-| Daemon state, proof age, and challenge hash          | ✅                     | Stage 2.3 — replay-resistant device-integrity metadata              |
-| Browser SDK daemon state label                       | ✅                     | Stage 2.4 — local lifecycle status only                             |
-| Scanner state, counts, duration, and version         | ✅                     | Stage 2.5/2.6 — aggregate metadata-only affinity scanner summary    |
-| Windows monitor-only / capture-excluded counts       | ✅                     | Stage 2.6B — signed `WDA_MONITOR` / `WDA_EXCLUDEFROMCAPTURE` counts |
-| Raw HWNDs, process/window names, PIDs, paths, pixels | ❌                     | Forbidden; rejected by daemon-proof validation and privacy audit    |
+| Signal                                               | Collected              | Purpose                                                            |
+| ---------------------------------------------------- | ---------------------- | ------------------------------------------------------------------ |
+| Keystroke count per window                           | ✅                     | Typing cadence analysis                                            |
+| Characters typed (count only)                        | ✅                     | Cognitive load signal                                              |
+| Effective WPM                                        | ✅                     | Superhuman cadence detection                                       |
+| Focus loss count                                     | ✅                     | Context-switch detection                                           |
+| Time off window (ms)                                 | ✅                     | Off-task duration signal                                           |
+| Paste count                                          | ✅                     | Paste frequency                                                    |
+| Paste length (chars, no content)                     | ✅                     | Bulk paste detection                                               |
+| Maximum idle gap (ms)                                | ✅                     | Idle-then-paste pattern                                            |
+| Keydown timing intervals                             | ✅ (capped at 200)     | Rhythm analysis                                                    |
+| Helper connection status                             | ✅                     | Countermeasure A attestation                                       |
+| Display-affinity alerts                              | ✅                     | Invisible window detection                                         |
+| Node ID hash (SHA-256 of Ed25519 pubkey)             | ✅                     | Stage 2.1/2.2: node continuity check                               |
+| Node public key (base64)                             | ✅                     | Stage 2.2: paired-session signature verification                   |
+| Pairing challenge hash                               | ✅                     | Stage 2.2: pairing audit trail                                     |
+| Proof / pairing signatures (verify-only)             | ✅ (not stored as raw) | Stage 2.1/2.2: Ed25519 verification; raw bytes never enter audit   |
+| Capability flags (booleans)                          | ✅                     | Stage 2.1: node capability summary                                 |
+| Node uptime / window count / capture-excluded count  | ✅                     | Stage 2.1: numeric signals                                         |
+| Daemon node hash and version                         | ✅                     | Stage 2.3: localhost daemon proof verification                     |
+| Daemon state, proof age, and challenge hash          | ✅                     | Stage 2.3: replay-resistant device-integrity metadata              |
+| Browser SDK daemon state label                       | ✅                     | Stage 2.4: local lifecycle status only                             |
+| Scanner state, counts, duration, and version         | ✅                     | Stage 2.5/2.6: aggregate metadata-only affinity scanner summary    |
+| Windows monitor-only / capture-excluded counts       | ✅                     | Stage 2.6B: signed `WDA_MONITOR` / `WDA_EXCLUDEFROMCAPTURE` counts |
+| Raw HWNDs, process/window names, PIDs, paths, pixels | ❌                     | Forbidden; rejected by daemon-proof validation and privacy audit   |
 
 ## Excluded data in the academic/device policy
 
@@ -227,12 +227,12 @@ the legacy public pages section.
 
 Simurgh enforces privacy constraints at the code level:
 
-- `src/privacy/privacyConfig.js` — declarative policy (what is and is not collected)
-- `src/privacy/normaliseTelemetry.js` — strict allowlist enforcement before any processing
-- `src/privacy/hashIdentity.js` — keyed pseudonymization after receipt of the raw identifier
-- `public/sdk/simurgh-browser-sdk.js` — daemon status state machine with metadata-only proof attachment
-- `tools/simurgh-daemon-macos/Sources/SimurghDaemon/AffinityScanner.swift` — CoreGraphics metadata scanner with aggregate output only
-- `tools/simurgh-daemon-windows/src/SimurghDaemon.Windows/DisplayAffinityScanner.cs` — Win32 `GetWindowDisplayAffinity` scanner with aggregate counts only; raw field transmission is unconditionally rejected
+- `src/privacy/privacyConfig.js`: declarative policy (what is and is not collected)
+- `src/privacy/normaliseTelemetry.js`: strict allowlist enforcement before any processing
+- `src/privacy/hashIdentity.js`: keyed pseudonymization after receipt of the raw identifier
+- `public/sdk/simurgh-browser-sdk.js`: daemon status state machine with metadata-only proof attachment
+- `tools/simurgh-daemon-macos/Sources/SimurghDaemon/AffinityScanner.swift`: CoreGraphics metadata scanner with aggregate output only
+- `tools/simurgh-daemon-windows/src/SimurghDaemon.Windows/DisplayAffinityScanner.cs`: Win32 `GetWindowDisplayAffinity` scanner with aggregate counts only; raw field transmission is unconditionally rejected
 
 These are named enforcement paths, not proof of repository-wide coverage. The legacy helper
 exception above illustrates why each ingestion and export route needs separate review.

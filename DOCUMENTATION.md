@@ -56,8 +56,8 @@ Likewise, the root package version, explorer version and research tags are disti
    it was checked. Separate normative requirements, vendor guidance and project interpretation.
 4. Use explicit working directories, pinned prerequisites and fresh output paths in commands.
    Distinguish key-free replay from fresh inference, and build tests from interactive validation.
-5. Check relative paths, anchors, commands and formatting for edited mutable files. Record checks
-   actually performed and material exclusions. Never label an automated inventory as complete
+5. Check relative paths, anchors, commands and formatting for edited mutable files. Record the checks
+   you performed and material exclusions. Never label an automated inventory as complete
    semantic or scientific validation.
 6. Append the required change-log entries and preserve old evidence bytes. Correct a frozen
    assertion through a dated erratum linking the original path and replacement evidence.

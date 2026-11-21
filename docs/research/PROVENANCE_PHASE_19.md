@@ -1869,6 +1869,27 @@ Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to
 receipt, or any other change to what the comparator checks. This declaration commit must be a
 strict ancestor of every commit that acts on it.
 
+**P19-STYLE01 (bounded authority for a wording pass on living documents; declared 21 Nov 2026
+before any commit that acts on it).** The owner asked for a pass against stock machine-written
+phrasing over the documents of the last four months. A scan of the 365 Markdown files changed
+since 21 Jul 2026 found no cadence problem, two files with invisible characters, 33 files with
+stock words and 5,278 dash-separated clauses, nearly all of them in records this project does
+not rewrite. This declaration authorises, and nothing else:
+
+1. Wording and punctuation edits in these living documents: the root `README.md`,
+   `DOCUMENTATION.md`, `SECURITY.md`, `PRIVACY.md`, and the READMEs and results pages of
+   lanes 19f, 19k and 19x. An edit may replace a dash that separates two clauses or a label
+   from its text, remove an adverb that carries no meaning, or replace a stock phrase with a
+   plain one.
+2. Both logs and the ruling, which lists every file changed and the count of edits in each.
+
+Not authorised: any change to a number, a claim, a limit, a link, a heading, a code block, a
+command, a quotation of a model or of an operator, or a table's data; any edit to a file whose
+digest an audit inventory or a test records; any edit to a log entry, a ledger entry, a dated
+plan, specification, audit or gap hunt, a frozen stage's document, a generated file, a pack's
+bound file, a file an operator returned or third-party material. This declaration commit must
+be a strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
@@ -2874,3 +2895,19 @@ strict ancestor of every commit that acts on it.
   twenty-three packs and gained one paragraph on the lane, and `docs/AUTHOR_AND_METHOD.md`
   has the new count. Not done: no one outside the author has run the handoff for 19x or for
   the other items owed.
+- Ruling (21 Nov 2026, P19-STYLE01 exercised): the declaration (`185f8739`) precedes the
+  commit that acts on it. Thirty-three edits in seven living documents: `PRIVACY.md` 18 and
+  `SECURITY.md` 9, each a dash between a label and its text or between two clauses replaced
+  by a colon, a semicolon or a full stop; the root `README.md` 2 (the dash in the logo's
+  alternative text and one adverb); `DOCUMENTATION.md` 1; and one word or phrase each in the
+  19f README, the 19k README and the 19x results page. No number, claim, limit, link,
+  heading, code block, command, quotation or table datum changed; two tables were realigned
+  by the formatter after their separators changed. Left as written, by the declaration: 62
+  dated plans and specifications (2,285 dash-separated clauses), both logs (1,791), 27
+  documents of frozen stages (557), 29 of dated audits (225), 14 dated records (117), and 16
+  living documents whose digests an audit inventory records, `RESEARCH_HISTORY.md` among
+  them. Two files hold invisible characters and are also left: a third-party model card
+  (2) and a dated gap-hunt record (150). The scoring script gave every edited file the same
+  low score before and after, which shows nothing either way. The quick gate passes. Not
+  done: no structure, paragraph or section was rewritten, and the pass says nothing about
+  how any text was written; `docs/AUTHOR_AND_METHOD.md` states how AI assistance is used.

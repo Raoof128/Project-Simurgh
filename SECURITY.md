@@ -452,14 +452,14 @@ The Windows Device Shield path is protected by:
 
 ### Stage 1 Trust Boundaries
 
-| Component              | Trust Level         | Mechanism                                                                                      |
-| ---------------------- | ------------------- | ---------------------------------------------------------------------------------------------- |
-| Student browser        | **Untrusted**       | Strict allowlist + range-reject validation; replay guard (sequence + timestamp); rate limit    |
-| Joined student session | **Token-bound**     | HMAC-SHA256 session token issued at `/api/exams/:id/join`, required for lifecycle + telemetry  |
-| Native helper          | **Authenticated**   | `x-simurgh-helper-secret` shared-secret header + per-helper rate limit                         |
-| Instructor dashboard   | **Authenticated**   | Bearer token (`SIMURGH_INSTRUCTOR_TOKEN`) — query-string token stripped from URL after capture |
-| Claude API             | **Trusted service** | Receives sanitised behavioural metadata only, never raw content                                |
-| Audit chain            | **Tamper-evident**  | HMAC-SHA256 linked entries; integrity is relative to the key and trusted retained chain state  |
+| Component              | Trust Level         | Mechanism                                                                                     |
+| ---------------------- | ------------------- | --------------------------------------------------------------------------------------------- |
+| Student browser        | **Untrusted**       | Strict allowlist + range-reject validation; replay guard (sequence + timestamp); rate limit   |
+| Joined student session | **Token-bound**     | HMAC-SHA256 session token issued at `/api/exams/:id/join`, required for lifecycle + telemetry |
+| Native helper          | **Authenticated**   | `x-simurgh-helper-secret` shared-secret header + per-helper rate limit                        |
+| Instructor dashboard   | **Authenticated**   | Bearer token (`SIMURGH_INSTRUCTOR_TOKEN`); query-string token stripped from URL after capture |
+| Claude API             | **Trusted service** | Receives sanitised behavioural metadata only, never raw content                               |
+| Audit chain            | **Tamper-evident**  | HMAC-SHA256 linked entries; integrity is relative to the key and trusted retained chain state |
 
 ### Secret Separation
 
@@ -489,10 +489,10 @@ The historical academic/device telemetry pipeline is designed around data minimi
 
 Enforcement points:
 
-- `src/privacy/privacyConfig.js` — declarative allowlist of what may be collected
-- `src/privacy/normaliseTelemetry.js` — strict allowlist applied before storage
-- `src/privacy/hashIdentity.js` — HMAC-SHA256 pseudonymization after receipt of the raw identifier
-- `tools/privacy-audit.mjs` — CI-ready scanner that fails if forbidden fields appear in generated data
+- `src/privacy/privacyConfig.js`: declarative allowlist of what may be collected
+- `src/privacy/normaliseTelemetry.js`: strict allowlist applied before storage
+- `src/privacy/hashIdentity.js`: HMAC-SHA256 pseudonymization after receipt of the raw identifier
+- `tools/privacy-audit.mjs`: CI-ready scanner that fails if forbidden fields appear in generated data
 
 These controls are implemented in the named validation paths. They do not protect against a
 compromised server or a party able to change the code or its signing secrets; application audit
@@ -511,9 +511,9 @@ This is the Critical wording emitted by `src/academic/riskScoring.js`; Warning u
 
 The following attack classes are **not** detectable from telemetry alone:
 
-1. **Click-through overlays** — `WS_EX_TRANSPARENT` (Windows) or `ignoresMouseEvents` (macOS) do not fire focus or paste events
-2. **Read-don't-paste workflows** — silent transcription at human WPM with no paste events
-3. **GPU-layer overlays** (DirectX / Metal hooks, e.g. Cluely-class) — bypass both DOM events and `getDisplayMedia()`
+1. **Click-through overlays**: `WS_EX_TRANSPARENT` (Windows) or `ignoresMouseEvents` (macOS) do not fire focus or paste events
+2. **Read-don't-paste workflows**: silent transcription at human WPM with no paste events
+3. **GPU-layer overlays** (DirectX / Metal hooks, e.g. Cluely-class): bypass both DOM events and `getDisplayMedia()`
 
 Mitigations:
 
@@ -540,7 +540,7 @@ Dependency findings are time-dependent. Run the command against the installed lo
 - Challenge binding: proof includes a server-issued challenge echoed back; session-scoped one-time use prevents replay.
 - Wayland portal probe uses property reads only (`AvailableSourceTypes`); never calls `CreateSession`, `SelectSources`, `Start`, or `OpenPipeWireRemote`. Enforced by source-grep tests in both the Wayland scanner test file and the cybersecurity audit.
 - `display_server` is locked to the first verified value per session; mid-session changes are rejected with `display_server_mismatch` and emit `DAEMON_PROOF_REJECTED` to the HMAC audit chain.
-- XWayland output never claims `x11_full` or `wayland_limited` coverage — always `xwayland_partial`.
+- XWayland output never claims `x11_full` or `wayland_limited` coverage. It reports `xwayland_partial`.
 - `browser_package_hint` is UX-only. The server (`server.js`), proof validator (`daemonProof.js`), schema (`platformScannerSchema.js`), risk policy (`scannerRiskPolicy.js`), and report builder (`reportBuilder.js`) all source-grep clean of the field.
 - systemd `--user` unit is development-only. No system-wide service. No root. No sudo in lifecycle scripts. Hardening directives: `NoNewPrivileges=true`, `ProtectSystem=strict`, `ProtectHome=read-only`, `PrivateTmp=true`.
 - Ubuntu CI now enforces Rust `cargo fmt --check`, `cargo clippy -- -D warnings`, `cargo test`, and `shellcheck` on the lifecycle scripts. Xvfb integration tests are mandatory via `SIMURGH_REQUIRE_XVFB_TESTS=1`.
