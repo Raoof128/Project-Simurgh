@@ -73,6 +73,17 @@ baseline is needed and does not measure one for the paper's models. Two of the t
 author said before the run did not hold, and a defect in the lane's own record-keeping was found
 after the run and amended in the open. Both are in the record.
 
+**The same control on eight models, 21 November.**
+[19x](docs/research/provenance-phase-19x/README.md) repeated it on four Anthropic and four OpenAI
+models, 1,980 runs. With nothing planted, the attack check was true in at least one run on seven
+of the eight, in at most 3.3% of a model's runs and in six of the 90 cases. Two dispute cases
+fired on six and on seven models. The author read all 43 such runs: in 33 the model took the
+attacker's side of a decision for a reason it stated, and in 10 the check was true of something
+the model did not do. Claude Sonnet 4.5, the one model the paper also used, had none in ninety
+runs. No attacked run was made, so this does not say what share of any reported attack success
+these outcomes make up. The author's disk filled during the run and stopped it for a quarter of
+an hour, and two of six things said beforehand did not hold. Both are in the record.
+
 [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) ·
 [Release and archive](https://github.com/Raoof128/Project-Simurgh/releases/tag/phase-19-paper-v1.0) ·
 [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) ·
@@ -290,7 +301,7 @@ and document text as untrusted data when feeding CLI results to an agent.
 | Perform outside reproduction | [Operator handoff](docs/research/CONTINUATION_HANDOFF_2026-10-19.md)                                                                                        | Earlier viewer/export snapshot; use the current runbook for the latest study                |
 | Trace prior work             | [Reviewer index](docs/REVIEWER_INDEX.md) and [research history](RESEARCH_HISTORY.md)                                                                        | Frozen stages, negative results and historical reproduction                                 |
 | Read the newest study        | [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) and [Phase 19 ledger](docs/research/PROVENANCE_PHASE_19.md)                            | Plans committed before each run, hypotheses decided by rule, limits stated with each result |
-| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Twenty-two verify commands; twenty need no installed packages                               |
+| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Twenty-three verify commands; twenty-one need no installed packages                         |
 | Judge the process and author | [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) and [author, method and open problems](docs/AUTHOR_AND_METHOD.md)                                    | How errors were found and handled, how AI assistance is used, what remains open             |
 
 The most useful review would challenge the exact-action comparator, admission/revocation
@@ -299,13 +310,13 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
 
 ### Open work
 
-- **Independent reproduction:** one outside operator has replayed twenty-one of the twenty-two
+- **Independent reproduction:** one outside operator has replayed twenty-one of the twenty-three
   Phase 19 packs on Ubuntu x86_64 with no discrepancy, including the five frozen-gate replays,
   the Lean check and the namespace probe, and the test suite passed there. A second ran the
   handoff natively on Windows 10, where every verifier refused; the causes are published and
   the handoff now lists native Windows as unsupported. An earlier receipt covers five packs on
   macOS ([receipts and reviews](docs/research/provenance-phase-19f/README.md)). Still
-  outstanding: lane 19w, one dataset recomputation, a second Linux host, and independent
+  outstanding: lanes 19w and 19x, one dataset recomputation, a second Linux host, and independent
   evidence custody, since the author's side asked both operators and each signed with a typed
   name.
 - **Provider lifecycle:** real provider IAM/revocation and authenticated live safety-alert

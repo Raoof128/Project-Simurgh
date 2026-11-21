@@ -7,7 +7,7 @@
     "os": "Ubuntu 26.04.1 LTS (Resolute Raccoon), Linux 7.0.0-43-generic",
     "python": "CPython 3.12.16 (uv-managed standalone build)"
   },
-  "not_exercised": ["19q --dataset", "19w"],
+  "not_exercised": ["19q --dataset", "19w", "19x"],
   "operator": "Jacob",
   "phases": {
     "19a": {
@@ -190,6 +190,9 @@
       "tree_state_is_commit": true
     },
     "19w": {
+      "result": "not_in_receipt"
+    },
+    "19x": {
       "result": "not_in_receipt"
     }
   },

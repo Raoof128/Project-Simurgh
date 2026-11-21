@@ -1840,6 +1840,35 @@ protocol's source digests:
   to a model for this lane. The lane's instrument is written after this declaration and
   committed before the first run.
 
+**P19-OPERATOR10 (bounded authority to bring lane 19x into the outside-operator handoff and the
+externally pinned roots; declared 21 Nov 2026 before any commit that acts on it).** 19x is
+committed (`95a3757e`) with root
+`7ff8634f56c8bb3cdb152d5e5a22a13db0c73ba62c6f5f0c0ccea904e995db36`. Its declaration did not
+authorise a workflow or handoff edit, so the hosted roots check and the handoff list twenty-two
+packs. This change is stacked on the lane's branch and is merged after it. This declaration
+authorises, and nothing else:
+
+1. `handoff19.py`: 19x added to `PHASES` as a plain lane with its host and time, the word for
+   the new count, and 19x in the list of lanes that need nothing beyond the standard library.
+   Verifying 19x runs no model and no benchmark and needs no network or key: it recomputes the
+   counts from the committed records. No change to what the comparator checks. Tests first.
+2. The reviews of the three operator receipts recomputed under the new phase list. No receipt
+   is edited; 19x appears in each review as `not_in_receipt`, which is what happened.
+3. Re-rendering `HANDOFF.md` and `discrepancy-template.json`; the 19f README's count of packs,
+   its sentence on the lane and its list of what is owed.
+4. `.github/workflows/assurance-provenance.yml`: 19x's `docs/` path added to both path filters
+   and its id to the expected-roots check, with its message. No step is added, removed or
+   renamed, and the Stage 5Q census must be byte-identical before and after. The repository
+   variable `PHASE19_ROOTS` gains the one root, set outside the pull request, the twenty-two
+   existing values unchanged.
+5. The root README's count of Phase 19 packs and its sentences on the lane, and the same count
+   in `docs/AUTHOR_AND_METHOD.md`.
+6. Both logs and the ruling.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to an operator's
+receipt, or any other change to what the comparator checks. This declaration commit must be a
+strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
@@ -2827,3 +2856,21 @@ protocol's source digests:
   attack success these outcomes make up; the labels are one reader's judgement; no one
   outside the author has replayed the pack; 19x is not in the operator handoff or the pinned
   roots, which needs its own declaration.
+- Ruling (21 Nov 2026, P19-OPERATOR10 exercised): the declaration (`5b5a7053`) precedes the
+  commit that acts on it. `handoff19.py` lists twenty-three lanes; 19x is a plain lane whose
+  verification runs no model and no benchmark and takes under two seconds. The handoff tests
+  were changed first and five failed before the code changed; 37 pass. The comparator is
+  unchanged. The three operator receipts are byte-identical; their reviews were recomputed
+  and list 19x as `not_in_receipt`, and `handoff19.py status` names three items still owed
+  under `IOU-19-OPERATOR`: 19w, 19x and 19q's `--dataset`. `HANDOFF.md` and
+  `discrepancy-template.json` were rendered again. The 19f README counts twenty-three packs
+  and has a row for the lane. The workflow gained the lane's `docs/` path in both path
+  filters and its id in the expected-roots check, with its message; no step was added,
+  removed or renamed, and the Stage 5Q census output is identical before and after.
+  `PHASE19_ROOTS` was extended outside the pull request at 11:18Z on 21 Nov from twenty-two
+  roots to twenty-three, the twenty-two existing values unchanged and each compared with its
+  committed `ROOT.sha256`; the one added is 19x
+  `7ff8634f56c8bb3cdb152d5e5a22a13db0c73ba62c6f5f0c0ccea904e995db36`. The root README says
+  twenty-three packs and gained one paragraph on the lane, and `docs/AUTHOR_AND_METHOD.md`
+  has the new count. Not done: no one outside the author has run the handoff for 19x or for
+  the other items owed.
