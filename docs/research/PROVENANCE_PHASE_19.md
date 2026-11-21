@@ -1869,6 +1869,27 @@ Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to
 receipt, or any other change to what the comparator checks. This declaration commit must be a
 strict ancestor of every commit that acts on it.
 
+**P19-STYLE01 (bounded authority for a wording pass on living documents; declared 21 Nov 2026
+before any commit that acts on it).** The owner asked for a pass against stock machine-written
+phrasing over the documents of the last four months. A scan of the 365 Markdown files changed
+since 21 Jul 2026 found no cadence problem, two files with invisible characters, 33 files with
+stock words and 5,278 dash-separated clauses, nearly all of them in records this project does
+not rewrite. This declaration authorises, and nothing else:
+
+1. Wording and punctuation edits in these living documents: the root `README.md`,
+   `DOCUMENTATION.md`, `SECURITY.md`, `PRIVACY.md`, and the READMEs and results pages of
+   lanes 19f, 19k and 19x. An edit may replace a dash that separates two clauses or a label
+   from its text, remove an adverb that carries no meaning, or replace a stock phrase with a
+   plain one.
+2. Both logs and the ruling, which lists every file changed and the count of edits in each.
+
+Not authorised: any change to a number, a claim, a limit, a link, a heading, a code block, a
+command, a quotation of a model or of an operator, or a table's data; any edit to a file whose
+digest an audit inventory or a test records; any edit to a log entry, a ledger entry, a dated
+plan, specification, audit or gap hunt, a frozen stage's document, a generated file, a pack's
+bound file, a file an operator returned or third-party material. This declaration commit must
+be a strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
