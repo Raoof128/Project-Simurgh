@@ -1,5 +1,16 @@
 ## Change Log
 
+## [phase-19-style01-2026-11-21] — 2026-11-21 — Wording pass on living documents
+
+**Raouf:**
+
+- **Scope:** the declaration P19-STYLE01, seven living documents, the ruling and both logs.
+- **Summary:** 33 edits: dashes between a label and its text replaced by colons in
+  `PRIVACY.md` and `SECURITY.md`, and single words in five other documents. No number, claim,
+  link, heading, command or quotation changed. Logs, dated records, frozen stages and
+  audit-pinned documents were left as written.
+- **Verification:** `prettier`; quick gate.
+
 ## [phase-19f-operator10-2026-11-21] — 2026-11-21 — Lane 19x in the operator handoff; twenty-three pinned roots
 
 **Raouf:**

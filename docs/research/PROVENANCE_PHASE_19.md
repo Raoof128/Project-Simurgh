@@ -2895,3 +2895,19 @@ be a strict ancestor of every commit that acts on it.
   twenty-three packs and gained one paragraph on the lane, and `docs/AUTHOR_AND_METHOD.md`
   has the new count. Not done: no one outside the author has run the handoff for 19x or for
   the other items owed.
+- Ruling (21 Nov 2026, P19-STYLE01 exercised): the declaration (`185f8739`) precedes the
+  commit that acts on it. Thirty-three edits in seven living documents: `PRIVACY.md` 18 and
+  `SECURITY.md` 9, each a dash between a label and its text or between two clauses replaced
+  by a colon, a semicolon or a full stop; the root `README.md` 2 (the dash in the logo's
+  alternative text and one adverb); `DOCUMENTATION.md` 1; and one word or phrase each in the
+  19f README, the 19k README and the 19x results page. No number, claim, limit, link,
+  heading, code block, command, quotation or table datum changed; two tables were realigned
+  by the formatter after their separators changed. Left as written, by the declaration: 62
+  dated plans and specifications (2,285 dash-separated clauses), both logs (1,791), 27
+  documents of frozen stages (557), 29 of dated audits (225), 14 dated records (117), and 16
+  living documents whose digests an audit inventory records, `RESEARCH_HISTORY.md` among
+  them. Two files hold invisible characters and are also left: a third-party model card
+  (2) and a dated gap-hunt record (150). The scoring script gave every edited file the same
+  low score before and after, which shows nothing either way. The quick gate passes. Not
+  done: no structure, paragraph or section was rewritten, and the pass says nothing about
+  how any text was written; `docs/AUTHOR_AND_METHOD.md` states how AI assistance is used.

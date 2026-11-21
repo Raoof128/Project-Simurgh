@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/Project-Simurgh-Logo.png" alt="Project Simurgh — Knowledge, Verification, Guidance" width="100%" />
+  <img src="docs/Project-Simurgh-Logo.png" alt="Project Simurgh: Knowledge, Verification, Guidance" width="100%" />
 </p>
 
 # Project Simurgh
@@ -8,7 +8,7 @@
 
 Simurgh is a research prototype for controlling what an AI agent can do when its authority
 changes. It combines host-controlled delegation, safety stops, monitoring leases and
-credential checks, then preserves the receiver state needed to examine what actually happened.
+credential checks, then preserves the receiver state needed to examine what happened.
 
 **In a bounded Llama evaluation, composed controls reduced restricted-state trials with new
 effects from 17/24 to 0/24 while preserving 23/24 active completions.** The same comparison

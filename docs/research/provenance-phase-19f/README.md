@@ -49,7 +49,7 @@ The operator's note returned two mismatches with the handoff, both reproduced an
    successor chain and exit with `ModuleNotFoundError` on a bare interpreter. Answer:
    [`requirements-verify.lock`](../../../tools/assurance-provenance/requirements-verify.lock), a
    hash-locked subset of the SDK lock, and a host recipe that names it.
-2. The full hash-locked set has no macOS x86_64 wheel for `cryptography`, so it could not serve as
+2. The full hash-locked set has no macOS x86_64 wheel for `cryptography`, so it could not be
    the workaround there. Answer: the handoff now says the full set is Linux x86_64 only.
 
 The note also records what the run did not cover: 19d (refused off Linux), 19a's `--replay`, the

@@ -14,6 +14,25 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-21 (Australia/Sydney) — Wording pass on living documents (33 edits in seven files; records left as written)
+
+**Raouf:**
+
+- **Scope:** the declaration P19-STYLE01 in the Phase 19 ledger (`185f8739`, before the
+  change), seven living documents, the ruling and both logs.
+- **Summary:** the owner asked for a pass against stock machine-written phrasing over the
+  documents of the last four months. A scan of the 365 Markdown files changed since 21 Jul
+  2026 found little to change in the documents this project may edit: 33 edits, almost all
+  a dash between a label and its text in `PRIVACY.md` and `SECURITY.md`. The records that
+  hold nearly all the dashes (logs, dated plans, specifications and audits, frozen stages)
+  are left as written.
+- **Files changed:** `README.md`, `DOCUMENTATION.md`, `SECURITY.md`, `PRIVACY.md`, the 19f and
+  19k READMEs, the 19x results page, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** no test quotes any changed sentence; `prettier` is clean and the quick
+  gate passes (96 steps).
+- **Not done:** no paragraph or section was restructured. Sixteen living documents pinned by
+  audit inventories were not touched.
+
 ### 2026-11-21 (Australia/Sydney) — Phase 19f: lane 19x joins the operator handoff; twenty-three pinned roots in the hosted check
 
 **Raouf:**

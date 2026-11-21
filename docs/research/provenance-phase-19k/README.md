@@ -44,7 +44,7 @@ All three models passed the positive control. The primary model declined all 120
 
 **The wording matters as much as the style.** On the primary model the five operator-note
 wordings drew 12, 0, 4, 3 and 24 sends of 24; the five host-block wordings 4, 24, 4, 4 and 0. A
-style's count is an average over wordings that behave very differently, and one wording of a style
+style's count is an average over wordings that behave differently, and one wording of a style
 moving the model does not show that the style does.
 
 **The ordering of styles does not carry to the other models.** These are descriptions, not tests;
