@@ -14,6 +14,32 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-21 (Australia/Sydney) — Phase 19f: lane 19x joins the operator handoff; twenty-three pinned roots in the hosted check
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR10 in the Phase 19 ledger (`5b5a7053`, before the
+  change), `tools/assurance-provenance/handoff19.py` and its test, the files rendered from it
+  in `docs/research/provenance-phase-19f/`, that directory's two READMEs, the hosted workflow
+  `assurance-provenance.yml`, the root README, one count in `docs/AUTHOR_AND_METHOD.md`, the
+  ruling and both logs.
+- **Summary:** the handoff lists twenty-three lanes. 19x is a plain lane: verifying it
+  recomputes the counts from the committed records and runs no model and no benchmark. The
+  comparator is unchanged. The reviews of the three operator receipts were recomputed and
+  list 19x as `not_in_receipt`; the receipts themselves are byte-identical. The workflow has
+  the lane's path in both filters and its id in the expected-roots check. The repository
+  variable `PHASE19_ROOTS` holds twenty-three roots, the twenty-two earlier ones unchanged.
+  The root README counts twenty-three packs and has a paragraph on the lane.
+- **Files changed:** `handoff19.py`, `tests/test_handoff19.py`, `HANDOFF.md`,
+  `discrepancy-template.json`, three reviews, two READMEs under 19f,
+  `.github/workflows/assurance-provenance.yml`, `README.md`, `docs/AUTHOR_AND_METHOD.md`, the
+  ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the handoff tests were changed first and five failed before the code
+  changed; 37 pass. The Stage 5Q census output is identical before and after the workflow
+  edit. A Python 3.12 with no site packages verified the 19x pack. `prettier` is clean and
+  the quick gate passes.
+- **Follow-ups:** an outside replay of the three items still owed.
+
 ### 2026-11-21 (Australia/Sydney) — Phase 19x: pack and results (with nothing planted, the benchmark's attack formula was true on seven of eight models, in six of 90 cases)
 
 **Raouf:**

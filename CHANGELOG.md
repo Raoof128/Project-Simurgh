@@ -1,5 +1,20 @@
 ## Change Log
 
+## [phase-19f-operator10-2026-11-21] — 2026-11-21 — Lane 19x in the operator handoff; twenty-three pinned roots
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR10, `handoff19.py` and its test, the rendered handoff
+  files, the 19f READMEs, the hosted workflow, the root README, the ruling and both logs.
+- **Summary:** the handoff, the hosted expected-roots check and `PHASE19_ROOTS` cover
+  twenty-three packs. 19x is a plain lane whose verification runs no model and no benchmark.
+  The comparator and the three operator receipts are unchanged; each review lists 19x as
+  `not_in_receipt`.
+- **Verification:** 37 handoff tests, changed before the code; the Stage 5Q census is
+  byte-identical before and after the workflow edit; quick gate; a bare Python 3.12 verifies
+  the pack.
+- **Follow-ups:** an outside replay of the three items still owed.
+
 ## [phase-19x-2026-11-21] — 2026-11-21 — Lane 19x: the attack formula with no attack on eight models; true on seven, in six of 90 cases
 
 **Raouf:**

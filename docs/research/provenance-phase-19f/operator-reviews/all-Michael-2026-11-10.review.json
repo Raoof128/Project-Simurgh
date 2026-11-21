@@ -31,7 +31,8 @@
     "19t --replay",
     "19u",
     "19v",
-    "19w"
+    "19w",
+    "19x"
   ],
   "operator": "Michael",
   "phases": {
@@ -146,6 +147,9 @@
       "result": "not_in_receipt"
     },
     "19w": {
+      "result": "not_in_receipt"
+    },
+    "19x": {
       "result": "not_in_receipt"
     }
   },

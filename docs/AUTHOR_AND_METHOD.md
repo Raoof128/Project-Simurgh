@@ -87,9 +87,9 @@ below. Each item names what already exists to build on.
    authorised action is unambiguous. Phase 19 did not measure its cost on a task benchmark, where
    legitimate work is messier.
 5. **Reproduction and review by others.** One outside operator has replayed twenty-one of the
-   twenty-two packs on a Linux machine, the manuscript's studies among them, with no discrepancy.
-   That is one machine, and the owner asked the operator. Lane 19w and one dataset recomputation
-   have not been replayed outside the author's custody, and no researcher outside the project has
+   twenty-three packs on a Linux machine, the manuscript's studies among them, with no
+   discrepancy. That is one machine, and the owner asked the operator. Lanes 19w and 19x and one
+   dataset recomputation have not been replayed outside the author's custody, and no researcher outside the project has
    read the manuscript.
 
 ## Where to press
