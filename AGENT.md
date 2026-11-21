@@ -14,6 +14,24 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-21 (Australia/Sydney) — Phase 19x: both chains stopped by a full disk on the author's machine; ledger entry before the halted unit is run again
+
+**Raouf:**
+
+- **Scope:** a note in the Phase 19 ledger and both logs. No code, no pinned source and no
+  pack is touched; the instrument commit `e53f7f30` is unchanged.
+- **Summary:** the runs started at 08:52Z on 21 Nov after a second connection check passed.
+  At about 09:40Z the author's disk ran out of space. The Anthropic chain halted under the
+  declared halt rule on Sonnet 5.5's third repeat (two cases of one unit without a record);
+  the OpenAI chain's process ended with a write error during Terra's second repeat. The
+  cause is the author's machine, not a vendor, a key or the instrument.
+- **Files changed:** `docs/research/PROVENANCE_PHASE_19.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the cause was read from both chain logs (`No space left on device`);
+  free space was 19 GB before the restart. `prettier` is clean on the three files.
+- **Not done:** the author did not establish what filled the disk beyond the lane's own
+  121 MB. No result has been read beyond run counts and the meter.
+- **Follow-ups:** the halted unit once more, then both chains in the declared order.
+
 ### 2026-11-18 (Australia/Sydney) — Phase 19x: connection check passed for all eight models and the judge (no run yet)
 
 **Raouf:**

@@ -1,5 +1,17 @@
 ## Change Log
 
+## [phase-19x-halt-note-2026-11-21] — 2026-11-21 — Lane 19x: runs interrupted by a full disk; ledger entry before the rerun of one halted unit
+
+**Raouf:**
+
+- **Scope:** one ledger note and both logs; no code or pack.
+- **Summary:** both vendor chains of lane 19x stopped about fifty minutes into the run when
+  the author's disk ran out of space. One unit of Sonnet 5.5 halted under the declared rule
+  and is run once more after this entry; its first logs are kept and reported as
+  superseded. One unit of Terra was interrupted and is continued.
+- **Verification:** cause read from both chain logs; `prettier` clean.
+- **Follow-ups:** the remaining units of both chains.
+
 ## [phase-19x-connection-check-2026-11-18] — 2026-11-18 — Lane 19x: connection check passed for all eight models
 
 **Raouf:**

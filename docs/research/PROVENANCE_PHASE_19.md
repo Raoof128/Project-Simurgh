@@ -2776,3 +2776,29 @@ protocol's source digests:
   at 8 and 40 USD per million tokens the author put one repeat at 23 to 35 USD, and the
   owner left it out. The lane stays at the eight declared models. Not done: every run. The
   owner starts them.
+- Note (21 Nov 2026, P19-CONTROL02, both chains stopped by a full disk on the author's
+  machine; this is the entry the halt rule requires before a halted unit is run again): the
+  connection check was repeated at 08:43Z on the unchanged instrument and passed for the
+  judge and all eight models (0.0068 USD at Anthropic, 0.0018 at OpenAI). Both chains were
+  started at 08:52:26Z from head `bd44391e`. The author's disk, which had 8.3 GB free at the
+  check, ran out of space between 09:37Z and 09:41Z. The lane's own files were about 121 MB
+  at that point; the author did not check free space as a condition of starting and did not
+  establish what else used the rest. Anthropic chain: Haiku 5.5 finished its second and
+  third repeats and Sonnet 5.5 its first two; in Sonnet 5.5's third repeat the marketplace
+  unit came back with two cases without a record: `OM10` with an `OSError` 28, no space
+  left on the device, and `OM2` with an `OperationalError`, the database locked. The halt
+  rule stopped the chain at 09:41:02Z (exit 4). The rule was written for a failure of the account or the
+  provider; this failure is the author's machine, and it is named here as that. OpenAI
+  chain: Luna finished three repeats and Terra one and two units of its second; the process
+  then ended with `[Errno 28] No space left on device` while writing its own timeline
+  during Terra's second repeat, productivity unit. That unit was interrupted, not halted:
+  it has no complete set of records and the instrument runs a unit that is not on disk.
+  Meter at the stop: 16.7954 USD at Anthropic and 2.2857 at OpenAI. Five logs are
+  unfinished and hold no token count; they are counted and reported, as declared. The
+  author freed 13.7 GB by deleting unrelated temporary files, none of them the lane's, and
+  19 GB was free before the restart. What is run again, and nothing else: Sonnet 5.5's
+  third-repeat marketplace unit once, with the instrument's `--rerun-halted`, its first
+  logs kept, metered and reported as superseded; then each chain continues in the declared
+  order from the first unit that is not on disk. The instrument commit `e53f7f30` is
+  unchanged. No result of the lane has been read by the author beyond the counts of runs
+  and the meter.
