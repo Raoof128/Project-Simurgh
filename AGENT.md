@@ -14,6 +14,114 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-21 (Australia/Sydney) — Phase 19x: pack and results (with nothing planted, the benchmark's attack formula was true on seven of eight models, in six of 90 cases)
+
+**Raouf:**
+
+- **Scope:** the 19x pack and its folder (`docs/research/provenance-phase-19x/`: pack,
+  protocol, report, receipt, root, eight record files, eight capture records, audit, labels,
+  connection checks, README, RESULTS, NOTICE), a committed-pack test, `.prettierignore`, the
+  ruling in the Phase 19 ledger and both logs. The instrument commit `e53f7f30` is unchanged.
+- **Summary:** eight models from two vendors ran the task-tampering benchmark's 90 cases with
+  no injection, 1,980 runs, every one scored. The attack formula was true in at least one run
+  on seven models, at a per-run rate between 0.0% and 3.3%. Six cases fired; two marketplace
+  dispute cases fired on six and on seven models. Sonnet 4.5, the one model the paper also
+  used, had no firing run in its one repeat. The author read all 43 firing runs: 33 labelled
+  `own_reason` and 10 `scorer`.
+- **Files changed:** the folder above, `tests/test_evidence19x_committed.py`,
+  `.prettierignore`, `docs/research/PROVENANCE_PHASE_19.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 58 lane tests pass, eight of them new and pinned to the committed pack; a
+  Python 3.12 with no site packages verifies the pack; the audit recomputes from a clone at
+  the declared commit; the records were scanned for keys and account data before the commit
+  (the only matches are the benchmark's address and its fictional mail addresses);
+  `prettier` is clean and the quick gate passes.
+- **Money:** 53.31 USD at Anthropic and 24.61 USD at OpenAI by the lane's meter, each under
+  its 80.00 cap. The vendors' bills have not been compared with it yet.
+- **Not planned:** the author's disk filled during the run and stopped both chains; one
+  halted unit was run again after a ledger entry. Two things said before the run did not
+  hold: Sonnet 4.5 had no firing run, and the cap did not stop Astra.
+- **Not done:** no attacked variant was run. No one outside the author has replayed the
+  pack. 19x is not in the operator handoff or the pinned roots.
+- **Follow-ups:** the handoff and pinned roots under their own declaration; the note to the
+  benchmark's authors, which is the owner's to send.
+
+### 2026-11-21 (Australia/Sydney) — Phase 19x: both chains stopped by a full disk on the author's machine; ledger entry before the halted unit is run again
+
+**Raouf:**
+
+- **Scope:** a note in the Phase 19 ledger and both logs. No code, no pinned source and no
+  pack is touched; the instrument commit `e53f7f30` is unchanged.
+- **Summary:** the runs started at 08:52Z on 21 Nov after a second connection check passed.
+  At about 09:40Z the author's disk ran out of space. The Anthropic chain halted under the
+  declared halt rule on Sonnet 5.5's third repeat (two cases of one unit without a record);
+  the OpenAI chain's process ended with a write error during Terra's second repeat. The
+  cause is the author's machine, not a vendor, a key or the instrument.
+- **Files changed:** `docs/research/PROVENANCE_PHASE_19.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the cause was read from both chain logs (`No space left on device`);
+  free space was 19 GB before the restart. `prettier` is clean on the three files.
+- **Not done:** the author did not establish what filled the disk beyond the lane's own
+  121 MB. No result has been read beyond run counts and the meter.
+- **Follow-ups:** the halted unit once more, then both chains in the declared order.
+
+### 2026-11-18 (Australia/Sydney) — Phase 19x: connection check passed for all eight models and the judge (no run yet)
+
+**Raouf:**
+
+- **Scope:** a note in the Phase 19 ledger and both logs. No code, no pinned source and no
+  pack is touched; the instrument commit `e53f7f30` is unchanged.
+- **Summary:** the declared connection check ran on 18 Nov. The judge and all eight models
+  passed, each agent model calling the one tool, the four OpenAI models on the Responses
+  endpoint. The first attempt failed for the four OpenAI models on the author's machine
+  before a connection was opened: version 3.54.0 of that vendor's client library does not
+  work with the framework at the benchmark's pinned commit. Version 2.54.0 is installed in
+  the private environment and the second attempt passed. The check is metered at under one
+  cent. The owner considered adding Claude Fable 5.2 and left it out on cost.
+- **Files changed:** `docs/research/PROVENANCE_PHASE_19.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the lane's 50 tests pass on the unchanged instrument; `prettier` is
+  clean. The repository's quick gate was not run again for this change, which is three
+  Markdown files; it passed on `e53f7f30` (96 steps).
+- **Not done:** every run of the lane. The owner starts them.
+- **Follow-ups:** the runs, the labels, the pack, results and ruling.
+
+### 2026-11-18 (Australia/Sydney) — Phase 19x: instrument for the no-attack control on eight models from two vendors (committed before any run)
+
+**Raouf:**
+
+- **Scope:** the declaration P19-CONTROL02 in the Phase 19 ledger (`d0ca3e86`, before this
+  change), three new modules in `tools/assurance-provenance/` and their tests, and both logs.
+  No model has been run for the lane and no request has been sent to one. Lane 19w, its pack
+  and its three modules are not touched; no frozen file or pinned source is touched.
+- **Summary:** lane 19x asks 19w's question of more models: how often the task-tampering
+  benchmark's attack formula is true in a run with no injection. It is a new lane because
+  19w's pack pins its instrument and its root is externally pinned. `control19x.py` imports
+  19w's audit, reader, counting rule and interval unchanged and adds the eight models in run
+  order (Haiku 5.5, Sonnet 5.5, Sonnet 4.5 and Opus 5.5; GPT-6 Luna, GPT-6.1 Terra, GPT-6.2
+  Sol and GPT-6.2 Astra), each vendor's prices, a cap of 80.00 USD at each vendor and the
+  start rule, whose unit is one environment of one repeat. `capture19x.py` runs the
+  benchmark's own runner, meters every log of the lane at both vendors before each unit,
+  stops a vendor's chain at the first unit that does not fit, halts it when a unit comes
+  back more than a third unscored or with a case missing, sends an OpenAI model to the
+  Responses endpoint through the library's own option, and refuses a model that has not
+  passed the declared connection check. `evidence19x.py` builds and verifies the pack, with a
+  table of how many models each case fires on and no rate pooled over models. Haiku 5.5's
+  first repeat is 19w's ninety records, held to the digest of that pack's member.
+- **Files changed:** `tools/assurance-provenance/control19x.py`, `capture19x.py`,
+  `evidence19x.py`, `tests/test_control19x.py`, `tests/test_capture19x.py`,
+  `tests/test_evidence19x.py`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 50 lane tests pass (16, 20 and 14); each module's tests were written
+  before the module. With 19w's they are 95. `ruff` is clean. A dry run outside the
+  repository drove the benchmark's real runner, tool servers and scorer with the library's
+  mock model in place of agent and judge: 90 logs, 90 scored records, 31, 31 and 28 cases per
+  environment as declared. All eight models were constructed offline with a placeholder key:
+  the four OpenAI models take the Responses endpoint only through the wrapper. The audit
+  recomputed at the declared commit equals the 19w pack's member, and the records rebuilt
+  from 19w's ninety logs have that pack's digest. The lane's meter on those logs reads
+  0.765858 USD, as 19w's did.
+- **Not done:** the connection check and every run. Nothing here shows that either vendor
+  accepts the requests the runner will send; the check is what finds that out.
+- **Follow-ups:** the connection check, the runs, the labels, the pack, results and ruling;
+  the operator handoff and pinned roots under their own declaration.
+
 ### 2026-11-16 (Australia/Sydney) — Phase 19f: two outside receipts filed and reviewed (twenty-one packs verified on an outside Linux host; every verifier refused on native Windows)
 
 **Raouf:**

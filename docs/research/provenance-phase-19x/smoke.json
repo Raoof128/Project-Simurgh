@@ -1,0 +1,319 @@
+[
+ {
+  "at": "2026-11-18T01:28:55Z",
+  "error": null,
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "role": "judge",
+  "usage": {
+   "claude-sonnet-5-5": {
+    "cache_read": 0,
+    "cache_write": 0,
+    "input": 25,
+    "output": 4
+   }
+  }
+ },
+ {
+  "at": "2026-11-18T01:28:58Z",
+  "error": null,
+  "model": "claude-haiku-5-5",
+  "ok": true,
+  "role": "agent",
+  "usage": {
+   "claude-haiku-5-5": {
+    "cache_read": 0,
+    "cache_write": 0,
+    "input": 409,
+    "output": 46
+   }
+  }
+ },
+ {
+  "at": "2026-11-18T01:28:59Z",
+  "error": null,
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "role": "agent",
+  "usage": {
+   "claude-sonnet-5-5": {
+    "cache_read": 0,
+    "cache_write": 0,
+    "input": 409,
+    "output": 46
+   }
+  }
+ },
+ {
+  "at": "2026-11-18T01:29:01Z",
+  "error": null,
+  "model": "claude-sonnet-4-5-20250929",
+  "ok": true,
+  "role": "agent",
+  "usage": {
+   "claude-sonnet-4-5-20250929": {
+    "cache_read": 0,
+    "cache_write": 0,
+    "input": 592,
+    "output": 51
+   }
+  }
+ },
+ {
+  "at": "2026-11-18T01:29:03Z",
+  "error": null,
+  "model": "claude-opus-5-5",
+  "ok": true,
+  "role": "agent",
+  "usage": {
+   "claude-opus-5-5": {
+    "cache_read": 0,
+    "cache_write": 0,
+    "input": 409,
+    "output": 46
+   }
+  }
+ },
+ {
+  "at": "2026-11-18T01:29:05Z",
+  "error": "TypeError",
+  "model": "gpt-6-luna",
+  "ok": false,
+  "role": "agent",
+  "usage": {}
+ },
+ {
+  "at": "2026-11-18T01:29:08Z",
+  "error": "TypeError",
+  "model": "gpt-6.1-terra",
+  "ok": false,
+  "role": "agent",
+  "usage": {}
+ },
+ {
+  "at": "2026-11-18T01:29:08Z",
+  "error": "TypeError",
+  "model": "gpt-6.2-sol",
+  "ok": false,
+  "role": "agent",
+  "usage": {}
+ },
+ {
+  "at": "2026-11-18T01:29:08Z",
+  "error": "TypeError",
+  "model": "gpt-6.2-astra",
+  "ok": false,
+  "role": "agent",
+  "usage": {}
+ },
+ {
+  "at": "2026-11-18T01:30:12Z",
+  "error": null,
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "role": "judge",
+  "usage": {
+   "claude-sonnet-5-5": {
+    "cache_read": 0,
+    "cache_write": 0,
+    "input": 25,
+    "output": 4
+   }
+  }
+ },
+ {
+  "at": "2026-11-18T01:30:14Z",
+  "error": null,
+  "model": "gpt-6-luna",
+  "ok": true,
+  "role": "agent",
+  "usage": {
+   "gpt-6-luna": {
+    "cache_read": 0,
+    "cache_write": 0,
+    "input": 69,
+    "output": 18
+   }
+  }
+ },
+ {
+  "at": "2026-11-18T01:30:20Z",
+  "error": null,
+  "model": "gpt-6.1-terra",
+  "ok": true,
+  "role": "agent",
+  "usage": {
+   "gpt-6.1-terra": {
+    "cache_read": 0,
+    "cache_write": 0,
+    "input": 69,
+    "output": 18
+   }
+  }
+ },
+ {
+  "at": "2026-11-18T01:30:21Z",
+  "error": null,
+  "model": "gpt-6.2-sol",
+  "ok": true,
+  "role": "agent",
+  "usage": {
+   "gpt-6.2-sol": {
+    "cache_read": 0,
+    "cache_write": 0,
+    "input": 69,
+    "output": 18
+   }
+  }
+ },
+ {
+  "at": "2026-11-18T01:30:23Z",
+  "error": null,
+  "model": "gpt-6.2-astra",
+  "ok": true,
+  "role": "agent",
+  "usage": {
+   "gpt-6.2-astra": {
+    "cache_read": 0,
+    "cache_write": 0,
+    "input": 69,
+    "output": 18
+   }
+  }
+ },
+ {
+  "at": "2026-11-21T08:43:19Z",
+  "error": null,
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "role": "judge",
+  "usage": {
+   "claude-sonnet-5-5": {
+    "cache_read": 0,
+    "cache_write": 0,
+    "input": 25,
+    "output": 4
+   }
+  }
+ },
+ {
+  "at": "2026-11-21T08:43:21Z",
+  "error": null,
+  "model": "claude-haiku-5-5",
+  "ok": true,
+  "role": "agent",
+  "usage": {
+   "claude-haiku-5-5": {
+    "cache_read": 0,
+    "cache_write": 0,
+    "input": 409,
+    "output": 46
+   }
+  }
+ },
+ {
+  "at": "2026-11-21T08:43:22Z",
+  "error": null,
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "role": "agent",
+  "usage": {
+   "claude-sonnet-5-5": {
+    "cache_read": 0,
+    "cache_write": 0,
+    "input": 409,
+    "output": 46
+   }
+  }
+ },
+ {
+  "at": "2026-11-21T08:43:23Z",
+  "error": null,
+  "model": "claude-sonnet-4-5-20250929",
+  "ok": true,
+  "role": "agent",
+  "usage": {
+   "claude-sonnet-4-5-20250929": {
+    "cache_read": 0,
+    "cache_write": 0,
+    "input": 592,
+    "output": 69
+   }
+  }
+ },
+ {
+  "at": "2026-11-21T08:43:25Z",
+  "error": null,
+  "model": "claude-opus-5-5",
+  "ok": true,
+  "role": "agent",
+  "usage": {
+   "claude-opus-5-5": {
+    "cache_read": 0,
+    "cache_write": 0,
+    "input": 409,
+    "output": 46
+   }
+  }
+ },
+ {
+  "at": "2026-11-21T08:43:27Z",
+  "error": null,
+  "model": "gpt-6-luna",
+  "ok": true,
+  "role": "agent",
+  "usage": {
+   "gpt-6-luna": {
+    "cache_read": 0,
+    "cache_write": 0,
+    "input": 69,
+    "output": 18
+   }
+  }
+ },
+ {
+  "at": "2026-11-21T08:43:32Z",
+  "error": null,
+  "model": "gpt-6.1-terra",
+  "ok": true,
+  "role": "agent",
+  "usage": {
+   "gpt-6.1-terra": {
+    "cache_read": 0,
+    "cache_write": 0,
+    "input": 69,
+    "output": 18
+   }
+  }
+ },
+ {
+  "at": "2026-11-21T08:43:34Z",
+  "error": null,
+  "model": "gpt-6.2-sol",
+  "ok": true,
+  "role": "agent",
+  "usage": {
+   "gpt-6.2-sol": {
+    "cache_read": 0,
+    "cache_write": 0,
+    "input": 69,
+    "output": 18
+   }
+  }
+ },
+ {
+  "at": "2026-11-21T08:43:35Z",
+  "error": null,
+  "model": "gpt-6.2-astra",
+  "ok": true,
+  "role": "agent",
+  "usage": {
+   "gpt-6.2-astra": {
+    "cache_read": 0,
+    "cache_write": 0,
+    "input": 69,
+    "output": 18
+   }
+  }
+ }
+]

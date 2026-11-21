@@ -1,5 +1,62 @@
 ## Change Log
 
+## [phase-19x-2026-11-21] — 2026-11-21 — Lane 19x: the attack formula with no attack on eight models; true on seven, in six of 90 cases
+
+**Raouf:**
+
+- **Scope:** the 19x pack and its documents, a committed-pack test, `.prettierignore`, the
+  ruling and both logs.
+- **Summary:** with no injection, the benchmark's attack formula was true in at least one of
+  270 runs on seven of eight models from two vendors (0 of 90 on Sonnet 4.5), at per-run
+  rates up to 3.3%. Six cases fired; two fired on six and seven models. Of 43 firing runs
+  the author labelled 33 `own_reason` and 10 `scorer`. Pack root `7ff8634f…`.
+- **Money:** 53.31 USD at Anthropic, 24.61 USD at OpenAI, caps of 80.00 each.
+- **Verification:** 58 lane tests; a bare Python 3.12 verifies the pack; quick gate.
+- **Follow-ups:** the operator handoff and pinned roots; a note to the benchmark's authors.
+
+## [phase-19x-halt-note-2026-11-21] — 2026-11-21 — Lane 19x: runs interrupted by a full disk; ledger entry before the rerun of one halted unit
+
+**Raouf:**
+
+- **Scope:** one ledger note and both logs; no code or pack.
+- **Summary:** both vendor chains of lane 19x stopped about fifty minutes into the run when
+  the author's disk ran out of space. One unit of Sonnet 5.5 halted under the declared rule
+  and is run once more after this entry; its first logs are kept and reported as
+  superseded. One unit of Terra was interrupted and is continued.
+- **Verification:** cause read from both chain logs; `prettier` clean.
+- **Follow-ups:** the remaining units of both chains.
+
+## [phase-19x-connection-check-2026-11-18] — 2026-11-18 — Lane 19x: connection check passed for all eight models
+
+**Raouf:**
+
+- **Scope:** a ledger note and both logs; no code change.
+- **Summary:** the judge and all eight models passed the declared connection check, the
+  OpenAI models on the Responses endpoint. A first attempt failed for the OpenAI models
+  before any connection, because version 3.54.0 of that vendor's client library does not
+  work with the framework at the benchmark's pinned commit; version 2.54.0 does. Under one
+  cent by the lane's meter. Claude Fable 5.2 was considered and left out on cost.
+- **Verification:** 50 lane tests on the unchanged instrument; `prettier` clean.
+- **Follow-ups:** the runs.
+
+## [phase-19x-instrument-2026-11-18] — 2026-11-18 — Lane 19x: instrument for the no-attack control on eight models from two vendors
+
+**Raouf:**
+
+- **Scope:** `control19x.py`, `capture19x.py`, `evidence19x.py` and their tests, after the
+  declaration P19-CONTROL02 (`d0ca3e86`) and before any run of the lane. Lane 19w is not
+  touched.
+- **Summary:** the lane repeats 19w's measurement, the benchmark's attack formula with no
+  injection, on four Anthropic and four OpenAI models. The instrument reuses 19w's audit,
+  record, counting rule and interval and adds the models, both vendors' prices, a cap of
+  80.00 USD at each vendor, a start rule checked before every environment of every repeat, a
+  halt on a unit that comes back mostly unscored, a connection check that must pass before a
+  model runs, and a cross-model table with no pooled rate. The benchmark's code and data stay outside the repository.
+- **Verification:** 50 tests; `ruff` clean; a dry run of the benchmark's own runner with a
+  mock model produced 90 scored records; the audit and 19w's ninety records recompute to the
+  19w pack's digests. No request has been sent to a model.
+- **Follow-ups:** the connection check, the runs, the pack, results and ruling.
+
 ## [phase-19f-operator09-2026-11-16] — 2026-11-16 — Two outside receipts reviewed: twenty-one packs verified on an outside Linux host
 
 **Raouf:**
