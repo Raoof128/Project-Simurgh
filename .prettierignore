@@ -396,3 +396,13 @@ docs/research/provenance-phase-19w/captures/claude-haiku-5-5.json
 # P19-FORMAT24: a file an operator returned beside a receipt is committed byte for byte (P19-OPERATOR09);
 # the 19f README names it.
 docs/research/provenance-phase-19f/operator-receipts/*.attachments/**
+
+# P19-FORMAT25: Phase 19x source-bound machine evidence (P19-CONTROL02); bytes are bound by
+# the pack root and must not be reformatted.
+docs/research/provenance-phase-19x/protocol.json
+docs/research/provenance-phase-19x/report.json
+docs/research/provenance-phase-19x/receipt.json
+docs/research/provenance-phase-19x/audit.json
+docs/research/provenance-phase-19x/labels.json
+docs/research/provenance-phase-19x/smoke.json
+docs/research/provenance-phase-19x/captures/*.json

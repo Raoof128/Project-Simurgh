@@ -14,6 +14,37 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-21 (Australia/Sydney) — Phase 19x: pack and results (with nothing planted, the benchmark's attack formula was true on seven of eight models, in six of 90 cases)
+
+**Raouf:**
+
+- **Scope:** the 19x pack and its folder (`docs/research/provenance-phase-19x/`: pack,
+  protocol, report, receipt, root, eight record files, eight capture records, audit, labels,
+  connection checks, README, RESULTS, NOTICE), a committed-pack test, `.prettierignore`, the
+  ruling in the Phase 19 ledger and both logs. The instrument commit `e53f7f30` is unchanged.
+- **Summary:** eight models from two vendors ran the task-tampering benchmark's 90 cases with
+  no injection, 1,980 runs, every one scored. The attack formula was true in at least one run
+  on seven models, at a per-run rate between 0.0% and 3.3%. Six cases fired; two marketplace
+  dispute cases fired on six and on seven models. Sonnet 4.5, the one model the paper also
+  used, had no firing run in its one repeat. The author read all 43 firing runs: 33 labelled
+  `own_reason` and 10 `scorer`.
+- **Files changed:** the folder above, `tests/test_evidence19x_committed.py`,
+  `.prettierignore`, `docs/research/PROVENANCE_PHASE_19.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 58 lane tests pass, eight of them new and pinned to the committed pack; a
+  Python 3.12 with no site packages verifies the pack; the audit recomputes from a clone at
+  the declared commit; the records were scanned for keys and account data before the commit
+  (the only matches are the benchmark's address and its fictional mail addresses);
+  `prettier` is clean and the quick gate passes.
+- **Money:** 53.31 USD at Anthropic and 24.61 USD at OpenAI by the lane's meter, each under
+  its 80.00 cap. The vendors' bills have not been compared with it yet.
+- **Not planned:** the author's disk filled during the run and stopped both chains; one
+  halted unit was run again after a ledger entry. Two things said before the run did not
+  hold: Sonnet 4.5 had no firing run, and the cap did not stop Astra.
+- **Not done:** no attacked variant was run. No one outside the author has replayed the
+  pack. 19x is not in the operator handoff or the pinned roots.
+- **Follow-ups:** the handoff and pinned roots under their own declaration; the note to the
+  benchmark's authors, which is the owner's to send.
+
 ### 2026-11-21 (Australia/Sydney) — Phase 19x: both chains stopped by a full disk on the author's machine; ledger entry before the halted unit is run again
 
 **Raouf:**

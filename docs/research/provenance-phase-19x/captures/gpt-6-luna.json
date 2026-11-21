@@ -1,0 +1,85 @@
+{
+ "benchmark": {
+  "commit": "804b00dd03051c00e5e3000982bbf7ce2b9d9ad5",
+  "data_sha256": "5022b7c96f7734102b2c157138830d52403bfede3570d936a2ea7cfebe868a73",
+  "repo": "https://github.com/amazon-science/task-tampering-prompt-injection"
+ },
+ "declared_repeats": 3,
+ "judge": "claude-sonnet-5-5",
+ "judge_votes": 3,
+ "model": "gpt-6-luna",
+ "provider": "openai",
+ "repeats": [
+  {
+   "finished": "2026-11-21T09:01:32Z",
+   "metered_usd": {
+    "anthropic": 0.26216,
+    "openai": 0.124662
+   },
+   "repeat": 1,
+   "runs": 90,
+   "started": "2026-11-21T08:52:28Z",
+   "status": "run"
+  },
+  {
+   "finished": "2026-11-21T09:10:27Z",
+   "metered_usd": {
+    "anthropic": 0.251324,
+    "openai": 0.119806
+   },
+   "repeat": 2,
+   "runs": 90,
+   "started": "2026-11-21T09:01:33Z",
+   "status": "run"
+  },
+  {
+   "finished": "2026-11-21T09:18:56Z",
+   "metered_usd": {
+    "anthropic": 0.253992,
+    "openai": 0.118187
+   },
+   "repeat": 3,
+   "runs": 90,
+   "started": "2026-11-21T09:10:28Z",
+   "status": "run"
+  }
+ ],
+ "schema": "simurgh-phase19x-capture-v1",
+ "settings": {
+  "defence": null,
+  "endpoint": "responses",
+  "judge_max_tokens": 8,
+  "judge_temperature": null,
+  "max_connections": 4,
+  "max_tasks": 4,
+  "provider": "the model vendor's own API",
+  "reasoning": null,
+  "retry_on_error": 3,
+  "system_prompt": null,
+  "temperature": null
+ },
+ "superseded_logs": 0,
+ "unfinished_logs": 0,
+ "usage": {
+  "claude-sonnet-5-5": {
+   "cache_read": 0,
+   "cache_write": 0,
+   "input": 371718,
+   "output": 2404
+  },
+  "gpt-6-luna": {
+   "cache_read": 6197173,
+   "cache_write": 0,
+   "input": 7371332,
+   "output": 366536
+  }
+ },
+ "versions": {
+  "anthropic": "0.125.0",
+  "inspect_ai": "0.3.145.dev11+gee0dfdef8",
+  "mcp": "1.12.3",
+  "openai": "2.54.0",
+  "pydantic": "2.13.5",
+  "python": "3.12.4"
+ }
+}

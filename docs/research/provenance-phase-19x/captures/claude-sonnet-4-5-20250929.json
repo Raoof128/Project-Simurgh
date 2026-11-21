@@ -1,0 +1,63 @@
+{
+ "benchmark": {
+  "commit": "804b00dd03051c00e5e3000982bbf7ce2b9d9ad5",
+  "data_sha256": "5022b7c96f7734102b2c157138830d52403bfede3570d936a2ea7cfebe868a73",
+  "repo": "https://github.com/amazon-science/task-tampering-prompt-injection"
+ },
+ "declared_repeats": 1,
+ "judge": "claude-sonnet-5-5",
+ "judge_votes": 3,
+ "model": "claude-sonnet-4-5-20250929",
+ "provider": "anthropic",
+ "repeats": [
+  {
+   "finished": "2026-11-21T10:17:14Z",
+   "metered_usd": {
+    "anthropic": 5.586577,
+    "openai": 0.0
+   },
+   "repeat": 1,
+   "runs": 90,
+   "started": "2026-11-21T10:01:57Z",
+   "status": "run"
+  }
+ ],
+ "schema": "simurgh-phase19x-capture-v1",
+ "settings": {
+  "defence": null,
+  "endpoint": "messages",
+  "judge_max_tokens": 8,
+  "judge_temperature": null,
+  "max_connections": 4,
+  "max_tasks": 4,
+  "provider": "the model vendor's own API",
+  "reasoning": null,
+  "retry_on_error": 3,
+  "system_prompt": null,
+  "temperature": 0.0
+ },
+ "superseded_logs": 0,
+ "unfinished_logs": 0,
+ "usage": {
+  "claude-sonnet-4-5-20250929": {
+   "cache_read": 2770238,
+   "cache_write": 500399,
+   "input": 2674,
+   "output": 159585
+  },
+  "claude-sonnet-5-5": {
+   "cache_read": 0,
+   "cache_write": 0,
+   "input": 234366,
+   "output": 848
+  }
+ },
+ "versions": {
+  "anthropic": "0.125.0",
+  "inspect_ai": "0.3.145.dev11+gee0dfdef8",
+  "mcp": "1.12.3",
+  "openai": "2.54.0",
+  "pydantic": "2.13.5",
+  "python": "3.12.4"
+ }
+}

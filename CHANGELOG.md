@@ -1,5 +1,19 @@
 ## Change Log
 
+## [phase-19x-2026-11-21] — 2026-11-21 — Lane 19x: the attack formula with no attack on eight models; true on seven, in six of 90 cases
+
+**Raouf:**
+
+- **Scope:** the 19x pack and its documents, a committed-pack test, `.prettierignore`, the
+  ruling and both logs.
+- **Summary:** with no injection, the benchmark's attack formula was true in at least one of
+  270 runs on seven of eight models from two vendors (0 of 90 on Sonnet 4.5), at per-run
+  rates up to 3.3%. Six cases fired; two fired on six and seven models. Of 43 firing runs
+  the author labelled 33 `own_reason` and 10 `scorer`. Pack root `7ff8634f…`.
+- **Money:** 53.31 USD at Anthropic, 24.61 USD at OpenAI, caps of 80.00 each.
+- **Verification:** 58 lane tests; a bare Python 3.12 verifies the pack; quick gate.
+- **Follow-ups:** the operator handoff and pinned roots; a note to the benchmark's authors.
+
 ## [phase-19x-halt-note-2026-11-21] — 2026-11-21 — Lane 19x: runs interrupted by a full disk; ledger entry before the rerun of one halted unit
 
 **Raouf:**
