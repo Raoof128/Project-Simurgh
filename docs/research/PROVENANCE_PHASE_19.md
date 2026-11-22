@@ -2490,6 +2490,40 @@ Authorised files: `tools/assurance-provenance/bind19ad.py`, `evidence19ad.py`, t
 authorised: any edit to a frozen file, to a 19a to 19ac source or pack, or to a workflow.
 This declaration commit must be a strict ancestor of every other commit of lane 19ad.
 
+**P19-OPERATOR14 (bounded authority to bring lanes 19ac and 19ad into the outside-operator
+handoff and the externally pinned roots, and to state the fault they concern in the root
+README; declared 22 Nov 2026 before any commit that acts on it).** 19ac is committed
+(`86b75519`) with root `c130b0e56a4f1c38bc2c11f70fd8944ce88ee0221be7d8432e7a063a262742fe` and
+19ad (`f237ddd7`) with root `a4f233830d9fad3c86a6ce219a72f5f8daed6b9d976c15a9187d0cd5df12fb3f`.
+Neither declaration authorised a workflow or handoff edit. This declaration authorises, and
+nothing else:
+
+1. `handoff19.py`: 19ac and 19ad added to `PHASES` with their hosts and times, the word for
+   the new count, and both in the list of lanes that need nothing beyond the standard
+   library. Both are replayed lanes: their committed receipts read `gate_recomputed`, a host
+   that cannot replay prints `structure_checked`, and their `--replay` joins the items only
+   some hosts can exercise. The handoff says that one row in each depends on the host's JSON
+   parser. The comparator's rules do not change. Tests first.
+2. The reviews of the three operator receipts recomputed under the new phase list. No receipt
+   is edited; both lanes appear in each review as `not_in_receipt`.
+3. Re-rendering `HANDOFF.md` and `discrepancy-template.json`; the 19f READMEs' count of
+   packs, their rows for the lanes and their lists of what is owed.
+4. `.github/workflows/assurance-provenance.yml`: the two `docs/` paths added to both path
+   filters and the two ids to the expected-roots check, with its message. No step is added,
+   removed or renamed, and the Stage 5Q census must be byte-identical before and after. The
+   repository variable `PHASE19_ROOTS` gains the two roots, set outside the pull request,
+   the twenty-seven existing values unchanged.
+5. The root README: the count of Phase 19 packs, one paragraph on the two lanes, and under
+   its open work one entry on the fault, where it is and is not repaired, and a correction
+   to the sentence that says the faults attackers found are repaired. The same count in
+   `docs/AUTHOR_AND_METHOD.md`. The generated census page of P19-AUDIT01, if the new packs
+   change it.
+6. Both logs and the ruling.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to an operator's
+receipt, or any other change to what the comparator checks. This declaration commit must be a
+strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
