@@ -4034,3 +4034,25 @@ ancestor of every other commit of lane 19af.
   not hold. Two attempts are latched by the seat's own store write and have a run of 20
   refusals with no mark, so F2 will not hold either. The files are committed as they were
   handed in and nothing is dropped, reordered or repaired.
+- Ruling (22 Nov 2026, P19-FULL01 exercised): the declaration (`d88921d6`) is an ancestor of
+  the instrument commit (`718af1d9`) and of the commit the run of record was made from
+  (`ab544c00`), which holds the seats' files and the amendment; the run was on the project's
+  Linux x86_64 host from a clean clone, started 09:20:43Z. Root
+  `cf7693ef4af20e1f523391e0fa873bf1e1f11246fcd12f3c151406d0d132b20e`. 467 attempts: 431
+  recorded by lanes 19t, 19y, 19z, 19aa, 19ab, 19ac and 19ad, and 36 from three seats, none
+  rejected. F0 holds: on the bound gate 24 refusals leave no record and nothing marks a run
+  of retries. F1 holds: on the full gate no refused dispatch is without a record. F2 does
+  not hold: 465 of 467 attempts match; in the other two a seat's own store write latched
+  the seal, after which nothing is written or read, and a run of 20 refusals has no mark.
+  F3 holds: all 431 recorded attempts end on the full gate as on the bound one. F4 holds:
+  none of the 467 gains, the six gains of lane 19ac among them. F5 does not hold: of 31
+  fresh attempts that write no store, 16 make the gate raise `KeyError`. The cause is in
+  lane 19b's approval check, which reads the `run` and `id` of the dispatched body before
+  anything has checked that the body has them; a body without one, sent with a token whose
+  signature is good, raises. Nothing is sent and no authority is gained; a caller that does
+  not catch the exception stops, and the call leaves no record. All three seats found it
+  independently. No repair was made, as declared. `seat-a` and `seat-b` ran on Claude Opus
+  5.5 and `seat-c` on Claude Sonnet 5.5, read from the harness's record, which is not in
+  the repository. Not done and not claimed: the raise is not repaired and every gate here
+  has it; there was no planted fault in this round; the seats are agents of two Claude
+  models and not a person or another vendor's model; the retry mark is not a cap.

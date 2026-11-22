@@ -1,5 +1,16 @@
 ## Change Log
 
+## [phase-19ae-pack-2026-11-22] — 2026-11-22 — Lane 19ae: one gate with every repair, attacked afresh
+
+**Raouf:**
+
+- **Scope:** the 19ae pack, its pages, a committed-pack test, the ruling.
+- **Summary:** none of 467 attempts gains on `full19ae.pipeline()`; every refusal has a
+  record and runs of retries are marked. Three fresh seats found no way through and one
+  raise: a malformed body with a signed token raises `KeyError`. Root `cf7693ef…`. F2 and F5
+  do not hold; the raise is not repaired in this lane.
+- **Verification:** bare-interpreter `verify`; committed-pack tests; quick gate.
+
 ## [phase-19ae-submissions-2026-11-22] — 2026-11-22 — Lane 19ae: the seats' files as received; one instrument amendment
 
 **Raouf:**

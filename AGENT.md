@@ -14,6 +14,27 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19ae pack: no gain in 467 attempts on the gate with every repair; the seats find a raise
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19ae/` (pack, README, results), the
+  committed-pack test, the ruling.
+- **Summary:** the run of record on the Linux host from `ab544c00`. All 431 attempts that
+  seven earlier lanes recorded end on the full gate as on lane 19ad's, and none gains; the 24
+  refusals that left no record now have one; runs of 20 refusals are marked. Three seats
+  attacked the gate afresh with its source in hand: none of their 36 attempts gains, and 16
+  make the gate raise `KeyError` where it should refuse, through a body without `run` or
+  `id` sent with a signed token. F2 and F5 do not hold. Not repaired, as declared.
+- **Files changed:** the pack's five files, `README.md` and `RESULTS.md` beside them,
+  `tools/assurance-provenance/tests/test_evidence19ae_committed.py`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** `verify` with a bare Python 3.12 interpreter (`structure_checked`); 8
+  committed-pack tests (one skipped off the replay host); `prettier`, `ruff` and the quick
+  gate pass.
+- **Not done:** the raise is not repaired; the lane is not in the operator handoff yet; no
+  one outside the author has run it.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19ae: an amendment to the instrument and the three seats' files as received
 
 **Raouf:**
