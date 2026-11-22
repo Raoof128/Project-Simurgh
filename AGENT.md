@@ -14,6 +14,27 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19ad pack: the fault of lane 19ac repaired beside the gate; none of 67 recorded sequences gains
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19ad/` (pack, README, results), the
+  committed-pack test, the ruling.
+- **Summary:** the run of record on the Linux host from the instrument commit (`62133f88`).
+  67 sequences on the gate before and on the bound gate. Eight gain before (the six of lane
+  19ac's seats and two of the author's) and none on the bound gate; the 57 with no forged
+  token admitted before behave the same on both; two re-signed tokens for an approved
+  action are admitted before and refused after. All four hypotheses hold, D2 as amended
+  before any run.
+- **Files changed:** the pack's five files, `README.md` and `RESULTS.md` beside them,
+  `tools/assurance-provenance/tests/test_evidence19ad_committed.py`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** `verify` with a bare Python 3.12 interpreter (`structure_checked`); 7
+  committed-pack tests (one skipped off the replay host); `prettier`, `ruff` and the quick
+  gate pass.
+- **Not done:** no fresh attack on the repair; no outside review; the lane is not in the
+  operator handoff yet.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19ad instrument: the approval bound to what the host minted
 
 **Raouf:**

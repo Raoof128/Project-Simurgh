@@ -3789,3 +3789,20 @@ This declaration commit must be a strict ancestor of every other commit of lane 
   the same verdicts and effects on both; two re-signed tokens for an approved action are
   admitted before and refused by the bound gate. The run of record is not the first time
   the outcome was seen.
+- Ruling (22 Nov 2026, P19-BIND01 exercised): the declaration (`8bdc56de`) and its amendment
+  (`b09a89d4`) are ancestors of the instrument commit (`62133f88`), and the run of record
+  was made from a clean clone at that commit on the project's Linux x86_64 host, started
+  06:43:23Z. Root `a4f233830d9fad3c86a6ce219a72f5f8daed6b9d976c15a9187d0cd5df12fb3f`. 67
+  sequences: lane 19aa's 28, lane 19ac's 30 and nine by the author, none rejected. D0
+  holds: on the gate before, the six recorded gains of lane 19ac's seats gain again and two
+  of the author's sequences gain. D1 holds: on the bound gate none of the 67 gains. D2
+  holds as amended: in the 57 sequences where the gate before admits no token the host did
+  not mint, the bound gate gives the same verdict for every dispatch and the same count of
+  effects. D3 holds: on the bound gate nothing latches or raises. Reported: two re-signed
+  tokens for an approved action are admitted by the gate before and refused by the bound
+  gate, which then honours the real approval once. The repair is in `bind19ad.py`, beside
+  the gate: the store records a digest of the payload the host signed and admits a returned
+  token only if its payload has it. Not done and not claimed: the repair has not been
+  attacked afresh and the seats that found the fault have not seen it; no one outside the
+  project has reviewed it; the fault is still in the gate that lanes 19a to 19ac ran, and a
+  caller has to use the new classes; a lost signing key is not made safe.

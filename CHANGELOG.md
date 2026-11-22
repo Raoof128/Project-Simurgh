@@ -1,5 +1,15 @@
 ## Change Log
 
+## [phase-19ad-pack-2026-11-22] — 2026-11-22 — Lane 19ad: the fault lane 19ac found, repaired beside the gate
+
+**Raouf:**
+
+- **Scope:** the 19ad pack, its pages, a committed-pack test, the ruling.
+- **Summary:** eight recorded sequences beat the gate as it was; none of the 67 beats the
+  gate whose approval store remembers what it minted, and nothing else changes. Root
+  `a4f23383…`. Not attacked afresh.
+- **Verification:** bare-interpreter `verify`; committed-pack tests; quick gate.
+
 ## [phase-19ad-instrument-2026-11-22] — 2026-11-22 — Lane 19ad: the approval bound to what the host minted (instrument)
 
 **Raouf:**
