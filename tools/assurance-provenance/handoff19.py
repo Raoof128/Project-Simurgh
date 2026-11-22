@@ -28,8 +28,8 @@ LEAN_ITEM = "19b Lean closure"
 EXCLUDED = ("tree_state", "host", "replay")
 # A lane's ``kind`` is a function of its replay result (``receipt_for`` in each evidence module),
 # and the replay is host-dependent, so the expected kind follows the operator's own replay rather
-# than the author's. 19a's committed receipt is the unreplayed kind; 19j's, 19l's, 19p's, 19t's
-# and 19y's are the replayed kind (P19-OPERATOR02, 05, 06, 11), so those also name what a host
+# than the author's. 19a's committed receipt is the unreplayed kind; 19j's, 19l's, 19p's, 19t's,
+# 19y's and 19z's are the replayed kind (P19-OPERATOR02, 05, 06, 11, 12), so those also name what a host
 # that cannot replay prints.
 REPLAY_CHAINED_KIND = {
     "19a": "frozen_replay_chained",
@@ -38,6 +38,7 @@ REPLAY_CHAINED_KIND = {
     "19p": "frozen_replay_recomputed",
     "19t": "gate_recomputed",
     "19y": "gate_recomputed",
+    "19z": "gate_recomputed",
 }
 STRUCTURE_ONLY_KIND = {
     "19j": "structure_checked",
@@ -45,6 +46,7 @@ STRUCTURE_ONLY_KIND = {
     "19p": "structure_checked",
     "19t": "structure_checked",
     "19y": "structure_checked",
+    "19z": "structure_checked",
 }
 # 19q's deeper check is a recomputation from the dataset, which the verifier reports in
 # ``recompute`` as the replay lanes report theirs in ``replay`` (P19-OPERATOR06). Its committed
@@ -269,6 +271,13 @@ PHASES = (
         "host": "any host with Python 3.12; on Linux x86_64 inside the hash-locked venv add --replay",
         "time": "a few seconds; about thirty minutes with --replay on a two-core server",
     },
+    {
+        "id": "19z",
+        "module": "evidence19z.py",
+        "docs": "docs/research/provenance-phase-19z",
+        "host": "any host with Python 3.12; on Linux x86_64 inside the hash-locked venv add --replay",
+        "time": "a few seconds; about three minutes with --replay on a two-core server",
+    },
 )
 NUMBER_WORDS = {
     6: "six",
@@ -282,6 +291,7 @@ NUMBER_WORDS = {
     22: "twenty-two",
     23: "twenty-three",
     24: "twenty-four",
+    25: "twenty-five",
 }
 
 
@@ -590,9 +600,9 @@ def render():
         "  `python -m venv .venv-verify && .venv-verify/bin/pip install --require-hashes --only-binary=:all:",
         f"  -r {VERIFY_LOCK_REL}`. Installed and run on Linux x86_64 and macOS arm64;",
         "  its wheels also resolve for macOS x86_64. 19a, 19c, 19d, 19e, 19h, 19i, 19j, 19k, 19l, 19m, 19n,",
-        "  19o, 19p, 19q, 19r, 19s, 19t, 19u, 19v, 19w, 19x and 19y",
+        "  19o, 19p, 19q, 19r, 19s, 19t, 19u, 19v, 19w, 19x, 19y and 19z",
         "  need nothing beyond the standard library unless `--replay` or `--dataset` is added.",
-        "- 19a, 19j, 19l, 19p, 19t and 19y with `--replay` (Linux x86_64 only: the full set has no macOS x86_64 wheel for `cryptography`,",
+        "- 19a, 19j, 19l, 19p, 19t, 19y and 19z with `--replay` (Linux x86_64 only: the full set has no macOS x86_64 wheel for `cryptography`,",
         "  so it is not a substitute for the verify set there): create a venv and install the hash-locked set:",
         "  `python -m venv .venv && .venv/bin/pip install --require-hashes --only-binary=:all:",
         "  -r tools/assurance-sdk/requirements.lock -r tools/assurance-workflow/requirements.lock`, then",
@@ -604,7 +614,8 @@ def render():
         "  against the Phase 19 gate and thirteen naive gates again and compares the whole report; without",
         "  `--replay` it checks every row against the committed submissions and prints `kind: structure_checked`.",
         "  19y does the same for 19t's attempts and for its own second round, against the gate as it was,",
-        "  the repaired gate and the naive gates.",
+        "  the repaired gate and the naive gates. 19z runs every attempt that writes the gate's own stores",
+        "  again, on the gate with no seal and on the sealed gate, one process per attempt.",
         "- 19q with `--dataset` recomputes every row from the benchmark it measures, which is not in this",
         "  repository. Clone `https://github.com/safety-research/sleight-bench`, check out the commit that",
         "  `docs/research/provenance-phase-19q/protocol.json` names, install the `cryptography` package",
@@ -660,7 +671,7 @@ def render():
         "only when your receipt says Lean was absent). Nothing else is waived. It cannot see whether the",
         "`--replay` run happened: a receipt whose `replay.result` says `verified` is taken at its word and",
         "then expected to read `kind: frozen_replay_chained` (19a),",
-        "`frozen_replay_recomputed` (19j, 19l, 19p) or `gate_recomputed` (19t, 19y).",
+        "`frozen_replay_recomputed` (19j, 19l, 19p) or `gate_recomputed` (19t, 19y, 19z).",
         "19q is handled the same way through `recompute.result` and `dataset_recomputed`.",
         "Your verbatim verifier output and your note are what make that claim checkable; the comparator",
         "alone does not.",

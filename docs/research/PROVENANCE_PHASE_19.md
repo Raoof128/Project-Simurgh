@@ -3355,3 +3355,21 @@ strict ancestor of every commit that acts on it.
   caught. Not done: this is detection and not isolation; the seal is in `seal19z.py` beside
   the gate, and the gate that lanes 19a to 19y measured is unchanged; one attacking seat,
   of one vendor; nothing here was replayed outside the author's custody.
+- Ruling (22 Nov 2026, P19-OPERATOR12 exercised): the declaration (`ae0468b3`) precedes the
+  commit that acts on it, and the lane's pack (`622901d0`) is in place. `handoff19.py` lists
+  twenty-five lanes; 19z is a replayed lane as 19t and 19y are. The handoff tests were
+  changed first and six failed before the code changed; 39 pass. The comparator is
+  unchanged. The three operator receipts are byte-identical; their reviews were recomputed
+  and list 19z as `not_in_receipt`, and `handoff19.py status` names seven items still owed
+  under `IOU-19-OPERATOR`: 19w, 19x, 19y, 19z, the `--replay` of 19y and of 19z, and 19q's
+  `--dataset`. `HANDOFF.md` and `discrepancy-template.json` were rendered again. The workflow
+  gained the lane's `docs/` path in both path filters and its id in the expected-roots
+  check, with its message; no step was added, removed or renamed, and the Stage 5Q census
+  output is identical before and after. `PHASE19_ROOTS` was extended outside the pull
+  request at 04:56Z on 22 Nov from twenty-four roots to twenty-five, the twenty-four
+  existing values unchanged and each compared with its committed `ROOT.sha256`; the one
+  added is 19z `c4c59ef843e83da576a9aeb331230961b24349d3a87b24ef4ad56df36913d30c`. The root
+  README says twenty-five packs and gained one paragraph on the lane and two entries under
+  its open work: what the gate cannot see, and that the hosted models' zero sends have only
+  the local models' sends as a positive control. `docs/AUTHOR_AND_METHOD.md` has the new
+  count. Not done: no one outside the author has run the handoff for any of the seven items.

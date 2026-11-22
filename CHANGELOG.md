@@ -1,5 +1,16 @@
 ## Change Log
 
+## [phase-19f-operator12-2026-11-22] — 2026-11-22 — Lane 19z in the operator handoff; twenty-five pinned roots
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR12, the handoff tool, its rendered files, the hosted
+  roots check, the root README.
+- **Summary:** twenty-five packs in the handoff and in the hosted roots check. The root
+  README now says what the gate cannot see and what stands as the positive control for the
+  hosted models' zero sends.
+- **Verification:** 39 handoff tests; Stage 5Q census identical; quick gate.
+
 ## [phase-19z-pack-2026-11-22] — 2026-11-22 — Lane 19z: writes to the gate's own stores, with and without a seal
 
 **Raouf:**

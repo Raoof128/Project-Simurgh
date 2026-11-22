@@ -14,6 +14,28 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19z in the operator handoff; twenty-five pinned roots; the README states what the gate cannot see
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR12 in the ledger (`ae0468b3`, before the change), the
+  handoff tool and its tests, the rendered handoff, the hosted roots check, the root README.
+- **Summary:** 19z joins the handoff as a replayed lane. The three operator reviews were
+  recomputed (19z is `not_in_receipt` in each; the receipts are byte-identical). Seven items
+  are owed to an outside operator. `PHASE19_ROOTS` was extended outside the pull request
+  from twenty-four roots to twenty-five. The root README has a paragraph on the lane and two
+  new entries under its open work, both prompted by the gap hunt of 22 Nov: harm inside an
+  allowed send is outside what the gate decides, and the hosted models' zero sends have only
+  the local models' sends on the same texts as a positive control.
+- **Files changed:** `tools/assurance-provenance/handoff19.py`, `tests/test_handoff19.py`,
+  `docs/research/provenance-phase-19f/HANDOFF.md`, `discrepancy-template.json`, the three
+  reviews, the two 19f READMEs, `.github/workflows/assurance-provenance.yml`, `README.md`,
+  `docs/AUTHOR_AND_METHOD.md`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 39 handoff tests, six failing before the code changed; the Stage 5Q
+  census is byte-identical before and after the workflow edit; `prettier` and `ruff` are
+  clean; the quick gate passes.
+- **Not done:** no outside operator has run any of the seven items.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19z pack: with no seal 13 of 52 store-writing attempts gain authority; with the seal none does
 
 **Raouf:**
