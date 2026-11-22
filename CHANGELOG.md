@@ -1,5 +1,17 @@
 ## Change Log
 
+## [phase-19af-pack-2026-11-22] — 2026-11-22 — Lane 19af: three questions asked of small local models
+
+**Raouf:**
+
+- **Scope:** the 19af pack, its pages, the pack module and a committed-pack test, the ruling.
+- **Summary:** whether two small local models obey a restriction that arrives as text
+  depends on its wording, and the gate ignores all of them by design; a transcript monitor
+  catches an added sentence far more often than an omitted clause; a monitor call takes
+  tens of seconds on a laptop against a fiftieth of a second for the gate. Five of six
+  predictions hold. Root `79e8b1f2…`.
+- **Verification:** bare-interpreter `verify`; committed-pack tests; quick gate.
+
 ## [phase-19f-operator15-2026-11-22] — 2026-11-22 — Lane 19ae in the operator handoff; thirty pinned roots
 
 **Raouf:**

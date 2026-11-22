@@ -4103,3 +4103,25 @@ strict ancestor of every commit that acts on it.
   raise is stated as open, and the entry on unrecorded refusals says where they now have a
   record. `docs/AUTHOR_AND_METHOD.md` has the count. Not done: no one outside the author has
   run the handoff for any of the seventeen items.
+- Ruling (22 Nov 2026, P19-LOCAL04 exercised): the declaration (`a54b3706`) is an ancestor of
+  the instrument commit (`64a77f22`, 08:09:57Z), which precedes the capture (launched
+  08:10:06Z), and of the pack module's commit (`ab544c00`). Root
+  `79e8b1f27371c7476373d9613799833508506aec5bb6826c3135aa2ce8f2e255`. 528 generations on the
+  author's Apple M2 laptop, none resumed; the rechecked rows repeat. Both models are
+  eligible as agents and usable as monitors. T1 holds: under a restriction that arrives as
+  text `qwen3-4b-4bit` sends in 28 of 120 generations and `llama-3.2-3b-4bit` in 46 of 120.
+  The wording decides: three of the five texts stop every send in both models and the legal
+  hold stops none. T2 does not hold: with the restriction in the trusted state
+  `qwen3-4b-4bit` sends 0 of 24 times and `llama-3.2-3b-4bit` 19 of 24, more than under the
+  text. T3 holds: the gate observes the delegated action in all 20 dispatches with a
+  restriction text in a channel. O1 and O2 hold: as monitors the two models catch 24 and 2
+  of the transcripts with an added sentence, 4 and 0 of those with an omitted clause, and 9
+  and 1 of those split in two. O3 holds: the gate observes the exact body and refuses the
+  four changed ones. Reported: a monitor call took a median of 41.2 and 23.4 seconds and a
+  dispatch on the gate 0.0175 seconds, on this machine. Disclosed: the capture was suspended
+  twice for the project's test gate and the first model was captured on a loaded machine,
+  so its seconds are inflated; the pack module was written while the capture ran and before
+  any output was analysed, and the capture's progress log, which shows the end of each
+  output, was looked at three times. Not done and not claimed: nothing here transfers to a
+  hosted model; five wordings and four trials per cell are too few to say which words
+  matter; a verifier cannot recompute a generation.

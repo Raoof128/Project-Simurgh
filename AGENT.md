@@ -14,6 +14,29 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19af pack: a restriction as text is obeyed or not by its wording; a monitor misses omissions
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19af/` (pack, README, results), the
+  committed-pack test, `.prettierignore`, the ruling. This entry also covers the pack module
+  `evidence19af.py` and its tests, committed earlier (`ab544c00`) without a log entry.
+- **Summary:** 528 generations from two small local models on the author's laptop. As agents
+  both obey three of five restriction texts every time and both ignore a legal hold every
+  time; one sends 19 of 24 times when the restriction is in the trusted state, so T2 does not
+  hold. The gate observes the delegated action in all 20 dispatches with a restriction text
+  in a channel. As monitors they catch 24 and 2 added sentences, 4 and 0 omitted clauses.
+  The gate refuses every changed body. A monitor call takes tens of seconds here and a
+  dispatch about a fiftieth of a second.
+- **Files changed:** the pack's five files, `README.md` and `RESULTS.md` beside them,
+  `tools/assurance-provenance/tests/test_evidence19af_committed.py`, `.prettierignore`, the
+  ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `verify` with a bare Python 3.12 interpreter; 7 committed-pack tests, one
+  of which recomputes the gate's side on real fixtures; `prettier`, `ruff` and the quick
+  gate pass.
+- **Not done:** the lane is not in the operator handoff yet; nothing here transfers to a
+  hosted model.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19ae in the operator handoff; thirty pinned roots; the README's open work brought up to date
 
 **Raouf:**

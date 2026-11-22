@@ -457,3 +457,9 @@ docs/research/provenance-phase-19ae/submissions/*.json
 docs/research/provenance-phase-19ae/protocol.json
 docs/research/provenance-phase-19ae/report.json
 docs/research/provenance-phase-19ae/receipt.json
+
+# P19-FORMAT33: Phase 19af source-bound machine evidence (P19-LOCAL04); bytes are bound by
+# the pack root and must not be reformatted.
+docs/research/provenance-phase-19af/protocol.json
+docs/research/provenance-phase-19af/report.json
+docs/research/provenance-phase-19af/receipt.json
