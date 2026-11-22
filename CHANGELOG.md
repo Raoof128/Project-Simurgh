@@ -1,5 +1,13 @@
 ## Change Log
 
+## [phase-19y-seats2-2026-11-22] — 2026-11-22 — Lane 19y: an OpenAI seat and a Mythos seat
+
+**Raouf:**
+
+- **Scope:** the second amendment to P19-REDTEAM02, the list of seats and its tests.
+- **Summary:** five seats in round two at the owner's request. Nothing else changed.
+- **Verification:** 59 lane tests; `ruff`; quick gate.
+
 ## [phase-19y-seats-2026-11-22] — 2026-11-22 — Lane 19y: a refused seat recorded and a third seat added
 
 **Raouf:**

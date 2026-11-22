@@ -14,6 +14,21 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19y: two more seats at the owner's request, an OpenAI Codex agent and a Mythos agent (no submission committed yet)
+
+**Raouf:**
+
+- **Scope:** the second amendment to P19-REDTEAM02 in the ledger, the instrument's list of
+  seats and its tests.
+- **Summary:** the owner asked that an OpenAI model and Claude Mythos attack as well. The
+  round now has five seats: `opus-r2`, `fable-r2` (refused, empty), `sonnet-r2`, `codex-r2`
+  and `mythos-r2`. The Codex agent is asked once in the same words; a refusal is recorded and
+  not worked around. The Mythos agent is the model that wrote the repair, which the
+  amendment says.
+- **Files changed:** `tools/assurance-provenance/redteam19y.py`, `tests/test_redteam19y.py`,
+  `tests/test_evidence19y.py`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the lane's 59 tests pass; `ruff` is clean; the quick gate passes.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19y: the Fable seat was refused by its provider; a Sonnet 5.5 seat is added (no submission exists yet)
 
 **Raouf:**
