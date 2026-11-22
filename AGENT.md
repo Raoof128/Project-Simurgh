@@ -14,6 +14,27 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19aa instrument: sequences at the gate's front door
+
+**Raouf:**
+
+- **Scope:** the declaration P19-RETRY01 in the ledger (`0fe5d615`, before any code), a new
+  instrument and pack module beside lane 19z's sealed gate, the author's 28 sequences, and a
+  note in the ledger written before the run of record.
+- **Summary:** one attempt is up to twelve steps on a fresh sealed fixture: retries of the
+  undelegated action, text written into a channel, a real approval minted by the host and
+  used directly or relayed, and tokens signed with the fixture's operator key. Each sequence
+  runs in a process of its own. Five hypotheses are decided by rule from the rows. No file
+  of an earlier lane is edited.
+- **Files changed:** `tools/assurance-provenance/retry19aa.py`, `evidence19aa.py`,
+  `tests/test_retry19aa.py`, `tests/test_evidence19aa.py`,
+  `docs/research/provenance-phase-19aa/attempts-author.json`, `.prettierignore`, the ledger,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 30 tests (20 for the instrument, four of them on the real gate; 10 for
+  the pack); `ruff` and `prettier` are clean; the quick gate passes.
+- **Not done:** the run of record on the Linux host, the pack and the ruling. A trial on the
+  author's machine has already shown that R2 will not hold; the ledger note says why.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19z in the operator handoff; twenty-five pinned roots; the README states what the gate cannot see
 
 **Raouf:**

@@ -3427,3 +3427,18 @@ declaration commit must be a strict ancestor of every other commit of lane 19aa.
   its open work: what the gate cannot see, and that the hosted models' zero sends have only
   the local models' sends as a positive control. `docs/AUTHOR_AND_METHOD.md` has the new
   count. Not done: no one outside the author has run the handoff for any of the seven items.
+- Note (22 Nov 2026, P19-RETRY01, written with the instrument and before the run of record):
+  three things a reader should know before the numbers. First, the author's 28 sequences
+  were tried on the author's own machine while the instrument was written, so the run of
+  record is not the first time their outcome was seen. Second, that trial showed how R2 will
+  be decided and that it will not hold as the rule is written. R2 is applied to a whole
+  sequence: the undelegated action is observed exactly once and every later dispatch of it
+  is refused. In one sequence the host mints two approvals and each is used once. The gate
+  reports the action observed both times and one effect reaches the receiver, because the
+  frozen gate answers a repeat of an action it has already carried out from its record. By
+  the rule that sequence fails R2; the rule is not reworded to pass it. The count of effects
+  is recorded for every sequence so a reader can see what reached the receiver. Third, the
+  declaration says nothing here measures a credential left within reach. Five sequences sign
+  a token with the fixture's operator key, which is a constant in the repository, so one
+  credential of that kind is in the list after all. The lane's page says what those
+  sequences show and what they do not.

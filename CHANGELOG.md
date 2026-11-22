@@ -1,5 +1,15 @@
 ## Change Log
 
+## [phase-19aa-instrument-2026-11-22] — 2026-11-22 — Lane 19aa: sequences at the gate's front door (instrument)
+
+**Raouf:**
+
+- **Scope:** `retry19aa.py`, `evidence19aa.py`, their tests, the author's 28 sequences, a
+  ledger note.
+- **Summary:** retries after a refusal, self-written approval text, and real, reused and
+  forged approvals, as sequences on lane 19z's sealed gate. No run of record yet.
+- **Verification:** 30 tests; `ruff`; `prettier`; quick gate.
+
 ## [phase-19f-operator12-2026-11-22] — 2026-11-22 — Lane 19z in the operator handoff; twenty-five pinned roots
 
 **Raouf:**
