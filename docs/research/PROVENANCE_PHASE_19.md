@@ -2156,6 +2156,15 @@ any code:
 - Seen when this was written: the gap hunt's findings, the stores a fixture creates (nine
   SQLite files and their tables), and lane 19y. No line of the seal exists and no attempt has
   been run.
+- Amended 22 Nov 2026, after the two agents were started and before any submission existed:
+  the agent in `seat-b` stopped. It was a Claude Sonnet 5.5 agent, by the harness's record of
+  it. A safety classifier of its provider withheld one of its responses after it had read the
+  modules and run one script that lists the fixture's files; it reported this and said it
+  would not redo or reword the work. It was told to stop. It ran no attempt and wrote no
+  file. The seat stays in the record with an empty file written by the author to say that
+  nothing was received, so Z3 cannot hold. No seat is added in its place: the round has one
+  attacking seat, `seat-a`, which the harness's record shows running on Claude Opus 5.5.
+  Nothing in the instrument changes.
 
 Authorised files: `tools/assurance-provenance/seal19z.py`, `tamper19z.py`, `evidence19z.py`,
 their tests, `docs/research/provenance-phase-19z/` (the brief, the author's attempts, the two
