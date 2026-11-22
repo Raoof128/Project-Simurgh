@@ -2041,6 +2041,36 @@ new measurement or claim about a benchmark, a monitor or a model. The tool inher
 limit of 19q's rules: they are a grammar over recorded text and not a network boundary. This
 declaration commit must be a strict ancestor of every commit that acts on it.
 
+**P19-OPERATOR11 (bounded authority to bring lane 19y into the outside-operator handoff and the
+externally pinned roots; declared 22 Nov 2026 before any commit that acts on it).** Lane 19y's
+submissions are committed (`f1bbf672`) and its run of record is under way on the project's
+second host; its pack does not exist yet. The lane's declaration did not authorise a workflow
+or handoff edit. This change is made on the lane's branch after the pack is committed. This
+declaration authorises, and nothing else:
+
+1. `handoff19.py`: 19y added to `PHASES` with its host and time, the word for the new count,
+   and 19y in the list of lanes that need nothing beyond the standard library. 19y is a
+   replayed lane as 19t is: its committed receipt reads `gate_recomputed`, a host that cannot
+   replay prints `structure_checked`, and `19y --replay` joins the items only some hosts can
+   exercise. The comparator's rules are the ones 19t already has, applied to one more lane.
+   Tests first.
+2. The reviews of the three operator receipts recomputed under the new phase list. No receipt
+   is edited; 19y appears in each review as `not_in_receipt`, which is what happened.
+3. Re-rendering `HANDOFF.md` and `discrepancy-template.json`; the 19f README's count of packs,
+   its sentence on the lane and its list of what is owed.
+4. `.github/workflows/assurance-provenance.yml`: 19y's `docs/` path added to both path filters
+   and its id to the expected-roots check, with its message. No step is added, removed or
+   renamed, and the Stage 5Q census must be byte-identical before and after. The repository
+   variable `PHASE19_ROOTS` gains the one root, set outside the pull request, the
+   twenty-three existing values unchanged.
+5. The root README's count of Phase 19 packs, its sentences on lanes 19t and 19y, and the
+   same count and the sentence on what is owed in `docs/AUTHOR_AND_METHOD.md`.
+6. Both logs and the ruling.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to an operator's
+receipt, or any other change to what the comparator checks. This declaration commit must be a
+strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
