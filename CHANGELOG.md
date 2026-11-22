@@ -1,5 +1,14 @@
 ## Change Log
 
+## [phase-19z-submissions-2026-11-22] — 2026-11-22 — Lane 19z: attackers' files as received
+
+**Raouf:**
+
+- **Scope:** two files under `docs/research/provenance-phase-19z/submissions/`.
+- **Summary:** 21 attempts from one seat and one empty seat, committed before the host of
+  record runs any of them.
+- **Verification:** format read; private-data scan; quick gate.
+
 ## [phase-19z-instrument2-2026-11-22] — 2026-11-22 — Lane 19z: one process per attempt; a stopped seat recorded
 
 **Raouf:**

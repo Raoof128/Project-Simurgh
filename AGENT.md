@@ -14,6 +14,20 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19z: the two seats' files as received, committed before the host of record runs any of them
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19z/submissions/`.
+- **Summary:** `seat-a` (Claude Opus 5.5 by the harness's record) handed in 21 attempts,
+  among them the pragma that broke the first instrument. `seat-b` is an empty file written by
+  the author: its Sonnet 5.5 agent stopped when a safety classifier withheld a response.
+- **Files changed:** two files under `submissions/`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the attacker's file is byte-identical to what it wrote, was read for
+  format with the instrument's reader (21 accepted, none rejected) and scanned for keys,
+  addresses and names (no hit). The author has not run it. The quick gate passes.
+- **Not done:** nothing has run on the host of record.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19z: one seat stopped by a safety classifier; the instrument now runs each attempt in its own process (no submission committed yet)
 
 **Raouf:**
