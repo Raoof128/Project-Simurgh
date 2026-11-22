@@ -2216,6 +2216,60 @@ Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to
 receipt, or any other change to what the comparator checks. This declaration commit must be a
 strict ancestor of every commit that acts on it.
 
+**P19-RETRY01 (a new lane, 19aa: what repetition, self-written approval text and a reused
+approval do at the gate's front door; deterministic; no model and no attacker agent; declared
+22 Nov 2026 before any line of it was written).** The gap hunt of 22 Nov left three groups of
+pains that can be measured on a fixture at no cost: an agent that tries again after a refusal,
+an agent that writes its own approval or relays one, and a real approval used more than once.
+Lanes 19b, 19t and 19y each touch one of these in passing; none measures sequences. Declared
+before any code:
+
+- The gate is the sealed, repaired gate of lane 19z on its fixture. No file of an earlier lane
+  is edited; the instrument is a new module, `retry19aa.py`.
+- One attempt is a sequence of at most twelve steps on one fresh fixture: dispatch an action
+  some number of times, up to 200, with or without a channel's adapter; write text into one
+  of the four wired channels; have the host mint a real approval for an action and keep it
+  under a name; dispatch with that approval passed directly; relay that approval, or any
+  text, through the tool-result channel. Each attempt runs in a process of its own.
+- Recorded for each attempt: the verdict of every dispatch in order, the count of effects at
+  the receiver, the gate's own `blocked` events, the pipeline's refusal reasons, whether the
+  seal latched and whether anything raised.
+- The attempts are the author's list, committed with the instrument. There is no attacker
+  agent in this lane: two of the last five seats offered to an agent of another model were
+  stopped by safety classifiers, and the lane's question is what the gate does with a fixed
+  set of sequences, which a list answers.
+- Hypotheses. R1: in no sequence in which the host mints no approval for the undelegated
+  action is that action ever observed, whatever is retried, written or relayed. R2: a minted
+  approval is honoured once: across every use of it in a sequence, direct or relayed, the
+  action is observed exactly once and every later use is refused. R3: refused retries are not
+  a lever on other work: wherever the delegated action is dispatched after only refused
+  dispatches, it is observed. R4: every refused dispatch leaves a record: the count of the
+  gate's `blocked` events equals the count of dispatches that were refused. R5: no sequence
+  latches the seal or raises.
+- Reported and not a hypothesis: the gate has no limit on retries, so the log grows by one
+  record for each. The largest count in the list is reported.
+- Where: the run of record is on the project's Linux x86_64 host in the hash-locked
+  environment, from a clean clone at the instrument commit. `verify` recomputes every row
+  there; elsewhere it checks structure.
+- If a hypothesis fails: the sequence and the cause are published as they are, and no repair
+  is made in this lane.
+- Money: none.
+- What this is not. A list the author wrote, on a fixture with two actions, one actor and a
+  budget of one. It is not evidence about what a model would try, about an attacker, or about
+  a human approver. A model that writes its own approval text is represented by the text,
+  not by a model. Nothing here measures credentials left within reach or requests laundered
+  through a permitted route; both need a receiver this fixture does not have.
+- Seen when this was written: lanes 19b, 19t, 19y and 19z, and one look at the existing
+  gate's events after three refused dispatches and one relayed approval (a `blocked` event
+  for each refusal; a relayed minted approval observed once and then refused as replayed).
+  No line of the instrument exists.
+
+Authorised files: `tools/assurance-provenance/retry19aa.py`, `evidence19aa.py`, their tests,
+`docs/research/provenance-phase-19aa/` (the author's attempts, the pack and its pages),
+`.prettierignore` entries for its byte-preserved files, the ruling and both logs. Not
+authorised: any edit to a frozen file, to a 19a to 19z source or pack, or to a workflow. This
+declaration commit must be a strict ancestor of every other commit of lane 19aa.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
