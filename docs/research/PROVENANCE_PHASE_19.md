@@ -3769,3 +3769,15 @@ This declaration commit must be a strict ancestor of every other commit of lane 
   a nonce the host never minted and not for one it minted for something else. Not done and
   not claimed: the fault is not repaired; no lane measures how an agent would come to hold
   the key; two seats of one model are not an attacker in general.
+- Amendment (22 Nov 2026, P19-BIND01, before any line of the lane was run): D2 as declared
+  contradicts the same declaration. It says the bound gate gives the same verdicts as the
+  gate before "in every attempt that does not gain before", and the declaration also says
+  the lane will report what each gate does with a re-signed token for an action the host did
+  approve. Such an attempt does not gain, because the action was approved, and the two gates
+  are meant to differ on it: the gate before admits the re-signed token and the bound gate
+  refuses it. D2 is therefore read over the attempts in which the gate before admits no
+  token the host did not mint, decided from the row: the undelegated action is never
+  observed there on a dispatch that carried no minted token. The attempts left out of D2
+  are the gains, which D1 covers, and the re-signed tokens for an approved action, which
+  are reported. Nothing had been run when this was written; the repair and the instrument
+  were in draft and no sequence had been tried on the bound gate.
