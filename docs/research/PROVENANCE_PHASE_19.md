@@ -1967,6 +1967,19 @@ own declaration. This is that declaration. Declared before any code:
   list of seats, its tests and the pack's inventory change for that and for nothing else; the
   repair, the gate and the fixture are the files the `opus-r2` agent already has. All seats
   that attack are again of one vendor.
+- Amended a second time on 22 Nov 2026, before any submission was committed or dispatched:
+  the owner asked that an OpenAI model and Claude Mythos attack as well. Two seats are added
+  with the same brief, each with its own copy at the commit that makes this change.
+  `codex-r2` is the OpenAI Codex command-line agent on the owner's plan. This declaration
+  first said that agent would not be asked again; it is asked once, in the words the other
+  seats were given. If its provider refuses, the seat is recorded as refused with an empty
+  submission and the request is not reworded. `mythos-r2` is a Claude Mythos 5.2 agent
+  started with no knowledge of this project's conversation. It is the same model that wrote
+  the repair, so it is the seat most likely to share the repair's blind spots. When this was
+  written the `opus-r2` agent had handed in a file, which the author had read for format and
+  scanned for private data and had not run; the `sonnet-r2` agent was still working. The
+  instrument's list of seats, its tests and the pack's inventory change for the two seats
+  and for nothing else. No money is spent: both agents run on the owner's plans.
 
 Authorised files: `tools/assurance-provenance/repair19y.py`, `redteam19y.py`,
 `evidence19y.py`, their tests, `docs/research/provenance-phase-19y/` (the brief, the two
