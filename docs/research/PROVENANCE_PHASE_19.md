@@ -2016,6 +2016,31 @@ the ruling and both logs. Not authorised: any edit to a frozen file, to a 19a to
 pack, or to a workflow. This declaration commit must be a strict ancestor of every other
 commit of lane 19y.
 
+**P19-TOOL01 (bounded authority for a one-command labeller built on lane 19q's rules; no
+measurement, no model, no dataset text; declared 22 Nov 2026 before the tool was written).**
+Lane 19q typed every destination in a public monitor benchmark by where it first appeared and
+scored three rules on it. Its code can only be run through that lane's pack, on that dataset.
+The second-stage plan of 13 Nov listed, as a way to make the work usable by someone else, the
+same rules as a tool that reads one transcript. This declaration authorises, and nothing else:
+
+1. A new module, `tools/assurance-provenance/label19.py`, that imports `dest19q.py` unchanged.
+   Given one transcript in the benchmark's JSONL format, and optionally the transcript of an
+   earlier stage, it prints which destinations the transcript holds, where each first
+   appeared (the principal, the environment, the agent, or the agent in the earlier stage),
+   which of them a command uses, and whether rules P, E and A refuse the transcript under the
+   strict and the lenient reading. It needs nothing but the standard library. It prints a
+   truncated digest of each destination and prints the destination itself only when asked.
+   Its exit status says whether the chosen rule refused.
+2. Its tests, on transcripts written for the tests. No text of the benchmark is used, copied
+   or committed.
+3. One page beside lane 19q's that says how to run it and what it cannot tell, one sentence
+   in the root `README.md`, the ruling and both logs.
+
+Not authorised: any edit to `dest19q.py`, to lane 19q's pack or pages, or to a workflow; any
+new measurement or claim about a benchmark, a monitor or a model. The tool inherits every
+limit of 19q's rules: they are a grammar over recorded text and not a network boundary. This
+declaration commit must be a strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
