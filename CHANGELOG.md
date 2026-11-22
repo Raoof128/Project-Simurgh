@@ -1,5 +1,14 @@
 ## Change Log
 
+## [phase-19-e2e-2026-11-22] — 2026-11-22 — End-to-end check of the day's lanes after they merged
+
+**Raouf:**
+
+- **Scope:** a ledger note and the logs.
+- **Summary:** eight packs replayed in full on the Linux host from the merged `main`, each
+  recomputing its committed root; all thirty-one packs verified there.
+- **Verification:** quick gate.
+
 ## [phase-19f-operator16-2026-11-22] — 2026-11-22 — Lane 19af in the operator handoff; thirty-one pinned roots; plain-language pass
 
 **Raouf:**
