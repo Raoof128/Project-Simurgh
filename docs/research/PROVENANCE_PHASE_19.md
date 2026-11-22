@@ -4087,3 +4087,19 @@ strict ancestor of every commit that acts on it.
   the repository. Not done and not claimed: the raise is not repaired and every gate here
   has it; there was no planted fault in this round; the seats are agents of two Claude
   models and not a person or another vendor's model; the retry mark is not a cap.
+- Ruling (22 Nov 2026, P19-OPERATOR15 exercised): the declaration precedes the commit that
+  acts on it. `handoff19.py` carries 19ae as a replayed lane and says it holds
+  host-dependent rows. The declaration says tests first; this time the edit to the tests
+  stopped on a change of layout and the tool was edited before it was fixed, so the tests
+  were not seen failing first. All 44 pass with both in place. The
+  three operator reviews were recomputed and no receipt was edited: the lane is
+  `not_in_receipt` in each. Seventeen items are owed to an outside operator: lanes 19w, 19x,
+  19y, 19z and 19aa to 19ae, the `--replay` of the last seven, and 19q's `--dataset`
+  recomputation. The workflow gained the `docs/` path in both filters and the id in the
+  roots check; the Stage 5Q census is byte-identical before and after. `PHASE19_ROOTS` was
+  read, found as P19-OPERATOR14 left it, and set to thirty roots, the twenty-nine earlier
+  values unchanged. The root README has the new count, one paragraph on the lane, and its
+  open work brought up to date: the repair of lane 19ad has been attacked and held, the
+  raise is stated as open, and the entry on unrecorded refusals says where they now have a
+  record. `docs/AUTHOR_AND_METHOD.md` has the count. Not done: no one outside the author has
+  run the handoff for any of the seventeen items.

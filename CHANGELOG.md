@@ -1,5 +1,15 @@
 ## Change Log
 
+## [phase-19f-operator15-2026-11-22] — 2026-11-22 — Lane 19ae in the operator handoff; thirty pinned roots
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR15, the handoff tool, its rendered files, the hosted
+  roots check, the root README.
+- **Summary:** thirty packs in the handoff and in the hosted roots check. The README's open
+  work says what the fresh round found: the repair held, and a raise is open.
+- **Verification:** handoff tests; Stage 5Q census identical; quick gate.
+
 ## [phase-19ae-pack-2026-11-22] — 2026-11-22 — Lane 19ae: one gate with every repair, attacked afresh
 
 **Raouf:**
