@@ -14,6 +14,23 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19ac: the two seats' files as received
+
+**Raouf:**
+
+- **Scope:** two files under `docs/research/provenance-phase-19ac/submissions/` and a ledger
+  note.
+- **Summary:** `seat-a` handed in 16 attempts and `seat-b` 9. Both ran on Claude Opus 5.5,
+  read from the harness's record. Both say they found the planted fault and both say they
+  gained on the real gate as well, by signing a token for the undelegated action with the
+  fixture's operator key and the nonce of an approval the host minted for the other action.
+  The files are committed as handed in, before the run of record.
+- **Files changed:** `submissions/seat-a.json`, `submissions/seat-b.json`, the ledger,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** both files pass the format check with no attempt rejected; the privacy
+  scan finds nothing.
+- **Not done:** the run of record, the pack and the ruling.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19ac instrument: sequences written by a model, and one planted fault
 
 **Raouf:**

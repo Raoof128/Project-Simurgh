@@ -1,5 +1,14 @@
 ## Change Log
 
+## [phase-19ac-submissions-2026-11-22] — 2026-11-22 — Lane 19ac: the seats' files as received
+
+**Raouf:**
+
+- **Scope:** two files under `docs/research/provenance-phase-19ac/submissions/`.
+- **Summary:** 16 and 9 attempts from two Opus 5.5 seats, committed before any of them is
+  run on the host of record.
+- **Verification:** format check; privacy scan.
+
 ## [phase-19ac-instrument-2026-11-22] — 2026-11-22 — Lane 19ac: a planted fault as a control on a model that writes sequences (instrument)
 
 **Raouf:**
