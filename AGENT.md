@@ -14,6 +14,22 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — End-to-end check of the day's lanes after they merged
+
+**Raouf:**
+
+- **Scope:** one note in the ledger and this entry. No code, pack or page changes.
+- **Summary:** the earlier entry said a full replay on the Linux host was still running. It
+  finished. From a clean clone of `main` at `96ef6339`, `verify --replay` recomputed lanes
+  19t, 19y, 19z, 19aa, 19ab, 19ac, 19ad and 19ae, each with its committed root. Plain
+  `verify` then passed there for all thirty-one packs. `main` is at `2bd16700` with
+  thirty-one packs after pull requests 186 to 190.
+- **Files changed:** `docs/research/PROVENANCE_PHASE_19.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the replay and verify logs are the author's and are not in the
+  repository; `prettier` is clean; the quick gate passes.
+- **Not done:** the `KeyError` raise found in lane 19ae is not repaired. No outside operator
+  has run any of the eighteen items owed.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19af in the operator handoff; thirty-one pinned roots; a plain-language pass over the day's pages
 
 **Raouf:**

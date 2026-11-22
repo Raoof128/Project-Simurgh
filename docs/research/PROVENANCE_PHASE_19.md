@@ -4170,3 +4170,13 @@ strict ancestor of every commit that acts on it.
   plain language and seven sentences reworded; no number and no claim changed, and the
   pinned briefs were not touched. Not done: no one outside the author has run the handoff
   for any of the eighteen items.
+- Note (22 Nov 2026, an end-to-end check of the day's lanes after they merged): from a clean
+  clone of `main` at `96ef6339` on the project's Linux x86_64 host, in the hash-locked
+  environment, `verify --replay` was run for lanes 19t, 19y, 19z, 19aa, 19ab, 19ac, 19ad
+  and 19ae. Each printed `gate_recomputed` with its committed root, and the clone was clean
+  before and after. From the head of the branch that became `2bd16700`, plain `verify` was
+  run there for all thirty-one packs, lane 19d's namespace probe among them: thirty-one
+  verified. On the author's macOS machine the eleven groups of tests written on 22 Nov pass
+  (378 tests), twenty-eight packs verify under a bare interpreter and 19b and 19g with their
+  packages, the quick gate passes 96 of 96 and the full gate 144 of 144. These are the
+  author's own hosts. No one outside the project has run any of the eighteen items owed.
