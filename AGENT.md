@@ -14,6 +14,26 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19ad instrument: the approval bound to what the host minted
+
+**Raouf:**
+
+- **Scope:** the declaration P19-BIND01 (`8bdc56de`) and its amendment (`b09a89d4`), both
+  before anything was run; the repair, an instrument and a pack module in new files; the
+  author's nine sequences; a ledger note written before the run of record.
+- **Summary:** `bind19ad.py` holds an approval store that records a digest of the payload
+  the host signed and admits a returned token only if its payload has that digest. It sits
+  beside the gate; no earlier file is edited. The instrument runs lane 19aa's and lane
+  19ac's committed sequences and the author's nine on the gate before and on the bound gate.
+- **Files changed:** `tools/assurance-provenance/bind19ad.py`, `evidence19ad.py`,
+  `tests/test_bind19ad.py`, `tests/test_evidence19ad.py`,
+  `docs/research/provenance-phase-19ad/attempts-author.json`, `.prettierignore`, the ledger,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 18 tests, four of them on both real fixtures; `ruff` and `prettier` are
+  clean; the quick gate passes.
+- **Not done:** the run of record, the pack and the ruling. The repair has not been attacked
+  afresh.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19ac pack: both seats find the planted fault, and both find a real one
 
 **Raouf:**

@@ -443,3 +443,10 @@ docs/research/provenance-phase-19ac/submissions/*.json
 docs/research/provenance-phase-19ac/protocol.json
 docs/research/provenance-phase-19ac/report.json
 docs/research/provenance-phase-19ac/receipt.json
+
+# P19-FORMAT31: Phase 19ad sequences as written and source-bound machine evidence
+# (P19-BIND01); bytes are bound by the pack root and must not be reformatted.
+docs/research/provenance-phase-19ad/attempts-author.json
+docs/research/provenance-phase-19ad/protocol.json
+docs/research/provenance-phase-19ad/report.json
+docs/research/provenance-phase-19ad/receipt.json

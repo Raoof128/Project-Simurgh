@@ -1,5 +1,14 @@
 ## Change Log
 
+## [phase-19ad-instrument-2026-11-22] — 2026-11-22 — Lane 19ad: the approval bound to what the host minted (instrument)
+
+**Raouf:**
+
+- **Scope:** `bind19ad.py`, `evidence19ad.py`, their tests, the author's nine sequences.
+- **Summary:** a repair beside the gate for the fault lane 19ac found, and an instrument
+  that runs every recorded sequence on the gate before and after. No run of record yet.
+- **Verification:** 18 tests; `ruff`; `prettier`; quick gate.
+
 ## [phase-19ac-pack-2026-11-22] — 2026-11-22 — Lane 19ac: a planted fault found, and a real fault found with it
 
 **Raouf:**

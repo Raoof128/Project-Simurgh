@@ -3781,3 +3781,11 @@ This declaration commit must be a strict ancestor of every other commit of lane 
   are the gains, which D1 covers, and the re-signed tokens for an approved action, which
   are reported. Nothing had been run when this was written; the repair and the instrument
   were in draft and no sequence had been tried on the bound gate.
+- Note (22 Nov 2026, P19-BIND01, written with the instrument and before the run of record):
+  the 67 sequences were tried on both gates on the author's own machine while the instrument
+  was written, after the amendment above. In that trial all four hypotheses held: 8
+  sequences gain on the gate before (the six of lane 19ac's seats and two of the author's)
+  and none on the bound gate; the 57 in which the gate before admits no forged token have
+  the same verdicts and effects on both; two re-signed tokens for an approved action are
+  admitted before and refused by the bound gate. The run of record is not the first time
+  the outcome was seen.
