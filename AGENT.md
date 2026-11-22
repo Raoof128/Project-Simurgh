@@ -14,6 +14,31 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19y pack: the repair holds against 19t's 92 attempts and 151 new ones; three seats refused
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19y/` (pack, README, results), the committed-pack
+  test, the ruling.
+- **Summary:** the run of record on the project's Linux host gave root `cf2557c4…`. None of
+  19t's 92 attempts and none of 151 new attempts changes the repaired gate's output. The
+  instrument reproduced 19t's record on the gate as it was (92 of 92). Three of six seats in
+  the second round are empty because their providers refused the task, so the prediction
+  about every seat did not hold. 0.008 USD was spent, at OpenAI, under a cap of 10 USD.
+- **Files changed:** `evidence.zip`, `protocol.json`, `report.json`, `receipt.json`,
+  `ROOT.sha256`, `README.md`, `RESULTS.md` under the lane's folder;
+  `tools/assurance-provenance/tests/test_evidence19y_committed.py`; the ledger; `AGENT.md`;
+  `CHANGELOG.md`.
+- **Verification:** the pack verifies with a bare interpreter; 10 committed-pack tests (one
+  skipped: the full replay) and the lane's 59 tests pass; the README's numbers are filled
+  from the record by script; the quick gate passes.
+- **Corrected before commit:** a draft count of attempts that sign with the fixture's key
+  (62) matched two notes about JSON keys; the page says 60. Three deep-nesting attempts
+  change two naive gates on the author's machine and none on the host of record; the page
+  and the ruling say so.
+- **Not done:** `gate19.py` is unchanged; no attacker from another vendor ran; no replay
+  outside the author's custody.
+
 ### 2026-11-22 (Australia/Sydney) — A one-command labeller built on lane 19q's rules (no measurement)
 
 **Raouf:**

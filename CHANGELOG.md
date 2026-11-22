@@ -1,5 +1,15 @@
 ## Change Log
 
+## [phase-19y-pack-2026-11-22] — 2026-11-22 — Lane 19y: the repair of 19t's faults, and a second round against it
+
+**Raouf:**
+
+- **Scope:** the lane's pack, pages, committed test and ruling.
+- **Summary:** the repaired gate's output did not change for any of 19t's 92 attempts or for
+  any of 151 new attempts from three Claude agents. Three other seats were refused by their
+  providers. Root `cf2557c4116c9d160d5055cb6afe2eba61b3b528dfbad0cee893dbf0f6b63bd5`.
+- **Verification:** bare-interpreter verify; 69 lane tests; quick gate.
+
 ## [phase-19-tool01-2026-11-22] — 2026-11-22 — A one-command labeller built on lane 19q's rules
 
 **Raouf:**
