@@ -2071,6 +2071,30 @@ Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to
 receipt, or any other change to what the comparator checks. This declaration commit must be a
 strict ancestor of every commit that acts on it.
 
+**P19-REPAIR09 (bounded authority to correct which model sat in one seat of lane 19y; declared
+22 Nov 2026 before any commit that acts on it).** Lane 19y's pages, its ruling and the root
+README say that the seat `mythos-r2` was a Claude Mythos 5.2 agent, "the model that wrote the
+repair". That is false. The agent was started without a named model, and the author assumed it
+would run on the session's own model. The author's harness has a setting that gives every such
+agent Claude Sonnet 5.5, and the record the harness keeps of that agent names
+`claude-sonnet-5-5` on each of its 58 responses. The author found this an hour after the merge,
+when another agent started the same way failed with a notice that named Sonnet 5.5. The same
+record names `claude-opus-5-5` for `opus-r2` and `claude-sonnet-5-5` for `sonnet-r2`, as the
+pages say. So the seats that attacked were one Opus 5.5 agent and two separate Sonnet 5.5
+agents, no Mythos agent attacked, and the owner's request for one was not met. This
+declaration authorises, and nothing else:
+
+1. The lane's `README.md` and `RESULTS.md`: the model of that seat, the sentence that one
+   attacker wrote the repair, and a section saying what was wrong and how it was found.
+2. The same sentence in the root `README.md`.
+3. A note under the lane's ruling, this ruling and both logs. Earlier ledger and log entries
+   are records and stay as written.
+
+Not authorised: any change to the pack, the protocol, a submission, the instrument or a test.
+The seat keeps its name `mythos-r2` there because the pack binds it; it is an identifier and
+not a statement of the model. No number, hypothesis or outcome changes. This declaration
+commit must be a strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
@@ -3162,3 +3186,22 @@ strict ancestor of every commit that acts on it.
   19t are unrepaired; `docs/AUTHOR_AND_METHOD.md` has the new count. Not done: no one outside
   the author has run the handoff for 19y or for the other items owed, and a replay of 19y on
   another host may differ in the three deep-nesting rows the lane's page names.
+- Note (22 Nov 2026, P19-REDTEAM02, corrected under P19-REPAIR09): the ruling above says of
+  the seats that attacked that "one is the model that wrote the repair", and the second
+  amendment calls `mythos-r2` a Claude Mythos 5.2 agent. Both are wrong about what ran. The
+  agent in that seat ran on Claude Sonnet 5.5. The seats that attacked were one Opus 5.5
+  agent and two separate Sonnet 5.5 agents; no Mythos agent attacked. Every number in the
+  ruling stands.
+- Ruling (22 Nov 2026, P19-REPAIR09 exercised): the declaration (`850b226a`) precedes the
+  commit that acts on it. The lane's page now names Claude Sonnet 5.5 for the seat
+  `mythos-r2`, says that none of the attackers is the model that wrote the repair, and has a
+  section on what was wrong and how it was found; its results page carries the same model in
+  the one row that named it; the root README's sentence is corrected. The cause was the
+  author's: an agent started without a named model was assumed to run on the session's
+  model, the harness gave it Sonnet 5.5 under a setting the author had not checked, and the
+  page stated the intended model as fact. The record the harness keeps of each agent was
+  read for all three seats: `claude-opus-5-5` for `opus-r2` and `claude-sonnet-5-5` for
+  `sonnet-r2` and `mythos-r2`. That record is the author's own and is not in the repository,
+  so a reader has the author's word for it and nothing more. The pack, the protocol, the
+  submissions, the instrument and the tests are unchanged, and the seat keeps its name
+  there. Not done: no Claude Mythos agent has attacked the repaired gate.

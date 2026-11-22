@@ -74,22 +74,38 @@ counts as potent only because it changed the audit.
 
 ## The seats of the second round
 
-| Seat        | Agent                                              | What happened                                                                                  |
-| ----------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `opus-r2`   | Claude Opus 5.5                                    | Handed in 37 attempts                                                                          |
-| `sonnet-r2` | Claude Sonnet 5.5                                  | Handed in 60 attempts                                                                          |
-| `mythos-r2` | Claude Mythos 5.2, the model that wrote the repair | Handed in 54 attempts                                                                          |
-| `fable-r2`  | Claude Fable 5.2                                   | Its provider's safeguards flagged the first request. Nothing received                          |
-| `codex-r2`  | OpenAI Codex command-line agent                    | Refused on the owner's plan as a possible cybersecurity risk; could not start with the API key |
-| `astra-r2`  | `gpt-6.2-astra` through the paid interface         | The provider answered `cyber_policy` after the model had read the brief. Nothing received      |
+| Seat        | Agent                                                          | What happened                                                                                  |
+| ----------- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `opus-r2`   | Claude Opus 5.5                                                | Handed in 37 attempts                                                                          |
+| `sonnet-r2` | Claude Sonnet 5.5                                              | Handed in 60 attempts                                                                          |
+| `mythos-r2` | Claude Sonnet 5.5, a second sitting (see the correction below) | Handed in 54 attempts                                                                          |
+| `fable-r2`  | Claude Fable 5.2                                               | Its provider's safeguards flagged the first request. Nothing received                          |
+| `codex-r2`  | OpenAI Codex command-line agent                                | Refused on the owner's plan as a possible cybersecurity risk; could not start with the API key |
+| `astra-r2`  | `gpt-6.2-astra` through the paid interface                     | The provider answered `cyber_policy` after the model had read the brief. Nothing received      |
 
 No request was reworded after a refusal and no access programme was applied for. The three
 empty files were written by the author to record that nothing was received. The only money
 spent in the lane is 0.008 USD at OpenAI, on the `astra-r2` seat, under a cap of 10 USD.
 
-So every seat that attacked is a Claude model, and one of them is the model that wrote the
-repair. That is weaker evidence than attackers from two vendors would be, and the lane has no
-way to make it stronger.
+So every seat that attacked is a Claude model: one Opus 5.5 agent and two separate Sonnet 5.5
+agents. None of them is the model that wrote the repair. That is weaker evidence than attackers
+from two vendors would be, and the lane has no way to make it stronger.
+
+### Corrected after the merge: the seat `mythos-r2` ran on Sonnet 5.5
+
+This page first said that `mythos-r2` was a Claude Mythos 5.2 agent, "the model that wrote the
+repair". That was false. The owner had asked for a Mythos attacker. The author started the
+agent without naming a model and assumed it would run on the session's own model. The
+author's harness has a setting that gives every such agent Claude Sonnet 5.5. The record the
+harness keeps of that agent names `claude-sonnet-5-5` on each of its 58 responses. The author
+found this an hour after the merge, when another agent started the same way failed with a
+notice that named Sonnet 5.5, and then checked the records of all three seats: `opus-r2` is
+Opus 5.5 and `sonnet-r2` is Sonnet 5.5, as stated.
+
+What this changes: no Mythos agent attacked, and the owner's request for one was not met. The
+round has two models, not three. What it does not change: the 54 attempts in that seat's
+file, the run, the pack and every number on this page. The seat keeps the name `mythos-r2` in
+the pack and in the results because the pack binds it; read it as an identifier.
 
 ## What the attackers said was still weak
 
@@ -147,8 +163,9 @@ numbers on this page are the host of record's.
 
 ## Limits
 
-- Three attacking agents, one sitting each of about half an hour, through one interface, all
-  from one vendor. Nothing here is evidence about attackers in general, about a person, or
+- Three attacking agents on two models, one sitting each of about half an hour, through one
+  interface, all from one vendor. No Claude Mythos agent attacked, although a seat is named
+  for one. Nothing here is evidence about attackers in general, about a person, or
   about an attacker with more time.
 - The repair is beside the gate, not in it. Lanes 19a to 19x measured
   `gate19.ProvenancePipeline`, which still has both faults; a caller has to use
