@@ -1957,6 +1957,16 @@ own declaration. This is that declaration. Declared before any code:
 - Seen when this was written: 19t's pack, results and submissions, and the gate's source. No
   line of the repair exists, no attempt has been run against it, and no agent has been
   briefed.
+- Amended 22 Nov 2026, after the two agents were started and before any submission existed:
+  the Fable seat was refused by its provider. Its first request was answered with a notice
+  that the provider's safeguards had flagged the message, and it produced no file and no
+  scratch work. The task was not reworded or sent again to get past that filter. The seat
+  stays in the record with an empty submission written by the author to say that nothing was
+  received, so Y3 cannot hold. A third seat is added: `sonnet-r2`, a Claude Sonnet 5.5 agent,
+  with the same brief and its own copy at the commit that makes this change. The instrument's
+  list of seats, its tests and the pack's inventory change for that and for nothing else; the
+  repair, the gate and the fixture are the files the `opus-r2` agent already has. All seats
+  that attack are again of one vendor.
 
 Authorised files: `tools/assurance-provenance/repair19y.py`, `redteam19y.py`,
 `evidence19y.py`, their tests, `docs/research/provenance-phase-19y/` (the brief, the two
