@@ -1,5 +1,15 @@
 ## Change Log
 
+## [phase-19ac-pack-2026-11-22] — 2026-11-22 — Lane 19ac: a planted fault found, and a real fault found with it
+
+**Raouf:**
+
+- **Scope:** the 19ac pack, its pages, a committed-pack test, the ruling.
+- **Summary:** two agent seats found the fault the author planted, and both found a real
+  one: a key-signed token is admitted on the nonce of an approval minted for another action
+  (6 of 25 attempts gain on the real gate). Root `c130b0e5…`. Not repaired in this lane.
+- **Verification:** bare-interpreter `verify`; committed-pack tests; quick gate.
+
 ## [phase-19ac-submissions-2026-11-22] — 2026-11-22 — Lane 19ac: the seats' files as received
 
 **Raouf:**

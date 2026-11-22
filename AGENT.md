@@ -14,6 +14,29 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19ac pack: both seats find the planted fault, and both find a real one
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19ac/` (pack, README, results), the
+  committed-pack test, the ruling, one paragraph on lane 19aa's page.
+- **Summary:** the run of record on the Linux host from `37c48971`. 30 attempts on the real
+  gate and on the planted one. P0, P2 and P3 hold. P1 does not: 6 of the seats' 25 attempts
+  make the undelegated action land on the real gate. The cause is in lane 19b's approval
+  store: the nonce of a minted approval is recorded with its action, and the check of a
+  returned token never reads the action back. A token signed with the operator's key for
+  one action is admitted on the nonce of an approval minted for another. Not repaired, as
+  declared.
+- **Files changed:** the pack's five files, `README.md` and `RESULTS.md` beside them,
+  `tools/assurance-provenance/tests/test_evidence19ac_committed.py`,
+  `docs/research/provenance-phase-19aa/README.md`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `verify` with a bare Python 3.12 interpreter (`structure_checked`); 7
+  committed-pack tests (one skipped off the replay host); `prettier`, `ruff` and the quick
+  gate pass. A rebuild on macOS gives another root because one row's reason depends on the
+  host's JSON parser; the page says which.
+- **Not done:** the repair; the lane is not in the operator handoff yet; no one outside the
+  author has run it.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19ac: the two seats' files as received
 
 **Raouf:**

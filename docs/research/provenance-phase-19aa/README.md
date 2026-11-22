@@ -69,6 +69,11 @@ actor or name another run are refused with those reasons. So on this gate a leak
 alone does not make `b` land. Lane 19z is the other half: an agent that can also write the
 store gains authority on a gate with no seal.
 
+That holds for a nonce the host never minted. [Lane 19ac](../provenance-phase-19ac/README.md),
+run after this one, found that it does not hold for a nonce the host minted for something
+else: a key-signed token for `b` that reuses the nonce of an approval minted for `a` is
+admitted. None of the sequences here tries that.
+
 **A real approval.** Used once, it is honoured. Used five times in a row, directly or through
 the tool-result channel, it is honoured once and refused four times as replayed. An approval
 minted for `a` and presented for `b` is refused with the reason `approval_action`.
