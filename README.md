@@ -110,6 +110,21 @@ a file and on no other. The price is that a writer of the files can stop all wor
 attempt stopped the sealed gate without touching a file at all. This is detection after the
 fact, on a fixture, with one attacking agent; it is not isolation.
 
+**Persistence, changed bodies and a census, 22 November.**
+[19aa](docs/research/provenance-phase-19aa/README.md) asks what an agent gets at the front
+door by persistence alone. Across 28 sequences and 1,194 dispatches the undelegated action is
+never observed unless the host minted an approval for it: 600 retries in a row change
+nothing, an approval the agent writes for itself changes nothing, and a token signed with the
+fixture's own operator key is refused because its nonce is not one the host holds. One of five
+predictions failed: with two valid approvals the gate reports the action observed twice while
+one effect reaches the receiver. [19ab](docs/research/provenance-phase-19ab/README.md) hands
+the gate 64 changed bodies in place of an action it allows. None is observed, with or without
+an approval, so the gate binds the body and not the name. It also found what it did not
+predict: 30 of 66 refusals, those of bodies the gate's schema rejects, leave no record in its
+log. Both lanes are lists the author wrote and no agent attacked them. A
+[census of the packs](docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md) found that of the
+16 that name a model, one holds a model id the provider returned.
+
 [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) ·
 [Release and archive](https://github.com/Raoof128/Project-Simurgh/releases/tag/phase-19-paper-v1.0) ·
 [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) ·
@@ -327,7 +342,7 @@ and document text as untrusted data when feeding CLI results to an agent.
 | Perform outside reproduction | [Operator handoff](docs/research/CONTINUATION_HANDOFF_2026-10-19.md)                                                                                        | Earlier viewer/export snapshot; use the current runbook for the latest study                |
 | Trace prior work             | [Reviewer index](docs/REVIEWER_INDEX.md) and [research history](RESEARCH_HISTORY.md)                                                                        | Frozen stages, negative results and historical reproduction                                 |
 | Read the newest study        | [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) and [Phase 19 ledger](docs/research/PROVENANCE_PHASE_19.md)                            | Plans committed before each run, hypotheses decided by rule, limits stated with each result |
-| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Twenty-five verify commands; twenty-three need no installed packages                        |
+| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Twenty-seven verify commands; twenty-five need no installed packages                        |
 | Judge the process and author | [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) and [author, method and open problems](docs/AUTHOR_AND_METHOD.md)                                    | How errors were found and handled, how AI assistance is used, what remains open             |
 
 The most useful review would challenge the exact-action comparator, admission/revocation
@@ -336,15 +351,15 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
 
 ### Open work
 
-- **Independent reproduction:** one outside operator has replayed twenty-one of the twenty-five
+- **Independent reproduction:** one outside operator has replayed twenty-one of the twenty-seven
   Phase 19 packs on Ubuntu x86_64 with no discrepancy, including the five frozen-gate replays,
   the Lean check and the namespace probe, and the test suite passed there. A second ran the
   handoff natively on Windows 10, where every verifier refused; the causes are published and
   the handoff now lists native Windows as unsupported. An earlier receipt covers five packs on
   macOS ([receipts and reviews](docs/research/provenance-phase-19f/README.md)). Still
-  outstanding: lanes 19w, 19x, 19y and 19z, one dataset recomputation, a second Linux host, and
-  independent evidence custody, since the author's side asked both operators and each signed
-  with a typed name.
+  outstanding: lanes 19w, 19x, 19y, 19z, 19aa and 19ab, one dataset recomputation, a second
+  Linux host, and independent evidence custody, since the author's side asked both operators
+  and each signed with a typed name.
 - **Provider lifecycle:** real provider IAM/revocation and authenticated live safety-alert
   delivery have not been validated by the owned-service experiments.
 - **Model transfer:** broader externally held tasks and adaptive multi-step behavior remain
@@ -361,6 +376,16 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
   a restricted state. The only evidence that the same injected texts can move a model at all
   is that local models did send on them (19k, 19m, 19v). No lane measures whether a hosted
   model recognised the fixture as a test.
+- **A verdict is not an effect:** with two valid approvals for one action the gate reports it
+  observed twice and sends once (19aa). The count of effects at the receiver is the fact; the
+  verdict alone overstates it. Not repaired.
+- **Refusals that leave no record:** a body the gate's schema rejects is refused without a
+  `blocked` event in its log (19ab, 30 of 66 refusals). A monitor that counts those events
+  would not see an agent probing with malformed actions. The gate also has no limit on
+  retries (19aa). Not repaired.
+- **Which model answered:** lanes 19u, 19w and 19x record the model id that was requested
+  and nothing the provider returned; 19o records one returned id per model, from a call made
+  before the capture. No lane records it beside each generation.
 - **Operational assurance:** sustained deployment load, interactive desktop capture and
   real-data privacy validation remain separate work.
 - **Security review:** the [19 October local Phase 8 review](docs/research/PHASE_8_REVIEW_2026-10-19.md)

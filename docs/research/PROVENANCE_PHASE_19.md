@@ -3612,3 +3612,15 @@ strict ancestor of every commit that acts on it.
   on the name alone was run, so the lane has no positive control (56 of the 64 changed
   bodies keep the name, which is arithmetic on the list); no model and no agent wrote a
   body; what an allowed body means, and a third party acting on it, are not measured.
+- Ruling (22 Nov 2026, P19-OPERATOR13 exercised): the declaration (`84bab82f`) precedes the
+  commit that acts on it. `handoff19.py` carries 19aa and 19ab as replayed lanes; seven of
+  its 41 tests failed before the tool changed and none after. The three operator reviews
+  were recomputed and no receipt was edited: both lanes are `not_in_receipt` in each. Eleven
+  items are owed to an outside operator: lanes 19w, 19x, 19y, 19z, 19aa and 19ab, the
+  `--replay` of the last four, and 19q's `--dataset` recomputation. The workflow gained the
+  two `docs/` paths in both filters and the two ids in the roots check; the Stage 5Q census
+  is byte-identical before and after. `PHASE19_ROOTS` was read, found as P19-OPERATOR12 left
+  it, and set at 06:04Z on 22 Nov 2026 to twenty-seven roots, the twenty-five earlier values
+  unchanged. The root README has the new count, one paragraph on the two lanes and the
+  census, and three entries under its open work; `docs/AUTHOR_AND_METHOD.md` has the count.
+  Not done: no one outside the author has run the handoff for any of the eleven items.

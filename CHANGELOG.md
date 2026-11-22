@@ -1,5 +1,15 @@
 ## Change Log
 
+## [phase-19f-operator13-2026-11-22] — 2026-11-22 — Lanes 19aa and 19ab in the operator handoff; twenty-seven pinned roots
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR13, the handoff tool, its rendered files, the hosted
+  roots check, the root README.
+- **Summary:** twenty-seven packs in the handoff and in the hosted roots check. The root
+  README states three findings of the day under its open work.
+- **Verification:** 41 handoff tests; Stage 5Q census identical; quick gate.
+
 ## [phase-19ab-pack-2026-11-22] — 2026-11-22 — Lane 19ab: changed bodies of a delegated or approved action
 
 **Raouf:**
