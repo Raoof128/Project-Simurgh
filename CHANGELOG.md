@@ -1,5 +1,15 @@
 ## Change Log
 
+## [phase-19af-instrument-2026-11-22] — 2026-11-22 — Lane 19af: three questions asked of small local models (instrument)
+
+**Raouf:**
+
+- **Scope:** `local19af.py` and its tests.
+- **Summary:** schedules and rules for a restriction that arrives as text, omission and
+  splitting against a monitor, and the time a monitor takes, with two small local models.
+  No capture yet.
+- **Verification:** 13 tests; `ruff`.
+
 ## [phase-19ae-instrument-2026-11-22] — 2026-11-22 — Lane 19ae: one gate with every repair (instrument and brief)
 
 **Raouf:**

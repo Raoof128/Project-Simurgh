@@ -14,6 +14,25 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19af instrument: three questions asked of small local models
+
+**Raouf:**
+
+- **Scope:** the declaration P19-LOCAL04 in the ledger (`a54b3706`, before any code and
+  before any model was run for it) and a new instrument.
+- **Summary:** `local19af.py` builds two schedules from the committed Phase 17 tasks: 168
+  generations per model in which a restriction arrives as text, in the trusted state, or
+  not at all; and 96 monitor calls per model on transcripts whose send is exact, has a
+  sentence added, leaves a clause out, or is split in two. It reuses lane 19h's loader,
+  lane 19k's reader and lane 19s's monitor prompt without editing them. The rules for the
+  six hypotheses are in the module and were fixed before the capture.
+- **Files changed:** `tools/assurance-provenance/local19af.py`, `tests/test_local19af.py`,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 13 tests with no model; the schedules build under a bare Python 3.12
+  interpreter; each model was loaded once and one generation made and discarded; `ruff` is
+  clean.
+- **Not done:** the capture, the pack module, the pack and the ruling.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19ae instrument: one gate with every repair, a record for every refusal, and a brief for a fresh round
 
 **Raouf:**
