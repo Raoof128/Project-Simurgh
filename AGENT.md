@@ -14,6 +14,25 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19ac instrument: sequences written by a model, and one planted fault
+
+**Raouf:**
+
+- **Scope:** the declaration P19-PLANT01 in the ledger (`b0574021`, before any code and
+  before the fault was written), a new instrument with a planted gate, a pack module, the
+  author's five control sequences and the brief for two seats.
+- **Summary:** `planted19ac.py` runs a sequence in lane 19aa's grammar on two gates, the
+  real sealed gate and one whose approval check passes a signed token the host never
+  minted. A seat reaches both through a runner outside its copy and is not told which is
+  which. This commit was made before a seat started and is pushed only after both ended.
+- **Files changed:** `tools/assurance-provenance/planted19ac.py`, `evidence19ac.py`,
+  `tests/test_planted19ac.py`, `tests/test_evidence19ac.py`,
+  `docs/research/provenance-phase-19ac/BRIEF.md`, `attempts-author.json`, `.prettierignore`,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 25 tests, three of them on both real fixtures (the forged token lands on
+  the planted gate and not on the real one); `ruff` and `prettier` are clean.
+- **Not done:** the seats, the run of record, the pack and the ruling.
+
 ### 2026-11-22 (Australia/Sydney) — Lanes 19aa and 19ab in the operator handoff; twenty-seven pinned roots; three findings in the README
 
 **Raouf:**

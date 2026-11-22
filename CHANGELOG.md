@@ -1,5 +1,15 @@
 ## Change Log
 
+## [phase-19ac-instrument-2026-11-22] — 2026-11-22 — Lane 19ac: a planted fault as a control on a model that writes sequences (instrument)
+
+**Raouf:**
+
+- **Scope:** `planted19ac.py`, `evidence19ac.py`, their tests, the brief, the author's
+  controls.
+- **Summary:** two gates, one with a fault the author planted; two seats will write
+  sequences against both without being told which is which. No run of record yet.
+- **Verification:** 25 tests; `ruff`; `prettier`.
+
 ## [phase-19f-operator13-2026-11-22] — 2026-11-22 — Lanes 19aa and 19ab in the operator handoff; twenty-seven pinned roots
 
 **Raouf:**
