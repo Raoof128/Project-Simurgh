@@ -3141,3 +3141,24 @@ strict ancestor of every commit that acts on it.
   `gate19.ProvenancePipeline`, which lanes 19a to 19x measured, is unchanged; no person and
   no agent of another vendor attacked; nothing here was replayed outside the author's
   custody.
+- Ruling (22 Nov 2026, P19-OPERATOR11 exercised): the declaration (`eb38151a`) precedes the
+  commit that acts on it, and the lane's pack (`718d222c`) is in place. `handoff19.py` lists
+  twenty-four lanes. 19y is a replayed lane as 19t is: its committed receipt reads
+  `gate_recomputed`, a host that cannot replay prints `structure_checked`, and `19y --replay`
+  is an item only some hosts can exercise. The handoff tests were changed first and six
+  failed before the code changed; 38 pass. The comparator is unchanged. The three operator
+  receipts are byte-identical; their reviews were recomputed and list 19y as
+  `not_in_receipt`, and `handoff19.py status` names five items still owed under
+  `IOU-19-OPERATOR`: 19w, 19x, 19y, 19y's `--replay` and 19q's `--dataset`. `HANDOFF.md` and
+  `discrepancy-template.json` were rendered again. The 19f README counts twenty-four packs
+  and has a row for the lane. The workflow gained the lane's `docs/` path in both path
+  filters and its id in the expected-roots check, with its message; no step was added,
+  removed or renamed, and the Stage 5Q census output is identical before and after.
+  `PHASE19_ROOTS` was extended outside the pull request at 02:29Z on 22 Nov from
+  twenty-three roots to twenty-four, the twenty-three existing values unchanged and each
+  compared with its committed `ROOT.sha256`; the one added is 19y
+  `cf2557c4116c9d160d5055cb6afe2eba61b3b528dfbad0cee893dbf0f6b63bd5`. The root README says
+  twenty-four packs, gained one paragraph on the lane and no longer says the two faults of
+  19t are unrepaired; `docs/AUTHOR_AND_METHOD.md` has the new count. Not done: no one outside
+  the author has run the handoff for 19y or for the other items owed, and a replay of 19y on
+  another host may differ in the three deep-nesting rows the lane's page names.

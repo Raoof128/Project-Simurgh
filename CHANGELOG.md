@@ -1,5 +1,15 @@
 ## Change Log
 
+## [phase-19f-operator11-2026-11-22] — 2026-11-22 — Lane 19y in the operator handoff; twenty-four pinned roots
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR11, the handoff tool, its rendered files, the hosted
+  roots check, the root README.
+- **Summary:** twenty-four packs in the handoff and in the hosted roots check. 19y is a
+  replayed lane. Five items are owed to an outside operator.
+- **Verification:** 38 handoff tests; Stage 5Q census identical; quick gate.
+
 ## [phase-19y-pack-2026-11-22] — 2026-11-22 — Lane 19y: the repair of 19t's faults, and a second round against it
 
 **Raouf:**

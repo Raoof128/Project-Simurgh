@@ -14,6 +14,27 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19y in the operator handoff; twenty-four pinned roots; README counts
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR11 in the ledger (`eb38151a`, before the change), the
+  handoff tool and its tests, the rendered handoff, the hosted roots check, the root README.
+- **Summary:** 19y joins the handoff as a replayed lane, as 19t is. The three operator
+  reviews were recomputed (19y is `not_in_receipt` in each; the receipts are byte-identical).
+  Five items are owed to an outside operator: 19w, 19x, 19y, 19y's `--replay` and 19q's
+  `--dataset`. `PHASE19_ROOTS` was extended outside the pull request from twenty-three roots
+  to twenty-four. The root README has a paragraph on the lane and no longer says 19t's
+  faults are unrepaired.
+- **Files changed:** `tools/assurance-provenance/handoff19.py`, `tests/test_handoff19.py`,
+  `docs/research/provenance-phase-19f/HANDOFF.md`, `discrepancy-template.json`, the three
+  reviews, the two 19f READMEs, `.github/workflows/assurance-provenance.yml`, `README.md`,
+  `docs/AUTHOR_AND_METHOD.md`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 38 handoff tests, six failing before the code changed; the Stage 5Q
+  census is byte-identical before and after the workflow edit; `prettier` and `ruff` are
+  clean; the quick gate passes.
+- **Not done:** no outside operator has run any of the five items.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19y pack: the repair holds against 19t's 92 attempts and 151 new ones; three seats refused
 
 **Raouf:**

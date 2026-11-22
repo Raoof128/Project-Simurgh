@@ -10,7 +10,7 @@ committed review equals the recomputation.
 | Receipt                                                    | Host                                              | Verified                                                           | Not exercised                         |
 | ---------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------- |
 | [all-Michael-2026-11-10.json](all-Michael-2026-11-10.json) | macOS 13 x86_64, Python 3.12, no Lean             | 19a (projection), 19b, 19c, 19e, 19g                               | 19d, 19a `--replay`, 19b Lean closure |
-| [all-Jacob-2026-11-15.json](all-Jacob-2026-11-15.json)     | Ubuntu 26.04 x86_64, CPython 3.12.16, Lean 4.15.0 | 19a to 19v (twenty-one lanes), five with `--replay`, 19b with Lean | 19w, 19x, 19q `--dataset`             |
+| [all-Jacob-2026-11-15.json](all-Jacob-2026-11-15.json)     | Ubuntu 26.04 x86_64, CPython 3.12.16, Lean 4.15.0 | 19a to 19v (twenty-one lanes), five with `--replay`, 19b with Lean | 19w, 19x, 19y, 19q `--dataset`        |
 | [all-Mona-2026-11-15.json](all-Mona-2026-11-15.json)       | Windows 10 run natively, Python 3.12.10, no Lean  | none: every verifier refused                                       | everything                            |
 
 The files are stored under this directory's naming rule. The second came back as

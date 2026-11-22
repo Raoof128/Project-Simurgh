@@ -40,7 +40,8 @@ refused, while a credential check alone let 369 through.
 against what was declared come first. [19t](docs/research/provenance-phase-19t/README.md) gave
 two coding agents the gate's source and committed what each submitted before it was run: 49 of
 92 attempts changed the gate's output, against the declared prediction, through two faults that
-are described and not yet repaired. None made the undelegated action land or changed a verdict.
+lane 19y has since repaired beside the gate. None made the undelegated action land or changed a
+verdict.
 [19q](docs/research/provenance-phase-19q/README.md) scored a destination rule on a public
 monitor benchmark: it flagged 7 of 43 attack sessions and 6 of 43 benign ones, and two of its
 three hypotheses did not hold. The same rules run on one transcript of your own with
@@ -85,6 +86,16 @@ the model did not do. Claude Sonnet 4.5, the one model the paper also used, had 
 runs. No attacked run was made, so this does not say what share of any reported attack success
 these outcomes make up. The author's disk filled during the run and stopped it for a quarter of
 an hour, and two of six things said beforehand did not hold. Both are in the record.
+
+**The repair of 19t's faults, 22 November.**
+[19y](docs/research/provenance-phase-19y/README.md) repaired the two faults in new classes
+beside the gate, ran 19t's 92 attempts again and gave the repaired source to new attackers,
+whose files were committed before the host of record ran them. None of the 92 changes the
+repaired gate's output, and none of 151 new attempts from three Claude agents does. Three other
+seats are empty: the providers of a fourth Claude model and of two OpenAI routes refused the
+task, and no request was reworded. So every attacker that ran is from one vendor, and one of
+them is the model that wrote the repair. The gate that the earlier lanes measured is unchanged;
+a caller has to use the repaired classes.
 
 [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) ·
 [Release and archive](https://github.com/Raoof128/Project-Simurgh/releases/tag/phase-19-paper-v1.0) ·
@@ -303,7 +314,7 @@ and document text as untrusted data when feeding CLI results to an agent.
 | Perform outside reproduction | [Operator handoff](docs/research/CONTINUATION_HANDOFF_2026-10-19.md)                                                                                        | Earlier viewer/export snapshot; use the current runbook for the latest study                |
 | Trace prior work             | [Reviewer index](docs/REVIEWER_INDEX.md) and [research history](RESEARCH_HISTORY.md)                                                                        | Frozen stages, negative results and historical reproduction                                 |
 | Read the newest study        | [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) and [Phase 19 ledger](docs/research/PROVENANCE_PHASE_19.md)                            | Plans committed before each run, hypotheses decided by rule, limits stated with each result |
-| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Twenty-three verify commands; twenty-one need no installed packages                         |
+| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Twenty-four verify commands; twenty-two need no installed packages                          |
 | Judge the process and author | [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) and [author, method and open problems](docs/AUTHOR_AND_METHOD.md)                                    | How errors were found and handled, how AI assistance is used, what remains open             |
 
 The most useful review would challenge the exact-action comparator, admission/revocation
@@ -312,22 +323,23 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
 
 ### Open work
 
-- **Independent reproduction:** one outside operator has replayed twenty-one of the twenty-three
+- **Independent reproduction:** one outside operator has replayed twenty-one of the twenty-four
   Phase 19 packs on Ubuntu x86_64 with no discrepancy, including the five frozen-gate replays,
   the Lean check and the namespace probe, and the test suite passed there. A second ran the
   handoff natively on Windows 10, where every verifier refused; the causes are published and
   the handoff now lists native Windows as unsupported. An earlier receipt covers five packs on
   macOS ([receipts and reviews](docs/research/provenance-phase-19f/README.md)). Still
-  outstanding: lanes 19w and 19x, one dataset recomputation, a second Linux host, and independent
-  evidence custody, since the author's side asked both operators and each signed with a typed
-  name.
+  outstanding: lanes 19w, 19x and 19y, one dataset recomputation, a second Linux host, and
+  independent evidence custody, since the author's side asked both operators and each signed
+  with a typed name.
 - **Provider lifecycle:** real provider IAM/revocation and authenticated live safety-alert
   delivery have not been validated by the owned-service experiments.
 - **Model transfer:** broader externally held tasks and adaptive multi-step behavior remain
   untested; the corrected OpenAI workflow retains one unresolved active refusal. The six hosted
   models of lane 19o and the four of lane 19u were given static injected texts only; an
-  attacker that adapts to a model has not been run. Lane 19t's attackers adapted to the gate,
-  not to a model, and the two faults they found are not yet repaired.
+  attacker that adapts to a model has not been run. The attackers of lanes 19t and 19y adapted
+  to the gate, not to a model. The two faults they found are repaired in classes beside the
+  gate, which the earlier lanes did not use, and every attacker that ran is a Claude model.
 - **Operational assurance:** sustained deployment load, interactive desktop capture and
   real-data privacy validation remain separate work.
 - **Security review:** the [19 October local Phase 8 review](docs/research/PHASE_8_REVIEW_2026-10-19.md)

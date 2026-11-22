@@ -134,6 +134,33 @@ class HandoffTests(unittest.TestCase):
             [("totals", "differs")],
         )
 
+    def test_check_follows_the_operators_own_replay_for_19y(self):
+        # P19-OPERATOR11: 19y is a replayed lane as 19t is, with the same two table entries.
+        committed = handoff19.committed_receipt("19y")
+        self.assertEqual(committed["kind"], "gate_recomputed")
+        self.assertEqual(handoff19.check("19y", committed), [])
+        structure = dict(
+            committed,
+            kind="structure_checked",
+            replay={"result": "not_run", "reason": "host_not_linux_x86_64"},
+        )
+        self.assertEqual(handoff19.check("19y", structure), [])
+        claimed = dict(structure, kind="gate_recomputed")
+        self.assertEqual(
+            [(d["field"], d["kind"]) for d in handoff19.check("19y", claimed)],
+            [("kind", "differs")],
+        )
+        unlabelled = dict(committed, kind="structure_checked")
+        self.assertEqual(
+            [(d["field"], d["kind"]) for d in handoff19.check("19y", unlabelled)],
+            [("kind", "differs")],
+        )
+        hypotheses = dict(structure, hypotheses=dict(structure["hypotheses"], Y3=True))
+        self.assertEqual(
+            [(d["field"], d["kind"]) for d in handoff19.check("19y", hypotheses)],
+            [("hypotheses", "differs")],
+        )
+
     def test_check_follows_the_operators_own_recomputation_for_19q(self):
         # P19-OPERATOR06: 19q's committed receipt was produced with the dataset. Without
         # --dataset the verifier prints structure_checked and says so in `recompute`; that is
@@ -202,14 +229,17 @@ class HandoffTests(unittest.TestCase):
                 "19v",
                 "19w",
                 "19x",
+                "19y",
             ],
         )
         text = handoff19.render()
-        self.assertIn("run twenty-three verify commands", text)
-        self.assertIn("19o, 19p, 19q, 19r, 19s, 19t, 19u, 19v, 19w and 19x\n", text)
-        self.assertIn("- 19a, 19j, 19l, 19p and 19t with `--replay`", text)
+        self.assertIn("run twenty-four verify commands", text)
         self.assertIn(
-            "`frozen_replay_recomputed` (19j, 19l, 19p) or `gate_recomputed` (19t).",
+            "19o, 19p, 19q, 19r, 19s, 19t, 19u, 19v, 19w, 19x and 19y\n", text
+        )
+        self.assertIn("- 19a, 19j, 19l, 19p, 19t and 19y with `--replay`", text)
+        self.assertIn(
+            "`frozen_replay_recomputed` (19j, 19l, 19p) or `gate_recomputed` (19t, 19y).",
             text,
         )
         self.assertIn("`dataset_recomputed`", text)
@@ -228,12 +258,13 @@ class HandoffTests(unittest.TestCase):
                     "19l --replay",
                     "19p --replay",
                     "19t --replay",
+                    "19y --replay",
                     "19q --dataset",
                     "19b Lean closure",
                 ]
             ),
         )
-        for pid in ("19j", "19l", "19p", "19t"):
+        for pid in ("19j", "19l", "19p", "19t", "19y"):
             self.assertIn("--replay", handoff19.phase(pid)["time"], pid)
         self.assertIn("--dataset", handoff19.phase("19q")["host"])
 
@@ -431,11 +462,11 @@ THIRD_SHA256 = "c3ddbce786d622d258e3d3a46041a2cd423eaccec78cfb2239c830766c65a7f4
 THIRD_RETURNED_SHA256 = (
     "e4f22c47edb7d7472e21d5e0ad5b959273d16e8f4b17b20968c442617bf710a4"
 )
-# What no reviewed receipt has exercised (P19-OPERATOR09 and 10): the second receipt predates
-# 19w and 19x and did not run 19q's recomputation.
-OWED_AFTER_THREE = ["19q --dataset", "19w", "19x"]
-LATER_LANES = ("19w", "19x")
-# What the first receipt left unreplayed, and the lanes added after it (P19-OPERATOR02 to 10).
+# What no reviewed receipt has exercised (P19-OPERATOR09 to 11): the second receipt predates
+# 19w, 19x and 19y and did not run 19q's recomputation.
+OWED_AFTER_THREE = ["19q --dataset", "19w", "19x", "19y", "19y --replay"]
+LATER_LANES = ("19w", "19x", "19y")
+# What the first receipt left unreplayed, and the lanes added after it (P19-OPERATOR02 to 11).
 STILL_OWED = [
     "19a --replay",
     "19b Lean closure",
@@ -462,6 +493,8 @@ STILL_OWED = [
     "19v",
     "19w",
     "19x",
+    "19y",
+    "19y --replay",
 ]
 
 
@@ -605,6 +638,7 @@ class OperatorReceiptTests(unittest.TestCase):
                 "19v": "not_in_receipt",
                 "19w": "not_in_receipt",
                 "19x": "not_in_receipt",
+                "19y": "not_in_receipt",
             },
         )
         for pid in ("19a", "19b", "19c", "19e", "19g"):
@@ -725,7 +759,9 @@ class StatusTests(unittest.TestCase):
         self.assertEqual(s["not_yet_replayed_outside"], OWED_AFTER_THREE)
         text = handoff19.render()
         self.assertIn("3 outside receipt(s) reviewed", text)
-        self.assertIn("`IOU-19-OPERATOR`:\n19q --dataset, 19w, 19x.", text)
+        self.assertIn(
+            "`IOU-19-OPERATOR`:\n19q --dataset, 19w, 19x, 19y, 19y --replay.", text
+        )
         self.assertIn("still owed under `IOU-19-OPERATOR`", text)
         self.assertNotIn("owed until a receipt is reviewed", text)
 
