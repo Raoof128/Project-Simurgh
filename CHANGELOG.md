@@ -1,5 +1,17 @@
 ## Change Log
 
+## [phase-19-tool01-2026-11-22] — 2026-11-22 — A one-command labeller built on lane 19q's rules
+
+**Raouf:**
+
+- **Scope:** the declaration P19-TOOL01, one new module, its test, one page, one README
+  sentence.
+- **Summary:** `label19.py` reads one transcript and reports where each destination first
+  appeared and whether rules P, E and A refuse it. No measurement, no model, no benchmark
+  text. A limit of the grammar found while testing is recorded on the page.
+- **Verification:** 15 tests; six deliberate breaks each caught; `ruff`; `prettier`; quick
+  gate.
+
 ## [phase-19y-submissions-2026-11-22] — 2026-11-22 — Lane 19y: round-two submissions as received
 
 **Raouf:**

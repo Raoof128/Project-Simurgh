@@ -14,6 +14,26 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — A one-command labeller built on lane 19q's rules (no measurement)
+
+**Raouf:**
+
+- **Scope:** the declaration P19-TOOL01 in the ledger (`5d81c7eb`, before the tool), one new
+  module, its test, one page and one sentence in the root README.
+- **Summary:** `label19.py` applies lane 19q's three destination-origin rules to one
+  transcript in the benchmark's JSONL format. It imports `dest19q.py` unchanged, needs only
+  the standard library, prints one JSON object and sets its exit status to the decision of
+  the chosen rule. Destinations are shown as digests unless `--show-tokens` is given.
+- **Files changed:** `tools/assurance-provenance/label19.py`, `tests/test_label19.py`,
+  `docs/research/provenance-phase-19q/LABELLER.md`, `README.md`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** 15 tests pass, also with a bare interpreter; six deliberate breaks each
+  fail a test; the page's example was run through the tool; lane 19q's tests still pass;
+  `ruff` and `prettier` are clean; the quick gate passes.
+- **Found and not changed:** a host the principal names in prose without a scheme is not read
+  by 19q's grammar, so the agent's command is where it first appears and every rule refuses.
+  The page says so.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19y: the six round-two files as received, committed before the host of record runs any of them
 
 **Raouf:**

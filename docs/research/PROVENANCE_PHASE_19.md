@@ -3062,3 +3062,18 @@ declaration commit must be a strict ancestor of every commit that acts on it.
   low score before and after, which shows nothing either way. The quick gate passes. Not
   done: no structure, paragraph or section was rewritten, and the pass says nothing about
   how any text was written; `docs/AUTHOR_AND_METHOD.md` states how AI assistance is used.
+- Ruling (22 Nov 2026, P19-TOOL01 exercised): the declaration (`5d81c7eb`) precedes the
+  commit that adds the tool. `tools/assurance-provenance/label19.py` imports `dest19q.py`
+  unchanged and reads one transcript; given the transcript of an earlier stage it applies
+  rule A as the lane does. It prints a truncated digest of each destination unless asked for
+  the destination, and its exit status is the decision of the chosen rule. Fifteen tests on
+  transcripts written for them pass, with a bare interpreter as well; one of them checks the
+  tool's output against lane 19q's own row for the same transcript, and each of six
+  deliberate breaks of the tool fails at least one. The page
+  `docs/research/provenance-phase-19q/LABELLER.md` says how to run it and what it cannot
+  tell, and its example was run through the tool. Found while writing the tests and recorded
+  on that page: the lane's grammar does not read a bare host name in prose, so a destination
+  the principal names that way is first seen in the agent's own command and every rule
+  refuses. That is a limit of 19q's rules and is not changed here. `dest19q.py`, lane 19q's
+  pack and its pages are unchanged, and no text of the benchmark was used. The quick gate
+  passes.

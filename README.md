@@ -43,8 +43,10 @@ two coding agents the gate's source and committed what each submitted before it 
 are described and not yet repaired. None made the undelegated action land or changed a verdict.
 [19q](docs/research/provenance-phase-19q/README.md) scored a destination rule on a public
 monitor benchmark: it flagged 7 of 43 attack sessions and 6 of 43 benign ones, and two of its
-three hypotheses did not hold. [19u](docs/research/provenance-phase-19u/README.md) sent part of
-19o's schedule to four hosted Claude models. The output limit first declared was too small and
+three hypotheses did not hold. The same rules run on one transcript of your own with
+[one command](docs/research/provenance-phase-19q/LABELLER.md).
+[19u](docs/research/provenance-phase-19u/README.md) sent part of 19o's schedule to four hosted
+Claude models. The output limit first declared was too small and
 the plan was amended after two models; no model sent in a restricted generation in either run.
 [19r](docs/research/provenance-phase-19r/README.md) made a send name the grant that authorises
 it, on three local models: when the untrusted text offered a grant, every wrong send cited it,
