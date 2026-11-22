@@ -52,6 +52,7 @@ on:
       - "docs/research/provenance-phase-19ab/**"
       - "docs/research/provenance-phase-19ac/**"
       - "docs/research/provenance-phase-19ad/**"
+      - "docs/research/provenance-phase-19ae/**"
   pull_request:
     paths:
       - ".github/workflows/assurance-provenance.yml"
@@ -98,6 +99,7 @@ on:
       - "docs/research/provenance-phase-19ab/**"
       - "docs/research/provenance-phase-19ac/**"
       - "docs/research/provenance-phase-19ad/**"
+      - "docs/research/provenance-phase-19ae/**"
   workflow_dispatch:
 
 permissions:
@@ -152,13 +154,13 @@ jobs:
               sys.exit("PHASE19_ROOTS is not set: the expected roots must come from outside the checkout")
           expected = json.loads(raw)
           bad = []
-          for phase in ("19a", "19b", "19c", "19d", "19e", "19g", "19h", "19i", "19j", "19k", "19l", "19m", "19n", "19o", "19p", "19q", "19r", "19s", "19t", "19u", "19v", "19w", "19x", "19y", "19z", "19aa", "19ab", "19ac", "19ad"):
+          for phase in ("19a", "19b", "19c", "19d", "19e", "19g", "19h", "19i", "19j", "19k", "19l", "19m", "19n", "19o", "19p", "19q", "19r", "19s", "19t", "19u", "19v", "19w", "19x", "19y", "19z", "19aa", "19ab", "19ac", "19ad", "19ae"):
               committed = pathlib.Path(f"docs/research/provenance-phase-{phase}/ROOT.sha256").read_text().strip()
               if expected.get(phase) != committed:
                   bad.append((phase, expected.get(phase), committed))
           if bad:
               sys.exit("expected-root mismatch: " + json.dumps(bad))
-          print("expected roots match the committed ROOT.sha256 files for twenty-nine packs")
+          print("expected roots match the committed ROOT.sha256 files for thirty packs")
           PY
       - name: Verify the Phase 19a pack and chain the frozen Phase 17 replay through it
         run: |

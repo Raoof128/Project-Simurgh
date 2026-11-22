@@ -1,5 +1,57 @@
 ## Change Log
 
+## [phase-19f-operator15-2026-11-22] — 2026-11-22 — Lane 19ae in the operator handoff; thirty pinned roots
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR15, the handoff tool, its rendered files, the hosted
+  roots check, the root README.
+- **Summary:** thirty packs in the handoff and in the hosted roots check. The README's open
+  work says what the fresh round found: the repair held, and a raise is open.
+- **Verification:** handoff tests; Stage 5Q census identical; quick gate.
+
+## [phase-19ae-pack-2026-11-22] — 2026-11-22 — Lane 19ae: one gate with every repair, attacked afresh
+
+**Raouf:**
+
+- **Scope:** the 19ae pack, its pages, a committed-pack test, the ruling.
+- **Summary:** none of 467 attempts gains on `full19ae.pipeline()`; every refusal has a
+  record and runs of retries are marked. Three fresh seats found no way through and one
+  raise: a malformed body with a signed token raises `KeyError`. Root `cf7693ef…`. F2 and F5
+  do not hold; the raise is not repaired in this lane.
+- **Verification:** bare-interpreter `verify`; committed-pack tests; quick gate.
+
+## [phase-19ae-submissions-2026-11-22] — 2026-11-22 — Lane 19ae: the seats' files as received; one instrument amendment
+
+**Raouf:**
+
+- **Scope:** three files under `docs/research/provenance-phase-19ae/submissions/`; one
+  comparison in `full19ae.py`.
+- **Summary:** 9, 11 and 16 attempts from two Opus 5.5 seats and one Sonnet 5.5 seat,
+  committed before any is run on the host of record. The retry-mark check now compares which
+  labels are marked, after two seats showed it was stricter than the declared rule.
+- **Verification:** 23 tests; format check; privacy scan.
+
+## [phase-19af-instrument-2026-11-22] — 2026-11-22 — Lane 19af: three questions asked of small local models (instrument)
+
+**Raouf:**
+
+- **Scope:** `local19af.py` and its tests.
+- **Summary:** schedules and rules for a restriction that arrives as text, omission and
+  splitting against a monitor, and the time a monitor takes, with two small local models.
+  No capture yet.
+- **Verification:** 13 tests; `ruff`.
+
+## [phase-19ae-instrument-2026-11-22] — 2026-11-22 — Lane 19ae: one gate with every repair (instrument and brief)
+
+**Raouf:**
+
+- **Scope:** `full19ae.py`, `evidence19ae.py`, their tests, the brief for three seats.
+- **Summary:** one class a caller should use, with a record for every refusal and a mark
+  after twenty in a row; an instrument that runs 431 recorded attempts of seven lanes on
+  it. No seat has run and there is no run of record yet.
+- **Verification:** 22 tests; `ruff`; `prettier`; quick gate.
+
 ## [phase-19f-operator14-2026-11-22] — 2026-11-22 — Lanes 19ac and 19ad in the operator handoff; twenty-nine pinned roots
 
 **Raouf:**

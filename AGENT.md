@@ -14,6 +14,110 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19ae in the operator handoff; thirty pinned roots; the README's open work brought up to date
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR15 in the ledger (before the change), the handoff
+  tool and its tests, the rendered handoff, the hosted roots check, the root README.
+- **Summary:** 19ae joins the handoff as a replayed lane. The three operator reviews were
+  recomputed (the lane is `not_in_receipt` in each; the receipts are byte-identical).
+  Seventeen items are owed to an outside operator. `PHASE19_ROOTS` was extended outside the
+  pull request from twenty-nine roots to thirty. The root README has a paragraph on the lane
+  and its open work now says that the repair of lane 19ad was attacked and held, that the
+  seats found a raise which is not repaired, and where unrecorded refusals now get a record.
+- **Files changed:** `tools/assurance-provenance/handoff19.py`, `tests/test_handoff19.py`,
+  `docs/research/provenance-phase-19f/HANDOFF.md`, `discrepancy-template.json`, the three
+  reviews, the two 19f READMEs, `.github/workflows/assurance-provenance.yml`, `README.md`,
+  `docs/AUTHOR_AND_METHOD.md`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 44 handoff tests (the tool was edited before the tests this time, so
+  they were not seen failing first); the Stage 5Q census
+  is byte-identical before and after the workflow edit; `prettier` and `ruff` are clean; the
+  quick gate passes.
+- **Not done:** no outside operator has run any of the seventeen items.
+
+### 2026-11-22 (Australia/Sydney) — Lane 19ae pack: no gain in 467 attempts on the gate with every repair; the seats find a raise
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19ae/` (pack, README, results), the
+  committed-pack test, the ruling.
+- **Summary:** the run of record on the Linux host from `ab544c00`. All 431 attempts that
+  seven earlier lanes recorded end on the full gate as on lane 19ad's, and none gains; the 24
+  refusals that left no record now have one; runs of 20 refusals are marked. Three seats
+  attacked the gate afresh with its source in hand: none of their 36 attempts gains, and 16
+  make the gate raise `KeyError` where it should refuse, through a body without `run` or
+  `id` sent with a signed token. F2 and F5 do not hold. Not repaired, as declared.
+- **Files changed:** the pack's five files, `README.md` and `RESULTS.md` beside them,
+  `tools/assurance-provenance/tests/test_evidence19ae_committed.py`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** `verify` with a bare Python 3.12 interpreter (`structure_checked`); 8
+  committed-pack tests (one skipped off the replay host); `prettier`, `ruff` and the quick
+  gate pass.
+- **Not done:** the raise is not repaired; the lane is not in the operator handoff yet; no
+  one outside the author has run it.
+
+### 2026-11-22 (Australia/Sydney) — Lane 19ae: an amendment to the instrument and the three seats' files as received
+
+**Raouf:**
+
+- **Scope:** one comparison in `full19ae.py` and a test for it; three files under
+  `docs/research/provenance-phase-19ae/submissions/`; two ledger entries.
+- **Summary:** two seats showed that the instrument's F2 check compared a list of marks with
+  a set of labels, so a label rightly marked twice read as a mismatch. It now compares which
+  labels are marked, as F2 is declared. This was changed after seeing the seats' reports and
+  the ledger says so. `seat-a` and `seat-b` ran on Claude Opus 5.5 and `seat-c` on Claude
+  Sonnet 5.5, read from the harness's record. They handed in 9, 11 and 16 attempts. None
+  gains. All three found that a body without `run` or `id`, sent with a signed token, makes
+  the gate raise `KeyError` where it should refuse. The files are committed as handed in,
+  before the run of record.
+- **Files changed:** `tools/assurance-provenance/full19ae.py`, `tests/test_full19ae.py`,
+  `submissions/seat-a.json`, `seat-b.json`, `seat-c.json`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** 23 tests; all three files pass the format check with no attempt
+  rejected; the privacy scan finds nothing; `ruff` and `prettier` are clean.
+- **Not done:** the run of record, the pack and the ruling. The raise is not repaired.
+
+### 2026-11-22 (Australia/Sydney) — Lane 19af instrument: three questions asked of small local models
+
+**Raouf:**
+
+- **Scope:** the declaration P19-LOCAL04 in the ledger (`a54b3706`, before any code and
+  before any model was run for it) and a new instrument.
+- **Summary:** `local19af.py` builds two schedules from the committed Phase 17 tasks: 168
+  generations per model in which a restriction arrives as text, in the trusted state, or
+  not at all; and 96 monitor calls per model on transcripts whose send is exact, has a
+  sentence added, leaves a clause out, or is split in two. It reuses lane 19h's loader,
+  lane 19k's reader and lane 19s's monitor prompt without editing them. The rules for the
+  six hypotheses are in the module and were fixed before the capture.
+- **Files changed:** `tools/assurance-provenance/local19af.py`, `tests/test_local19af.py`,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 13 tests with no model; the schedules build under a bare Python 3.12
+  interpreter; each model was loaded once and one generation made and discarded; `ruff` is
+  clean.
+- **Not done:** the capture, the pack module, the pack and the ruling.
+
+### 2026-11-22 (Australia/Sydney) — Lane 19ae instrument: one gate with every repair, a record for every refusal, and a brief for a fresh round
+
+**Raouf:**
+
+- **Scope:** the declaration P19-FULL01 in the ledger (`d88921d6`, before any code); a new
+  module with the gate a caller should use, an instrument that runs every earlier lane's
+  recorded attempts on it, a pack module, and the brief for three seats.
+- **Summary:** `full19ae.pipeline()` is lane 19ad's bound gate with two additions in its
+  session: a `refused:` record for a refusal that left none, and one `retry_limit:` record at
+  the twentieth refusal of an action in a row. Neither changes a decision. The instrument
+  converts the files of lanes 19t, 19y, 19z, 19aa, 19ab, 19ac and 19ad (431 attempts) into
+  one list of steps and runs each on the bound gate and on the full gate. No file of an
+  earlier lane is edited.
+- **Files changed:** `tools/assurance-provenance/full19ae.py`, `evidence19ae.py`,
+  `tests/test_full19ae.py`, `tests/test_evidence19ae.py`,
+  `docs/research/provenance-phase-19ae/BRIEF.md`, `.prettierignore`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** 22 tests, six of them on both real fixtures; `ruff` and `prettier` are
+  clean; the quick gate passes.
+- **Not done:** the seats, the run of record, the pack and the ruling.
+
 ### 2026-11-22 (Australia/Sydney) — Lanes 19ac and 19ad in the operator handoff; twenty-nine pinned roots; the fault stated in the README
 
 **Raouf:**
