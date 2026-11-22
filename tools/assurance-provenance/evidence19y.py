@@ -1,7 +1,7 @@
 """Phase 19y evidence: source-bound pack for the repair and the second red-team round
 (P19-REDTEAM02), with verify.
 
-The pack holds the two round-two submissions as received and one row per attempt that was
+The pack holds the round-two submissions as received and one row per attempt that was
 run, round one first. Round one's submissions and 19t's record of them are read from 19t's
 own pack, which the protocol binds by digest. On any host ``verify`` reads every submission
 again, checks every row's identity against it (round, attacker, position, channel, digest and
@@ -50,7 +50,7 @@ PHASE_19Y_FILES = (
     "tests/test_evidence19y.py",
 )
 NON_CLAIMS = (
-    "two attacking agents of one vendor in round two, one sitting each, through one interface; nothing here is evidence about attackers in general or about a person",
+    "the attacking agents of round two are of one vendor, one sitting each, through one interface; nothing here is evidence about attackers in general or about a person",
     "the attackers are of the same family as the model that wrote the repair under the owner's direction, and may share its blind spots",
     "the repair is in new classes beside the gate that lanes 19a to 19x measured; a caller of gate19.ProvenancePipeline still has both faults",
     "the attacker controls a channel's text and nothing else: not the host's state, the clock, the operator's key, the receiver or the code",

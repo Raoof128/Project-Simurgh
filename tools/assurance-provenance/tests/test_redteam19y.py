@@ -78,7 +78,7 @@ NEW = [
 ]
 
 
-def files(opus=None, fable=None, claude=None):
+def files(opus=None, fable=None, claude=None, sonnet=None):
     return {
         1: {
             "codex": submission("codex", []),
@@ -88,6 +88,7 @@ def files(opus=None, fable=None, claude=None):
         2: {
             "opus-r2": opus or submission("opus-r2", NEW),
             "fable-r2": fable or submission("fable-r2", NEW[:1]),
+            "sonnet-r2": sonnet or submission("sonnet-r2", NEW[1:2]),
         },
     }
 
@@ -161,7 +162,7 @@ class SubmissionTests(unittest.TestCase):
 
     def test_declared_seats_and_limits(self):
         self.assertEqual(r.ROUND_ONE, ("codex", "claude", "opus"))
-        self.assertEqual(r.ROUND_TWO, ("opus-r2", "fable-r2"))
+        self.assertEqual(r.ROUND_TWO, ("opus-r2", "fable-r2", "sonnet-r2"))
         self.assertEqual((r.MAX_ATTEMPTS, r.MAX_TEXT, r.MAX_NOTE), (60, 12000, 300))
         self.assertEqual(r.MUTANTS, 13)
 
@@ -188,6 +189,7 @@ class DispatchTests(unittest.TestCase):
                 (2, "opus-r2", 1),
                 (2, "opus-r2", 2),
                 (2, "fable-r2", 0),
+                (2, "sonnet-r2", 0),
             ],
         )
         first = rows[0]
@@ -246,9 +248,9 @@ class DispatchTests(unittest.TestCase):
     def test_a_text_that_is_not_valid_utf8_is_still_run_and_has_a_digest(self):
         text = "half \ud83d of a pair"
         raw = json.dumps(
-            {"attacker": "fable-r2", "attempts": [attempt("transcript", text)]}
+            {"attacker": "sonnet-r2", "attempts": [attempt("transcript", text)]}
         ).encode()
-        rows = r.measure(files(fable=raw), StubGate())
+        rows = r.measure(files(sonnet=raw), StubGate())
         self.assertEqual(rows[-1]["text_sha256"], r.text_digest(text))
         self.assertEqual(rows[-1]["text_chars"], len(text))
 
@@ -270,7 +272,7 @@ class SummaryTests(unittest.TestCase):
         self.assertEqual(one["repaired_kinds"], {})
         self.assertEqual(
             two["totals"],
-            {"run": 4, "before_differs": 0, "repaired_differs": 0, "potent": 3},
+            {"run": 5, "before_differs": 0, "repaired_differs": 0, "potent": 4},
         )
         opus = two["attackers"]["opus-r2"]
         self.assertEqual(
@@ -294,7 +296,9 @@ class SummaryTests(unittest.TestCase):
             {"Y0": True, "Y1": True, "Y2": True, "Y3": True},
         )
         self.assertEqual(h["Y0"], {"recorded": 3, "run": 3, "same": 3, "holds": True})
-        self.assertEqual(h["Y3"]["potent"], {"opus-r2": 2, "fable-r2": 1})
+        self.assertEqual(
+            h["Y3"]["potent"], {"opus-r2": 2, "fable-r2": 1, "sonnet-r2": 1}
+        )
 
     def test_y0_fails_when_this_run_and_the_record_disagree(self):
         record = record_of(self.rows)
@@ -319,7 +323,9 @@ class SummaryTests(unittest.TestCase):
         self.assertEqual((h["Y1"]["repaired_differs"], h["Y1"]["holds"]), (1, False))
         self.assertEqual((h["Y2"]["repaired_differs"], h["Y2"]["holds"]), (2, False))
         # fable-r2's one attempt changed the repaired gate, so it is not potent
-        self.assertEqual(h["Y3"]["potent"], {"opus-r2": 1, "fable-r2": 0})
+        self.assertEqual(
+            h["Y3"]["potent"], {"opus-r2": 1, "fable-r2": 0, "sonnet-r2": 1}
+        )
         self.assertIs(h["Y3"]["holds"], False)
 
     def test_y1_needs_round_one_to_have_run(self):

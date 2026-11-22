@@ -1,8 +1,8 @@
 """Phase 19y: lane 19t's attempts run again after the repair, and a second round of attackers
 that have the repaired source (P19-REDTEAM02). No model is a target.
 
-Round one is the two submissions of 19t, unchanged. Round two is two new submissions in the
-same format. Every attempt is dispatched three ways on a fresh fixture:
+Round one is the two submissions of 19t, unchanged. Round two is one new submission from each
+of its seats, in the same format. Every attempt is dispatched three ways on a fresh fixture:
 
 - ``before``: 19b's gate on 19b's fixture, exactly as 19t ran it;
 - ``repaired``: ``repair19y.Pipeline`` on ``repair19y.Rig``;
@@ -25,7 +25,7 @@ from redteam19t import CHANNELS, KEYS, MAX_ATTEMPTS, MAX_NOTE, MAX_TEXT, MUTANTS
 from redteam19t import kinds, sha, text_digest, wire
 
 ROUND_ONE = redteam19t.ATTACKERS
-ROUND_TWO = ("opus-r2", "fable-r2")
+ROUND_TWO = ("opus-r2", "fable-r2", "sonnet-r2")
 SEATS = {1: ROUND_ONE, 2: ROUND_TWO}
 BEFORE = "before"
 REPAIRED = "repaired"

@@ -14,6 +14,21 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19y: the Fable seat was refused by its provider; a Sonnet 5.5 seat is added (no submission exists yet)
+
+**Raouf:**
+
+- **Scope:** the amendment to P19-REDTEAM02 in the ledger (`2e8c5839`), the instrument's list
+  of seats and its tests.
+- **Summary:** the Claude Fable 5.2 agent's first request was flagged by its provider's
+  safeguards and it produced nothing. The task was not reworded or sent again. Its seat stays
+  with an empty submission, so Y3 cannot hold. A third seat, `sonnet-r2`, is added with the
+  same brief. The repair, the gate and the fixture are unchanged.
+- **Files changed:** `tools/assurance-provenance/redteam19y.py`, `evidence19y.py`,
+  `tests/test_redteam19y.py`, `tests/test_evidence19y.py`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** the lane's 59 tests pass; `ruff` is clean; the quick gate passes.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19y instrument: the repair of 19t's two faults and a two-round red-team runner (nothing run on the host of record yet)
 
 **Raouf:**

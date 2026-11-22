@@ -1,5 +1,14 @@
 ## Change Log
 
+## [phase-19y-seats-2026-11-22] — 2026-11-22 — Lane 19y: a refused seat recorded and a third seat added
+
+**Raouf:**
+
+- **Scope:** the amendment to P19-REDTEAM02, the instrument's list of seats and its tests.
+- **Summary:** the Fable 5.2 seat was refused by its provider and stays in the record empty;
+  a Sonnet 5.5 seat is added before any submission exists. Nothing else changed.
+- **Verification:** 59 lane tests; `ruff`; quick gate.
+
 ## [phase-19y-instrument-2026-11-22] — 2026-11-22 — Lane 19y instrument: the 19t repair and a second red-team round
 
 **Raouf:**

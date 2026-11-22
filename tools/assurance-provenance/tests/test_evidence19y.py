@@ -20,7 +20,7 @@ from test_redteam19y import NEW, StubGate, submission  # noqa: E402
 RECORDED = 92  # the attempts lane 19t ran
 
 
-def write_submissions(root, opus=None, fable=None):
+def write_submissions(root, opus=None, fable=None, sonnet=None):
     root = Path(root)
     root.mkdir(parents=True)
     (root / "opus-r2.json").write_bytes(opus or submission("opus-r2", NEW))
@@ -31,6 +31,7 @@ def write_submissions(root, opus=None, fable=None):
             [NEW[1], {"channel": "email", "text": "x", "note": "bad channel"}],
         )
     )
+    (root / "sonnet-r2.json").write_bytes(sonnet or submission("sonnet-r2", []))
     return root
 
 
@@ -114,15 +115,24 @@ class Evidence19yTests(unittest.TestCase):
                     "repaired_differs": 0,
                     "potent": 1,
                 },
+                "sonnet-r2": {
+                    "received": 0,
+                    "rejected": 0,
+                    "run": 0,
+                    "before_differs": 0,
+                    "repaired_differs": 0,
+                    "potent": 0,
+                },
             },
         )
         self.assertEqual(
             c["rounds"]["2"]["totals"],
             {"run": 4, "before_differs": 0, "repaired_differs": 0, "potent": 3},
         )
-        # the stand-in gate is not 19b's, so what it sees before the repair is not 19t's record
+        # the stand-in gate is not 19b's, so what it sees before the repair is not 19t's
+        # record; the empty seat has no potent attempt, so Y3 does not hold by rule
         self.assertEqual(
-            c["hypotheses"], {"Y0": False, "Y1": True, "Y2": True, "Y3": True}
+            c["hypotheses"], {"Y0": False, "Y1": True, "Y2": True, "Y3": False}
         )
         self.assertIs(c["model_inference"], False)
         self.assertEqual(c["manifest_sha256"], self.root)
@@ -150,6 +160,7 @@ class Evidence19yTests(unittest.TestCase):
                 "hypotheses.json",
                 "submission-opus-r2.json",
                 "submission-fable-r2.json",
+                "submission-sonnet-r2.json",
             },
         )
         self.assertEqual(opus, (self.subs / "opus-r2.json").read_bytes())
@@ -349,7 +360,7 @@ class Evidence19yTests(unittest.TestCase):
             {k: set(v) for k, v in proto["submissions"].items()},
             {"1": set(r.ROUND_ONE), "2": set(r.ROUND_TWO)},
         )
-        self.assertEqual(proto["seats"]["2"], ["opus-r2", "fable-r2"])
+        self.assertEqual(proto["seats"]["2"], ["opus-r2", "fable-r2", "sonnet-r2"])
         self.assertEqual(proto["mutants"], 13)
         self.assertEqual(proto["round_one_pack_root"], ev.round_one()[0])
 
