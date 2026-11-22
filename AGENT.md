@@ -14,6 +14,28 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19aa pack: retries, self-written approvals and reused approvals change nothing but one verdict
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19aa/` (pack, README, results), the
+  committed-pack test, the ruling.
+- **Summary:** the run of record on the Linux host from the instrument commit (`387f1a13`).
+  28 sequences, 1,194 dispatches. The undelegated action is never observed without an
+  approval the host minted (21 sequences); 1,158 refusals leave 1,158 records; the delegated
+  action is observed after only refused dispatches in 20 of 20; nothing latches or raises.
+  R2 does not hold: with two valid approvals the gate reports the action observed twice and
+  one effect reaches the receiver. Five sequences sign with the fixture's operator key and
+  are refused, 113 times because the nonce is not one the host's store holds.
+- **Files changed:** the pack's five files, `README.md` and `RESULTS.md` beside them,
+  `tools/assurance-provenance/tests/test_evidence19aa_committed.py`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** `verify` with a bare Python 3.12 interpreter (`structure_checked`); a
+  rebuild on macOS gave the committed root; 8 committed-pack tests (one skipped off the
+  replay host); `prettier`, `ruff` and the quick gate pass.
+- **Not done:** the lane is not in the operator handoff yet; no one outside the author has
+  run it; no model wrote a sequence.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19aa instrument: sequences at the gate's front door
 
 **Raouf:**

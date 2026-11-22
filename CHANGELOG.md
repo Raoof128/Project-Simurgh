@@ -1,5 +1,15 @@
 ## Change Log
 
+## [phase-19aa-pack-2026-11-22] — 2026-11-22 — Lane 19aa: retries, self-written approvals and reused approvals
+
+**Raouf:**
+
+- **Scope:** the 19aa pack, its pages, a committed-pack test, the ruling.
+- **Summary:** 28 sequences and 1,194 dispatches on the sealed gate. Four of five
+  predictions hold; R2 does not (two valid approvals, the action reported observed twice,
+  one effect). Root `871e7cc7…`.
+- **Verification:** bare-interpreter `verify`; the same root on a second host; quick gate.
+
 ## [phase-19aa-instrument-2026-11-22] — 2026-11-22 — Lane 19aa: sequences at the gate's front door (instrument)
 
 **Raouf:**

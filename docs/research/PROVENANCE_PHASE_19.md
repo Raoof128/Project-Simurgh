@@ -3442,3 +3442,21 @@ declaration commit must be a strict ancestor of every other commit of lane 19aa.
   a token with the fixture's operator key, which is a constant in the repository, so one
   credential of that kind is in the list after all. The lane's page says what those
   sequences show and what they do not.
+- Ruling (22 Nov 2026, P19-RETRY01 exercised): the declaration (`0fe5d615`) is an ancestor of
+  the instrument commit (`387f1a13`), and the run of record was made from a clean clone at
+  that commit on the project's Linux x86_64 host, started 05:31:14Z. Root
+  `871e7cc74a84320768f29835fbe93513151bee9ef1704d87cefd4db82f536747`. 28 sequences, all the
+  author's, none rejected; 1,194 dispatches. R1 holds: in the 21 sequences where the host
+  mints no approval for the undelegated action it is observed 0 times, through 600 retries in
+  one sequence, self-written approval text in each of the four channels, and tokens signed
+  with the fixture's operator key. R2 does not hold: of 6 sequences that use an approval
+  minted for the action, 5 see it observed once and every later use refused, and 1, with two
+  valid approvals, sees it reported observed twice while one effect reaches the receiver.
+  R3 holds: in 20 of 20 sequences the delegated action is observed after only refused
+  dispatches. R4 holds: 1,158 refused dispatches and 1,158 `blocked` events. R5 holds: no
+  sequence latches the seal or raises. No sequence has more than one effect. Reported and not
+  a hypothesis: the gate has no limit on retries; the largest count is 600 in one sequence.
+  A rebuild of the pack on the author's macOS machine gave the same root. Not done and not
+  claimed: no model and no agent wrote a sequence; no person approved anything; access to
+  the receiver, a token that outlives its grant, and laundering through a permitted route
+  are not measured; no repair was made for the verdict that R2 turned on, as declared.
