@@ -2270,6 +2270,86 @@ Authorised files: `tools/assurance-provenance/retry19aa.py`, `evidence19aa.py`, 
 authorised: any edit to a frozen file, to a 19a to 19z source or pack, or to a workflow. This
 declaration commit must be a strict ancestor of every other commit of lane 19aa.
 
+**P19-BODY01 (a new lane, 19ab: what the gate does when the body of an action is not the
+body that was delegated or approved; deterministic; no model and no attacker agent; declared
+22 Nov 2026 before any line of it was written).** The gap hunt of 22 Nov names laundering
+through a permitted request: an agent that may send one thing sends another under the same
+name. Lane 19aa left it out. The part of it a fixture can measure is whether the gate binds
+the whole body of an action or only its name. Declared before any code:
+
+- The gate is the sealed, repaired gate of lane 19z on its fixture. No file of an earlier
+  lane is edited; the instrument is a new module, `body19ab.py`.
+- One attempt is one body, a JSON object, and one of two routes. On route `a` the body is
+  dispatched once in place of the delegated action, with no approval, and then the delegated
+  action is dispatched unchanged. On route `b` the host mints an approval for the unchanged
+  undelegated action, the body is dispatched once with that approval, and then the unchanged
+  action is dispatched with the same approval. Each attempt runs in a process of its own.
+- Recorded for each attempt: both verdicts, the count of effects, the digest of every
+  payload the receiver recorded and whether it equals the digest of the unchanged action's
+  payload in the baseline, the gate's `blocked` events, the pipeline's reasons, whether the
+  seal latched and whether anything raised.
+- The attempts are the author's list, committed with the instrument: changes to each field's
+  value, added and missing fields, the same text in other encodings (case, a trailing space,
+  a compatibility form, a zero-width character, a look-alike letter), values of another
+  type, and the same body with its keys in another order. No attacker agent, for the reason
+  given in P19-RETRY01.
+- A body is "changed" when, as a JSON value, it is not equal to the unchanged action. The
+  same keys and values in another order are not a change.
+- Hypotheses. B1: no changed body is observed, on either route. B2: every payload the
+  receiver records, in every attempt, has the digest of the unchanged action's payload. B3:
+  after a refused changed body on route `a`, the unchanged delegated action is observed in
+  every attempt. B4: on route `b`, the approval is refused for every changed body and is
+  then honoured once for the unchanged one. B5: no attempt latches the seal or raises.
+- Reported and not a hypothesis: what the gate does with a body that is unchanged as a value
+  but written with its keys in another order.
+- Where: the run of record is on the project's Linux x86_64 host in the hash-locked
+  environment, from a clean clone at the instrument commit. `verify` recomputes every row
+  there; elsewhere it checks structure.
+- If a hypothesis fails: the attempt and the cause are published as they are, and no repair
+  is made in this lane.
+- Money: none.
+- What this is not. It does not show that an allowed body is harmless: the gate binds what
+  the body is, and cannot judge what it means. It does not measure a third party that acts
+  on an allowed request, which is the rest of what laundering names. It is a list the author
+  wrote on a fixture with two actions; it is not evidence about a model or an attacker.
+- Seen when this was written: one look at the sealed gate with ten bodies on route `a` (the
+  unchanged action observed; a changed content, resource, operation, principal, tenant or
+  policy revision, an added field, and the other action's name each blocked with no effect,
+  and the unchanged action observed afterwards). Nothing was tried on route `b`, with other
+  encodings, with other types or with reordered keys. No line of the instrument exists.
+
+Authorised files: `tools/assurance-provenance/body19ab.py`, `evidence19ab.py`, their tests,
+`docs/research/provenance-phase-19ab/` (the author's attempts, the pack and its pages),
+`.prettierignore` entries for its byte-preserved files, the ruling and both logs. Not
+authorised: any edit to a frozen file, to a 19a to 19aa source or pack, or to a workflow.
+This declaration commit must be a strict ancestor of every other commit of lane 19ab.
+
+**P19-AUDIT01 (a census, not a lane: which committed packs record the model the provider
+says answered; declared 22 Nov 2026 before the tool was written).** On 22 Nov a page of
+this project named a model that did not run (P19-REPAIR09). The gap hunt of the same day
+asks for a record of the served model in every pack. Past captures cannot be made again
+without money, so this is a census of what the committed packs hold.
+
+- A new tool, `tools/assurance-provenance/served19.py`, reads every committed Phase 19
+  `evidence.zip` and, for each model id a pack names, reports whether the pack also holds an
+  id that the provider returned for it. It reads only the packs. It contacts no provider and
+  no model, and edits no pack.
+- It writes one page, `docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md`, generated from
+  the packs, and a test holds the page to the tool's output.
+- No hypothesis. Seen when this was written: a survey of the keys the packs use. Lane 19o
+  holds a `served_model` for some of its models; lanes 19u, 19w and 19x hold the requested
+  id and no id from the provider; the local-model lanes name a local file.
+- What this is not: where a pack holds no id from the provider, the census cannot say what
+  was served, and it does not say anything was served wrongly. It covers targets in packs.
+  The model behind an attacker seat is recorded by the harness outside the repository, and
+  the census does not reach it.
+- Money: none.
+
+Authorised files: `tools/assurance-provenance/served19.py`, its test, the generated page,
+the ruling and both logs. Not authorised: any edit to a pack, a capture module or a
+workflow. This declaration commit must be a strict ancestor of every other commit made
+under it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
