@@ -2350,6 +2350,39 @@ the ruling and both logs. Not authorised: any edit to a pack, a capture module o
 workflow. This declaration commit must be a strict ancestor of every other commit made
 under it.
 
+**P19-OPERATOR13 (bounded authority to bring lanes 19aa and 19ab into the outside-operator
+handoff and the externally pinned roots, and to state three findings in the root README;
+declared 22 Nov 2026 before any commit that acts on it).** 19aa is committed (`4f6ab473`) with
+root `871e7cc74a84320768f29835fbe93513151bee9ef1704d87cefd4db82f536747` and 19ab (`dbeb1946`)
+with root `67d1029539c921f772229731779e8c4fd0a1297c07f422e138b03ca967bdaade`. Neither
+declaration authorised a workflow or handoff edit. This declaration authorises, and nothing
+else:
+
+1. `handoff19.py`: 19aa and 19ab added to `PHASES` with their hosts and times, the word for
+   the new count, and both in the list of lanes that need nothing beyond the standard
+   library. Both are replayed lanes as 19t, 19y and 19z are: their committed receipts read
+   `gate_recomputed`, a host that cannot replay prints `structure_checked`, and their
+   `--replay` joins the items only some hosts can exercise. The comparator's rules do not
+   change. Tests first.
+2. The reviews of the three operator receipts recomputed under the new phase list. No receipt
+   is edited; both lanes appear in each review as `not_in_receipt`.
+3. Re-rendering `HANDOFF.md` and `discrepancy-template.json`; the 19f READMEs' count of
+   packs, their rows for the lanes and their lists of what is owed.
+4. `.github/workflows/assurance-provenance.yml`: the two `docs/` paths added to both path
+   filters and the two ids to the expected-roots check, with its message. No step is added,
+   removed or renamed, and the Stage 5Q census must be byte-identical before and after. The
+   repository variable `PHASE19_ROOTS` gains the two roots, set outside the pull request,
+   the twenty-five existing values unchanged.
+5. The root README: the count of Phase 19 packs, one paragraph on the two lanes and the
+   census of P19-AUDIT01, and three entries under its open work: a verdict of `observed`
+   that sends nothing (19aa), refusals that leave no record (19ab), and packs that hold no
+   model id from the provider (P19-AUDIT01). The same count in `docs/AUTHOR_AND_METHOD.md`.
+6. Both logs and the ruling.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to an operator's
+receipt, or any other change to what the comparator checks. This declaration commit must be a
+strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
