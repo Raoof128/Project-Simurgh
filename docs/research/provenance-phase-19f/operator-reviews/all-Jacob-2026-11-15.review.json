@@ -18,6 +18,7 @@
     "19ad --replay",
     "19ae",
     "19ae --replay",
+    "19af",
     "19q --dataset",
     "19w",
     "19x",
@@ -49,6 +50,9 @@
       "result": "not_in_receipt"
     },
     "19ae": {
+      "result": "not_in_receipt"
+    },
+    "19af": {
       "result": "not_in_receipt"
     },
     "19b": {

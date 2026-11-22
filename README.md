@@ -151,6 +151,18 @@ Sixteen attempts do it. Nothing is sent and no authority is gained, but a caller
 not catch the exception stops. Two of the lane's six predictions fail, and the raise is not
 repaired.
 
+**Three questions asked of small local models, 22 November.**
+[19af](docs/research/provenance-phase-19af/README.md) takes three pains the gap hunt left
+untouched to two small models on a laptop. A legitimate restriction that arrives as text is
+obeyed or ignored by its wording: both models stop for a notice that says "do not send" and
+both send through a legal hold every time. The gate ignores all of them, as designed, so a
+withdrawal that reaches the system only as text changes nothing at the gate. One model sends
+19 of 24 times when the restriction is in the trusted state, against the lane's prediction.
+As a transcript monitor the better model catches an added exfiltration sentence 24 times in
+24 and an omitted clause 4 times in 24; the gate refuses both, because it binds the exact
+body. A monitor call takes tens of seconds on that laptop and a dispatch on the gate about
+a fiftieth of a second. Nothing here transfers to a hosted model.
+
 [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) ·
 [Release and archive](https://github.com/Raoof128/Project-Simurgh/releases/tag/phase-19-paper-v1.0) ·
 [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) ·
@@ -368,7 +380,7 @@ and document text as untrusted data when feeding CLI results to an agent.
 | Perform outside reproduction | [Operator handoff](docs/research/CONTINUATION_HANDOFF_2026-10-19.md)                                                                                        | Earlier viewer/export snapshot; use the current runbook for the latest study                |
 | Trace prior work             | [Reviewer index](docs/REVIEWER_INDEX.md) and [research history](RESEARCH_HISTORY.md)                                                                        | Frozen stages, negative results and historical reproduction                                 |
 | Read the newest study        | [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) and [Phase 19 ledger](docs/research/PROVENANCE_PHASE_19.md)                            | Plans committed before each run, hypotheses decided by rule, limits stated with each result |
-| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Thirty verify commands; twenty-eight need no installed packages                             |
+| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Thirty-one verify commands; twenty-nine need no installed packages                          |
 | Judge the process and author | [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) and [author, method and open problems](docs/AUTHOR_AND_METHOD.md)                                    | How errors were found and handled, how AI assistance is used, what remains open             |
 
 The most useful review would challenge the exact-action comparator, admission/revocation
@@ -377,13 +389,13 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
 
 ### Open work
 
-- **Independent reproduction:** one outside operator has replayed twenty-one of the thirty
+- **Independent reproduction:** one outside operator has replayed twenty-one of the thirty-one
   Phase 19 packs on Ubuntu x86_64 with no discrepancy, including the five frozen-gate replays,
   the Lean check and the namespace probe, and the test suite passed there. A second ran the
   handoff natively on Windows 10, where every verifier refused; the causes are published and
   the handoff now lists native Windows as unsupported. An earlier receipt covers five packs on
   macOS ([receipts and reviews](docs/research/provenance-phase-19f/README.md)). Still
-  outstanding: lanes 19w, 19x, 19y, 19z and 19aa to 19ae, one dataset recomputation, a second
+  outstanding: lanes 19w, 19x, 19y, 19z and 19aa to 19af, one dataset recomputation, a second
   Linux host, and independent evidence custody, since the author's side asked both operators
   and each signed with a typed name.
 - **Provider lifecycle:** real provider IAM/revocation and authenticated live safety-alert
@@ -404,6 +416,10 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
   a token whose signature is good, raises `KeyError` where the gate should refuse (19ae).
   It needs no signing key, only an approval the host minted for any action. Every gate in
   the repository has it. Not repaired.
+- **A restriction that arrives as text:** the gate acts on host state and ignores a
+  withdrawal written into a channel (19af, 20 of 20 dispatches observed). Whether the send
+  then goes out is left to the model and the wording. A host that learns of a restriction
+  has to put it in the state the gate reads.
 - **What the gate cannot see:** it decides who may send what to where, from host state. Harm
   carried inside a send it allows is outside it: a threatening message on a permitted
   channel, an injected text quoted back to a legitimate recipient, a permitted repository

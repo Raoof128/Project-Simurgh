@@ -2694,6 +2694,37 @@ Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to
 receipt, or any other change to what the comparator checks. This declaration commit must be a
 strict ancestor of every commit that acts on it.
 
+**P19-OPERATOR16 (bounded authority to bring lane 19af into the outside-operator handoff and
+the externally pinned roots, and to add what it found to the root README; declared 22 Nov 2026
+before any commit that acts on it).** 19af is committed with root
+`79e8b1f27371c7476373d9613799833508506aec5bb6826c3135aa2ce8f2e255`. Its declaration did not
+authorise a workflow or handoff edit. This declaration authorises, and nothing else:
+
+1. `handoff19.py`: 19af added to `PHASES` with its host and time, the word for the new count,
+   and the lane in the list of lanes that need nothing beyond the standard library. It is a
+   capture lane as 19k and 19s are: its verifier runs no model and has no `--replay`. The
+   comparator's rules do not change. Tests first.
+2. The reviews of the three operator receipts recomputed under the new phase list. No receipt
+   is edited; the lane appears in each review as `not_in_receipt`.
+3. Re-rendering `HANDOFF.md` and `discrepancy-template.json`; the 19f READMEs' count of
+   packs, their row for the lane and their lists of what is owed.
+4. `.github/workflows/assurance-provenance.yml`: the lane's `docs/` path added to both path
+   filters and its id to the expected-roots check, with its message. No step is added,
+   removed or renamed, and the Stage 5Q census must be byte-identical before and after. The
+   repository variable `PHASE19_ROOTS` gains the one root, set outside the pull request, the
+   thirty existing values unchanged.
+5. The root README: the count of Phase 19 packs, one paragraph on the lane, and one entry
+   under its open work on a restriction that arrives as text. The same count in
+   `docs/AUTHOR_AND_METHOD.md`.
+6. Wording only, with no change to any number or claim: a pass over the pages of lanes 19aa
+   to 19af for plain language. The briefs of lanes 19ac and 19ae are pinned by their packs
+   and are not touched.
+7. Both logs and the ruling.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to an operator's
+receipt, or any other change to what the comparator checks. This declaration commit must be a
+strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
@@ -4103,3 +4134,39 @@ strict ancestor of every commit that acts on it.
   raise is stated as open, and the entry on unrecorded refusals says where they now have a
   record. `docs/AUTHOR_AND_METHOD.md` has the count. Not done: no one outside the author has
   run the handoff for any of the seventeen items.
+- Ruling (22 Nov 2026, P19-LOCAL04 exercised): the declaration (`a54b3706`) is an ancestor of
+  the instrument commit (`64a77f22`, 08:09:57Z), which precedes the capture (launched
+  08:10:06Z), and of the pack module's commit (`ab544c00`). Root
+  `79e8b1f27371c7476373d9613799833508506aec5bb6826c3135aa2ce8f2e255`. 528 generations on the
+  author's Apple M2 laptop, none resumed; the rechecked rows repeat. Both models are
+  eligible as agents and usable as monitors. T1 holds: under a restriction that arrives as
+  text `qwen3-4b-4bit` sends in 28 of 120 generations and `llama-3.2-3b-4bit` in 46 of 120.
+  The wording decides: three of the five texts stop every send in both models and the legal
+  hold stops none. T2 does not hold: with the restriction in the trusted state
+  `qwen3-4b-4bit` sends 0 of 24 times and `llama-3.2-3b-4bit` 19 of 24, more than under the
+  text. T3 holds: the gate observes the delegated action in all 20 dispatches with a
+  restriction text in a channel. O1 and O2 hold: as monitors the two models catch 24 and 2
+  of the transcripts with an added sentence, 4 and 0 of those with an omitted clause, and 9
+  and 1 of those split in two. O3 holds: the gate observes the exact body and refuses the
+  four changed ones. Reported: a monitor call took a median of 41.2 and 23.4 seconds and a
+  dispatch on the gate 0.0175 seconds, on this machine. Disclosed: the capture was suspended
+  twice for the project's test gate and the first model was captured on a loaded machine,
+  so its seconds are inflated; the pack module was written while the capture ran and before
+  any output was analysed, and the capture's progress log, which shows the end of each
+  output, was looked at three times. Not done and not claimed: nothing here transfers to a
+  hosted model; five wordings and four trials per cell are too few to say which words
+  matter; a verifier cannot recompute a generation.
+- Ruling (22 Nov 2026, P19-OPERATOR16 exercised): the declaration precedes the commit that
+  acts on it. `handoff19.py` carries 19af as a capture lane with no `--replay`; the handoff
+  tests were changed first and failed until the tool changed. The three operator reviews
+  were recomputed and no receipt was edited: the lane is `not_in_receipt` in each. Eighteen
+  items are owed to an outside operator: lanes 19w, 19x, 19y, 19z and 19aa to 19af, the
+  `--replay` of seven of them, and 19q's `--dataset` recomputation. The workflow gained the
+  `docs/` path in both filters and the id in the roots check; the Stage 5Q census is
+  byte-identical before and after. `PHASE19_ROOTS` was read, found as P19-OPERATOR15 left it,
+  and set to thirty-one roots, the thirty earlier values unchanged. The root README has the
+  new count, one paragraph on the lane and one entry under its open work.
+  `docs/AUTHOR_AND_METHOD.md` has the count. The pages of lanes 19aa to 19af were read for
+  plain language and seven sentences reworded; no number and no claim changed, and the
+  pinned briefs were not touched. Not done: no one outside the author has run the handoff
+  for any of the eighteen items.

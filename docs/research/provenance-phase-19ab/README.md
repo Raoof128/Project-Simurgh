@@ -57,7 +57,7 @@ number, true).
 | B4: an approval is refused for a changed body and then honoured once         | 17 changed, 17 refused, 17 then honoured once | yes   |
 | B5: no attempt latches the seal or raises                                    | latched 0, raised 0                           | yes   |
 
-**The gate binds the body, not the name.** 56 of the 64 changed bodies keep the name of the
+**The gate binds the whole body.** 56 of the 64 changed bodies keep the name of the
 action they stand in for, so a gate that matched on the name alone would have passed them.
 That figure is arithmetic on the list. It is not a measurement of another gate, and the lane
 has no gate of that kind as a positive control.
@@ -81,7 +81,7 @@ The 30 are the bodies the gate's own schema rejects before it reaches a decision
 missing field, a value of another type, an operation the fixture does not have, and content
 that is empty or too long. A look at the stores after the run of record showed the same for
 each: the dispatch returns `blocked`, and the only event written is the session's `resume`.
-Bodies that are well formed and merely wrong (another resource, principal, tenant, policy
+Bodies that are well formed and wrong (another resource, principal, tenant, policy
 revision, run, name or content, and every re-encoding of the content) are refused with a
 `blocked` event.
 

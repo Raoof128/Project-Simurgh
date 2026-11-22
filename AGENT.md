@@ -14,6 +14,61 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19af in the operator handoff; thirty-one pinned roots; a plain-language pass over the day's pages
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR16 in the ledger (before the change), the handoff
+  tool and its tests, the rendered handoff, the hosted roots check, the root README, and the
+  pages of lanes 19aa to 19af.
+- **Summary:** 19af joins the handoff as a capture lane whose verifier runs no model. The
+  three operator reviews were recomputed (the lane is `not_in_receipt` in each; the receipts
+  are byte-identical). Eighteen items are owed to an outside operator. `PHASE19_ROOTS` was
+  extended outside the pull request from thirty roots to thirty-one. The root README has a
+  paragraph on the lane and an entry under its open work on a restriction that arrives as
+  text. The six lane pages of the day were read for plain language: no invisible
+  characters, no dashes used as punctuation, seven sentences reworded, no number or claim
+  changed. The briefs of lanes 19ac and 19ae are pinned by their packs and were left alone.
+- **Files changed:** `tools/assurance-provenance/handoff19.py`, `tests/test_handoff19.py`,
+  `docs/research/provenance-phase-19f/HANDOFF.md`, `discrepancy-template.json`, the three
+  reviews, the two 19f READMEs, `.github/workflows/assurance-provenance.yml`, `README.md`,
+  `docs/AUTHOR_AND_METHOD.md`, the READMEs of lanes 19aa, 19ab, 19ac and 19ad, the ledger,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the handoff tests, failing before the tool changed; the Stage 5Q census
+  is byte-identical before and after the workflow edit; the eleven groups of tests written
+  on 22 Nov (378 tests) pass; all thirty-one packs verify, twenty-eight under a bare
+  interpreter on macOS, 19b and 19g with their packages installed, and 19d only on Linux;
+  `prettier` and `ruff` are clean; the quick gate passes 96 of 96. The full gate passes 144
+  of 144 on its second run in this worktree; on the first run five Stage 2 checks failed
+  because the native macOS daemon had never been built here and did not come up within its
+  60 seconds, and the untouched `main` checkout passed 144 of 144 in between. A full replay
+  of eight packs on the Linux host from the merged `main` was running when this was
+  written; 19t had recomputed.
+- **Not done:** no outside operator has run any of the eighteen items.
+
+### 2026-11-22 (Australia/Sydney) — Lane 19af pack: a restriction as text is obeyed or not by its wording; a monitor misses omissions
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19af/` (pack, README, results), the
+  committed-pack test, `.prettierignore`, the ruling. This entry also covers the pack module
+  `evidence19af.py` and its tests, committed earlier (`ab544c00`) without a log entry.
+- **Summary:** 528 generations from two small local models on the author's laptop. As agents
+  both obey three of five restriction texts every time and both ignore a legal hold every
+  time; one sends 19 of 24 times when the restriction is in the trusted state, so T2 does not
+  hold. The gate observes the delegated action in all 20 dispatches with a restriction text
+  in a channel. As monitors they catch 24 and 2 added sentences, 4 and 0 omitted clauses.
+  The gate refuses every changed body. A monitor call takes tens of seconds here and a
+  dispatch about a fiftieth of a second.
+- **Files changed:** the pack's five files, `README.md` and `RESULTS.md` beside them,
+  `tools/assurance-provenance/tests/test_evidence19af_committed.py`, `.prettierignore`, the
+  ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `verify` with a bare Python 3.12 interpreter; 7 committed-pack tests, one
+  of which recomputes the gate's side on real fixtures; `prettier`, `ruff` and the quick
+  gate pass.
+- **Not done:** the lane is not in the operator handoff yet; nothing here transfers to a
+  hosted model.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19ae in the operator handoff; thirty pinned roots; the README's open work brought up to date
 
 **Raouf:**

@@ -1,10 +1,11 @@
 # Phase 19f: outside-operator replay (paid in part)
 
 `IOU-19-OPERATOR`: three receipts have come back and each is reviewed here. One outside operator
-replayed twenty-one of the thirty packs on Linux x86_64 with no discrepancy, among them the
-five frozen-gate replays, 19b's Lean closure and 19d's namespace probe. Seventeen items are
-still owed: lanes 19w, 19x, 19y, 19z and 19aa to 19ae, which joined the handoff after those
-receipts, the `--replay` of each of the last seven, and 19q's `--dataset` recomputation.
+replayed twenty-one of the thirty-one packs on Linux x86_64 with no discrepancy, among them
+the five frozen-gate replays, 19b's Lean closure and 19d's namespace probe. Eighteen items
+are still owed: lanes 19w, 19x, 19y, 19z and 19aa to 19af, which joined the handoff after
+those receipts, the `--replay` of 19y, 19z and 19aa to 19ae, and 19q's `--dataset`
+recomputation.
 This directory holds the package that makes the replay a run of named commands against named
 expectations, the receipts that came back and the author's review of each:
 
@@ -26,7 +27,7 @@ python -B tools/assurance-provenance/handoff19.py review \
 | Receipt | Operator's host                                   | What the review found              | Left unexercised                             |
 | ------- | ------------------------------------------------- | ---------------------------------- | -------------------------------------------- |
 | First   | macOS 13 x86_64, Python 3.12, no Lean             | 5 lanes verified, 19d refused      | everything else                              |
-| Second  | Ubuntu 26.04 x86_64, CPython 3.12.16, Lean 4.15.0 | 21 lanes verified, no discrepancy  | 19w to 19z, 19aa to 19ae and `19q --dataset` |
+| Second  | Ubuntu 26.04 x86_64, CPython 3.12.16, Lean 4.15.0 | 21 lanes verified, no discrepancy  | 19w to 19z, 19aa to 19af and `19q --dataset` |
 | Third   | Windows 10 run natively, Python 3.12.10, no Lean  | 21 lanes refused, nothing verified | everything                                   |
 
 ## The first receipt (10 Nov 2026, commit `c7d7ceec`)
@@ -110,7 +111,7 @@ lists all twenty-one lanes as `refused` and counts nothing as exercised. What th
 | Test suite: 652 tests, 19 failures, 50 errors, 22 skips | n/a       | The causes above, and four `test_egress19` tests that error for want of `AF_UNIX` where the handoff said they would skip.          | The handoff now says the suite does not pass there. |
 
 The author ran none of this on Windows. Each cause was checked against the code the receipt
-names: all thirty verifiers build the list the same way, the repository has no
+names: all thirty-one verifiers build the list the same way, the repository has no
 `.gitattributes`, and the import is on line 21 of the frozen module. The path and `fcntl` causes
 sit in modules the packs pin by digest, so changing them would change the packs. The handoff now
 says that native Windows is not a supported host. Nobody has yet tried the WSL2 route.
@@ -153,6 +154,7 @@ Still owed:
 - Lanes 19aa and 19ab and the `--replay` of each, which joined on 22 Nov 2026.
 - Lanes 19ac and 19ad and the `--replay` of each, which joined on 22 Nov 2026.
 - Lane 19ae and its `--replay`, which joined on 22 Nov 2026.
+- Lane 19af, which joined on 22 Nov 2026. It has no `--replay`.
 - 19q's `--dataset` recomputation, which neither receipt ran to completion.
 
 Not on that list, and also not done: the WSL2 route has not been tried, and no second Linux host
@@ -166,7 +168,7 @@ the second receipt ran Lean. The rule is fixed and a test holds it.
 ## Lanes that joined after the first receipt
 
 Each is `not_in_receipt` in the review of the first receipt. The second and third receipts hold
-all of them except 19w, 19x, 19y, 19z and 19aa to 19ae.
+all of them except 19w, 19x, 19y, 19z and 19aa to 19af.
 
 | Lanes                   | Joined       | Declaration    | What verifying does                                                                                                           |
 | ----------------------- | ------------ | -------------- | ----------------------------------------------------------------------------------------------------------------------------- |
@@ -186,6 +188,7 @@ all of them except 19w, 19x, 19y, 19z and 19aa to 19ae.
 | 19ac                    | 22 Nov 2026  | P19-OPERATOR14 | Sequences two agent seats wrote, on the gate and on a copy with a planted fault; `--replay` on Linux x86_64.                  |
 | 19ad                    | 22 Nov 2026  | P19-OPERATOR14 | Every recorded sequence on the gate before and after a repair; `--replay` on Linux x86_64.                                    |
 | 19ae                    | 22 Nov 2026  | P19-OPERATOR15 | Every earlier lane's recorded attempts and three seats' fresh ones on one gate with every repair; `--replay` on Linux x86_64. |
+| 19af                    | 22 Nov 2026  | P19-OPERATOR16 | Three questions asked of two small local models; verifying runs no model.                                                     |
 
 ## Limits
 
