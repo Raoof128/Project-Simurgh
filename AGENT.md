@@ -14,6 +14,26 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19y: the six round-two files as received, committed before the host of record runs any of them
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19y/submissions/` and the formatter's ignore
+  list.
+- **Summary:** three seats handed in files: `opus-r2` 37 attempts, `sonnet-r2` 60 and
+  `mythos-r2` 54, 151 in all. Three seats are empty files written by the author to record
+  that nothing was received: `fable-r2` (refused by its provider's safeguards), `codex-r2`
+  (refused on the owner's plan, then unable to use the API organisation) and `astra-r2`
+  (the provider answered `cyber_policy` on the second request, after the model had read the
+  brief; 0.008 USD spent of a 10 USD cap). No request was reworded.
+- **Files changed:** six files under `submissions/`, `.prettierignore` (P19-FORMAT26),
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** each file was read for format with the instrument's reader (151 attempts
+  accepted, none rejected) and scanned for keys, addresses and names (no hit). The three
+  attackers' files are byte-identical to what each wrote. The author has not run any of
+  them. The quick gate passes.
+- **Not done:** nothing has run on the host of record.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19y: the Codex seat stays empty; a direct API seat for an OpenAI model is added (no submission committed yet)
 
 **Raouf:**

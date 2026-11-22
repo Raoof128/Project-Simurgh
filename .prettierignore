@@ -406,3 +406,10 @@ docs/research/provenance-phase-19x/audit.json
 docs/research/provenance-phase-19x/labels.json
 docs/research/provenance-phase-19x/smoke.json
 docs/research/provenance-phase-19x/captures/*.json
+
+# P19-FORMAT26: Phase 19y submissions as received and source-bound machine evidence
+# (P19-REDTEAM02); bytes are bound by the pack root and must not be reformatted.
+docs/research/provenance-phase-19y/submissions/*.json
+docs/research/provenance-phase-19y/protocol.json
+docs/research/provenance-phase-19y/report.json
+docs/research/provenance-phase-19y/receipt.json

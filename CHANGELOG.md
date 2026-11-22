@@ -1,5 +1,15 @@
 ## Change Log
 
+## [phase-19y-submissions-2026-11-22] — 2026-11-22 — Lane 19y: round-two submissions as received
+
+**Raouf:**
+
+- **Scope:** six files under `docs/research/provenance-phase-19y/submissions/`.
+- **Summary:** 151 attempts from three seats (`opus-r2` 37, `sonnet-r2` 60, `mythos-r2` 54)
+  and three empty seats whose providers refused or could not serve the task. Committed
+  before the host of record runs any of them.
+- **Verification:** format read; private-data scan; quick gate.
+
 ## [phase-19y-seats3-2026-11-22] — 2026-11-22 — Lane 19y: a direct API seat for an OpenAI model
 
 **Raouf:**
