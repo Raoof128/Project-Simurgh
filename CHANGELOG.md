@@ -1,5 +1,15 @@
 ## Change Log
 
+## [phase-19z-instrument2-2026-11-22] — 2026-11-22 — Lane 19z: one process per attempt; a stopped seat recorded
+
+**Raouf:**
+
+- **Scope:** two amendments to P19-SEAL01, `tamper19z.py`, one test file.
+- **Summary:** an attacker found an operation that broke the instrument for every later
+  attempt; each attempt now runs in its own process. A seat stopped by a safety classifier
+  stays empty.
+- **Verification:** 45 lane tests; `ruff`; quick gate.
+
 ## [phase-19z-instrument-2026-11-22] — 2026-11-22 — Lane 19z instrument: a seal over the gate's own stores
 
 **Raouf:**

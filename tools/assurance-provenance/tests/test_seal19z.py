@@ -12,6 +12,7 @@ sys.path.insert(0, str(HERE))
 
 import repair19y  # noqa: E402
 import seal19z  # noqa: E402
+import tamper19z  # noqa: E402
 
 GRANT_B = """UPDATE grants SET actions='["a","b"]' WHERE actor='child'"""
 BASELINE = {"b": "blocked", "a": "observed"}
@@ -148,6 +149,82 @@ class SealTests(Base):
         self.assertEqual(two["bound:" + str(r.script)], "absent")
         self.assertEqual(seal19z.difference(one, two), ["bound:" + str(r.script)])
         self.assertEqual(seal19z.file_digest(Path(d) / "missing"), "absent")
+
+
+class RunnerTests(unittest.TestCase):
+    """The instrument's own runner on the real gate: one process per attempt."""
+
+    def setUp(self):
+        self.gate = tamper19z.Gate()
+        self.addCleanup(self.gate.close)
+
+    def test_the_baseline_is_the_same_on_both_gates(self):
+        base = self.gate.baseline()
+        for name in tamper19z.GATES:
+            self.assertEqual(base[name]["verdicts"], BASELINE)
+            self.assertEqual((base[name]["effects"], base[name]["raised"]), (1, None))
+            self.assertEqual((base[name]["latched"], base[name]["touched"]), ([], []))
+            self.assertEqual(set(base[name]), set(tamper19z.OUTCOME_KEYS))
+
+    def test_a_grant_gains_on_the_open_gate_and_latches_the_sealed_one(self):
+        ops = [{"op": "sql", "store": "context.sqlite", "sql": GRANT_B}]
+        opened = self.gate.run("open", ops)
+        self.assertIs(tamper19z.gained(opened), True)
+        sealed = self.gate.run("sealed", ops)
+        self.assertEqual(sealed["latched"], ["context.sqlite"])
+        self.assertEqual(sealed["touched"], ["context.sqlite"])
+        self.assertIs(tamper19z.gained(sealed), False)
+        self.assertEqual(sealed["effects"], 0)
+
+    def test_a_rewritten_script_runs_on_the_open_gate_only(self):
+        ops = [{"op": "script", "text": "#!/bin/sh\necho other\n"}]
+        self.assertIs(tamper19z.ran_changed(self.gate.run("open", ops)), True)
+        sealed = self.gate.run("sealed", ops)
+        self.assertIs(tamper19z.ran_changed(sealed), False)
+        self.assertEqual(sealed["latched"], ["run.sh"])
+
+    def test_a_setting_of_the_whole_process_cannot_reach_the_next_attempt(self):
+        # found by an attacker before any file was committed: this pragma caps SQLite's
+        # memory for the life of the process, and SQL cannot raise it again
+        heap = [
+            {
+                "op": "sql",
+                "store": "context.sqlite",
+                "sql": "PRAGMA hard_heap_limit=100000",
+            }
+        ]
+        for name in tamper19z.GATES:
+            out = self.gate.run(name, heap)
+            self.assertEqual(out["raised"], "MemoryError")
+            self.assertIs(tamper19z.gained(out), False)
+            self.assertEqual(out["ops"], ["ok"])
+            after = self.gate.run(
+                name, [{"op": "sql", "store": "context.sqlite", "sql": "SELECT 1"}]
+            )
+            self.assertEqual(
+                (after["verdicts"], after["effects"], after["raised"]),
+                (BASELINE, 1, None),
+            )
+
+    def test_a_worker_that_does_not_answer_is_recorded_and_a_baseline_that_fails_stops_the_run(
+        self,
+    ):
+        ops = [{"op": "sql", "store": "context.sqlite", "sql": "SELECT 1"}]
+        before = tamper19z.WORKER_SECONDS
+        tamper19z.WORKER_SECONDS = 0.01
+        try:
+            out = self.gate.run("sealed", ops)
+            self.assertEqual(
+                (out["raised"], out["verdicts"], out["ops"]),
+                ("WorkerTimeout", {}, ["unknown"]),
+            )
+            self.assertIs(tamper19z.gained(out), False)
+            with self.assertRaises(ValueError):
+                self.gate.run("open", None)
+        finally:
+            tamper19z.WORKER_SECONDS = before
+        with self.assertRaises(ValueError):
+            self.gate.run("other", ops)
 
 
 if __name__ == "__main__":

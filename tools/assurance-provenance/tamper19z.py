@@ -22,6 +22,8 @@ import hashlib
 import json
 import shutil
 import sqlite3
+import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
@@ -50,6 +52,8 @@ MAX_SQL = 2000
 MAX_TEXT = 4000
 MAX_NOTE = 300
 STEP_LIMIT = 2_000_000
+WORKER_SECONDS = 180
+MARK = "p19z-outcome:"
 GATES = ("open", "sealed")
 OUTCOME_KEYS = (
     "verdicts",
@@ -305,50 +309,129 @@ def apply(rig, ops):
     return out
 
 
+def _attempt(directory, gate, ops):
+    """Run one attempt on one gate in this process and say what happened. The count of
+    effects is left to the caller, which reads the receiver's store from its own process."""
+    import seal19z
+
+    rig_cls = {"open": seal19z.FileRig, "sealed": seal19z.Rig}[gate]
+    rig = rig_cls(Path(directory))
+    try:
+        bound = [rig.script]
+        before = seal19z.snapshot(rig.pipe.directory, bound)
+        results = apply(rig, ops or [])
+        touched = seal19z.difference(
+            before, seal19z.snapshot(rig.pipe.directory, bound)
+        )
+        adapter = (
+            "tool_result_body" if any(o["op"] == "relay" for o in ops or []) else None
+        )
+        raised = None
+        try:
+            rig.dispatch("b", adapter)
+            rig.dispatch("a", adapter)
+        except BaseException as error:  # the attempt's outcome, whatever it was
+            raised = type(error).__name__
+        return {
+            "verdicts": dict(rig.verdicts),
+            "raised": raised,
+            "script_changed": rig.script_changed(),
+            "latched": [n.rsplit("/", 1)[-1] for n in rig.latched()],
+            "touched": [n.rsplit("/", 1)[-1] for n in touched],
+            "ops": results,
+        }
+    finally:
+        rig.close()
+
+
+def _worker():
+    """One attempt, read from standard input, in a process of its own."""
+    job = json.loads(sys.stdin.read())
+    out = _attempt(job["directory"], job["gate"], job["ops"])
+    sys.stdout.write(MARK + json.dumps(out, sort_keys=True) + "\n")
+
+
+def _effects(directory):
+    """How many effects reached the receiver, read by the caller from the receiver's store."""
+    db = sqlite3.connect(Path(directory) / "service.sqlite")
+    try:
+        return db.execute("SELECT count(*) FROM effects").fetchone()[0]
+    finally:
+        db.close()
+
+
 class Gate:
     """19y's repaired gate with the script file and nothing sealed (``open``), and the same
-    with the seal (``sealed``), each on a fresh fixture per run. Needs the hash-locked set."""
+    with the seal (``sealed``), each on a fresh fixture per run. Needs the hash-locked set.
+
+    Every attempt runs in a process of its own. An attempt can change a setting of the whole
+    process (one attacker found a pragma that caps SQLite's memory for good) or kill it; in
+    its own process that is recorded for the one attempt and cannot reach the next."""
 
     def __init__(self):
-        import seal19z
+        import seal19z  # fail here, not in a worker, on a host without the locked set
 
-        self._seal = seal19z
-        self._rigs = {"open": seal19z.FileRig, "sealed": seal19z.Rig}
+        self._approved = hashlib.sha256(seal19z.SCRIPT_TEXT.encode()).hexdigest()
+        self._script = seal19z.SCRIPT
         self._base = Path(tempfile.mkdtemp(prefix="p19z-"))
 
     def run(self, gate, ops):
         """What one attempt does on one gate. ``ops`` of ``None`` is the baseline."""
+        if gate not in GATES:
+            raise ValueError("gate")
         directory = self._base / "run"
-        rig = self._rigs[gate](directory)
+        job = json.dumps({"directory": str(directory), "gate": gate, "ops": ops})
+        code = "import tamper19z; tamper19z._worker()"
+        died = None
+        out = None
         try:
-            bound = [rig.script]
-            before = self._seal.snapshot(rig.pipe.directory, bound)
-            results = apply(rig, ops or [])
-            touched = self._seal.difference(
-                before, self._seal.snapshot(rig.pipe.directory, bound)
+            done = subprocess.run(
+                [sys.executable, "-B", "-c", code],
+                input=job,
+                capture_output=True,
+                text=True,
+                timeout=WORKER_SECONDS,
+                cwd=Path(__file__).resolve().parent,
             )
-            adapter = (
-                "tool_result_body"
-                if any(o["op"] == "relay" for o in ops or [])
-                else None
-            )
-            raised = None
+            lines = [x for x in done.stdout.splitlines() if x.startswith(MARK)]
+            if done.returncode == 0 and len(lines) == 1:
+                out = json.loads(lines[0][len(MARK) :])
+            else:
+                died = "WorkerDied"
+        except subprocess.TimeoutExpired:
+            died = "WorkerTimeout"
+        try:
+            if out is None:
+                script = directory / self._script
+                digest = (
+                    hashlib.sha256(script.read_bytes()).hexdigest()
+                    if script.is_file()
+                    else "absent"
+                )
+                out = {
+                    "verdicts": {},
+                    "raised": died,
+                    "script_changed": digest != self._approved,
+                    "latched": [],
+                    "touched": [],
+                    "ops": ["unknown"] * len(ops or []),
+                }
             try:
-                rig.dispatch("b", adapter)
-                rig.dispatch("a", adapter)
-            except Exception as error:
-                raised = type(error).__name__
+                effects = _effects(directory)
+            except sqlite3.Error:
+                effects = 0
+            if ops is None and (out["raised"] or died):
+                raise ValueError("baseline_failed")
             return {
-                "verdicts": dict(rig.verdicts),
-                "effects": len(rig.effects()),
-                "raised": raised,
-                "script_changed": rig.script_changed(),
-                "latched": [n.rsplit("/", 1)[-1] for n in rig.latched()],
-                "touched": [n.rsplit("/", 1)[-1] for n in touched],
-                "ops": results,
+                "verdicts": out["verdicts"],
+                "effects": effects,
+                "raised": out["raised"],
+                "script_changed": out["script_changed"],
+                "latched": out["latched"],
+                "touched": out["touched"],
+                "ops": out["ops"],
             }
         finally:
-            rig.close()
             shutil.rmtree(directory, ignore_errors=True)
 
     def baseline(self):

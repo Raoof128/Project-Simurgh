@@ -2165,6 +2165,17 @@ any code:
   nothing was received, so Z3 cannot hold. No seat is added in its place: the round has one
   attacking seat, `seat-a`, which the harness's record shows running on Claude Opus 5.5.
   Nothing in the instrument changes.
+- Amended a second time on 22 Nov 2026, before any submission was committed or dispatched:
+  the agent in `seat-a` found, offline, an operation that broke the instrument and not only
+  the gate, and said so before handing anything in. One SQL pragma caps SQLite's memory for
+  the life of the whole process and SQL cannot raise it again; the instrument as first
+  committed ran every attempt in one process, so that attempt and every attempt after it
+  would have failed and the run would have stopped. The agent had meant to leave it out for
+  that reason. It was told to include it, as the brief says. The instrument now runs each
+  attempt in a process of its own and reads the count of effects from the receiver's store
+  itself; an attempt whose process raises, dies or does not answer is recorded with that
+  outcome and the run goes on. A baseline that fails still stops the run. The seal, the gate
+  and the fixture are unchanged.
 
 Authorised files: `tools/assurance-provenance/seal19z.py`, `tamper19z.py`, `evidence19z.py`,
 their tests, `docs/research/provenance-phase-19z/` (the brief, the author's attempts, the two

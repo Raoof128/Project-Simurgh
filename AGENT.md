@@ -14,6 +14,22 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19z: one seat stopped by a safety classifier; the instrument now runs each attempt in its own process (no submission committed yet)
+
+**Raouf:**
+
+- **Scope:** two amendments to P19-SEAL01 in the ledger, `tamper19z.py` and one test file.
+- **Summary:** the Sonnet 5.5 agent in `seat-b` stopped when a safety classifier withheld a
+  response; it ran no attempt, was not asked to continue, and its seat stays empty. The Opus
+  5.5 agent in `seat-a` found an SQL pragma that caps SQLite's memory for the whole process,
+  which would have failed every later attempt and stopped the run. Each attempt now runs in
+  its own process; the count of effects is read by the parent from the receiver's store; a
+  process that raises, dies or does not answer is recorded for that attempt alone.
+- **Files changed:** `tools/assurance-provenance/tamper19z.py`, `tests/test_seal19z.py`, the
+  ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 45 lane tests pass, 16 of them on the real gate, among them the pragma
+  followed by an ordinary attempt on both gates; `ruff` is clean; the quick gate passes.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19z instrument: a host-held seal over the gate's own stores and an approved script (nothing run on the host of record yet)
 
 **Raouf:**
