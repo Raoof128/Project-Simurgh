@@ -1,5 +1,15 @@
 ## Change Log
 
+## [phase-19z-pack-2026-11-22] — 2026-11-22 — Lane 19z: writes to the gate's own stores, with and without a seal
+
+**Raouf:**
+
+- **Scope:** the lane's pack, pages, committed test and ruling.
+- **Summary:** with no seal, 13 of 52 attempts that write the gate's stores gain authority
+  and 4 run a rewritten script; with the seal none does. One seat of two is empty. Root
+  `c4c59ef843e83da576a9aeb331230961b24349d3a87b24ef4ad56df36913d30c`.
+- **Verification:** bare-interpreter verify; 53 lane tests; quick gate.
+
 ## [phase-19z-submissions-2026-11-22] — 2026-11-22 — Lane 19z: attackers' files as received
 
 **Raouf:**

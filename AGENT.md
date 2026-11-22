@@ -14,6 +14,29 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19z pack: with no seal 13 of 52 store-writing attempts gain authority; with the seal none does
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19z/` (pack, README, results), the committed-pack
+  test, the ruling.
+- **Summary:** the run of record on the project's Linux host gave root `c4c59ef8…`. The gate
+  believes what is in its own stores: with no seal, 13 of 52 attempts that write them make
+  the undelegated action land and 4 let the delegated action go ahead on a rewritten script.
+  With the seal none does, and the latch fired for exactly the 36 attempts that changed a
+  sealed file. One attempt stops the sealed gate through a process-wide SQLite setting
+  without touching a file. One of two seats is empty, so the prediction about every seat did
+  not hold. No money was spent.
+- **Files changed:** `evidence.zip`, `protocol.json`, `report.json`, `receipt.json`,
+  `ROOT.sha256`, `README.md`, `RESULTS.md` under the lane's folder;
+  `tools/assurance-provenance/tests/test_evidence19z_committed.py`; the ledger; `AGENT.md`;
+  `CHANGELOG.md`.
+- **Verification:** the pack verifies with a bare interpreter; 8 committed-pack tests (one
+  skipped: the full replay) and the lane's 45 tests pass; the pages' numbers are filled from
+  the record by script; the quick gate passes.
+- **Not done:** detection, not isolation; the gate itself is unchanged; no replay outside the
+  author's custody.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19z: the two seats' files as received, committed before the host of record runs any of them
 
 **Raouf:**
