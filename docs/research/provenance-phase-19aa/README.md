@@ -93,6 +93,10 @@ The gate has no limit on retries. Six hundred refusals write six hundred records
 that loops fills the log at one record per try. Nothing here measures how large that log may
 grow before it matters, and nothing here alerts on a run of refusals.
 
+R4 holds here for actions that are well formed. Lane 19ab, run after this one, found
+refusals that leave no record: a body the gate's schema rejects is refused without a
+`blocked` event. See [its page](../provenance-phase-19ab/README.md).
+
 One sequence mints an approval for `b` and never presents it. It belongs to neither R1 nor R2
 as they are written; `b` is not observed in it.
 

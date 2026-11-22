@@ -1,5 +1,14 @@
 ## Change Log
 
+## [phase-19ab-pack-2026-11-22] — 2026-11-22 — Lane 19ab: changed bodies of a delegated or approved action
+
+**Raouf:**
+
+- **Scope:** the 19ab pack, its pages, a committed-pack test, the ruling.
+- **Summary:** 64 changed bodies, none observed; all five predictions hold. Found and not
+  predicted: 30 of 66 refusals leave no `blocked` event. Root `67d10295…`.
+- **Verification:** bare-interpreter `verify`; the same root on a second host; quick gate.
+
 ## [phase-19ab-instrument-2026-11-22] — 2026-11-22 — Lane 19ab instrument; a census of served-model records
 
 **Raouf:**

@@ -14,6 +14,27 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19ab pack: no changed body gets through; 30 of 66 refusals leave no record
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19ab/` (pack, README, results), the
+  committed-pack test, the ruling, one cross-reference on lane 19aa's page.
+- **Summary:** the run of record on the Linux host from the instrument commit (`b3bf1e77`).
+  69 attempts. None of the 64 changed bodies is observed, with or without an approval; every
+  payload at the receiver is the unchanged action's; a refused body does not spend the
+  approval. All five hypotheses hold. Not predicted: the 30 refusals of bodies the gate's
+  schema rejects leave no `blocked` event, so a monitor counting those events would miss
+  them.
+- **Files changed:** the pack's five files, `README.md` and `RESULTS.md` beside them,
+  `tools/assurance-provenance/tests/test_evidence19ab_committed.py`,
+  `docs/research/provenance-phase-19aa/README.md`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `verify` with a bare Python 3.12 interpreter (`structure_checked`); a
+  rebuild on macOS gave the committed root; 8 committed-pack tests (one skipped off the
+  replay host); `prettier`, `ruff` and the quick gate pass.
+- **Not done:** no repair for the silent refusals; the lane is not in the operator handoff
+  yet; no one outside the author has run it.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19ab instrument (changed bodies of an allowed action) and a census of served-model records
 
 **Raouf:**

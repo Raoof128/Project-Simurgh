@@ -3558,3 +3558,24 @@ under it.
   Not done and not claimed: no capture was made again, no pack was edited, and nothing here
   says a wrong model answered in any lane. From here on a capture that calls a hosted model
   should record the returned id beside each generation; no lane does so yet.
+- Ruling (22 Nov 2026, P19-BODY01 exercised): the declaration (`e891cf7a`) is an ancestor of
+  the instrument commit (`b3bf1e77`), and the run of record was made from a clean clone at
+  that commit on the project's Linux x86_64 host, started 05:51:25Z. Root
+  `67d1029539c921f772229731779e8c4fd0a1297c07f422e138b03ca967bdaade`. 69 attempts, all the
+  author's, none rejected: 64 changed bodies and 5 unchanged as values. B1 holds: no changed
+  body is observed, 47 on route `a` and 17 on route `b`. B2 holds: all 69 payloads at the
+  receiver are the unchanged action's. B3 holds: after each of the 47 refusals on route `a`
+  the unchanged delegated action is observed. B4 holds: on route `b` the approval is refused
+  for all 17 changed bodies (15 as `approval_digest`, one as `approval_run`, one as
+  `approval_action`) and then honoured once for the unchanged one. B5 holds: nothing latches
+  or raises. Reported: the five unchanged bodies, three of them with reordered keys, are
+  observed with the same payload. Found and not declared: of 66 refused dispatches, 30 leave
+  no `blocked` event in the gate's log. They are the bodies the gate's schema rejects (an
+  added or missing field, a value of another type, an unknown operation, empty or over-long
+  content); a look at the stores after the run showed only the session's `resume` event for
+  each. Lane 19aa's page now points to this, since its R4 holds for well-formed actions
+  only. A rebuild of the pack on the author's macOS machine gave the same root. Not done and
+  not claimed: no repair was made for the silent refusals, as declared; no gate that matches
+  on the name alone was run, so the lane has no positive control (56 of the 64 changed
+  bodies keep the name, which is arithmetic on the list); no model and no agent wrote a
+  body; what an allowed body means, and a third party acting on it, are not measured.
