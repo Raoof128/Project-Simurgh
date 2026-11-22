@@ -14,6 +14,33 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19y instrument: the repair of 19t's two faults and a two-round red-team runner (nothing run on the host of record yet)
+
+**Raouf:**
+
+- **Scope:** the declaration P19-REDTEAM02 in the Phase 19 ledger (`cc3dc187`, before any
+  code), three new modules, their tests and the brief for the second round.
+- **Summary:** lane 19t's ruling left a repair owed. `repair19y.py` holds it in new classes
+  that subclass the gate and the fixture: a token whose `approver_id` is not a string is
+  refused as `approval_schema`, a database error during verification becomes the reason
+  `approval_store`, an oversize summary note is cut to the longest prefix that fits and the
+  cut is recorded in the pipeline's own events, and file channels are held as bytes.
+  `redteam19y.py` runs every attempt against the gate as it was, the repaired gate and the
+  thirteen reader mutants with the repair mixed in. `evidence19y.py` builds and verifies the
+  pack and reads round one from 19t's committed pack.
+- **Files changed:** `tools/assurance-provenance/repair19y.py`, `redteam19y.py`,
+  `evidence19y.py`, `tests/test_repair19y.py`, `tests/test_redteam19y.py`,
+  `tests/test_evidence19y.py`, `docs/research/provenance-phase-19y/BRIEF.md`, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** 59 new tests pass, 27 of them on the real gate; each of nine deliberate
+  breaks of the repair fails at least one test; 19t's 33 tests still pass; `ruff` and
+  `prettier` are clean; the quick gate passes.
+- **Seen before the run of record:** a trial on the author's machine ran 19t's 92 attempts.
+  The gate as it was gave the outcome 19t recorded for each, and the repaired gate's output
+  did not change for any. No second-round attempt exists yet.
+- **Not done:** no agent has been briefed, nothing has run on the Linux host, and `gate19.py`
+  is unchanged, so a caller of `gate19.ProvenancePipeline` still has both faults.
+
 ### 2026-11-21 (Australia/Sydney) — Wording pass on living documents (33 edits in seven files; records left as written)
 
 **Raouf:**

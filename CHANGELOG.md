@@ -1,5 +1,18 @@
 ## Change Log
 
+## [phase-19y-instrument-2026-11-22] — 2026-11-22 — Lane 19y instrument: the 19t repair and a second red-team round
+
+**Raouf:**
+
+- **Scope:** the declaration P19-REDTEAM02, three new modules, their tests and a brief.
+- **Summary:** `repair19y.py` repairs what lane 19t's attackers found, in new classes beside
+  the gate: a non-string `approver_id` is a schema refusal, a database error is a reason and
+  not an exception, an oversize summary note is cut before the frozen gate sees it, and the
+  fixture holds file channels as bytes. `redteam19y.py` and `evidence19y.py` run 19t's 92
+  attempts and a new round against the gate as it was and the repaired gate.
+- **Verification:** 59 new tests; nine deliberate breaks each caught; `ruff`; `prettier`;
+  quick gate.
+
 ## [phase-19-style01-2026-11-21] — 2026-11-21 — Wording pass on living documents
 
 **Raouf:**
