@@ -14,6 +14,27 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19ae: an amendment to the instrument and the three seats' files as received
+
+**Raouf:**
+
+- **Scope:** one comparison in `full19ae.py` and a test for it; three files under
+  `docs/research/provenance-phase-19ae/submissions/`; two ledger entries.
+- **Summary:** two seats showed that the instrument's F2 check compared a list of marks with
+  a set of labels, so a label rightly marked twice read as a mismatch. It now compares which
+  labels are marked, as F2 is declared. This was changed after seeing the seats' reports and
+  the ledger says so. `seat-a` and `seat-b` ran on Claude Opus 5.5 and `seat-c` on Claude
+  Sonnet 5.5, read from the harness's record. They handed in 9, 11 and 16 attempts. None
+  gains. All three found that a body without `run` or `id`, sent with a signed token, makes
+  the gate raise `KeyError` where it should refuse. The files are committed as handed in,
+  before the run of record.
+- **Files changed:** `tools/assurance-provenance/full19ae.py`, `tests/test_full19ae.py`,
+  `submissions/seat-a.json`, `seat-b.json`, `seat-c.json`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** 23 tests; all three files pass the format check with no attempt
+  rejected; the privacy scan finds nothing; `ruff` and `prettier` are clean.
+- **Not done:** the run of record, the pack and the ruling. The raise is not repaired.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19af instrument: three questions asked of small local models
 
 **Raouf:**

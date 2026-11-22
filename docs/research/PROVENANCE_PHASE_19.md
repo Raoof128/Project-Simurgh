@@ -4006,3 +4006,31 @@ ancestor of every other commit of lane 19af.
   half was seen. No seat had started and F5 was not exercised. To keep the run of record
   short, attempts that only use the gate's own calls run 25 to a process; an attempt that
   writes a store, and every attempt of a seat, runs alone in its process, as in lane 19z.
+- Amendment (22 Nov 2026, P19-FULL01, after the seats ended and before the run of record):
+  two seats reported that the instrument's check for F2 was wrong where the gate was right.
+  When an action is refused 20 times, admitted once on a minted approval and refused 20
+  times more, the gate writes two `retry_limit` records for it, as it should, and the
+  instrument compared the list of records with the set of labels and called that a mismatch.
+  F2 as declared asks whether a label has a record, not how many. The instrument now compares
+  which labels are marked, and a test holds it. This is a change to the instrument made
+  after seeing attackers' reports and is recorded as such. The seats reported a second case
+  and it is left as it is: when a seat's own write to a store latches the seal, the gate
+  writes nothing more and the instrument does not read a log it can no longer trust, so a
+  run of 20 refusals in such an attempt has no mark to match. F2 has no exception for a
+  latched attempt, as F1 has, and none is added now; those rows count against it.
+- Note (22 Nov 2026, P19-FULL01, the seats' files as received, before the run of record):
+  the instrument commit (`718af1d9`) was pushed before a seat started. Each seat worked from
+  a copy at that commit with nothing hidden. The harness's record of each was read:
+  `seat-a` and `seat-b` ran on `claude-opus-5-5` and `seat-c` on `claude-sonnet-5-5`; they
+  worked from 08:02Z to 08:07Z, 08:08Z and 08:09Z; no record holds a path outside the seat's
+  copy. That record is the author's and is not in the repository. `seat-a` handed in 9
+  attempts (sha256 `4d2d2d11…`), `seat-b` 11 (`c084a759…`) and `seat-c` 16 (`220a4227…`);
+  none is rejected for format. Seen before the run of record: every seat reported no gain
+  and the same fault, and the author ran the three files on the full gate on the author's
+  machine to check. None of the 36 attempts gains. Sixteen that write no store make the
+  gate raise `KeyError`: the approval check reads the `run` and `id` of the dispatched body
+  before anything has checked that the body has them, so a body without one of them, sent
+  with any token whose signature is good, raises where it should refuse. F5 will therefore
+  not hold. Two attempts are latched by the seat's own store write and have a run of 20
+  refusals with no mark, so F2 will not hold either. The files are committed as they were
+  handed in and nothing is dropped, reordered or repaired.

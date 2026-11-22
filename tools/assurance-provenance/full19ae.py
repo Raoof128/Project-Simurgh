@@ -348,7 +348,9 @@ def summarise(rows, got, fixture):
     ]
 
     def marks(x, name):
-        return sorted(x[name]["marks"]["retry_limit"])
+        # which labels have a mark: a label marked twice, after an admission between two
+        # long runs, is one label (P19-FULL01, amended before the run of record)
+        return sorted(set(x[name]["marks"]["retry_limit"]))
 
     return {
         "fixture": fixture,

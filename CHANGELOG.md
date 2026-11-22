@@ -1,5 +1,16 @@
 ## Change Log
 
+## [phase-19ae-submissions-2026-11-22] — 2026-11-22 — Lane 19ae: the seats' files as received; one instrument amendment
+
+**Raouf:**
+
+- **Scope:** three files under `docs/research/provenance-phase-19ae/submissions/`; one
+  comparison in `full19ae.py`.
+- **Summary:** 9, 11 and 16 attempts from two Opus 5.5 seats and one Sonnet 5.5 seat,
+  committed before any is run on the host of record. The retry-mark check now compares which
+  labels are marked, after two seats showed it was stricter than the declared rule.
+- **Verification:** 23 tests; format check; privacy scan.
+
 ## [phase-19af-instrument-2026-11-22] — 2026-11-22 — Lane 19af: three questions asked of small local models (instrument)
 
 **Raouf:**

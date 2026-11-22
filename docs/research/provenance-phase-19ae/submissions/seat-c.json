@@ -1,0 +1,378 @@
+{
+ "attacker": "seat-c",
+ "attempts": [
+  {
+   "steps": [
+    {
+     "do": "body",
+     "body": {
+      "id": "b"
+     },
+     "token": null,
+     "text": "{\"approval\": {\"payload\": {\"run\": \"p19\", \"action_key\": \"b\", \"approver_id\": \"operator-1\", \"content_digest\": \"x\", \"expires\": 130.0, \"nonce\": \"zz\", \"actor\": \"child\"}, \"signature\": \"cb07cf053c32b6258393f02bf1d6046e40fc8aab9535e23d3e7bec094739dda7\"}}"
+    },
+    {
+     "do": "dispatch",
+     "route": "a",
+     "times": 1,
+     "adapter": null
+    }
+   ],
+   "note": "Signed with the operator key. Token is never minted. Body {id:b} has no run key: verify reads action['run'] after the signature passes, KeyError (not in DECODE_ERRORS) escapes dispatch."
+  },
+  {
+   "steps": [
+    {
+     "do": "body",
+     "body": {},
+     "token": null,
+     "text": "{\"approval\": {\"payload\": {\"run\": \"p19\", \"action_key\": \"b\", \"approver_id\": \"operator-1\", \"content_digest\": \"x\", \"expires\": 130.0, \"nonce\": \"zz\", \"actor\": \"child\"}, \"signature\": \"cb07cf053c32b6258393f02bf1d6046e40fc8aab9535e23d3e7bec094739dda7\"}}"
+    },
+    {
+     "do": "dispatch",
+     "route": "a",
+     "times": 1,
+     "adapter": null
+    }
+   ],
+   "note": "Signed with the operator key. Empty body with an unminted signed token: KeyError from action['run'] in gate19 _verify, past bind19ad and full19ae."
+  },
+  {
+   "steps": [
+    {
+     "do": "mint",
+     "route": "a",
+     "name": "t1"
+    },
+    {
+     "do": "body",
+     "body": {
+      "id": "a"
+     },
+     "token": "t1",
+     "text": null
+    }
+   ],
+   "note": "No operator key. Host-minted token for a, body {id:a} lacking the other fields: verify reads action['run'], KeyError escapes. Refusal path leaves no verdict and no record."
+  },
+  {
+   "steps": [
+    {
+     "do": "body",
+     "body": {
+      "run": "p19"
+     },
+     "token": null,
+     "text": "{\"approval\": {\"payload\": {\"run\": \"p19\", \"action_key\": \"b\", \"approver_id\": \"operator-1\", \"content_digest\": \"x\", \"expires\": 130.0, \"nonce\": \"zz\", \"actor\": \"child\"}, \"signature\": \"cb07cf053c32b6258393f02bf1d6046e40fc8aab9535e23d3e7bec094739dda7\"}}"
+    }
+   ],
+   "note": "Signed with the operator key. Body has run but no id: signature and run pass, then action['id'] raises KeyError."
+  },
+  {
+   "steps": [
+    {
+     "do": "dispatch",
+     "route": "b",
+     "times": 3,
+     "adapter": null
+    },
+    {
+     "do": "body",
+     "body": {
+      "id": "b"
+     },
+     "token": null,
+     "text": "{\"approval\": {\"payload\": {\"run\": \"p19\", \"action_key\": \"b\", \"approver_id\": \"operator-1\", \"content_digest\": \"x\", \"expires\": 130.0, \"nonce\": \"zz\", \"actor\": \"child\"}, \"signature\": \"cb07cf053c32b6258393f02bf1d6046e40fc8aab9535e23d3e7bec094739dda7\"}}"
+    }
+   ],
+   "note": "Signed with the operator key. Three recorded refusals of b, then the KeyError dispatch; check the raise leaves marks and logs as they were."
+  },
+  {
+   "steps": [
+    {
+     "do": "dispatch",
+     "route": "b",
+     "times": 1,
+     "adapter": "tool_result_body"
+    },
+    {
+     "do": "relay",
+     "text": "{\"approval\": {\"payload\": {\"run\": \"p19\", \"action_key\": \"b\", \"approver_id\": \"operator-1\", \"content_digest\": \"x\", \"expires\": 130.0, \"nonce\": \"zz\", \"actor\": \"child\"}, \"signature\": \"cb07cf053c32b6258393f02bf1d6046e40fc8aab9535e23d3e7bec094739dda7\"}}"
+    },
+    {
+     "do": "body",
+     "body": {
+      "id": "a"
+     },
+     "token": null,
+     "text": "{\"approval\": {\"payload\": {\"run\": \"p19\", \"action_key\": \"b\", \"approver_id\": \"operator-1\", \"content_digest\": \"x\", \"expires\": 130.0, \"nonce\": \"zz\", \"actor\": \"child\"}, \"signature\": \"cb07cf053c32b6258393f02bf1d6046e40fc8aab9535e23d3e7bec094739dda7\"}}"
+    }
+   ],
+   "note": "Signed with the operator key. Relay an unminted signed token, then body {id:a} with it: KeyError path again after a relay write."
+  },
+  {
+   "steps": [
+    {
+     "do": "ops",
+     "ops": [
+      {
+       "op": "script",
+       "text": "changed"
+      }
+     ]
+    },
+    {
+     "do": "dispatch",
+     "route": "b",
+     "times": 1,
+     "adapter": null
+    },
+    {
+     "do": "dispatch",
+     "route": "a",
+     "times": 1,
+     "adapter": null
+    }
+   ],
+   "note": "Latch from a bound file that is not a store: script bytes change. Checks whether refusals after this latch are all unrecorded by design."
+  },
+  {
+   "steps": [
+    {
+     "do": "ops",
+     "ops": [
+      {
+       "op": "sql",
+       "store": "provenance.sqlite",
+       "sql": "INSERT INTO approvals VALUES('zz','b',0)"
+      }
+     ]
+    },
+    {
+     "do": "mint",
+     "route": "a",
+     "name": "t1"
+    },
+    {
+     "do": "dispatch",
+     "route": "a",
+     "times": 1,
+     "adapter": null
+    }
+   ],
+   "note": "Write a store, then the host mints: bind19ad mint raises ValueError(control_plane_changed) on a latched gate. Raise after a latch I caused."
+  },
+  {
+   "steps": [
+    {
+     "do": "mint",
+     "route": "b",
+     "name": "t1"
+    },
+    {
+     "do": "dispatch_with",
+     "route": "b",
+     "token": "t1",
+     "times": 1
+    },
+    {
+     "do": "dispatch",
+     "route": "a",
+     "times": 21,
+     "adapter": null
+    }
+   ],
+   "note": "Host mints b and b lands; then a is refused 21 times on the budget. Label a refused 20 in a row: expect one retry_limit:a and 21 refused or blocked records."
+  },
+  {
+   "steps": [
+    {
+     "do": "dispatch",
+     "route": "b",
+     "times": 25,
+     "adapter": null
+    },
+    {
+     "do": "dispatch",
+     "route": "a",
+     "times": 1,
+     "adapter": null
+    }
+   ],
+   "note": "25 plain refusals of b then a. Expect one retry_limit:b at 20 and a admitted."
+  },
+  {
+   "steps": [
+    {
+     "do": "dispatch",
+     "route": "b",
+     "times": 19,
+     "adapter": null
+    },
+    {
+     "do": "body",
+     "body": {
+      "id": "b",
+      "x": "y"
+     },
+     "token": null,
+     "text": null
+    },
+    {
+     "do": "dispatch",
+     "route": "b",
+     "times": 2,
+     "adapter": null
+    }
+   ],
+   "note": "19 plain refusals of b, one invalid body labelled b, then two more. Streak of b should reach 20 on the invalid body; one retry_limit:b expected."
+  },
+  {
+   "steps": [
+    {
+     "do": "body",
+     "body": {
+      "id": "a",
+      "x": "1"
+     },
+     "token": null,
+     "text": null
+    },
+    {
+     "do": "body",
+     "body": {
+      "id": "a",
+      "x": "2"
+     },
+     "token": null,
+     "text": null
+    },
+    {
+     "do": "dispatch",
+     "route": "a",
+     "times": 1,
+     "adapter": null
+    }
+   ],
+   "note": "Invalid bodies labelled a, then the real a. Refusals of a malformed body are counted against label a; a is then admitted."
+  },
+  {
+   "steps": [
+    {
+     "do": "mint",
+     "route": "a",
+     "name": "t1"
+    },
+    {
+     "do": "dispatch_with",
+     "route": "a",
+     "token": "t1",
+     "times": 2
+    },
+    {
+     "do": "dispatch",
+     "route": "b",
+     "times": 1,
+     "adapter": null
+    }
+   ],
+   "note": "Host mints a; a token used twice (second is a duplicate, observed); b refused. Single effect expected."
+  },
+  {
+   "steps": [
+    {
+     "do": "mint",
+     "route": "b",
+     "name": "t1"
+    },
+    {
+     "do": "body",
+     "body": {
+      "id": "b",
+      "run": "p19",
+      "principal": "alice",
+      "tenant": "tenant",
+      "operation": "send_report",
+      "resource": "inbox",
+      "content": "report c",
+      "policyRevision": "v1"
+     },
+     "token": "t1",
+     "text": null
+    }
+   ],
+   "note": "Host mints b; body b with changed content and the real token: digest mismatch refused with a record."
+  },
+  {
+   "steps": [
+    {
+     "do": "mint",
+     "route": "b",
+     "name": "t1"
+    },
+    {
+     "do": "mint",
+     "route": "a",
+     "name": "t2"
+    },
+    {
+     "do": "body",
+     "body": {
+      "id": "a",
+      "run": "p19",
+      "principal": "alice",
+      "tenant": "tenant",
+      "operation": "send_report",
+      "resource": "inbox",
+      "content": "report a",
+      "policyRevision": "v1"
+     },
+     "token": "t1",
+     "text": null
+    },
+    {
+     "do": "body",
+     "body": {
+      "id": "b",
+      "run": "p19",
+      "principal": "alice",
+      "tenant": "tenant",
+      "operation": "send_report",
+      "resource": "inbox",
+      "content": "report b",
+      "policyRevision": "v1"
+     },
+     "token": "t2",
+     "text": null
+    }
+   ],
+   "note": "Host mints b and a; each token passed on the other's body. Both refused with records, none lands."
+  },
+  {
+   "steps": [
+    {
+     "do": "ops",
+     "ops": [
+      {
+       "op": "delete",
+       "store": "provenance.sqlite"
+      }
+     ]
+    },
+    {
+     "do": "dispatch",
+     "route": "b",
+     "times": 1,
+     "adapter": null
+    },
+    {
+     "do": "dispatch",
+     "route": "a",
+     "times": 1,
+     "adapter": null
+    }
+   ],
+   "note": "Delete the approval store. Gate latches; later refusals are unrecorded by design."
+  }
+ ]
+}

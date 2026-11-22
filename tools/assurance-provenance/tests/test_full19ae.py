@@ -47,8 +47,16 @@ class StubGate:
     and the twentieth refusal of a label in a row is marked."""
 
     def __init__(
-        self, *, silent=False, nomark=False, drift=False, leak=False, latch=False
+        self,
+        *,
+        silent=False,
+        nomark=False,
+        drift=False,
+        leak=False,
+        latch=False,
+        double=False,
     ):
+        self.double = double
         self.silent, self.nomark, self.drift = silent, nomark, drift
         self.leak, self.latch = leak, latch
 
@@ -92,7 +100,7 @@ class StubGate:
                 if full and label == "other" and not self.silent:
                     marks["refused"] += 1
                 if full and streak[label] == m.LIMIT and not self.nomark:
-                    marks["retry_limit"].append(label)
+                    marks["retry_limit"].extend([label] * (2 if self.double else 1))
                 done.append([label, do, "blocked", recorded])
         latched = ["context.sqlite"] if full and self.latch and len(steps) == 2 else []
         return {
@@ -273,6 +281,13 @@ class RuleTests(unittest.TestCase):
             self.assertIs(h[name]["holds"], False, flag)
         _, _, h = report(StubGate(), committed({s: [] for s in m.SEATS}))
         self.assertIs(h["F5"]["holds"], False)
+
+    def test_a_label_marked_twice_is_one_marked_label(self):
+        _, summary, h = report(StubGate(double=True))
+        self.assertIs(h["F2"]["holds"], True)
+        self.assertEqual(
+            summary["totals"]["full_retry_marks_match"], summary["totals"]["run"]
+        )
 
     def test_a_seats_attempt_that_writes_a_store_is_outside_f5(self):
         writes = seq(
