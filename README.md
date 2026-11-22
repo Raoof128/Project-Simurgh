@@ -99,6 +99,17 @@ repair, was in fact served by Sonnet 5.5; the lane's page records the correction
 the earlier lanes measured is unchanged;
 a caller has to use the repaired classes.
 
+**Writes to the gate's own stores, 22 November.**
+[19z](docs/research/provenance-phase-19z/README.md) gives the attacker what the labs' 2026
+incident reports describe: write access to the controls themselves. The gate keeps its grants,
+stop state and approvals in files and believes what it reads there, so with nothing else in
+place 13 of 52 attempts that write those files make the undelegated action land, and 4 let an
+approved action go ahead on a script rewritten after approval. With a digest of those files
+held in the host's memory, none does: the gate latched on each of the 36 attempts that changed
+a file and on no other. The price is that a writer of the files can stop all work, and one
+attempt stopped the sealed gate without touching a file at all. This is detection after the
+fact, on a fixture, with one attacking agent; it is not isolation.
+
 [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) ·
 [Release and archive](https://github.com/Raoof128/Project-Simurgh/releases/tag/phase-19-paper-v1.0) ·
 [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) ·
@@ -316,7 +327,7 @@ and document text as untrusted data when feeding CLI results to an agent.
 | Perform outside reproduction | [Operator handoff](docs/research/CONTINUATION_HANDOFF_2026-10-19.md)                                                                                        | Earlier viewer/export snapshot; use the current runbook for the latest study                |
 | Trace prior work             | [Reviewer index](docs/REVIEWER_INDEX.md) and [research history](RESEARCH_HISTORY.md)                                                                        | Frozen stages, negative results and historical reproduction                                 |
 | Read the newest study        | [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) and [Phase 19 ledger](docs/research/PROVENANCE_PHASE_19.md)                            | Plans committed before each run, hypotheses decided by rule, limits stated with each result |
-| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Twenty-four verify commands; twenty-two need no installed packages                          |
+| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Twenty-five verify commands; twenty-three need no installed packages                        |
 | Judge the process and author | [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) and [author, method and open problems](docs/AUTHOR_AND_METHOD.md)                                    | How errors were found and handled, how AI assistance is used, what remains open             |
 
 The most useful review would challenge the exact-action comparator, admission/revocation
@@ -325,13 +336,13 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
 
 ### Open work
 
-- **Independent reproduction:** one outside operator has replayed twenty-one of the twenty-four
+- **Independent reproduction:** one outside operator has replayed twenty-one of the twenty-five
   Phase 19 packs on Ubuntu x86_64 with no discrepancy, including the five frozen-gate replays,
   the Lean check and the namespace probe, and the test suite passed there. A second ran the
   handoff natively on Windows 10, where every verifier refused; the causes are published and
   the handoff now lists native Windows as unsupported. An earlier receipt covers five packs on
   macOS ([receipts and reviews](docs/research/provenance-phase-19f/README.md)). Still
-  outstanding: lanes 19w, 19x and 19y, one dataset recomputation, a second Linux host, and
+  outstanding: lanes 19w, 19x, 19y and 19z, one dataset recomputation, a second Linux host, and
   independent evidence custody, since the author's side asked both operators and each signed
   with a typed name.
 - **Provider lifecycle:** real provider IAM/revocation and authenticated live safety-alert
@@ -342,6 +353,14 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
   attacker that adapts to a model has not been run. The attackers of lanes 19t and 19y adapted
   to the gate, not to a model. The two faults they found are repaired in classes beside the
   gate, which the earlier lanes did not use, and every attacker that ran is a Claude model.
+- **What the gate cannot see:** it decides who may send what to where, from host state. Harm
+  carried inside a send it allows is outside it: a threatening message on a permitted
+  channel, an injected text quoted back to a legitimate recipient, a permitted repository
+  used as a message board. Nothing here judges the content of an allowed action.
+- **A zero needs a positive control:** the hosted models of lanes 19o and 19u sent nothing in
+  a restricted state. The only evidence that the same injected texts can move a model at all
+  is that local models did send on them (19k, 19m, 19v). No lane measures whether a hosted
+  model recognised the fixture as a test.
 - **Operational assurance:** sustained deployment load, interactive desktop capture and
   real-data privacy validation remain separate work.
 - **Security review:** the [19 October local Phase 8 review](docs/research/PHASE_8_REVIEW_2026-10-19.md)

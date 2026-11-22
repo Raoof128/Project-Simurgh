@@ -1,5 +1,57 @@
 ## Change Log
 
+## [phase-19f-operator12-2026-11-22] — 2026-11-22 — Lane 19z in the operator handoff; twenty-five pinned roots
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR12, the handoff tool, its rendered files, the hosted
+  roots check, the root README.
+- **Summary:** twenty-five packs in the handoff and in the hosted roots check. The root
+  README now says what the gate cannot see and what stands as the positive control for the
+  hosted models' zero sends.
+- **Verification:** 39 handoff tests; Stage 5Q census identical; quick gate.
+
+## [phase-19z-pack-2026-11-22] — 2026-11-22 — Lane 19z: writes to the gate's own stores, with and without a seal
+
+**Raouf:**
+
+- **Scope:** the lane's pack, pages, committed test and ruling.
+- **Summary:** with no seal, 13 of 52 attempts that write the gate's stores gain authority
+  and 4 run a rewritten script; with the seal none does. One seat of two is empty. Root
+  `c4c59ef843e83da576a9aeb331230961b24349d3a87b24ef4ad56df36913d30c`.
+- **Verification:** bare-interpreter verify; 53 lane tests; quick gate.
+
+## [phase-19z-submissions-2026-11-22] — 2026-11-22 — Lane 19z: attackers' files as received
+
+**Raouf:**
+
+- **Scope:** two files under `docs/research/provenance-phase-19z/submissions/`.
+- **Summary:** 21 attempts from one seat and one empty seat, committed before the host of
+  record runs any of them.
+- **Verification:** format read; private-data scan; quick gate.
+
+## [phase-19z-instrument2-2026-11-22] — 2026-11-22 — Lane 19z: one process per attempt; a stopped seat recorded
+
+**Raouf:**
+
+- **Scope:** two amendments to P19-SEAL01, `tamper19z.py`, one test file.
+- **Summary:** an attacker found an operation that broke the instrument for every later
+  attempt; each attempt now runs in its own process. A seat stopped by a safety classifier
+  stays empty.
+- **Verification:** 45 lane tests; `ruff`; quick gate.
+
+## [phase-19z-instrument-2026-11-22] — 2026-11-22 — Lane 19z instrument: a seal over the gate's own stores
+
+**Raouf:**
+
+- **Scope:** the declaration P19-SEAL01, three new modules, their tests, the author's
+  attempts and a brief.
+- **Summary:** `seal19z.py` latches the gate when the bytes of any of its stores, or of a
+  bound script, change between the host's own operations. `tamper19z.py` runs attempts that
+  write those files on the gate with no seal and on the sealed gate.
+- **Verification:** 40 new tests; seven deliberate breaks each caught; `ruff`; `prettier`;
+  quick gate.
+
 ## [phase-19y-correction-2026-11-22] — 2026-11-22 — Correction: which model sat in lane 19y's seat `mythos-r2`
 
 **Raouf:**
