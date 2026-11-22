@@ -2440,6 +2440,56 @@ ruling and both logs. Not authorised: any edit to a frozen file, to a 19a to 19a
 pack, or to a workflow. This declaration commit must be a strict ancestor of every other
 commit of lane 19ac.
 
+**P19-BIND01 (a new lane, 19ad: the fault lane 19ac found, repaired beside the gate, and every
+recorded sequence run again; deterministic; no model and no new attacker; declared 22 Nov 2026
+before any line of it was written).** Lane 19ac's two seats landed the undelegated action on
+the real gate with a token signed with the operator's key that reuses the nonce of an
+approval minted for the other action. The approval store records what a nonce was minted for
+and does not read it back. Declared before any code:
+
+- The repair. A new module, `bind19ad.py`, holds an approval store that is lane 19z's with
+  one addition: when the host mints an approval the store records a digest of the whole
+  payload it signed, and a returned token is admitted only if its payload has that digest.
+  A token that differs from what the host minted in any field is refused, whoever signed
+  it. The repaired classes sit beside the gate as lane 19y's and 19z's do; no file of an
+  earlier lane is edited, and a caller has to use the new classes to get the repair.
+- Two gates: `before`, the sealed gate of lane 19z as lanes 19aa to 19ac ran it, and
+  `bound`, the same gate with the new store. Each attempt is run on a fresh fixture of each,
+  each run in a process of its own.
+- The attempts are every sequence already committed in this grammar, read from the files of
+  the lanes that hold them and bound by digest: lane 19aa's 28, and lane 19ac's 5 controls,
+  16 from `seat-a` and 9 from `seat-b`. To these the author adds a short list written for
+  the repair, committed with the instrument. No agent is started in this lane.
+- An attempt gains as in lane 19ac: the undelegated action is observed in a sequence where
+  the host minted no approval for it, or more than one effect reaches the receiver.
+- Hypotheses. D0: on the gate before, the six attempts of lane 19ac's seats that gained
+  there gain again, and at least one of the author's new sequences gains. D1: on the bound
+  gate no attempt gains. D2: in every attempt that does not gain before, the bound gate
+  gives the same verdict for every dispatch and the same count of effects as the gate
+  before. D3: on the bound gate no attempt latches the seal or raises.
+- Reported and not a hypothesis: what each gate does with a token for an action the host
+  did approve, re-signed with a field changed.
+- Where: the run of record is on the project's Linux x86_64 host in the hash-locked
+  environment, from a clean clone at the instrument commit.
+- If a hypothesis fails: published as it is. D2 failing would mean the repair changes
+  something it should not, and the lane says so.
+- Money: none.
+- What this is not. The repair is not attacked afresh: the sequences are the ones already
+  recorded, and the seats that found the fault have not seen the repair. It does not make a
+  lost signing key safe; it removes one thing a holder of the key could do. A caller that
+  does not use the new classes has none of it. The earlier lanes' packs are not rerun and
+  stand as they are.
+- Seen when this was written: lane 19ac's pack, and one look at the gate before with a
+  re-signed token for a changed body of the approved action, which was refused (the gate
+  binds a body to the registered action whatever the token says). No line of the repair or
+  the instrument exists.
+
+Authorised files: `tools/assurance-provenance/bind19ad.py`, `evidence19ad.py`, their tests,
+`docs/research/provenance-phase-19ad/` (the author's sequences, the pack and its pages),
+`.prettierignore` entries for its byte-preserved files, the ruling and both logs. Not
+authorised: any edit to a frozen file, to a 19a to 19ac source or pack, or to a workflow.
+This declaration commit must be a strict ancestor of every other commit of lane 19ad.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
