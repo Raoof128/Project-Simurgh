@@ -2663,6 +2663,37 @@ its byte-preserved files, the ruling and both logs. Not authorised: any edit to 
 to a 19a to 19ae source or pack, or to a workflow. This declaration commit must be a strict
 ancestor of every other commit of lane 19af.
 
+**P19-OPERATOR15 (bounded authority to bring lane 19ae into the outside-operator handoff and
+the externally pinned roots, and to bring the root README's open work up to date with it;
+declared 22 Nov 2026 before any commit that acts on it).** 19ae is committed with root
+`cf7693ef4af20e1f523391e0fa873bf1e1f11246fcd12f3c151406d0d132b20e`. Its declaration did not
+authorise a workflow or handoff edit. This declaration authorises, and nothing else:
+
+1. `handoff19.py`: 19ae added to `PHASES` with its host and time, the word for the new count,
+   and the lane in the list of lanes that need nothing beyond the standard library. It is a
+   replayed lane: its committed receipt reads `gate_recomputed`, a host that cannot replay
+   prints `structure_checked`, and its `--replay` joins the items only some hosts can
+   exercise. The handoff says that it holds host-dependent rows. The comparator's rules do
+   not change. Tests first.
+2. The reviews of the three operator receipts recomputed under the new phase list. No receipt
+   is edited; the lane appears in each review as `not_in_receipt`.
+3. Re-rendering `HANDOFF.md` and `discrepancy-template.json`; the 19f READMEs' count of
+   packs, their row for the lane and their lists of what is owed.
+4. `.github/workflows/assurance-provenance.yml`: the lane's `docs/` path added to both path
+   filters and its id to the expected-roots check, with its message. No step is added,
+   removed or renamed, and the Stage 5Q census must be byte-identical before and after. The
+   repository variable `PHASE19_ROOTS` gains the one root, set outside the pull request, the
+   twenty-nine existing values unchanged.
+5. The root README: the count of Phase 19 packs, one paragraph on the lane, and its open
+   work brought up to date: the repair of lane 19ad has now been attacked, refusals have a
+   record in the class a caller should use, and the raise the seats found is stated as open.
+   The same count in `docs/AUTHOR_AND_METHOD.md`.
+6. Both logs and the ruling.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to an operator's
+receipt, or any other change to what the comparator checks. This declaration commit must be a
+strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
