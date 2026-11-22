@@ -1,5 +1,64 @@
 ## Change Log
 
+## [phase-19f-operator14-2026-11-22] — 2026-11-22 — Lanes 19ac and 19ad in the operator handoff; twenty-nine pinned roots
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR14, the handoff tool, its rendered files, the hosted
+  roots check, the root README.
+- **Summary:** twenty-nine packs in the handoff and in the hosted roots check. The root
+  README states the fault the project's own seats found in the approval check and where
+  its repair stands.
+- **Verification:** 43 handoff tests; Stage 5Q census identical; quick gate.
+
+## [phase-19ad-pack-2026-11-22] — 2026-11-22 — Lane 19ad: the fault lane 19ac found, repaired beside the gate
+
+**Raouf:**
+
+- **Scope:** the 19ad pack, its pages, a committed-pack test, the ruling.
+- **Summary:** eight recorded sequences beat the gate as it was; none of the 67 beats the
+  gate whose approval store remembers what it minted, and nothing else changes. Root
+  `a4f23383…`. Not attacked afresh.
+- **Verification:** bare-interpreter `verify`; committed-pack tests; quick gate.
+
+## [phase-19ad-instrument-2026-11-22] — 2026-11-22 — Lane 19ad: the approval bound to what the host minted (instrument)
+
+**Raouf:**
+
+- **Scope:** `bind19ad.py`, `evidence19ad.py`, their tests, the author's nine sequences.
+- **Summary:** a repair beside the gate for the fault lane 19ac found, and an instrument
+  that runs every recorded sequence on the gate before and after. No run of record yet.
+- **Verification:** 18 tests; `ruff`; `prettier`; quick gate.
+
+## [phase-19ac-pack-2026-11-22] — 2026-11-22 — Lane 19ac: a planted fault found, and a real fault found with it
+
+**Raouf:**
+
+- **Scope:** the 19ac pack, its pages, a committed-pack test, the ruling.
+- **Summary:** two agent seats found the fault the author planted, and both found a real
+  one: a key-signed token is admitted on the nonce of an approval minted for another action
+  (6 of 25 attempts gain on the real gate). Root `c130b0e5…`. Not repaired in this lane.
+- **Verification:** bare-interpreter `verify`; committed-pack tests; quick gate.
+
+## [phase-19ac-submissions-2026-11-22] — 2026-11-22 — Lane 19ac: the seats' files as received
+
+**Raouf:**
+
+- **Scope:** two files under `docs/research/provenance-phase-19ac/submissions/`.
+- **Summary:** 16 and 9 attempts from two Opus 5.5 seats, committed before any of them is
+  run on the host of record.
+- **Verification:** format check; privacy scan.
+
+## [phase-19ac-instrument-2026-11-22] — 2026-11-22 — Lane 19ac: a planted fault as a control on a model that writes sequences (instrument)
+
+**Raouf:**
+
+- **Scope:** `planted19ac.py`, `evidence19ac.py`, their tests, the brief, the author's
+  controls.
+- **Summary:** two gates, one with a fault the author planted; two seats will write
+  sequences against both without being told which is which. No run of record yet.
+- **Verification:** 25 tests; `ruff`; `prettier`.
+
 ## [phase-19f-operator13-2026-11-22] — 2026-11-22 — Lanes 19aa and 19ab in the operator handoff; twenty-seven pinned roots
 
 **Raouf:**

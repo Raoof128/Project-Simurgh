@@ -14,6 +14,127 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lanes 19ac and 19ad in the operator handoff; twenty-nine pinned roots; the fault stated in the README
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR14 in the ledger (`6ed69090`, before the change), the
+  handoff tool and its tests, the rendered handoff, the hosted roots check, the root README.
+- **Summary:** both lanes join the handoff as replayed lanes, with a note that one row in
+  each depends on the host's JSON parser. The three operator reviews were recomputed (both
+  lanes are `not_in_receipt` in each; the receipts are byte-identical). Fifteen items are
+  owed to an outside operator. `PHASE19_ROOTS` was extended outside the pull request from
+  twenty-seven roots to twenty-nine. The root README has a paragraph on the two lanes and
+  an entry under its open work on the fault in the approval check.
+- **Files changed:** `tools/assurance-provenance/handoff19.py`, `tests/test_handoff19.py`,
+  `docs/research/provenance-phase-19f/HANDOFF.md`, `discrepancy-template.json`, the three
+  reviews, the two 19f READMEs, `.github/workflows/assurance-provenance.yml`, `README.md`,
+  `docs/AUTHOR_AND_METHOD.md`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 43 handoff tests, seven failing before the code changed; the Stage 5Q
+  census is byte-identical before and after the workflow edit; `prettier` and `ruff` are
+  clean; the quick gate passes.
+- **Not done:** no outside operator has run any of the fifteen items.
+
+### 2026-11-22 (Australia/Sydney) — Lane 19ad pack: the fault of lane 19ac repaired beside the gate; none of 67 recorded sequences gains
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19ad/` (pack, README, results), the
+  committed-pack test, the ruling.
+- **Summary:** the run of record on the Linux host from the instrument commit (`62133f88`).
+  67 sequences on the gate before and on the bound gate. Eight gain before (the six of lane
+  19ac's seats and two of the author's) and none on the bound gate; the 57 with no forged
+  token admitted before behave the same on both; two re-signed tokens for an approved
+  action are admitted before and refused after. All four hypotheses hold, D2 as amended
+  before any run.
+- **Files changed:** the pack's five files, `README.md` and `RESULTS.md` beside them,
+  `tools/assurance-provenance/tests/test_evidence19ad_committed.py`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** `verify` with a bare Python 3.12 interpreter (`structure_checked`); 7
+  committed-pack tests (one skipped off the replay host); `prettier`, `ruff` and the quick
+  gate pass.
+- **Not done:** no fresh attack on the repair; no outside review; the lane is not in the
+  operator handoff yet.
+
+### 2026-11-22 (Australia/Sydney) — Lane 19ad instrument: the approval bound to what the host minted
+
+**Raouf:**
+
+- **Scope:** the declaration P19-BIND01 (`8bdc56de`) and its amendment (`b09a89d4`), both
+  before anything was run; the repair, an instrument and a pack module in new files; the
+  author's nine sequences; a ledger note written before the run of record.
+- **Summary:** `bind19ad.py` holds an approval store that records a digest of the payload
+  the host signed and admits a returned token only if its payload has that digest. It sits
+  beside the gate; no earlier file is edited. The instrument runs lane 19aa's and lane
+  19ac's committed sequences and the author's nine on the gate before and on the bound gate.
+- **Files changed:** `tools/assurance-provenance/bind19ad.py`, `evidence19ad.py`,
+  `tests/test_bind19ad.py`, `tests/test_evidence19ad.py`,
+  `docs/research/provenance-phase-19ad/attempts-author.json`, `.prettierignore`, the ledger,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 18 tests, four of them on both real fixtures; `ruff` and `prettier` are
+  clean; the quick gate passes.
+- **Not done:** the run of record, the pack and the ruling. The repair has not been attacked
+  afresh.
+
+### 2026-11-22 (Australia/Sydney) — Lane 19ac pack: both seats find the planted fault, and both find a real one
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19ac/` (pack, README, results), the
+  committed-pack test, the ruling, one paragraph on lane 19aa's page.
+- **Summary:** the run of record on the Linux host from `37c48971`. 30 attempts on the real
+  gate and on the planted one. P0, P2 and P3 hold. P1 does not: 6 of the seats' 25 attempts
+  make the undelegated action land on the real gate. The cause is in lane 19b's approval
+  store: the nonce of a minted approval is recorded with its action, and the check of a
+  returned token never reads the action back. A token signed with the operator's key for
+  one action is admitted on the nonce of an approval minted for another. Not repaired, as
+  declared.
+- **Files changed:** the pack's five files, `README.md` and `RESULTS.md` beside them,
+  `tools/assurance-provenance/tests/test_evidence19ac_committed.py`,
+  `docs/research/provenance-phase-19aa/README.md`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `verify` with a bare Python 3.12 interpreter (`structure_checked`); 7
+  committed-pack tests (one skipped off the replay host); `prettier`, `ruff` and the quick
+  gate pass. A rebuild on macOS gives another root because one row's reason depends on the
+  host's JSON parser; the page says which.
+- **Not done:** the repair; the lane is not in the operator handoff yet; no one outside the
+  author has run it.
+
+### 2026-11-22 (Australia/Sydney) — Lane 19ac: the two seats' files as received
+
+**Raouf:**
+
+- **Scope:** two files under `docs/research/provenance-phase-19ac/submissions/` and a ledger
+  note.
+- **Summary:** `seat-a` handed in 16 attempts and `seat-b` 9. Both ran on Claude Opus 5.5,
+  read from the harness's record. Both say they found the planted fault and both say they
+  gained on the real gate as well, by signing a token for the undelegated action with the
+  fixture's operator key and the nonce of an approval the host minted for the other action.
+  The files are committed as handed in, before the run of record.
+- **Files changed:** `submissions/seat-a.json`, `submissions/seat-b.json`, the ledger,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** both files pass the format check with no attempt rejected; the privacy
+  scan finds nothing.
+- **Not done:** the run of record, the pack and the ruling.
+
+### 2026-11-22 (Australia/Sydney) — Lane 19ac instrument: sequences written by a model, and one planted fault
+
+**Raouf:**
+
+- **Scope:** the declaration P19-PLANT01 in the ledger (`b0574021`, before any code and
+  before the fault was written), a new instrument with a planted gate, a pack module, the
+  author's five control sequences and the brief for two seats.
+- **Summary:** `planted19ac.py` runs a sequence in lane 19aa's grammar on two gates, the
+  real sealed gate and one whose approval check passes a signed token the host never
+  minted. A seat reaches both through a runner outside its copy and is not told which is
+  which. This commit was made before a seat started and is pushed only after both ended.
+- **Files changed:** `tools/assurance-provenance/planted19ac.py`, `evidence19ac.py`,
+  `tests/test_planted19ac.py`, `tests/test_evidence19ac.py`,
+  `docs/research/provenance-phase-19ac/BRIEF.md`, `attempts-author.json`, `.prettierignore`,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 25 tests, three of them on both real fixtures (the forged token lands on
+  the planted gate and not on the real one); `ruff` and `prettier` are clean.
+- **Not done:** the seats, the run of record, the pack and the ruling.
+
 ### 2026-11-22 (Australia/Sydney) — Lanes 19aa and 19ab in the operator handoff; twenty-seven pinned roots; three findings in the README
 
 **Raouf:**
