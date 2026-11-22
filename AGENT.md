@@ -14,6 +14,170 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19y in the operator handoff; twenty-four pinned roots; README counts
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR11 in the ledger (`eb38151a`, before the change), the
+  handoff tool and its tests, the rendered handoff, the hosted roots check, the root README.
+- **Summary:** 19y joins the handoff as a replayed lane, as 19t is. The three operator
+  reviews were recomputed (19y is `not_in_receipt` in each; the receipts are byte-identical).
+  Five items are owed to an outside operator: 19w, 19x, 19y, 19y's `--replay` and 19q's
+  `--dataset`. `PHASE19_ROOTS` was extended outside the pull request from twenty-three roots
+  to twenty-four. The root README has a paragraph on the lane and no longer says 19t's
+  faults are unrepaired.
+- **Files changed:** `tools/assurance-provenance/handoff19.py`, `tests/test_handoff19.py`,
+  `docs/research/provenance-phase-19f/HANDOFF.md`, `discrepancy-template.json`, the three
+  reviews, the two 19f READMEs, `.github/workflows/assurance-provenance.yml`, `README.md`,
+  `docs/AUTHOR_AND_METHOD.md`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 38 handoff tests, six failing before the code changed; the Stage 5Q
+  census is byte-identical before and after the workflow edit; `prettier` and `ruff` are
+  clean; the quick gate passes.
+- **Not done:** no outside operator has run any of the five items.
+
+### 2026-11-22 (Australia/Sydney) — Lane 19y pack: the repair holds against 19t's 92 attempts and 151 new ones; three seats refused
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19y/` (pack, README, results), the committed-pack
+  test, the ruling.
+- **Summary:** the run of record on the project's Linux host gave root `cf2557c4…`. None of
+  19t's 92 attempts and none of 151 new attempts changes the repaired gate's output. The
+  instrument reproduced 19t's record on the gate as it was (92 of 92). Three of six seats in
+  the second round are empty because their providers refused the task, so the prediction
+  about every seat did not hold. 0.008 USD was spent, at OpenAI, under a cap of 10 USD.
+- **Files changed:** `evidence.zip`, `protocol.json`, `report.json`, `receipt.json`,
+  `ROOT.sha256`, `README.md`, `RESULTS.md` under the lane's folder;
+  `tools/assurance-provenance/tests/test_evidence19y_committed.py`; the ledger; `AGENT.md`;
+  `CHANGELOG.md`.
+- **Verification:** the pack verifies with a bare interpreter; 10 committed-pack tests (one
+  skipped: the full replay) and the lane's 59 tests pass; the README's numbers are filled
+  from the record by script; the quick gate passes.
+- **Corrected before commit:** a draft count of attempts that sign with the fixture's key
+  (62) matched two notes about JSON keys; the page says 60. Three deep-nesting attempts
+  change two naive gates on the author's machine and none on the host of record; the page
+  and the ruling say so.
+- **Not done:** `gate19.py` is unchanged; no attacker from another vendor ran; no replay
+  outside the author's custody.
+
+### 2026-11-22 (Australia/Sydney) — A one-command labeller built on lane 19q's rules (no measurement)
+
+**Raouf:**
+
+- **Scope:** the declaration P19-TOOL01 in the ledger (`5d81c7eb`, before the tool), one new
+  module, its test, one page and one sentence in the root README.
+- **Summary:** `label19.py` applies lane 19q's three destination-origin rules to one
+  transcript in the benchmark's JSONL format. It imports `dest19q.py` unchanged, needs only
+  the standard library, prints one JSON object and sets its exit status to the decision of
+  the chosen rule. Destinations are shown as digests unless `--show-tokens` is given.
+- **Files changed:** `tools/assurance-provenance/label19.py`, `tests/test_label19.py`,
+  `docs/research/provenance-phase-19q/LABELLER.md`, `README.md`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** 15 tests pass, also with a bare interpreter; six deliberate breaks each
+  fail a test; the page's example was run through the tool; lane 19q's tests still pass;
+  `ruff` and `prettier` are clean; the quick gate passes.
+- **Found and not changed:** a host the principal names in prose without a scheme is not read
+  by 19q's grammar, so the agent's command is where it first appears and every rule refuses.
+  The page says so.
+
+### 2026-11-22 (Australia/Sydney) — Lane 19y: the six round-two files as received, committed before the host of record runs any of them
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19y/submissions/` and the formatter's ignore
+  list.
+- **Summary:** three seats handed in files: `opus-r2` 37 attempts, `sonnet-r2` 60 and
+  `mythos-r2` 54, 151 in all. Three seats are empty files written by the author to record
+  that nothing was received: `fable-r2` (refused by its provider's safeguards), `codex-r2`
+  (refused on the owner's plan, then unable to use the API organisation) and `astra-r2`
+  (the provider answered `cyber_policy` on the second request, after the model had read the
+  brief; 0.008 USD spent of a 10 USD cap). No request was reworded.
+- **Files changed:** six files under `submissions/`, `.prettierignore` (P19-FORMAT26),
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** each file was read for format with the instrument's reader (151 attempts
+  accepted, none rejected) and scanned for keys, addresses and names (no hit). The three
+  attackers' files are byte-identical to what each wrote. The author has not run any of
+  them. The quick gate passes.
+- **Not done:** nothing has run on the host of record.
+
+### 2026-11-22 (Australia/Sydney) — Lane 19y: the Codex seat stays empty; a direct API seat for an OpenAI model is added (no submission committed yet)
+
+**Raouf:**
+
+- **Scope:** the third and fourth amendments to P19-REDTEAM02 in the ledger, the instrument's
+  list of seats and its tests, and a correction to the entry below this one.
+- **Summary:** the Codex agent was refused by its provider on the owner's plan. The owner
+  said to use the paid interface. The command-line agent could not use the project's API
+  organisation, which is an account setting, so nothing was generated or spent. A sixth
+  seat, `astra-r2`, calls `gpt-6.2-astra` through the ordinary paid interface from a loop the
+  author wrote, with a cap of 10 USD at OpenAI. The request is in the same words and is not
+  reworded after a refusal.
+- **Files changed:** `tools/assurance-provenance/redteam19y.py`, `tests/test_redteam19y.py`,
+  `tests/test_evidence19y.py`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the lane's 59 tests pass; `ruff` is clean. The quick gate is not run for
+  this change while the attackers load the machine; it is run at the pack commit.
+
+### 2026-11-22 (Australia/Sydney) — Lane 19y: two more seats at the owner's request, an OpenAI Codex agent and a Mythos agent (no submission committed yet)
+
+**Raouf:**
+
+- **Scope:** the second amendment to P19-REDTEAM02 in the ledger, the instrument's list of
+  seats and its tests.
+- **Summary:** the owner asked that an OpenAI model and Claude Mythos attack as well. The
+  round now has five seats: `opus-r2`, `fable-r2` (refused, empty), `sonnet-r2`, `codex-r2`
+  and `mythos-r2`. The Codex agent is asked once in the same words; a refusal is recorded and
+  not worked around. The Mythos agent is the model that wrote the repair, which the
+  amendment says.
+- **Files changed:** `tools/assurance-provenance/redteam19y.py`, `tests/test_redteam19y.py`,
+  `tests/test_evidence19y.py`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the lane's 59 tests pass and `ruff` is clean. The quick gate run for this
+  change showed 95 of 96: one Node timing test (a FIFO read) failed while the attackers'
+  processes held the machine at a load near 30, and passed when run alone. The change was
+  committed before that was looked at, which was a mistake; the full gate is run again at
+  the pack commit.
+
+### 2026-11-22 (Australia/Sydney) — Lane 19y: the Fable seat was refused by its provider; a Sonnet 5.5 seat is added (no submission exists yet)
+
+**Raouf:**
+
+- **Scope:** the amendment to P19-REDTEAM02 in the ledger (`2e8c5839`), the instrument's list
+  of seats and its tests.
+- **Summary:** the Claude Fable 5.2 agent's first request was flagged by its provider's
+  safeguards and it produced nothing. The task was not reworded or sent again. Its seat stays
+  with an empty submission, so Y3 cannot hold. A third seat, `sonnet-r2`, is added with the
+  same brief. The repair, the gate and the fixture are unchanged.
+- **Files changed:** `tools/assurance-provenance/redteam19y.py`, `evidence19y.py`,
+  `tests/test_redteam19y.py`, `tests/test_evidence19y.py`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** the lane's 59 tests pass; `ruff` is clean; the quick gate passes.
+
+### 2026-11-22 (Australia/Sydney) — Lane 19y instrument: the repair of 19t's two faults and a two-round red-team runner (nothing run on the host of record yet)
+
+**Raouf:**
+
+- **Scope:** the declaration P19-REDTEAM02 in the Phase 19 ledger (`cc3dc187`, before any
+  code), three new modules, their tests and the brief for the second round.
+- **Summary:** lane 19t's ruling left a repair owed. `repair19y.py` holds it in new classes
+  that subclass the gate and the fixture: a token whose `approver_id` is not a string is
+  refused as `approval_schema`, a database error during verification becomes the reason
+  `approval_store`, an oversize summary note is cut to the longest prefix that fits and the
+  cut is recorded in the pipeline's own events, and file channels are held as bytes.
+  `redteam19y.py` runs every attempt against the gate as it was, the repaired gate and the
+  thirteen reader mutants with the repair mixed in. `evidence19y.py` builds and verifies the
+  pack and reads round one from 19t's committed pack.
+- **Files changed:** `tools/assurance-provenance/repair19y.py`, `redteam19y.py`,
+  `evidence19y.py`, `tests/test_repair19y.py`, `tests/test_redteam19y.py`,
+  `tests/test_evidence19y.py`, `docs/research/provenance-phase-19y/BRIEF.md`, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** 59 new tests pass, 27 of them on the real gate; each of nine deliberate
+  breaks of the repair fails at least one test; 19t's 33 tests still pass; `ruff` and
+  `prettier` are clean; the quick gate passes.
+- **Seen before the run of record:** a trial on the author's machine ran 19t's 92 attempts.
+  The gate as it was gave the outcome 19t recorded for each, and the repaired gate's output
+  did not change for any. No second-round attempt exists yet.
+- **Not done:** no agent has been briefed, nothing has run on the Linux host, and `gate19.py`
+  is unchanged, so a caller of `gate19.ProvenancePipeline` still has both faults.
+
 ### 2026-11-21 (Australia/Sydney) — Wording pass on living documents (33 edits in seven files; records left as written)
 
 **Raouf:**

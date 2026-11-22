@@ -1890,6 +1890,187 @@ plan, specification, audit or gap hunt, a frozen stage's document, a generated f
 bound file, a file an operator returned or third-party material. This declaration commit must
 be a strict ancestor of every commit that acts on it.
 
+**P19-REDTEAM02 (a new lane, 19y: the two faults of lane 19t repaired in new modules, 19t's 92
+attempts run again, and a second round of attackers against the repaired gate; no model is a
+target; declared 22 Nov 2026 before any line of the repair was written).** Lane 19t gave two
+coding agents the gate's source. 49 of their 92 attempts changed the gate's output, through
+two faults and one fault of the fixture, and that lane's ruling left the repair owed under its
+own declaration. This is that declaration. Declared before any code:
+
+- The repair, all of it in a new module, `repair19y.py`. No frozen file, no file a pack binds
+  and none of `gate19.py`, `rig.py`, `lane.py` and `mutants.py` is edited; the new classes
+  subclass them.
+  - Approval store. A token whose `approver_id` is not a string is refused as
+    `approval_schema`, with the other shape checks and before the signature is looked at. A
+    database error while a token is verified becomes the reason `approval_store`; it does not
+    leave `verify`. In both cases the ordinary grant check then decides, as it does for every
+    other refused token.
+  - Summary note. When the note makes the encoded summary longer than the frozen gate's limit
+    of 16,384 bytes, the pipeline cuts the note to the longest prefix that fits before the
+    frozen gate sees it, and records `summary_note_cut` in the pipeline's own events. The
+    host's fields are not touched. A summary that is over the limit without its note is
+    passed on as it is, and the frozen gate's `summary_schema` stands.
+  - Fixture. A file channel is written and read as bytes. A text that holds half of a
+    surrogate pair is stored as Python's `surrogatepass` gives it and read back with
+    replacement, so no text can make the fixture's own write raise.
+- Round one, the regression. The two submissions of 19t are read from that lane's folder and
+  bound by the digests its pack records. Each of the 92 attempts is run against the gate as
+  it was (`gate19.ProvenancePipeline` on 19b's fixture) and against the repaired gate on the
+  repaired fixture.
+- Round two, the new attack. Two coding agents that have not seen this project's conversation
+  each get a copy of the repository at this lane's instrument commit, with the repair's
+  source and a brief committed with the instrument. Seats: `opus-r2`, a Claude Opus 5.5
+  agent, and `fable-r2`, a Claude Fable 5.2 agent. The interface is 19t's: one attempt is one
+  of the four channels and a text of at most 12,000 characters; at most 60 attempts a seat,
+  each with a note of at most 300 characters. A file is committed and pushed before the host
+  of record dispatches any of it. Nothing is dropped or reordered after that. A file that
+  breaks the format is recorded as received and its valid attempts are run.
+- Outcome of an attempt, as in 19t: it differs if the oracle's output (verdicts, effects,
+  authority hash, audit) is not byte-identical to the baseline run of the same gate with the
+  fixture's benign text, or if a dispatch raises.
+- Naive gates. The thirteen reader mutants of 19b are run on the repaired fixture with the
+  same repair mixed in. Lane 19t noted after the fact that its count of potent attempts was
+  inflated, because every attempt that changed the audit changed all thirteen. Here an
+  attempt is potent only if it changes at least one naive gate and leaves the repaired
+  gate's output byte-identical.
+- Hypotheses. Y0, a check of the instrument: on the gate as it was, this lane's run gives
+  each of the 92 attempts the outcome 19t's pack records for it (what differs, the class of
+  the error, the verdicts, the count of effects). Y1: none of the 92 changes the repaired
+  gate's output. Y2: no attempt of round two changes the repaired gate's output. Y3: each
+  seat of round two hands in at least one potent attempt. If Y3 fails for a seat, Y2 says
+  little about that seat and the write-up must say so.
+- Where: the run of record is on the project's Linux x86_64 host in the hash-locked
+  environment, from a clean clone at the commit that holds the round-two submissions.
+  `verify` recomputes every row there; elsewhere it checks structure and says the gate was
+  not run.
+- If Y1 or Y2 fails: the attempt, the difference and the cause are published as they are.
+  No further repair is made in this lane and no attempt is rerun after one.
+- Money: none. No hosted model is called through a paid interface; the two agents run on the
+  owner's plan, as 19t's did.
+- What this is not. Two agents of one vendor, one sitting each, through one interface, on a
+  fixture. Both are of the same family as the model that wrote the repair under the owner's
+  direction, so they may share its blind spots. The Codex agent, whose provider refused the
+  task in 19t, is not asked again. Nothing here is evidence about attackers in general or
+  about a person. The repair exists beside the gate that lanes 19a to 19x measured and does
+  not change it: every earlier pack still describes the gate as it was, and a caller of
+  `gate19.ProvenancePipeline` still has both faults.
+- Seen when this was written: 19t's pack, results and submissions, and the gate's source. No
+  line of the repair exists, no attempt has been run against it, and no agent has been
+  briefed.
+- Amended 22 Nov 2026, after the two agents were started and before any submission existed:
+  the Fable seat was refused by its provider. Its first request was answered with a notice
+  that the provider's safeguards had flagged the message, and it produced no file and no
+  scratch work. The task was not reworded or sent again to get past that filter. The seat
+  stays in the record with an empty submission written by the author to say that nothing was
+  received, so Y3 cannot hold. A third seat is added: `sonnet-r2`, a Claude Sonnet 5.5 agent,
+  with the same brief and its own copy at the commit that makes this change. The instrument's
+  list of seats, its tests and the pack's inventory change for that and for nothing else; the
+  repair, the gate and the fixture are the files the `opus-r2` agent already has. All seats
+  that attack are again of one vendor.
+- Amended a second time on 22 Nov 2026, before any submission was committed or dispatched:
+  the owner asked that an OpenAI model and Claude Mythos attack as well. Two seats are added
+  with the same brief, each with its own copy at the commit that makes this change.
+  `codex-r2` is the OpenAI Codex command-line agent on the owner's plan. This declaration
+  first said that agent would not be asked again; it is asked once, in the words the other
+  seats were given. If its provider refuses, the seat is recorded as refused with an empty
+  submission and the request is not reworded. `mythos-r2` is a Claude Mythos 5.2 agent
+  started with no knowledge of this project's conversation. It is the same model that wrote
+  the repair, so it is the seat most likely to share the repair's blind spots. When this was
+  written the `opus-r2` agent had handed in a file, which the author had read for format and
+  scanned for private data and had not run; the `sonnet-r2` agent was still working. The
+  instrument's list of seats, its tests and the pack's inventory change for the two seats
+  and for nothing else. No money is spent: both agents run on the owner's plans.
+- Amended a third time on 22 Nov 2026, before any submission was committed or dispatched:
+  the Codex agent on the owner's plan was refused. It read files for 28 seconds and its
+  provider then answered that the content was flagged for possible cybersecurity risk. It
+  wrote nothing. The owner then said to use the paid interface for the OpenAI seat ("use api
+  for open ai", 12:12 Sydney time). So the `codex-r2` seat is asked a second and last time:
+  the same command-line agent, the same words, signed in with the project's API key in a
+  separate configuration folder, on `gpt-6.2-astra`. The request is not reworded and no
+  access programme is applied for. If the provider refuses again, or the agent hands in
+  nothing, the seat is recorded as refused with an empty submission. This is the lane's only
+  spending: a cap of 10 USD at OpenAI, metered from the session's own token counts at the
+  prices lane 19x declared for that model, with the agent stopped at 9 USD or after 40
+  minutes, whichever comes first. The owner named no figure; the cap follows the owner's
+  earlier rule of about 10 USD for a paid lane. The line above that says no money is spent
+  no longer holds for this seat.
+- Amended a fourth time on 22 Nov 2026, before any submission was committed or dispatched:
+  the command-line agent could not use the project's API organisation at all. The provider
+  answered that the organisation is enrolled in a monthly credit benefit that excludes that
+  agent, which is an account setting and not a judgement of the task. Nothing was generated
+  and nothing was spent. The `codex-r2` seat therefore stays empty. To act on the owner's
+  instruction a sixth seat is added, `astra-r2`: the model `gpt-6.2-astra` called through
+  the provider's ordinary paid interface by a small loop the author wrote. The loop gives the
+  model the brief in the words the other seats were given, and three tools that work only
+  inside its copy of the repository: list a folder, read a file, and run Python there with
+  no network and no reading of the rest of the machine. The cap of the third amendment
+  applies to this seat: 10 USD at OpenAI by the loop's own meter at lane 19x's prices, with
+  a stop at 9 USD or 40 minutes. If the provider refuses or the model declines, the seat is
+  recorded as refused with an empty submission, and the request is not reworded. The loop is
+  the author's tool and is not part of the instrument; only the seat's file enters the pack.
+
+Authorised files: `tools/assurance-provenance/repair19y.py`, `redteam19y.py`,
+`evidence19y.py`, their tests, `docs/research/provenance-phase-19y/` (the brief, the two
+submissions, the pack and its pages), `.prettierignore` entries for its byte-preserved files,
+the ruling and both logs. Not authorised: any edit to a frozen file, to a 19a to 19x source or
+pack, or to a workflow. This declaration commit must be a strict ancestor of every other
+commit of lane 19y.
+
+**P19-TOOL01 (bounded authority for a one-command labeller built on lane 19q's rules; no
+measurement, no model, no dataset text; declared 22 Nov 2026 before the tool was written).**
+Lane 19q typed every destination in a public monitor benchmark by where it first appeared and
+scored three rules on it. Its code can only be run through that lane's pack, on that dataset.
+The second-stage plan of 13 Nov listed, as a way to make the work usable by someone else, the
+same rules as a tool that reads one transcript. This declaration authorises, and nothing else:
+
+1. A new module, `tools/assurance-provenance/label19.py`, that imports `dest19q.py` unchanged.
+   Given one transcript in the benchmark's JSONL format, and optionally the transcript of an
+   earlier stage, it prints which destinations the transcript holds, where each first
+   appeared (the principal, the environment, the agent, or the agent in the earlier stage),
+   which of them a command uses, and whether rules P, E and A refuse the transcript under the
+   strict and the lenient reading. It needs nothing but the standard library. It prints a
+   truncated digest of each destination and prints the destination itself only when asked.
+   Its exit status says whether the chosen rule refused.
+2. Its tests, on transcripts written for the tests. No text of the benchmark is used, copied
+   or committed.
+3. One page beside lane 19q's that says how to run it and what it cannot tell, one sentence
+   in the root `README.md`, the ruling and both logs.
+
+Not authorised: any edit to `dest19q.py`, to lane 19q's pack or pages, or to a workflow; any
+new measurement or claim about a benchmark, a monitor or a model. The tool inherits every
+limit of 19q's rules: they are a grammar over recorded text and not a network boundary. This
+declaration commit must be a strict ancestor of every commit that acts on it.
+
+**P19-OPERATOR11 (bounded authority to bring lane 19y into the outside-operator handoff and the
+externally pinned roots; declared 22 Nov 2026 before any commit that acts on it).** Lane 19y's
+submissions are committed (`f1bbf672`) and its run of record is under way on the project's
+second host; its pack does not exist yet. The lane's declaration did not authorise a workflow
+or handoff edit. This change is made on the lane's branch after the pack is committed. This
+declaration authorises, and nothing else:
+
+1. `handoff19.py`: 19y added to `PHASES` with its host and time, the word for the new count,
+   and 19y in the list of lanes that need nothing beyond the standard library. 19y is a
+   replayed lane as 19t is: its committed receipt reads `gate_recomputed`, a host that cannot
+   replay prints `structure_checked`, and `19y --replay` joins the items only some hosts can
+   exercise. The comparator's rules are the ones 19t already has, applied to one more lane.
+   Tests first.
+2. The reviews of the three operator receipts recomputed under the new phase list. No receipt
+   is edited; 19y appears in each review as `not_in_receipt`, which is what happened.
+3. Re-rendering `HANDOFF.md` and `discrepancy-template.json`; the 19f README's count of packs,
+   its sentence on the lane and its list of what is owed.
+4. `.github/workflows/assurance-provenance.yml`: 19y's `docs/` path added to both path filters
+   and its id to the expected-roots check, with its message. No step is added, removed or
+   renamed, and the Stage 5Q census must be byte-identical before and after. The repository
+   variable `PHASE19_ROOTS` gains the one root, set outside the pull request, the
+   twenty-three existing values unchanged.
+5. The root README's count of Phase 19 packs, its sentences on lanes 19t and 19y, and the
+   same count and the sentence on what is owed in `docs/AUTHOR_AND_METHOD.md`.
+6. Both logs and the ruling.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to an operator's
+receipt, or any other change to what the comparator checks. This declaration commit must be a
+strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
@@ -2911,3 +3092,73 @@ be a strict ancestor of every commit that acts on it.
   low score before and after, which shows nothing either way. The quick gate passes. Not
   done: no structure, paragraph or section was rewritten, and the pass says nothing about
   how any text was written; `docs/AUTHOR_AND_METHOD.md` states how AI assistance is used.
+- Ruling (22 Nov 2026, P19-TOOL01 exercised): the declaration (`5d81c7eb`) precedes the
+  commit that adds the tool. `tools/assurance-provenance/label19.py` imports `dest19q.py`
+  unchanged and reads one transcript; given the transcript of an earlier stage it applies
+  rule A as the lane does. It prints a truncated digest of each destination unless asked for
+  the destination, and its exit status is the decision of the chosen rule. Fifteen tests on
+  transcripts written for them pass, with a bare interpreter as well; one of them checks the
+  tool's output against lane 19q's own row for the same transcript, and each of six
+  deliberate breaks of the tool fails at least one. The page
+  `docs/research/provenance-phase-19q/LABELLER.md` says how to run it and what it cannot
+  tell, and its example was run through the tool. Found while writing the tests and recorded
+  on that page: the lane's grammar does not read a bare host name in prose, so a destination
+  the principal names that way is first seen in the agent's own command and every rule
+  refuses. That is a limit of 19q's rules and is not changed here. `dest19q.py`, lane 19q's
+  pack and its pages are unchanged, and no text of the benchmark was used. The quick gate
+  passes.
+- Ruling (22 Nov 2026, P19-REDTEAM02 exercised): the declaration (`cc3dc187`) is an ancestor
+  of the instrument (`43e019d4`), the four amendments and their seat changes (`2e8c5839` and
+  `fc90d942`, `6cb670a6` and `55be8905`, `dc28e017`, `69eb1235` and `6e56f09e`), the
+  submissions (`f1bbf672`) and the pack. The six round-two files were pushed at 01:22:54Z on
+  22 Nov and the host of record began at 01:23:49Z, from a clean clone at `f1bbf672` on the
+  project's second host; it ended at 02:22:59Z with the tree clean and its two passes in
+  agreement. Root `cf2557c4116c9d160d5055cb6afe2eba61b3b528dfbad0cee893dbf0f6b63bd5`.
+  Y0 holds: on the gate as it was, each of 19t's 92 attempts has the outcome 19t recorded (49
+  differ: 39 in the audit, 10 by a raise). Y1 holds: none of the 92 changes the repaired
+  gate's output. Y2 holds: none of the 151 attempts of round two changes it or makes a
+  dispatch raise (`opus-r2` 37, `sonnet-r2` 60, `mythos-r2` 54); 44 of them change the gate
+  as it was. In all 243 rows the repaired gate blocks the undelegated action, lets the
+  delegated one through and shows one effect. Y3 does not hold: three seats are empty.
+  `fable-r2` was refused by its provider's safeguards; `codex-r2` was refused on the owner's
+  plan as a possible cybersecurity risk and could not use the API organisation; `astra-r2`
+  was answered `cyber_policy` on its second request. No request was reworded and no access
+  programme was applied for. The seats that attacked have 5, 13 and 11 potent attempts,
+  which between them change all thirteen naive gates. Money: 0.008 USD at OpenAI under a cap
+  of 10 USD, all of it on the `astra-r2` seat; nothing else was spent. Departures and limits,
+  as they happened: (1) every seat that attacked is a Claude model, and one is the model that
+  wrote the repair; (2) the author ran 19t's attempts against the repair on a development
+  machine before the instrument was pushed, and all attempts there after the submissions
+  were pushed; three deep-nesting attempts change two naive gates on that machine and none
+  on the host of record, and no outcome of the gate as it was or of the repaired gate differs
+  between the two; (3) the commit `55be8905` was pushed while the quick gate showed one Node
+  timing failure under load, which the log records; the gate passed before the submissions
+  were committed and passes at this commit; (4) the attackers named weaknesses they could not
+  turn into a difference, which the lane's page lists: a cut note and a refused token are
+  recorded only in the pipeline's own events, the path that honours a minted approval was
+  not attacked because the fixture mints none, and a file channel can read back longer than
+  it was written. Not done: the repair is in `repair19y.py` beside the gate, and
+  `gate19.ProvenancePipeline`, which lanes 19a to 19x measured, is unchanged; no person and
+  no agent of another vendor attacked; nothing here was replayed outside the author's
+  custody.
+- Ruling (22 Nov 2026, P19-OPERATOR11 exercised): the declaration (`eb38151a`) precedes the
+  commit that acts on it, and the lane's pack (`718d222c`) is in place. `handoff19.py` lists
+  twenty-four lanes. 19y is a replayed lane as 19t is: its committed receipt reads
+  `gate_recomputed`, a host that cannot replay prints `structure_checked`, and `19y --replay`
+  is an item only some hosts can exercise. The handoff tests were changed first and six
+  failed before the code changed; 38 pass. The comparator is unchanged. The three operator
+  receipts are byte-identical; their reviews were recomputed and list 19y as
+  `not_in_receipt`, and `handoff19.py status` names five items still owed under
+  `IOU-19-OPERATOR`: 19w, 19x, 19y, 19y's `--replay` and 19q's `--dataset`. `HANDOFF.md` and
+  `discrepancy-template.json` were rendered again. The 19f README counts twenty-four packs
+  and has a row for the lane. The workflow gained the lane's `docs/` path in both path
+  filters and its id in the expected-roots check, with its message; no step was added,
+  removed or renamed, and the Stage 5Q census output is identical before and after.
+  `PHASE19_ROOTS` was extended outside the pull request at 02:29Z on 22 Nov from
+  twenty-three roots to twenty-four, the twenty-three existing values unchanged and each
+  compared with its committed `ROOT.sha256`; the one added is 19y
+  `cf2557c4116c9d160d5055cb6afe2eba61b3b528dfbad0cee893dbf0f6b63bd5`. The root README says
+  twenty-four packs, gained one paragraph on the lane and no longer says the two faults of
+  19t are unrepaired; `docs/AUTHOR_AND_METHOD.md` has the new count. Not done: no one outside
+  the author has run the handoff for 19y or for the other items owed, and a replay of 19y on
+  another host may differ in the three deep-nesting rows the lane's page names.

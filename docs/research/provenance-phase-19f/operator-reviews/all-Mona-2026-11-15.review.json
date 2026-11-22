@@ -37,7 +37,9 @@
     "19u",
     "19v",
     "19w",
-    "19x"
+    "19x",
+    "19y",
+    "19y --replay"
   ],
   "operator": "Mona",
   "phases": {
@@ -129,6 +131,9 @@
       "result": "not_in_receipt"
     },
     "19x": {
+      "result": "not_in_receipt"
+    },
+    "19y": {
       "result": "not_in_receipt"
     }
   },

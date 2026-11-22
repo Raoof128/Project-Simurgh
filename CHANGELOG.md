@@ -1,5 +1,88 @@
 ## Change Log
 
+## [phase-19f-operator11-2026-11-22] — 2026-11-22 — Lane 19y in the operator handoff; twenty-four pinned roots
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR11, the handoff tool, its rendered files, the hosted
+  roots check, the root README.
+- **Summary:** twenty-four packs in the handoff and in the hosted roots check. 19y is a
+  replayed lane. Five items are owed to an outside operator.
+- **Verification:** 38 handoff tests; Stage 5Q census identical; quick gate.
+
+## [phase-19y-pack-2026-11-22] — 2026-11-22 — Lane 19y: the repair of 19t's faults, and a second round against it
+
+**Raouf:**
+
+- **Scope:** the lane's pack, pages, committed test and ruling.
+- **Summary:** the repaired gate's output did not change for any of 19t's 92 attempts or for
+  any of 151 new attempts from three Claude agents. Three other seats were refused by their
+  providers. Root `cf2557c4116c9d160d5055cb6afe2eba61b3b528dfbad0cee893dbf0f6b63bd5`.
+- **Verification:** bare-interpreter verify; 69 lane tests; quick gate.
+
+## [phase-19-tool01-2026-11-22] — 2026-11-22 — A one-command labeller built on lane 19q's rules
+
+**Raouf:**
+
+- **Scope:** the declaration P19-TOOL01, one new module, its test, one page, one README
+  sentence.
+- **Summary:** `label19.py` reads one transcript and reports where each destination first
+  appeared and whether rules P, E and A refuse it. No measurement, no model, no benchmark
+  text. A limit of the grammar found while testing is recorded on the page.
+- **Verification:** 15 tests; six deliberate breaks each caught; `ruff`; `prettier`; quick
+  gate.
+
+## [phase-19y-submissions-2026-11-22] — 2026-11-22 — Lane 19y: round-two submissions as received
+
+**Raouf:**
+
+- **Scope:** six files under `docs/research/provenance-phase-19y/submissions/`.
+- **Summary:** 151 attempts from three seats (`opus-r2` 37, `sonnet-r2` 60, `mythos-r2` 54)
+  and three empty seats whose providers refused or could not serve the task. Committed
+  before the host of record runs any of them.
+- **Verification:** format read; private-data scan; quick gate.
+
+## [phase-19y-seats3-2026-11-22] — 2026-11-22 — Lane 19y: a direct API seat for an OpenAI model
+
+**Raouf:**
+
+- **Scope:** the third and fourth amendments to P19-REDTEAM02, the list of seats, its tests.
+- **Summary:** `codex-r2` stays empty after two failed starts; `astra-r2` is added under a
+  10 USD cap. The entry below is corrected: its quick gate showed one timing failure under
+  load.
+- **Verification:** 59 lane tests; `ruff`. The quick gate is run at the pack commit.
+
+## [phase-19y-seats2-2026-11-22] — 2026-11-22 — Lane 19y: an OpenAI seat and a Mythos seat
+
+**Raouf:**
+
+- **Scope:** the second amendment to P19-REDTEAM02, the list of seats and its tests.
+- **Summary:** five seats in round two at the owner's request. Nothing else changed.
+- **Verification:** 59 lane tests; `ruff`. The quick gate showed 95 of 96 (one Node timing
+  test failed under load and passed alone).
+
+## [phase-19y-seats-2026-11-22] — 2026-11-22 — Lane 19y: a refused seat recorded and a third seat added
+
+**Raouf:**
+
+- **Scope:** the amendment to P19-REDTEAM02, the instrument's list of seats and its tests.
+- **Summary:** the Fable 5.2 seat was refused by its provider and stays in the record empty;
+  a Sonnet 5.5 seat is added before any submission exists. Nothing else changed.
+- **Verification:** 59 lane tests; `ruff`; quick gate.
+
+## [phase-19y-instrument-2026-11-22] — 2026-11-22 — Lane 19y instrument: the 19t repair and a second red-team round
+
+**Raouf:**
+
+- **Scope:** the declaration P19-REDTEAM02, three new modules, their tests and a brief.
+- **Summary:** `repair19y.py` repairs what lane 19t's attackers found, in new classes beside
+  the gate: a non-string `approver_id` is a schema refusal, a database error is a reason and
+  not an exception, an oversize summary note is cut before the frozen gate sees it, and the
+  fixture holds file channels as bytes. `redteam19y.py` and `evidence19y.py` run 19t's 92
+  attempts and a new round against the gate as it was and the repaired gate.
+- **Verification:** 59 new tests; nine deliberate breaks each caught; `ruff`; `prettier`;
+  quick gate.
+
 ## [phase-19-style01-2026-11-21] — 2026-11-21 — Wording pass on living documents
 
 **Raouf:**
