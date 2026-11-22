@@ -4156,3 +4156,17 @@ strict ancestor of every commit that acts on it.
   output, was looked at three times. Not done and not claimed: nothing here transfers to a
   hosted model; five wordings and four trials per cell are too few to say which words
   matter; a verifier cannot recompute a generation.
+- Ruling (22 Nov 2026, P19-OPERATOR16 exercised): the declaration precedes the commit that
+  acts on it. `handoff19.py` carries 19af as a capture lane with no `--replay`; the handoff
+  tests were changed first and failed until the tool changed. The three operator reviews
+  were recomputed and no receipt was edited: the lane is `not_in_receipt` in each. Eighteen
+  items are owed to an outside operator: lanes 19w, 19x, 19y, 19z and 19aa to 19af, the
+  `--replay` of seven of them, and 19q's `--dataset` recomputation. The workflow gained the
+  `docs/` path in both filters and the id in the roots check; the Stage 5Q census is
+  byte-identical before and after. `PHASE19_ROOTS` was read, found as P19-OPERATOR15 left it,
+  and set to thirty-one roots, the thirty earlier values unchanged. The root README has the
+  new count, one paragraph on the lane and one entry under its open work.
+  `docs/AUTHOR_AND_METHOD.md` has the count. The pages of lanes 19aa to 19af were read for
+  plain language and seven sentences reworded; no number and no claim changed, and the
+  pinned briefs were not touched. Not done: no one outside the author has run the handoff
+  for any of the eighteen items.

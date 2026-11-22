@@ -1,5 +1,17 @@
 ## Change Log
 
+## [phase-19f-operator16-2026-11-22] — 2026-11-22 — Lane 19af in the operator handoff; thirty-one pinned roots; plain-language pass
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR16, the handoff tool, its rendered files, the hosted
+  roots check, the root README, the day's lane pages.
+- **Summary:** thirty-one packs in the handoff and in the hosted roots check. The README says
+  what the gate does with a restriction that arrives as text. Seven sentences on the day's
+  pages reworded for plain language; no number or claim changed.
+- **Verification:** handoff tests; Stage 5Q census identical; 378 tests of the day; all
+  thirty-one packs verified; quick gate 96 of 96 and full gate 144 of 144.
+
 ## [phase-19af-pack-2026-11-22] — 2026-11-22 — Lane 19af: three questions asked of small local models
 
 **Raouf:**

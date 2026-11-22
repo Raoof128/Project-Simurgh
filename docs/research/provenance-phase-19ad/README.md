@@ -69,9 +69,10 @@ nonce and changes the expiry. In the other both actions are approved and the tok
 token. The bound gate refuses it and then honours the real approval once. A third, naming an
 approver the host does not list, is refused by both.
 
-**Nothing else moved.** A real approval is honoured once, direct or relayed, on both gates.
-Tokens with a nonce the host never minted, the retries and the self-written approvals of lane
-19aa, and the seats' probes with malformed tokens all end the same way on both.
+**The other sequences are unchanged.** A real approval is honoured once, direct or relayed,
+on both gates. Tokens with a nonce the host never minted, the retries and the self-written
+approvals of lane 19aa, and the seats' probes with malformed tokens all end the same way on
+both.
 
 ## Where it ran
 

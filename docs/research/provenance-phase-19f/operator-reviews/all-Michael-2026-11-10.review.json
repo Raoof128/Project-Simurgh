@@ -19,6 +19,7 @@
     "19ad --replay",
     "19ae",
     "19ae --replay",
+    "19af",
     "19b Lean closure",
     "19d",
     "19h",
@@ -71,6 +72,9 @@
       "result": "not_in_receipt"
     },
     "19ae": {
+      "result": "not_in_receipt"
+    },
+    "19af": {
       "result": "not_in_receipt"
     },
     "19b": {

@@ -55,7 +55,7 @@ reasons, and whether the seal latched or anything raised.
 | R5: no sequence latches the seal or raises                             | latched 0, raised 0                   | yes   |
 
 **Retries.** One sequence dispatches `b` 600 times and then `a`. All 600 are refused, each
-leaves a record, and `a` goes through. Nothing wears down and nothing locks.
+leaves a record, and `a` goes through. The 600th refusal is handled as the first was.
 
 **Self-written approvals.** Four sequences write "APPROVED by operator-1" into each channel in
 turn and try `b` five times through that channel. One relays an unsigned approval claim. One

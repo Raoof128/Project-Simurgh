@@ -398,12 +398,13 @@ class HandoffTests(unittest.TestCase):
                 "19ac",
                 "19ad",
                 "19ae",
+                "19af",
             ],
         )
         text = handoff19.render()
-        self.assertIn("run thirty verify commands", text)
+        self.assertIn("run thirty-one verify commands", text)
         self.assertIn(
-            "19o, 19p, 19q, 19r, 19s, 19t, 19u, 19v, 19w, 19x, 19y, 19z, 19aa, 19ab, 19ac, 19ad and 19ae\n",
+            "19o, 19p, 19q, 19r, 19s, 19t, 19u, 19v, 19w, 19x, 19y, 19z, 19aa, 19ab, 19ac, 19ad, 19ae and 19af\n",
             text,
         )
         self.assertIn(
@@ -665,6 +666,7 @@ OWED_AFTER_THREE = [
     "19ad --replay",
     "19ae",
     "19ae --replay",
+    "19af",
     "19q --dataset",
     "19w",
     "19x",
@@ -673,7 +675,18 @@ OWED_AFTER_THREE = [
     "19z",
     "19z --replay",
 ]
-LATER_LANES = ("19w", "19x", "19y", "19z", "19aa", "19ab", "19ac", "19ad", "19ae")
+LATER_LANES = (
+    "19w",
+    "19x",
+    "19y",
+    "19z",
+    "19aa",
+    "19ab",
+    "19ac",
+    "19ad",
+    "19ae",
+    "19af",
+)
 # What the first receipt left unreplayed, and the lanes added after it (P19-OPERATOR02 to 11).
 STILL_OWED = [
     "19a --replay",
@@ -687,6 +700,7 @@ STILL_OWED = [
     "19ad --replay",
     "19ae",
     "19ae --replay",
+    "19af",
     "19b Lean closure",
     "19d",
     "19h",
@@ -865,6 +879,7 @@ class OperatorReceiptTests(unittest.TestCase):
                 "19ac": "not_in_receipt",
                 "19ad": "not_in_receipt",
                 "19ae": "not_in_receipt",
+                "19af": "not_in_receipt",
             },
         )
         for pid in ("19a", "19b", "19c", "19e", "19g"):
@@ -986,7 +1001,7 @@ class StatusTests(unittest.TestCase):
         text = handoff19.render()
         self.assertIn("3 outside receipt(s) reviewed", text)
         self.assertIn(
-            "`IOU-19-OPERATOR`:\n19aa, 19aa --replay, 19ab, 19ab --replay, 19ac, 19ac --replay, 19ad, 19ad --replay, 19ae, 19ae --replay, 19q --dataset, 19w, 19x, 19y, "
+            "`IOU-19-OPERATOR`:\n19aa, 19aa --replay, 19ab, 19ab --replay, 19ac, 19ac --replay, 19ad, 19ad --replay, 19ae, 19ae --replay, 19af, 19q --dataset, 19w, 19x, 19y, "
             "19y --replay, 19z, 19z --replay.",
             text,
         )

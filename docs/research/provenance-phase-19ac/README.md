@@ -4,10 +4,10 @@ Lanes 19y and 19z ended with no attempt that beat the gate, and nothing in them 
 their attackers would have found a fault had one been there. Lane 19aa's sequences are the
 author's own. This lane has two agents write the sequences, and gives them a second gate with
 a fault the author planted, without saying which gate is which. The planted fault was meant
-to give weight to a zero on the real gate. There was no zero. No model is a target. See
-[RESULTS.md](RESULTS.md), [the brief](BRIEF.md), [the author's controls](attempts-author.json),
-[the two seats' files](submissions/) and [the declaration](../PROVENANCE_PHASE_19.md)
-(P19-PLANT01).
+to give weight to a zero on the real gate, and the seats did not return a zero. No model is
+a target. See [RESULTS.md](RESULTS.md), [the brief](BRIEF.md),
+[the author's controls](attempts-author.json), [the two seats' files](submissions/) and
+[the declaration](../PROVENANCE_PHASE_19.md) (P19-PLANT01).
 
 **Both seats found the planted fault, and both found a real one in the gate itself: 6 of
 their 25 attempts make the undelegated action land on the real gate. Each of the 6 signs a
@@ -47,7 +47,7 @@ So this sequence lands the undelegated action `b` with no approval for it:
 The attacker needs the operator's signing key. In this fixture the key is a constant in the
 repository and the brief allowed its use; every attempt that signs with it says so in its
 note. A key that signs approvals is a serious thing to lose, and a gate whose key is lost has
-lost most of what an approval means. The store's record of what the host actually minted is
+lost most of what an approval means. The store's record of what the host minted is
 the one thing left standing in that case, and it is weaker than it looks: it holds the action
 and does not use it.
 
@@ -71,10 +71,9 @@ key-signed token with a fresh nonce finds it, and four of the author's 28 sequen
 `seat-a` found it by running its own probes on both.
 
 Each seat handed in attempts that gain on the planted gate and not on the real one (one from
-`seat-a`, two from `seat-b`), and each said correctly which label was the planted gate and
-what the fault was. So the control shows that these seats tried forged tokens at all and
-compared the two gates with care. It is a floor on their effort, and it says nothing about
-harder faults.
+`seat-a`, two from `seat-b`), and each named the planted gate's label and the fault. So the
+control shows that these seats tried forged tokens at all and compared the two gates with
+care. It is a floor on their effort, and it says nothing about harder faults.
 
 ## What the pack shows
 
