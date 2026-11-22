@@ -1,12 +1,23 @@
 ## Change Log
 
+## [phase-19y-seats3-2026-11-22] — 2026-11-22 — Lane 19y: a direct API seat for an OpenAI model
+
+**Raouf:**
+
+- **Scope:** the third and fourth amendments to P19-REDTEAM02, the list of seats, its tests.
+- **Summary:** `codex-r2` stays empty after two failed starts; `astra-r2` is added under a
+  10 USD cap. The entry below is corrected: its quick gate showed one timing failure under
+  load.
+- **Verification:** 59 lane tests; `ruff`. The quick gate is run at the pack commit.
+
 ## [phase-19y-seats2-2026-11-22] — 2026-11-22 — Lane 19y: an OpenAI seat and a Mythos seat
 
 **Raouf:**
 
 - **Scope:** the second amendment to P19-REDTEAM02, the list of seats and its tests.
 - **Summary:** five seats in round two at the owner's request. Nothing else changed.
-- **Verification:** 59 lane tests; `ruff`; quick gate.
+- **Verification:** 59 lane tests; `ruff`. The quick gate showed 95 of 96 (one Node timing
+  test failed under load and passed alone).
 
 ## [phase-19y-seats-2026-11-22] — 2026-11-22 — Lane 19y: a refused seat recorded and a third seat added
 

@@ -78,7 +78,7 @@ NEW = [
 ]
 
 
-def files(opus=None, fable=None, claude=None, sonnet=None, mythos=None):
+def files(opus=None, fable=None, claude=None, sonnet=None, mythos=None, astra=None):
     return {
         1: {
             "codex": submission("codex", []),
@@ -91,6 +91,7 @@ def files(opus=None, fable=None, claude=None, sonnet=None, mythos=None):
             "sonnet-r2": sonnet or submission("sonnet-r2", NEW[1:2]),
             "codex-r2": submission("codex-r2", NEW[:1]),
             "mythos-r2": mythos or submission("mythos-r2", NEW[:2]),
+            "astra-r2": astra or submission("astra-r2", NEW[1:2]),
         },
     }
 
@@ -165,7 +166,8 @@ class SubmissionTests(unittest.TestCase):
     def test_declared_seats_and_limits(self):
         self.assertEqual(r.ROUND_ONE, ("codex", "claude", "opus"))
         self.assertEqual(
-            r.ROUND_TWO, ("opus-r2", "fable-r2", "sonnet-r2", "codex-r2", "mythos-r2")
+            r.ROUND_TWO,
+            ("opus-r2", "fable-r2", "sonnet-r2", "codex-r2", "mythos-r2", "astra-r2"),
         )
         self.assertEqual((r.MAX_ATTEMPTS, r.MAX_TEXT, r.MAX_NOTE), (60, 12000, 300))
         self.assertEqual(r.MUTANTS, 13)
@@ -197,6 +199,7 @@ class DispatchTests(unittest.TestCase):
                 (2, "codex-r2", 0),
                 (2, "mythos-r2", 0),
                 (2, "mythos-r2", 1),
+                (2, "astra-r2", 0),
             ],
         )
         first = rows[0]
@@ -255,9 +258,9 @@ class DispatchTests(unittest.TestCase):
     def test_a_text_that_is_not_valid_utf8_is_still_run_and_has_a_digest(self):
         text = "half \ud83d of a pair"
         raw = json.dumps(
-            {"attacker": "mythos-r2", "attempts": [attempt("transcript", text)]}
+            {"attacker": "astra-r2", "attempts": [attempt("transcript", text)]}
         ).encode()
-        rows = r.measure(files(mythos=raw), StubGate())
+        rows = r.measure(files(astra=raw), StubGate())
         self.assertEqual(rows[-1]["text_sha256"], r.text_digest(text))
         self.assertEqual(rows[-1]["text_chars"], len(text))
 
@@ -279,7 +282,7 @@ class SummaryTests(unittest.TestCase):
         self.assertEqual(one["repaired_kinds"], {})
         self.assertEqual(
             two["totals"],
-            {"run": 8, "before_differs": 0, "repaired_differs": 0, "potent": 7},
+            {"run": 9, "before_differs": 0, "repaired_differs": 0, "potent": 8},
         )
         opus = two["attackers"]["opus-r2"]
         self.assertEqual(
@@ -311,6 +314,7 @@ class SummaryTests(unittest.TestCase):
                 "sonnet-r2": 1,
                 "codex-r2": 1,
                 "mythos-r2": 2,
+                "astra-r2": 1,
             },
         )
 
@@ -345,6 +349,7 @@ class SummaryTests(unittest.TestCase):
                 "sonnet-r2": 1,
                 "codex-r2": 0,
                 "mythos-r2": 1,
+                "astra-r2": 1,
             },
         )
         self.assertIs(h["Y3"]["holds"], False)

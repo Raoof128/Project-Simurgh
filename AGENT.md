@@ -14,6 +14,23 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19y: the Codex seat stays empty; a direct API seat for an OpenAI model is added (no submission committed yet)
+
+**Raouf:**
+
+- **Scope:** the third and fourth amendments to P19-REDTEAM02 in the ledger, the instrument's
+  list of seats and its tests, and a correction to the entry below this one.
+- **Summary:** the Codex agent was refused by its provider on the owner's plan. The owner
+  said to use the paid interface. The command-line agent could not use the project's API
+  organisation, which is an account setting, so nothing was generated or spent. A sixth
+  seat, `astra-r2`, calls `gpt-6.2-astra` through the ordinary paid interface from a loop the
+  author wrote, with a cap of 10 USD at OpenAI. The request is in the same words and is not
+  reworded after a refusal.
+- **Files changed:** `tools/assurance-provenance/redteam19y.py`, `tests/test_redteam19y.py`,
+  `tests/test_evidence19y.py`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the lane's 59 tests pass; `ruff` is clean. The quick gate is not run for
+  this change while the attackers load the machine; it is run at the pack commit.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19y: two more seats at the owner's request, an OpenAI Codex agent and a Mythos agent (no submission committed yet)
 
 **Raouf:**
@@ -27,7 +44,11 @@ one machine's local agent configuration:
   amendment says.
 - **Files changed:** `tools/assurance-provenance/redteam19y.py`, `tests/test_redteam19y.py`,
   `tests/test_evidence19y.py`, the ledger, `AGENT.md`, `CHANGELOG.md`.
-- **Verification:** the lane's 59 tests pass; `ruff` is clean; the quick gate passes.
+- **Verification:** the lane's 59 tests pass and `ruff` is clean. The quick gate run for this
+  change showed 95 of 96: one Node timing test (a FIFO read) failed while the attackers'
+  processes held the machine at a load near 30, and passed when run alone. The change was
+  committed before that was looked at, which was a mistake; the full gate is run again at
+  the pack commit.
 
 ### 2026-11-22 (Australia/Sydney) — Lane 19y: the Fable seat was refused by its provider; a Sonnet 5.5 seat is added (no submission exists yet)
 

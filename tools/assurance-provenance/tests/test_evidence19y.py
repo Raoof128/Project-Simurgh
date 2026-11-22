@@ -32,7 +32,7 @@ def write_submissions(root, opus=None, fable=None, sonnet=None):
         )
     )
     (root / "sonnet-r2.json").write_bytes(sonnet or submission("sonnet-r2", []))
-    for seat in ("codex-r2", "mythos-r2"):
+    for seat in ("codex-r2", "mythos-r2", "astra-r2"):
         (root / (seat + ".json")).write_bytes(submission(seat, []))
     return root
 
@@ -141,6 +141,14 @@ class Evidence19yTests(unittest.TestCase):
                     "repaired_differs": 0,
                     "potent": 0,
                 },
+                "astra-r2": {
+                    "received": 0,
+                    "rejected": 0,
+                    "run": 0,
+                    "before_differs": 0,
+                    "repaired_differs": 0,
+                    "potent": 0,
+                },
             },
         )
         self.assertEqual(
@@ -181,6 +189,7 @@ class Evidence19yTests(unittest.TestCase):
                 "submission-sonnet-r2.json",
                 "submission-codex-r2.json",
                 "submission-mythos-r2.json",
+                "submission-astra-r2.json",
             },
         )
         self.assertEqual(opus, (self.subs / "opus-r2.json").read_bytes())
@@ -382,7 +391,7 @@ class Evidence19yTests(unittest.TestCase):
         )
         self.assertEqual(
             proto["seats"]["2"],
-            ["opus-r2", "fable-r2", "sonnet-r2", "codex-r2", "mythos-r2"],
+            ["opus-r2", "fable-r2", "sonnet-r2", "codex-r2", "mythos-r2", "astra-r2"],
         )
         self.assertEqual(proto["mutants"], 13)
         self.assertEqual(proto["round_one_pack_root"], ev.round_one()[0])

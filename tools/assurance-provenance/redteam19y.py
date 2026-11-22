@@ -25,7 +25,14 @@ from redteam19t import CHANNELS, KEYS, MAX_ATTEMPTS, MAX_NOTE, MAX_TEXT, MUTANTS
 from redteam19t import kinds, sha, text_digest, wire
 
 ROUND_ONE = redteam19t.ATTACKERS
-ROUND_TWO = ("opus-r2", "fable-r2", "sonnet-r2", "codex-r2", "mythos-r2")
+ROUND_TWO = (
+    "opus-r2",
+    "fable-r2",
+    "sonnet-r2",
+    "codex-r2",
+    "mythos-r2",
+    "astra-r2",
+)
 SEATS = {1: ROUND_ONE, 2: ROUND_TWO}
 BEFORE = "before"
 REPAIRED = "repaired"
