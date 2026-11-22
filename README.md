@@ -93,8 +93,10 @@ beside the gate, ran 19t's 92 attempts again and gave the repaired source to new
 whose files were committed before the host of record ran them. None of the 92 changes the
 repaired gate's output, and none of 151 new attempts from three Claude agents does. Three other
 seats are empty: the providers of a fourth Claude model and of two OpenAI routes refused the
-task, and no request was reworded. So every attacker that ran is from one vendor, and one of
-them is the model that wrote the repair. The gate that the earlier lanes measured is unchanged;
+task, and no request was reworded. So every attacker that ran is from one vendor: one Opus 5.5
+agent and two Sonnet 5.5 agents. A seat named for Claude Mythos, the model that wrote the
+repair, was in fact served by Sonnet 5.5; the lane's page records the correction. The gate that
+the earlier lanes measured is unchanged;
 a caller has to use the repaired classes.
 
 [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) ·

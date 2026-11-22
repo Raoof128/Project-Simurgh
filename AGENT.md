@@ -14,6 +14,25 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Correction: lane 19y's seat `mythos-r2` ran on Claude Sonnet 5.5, not Mythos 5.2
+
+**Raouf:**
+
+- **Scope:** the declaration P19-REPAIR09 in the ledger (`850b226a`, before the change), the
+  lane's two pages and one sentence of the root README.
+- **Summary:** the pages, the ruling and the root README said one attacker in lane 19y was
+  Claude Mythos 5.2, "the model that wrote the repair". The agent was started without a named
+  model, and the harness gave it Claude Sonnet 5.5 under a setting the author had not
+  checked. The harness's own record of the agent names Sonnet 5.5 on all 58 responses. The
+  pages now say so. The seats that attacked were one Opus 5.5 agent and two Sonnet 5.5
+  agents. Entries below this one that name a Mythos agent are wrong on that point and stay
+  as written, as records.
+- **Files changed:** `docs/research/provenance-phase-19y/README.md`, `RESULTS.md`,
+  `README.md`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the lane's committed-pack tests pass unchanged; `prettier` is clean; the
+  quick gate passes. No number, hypothesis or pack byte changed.
+- **Not done:** no Claude Mythos agent has attacked the repaired gate.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19y in the operator handoff; twenty-four pinned roots; README counts
 
 **Raouf:**

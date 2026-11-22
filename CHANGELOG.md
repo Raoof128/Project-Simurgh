@@ -1,5 +1,16 @@
 ## Change Log
 
+## [phase-19y-correction-2026-11-22] — 2026-11-22 — Correction: which model sat in lane 19y's seat `mythos-r2`
+
+**Raouf:**
+
+- **Scope:** the declaration P19-REPAIR09, the lane's two pages, one sentence of the root
+  README.
+- **Summary:** the seat ran on Claude Sonnet 5.5, not Claude Mythos 5.2. The pages said
+  otherwise because the author stated the intended model without checking what the harness
+  ran. No number or outcome changes.
+- **Verification:** committed-pack tests; `prettier`; quick gate.
+
 ## [phase-19f-operator11-2026-11-22] — 2026-11-22 — Lane 19y in the operator handoff; twenty-four pinned roots
 
 **Raouf:**

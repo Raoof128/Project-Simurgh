@@ -24,7 +24,7 @@ Potent means the attempt changes at least one naive gate and leaves the repaired
 | 2     | `fable-r2` (Claude Fable 5.2; refused by its provider, nothing received)                                 | 0        | 0                | 0   | 0                         | 0                        | 0      | 0                                              |
 | 2     | `sonnet-r2` (Claude Sonnet 5.5)                                                                          | 60       | 0                | 60  | 16                        | 0                        | 13     | 12                                             |
 | 2     | `codex-r2` (OpenAI Codex agent; refused on the plan, could not start with the API key; nothing received) | 0        | 0                | 0   | 0                         | 0                        | 0      | 0                                              |
-| 2     | `mythos-r2` (Claude Mythos 5.2)                                                                          | 54       | 0                | 54  | 18                        | 0                        | 11     | 13                                             |
+| 2     | `mythos-r2` (Claude Sonnet 5.5; see the README's correction)                                             | 54       | 0                | 54  | 18                        | 0                        | 11     | 13                                             |
 | 2     | `astra-r2` (GPT Astra through the API; refused by its provider, nothing received)                        | 0        | 0                | 0   | 0                         | 0                        | 0      | 0                                              |
 
 ## 3. Round one: 19t's attempts, before and after the repair

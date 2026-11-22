@@ -3186,3 +3186,22 @@ commit must be a strict ancestor of every commit that acts on it.
   19t are unrepaired; `docs/AUTHOR_AND_METHOD.md` has the new count. Not done: no one outside
   the author has run the handoff for 19y or for the other items owed, and a replay of 19y on
   another host may differ in the three deep-nesting rows the lane's page names.
+- Note (22 Nov 2026, P19-REDTEAM02, corrected under P19-REPAIR09): the ruling above says of
+  the seats that attacked that "one is the model that wrote the repair", and the second
+  amendment calls `mythos-r2` a Claude Mythos 5.2 agent. Both are wrong about what ran. The
+  agent in that seat ran on Claude Sonnet 5.5. The seats that attacked were one Opus 5.5
+  agent and two separate Sonnet 5.5 agents; no Mythos agent attacked. Every number in the
+  ruling stands.
+- Ruling (22 Nov 2026, P19-REPAIR09 exercised): the declaration (`850b226a`) precedes the
+  commit that acts on it. The lane's page now names Claude Sonnet 5.5 for the seat
+  `mythos-r2`, says that none of the attackers is the model that wrote the repair, and has a
+  section on what was wrong and how it was found; its results page carries the same model in
+  the one row that named it; the root README's sentence is corrected. The cause was the
+  author's: an agent started without a named model was assumed to run on the session's
+  model, the harness gave it Sonnet 5.5 under a setting the author had not checked, and the
+  page stated the intended model as fact. The record the harness keeps of each agent was
+  read for all three seats: `claude-opus-5-5` for `opus-r2` and `claude-sonnet-5-5` for
+  `sonnet-r2` and `mythos-r2`. That record is the author's own and is not in the repository,
+  so a reader has the author's word for it and nothing more. The pack, the protocol, the
+  submissions, the instrument and the tests are unchanged, and the seat keeps its name
+  there. Not done: no Claude Mythos agent has attacked the repaired gate.
