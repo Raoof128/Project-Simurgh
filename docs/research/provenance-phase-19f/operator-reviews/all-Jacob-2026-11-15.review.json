@@ -7,7 +7,19 @@
     "os": "Ubuntu 26.04.1 LTS (Resolute Raccoon), Linux 7.0.0-43-generic",
     "python": "CPython 3.12.16 (uv-managed standalone build)"
   },
-  "not_exercised": ["19q --dataset", "19w", "19x", "19y", "19y --replay", "19z", "19z --replay"],
+  "not_exercised": [
+    "19aa",
+    "19aa --replay",
+    "19ab",
+    "19ab --replay",
+    "19q --dataset",
+    "19w",
+    "19x",
+    "19y",
+    "19y --replay",
+    "19z",
+    "19z --replay"
+  ],
   "operator": "Jacob",
   "phases": {
     "19a": {
@@ -17,6 +29,12 @@
       "result": "verified",
       "root_matches": true,
       "tree_state_is_commit": true
+    },
+    "19aa": {
+      "result": "not_in_receipt"
+    },
+    "19ab": {
+      "result": "not_in_receipt"
     },
     "19b": {
       "discrepancies": [],

@@ -1,10 +1,10 @@
 # Phase 19f: outside-operator replay (paid in part)
 
 `IOU-19-OPERATOR`: three receipts have come back and each is reviewed here. One outside operator
-replayed twenty-one of the twenty-five packs on Linux x86_64 with no discrepancy, among them the
-five frozen-gate replays, 19b's Lean closure and 19d's namespace probe. Seven items are still
-owed: lanes 19w, 19x, 19y and 19z, which joined the handoff after those receipts, the
-`--replay` of 19y and of 19z, and 19q's `--dataset` recomputation.
+replayed twenty-one of the twenty-seven packs on Linux x86_64 with no discrepancy, among them
+the five frozen-gate replays, 19b's Lean closure and 19d's namespace probe. Eleven items are
+still owed: lanes 19w, 19x, 19y, 19z, 19aa and 19ab, which joined the handoff after those
+receipts, the `--replay` of each of the last four, and 19q's `--dataset` recomputation.
 This directory holds the package that makes the replay a run of named commands against named
 expectations, the receipts that came back and the author's review of each:
 
@@ -23,11 +23,11 @@ python -B tools/assurance-provenance/handoff19.py review \
   docs/research/provenance-phase-19f/operator-receipts/all-Jacob-2026-11-15.json
 ```
 
-| Receipt | Operator's host                                   | What the review found              | Left unexercised                       |
-| ------- | ------------------------------------------------- | ---------------------------------- | -------------------------------------- |
-| First   | macOS 13 x86_64, Python 3.12, no Lean             | 5 lanes verified, 19d refused      | everything else                        |
-| Second  | Ubuntu 26.04 x86_64, CPython 3.12.16, Lean 4.15.0 | 21 lanes verified, no discrepancy  | 19w, 19x, 19y, 19z and `19q --dataset` |
-| Third   | Windows 10 run natively, Python 3.12.10, no Lean  | 21 lanes refused, nothing verified | everything                             |
+| Receipt | Operator's host                                   | What the review found              | Left unexercised                                   |
+| ------- | ------------------------------------------------- | ---------------------------------- | -------------------------------------------------- |
+| First   | macOS 13 x86_64, Python 3.12, no Lean             | 5 lanes verified, 19d refused      | everything else                                    |
+| Second  | Ubuntu 26.04 x86_64, CPython 3.12.16, Lean 4.15.0 | 21 lanes verified, no discrepancy  | 19w, 19x, 19y, 19z, 19aa, 19ab and `19q --dataset` |
+| Third   | Windows 10 run natively, Python 3.12.10, no Lean  | 21 lanes refused, nothing verified | everything                                         |
 
 ## The first receipt (10 Nov 2026, commit `c7d7ceec`)
 
@@ -110,7 +110,7 @@ lists all twenty-one lanes as `refused` and counts nothing as exercised. What th
 | Test suite: 652 tests, 19 failures, 50 errors, 22 skips | n/a       | The causes above, and four `test_egress19` tests that error for want of `AF_UNIX` where the handoff said they would skip.          | The handoff now says the suite does not pass there. |
 
 The author ran none of this on Windows. Each cause was checked against the code the receipt
-names: all twenty-five verifiers build the list the same way, the repository has no
+names: all twenty-seven verifiers build the list the same way, the repository has no
 `.gitattributes`, and the import is on line 21 of the frozen module. The path and `fcntl` causes
 sit in modules the packs pin by digest, so changing them would change the packs. The handoff now
 says that native Windows is not a supported host. Nobody has yet tried the WSL2 route.
@@ -150,6 +150,7 @@ Still owed:
 - Lane 19x, which joined on 21 Nov 2026.
 - Lane 19y and its `--replay`, which joined on 22 Nov 2026.
 - Lane 19z and its `--replay`, which joined on 22 Nov 2026.
+- Lanes 19aa and 19ab and the `--replay` of each, which joined on 22 Nov 2026.
 - 19q's `--dataset` recomputation, which neither receipt ran to completion.
 
 Not on that list, and also not done: the WSL2 route has not been tried, and no second Linux host
@@ -163,21 +164,23 @@ the second receipt ran Lean. The rule is fixed and a test holds it.
 ## Lanes that joined after the first receipt
 
 Each is `not_in_receipt` in the review of the first receipt. The second and third receipts hold
-all of them except 19w, 19x, 19y and 19z.
+all of them except 19w, 19x, 19y, 19z, 19aa and 19ab.
 
-| Lanes                   | Joined       | Declaration    | What verifying does                                                                                          |
-| ----------------------- | ------------ | -------------- | ------------------------------------------------------------------------------------------------------------ |
-| 19h, 19i, 19k           | 11 Nov 2026  | P19-OPERATOR02 | Recomputes three model captures from committed outputs.                                                      |
-| 19j, 19l                | 11 Nov 2026  | P19-OPERATOR02 | Gate replays of those captures; with `--replay` on Linux x86_64 every recorded send is dispatched again.     |
-| 19m                     | 12 Nov 2026  | P19-OPERATOR03 | Eight more local models on 19k's schedule, recomputed from committed outputs.                                |
-| 19n, 19o                | 13 Nov 2026  | P19-OPERATOR04 | Four local models and six hosted models, recomputed from committed outputs; needs no network and no key.     |
-| 19p                     | 13 Nov 2026  | P19-OPERATOR05 | Every send recorded in 19n through the frozen Phase 17 pipeline; `--replay` on Linux x86_64.                 |
-| 19q, 19r, 19s, 19t, 19u | 13 to 14 Nov | P19-OPERATOR06 | 19q has `--dataset`, 19t has `--replay`; the others are recomputed from committed outputs.                   |
-| 19v                     | 15 Nov 2026  | P19-OPERATOR07 | Eight open-weight models captured on a rented GPU; verifying runs no model and needs no GPU, network or key. |
-| 19w                     | 15 Nov 2026  | P19-OPERATOR08 | A no-attack control on a published benchmark; verifying runs no model and no benchmark.                      |
-| 19x                     | 21 Nov 2026  | P19-OPERATOR10 | The same control on eight models from two vendors; verifying runs no model and no benchmark.                 |
-| 19y                     | 22 Nov 2026  | P19-OPERATOR11 | 19t's attempts and a second round against the repaired gate; `--replay` on Linux x86_64.                     |
-| 19z                     | 22 Nov 2026  | P19-OPERATOR12 | Attempts that write the gate's own stores, with and without a seal; `--replay` on Linux x86_64.              |
+| Lanes                   | Joined       | Declaration    | What verifying does                                                                                           |
+| ----------------------- | ------------ | -------------- | ------------------------------------------------------------------------------------------------------------- |
+| 19h, 19i, 19k           | 11 Nov 2026  | P19-OPERATOR02 | Recomputes three model captures from committed outputs.                                                       |
+| 19j, 19l                | 11 Nov 2026  | P19-OPERATOR02 | Gate replays of those captures; with `--replay` on Linux x86_64 every recorded send is dispatched again.      |
+| 19m                     | 12 Nov 2026  | P19-OPERATOR03 | Eight more local models on 19k's schedule, recomputed from committed outputs.                                 |
+| 19n, 19o                | 13 Nov 2026  | P19-OPERATOR04 | Four local models and six hosted models, recomputed from committed outputs; needs no network and no key.      |
+| 19p                     | 13 Nov 2026  | P19-OPERATOR05 | Every send recorded in 19n through the frozen Phase 17 pipeline; `--replay` on Linux x86_64.                  |
+| 19q, 19r, 19s, 19t, 19u | 13 to 14 Nov | P19-OPERATOR06 | 19q has `--dataset`, 19t has `--replay`; the others are recomputed from committed outputs.                    |
+| 19v                     | 15 Nov 2026  | P19-OPERATOR07 | Eight open-weight models captured on a rented GPU; verifying runs no model and needs no GPU, network or key.  |
+| 19w                     | 15 Nov 2026  | P19-OPERATOR08 | A no-attack control on a published benchmark; verifying runs no model and no benchmark.                       |
+| 19x                     | 21 Nov 2026  | P19-OPERATOR10 | The same control on eight models from two vendors; verifying runs no model and no benchmark.                  |
+| 19y                     | 22 Nov 2026  | P19-OPERATOR11 | 19t's attempts and a second round against the repaired gate; `--replay` on Linux x86_64.                      |
+| 19z                     | 22 Nov 2026  | P19-OPERATOR12 | Attempts that write the gate's own stores, with and without a seal; `--replay` on Linux x86_64.               |
+| 19aa                    | 22 Nov 2026  | P19-OPERATOR13 | Sequences of retries and of real, reused and forged approvals on the sealed gate; `--replay` on Linux x86_64. |
+| 19ab                    | 22 Nov 2026  | P19-OPERATOR13 | Changed bodies of a delegated or approved action on the sealed gate; `--replay` on Linux x86_64.              |
 
 ## Limits
 

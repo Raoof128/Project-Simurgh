@@ -1,5 +1,55 @@
 ## Change Log
 
+## [phase-19f-operator13-2026-11-22] — 2026-11-22 — Lanes 19aa and 19ab in the operator handoff; twenty-seven pinned roots
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR13, the handoff tool, its rendered files, the hosted
+  roots check, the root README.
+- **Summary:** twenty-seven packs in the handoff and in the hosted roots check. The root
+  README states three findings of the day under its open work.
+- **Verification:** 41 handoff tests; Stage 5Q census identical; quick gate.
+
+## [phase-19ab-pack-2026-11-22] — 2026-11-22 — Lane 19ab: changed bodies of a delegated or approved action
+
+**Raouf:**
+
+- **Scope:** the 19ab pack, its pages, a committed-pack test, the ruling.
+- **Summary:** 64 changed bodies, none observed; all five predictions hold. Found and not
+  predicted: 30 of 66 refusals leave no `blocked` event. Root `67d10295…`.
+- **Verification:** bare-interpreter `verify`; the same root on a second host; quick gate.
+
+## [phase-19ab-instrument-2026-11-22] — 2026-11-22 — Lane 19ab instrument; a census of served-model records
+
+**Raouf:**
+
+- **Scope:** `body19ab.py`, `evidence19ab.py`, `served19.py`, their tests, the author's 69
+  attempts, the generated census page.
+- **Summary:** changed bodies of a delegated or approved action as attempts on the sealed
+  gate (no run of record yet). Of 16 packs that name a model, one holds an id the provider
+  returned.
+- **Verification:** 37 tests; `ruff`; `prettier`; quick gate.
+
+## [phase-19aa-pack-2026-11-22] — 2026-11-22 — Lane 19aa: retries, self-written approvals and reused approvals
+
+**Raouf:**
+
+- **Scope:** the 19aa pack, its pages, a committed-pack test, the ruling.
+- **Summary:** 28 sequences and 1,194 dispatches on the sealed gate. Four of five
+  predictions hold; R2 does not (two valid approvals, the action reported observed twice,
+  one effect). Root `871e7cc7…`.
+- **Verification:** bare-interpreter `verify`; the same root on a second host; quick gate.
+
+## [phase-19aa-instrument-2026-11-22] — 2026-11-22 — Lane 19aa: sequences at the gate's front door (instrument)
+
+**Raouf:**
+
+- **Scope:** `retry19aa.py`, `evidence19aa.py`, their tests, the author's 28 sequences, a
+  ledger note.
+- **Summary:** retries after a refusal, self-written approval text, and real, reused and
+  forged approvals, as sequences on lane 19z's sealed gate. No run of record yet.
+- **Verification:** 30 tests; `ruff`; `prettier`; quick gate.
+
 ## [phase-19f-operator12-2026-11-22] — 2026-11-22 — Lane 19z in the operator handoff; twenty-five pinned roots
 
 **Raouf:**

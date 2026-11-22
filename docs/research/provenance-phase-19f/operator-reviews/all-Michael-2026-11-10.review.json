@@ -9,6 +9,10 @@
   },
   "not_exercised": [
     "19a --replay",
+    "19aa",
+    "19aa --replay",
+    "19ab",
+    "19ab --replay",
     "19b Lean closure",
     "19d",
     "19h",
@@ -47,6 +51,12 @@
       "result": "verified",
       "root_matches": true,
       "tree_state_is_commit": true
+    },
+    "19aa": {
+      "result": "not_in_receipt"
+    },
+    "19ab": {
+      "result": "not_in_receipt"
     },
     "19b": {
       "discrepancies": [],

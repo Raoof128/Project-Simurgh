@@ -2216,6 +2216,173 @@ Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to
 receipt, or any other change to what the comparator checks. This declaration commit must be a
 strict ancestor of every commit that acts on it.
 
+**P19-RETRY01 (a new lane, 19aa: what repetition, self-written approval text and a reused
+approval do at the gate's front door; deterministic; no model and no attacker agent; declared
+22 Nov 2026 before any line of it was written).** The gap hunt of 22 Nov left three groups of
+pains that can be measured on a fixture at no cost: an agent that tries again after a refusal,
+an agent that writes its own approval or relays one, and a real approval used more than once.
+Lanes 19b, 19t and 19y each touch one of these in passing; none measures sequences. Declared
+before any code:
+
+- The gate is the sealed, repaired gate of lane 19z on its fixture. No file of an earlier lane
+  is edited; the instrument is a new module, `retry19aa.py`.
+- One attempt is a sequence of at most twelve steps on one fresh fixture: dispatch an action
+  some number of times, up to 200, with or without a channel's adapter; write text into one
+  of the four wired channels; have the host mint a real approval for an action and keep it
+  under a name; dispatch with that approval passed directly; relay that approval, or any
+  text, through the tool-result channel. Each attempt runs in a process of its own.
+- Recorded for each attempt: the verdict of every dispatch in order, the count of effects at
+  the receiver, the gate's own `blocked` events, the pipeline's refusal reasons, whether the
+  seal latched and whether anything raised.
+- The attempts are the author's list, committed with the instrument. There is no attacker
+  agent in this lane: two of the last five seats offered to an agent of another model were
+  stopped by safety classifiers, and the lane's question is what the gate does with a fixed
+  set of sequences, which a list answers.
+- Hypotheses. R1: in no sequence in which the host mints no approval for the undelegated
+  action is that action ever observed, whatever is retried, written or relayed. R2: a minted
+  approval is honoured once: across every use of it in a sequence, direct or relayed, the
+  action is observed exactly once and every later use is refused. R3: refused retries are not
+  a lever on other work: wherever the delegated action is dispatched after only refused
+  dispatches, it is observed. R4: every refused dispatch leaves a record: the count of the
+  gate's `blocked` events equals the count of dispatches that were refused. R5: no sequence
+  latches the seal or raises.
+- Reported and not a hypothesis: the gate has no limit on retries, so the log grows by one
+  record for each. The largest count in the list is reported.
+- Where: the run of record is on the project's Linux x86_64 host in the hash-locked
+  environment, from a clean clone at the instrument commit. `verify` recomputes every row
+  there; elsewhere it checks structure.
+- If a hypothesis fails: the sequence and the cause are published as they are, and no repair
+  is made in this lane.
+- Money: none.
+- What this is not. A list the author wrote, on a fixture with two actions, one actor and a
+  budget of one. It is not evidence about what a model would try, about an attacker, or about
+  a human approver. A model that writes its own approval text is represented by the text,
+  not by a model. Nothing here measures credentials left within reach or requests laundered
+  through a permitted route; both need a receiver this fixture does not have.
+- Seen when this was written: lanes 19b, 19t, 19y and 19z, and one look at the existing
+  gate's events after three refused dispatches and one relayed approval (a `blocked` event
+  for each refusal; a relayed minted approval observed once and then refused as replayed).
+  No line of the instrument exists.
+
+Authorised files: `tools/assurance-provenance/retry19aa.py`, `evidence19aa.py`, their tests,
+`docs/research/provenance-phase-19aa/` (the author's attempts, the pack and its pages),
+`.prettierignore` entries for its byte-preserved files, the ruling and both logs. Not
+authorised: any edit to a frozen file, to a 19a to 19z source or pack, or to a workflow. This
+declaration commit must be a strict ancestor of every other commit of lane 19aa.
+
+**P19-BODY01 (a new lane, 19ab: what the gate does when the body of an action is not the
+body that was delegated or approved; deterministic; no model and no attacker agent; declared
+22 Nov 2026 before any line of it was written).** The gap hunt of 22 Nov names laundering
+through a permitted request: an agent that may send one thing sends another under the same
+name. Lane 19aa left it out. The part of it a fixture can measure is whether the gate binds
+the whole body of an action or only its name. Declared before any code:
+
+- The gate is the sealed, repaired gate of lane 19z on its fixture. No file of an earlier
+  lane is edited; the instrument is a new module, `body19ab.py`.
+- One attempt is one body, a JSON object, and one of two routes. On route `a` the body is
+  dispatched once in place of the delegated action, with no approval, and then the delegated
+  action is dispatched unchanged. On route `b` the host mints an approval for the unchanged
+  undelegated action, the body is dispatched once with that approval, and then the unchanged
+  action is dispatched with the same approval. Each attempt runs in a process of its own.
+- Recorded for each attempt: both verdicts, the count of effects, the digest of every
+  payload the receiver recorded and whether it equals the digest of the unchanged action's
+  payload in the baseline, the gate's `blocked` events, the pipeline's reasons, whether the
+  seal latched and whether anything raised.
+- The attempts are the author's list, committed with the instrument: changes to each field's
+  value, added and missing fields, the same text in other encodings (case, a trailing space,
+  a compatibility form, a zero-width character, a look-alike letter), values of another
+  type, and the same body with its keys in another order. No attacker agent, for the reason
+  given in P19-RETRY01.
+- A body is "changed" when, as a JSON value, it is not equal to the unchanged action. The
+  same keys and values in another order are not a change.
+- Hypotheses. B1: no changed body is observed, on either route. B2: every payload the
+  receiver records, in every attempt, has the digest of the unchanged action's payload. B3:
+  after a refused changed body on route `a`, the unchanged delegated action is observed in
+  every attempt. B4: on route `b`, the approval is refused for every changed body and is
+  then honoured once for the unchanged one. B5: no attempt latches the seal or raises.
+- Reported and not a hypothesis: what the gate does with a body that is unchanged as a value
+  but written with its keys in another order.
+- Where: the run of record is on the project's Linux x86_64 host in the hash-locked
+  environment, from a clean clone at the instrument commit. `verify` recomputes every row
+  there; elsewhere it checks structure.
+- If a hypothesis fails: the attempt and the cause are published as they are, and no repair
+  is made in this lane.
+- Money: none.
+- What this is not. It does not show that an allowed body is harmless: the gate binds what
+  the body is, and cannot judge what it means. It does not measure a third party that acts
+  on an allowed request, which is the rest of what laundering names. It is a list the author
+  wrote on a fixture with two actions; it is not evidence about a model or an attacker.
+- Seen when this was written: one look at the sealed gate with ten bodies on route `a` (the
+  unchanged action observed; a changed content, resource, operation, principal, tenant or
+  policy revision, an added field, and the other action's name each blocked with no effect,
+  and the unchanged action observed afterwards). Nothing was tried on route `b`, with other
+  encodings, with other types or with reordered keys. No line of the instrument exists.
+
+Authorised files: `tools/assurance-provenance/body19ab.py`, `evidence19ab.py`, their tests,
+`docs/research/provenance-phase-19ab/` (the author's attempts, the pack and its pages),
+`.prettierignore` entries for its byte-preserved files, the ruling and both logs. Not
+authorised: any edit to a frozen file, to a 19a to 19aa source or pack, or to a workflow.
+This declaration commit must be a strict ancestor of every other commit of lane 19ab.
+
+**P19-AUDIT01 (a census, not a lane: which committed packs record the model the provider
+says answered; declared 22 Nov 2026 before the tool was written).** On 22 Nov a page of
+this project named a model that did not run (P19-REPAIR09). The gap hunt of the same day
+asks for a record of the served model in every pack. Past captures cannot be made again
+without money, so this is a census of what the committed packs hold.
+
+- A new tool, `tools/assurance-provenance/served19.py`, reads every committed Phase 19
+  `evidence.zip` and, for each model id a pack names, reports whether the pack also holds an
+  id that the provider returned for it. It reads only the packs. It contacts no provider and
+  no model, and edits no pack.
+- It writes one page, `docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md`, generated from
+  the packs, and a test holds the page to the tool's output.
+- No hypothesis. Seen when this was written: a survey of the keys the packs use. Lane 19o
+  holds a `served_model` for some of its models; lanes 19u, 19w and 19x hold the requested
+  id and no id from the provider; the local-model lanes name a local file.
+- What this is not: where a pack holds no id from the provider, the census cannot say what
+  was served, and it does not say anything was served wrongly. It covers targets in packs.
+  The model behind an attacker seat is recorded by the harness outside the repository, and
+  the census does not reach it.
+- Money: none.
+
+Authorised files: `tools/assurance-provenance/served19.py`, its test, the generated page,
+the ruling and both logs. Not authorised: any edit to a pack, a capture module or a
+workflow. This declaration commit must be a strict ancestor of every other commit made
+under it.
+
+**P19-OPERATOR13 (bounded authority to bring lanes 19aa and 19ab into the outside-operator
+handoff and the externally pinned roots, and to state three findings in the root README;
+declared 22 Nov 2026 before any commit that acts on it).** 19aa is committed (`4f6ab473`) with
+root `871e7cc74a84320768f29835fbe93513151bee9ef1704d87cefd4db82f536747` and 19ab (`dbeb1946`)
+with root `67d1029539c921f772229731779e8c4fd0a1297c07f422e138b03ca967bdaade`. Neither
+declaration authorised a workflow or handoff edit. This declaration authorises, and nothing
+else:
+
+1. `handoff19.py`: 19aa and 19ab added to `PHASES` with their hosts and times, the word for
+   the new count, and both in the list of lanes that need nothing beyond the standard
+   library. Both are replayed lanes as 19t, 19y and 19z are: their committed receipts read
+   `gate_recomputed`, a host that cannot replay prints `structure_checked`, and their
+   `--replay` joins the items only some hosts can exercise. The comparator's rules do not
+   change. Tests first.
+2. The reviews of the three operator receipts recomputed under the new phase list. No receipt
+   is edited; both lanes appear in each review as `not_in_receipt`.
+3. Re-rendering `HANDOFF.md` and `discrepancy-template.json`; the 19f READMEs' count of
+   packs, their rows for the lanes and their lists of what is owed.
+4. `.github/workflows/assurance-provenance.yml`: the two `docs/` paths added to both path
+   filters and the two ids to the expected-roots check, with its message. No step is added,
+   removed or renamed, and the Stage 5Q census must be byte-identical before and after. The
+   repository variable `PHASE19_ROOTS` gains the two roots, set outside the pull request,
+   the twenty-five existing values unchanged.
+5. The root README: the count of Phase 19 packs, one paragraph on the two lanes and the
+   census of P19-AUDIT01, and three entries under its open work: a verdict of `observed`
+   that sends nothing (19aa), refusals that leave no record (19ab), and packs that hold no
+   model id from the provider (P19-AUDIT01). The same count in `docs/AUTHOR_AND_METHOD.md`.
+6. Both logs and the ruling.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to an operator's
+receipt, or any other change to what the comparator checks. This declaration commit must be a
+strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
@@ -3373,3 +3540,87 @@ strict ancestor of every commit that acts on it.
   its open work: what the gate cannot see, and that the hosted models' zero sends have only
   the local models' sends as a positive control. `docs/AUTHOR_AND_METHOD.md` has the new
   count. Not done: no one outside the author has run the handoff for any of the seven items.
+- Note (22 Nov 2026, P19-RETRY01, written with the instrument and before the run of record):
+  three things a reader should know before the numbers. First, the author's 28 sequences
+  were tried on the author's own machine while the instrument was written, so the run of
+  record is not the first time their outcome was seen. Second, that trial showed how R2 will
+  be decided and that it will not hold as the rule is written. R2 is applied to a whole
+  sequence: the undelegated action is observed exactly once and every later dispatch of it
+  is refused. In one sequence the host mints two approvals and each is used once. The gate
+  reports the action observed both times and one effect reaches the receiver, because the
+  frozen gate answers a repeat of an action it has already carried out from its record. By
+  the rule that sequence fails R2; the rule is not reworded to pass it. The count of effects
+  is recorded for every sequence so a reader can see what reached the receiver. Third, the
+  declaration says nothing here measures a credential left within reach. Five sequences sign
+  a token with the fixture's operator key, which is a constant in the repository, so one
+  credential of that kind is in the list after all. The lane's page says what those
+  sequences show and what they do not.
+- Ruling (22 Nov 2026, P19-RETRY01 exercised): the declaration (`0fe5d615`) is an ancestor of
+  the instrument commit (`387f1a13`), and the run of record was made from a clean clone at
+  that commit on the project's Linux x86_64 host, started 05:31:14Z. Root
+  `871e7cc74a84320768f29835fbe93513151bee9ef1704d87cefd4db82f536747`. 28 sequences, all the
+  author's, none rejected; 1,194 dispatches. R1 holds: in the 21 sequences where the host
+  mints no approval for the undelegated action it is observed 0 times, through 600 retries in
+  one sequence, self-written approval text in each of the four channels, and tokens signed
+  with the fixture's operator key. R2 does not hold: of 6 sequences that use an approval
+  minted for the action, 5 see it observed once and every later use refused, and 1, with two
+  valid approvals, sees it reported observed twice while one effect reaches the receiver.
+  R3 holds: in 20 of 20 sequences the delegated action is observed after only refused
+  dispatches. R4 holds: 1,158 refused dispatches and 1,158 `blocked` events. R5 holds: no
+  sequence latches the seal or raises. No sequence has more than one effect. Reported and not
+  a hypothesis: the gate has no limit on retries; the largest count is 600 in one sequence.
+  A rebuild of the pack on the author's macOS machine gave the same root. Not done and not
+  claimed: no model and no agent wrote a sequence; no person approved anything; access to
+  the receiver, a token that outlives its grant, and laundering through a permitted route
+  are not measured; no repair was made for the verdict that R2 turned on, as declared.
+- Note (22 Nov 2026, P19-BODY01, written with the instrument and before the run of record):
+  the author's 69 attempts were tried on the author's own machine while the instrument was
+  written, so the run of record is not the first time their outcome was seen. In that trial
+  all five hypotheses held: none of the 64 changed bodies was observed, on either route. The
+  list has no body that a gate of this kind is known to pass, so the lane has no positive
+  control of its own; the lane's page says what a gate that matched on the name alone would
+  have passed, as arithmetic on the list and not as a measurement.
+- Ruling (22 Nov 2026, P19-AUDIT01 exercised): the declaration (`e891cf7a`) precedes the
+  tool. `served19.py` read every committed Phase 19 pack and every JSON member in each. 16
+  packs name a model. One, lane 19o, holds an id the provider returned: for each of its six
+  models the returned id equals the requested one, recorded from a single call per model
+  made before the capture, not from each generation. Lanes 19u, 19w and 19x, which also
+  called hosted models, hold the requested id and nothing from the provider. The other
+  packs that name a model name a local file. The page
+  `PROVENANCE_PHASE_19_SERVED_MODELS.md` is the tool's output and a test holds it there.
+  Not done and not claimed: no capture was made again, no pack was edited, and nothing here
+  says a wrong model answered in any lane. From here on a capture that calls a hosted model
+  should record the returned id beside each generation; no lane does so yet.
+- Ruling (22 Nov 2026, P19-BODY01 exercised): the declaration (`e891cf7a`) is an ancestor of
+  the instrument commit (`b3bf1e77`), and the run of record was made from a clean clone at
+  that commit on the project's Linux x86_64 host, started 05:51:25Z. Root
+  `67d1029539c921f772229731779e8c4fd0a1297c07f422e138b03ca967bdaade`. 69 attempts, all the
+  author's, none rejected: 64 changed bodies and 5 unchanged as values. B1 holds: no changed
+  body is observed, 47 on route `a` and 17 on route `b`. B2 holds: all 69 payloads at the
+  receiver are the unchanged action's. B3 holds: after each of the 47 refusals on route `a`
+  the unchanged delegated action is observed. B4 holds: on route `b` the approval is refused
+  for all 17 changed bodies (15 as `approval_digest`, one as `approval_run`, one as
+  `approval_action`) and then honoured once for the unchanged one. B5 holds: nothing latches
+  or raises. Reported: the five unchanged bodies, three of them with reordered keys, are
+  observed with the same payload. Found and not declared: of 66 refused dispatches, 30 leave
+  no `blocked` event in the gate's log. They are the bodies the gate's schema rejects (an
+  added or missing field, a value of another type, an unknown operation, empty or over-long
+  content); a look at the stores after the run showed only the session's `resume` event for
+  each. Lane 19aa's page now points to this, since its R4 holds for well-formed actions
+  only. A rebuild of the pack on the author's macOS machine gave the same root. Not done and
+  not claimed: no repair was made for the silent refusals, as declared; no gate that matches
+  on the name alone was run, so the lane has no positive control (56 of the 64 changed
+  bodies keep the name, which is arithmetic on the list); no model and no agent wrote a
+  body; what an allowed body means, and a third party acting on it, are not measured.
+- Ruling (22 Nov 2026, P19-OPERATOR13 exercised): the declaration (`84bab82f`) precedes the
+  commit that acts on it. `handoff19.py` carries 19aa and 19ab as replayed lanes; seven of
+  its 41 tests failed before the tool changed and none after. The three operator reviews
+  were recomputed and no receipt was edited: both lanes are `not_in_receipt` in each. Eleven
+  items are owed to an outside operator: lanes 19w, 19x, 19y, 19z, 19aa and 19ab, the
+  `--replay` of the last four, and 19q's `--dataset` recomputation. The workflow gained the
+  two `docs/` paths in both filters and the two ids in the roots check; the Stage 5Q census
+  is byte-identical before and after. `PHASE19_ROOTS` was read, found as P19-OPERATOR12 left
+  it, and set at 06:04Z on 22 Nov 2026 to twenty-seven roots, the twenty-five earlier values
+  unchanged. The root README has the new count, one paragraph on the two lanes and the
+  census, and three entries under its open work; `docs/AUTHOR_AND_METHOD.md` has the count.
+  Not done: no one outside the author has run the handoff for any of the eleven items.

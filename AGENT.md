@@ -14,6 +14,115 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lanes 19aa and 19ab in the operator handoff; twenty-seven pinned roots; three findings in the README
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR13 in the ledger (`84bab82f`, before the change), the
+  handoff tool and its tests, the rendered handoff, the hosted roots check, the root README.
+- **Summary:** both lanes join the handoff as replayed lanes. The three operator reviews
+  were recomputed (both lanes are `not_in_receipt` in each; the receipts are byte-identical).
+  Eleven items are owed to an outside operator. `PHASE19_ROOTS` was extended outside the
+  pull request from twenty-five roots to twenty-seven. The root README has a paragraph on
+  the two lanes and the census and three new entries under its open work: a verdict of
+  `observed` that sends nothing, refusals that leave no record, and packs with no model id
+  from the provider.
+- **Files changed:** `tools/assurance-provenance/handoff19.py`, `tests/test_handoff19.py`,
+  `docs/research/provenance-phase-19f/HANDOFF.md`, `discrepancy-template.json`, the three
+  reviews, the two 19f READMEs, `.github/workflows/assurance-provenance.yml`, `README.md`,
+  `docs/AUTHOR_AND_METHOD.md`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 41 handoff tests, seven failing before the code changed; the Stage 5Q
+  census is byte-identical before and after the workflow edit; `prettier` and `ruff` are
+  clean; the quick gate passes.
+- **Not done:** no outside operator has run any of the eleven items.
+
+### 2026-11-22 (Australia/Sydney) — Lane 19ab pack: no changed body gets through; 30 of 66 refusals leave no record
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19ab/` (pack, README, results), the
+  committed-pack test, the ruling, one cross-reference on lane 19aa's page.
+- **Summary:** the run of record on the Linux host from the instrument commit (`b3bf1e77`).
+  69 attempts. None of the 64 changed bodies is observed, with or without an approval; every
+  payload at the receiver is the unchanged action's; a refused body does not spend the
+  approval. All five hypotheses hold. Not predicted: the 30 refusals of bodies the gate's
+  schema rejects leave no `blocked` event, so a monitor counting those events would miss
+  them.
+- **Files changed:** the pack's five files, `README.md` and `RESULTS.md` beside them,
+  `tools/assurance-provenance/tests/test_evidence19ab_committed.py`,
+  `docs/research/provenance-phase-19aa/README.md`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `verify` with a bare Python 3.12 interpreter (`structure_checked`); a
+  rebuild on macOS gave the committed root; 8 committed-pack tests (one skipped off the
+  replay host); `prettier`, `ruff` and the quick gate pass.
+- **Not done:** no repair for the silent refusals; the lane is not in the operator handoff
+  yet; no one outside the author has run it.
+
+### 2026-11-22 (Australia/Sydney) — Lane 19ab instrument (changed bodies of an allowed action) and a census of served-model records
+
+**Raouf:**
+
+- **Scope:** the declarations P19-BODY01 and P19-AUDIT01 in the ledger (`e891cf7a`, before
+  any code); a new instrument and pack module for lane 19ab with the author's 69 attempts; a
+  census tool, its generated page and its ruling.
+- **Summary:** lane 19ab dispatches one body in place of the delegated action, or in place
+  of an approved one with the approval, then the unchanged action, each attempt in a process
+  of its own on lane 19z's sealed gate. No run of record yet. The census reads every
+  committed pack: 16 name a model and one, lane 19o, holds an id the provider returned;
+  lanes 19u, 19w and 19x hold the requested id only.
+- **Files changed:** `tools/assurance-provenance/body19ab.py`, `evidence19ab.py`,
+  `served19.py`, `tests/test_body19ab.py`, `tests/test_evidence19ab.py`,
+  `tests/test_served19.py`, `docs/research/provenance-phase-19ab/attempts-author.json`,
+  `docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md`, `.prettierignore`, the ledger,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 29 tests for lane 19ab (four on the real gate) and 8 for the census;
+  the census runs under a bare Python 3.12 interpreter; `ruff` and `prettier` are clean; the
+  quick gate passes.
+- **Not done:** lane 19ab's run of record, pack and ruling. No capture records a returned
+  model id beside each generation.
+
+### 2026-11-22 (Australia/Sydney) — Lane 19aa pack: retries, self-written approvals and reused approvals change nothing but one verdict
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19aa/` (pack, README, results), the
+  committed-pack test, the ruling.
+- **Summary:** the run of record on the Linux host from the instrument commit (`387f1a13`).
+  28 sequences, 1,194 dispatches. The undelegated action is never observed without an
+  approval the host minted (21 sequences); 1,158 refusals leave 1,158 records; the delegated
+  action is observed after only refused dispatches in 20 of 20; nothing latches or raises.
+  R2 does not hold: with two valid approvals the gate reports the action observed twice and
+  one effect reaches the receiver. Five sequences sign with the fixture's operator key and
+  are refused, 113 times because the nonce is not one the host's store holds.
+- **Files changed:** the pack's five files, `README.md` and `RESULTS.md` beside them,
+  `tools/assurance-provenance/tests/test_evidence19aa_committed.py`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** `verify` with a bare Python 3.12 interpreter (`structure_checked`); a
+  rebuild on macOS gave the committed root; 8 committed-pack tests (one skipped off the
+  replay host); `prettier`, `ruff` and the quick gate pass.
+- **Not done:** the lane is not in the operator handoff yet; no one outside the author has
+  run it; no model wrote a sequence.
+
+### 2026-11-22 (Australia/Sydney) — Lane 19aa instrument: sequences at the gate's front door
+
+**Raouf:**
+
+- **Scope:** the declaration P19-RETRY01 in the ledger (`0fe5d615`, before any code), a new
+  instrument and pack module beside lane 19z's sealed gate, the author's 28 sequences, and a
+  note in the ledger written before the run of record.
+- **Summary:** one attempt is up to twelve steps on a fresh sealed fixture: retries of the
+  undelegated action, text written into a channel, a real approval minted by the host and
+  used directly or relayed, and tokens signed with the fixture's operator key. Each sequence
+  runs in a process of its own. Five hypotheses are decided by rule from the rows. No file
+  of an earlier lane is edited.
+- **Files changed:** `tools/assurance-provenance/retry19aa.py`, `evidence19aa.py`,
+  `tests/test_retry19aa.py`, `tests/test_evidence19aa.py`,
+  `docs/research/provenance-phase-19aa/attempts-author.json`, `.prettierignore`, the ledger,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 30 tests (20 for the instrument, four of them on the real gate; 10 for
+  the pack); `ruff` and `prettier` are clean; the quick gate passes.
+- **Not done:** the run of record on the Linux host, the pack and the ruling. A trial on the
+  author's machine has already shown that R2 will not hold; the ledger note says why.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19z in the operator handoff; twenty-five pinned roots; the README states what the gate cannot see
 
 **Raouf:**

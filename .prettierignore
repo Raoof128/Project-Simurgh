@@ -421,3 +421,17 @@ docs/research/provenance-phase-19z/submissions/*.json
 docs/research/provenance-phase-19z/protocol.json
 docs/research/provenance-phase-19z/report.json
 docs/research/provenance-phase-19z/receipt.json
+
+# P19-FORMAT28: Phase 19aa sequences as written and source-bound machine evidence
+# (P19-RETRY01); bytes are bound by the pack root and must not be reformatted.
+docs/research/provenance-phase-19aa/attempts-author.json
+docs/research/provenance-phase-19aa/protocol.json
+docs/research/provenance-phase-19aa/report.json
+docs/research/provenance-phase-19aa/receipt.json
+
+# P19-FORMAT29: Phase 19ab attempts as written and source-bound machine evidence
+# (P19-BODY01); bytes are bound by the pack root and must not be reformatted.
+docs/research/provenance-phase-19ab/attempts-author.json
+docs/research/provenance-phase-19ab/protocol.json
+docs/research/provenance-phase-19ab/report.json
+docs/research/provenance-phase-19ab/receipt.json

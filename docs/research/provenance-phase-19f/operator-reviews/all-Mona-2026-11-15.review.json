@@ -10,6 +10,10 @@
   "not_exercised": [
     "19a",
     "19a --replay",
+    "19aa",
+    "19aa --replay",
+    "19ab",
+    "19ab --replay",
     "19b",
     "19b Lean closure",
     "19c",
@@ -48,6 +52,12 @@
     "19a": {
       "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence.py\", line 275, in <module>\n    main()\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence.py\", line 263, in main\n    verify(\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence.py\", line 183, in verify\n    protocol_digest = check_protocol(protocol or PROTOCOL)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence.py\", line 97, in check_protocol\n    raise ValueError(\"protocol_inventory\")\nValueError: protocol_inventory",
       "result": "refused"
+    },
+    "19aa": {
+      "result": "not_in_receipt"
+    },
+    "19ab": {
+      "result": "not_in_receipt"
     },
     "19b": {
       "refused": "Traceback (most recent call last):\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\evidence19b.py\", line 18, in <module>\n    import lane\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\lane.py\", line 16, in <module>\n    import gate19\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-provenance\\gate19.py\", line 23, in <module>\n    import successor  # noqa: E402\n    ^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\<redacted>\\Documents\\Project-Simurgh\\tools\\assurance-composed-successor\\successor.py\", line 21, in <module>\n    import fcntl\nModuleNotFoundError: No module named 'fcntl'",
