@@ -1994,6 +1994,20 @@ own declaration. This is that declaration. Declared before any code:
   minutes, whichever comes first. The owner named no figure; the cap follows the owner's
   earlier rule of about 10 USD for a paid lane. The line above that says no money is spent
   no longer holds for this seat.
+- Amended a fourth time on 22 Nov 2026, before any submission was committed or dispatched:
+  the command-line agent could not use the project's API organisation at all. The provider
+  answered that the organisation is enrolled in a monthly credit benefit that excludes that
+  agent, which is an account setting and not a judgement of the task. Nothing was generated
+  and nothing was spent. The `codex-r2` seat therefore stays empty. To act on the owner's
+  instruction a sixth seat is added, `astra-r2`: the model `gpt-6.2-astra` called through
+  the provider's ordinary paid interface by a small loop the author wrote. The loop gives the
+  model the brief in the words the other seats were given, and three tools that work only
+  inside its copy of the repository: list a folder, read a file, and run Python there with
+  no network and no reading of the rest of the machine. The cap of the third amendment
+  applies to this seat: 10 USD at OpenAI by the loop's own meter at lane 19x's prices, with
+  a stop at 9 USD or 40 minutes. If the provider refuses or the model declines, the seat is
+  recorded as refused with an empty submission, and the request is not reworded. The loop is
+  the author's tool and is not part of the instrument; only the seat's file enters the pack.
 
 Authorised files: `tools/assurance-provenance/repair19y.py`, `redteam19y.py`,
 `evidence19y.py`, their tests, `docs/research/provenance-phase-19y/` (the brief, the two
