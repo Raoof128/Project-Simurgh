@@ -1,5 +1,17 @@
 ## Change Log
 
+## [phase-19z-instrument-2026-11-22] — 2026-11-22 — Lane 19z instrument: a seal over the gate's own stores
+
+**Raouf:**
+
+- **Scope:** the declaration P19-SEAL01, three new modules, their tests, the author's
+  attempts and a brief.
+- **Summary:** `seal19z.py` latches the gate when the bytes of any of its stores, or of a
+  bound script, change between the host's own operations. `tamper19z.py` runs attempts that
+  write those files on the gate with no seal and on the sealed gate.
+- **Verification:** 40 new tests; seven deliberate breaks each caught; `ruff`; `prettier`;
+  quick gate.
+
 ## [phase-19y-correction-2026-11-22] — 2026-11-22 — Correction: which model sat in lane 19y's seat `mythos-r2`
 
 **Raouf:**

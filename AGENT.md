@@ -14,6 +14,35 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19z instrument: a host-held seal over the gate's own stores and an approved script (nothing run on the host of record yet)
+
+**Raouf:**
+
+- **Scope:** the declaration P19-SEAL01 in the ledger (`6d3beab6`, before any code), three new
+  modules, their tests, the author's attempts and the brief.
+- **Summary:** a gap hunt over the labs' newest documents found that the largest uncovered
+  group of pains is agents changing the controls themselves, and the second is an approval
+  not bound to what later runs. `seal19z.py` keeps a digest of every store's bytes and of a
+  bound script in the host's memory and latches the gate on any difference. `tamper19z.py`
+  applies attempts that write the stores or the script, under an SQL authoriser that refuses
+  to reach another file, and runs each on the gate with no seal and on the sealed gate.
+  `evidence19z.py` builds and verifies the pack.
+- **Files changed:** `tools/assurance-provenance/seal19z.py`, `tamper19z.py`,
+  `evidence19z.py`, `tests/test_seal19z.py`, `tests/test_tamper19z.py`,
+  `tests/test_evidence19z.py`, `docs/research/provenance-phase-19z/BRIEF.md`,
+  `attempts-author.json`, `.prettierignore` (P19-FORMAT27), `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 40 new tests pass, 11 of them on the real gate; each of seven deliberate
+  breaks of the seal fails at least one; `ruff` and `prettier` are clean; the quick gate
+  passes.
+- **Seen before the run of record:** a trial of the author's 31 attempts on the author's
+  machine. With no seal, seven make the undelegated action land and two let the delegated
+  action go ahead on a rewritten script. The first trial also showed one attempt escaping
+  the latch: the fixture read the grant store to build a summary before the seal was
+  checked, so a deleted store raised there. The fixture now checks the seal first, and a
+  test holds it. After that fix no attempt gains on the sealed gate.
+- **Not done:** no agent has been briefed and nothing has run on the Linux host. The seal is
+  beside the gate; `gate19.py` and `repair19y.py` are unchanged.
+
 ### 2026-11-22 (Australia/Sydney) — Correction: lane 19y's seat `mythos-r2` ran on Claude Sonnet 5.5, not Mythos 5.2
 
 **Raouf:**

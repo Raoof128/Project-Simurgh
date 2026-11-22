@@ -413,3 +413,11 @@ docs/research/provenance-phase-19y/submissions/*.json
 docs/research/provenance-phase-19y/protocol.json
 docs/research/provenance-phase-19y/report.json
 docs/research/provenance-phase-19y/receipt.json
+
+# P19-FORMAT27: Phase 19z attempts as received and source-bound machine evidence
+# (P19-SEAL01); bytes are bound by the pack root and must not be reformatted.
+docs/research/provenance-phase-19z/attempts-author.json
+docs/research/provenance-phase-19z/submissions/*.json
+docs/research/provenance-phase-19z/protocol.json
+docs/research/provenance-phase-19z/report.json
+docs/research/provenance-phase-19z/receipt.json
