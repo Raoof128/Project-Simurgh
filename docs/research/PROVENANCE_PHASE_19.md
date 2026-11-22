@@ -1890,6 +1890,81 @@ plan, specification, audit or gap hunt, a frozen stage's document, a generated f
 bound file, a file an operator returned or third-party material. This declaration commit must
 be a strict ancestor of every commit that acts on it.
 
+**P19-REDTEAM02 (a new lane, 19y: the two faults of lane 19t repaired in new modules, 19t's 92
+attempts run again, and a second round of attackers against the repaired gate; no model is a
+target; declared 22 Nov 2026 before any line of the repair was written).** Lane 19t gave two
+coding agents the gate's source. 49 of their 92 attempts changed the gate's output, through
+two faults and one fault of the fixture, and that lane's ruling left the repair owed under its
+own declaration. This is that declaration. Declared before any code:
+
+- The repair, all of it in a new module, `repair19y.py`. No frozen file, no file a pack binds
+  and none of `gate19.py`, `rig.py`, `lane.py` and `mutants.py` is edited; the new classes
+  subclass them.
+  - Approval store. A token whose `approver_id` is not a string is refused as
+    `approval_schema`, with the other shape checks and before the signature is looked at. A
+    database error while a token is verified becomes the reason `approval_store`; it does not
+    leave `verify`. In both cases the ordinary grant check then decides, as it does for every
+    other refused token.
+  - Summary note. When the note makes the encoded summary longer than the frozen gate's limit
+    of 16,384 bytes, the pipeline cuts the note to the longest prefix that fits before the
+    frozen gate sees it, and records `summary_note_cut` in the pipeline's own events. The
+    host's fields are not touched. A summary that is over the limit without its note is
+    passed on as it is, and the frozen gate's `summary_schema` stands.
+  - Fixture. A file channel is written and read as bytes. A text that holds half of a
+    surrogate pair is stored as Python's `surrogatepass` gives it and read back with
+    replacement, so no text can make the fixture's own write raise.
+- Round one, the regression. The two submissions of 19t are read from that lane's folder and
+  bound by the digests its pack records. Each of the 92 attempts is run against the gate as
+  it was (`gate19.ProvenancePipeline` on 19b's fixture) and against the repaired gate on the
+  repaired fixture.
+- Round two, the new attack. Two coding agents that have not seen this project's conversation
+  each get a copy of the repository at this lane's instrument commit, with the repair's
+  source and a brief committed with the instrument. Seats: `opus-r2`, a Claude Opus 5.5
+  agent, and `fable-r2`, a Claude Fable 5.2 agent. The interface is 19t's: one attempt is one
+  of the four channels and a text of at most 12,000 characters; at most 60 attempts a seat,
+  each with a note of at most 300 characters. A file is committed and pushed before the host
+  of record dispatches any of it. Nothing is dropped or reordered after that. A file that
+  breaks the format is recorded as received and its valid attempts are run.
+- Outcome of an attempt, as in 19t: it differs if the oracle's output (verdicts, effects,
+  authority hash, audit) is not byte-identical to the baseline run of the same gate with the
+  fixture's benign text, or if a dispatch raises.
+- Naive gates. The thirteen reader mutants of 19b are run on the repaired fixture with the
+  same repair mixed in. Lane 19t noted after the fact that its count of potent attempts was
+  inflated, because every attempt that changed the audit changed all thirteen. Here an
+  attempt is potent only if it changes at least one naive gate and leaves the repaired
+  gate's output byte-identical.
+- Hypotheses. Y0, a check of the instrument: on the gate as it was, this lane's run gives
+  each of the 92 attempts the outcome 19t's pack records for it (what differs, the class of
+  the error, the verdicts, the count of effects). Y1: none of the 92 changes the repaired
+  gate's output. Y2: no attempt of round two changes the repaired gate's output. Y3: each
+  seat of round two hands in at least one potent attempt. If Y3 fails for a seat, Y2 says
+  little about that seat and the write-up must say so.
+- Where: the run of record is on the project's Linux x86_64 host in the hash-locked
+  environment, from a clean clone at the commit that holds the round-two submissions.
+  `verify` recomputes every row there; elsewhere it checks structure and says the gate was
+  not run.
+- If Y1 or Y2 fails: the attempt, the difference and the cause are published as they are.
+  No further repair is made in this lane and no attempt is rerun after one.
+- Money: none. No hosted model is called through a paid interface; the two agents run on the
+  owner's plan, as 19t's did.
+- What this is not. Two agents of one vendor, one sitting each, through one interface, on a
+  fixture. Both are of the same family as the model that wrote the repair under the owner's
+  direction, so they may share its blind spots. The Codex agent, whose provider refused the
+  task in 19t, is not asked again. Nothing here is evidence about attackers in general or
+  about a person. The repair exists beside the gate that lanes 19a to 19x measured and does
+  not change it: every earlier pack still describes the gate as it was, and a caller of
+  `gate19.ProvenancePipeline` still has both faults.
+- Seen when this was written: 19t's pack, results and submissions, and the gate's source. No
+  line of the repair exists, no attempt has been run against it, and no agent has been
+  briefed.
+
+Authorised files: `tools/assurance-provenance/repair19y.py`, `redteam19y.py`,
+`evidence19y.py`, their tests, `docs/research/provenance-phase-19y/` (the brief, the two
+submissions, the pack and its pages), `.prettierignore` entries for its byte-preserved files,
+the ruling and both logs. Not authorised: any edit to a frozen file, to a 19a to 19x source or
+pack, or to a workflow. This declaration commit must be a strict ancestor of every other
+commit of lane 19y.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
