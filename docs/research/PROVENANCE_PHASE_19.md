@@ -1980,6 +1980,20 @@ own declaration. This is that declaration. Declared before any code:
   scanned for private data and had not run; the `sonnet-r2` agent was still working. The
   instrument's list of seats, its tests and the pack's inventory change for the two seats
   and for nothing else. No money is spent: both agents run on the owner's plans.
+- Amended a third time on 22 Nov 2026, before any submission was committed or dispatched:
+  the Codex agent on the owner's plan was refused. It read files for 28 seconds and its
+  provider then answered that the content was flagged for possible cybersecurity risk. It
+  wrote nothing. The owner then said to use the paid interface for the OpenAI seat ("use api
+  for open ai", 12:12 Sydney time). So the `codex-r2` seat is asked a second and last time:
+  the same command-line agent, the same words, signed in with the project's API key in a
+  separate configuration folder, on `gpt-6.2-astra`. The request is not reworded and no
+  access programme is applied for. If the provider refuses again, or the agent hands in
+  nothing, the seat is recorded as refused with an empty submission. This is the lane's only
+  spending: a cap of 10 USD at OpenAI, metered from the session's own token counts at the
+  prices lane 19x declared for that model, with the agent stopped at 9 USD or after 40
+  minutes, whichever comes first. The owner named no figure; the cap follows the owner's
+  earlier rule of about 10 USD for a paid lane. The line above that says no money is spent
+  no longer holds for this seat.
 
 Authorised files: `tools/assurance-provenance/repair19y.py`, `redteam19y.py`,
 `evidence19y.py`, their tests, `docs/research/provenance-phase-19y/` (the brief, the two
