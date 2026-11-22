@@ -2184,6 +2184,38 @@ the ruling and both logs. Not authorised: any edit to a frozen file, to a 19a to
 pack, or to a workflow. This declaration commit must be a strict ancestor of every other
 commit of lane 19z.
 
+**P19-OPERATOR12 (bounded authority to bring lane 19z into the outside-operator handoff and the
+externally pinned roots, and to state in the root README what the gate cannot see; declared
+22 Nov 2026 before any commit that acts on it).** 19z is committed (`622901d0`) with root
+`c4c59ef843e83da576a9aeb331230961b24349d3a87b24ef4ad56df36913d30c`. Its declaration did not
+authorise a workflow or handoff edit. This declaration authorises, and nothing else:
+
+1. `handoff19.py`: 19z added to `PHASES` with its host and time, the word for the new count,
+   and 19z in the list of lanes that need nothing beyond the standard library. 19z is a
+   replayed lane as 19t and 19y are: its committed receipt reads `gate_recomputed`, a host
+   that cannot replay prints `structure_checked`, and `19z --replay` joins the items only
+   some hosts can exercise. The comparator's rules do not change. Tests first.
+2. The reviews of the three operator receipts recomputed under the new phase list. No receipt
+   is edited; 19z appears in each review as `not_in_receipt`.
+3. Re-rendering `HANDOFF.md` and `discrepancy-template.json`; the 19f README's count of packs,
+   its row for the lane and its list of what is owed.
+4. `.github/workflows/assurance-provenance.yml`: 19z's `docs/` path added to both path filters
+   and its id to the expected-roots check, with its message. No step is added, removed or
+   renamed, and the Stage 5Q census must be byte-identical before and after. The repository
+   variable `PHASE19_ROOTS` gains the one root, set outside the pull request, the twenty-four
+   existing values unchanged.
+5. The root README: the count of Phase 19 packs, one paragraph on the lane, and two
+   statements that a gap hunt of 22 Nov showed were missing. First, what the gate cannot
+   see: harm carried inside a send it allows, and anything decided by the content of a
+   message and not by who may send it where. Second, that the hosted models' zero sends are
+   read beside the local models' sends on the same texts, which is the only positive control
+   the project has for them. The same count in `docs/AUTHOR_AND_METHOD.md`.
+6. Both logs and the ruling.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to an operator's
+receipt, or any other change to what the comparator checks. This declaration commit must be a
+strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
