@@ -3840,3 +3840,18 @@ strict ancestor of every commit that acts on it.
   attacked afresh and the seats that found the fault have not seen it; no one outside the
   project has reviewed it; the fault is still in the gate that lanes 19a to 19ac ran, and a
   caller has to use the new classes; a lost signing key is not made safe.
+- Ruling (22 Nov 2026, P19-OPERATOR14 exercised): the declaration (`6ed69090`) precedes the
+  commit that acts on it. `handoff19.py` carries 19ac and 19ad as replayed lanes and says
+  that one row in each depends on the host's JSON parser; seven of its 43 tests failed
+  before the tool changed and none after. The three operator reviews were recomputed and no
+  receipt was edited: both lanes are `not_in_receipt` in each. Fifteen items are owed to an
+  outside operator: lanes 19w, 19x, 19y, 19z and 19aa to 19ad, the `--replay` of the last
+  six, and 19q's `--dataset` recomputation. The workflow gained the two `docs/` paths in
+  both filters and the two ids in the roots check; the Stage 5Q census is byte-identical
+  before and after. `PHASE19_ROOTS` was read, found as P19-OPERATOR13 left it, and set at
+  06:58Z on 22 Nov 2026 to twenty-nine roots, the twenty-seven earlier values unchanged.
+  The root README has the new count, one paragraph on the two lanes, and one entry under
+  its open work on the fault: where it is, that lane 19ad repairs it beside the gate, and
+  that the repair has not been attacked afresh. `docs/AUTHOR_AND_METHOD.md` has the count.
+  The census page of P19-AUDIT01 is unchanged by the two packs. Not done: no one outside
+  the author has run the handoff for any of the fifteen items.

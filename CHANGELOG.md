@@ -1,5 +1,16 @@
 ## Change Log
 
+## [phase-19f-operator14-2026-11-22] — 2026-11-22 — Lanes 19ac and 19ad in the operator handoff; twenty-nine pinned roots
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR14, the handoff tool, its rendered files, the hosted
+  roots check, the root README.
+- **Summary:** twenty-nine packs in the handoff and in the hosted roots check. The root
+  README states the fault the project's own seats found in the approval check and where
+  its repair stands.
+- **Verification:** 43 handoff tests; Stage 5Q census identical; quick gate.
+
 ## [phase-19ad-pack-2026-11-22] — 2026-11-22 — Lane 19ad: the fault lane 19ac found, repaired beside the gate
 
 **Raouf:**
