@@ -2524,6 +2524,79 @@ Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to
 receipt, or any other change to what the comparator checks. This declaration commit must be a
 strict ancestor of every commit that acts on it.
 
+**P19-FULL01 (a new lane, 19ae: one gate with every repair, every recorded attempt of every
+earlier lane run on it, and a fresh round of attackers against it; declared 22 Nov 2026 before
+any line of it was written).** Three things stand open after lane 19ad. The repair of lane 19ad
+has not been attacked. The repairs sit beside the gate in three modules and a caller has to
+know to pick the last one. Two findings of 22 Nov are reported and not repaired: a refusal
+of a malformed action leaves no record (19ab), and nothing marks a run of retries (19aa).
+Declared before any code:
+
+- The gate. A new module, `full19ae.py`, holds one pipeline class that is lane 19ad's bound
+  gate (and so lane 19z's seal and lane 19y's repairs) with two additions made in the
+  session it hands out. First, when a dispatch is refused and neither the gate's log nor the
+  pipeline's log gained a record, the session writes one, `refused:` and a label. Second,
+  when the same label has been refused 20 times in a row, the session writes one
+  `retry_limit:` record. Neither addition changes a decision: the session never refuses or
+  admits anything itself. `full19ae.pipeline()` returns the class, and the lane's page names
+  it as the one a caller should use. No file of an earlier lane is edited.
+- What the second addition is not. It is a mark in the log, not a cap. The frozen gate
+  still writes a record for each refusal of a well-formed action, and this lane does not
+  bound that. A cap that refused without consulting the stores could be turned against
+  delegated work, and the lane does not build one.
+- Two gates are measured: `bound`, lane 19ad's, and `full`. Each attempt runs on a fresh
+  fixture of each, each run in a process of its own.
+- The recorded attempts are every attempt committed by an earlier lane that a fixture can
+  run, converted by rule into one list of steps and bound by the digest of the file it
+  came from: the channel texts of lanes 19t and 19y (a write, then the two dispatches
+  through that channel), the store-writing operations of lane 19z (the operations, then the
+  two dispatches), the sequences of lanes 19aa, 19ac and 19ad as they are, and the bodies of
+  lane 19ab (the body in place of the action, then the unchanged action, with an approval
+  on route `b`).
+- The fresh round. Three seats, `seat-a`, `seat-b` and `seat-c`, each an agent the author
+  starts, each with a copy of the repository at the instrument commit, the brief, and the
+  means to run an attempt on the full gate. Nothing is hidden from them: the repair and the
+  two additions are in their copy. Each hands in at most 40 attempts in the same list of
+  steps, which allows everything an earlier lane allowed: channel texts, sequences with
+  minted, relayed and forged approvals, changed bodies, and writes to the gate's own stores.
+  A seat's file is committed as received before any of it is run on the host of record. The
+  model behind each seat is read from the harness's record before any page names it. A seat
+  that a provider's safety system stops is recorded as empty and is not started again.
+- An attempt gains when the undelegated action is observed, or its payload reaches the
+  receiver, in an attempt where the host minted no approval for it; or when more than one
+  effect reaches the receiver; or when a payload reaches the receiver that is not the
+  payload of one of the two registered actions.
+- Hypotheses. F0: on the bound gate the recorded attempts reproduce the two findings: at
+  least one refused dispatch leaves no record, and no attempt has a `retry_limit` record.
+  F1: on the full gate every refused dispatch in every attempt, recorded or fresh, leaves a
+  record, except in an attempt where the seal has latched, where nothing is written by
+  design. F2: on the full gate an attempt has a `retry_limit` record for a label exactly
+  when that label is refused 20 or more times in a row in it. F3: for every recorded
+  attempt the full gate gives the same verdict for every dispatch, the same count of
+  effects and the same latch as the bound gate. F4: no attempt, recorded or fresh, gains
+  on the full gate. F5: no fresh attempt that writes no store makes the full gate latch or
+  raise.
+- How F4 is read. Lane 19ac's seats found a real fault in minutes with the source in hand,
+  and they are the kind of seat used here. A zero from them carries the weight that fact
+  gives it and no more. There is no planted fault in this round.
+- Where: the run of record is on the project's Linux x86_64 host in the hash-locked
+  environment, from a clean clone at the commit that holds the seats' files.
+- If a hypothesis fails: published as it is; no repair in this lane.
+- Money: none. The seats run on the author's plan.
+- What this is not. The seats are agents of at most two Claude models, started by the
+  author; they are not a person and not an attacker from another vendor. The earlier lanes'
+  packs are not replaced: they record what the gate of their day did. A caller that does
+  not use the new class has none of this.
+- Seen when this was written: lanes 19t to 19ad, the frozen session's dispatch as read in
+  `gate19.py`, and lane 19ab's look at what a refused malformed body leaves behind. No line
+  of the lane exists.
+
+Authorised files: `tools/assurance-provenance/full19ae.py`, `evidence19ae.py`, their tests,
+`docs/research/provenance-phase-19ae/` (the brief, the seats' files, the pack and its pages),
+`.prettierignore` entries for its byte-preserved files, the ruling and both logs. Not
+authorised: any edit to a frozen file, to a 19a to 19ad source or pack, or to a workflow.
+This declaration commit must be a strict ancestor of every other commit of lane 19ae.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
