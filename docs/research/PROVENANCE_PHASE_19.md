@@ -2694,6 +2694,37 @@ Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to
 receipt, or any other change to what the comparator checks. This declaration commit must be a
 strict ancestor of every commit that acts on it.
 
+**P19-OPERATOR16 (bounded authority to bring lane 19af into the outside-operator handoff and
+the externally pinned roots, and to add what it found to the root README; declared 22 Nov 2026
+before any commit that acts on it).** 19af is committed with root
+`79e8b1f27371c7476373d9613799833508506aec5bb6826c3135aa2ce8f2e255`. Its declaration did not
+authorise a workflow or handoff edit. This declaration authorises, and nothing else:
+
+1. `handoff19.py`: 19af added to `PHASES` with its host and time, the word for the new count,
+   and the lane in the list of lanes that need nothing beyond the standard library. It is a
+   capture lane as 19k and 19s are: its verifier runs no model and has no `--replay`. The
+   comparator's rules do not change. Tests first.
+2. The reviews of the three operator receipts recomputed under the new phase list. No receipt
+   is edited; the lane appears in each review as `not_in_receipt`.
+3. Re-rendering `HANDOFF.md` and `discrepancy-template.json`; the 19f READMEs' count of
+   packs, their row for the lane and their lists of what is owed.
+4. `.github/workflows/assurance-provenance.yml`: the lane's `docs/` path added to both path
+   filters and its id to the expected-roots check, with its message. No step is added,
+   removed or renamed, and the Stage 5Q census must be byte-identical before and after. The
+   repository variable `PHASE19_ROOTS` gains the one root, set outside the pull request, the
+   thirty existing values unchanged.
+5. The root README: the count of Phase 19 packs, one paragraph on the lane, and one entry
+   under its open work on a restriction that arrives as text. The same count in
+   `docs/AUTHOR_AND_METHOD.md`.
+6. Wording only, with no change to any number or claim: a pass over the pages of lanes 19aa
+   to 19af for plain language. The briefs of lanes 19ac and 19ae are pinned by their packs
+   and are not touched.
+7. Both logs and the ruling.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to an operator's
+receipt, or any other change to what the comparator checks. This declaration commit must be a
+strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
