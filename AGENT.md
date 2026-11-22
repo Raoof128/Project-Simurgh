@@ -14,6 +14,27 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19ae instrument: one gate with every repair, a record for every refusal, and a brief for a fresh round
+
+**Raouf:**
+
+- **Scope:** the declaration P19-FULL01 in the ledger (`d88921d6`, before any code); a new
+  module with the gate a caller should use, an instrument that runs every earlier lane's
+  recorded attempts on it, a pack module, and the brief for three seats.
+- **Summary:** `full19ae.pipeline()` is lane 19ad's bound gate with two additions in its
+  session: a `refused:` record for a refusal that left none, and one `retry_limit:` record at
+  the twentieth refusal of an action in a row. Neither changes a decision. The instrument
+  converts the files of lanes 19t, 19y, 19z, 19aa, 19ab, 19ac and 19ad (431 attempts) into
+  one list of steps and runs each on the bound gate and on the full gate. No file of an
+  earlier lane is edited.
+- **Files changed:** `tools/assurance-provenance/full19ae.py`, `evidence19ae.py`,
+  `tests/test_full19ae.py`, `tests/test_evidence19ae.py`,
+  `docs/research/provenance-phase-19ae/BRIEF.md`, `.prettierignore`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** 22 tests, six of them on both real fixtures; `ruff` and `prettier` are
+  clean; the quick gate passes.
+- **Not done:** the seats, the run of record, the pack and the ruling.
+
 ### 2026-11-22 (Australia/Sydney) — Lanes 19ac and 19ad in the operator handoff; twenty-nine pinned roots; the fault stated in the README
 
 **Raouf:**

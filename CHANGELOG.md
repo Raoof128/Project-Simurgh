@@ -1,5 +1,15 @@
 ## Change Log
 
+## [phase-19ae-instrument-2026-11-22] — 2026-11-22 — Lane 19ae: one gate with every repair (instrument and brief)
+
+**Raouf:**
+
+- **Scope:** `full19ae.py`, `evidence19ae.py`, their tests, the brief for three seats.
+- **Summary:** one class a caller should use, with a record for every refusal and a mark
+  after twenty in a row; an instrument that runs 431 recorded attempts of seven lanes on
+  it. No seat has run and there is no run of record yet.
+- **Verification:** 22 tests; `ruff`; `prettier`; quick gate.
+
 ## [phase-19f-operator14-2026-11-22] — 2026-11-22 — Lanes 19ac and 19ad in the operator handoff; twenty-nine pinned roots
 
 **Raouf:**

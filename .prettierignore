@@ -450,3 +450,10 @@ docs/research/provenance-phase-19ad/attempts-author.json
 docs/research/provenance-phase-19ad/protocol.json
 docs/research/provenance-phase-19ad/report.json
 docs/research/provenance-phase-19ad/receipt.json
+
+# P19-FORMAT32: Phase 19ae seats' files as received and source-bound machine evidence
+# (P19-FULL01); bytes are bound by the pack root and must not be reformatted.
+docs/research/provenance-phase-19ae/submissions/*.json
+docs/research/provenance-phase-19ae/protocol.json
+docs/research/provenance-phase-19ae/report.json
+docs/research/provenance-phase-19ae/receipt.json

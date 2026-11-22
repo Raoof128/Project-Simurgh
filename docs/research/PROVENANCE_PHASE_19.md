@@ -3928,3 +3928,15 @@ This declaration commit must be a strict ancestor of every other commit of lane 
   that the repair has not been attacked afresh. `docs/AUTHOR_AND_METHOD.md` has the count.
   The census page of P19-AUDIT01 is unchanged by the two packs. Not done: no one outside
   the author has run the handoff for any of the fifteen items.
+- Note (22 Nov 2026, P19-FULL01, written with the instrument and before a seat started): the
+  431 recorded attempts were run on both gates on the author's own machine while the
+  instrument was written. In that trial F0 to F4 held for them: on the bound gate 24 refused
+  dispatches leave no record in either log (all in lane 19ab's bodies; lane 19ab counted 30
+  by the gate's log alone, and six of those have a record in the pipeline's log) and nothing
+  marks a run of retries; on the full gate each of the 24 has a `refused:` record, the four
+  attempts with 20 or more refusals in a row each have one `retry_limit` record and no other
+  attempt has any, every attempt has the same verdicts, effects and latch as on the bound
+  gate, and none gains. The run of record is therefore not the first time the recorded
+  half was seen. No seat had started and F5 was not exercised. To keep the run of record
+  short, attempts that only use the gate's own calls run 25 to a process; an attempt that
+  writes a store, and every attempt of a seat, runs alone in its process, as in lane 19z.
