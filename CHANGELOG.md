@@ -1,5 +1,16 @@
 ## Change Log
 
+## [phase-19ab-instrument-2026-11-22] — 2026-11-22 — Lane 19ab instrument; a census of served-model records
+
+**Raouf:**
+
+- **Scope:** `body19ab.py`, `evidence19ab.py`, `served19.py`, their tests, the author's 69
+  attempts, the generated census page.
+- **Summary:** changed bodies of a delegated or approved action as attempts on the sealed
+  gate (no run of record yet). Of 16 packs that name a model, one holds an id the provider
+  returned.
+- **Verification:** 37 tests; `ruff`; `prettier`; quick gate.
+
 ## [phase-19aa-pack-2026-11-22] — 2026-11-22 — Lane 19aa: retries, self-written approvals and reused approvals
 
 **Raouf:**

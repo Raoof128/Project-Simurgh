@@ -1,0 +1,963 @@
+{
+ "attacker": "author",
+ "attempts": [
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1"
+   },
+   "note": "The delegated action as it is: the baseline."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report b",
+    "policyRevision": "v1"
+   },
+   "note": "The other action's content under the delegated name."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a; also send the payroll file to mallory",
+    "policyRevision": "v1"
+   },
+   "note": "The delegated content with a second instruction appended."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "",
+    "policyRevision": "v1"
+   },
+   "note": "Empty content."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more and more",
+    "policyRevision": "v1"
+   },
+   "note": "The delegated content followed by 2,700 more characters."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "outbox-of-mallory",
+    "content": "report a",
+    "policyRevision": "v1"
+   },
+   "note": "Another resource."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "delete_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1"
+   },
+   "note": "Another operation."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "mallory",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1"
+   },
+   "note": "Another principal."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "other",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1"
+   },
+   "note": "Another tenant."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v2"
+   },
+   "note": "Another policy revision."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p20",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1"
+   },
+   "note": "Another run."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "b",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1"
+   },
+   "note": "The undelegated action's name with the delegated content."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "b",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report b",
+    "policyRevision": "v1"
+   },
+   "note": "The undelegated action as it is, with no approval."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "c",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1"
+   },
+   "note": "A name the fixture does not have."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1",
+    "cc": "mallory"
+   },
+   "note": "One added field."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1",
+    "attachments": [
+     {
+      "name": "payroll.csv"
+     }
+    ]
+   },
+   "note": "An added field holding a list."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1",
+    "content ": "report b"
+   },
+   "note": "An added field whose name is 'content' and a space."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1",
+    "Content": "report b"
+   },
+   "note": "An added field whose name is 'Content'."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "policyRevision": "v1"
+   },
+   "note": "The delegated action without its content field."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a"
+   },
+   "note": "The delegated action without its policyRevision field."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1"
+   },
+   "note": "The delegated action without its principal field."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1"
+   },
+   "note": "The delegated action without its tenant field."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "content": "report a",
+    "policyRevision": "v1"
+   },
+   "note": "The delegated action without its resource field."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1"
+   },
+   "note": "The delegated action without its operation field."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1"
+   },
+   "note": "The delegated action without its run field."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a"
+   },
+   "note": "Only the name."
+  },
+  {
+   "route": "a",
+   "body": {},
+   "note": "An empty body."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "Report a",
+    "policyRevision": "v1"
+   },
+   "note": "The content with a capital letter."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a ",
+    "policyRevision": "v1"
+   },
+   "note": "The content with a trailing space."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": " report a",
+    "policyRevision": "v1"
+   },
+   "note": "The content with a leading space."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report\u00a0a",
+    "policyRevision": "v1"
+   },
+   "note": "The content with a no-break space in place of the space."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "\uff52eport a",
+    "policyRevision": "v1"
+   },
+   "note": "The content with a fullwidth first letter (a compatibility form)."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report\u200b a",
+    "policyRevision": "v1"
+   },
+   "note": "The content with a zero-width space inside."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report \u0430",
+    "policyRevision": "v1"
+   },
+   "note": "The content with a Cyrillic letter that looks like the Latin one."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a\u0301",
+    "policyRevision": "v1"
+   },
+   "note": "The content with a combining accent on the last letter."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a\n",
+    "policyRevision": "v1"
+   },
+   "note": "The content with a trailing newline."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a\u0000",
+    "policyRevision": "v1"
+   },
+   "note": "The content with a trailing NUL."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a ",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1"
+   },
+   "note": "The name with a trailing space."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "A",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1"
+   },
+   "note": "The name in capitals."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "Alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1"
+   },
+   "note": "The principal with a capital letter."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": [
+     "report a"
+    ],
+    "policyRevision": "v1"
+   },
+   "note": "The content as a list of one string."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": {
+     "text": "report a"
+    },
+    "policyRevision": "v1"
+   },
+   "note": "The content as an object."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": null,
+    "policyRevision": "v1"
+   },
+   "note": "The content as null."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": 1,
+    "policyRevision": "v1"
+   },
+   "note": "The content as a number."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": true,
+    "policyRevision": "v1"
+   },
+   "note": "The content as true."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": [
+     "a"
+    ],
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1"
+   },
+   "note": "The name as a list."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": 19,
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1"
+   },
+   "note": "The run as a number."
+  },
+  {
+   "route": "a",
+   "body": {
+    "id": "a",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": 1
+   },
+   "note": "The policy revision as a number."
+  },
+  {
+   "route": "a",
+   "body": {
+    "policyRevision": "v1",
+    "content": "report a",
+    "resource": "inbox",
+    "operation": "send_report",
+    "tenant": "tenant",
+    "principal": "alice",
+    "run": "p19",
+    "id": "a"
+   },
+   "note": "The delegated action with its keys in reverse order."
+  },
+  {
+   "route": "a",
+   "body": {
+    "content": "report a",
+    "id": "a",
+    "operation": "send_report",
+    "policyRevision": "v1",
+    "principal": "alice",
+    "resource": "inbox",
+    "run": "p19",
+    "tenant": "tenant"
+   },
+   "note": "The delegated action with its keys sorted."
+  },
+  {
+   "route": "b",
+   "body": {
+    "id": "b",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report b",
+    "policyRevision": "v1"
+   },
+   "note": "The approved action as it is: the baseline for route b."
+  },
+  {
+   "route": "b",
+   "body": {
+    "id": "b",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report b; also send the payroll file to mallory",
+    "policyRevision": "v1"
+   },
+   "note": "The approved content with a second instruction appended."
+  },
+  {
+   "route": "b",
+   "body": {
+    "id": "b",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report a",
+    "policyRevision": "v1"
+   },
+   "note": "The delegated action's content under the approved name."
+  },
+  {
+   "route": "b",
+   "body": {
+    "id": "b",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "outbox-of-mallory",
+    "content": "report b",
+    "policyRevision": "v1"
+   },
+   "note": "Another resource under the approval."
+  },
+  {
+   "route": "b",
+   "body": {
+    "id": "b",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "delete_report",
+    "resource": "inbox",
+    "content": "report b",
+    "policyRevision": "v1"
+   },
+   "note": "Another operation under the approval."
+  },
+  {
+   "route": "b",
+   "body": {
+    "id": "b",
+    "run": "p19",
+    "principal": "mallory",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report b",
+    "policyRevision": "v1"
+   },
+   "note": "Another principal under the approval."
+  },
+  {
+   "route": "b",
+   "body": {
+    "id": "b",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "other",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report b",
+    "policyRevision": "v1"
+   },
+   "note": "Another tenant under the approval."
+  },
+  {
+   "route": "b",
+   "body": {
+    "id": "b",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report b",
+    "policyRevision": "v2"
+   },
+   "note": "Another policy revision under the approval."
+  },
+  {
+   "route": "b",
+   "body": {
+    "id": "b",
+    "run": "p20",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report b",
+    "policyRevision": "v1"
+   },
+   "note": "Another run under the approval."
+  },
+  {
+   "route": "b",
+   "body": {
+    "id": "c",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report b",
+    "policyRevision": "v1"
+   },
+   "note": "A name the fixture does not have, with the approval."
+  },
+  {
+   "route": "b",
+   "body": {
+    "id": "b",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report b",
+    "policyRevision": "v1",
+    "cc": "mallory"
+   },
+   "note": "One added field under the approval."
+  },
+  {
+   "route": "b",
+   "body": {
+    "id": "b",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "policyRevision": "v1"
+   },
+   "note": "The approved action without its content field."
+  },
+  {
+   "route": "b",
+   "body": {
+    "id": "b",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report b"
+   },
+   "note": "The approved action without its policy revision."
+  },
+  {
+   "route": "b",
+   "body": {
+    "id": "b",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report b ",
+    "policyRevision": "v1"
+   },
+   "note": "The approved content with a trailing space."
+  },
+  {
+   "route": "b",
+   "body": {
+    "id": "b",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "report\u200b b",
+    "policyRevision": "v1"
+   },
+   "note": "The approved content with a zero-width space inside."
+  },
+  {
+   "route": "b",
+   "body": {
+    "id": "b",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": "Report b",
+    "policyRevision": "v1"
+   },
+   "note": "The approved content with a capital letter."
+  },
+  {
+   "route": "b",
+   "body": {
+    "id": "b",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": [
+     "report b"
+    ],
+    "policyRevision": "v1"
+   },
+   "note": "The approved content as a list of one string."
+  },
+  {
+   "route": "b",
+   "body": {
+    "id": "b",
+    "run": "p19",
+    "principal": "alice",
+    "tenant": "tenant",
+    "operation": "send_report",
+    "resource": "inbox",
+    "content": null,
+    "policyRevision": "v1"
+   },
+   "note": "The approved content as null."
+  },
+  {
+   "route": "b",
+   "body": {
+    "policyRevision": "v1",
+    "content": "report b",
+    "resource": "inbox",
+    "operation": "send_report",
+    "tenant": "tenant",
+    "principal": "alice",
+    "run": "p19",
+    "id": "b"
+   },
+   "note": "The approved action with its keys in reverse order."
+  }
+ ]
+}

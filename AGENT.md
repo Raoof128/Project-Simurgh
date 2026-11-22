@@ -14,6 +14,29 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-22 (Australia/Sydney) — Lane 19ab instrument (changed bodies of an allowed action) and a census of served-model records
+
+**Raouf:**
+
+- **Scope:** the declarations P19-BODY01 and P19-AUDIT01 in the ledger (`e891cf7a`, before
+  any code); a new instrument and pack module for lane 19ab with the author's 69 attempts; a
+  census tool, its generated page and its ruling.
+- **Summary:** lane 19ab dispatches one body in place of the delegated action, or in place
+  of an approved one with the approval, then the unchanged action, each attempt in a process
+  of its own on lane 19z's sealed gate. No run of record yet. The census reads every
+  committed pack: 16 name a model and one, lane 19o, holds an id the provider returned;
+  lanes 19u, 19w and 19x hold the requested id only.
+- **Files changed:** `tools/assurance-provenance/body19ab.py`, `evidence19ab.py`,
+  `served19.py`, `tests/test_body19ab.py`, `tests/test_evidence19ab.py`,
+  `tests/test_served19.py`, `docs/research/provenance-phase-19ab/attempts-author.json`,
+  `docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md`, `.prettierignore`, the ledger,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** 29 tests for lane 19ab (four on the real gate) and 8 for the census;
+  the census runs under a bare Python 3.12 interpreter; `ruff` and `prettier` are clean; the
+  quick gate passes.
+- **Not done:** lane 19ab's run of record, pack and ruling. No capture records a returned
+  model id beside each generation.
+
 ### 2026-11-22 (Australia/Sydney) — Lane 19aa pack: retries, self-written approvals and reused approvals change nothing but one verdict
 
 **Raouf:**

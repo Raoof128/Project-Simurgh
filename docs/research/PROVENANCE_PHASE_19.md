@@ -3540,3 +3540,21 @@ under it.
   claimed: no model and no agent wrote a sequence; no person approved anything; access to
   the receiver, a token that outlives its grant, and laundering through a permitted route
   are not measured; no repair was made for the verdict that R2 turned on, as declared.
+- Note (22 Nov 2026, P19-BODY01, written with the instrument and before the run of record):
+  the author's 69 attempts were tried on the author's own machine while the instrument was
+  written, so the run of record is not the first time their outcome was seen. In that trial
+  all five hypotheses held: none of the 64 changed bodies was observed, on either route. The
+  list has no body that a gate of this kind is known to pass, so the lane has no positive
+  control of its own; the lane's page says what a gate that matched on the name alone would
+  have passed, as arithmetic on the list and not as a measurement.
+- Ruling (22 Nov 2026, P19-AUDIT01 exercised): the declaration (`e891cf7a`) precedes the
+  tool. `served19.py` read every committed Phase 19 pack and every JSON member in each. 16
+  packs name a model. One, lane 19o, holds an id the provider returned: for each of its six
+  models the returned id equals the requested one, recorded from a single call per model
+  made before the capture, not from each generation. Lanes 19u, 19w and 19x, which also
+  called hosted models, hold the requested id and nothing from the provider. The other
+  packs that name a model name a local file. The page
+  `PROVENANCE_PHASE_19_SERVED_MODELS.md` is the tool's output and a test holds it there.
+  Not done and not claimed: no capture was made again, no pack was edited, and nothing here
+  says a wrong model answered in any lane. From here on a capture that calls a hosted model
+  should record the returned id beside each generation; no lane does so yet.
