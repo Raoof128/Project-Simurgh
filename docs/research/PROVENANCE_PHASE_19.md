@@ -2725,6 +2725,67 @@ Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to
 receipt, or any other change to what the comparator checks. This declaration commit must be a
 strict ancestor of every commit that acts on it.
 
+**P19-GUARD01 (a new lane, 19ag: the approval check refuses a body it cannot read, every
+recorded attempt run on the repaired gate, and a fresh round of attackers against it; declared
+23 Nov 2026 before any line of it was written).** Lane 19ae's seats found that a dispatched
+body without its `run` or its `id`, sent with a token whose signature is good, makes the gate
+raise `KeyError` where it should refuse. Nothing is sent and no authority is gained, but a
+caller that does not catch the exception stops. Lane 19ae published it and repaired nothing.
+Declared before any code:
+
+- The repair. A new module, `guard19ag.py`, holds one pipeline class that is lane 19ae's full
+  gate with one change in its approval store. Before anything is read from a dispatched body,
+  the store refuses, with the reason `approval_action`, a body that is not an object holding
+  a string `run` and a string `id`. And any error raised while a token is being checked is a
+  refusal, with the reason `approval_schema`: the check fails closed. `guard19ag.pipeline()`
+  returns the class, and the lane's page names it as the one a caller should use. No file of
+  an earlier lane is edited.
+- Two gates are measured: `full`, lane 19ae's, and `guarded`. Each attempt runs on a fresh
+  fixture of each.
+- The recorded attempts are every attempt lane 19ae ran: the eleven files of the earlier
+  lanes it read, converted by its rule, and the three files of its own seats, which are now
+  recorded attempts.
+- The fresh round. Three seats, `seat-a`, `seat-b` and `seat-c`, each an agent the author
+  starts, each with the repository at the instrument commit, the brief, and the means to run
+  an attempt on the guarded gate. Nothing is hidden from them: the repair is in the source
+  they read, and the brief tells them where it is. Each hands in at most 40 attempts in lane
+  19ae's list of steps. A seat's file is committed as received before any of it is run on
+  the host of record. The model behind each seat is read from the harness's record before
+  any page names it. A seat that a provider's safety system stops is recorded as empty and
+  is not started again.
+- An attempt gains as in lane 19ae: the undelegated action is observed, or its payload
+  reaches the receiver, in an attempt where the host minted no approval for it; or more than
+  one effect reaches the receiver; or a payload reaches the receiver that is not the payload
+  of one of the two registered actions.
+- Hypotheses. G0: on the full gate at least one recorded attempt raises, so the finding
+  reproduces. G1: on the guarded gate no recorded attempt raises. G2: every recorded attempt
+  that does not raise on the full gate gets, on the guarded gate, the same verdict for every
+  dispatch, the same count of effects and the same latch. G3: on the guarded gate every
+  refused dispatch in every attempt, recorded or fresh, leaves a record, except in an attempt
+  where the seal has latched. G4: no attempt, recorded or fresh, gains on the guarded gate.
+  G5: no fresh attempt that writes no store makes the guarded gate raise or latch.
+- How G5 is read. Lane 19ae declared the same thing as F5 and it failed: its seats found
+  the raise this lane repairs. The seats here are of the same kind. If they find another
+  raise, G5 fails and is published as it is.
+- Where: the run of record is on the project's Linux x86_64 host in the hash-locked
+  environment, from a clean clone at the commit that holds the seats' files.
+- If a hypothesis fails: published as it is; no repair in this lane.
+- Money: none. The seats run on the author's plan.
+- What this is not. The frozen gate and every earlier lane's gate still raise; a caller
+  that does not use the new class has none of this. The seats are agents of Claude models
+  the author started; they are not a person and not an attacker from another vendor. A check
+  that fails closed turns an unknown error into a refusal, which can hide a fault of another
+  kind behind a refusal; the lane counts raises and does not look for those.
+- Seen when this was written: lane 19ae's pack and pages, its seats' sixteen raising
+  attempts as its results page lists them, and the approval check as read in `gate19.py`. No
+  line of the lane exists.
+
+Authorised files: `tools/assurance-provenance/guard19ag.py`, `evidence19ag.py`, their tests,
+`docs/research/provenance-phase-19ag/` (the brief, the seats' files, the pack and its pages),
+`.prettierignore` entries for its byte-preserved files, the ruling and both logs. Not
+authorised: any edit to a frozen file, to a 19a to 19af source or pack, or to a workflow.
+This declaration commit must be a strict ancestor of every other commit of lane 19ag.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
