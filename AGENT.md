@@ -53,6 +53,56 @@ one machine's local agent configuration:
   19ae's files and was amended in its own commit. One declared prediction, G1, is expected
   to fail: two recorded attempts raise for reasons the repair does not touch. It is left as
   declared.
+### 2026-11-23 (Australia/Sydney) — Audit of the evidence explorer; all thirty-one Phase 19 packs shown
+
+**Raouf:**
+
+- **Scope:** `tools/simurgh-explorer/**`, an audit record under
+  `docs/research/explorer-phase-18/`, a declaration appended to
+  `docs/research/CONTINUATION_PHASE_18.md`, and the lines of `README.md`, `ROADMAP.md` and
+  `DOCUMENTATION.md` that describe the viewer. No pack, receipt, lane page, ledger entry,
+  frozen file or handoff text changes.
+- **Summary:** the dashboard showed the transfer study of October and none of Phase 19. It
+  now reads every pack from committed files: the handoff's lane table and status, each
+  receipt, report and protocol, the lane's pages, the ledger's rulings and the README's open
+  work. It opens on a record of every prediction, lists the ones that failed, and gives each
+  lane's limits, root and verify command. The interface is redrawn, with a dark scheme and a
+  narrow layout, and the command line gains `lanes`, `lane`, `handoff` and `open-work`.
+- **Files changed:** new `lanes.mjs`, `read-handoff.py`, `make-mark.py`, `src/Phase19.jsx`,
+  `src/Outcomes.jsx`, `src/ui.jsx`, `src/simurgh-mark.png`, `tests/lanes.test.mjs` and
+  `tests/e2e/browser.e2e.mjs`, `packcheck.mjs`, `agent.mjs`, `src/PackCheck.jsx`,
+  `tests/packcheck.test.mjs` and `tests/agent.test.mjs`; changed `core.mjs`, `index.mjs`, `cli.mjs`, `serve.mjs`,
+  `index.html`, `package.json`, `src/App.jsx`, `src/main.jsx`, `src/style.css`, two test
+  files and the tool's README; the audit record, the declaration, three navigation
+  pages and both logs.
+- **Second pass, same day:** a test now drives the built app in a real Chrome through every
+  lane and compares each page with the lane's receipt and root file. It found two defects,
+  both fixed: one lane listed its four models seven times and left stale model names on
+  screen when another lane was opened, and one page was in the library twice. Five things
+  typed into the tool were removed, and three tests keep it so: a scan of the tool's source,
+  a lane that exists only in a test, and a comparison with the hosted workflow's own list of
+  lanes. The header now carries the bird of the project's logo, cut from the logo file, and
+  the palette is sampled from it; terracotta marks only what did not hold.
+- **Third pass, same day:** the owner asked what would make it more useful. Three things
+  were added after reading the gap hunt and what the field published in 2026: the page
+  recomputes a pack's root and member hashes in the reader's browser (`packcheck.mjs`, also
+  `check --id` on the command line) and reports a match or what differs, never the word
+  verified; a table scores the predictions by whether the lane ran a model; and each outcome
+  names the place in its receipt that records it.
+- **Fourth pass, same day:** the command line now has a command for each view of the
+  dashboard (`agent.mjs`), a `watch` command that compares with a saved snapshot and exits 3
+  when the evidence itself changed, and the same commands as read-only tools over standard
+  input and output (`cli.mjs mcp`). A tool takes no file path.
+- **Verification:** 52 explorer tests pass (23 before) and 11 parts of the browser test; the
+  browser test measures text contrast and sideways scroll in six views at several widths in
+  both colour schemes; Lighthouse accessibility was 96 before and is 100; `npm audit` reports
+  no advisory; `prettier` and the quick gate pass.
+- **Not done:** the explorer's tests are in no gate and no hosted job, as Phase 18 declared.
+  Lanes 19w and 19x are read from a table on their results page because their receipts hold
+  no such field. Lane 19o's hypotheses are shown without wording. The bird is a raster cut
+  from a raster logo, and the wordmark is live text in a system face. The browser test ran in
+  Chrome only. No one outside the project has reviewed the tool, and no person using a screen
+  reader has tried it.
 
 ### 2026-11-22 (Australia/Sydney) — End-to-end check of the day's lanes after they merged
 

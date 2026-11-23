@@ -1,10 +1,19 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-import { readFileSync, writeFileSync, mkdirSync, realpathSync, statSync } from "node:fs";
+import {
+  copyFileSync,
+  readFileSync,
+  writeFileSync,
+  mkdirSync,
+  realpathSync,
+  rmSync,
+  statSync,
+} from "node:fs";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve, relative, isAbsolute } from "node:path";
 import { adaptPublic, validateBundle } from "./core.mjs";
 import { loadTransfer } from "./transfer.mjs";
+import { loadLanes } from "./lanes.mjs";
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 export function readBound(root, path) {
   const base = realpathSync(root),
@@ -13,8 +22,14 @@ export function readBound(root, path) {
   if (rel.startsWith("..") || isAbsolute(rel)) throw new Error("Source path escapes repository");
   if (statSync(actual).size > 32 * 1024 * 1024) throw new Error("Source exceeds 32 MiB");
   const bytes = readFileSync(actual);
-  return { text: bytes.toString("utf8"), sha256: createHash("sha256").update(bytes).digest("hex") };
+  return {
+    bytes: new Uint8Array(bytes),
+    text: bytes.toString("utf8"),
+    sha256: createHash("sha256").update(bytes).digest("hex"),
+  };
 }
+export const readBytes = readBound;
+const PUBLIC = "node_modules/.simurgh-explorer-public";
 const DOCS = [
   "docs/REVIEWER_INDEX.md",
   "docs/research/OPENAI_NEEDS_2026-10-16.md",
@@ -77,6 +92,13 @@ export function buildIndex({ root = ROOT, detail = false, study = "phase17" } = 
     }))
   );
   b.gaps = research.gaps;
+  // Phase 19: every pack, its outcomes, the outside-replication status and the README's open work.
+  const phase19 = loadLanes(root, readBound);
+  b.lanes = phase19.lanes;
+  b.handoff = phase19.handoff;
+  b.open_work = phase19.open_work;
+  b.other = phase19.other;
+  b.documents.push(...phase19.documents);
   if (detail && study === "phase10") {
     const path = "docs/research/model-composition-phase-10/capture.json";
     const raw = readBound(root, path),
@@ -151,14 +173,23 @@ if (isMainModule(import.meta.url)) {
     ) + "\n",
     {
       flag:
-        out ===
-        resolve(
-          dirname(fileURLToPath(import.meta.url)),
-          "node_modules/.simurgh-explorer-public/evidence.json"
-        )
+        out === resolve(dirname(fileURLToPath(import.meta.url)), PUBLIC, "evidence.json")
           ? "w"
           : "wx",
     }
   );
   console.log(`Wrote ${out}`);
+  // The built app can recompute each pack's root in the reader's browser, so the packs of this
+  // checkout go beside the index. Only the app's own build gets them; a file written elsewhere
+  // with --output is an index and nothing more.
+  if (out === resolve(dirname(fileURLToPath(import.meta.url)), PUBLIC, "evidence.json")) {
+    const packs = resolve(dirname(out), "packs");
+    rmSync(packs, { recursive: true, force: true });
+    mkdirSync(packs);
+    for (const lane of JSON.parse(readFileSync(out, "utf8")).lanes) {
+      realpathSync(resolve(ROOT, lane.pack));
+      copyFileSync(resolve(ROOT, lane.pack), resolve(packs, `${lane.id}.zip`));
+    }
+    console.log(`Copied the packs to ${packs}`);
+  }
 }

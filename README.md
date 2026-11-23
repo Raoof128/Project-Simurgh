@@ -339,16 +339,25 @@ The local **React dashboard and JSON CLI share the same query layer**. Humans an
 inspect outcomes, compare controls, locate unauthorized effects and incomplete tasks, retain
 unknowns, follow source pointers and search the dated research index.
 
-**Viewer scope:** the default dataset contains all **288 transfer-study branches**, with separate
-model identities and 96 generations. `--study phase10` retains the earlier 144-outcome view.
-The research index and gap register are dated snapshots; search is local. Loading data does not
-verify the source archive. See the [21 October readiness work](docs/readiness-2026-10-21/RESULTS.md)
-for repairs, validation and remaining blockers.
+**Viewer scope:** the dashboard opens on the Phase 19 record: all thirty-one packs, each
+prediction with the outcome its pack's receipt records, the verify command of each lane, and
+which items an outside operator has run. The **288 transfer-study branches** stay under
+Outcomes, with separate model identities and 96 generations, and `--study phase10` retains the
+earlier 144-outcome view. The October research index and gap register are dated snapshots;
+search is local. The page can recompute a pack's root and member hashes in the browser; it
+replays nothing, and loading data verifies nothing. See the
+[audit of 23 November](docs/research/explorer-phase-18/AUDIT_2026-11-23.md) for what the viewer
+covers and the [21 October readiness work](docs/readiness-2026-10-21/RESULTS.md) for earlier
+repairs.
 
 With Node.js 24 or 26 and Python 3, run the CLI from the repository root; no npm installation is required:
 
 ```sh
 node tools/simurgh-explorer/cli.mjs summary
+node tools/simurgh-explorer/cli.mjs lanes --outcome failed
+node tools/simurgh-explorer/cli.mjs lane --id 19ae
+node tools/simurgh-explorer/cli.mjs check --all
+node tools/simurgh-explorer/cli.mjs watch --baseline /tmp/simurgh-watch.json
 node tools/simurgh-explorer/cli.mjs records --kind unauthorized --control credential_only
 node tools/simurgh-explorer/cli.mjs records --kind unauthorized --model llama
 node tools/simurgh-explorer/cli.mjs inspect --id 'p17:llama:g1:composed' --detail

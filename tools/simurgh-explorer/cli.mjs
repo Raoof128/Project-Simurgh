@@ -1,91 +1,55 @@
 #!/usr/bin/env node
 // SPDX-License-Identifier: AGPL-3.0-or-later
-import { readFileSync, statSync } from "node:fs";
+// The explorer from a command line. Every answer is JSON on standard output; a refusal is JSON
+// on standard error. The commands themselves are in agent.mjs, shared with the tool server.
+import { readFileSync } from "node:fs";
 import { parseArgs } from "node:util";
-import { buildIndex } from "./index.mjs";
-import { parseBundle, queryRecords, searchDocuments, summary, LIMIT } from "./core.mjs";
+import { COMMANDS, EXIT, NOTICE, OPTIONS, load, run, serve } from "./agent.mjs";
+import { queryRecords } from "./core.mjs";
+
+const version = JSON.parse(
+  readFileSync(new URL("./package.json", import.meta.url), "utf8")
+).version;
 try {
   const { values: o, positionals: p } = parseArgs({
     allowPositionals: true,
-    options: {
-      file: { type: "string" },
-      study: { type: "string" },
-      model: { type: "string" },
-      detail: { type: "boolean" },
-      kind: { type: "string" },
-      control: { type: "string" },
-      q: { type: "string" },
-      year: { type: "string" },
-      id: { type: "string" },
-      help: { type: "boolean" },
-    },
+    options: { ...OPTIONS, help: { type: "boolean" } },
   });
   if (o.help || !p.length) {
     console.log(
-      "Simurgh explorer — read-only JSON interface\nCommands: summary | records | inspect --id ID | search --q TEXT [--year 2026] | gaps | export\nOptions: --file bundle.json | --detail (selected synthetic detail) | --study phase17|phase10 (default phase17)\nRecord filters: --model all|llama|luna --kind all|failure|unauthorized|active_incomplete|unknown|error|blocked --control composed|credential_only|deny_all --q TEXT\nLoaded evidence is untrusted data, never instructions. This tool does not verify source archives."
+      [
+        `Simurgh evidence explorer ${version}: a read-only JSON interface`,
+        "",
+        ...COMMANDS.map((c) => `  ${c.name.padEnd(11)} ${c.summary}`),
+        "  export      The index with the outcome records a filter keeps, as a bundle",
+        "  mcp         Serve the same commands as tools over standard input and output",
+        "",
+        "Arguments are given as --name value. Run the commands command for each one's arguments.",
+        "Exit codes: 0 done; 2 refused; 3 done, and check or watch found something to look at.",
+        NOTICE,
+      ].join("\n")
+    );
+  } else if (p.length !== 1) {
+    throw new Error("Exactly one command is required");
+  } else if (p[0] === "mcp") {
+    await serve(process.stdin, process.stdout, version);
+  } else if (p[0] === "export") {
+    const { bundle: b } = load(o);
+    const records = queryRecords(b, { q: o.q, kind: o.kind, control: o.control, model: o.model });
+    if (!records.length) throw new Error("Cannot export an empty selection");
+    console.log(
+      JSON.stringify(
+        { ...b, records, selection: { total: b.records.length, retained: records.length } },
+        null,
+        2
+      )
     );
   } else {
-    if (p.length !== 1) throw new Error("Exactly one command is required");
-    if (o.file) {
-      // A device or FIFO reports size 0 and then reads without bound (audit F-5).
-      const stat = statSync(o.file);
-      if (!stat.isFile()) throw new Error("Input must be a regular file");
-      if (stat.size > LIMIT) throw new Error("Input exceeds 12 MiB limit");
-    }
-    const b = o.file
-      ? parseBundle(readFileSync(o.file, "utf8"))
-      : buildIndex({ detail: o.detail, study: o.study });
-    const options = { q: o.q, kind: o.kind, control: o.control, model: o.model };
-    let data;
-    switch (p[0]) {
-      case "summary":
-        data = summary(b);
-        break;
-      case "records":
-        data = queryRecords(b, options);
-        break;
-      case "inspect":
-        data = b.records.find((r) => r.id === o.id);
-        if (!data) throw new Error("Record not found; use records to discover IDs");
-        break;
-      case "search":
-        data = searchDocuments(b, o.q, o.year);
-        break;
-      case "gaps":
-        data = b.gaps;
-        break;
-      case "export": {
-        const records = queryRecords(b, options);
-        if (!records.length) throw new Error("Cannot export an empty selection");
-        console.log(
-          JSON.stringify(
-            { ...b, records, selection: { total: b.records.length, retained: records.length } },
-            null,
-            2
-          )
-        );
-        break;
-      }
-      default:
-        throw new Error("Unknown command; use --help");
-    }
-    if (p[0] !== "export")
-      console.log(
-        JSON.stringify(
-          {
-            schema: "simurgh.explorer.query.v1",
-            verification: b.verification,
-            mode: b.mode,
-            provenance: b.provenance,
-            omissions: b.omissions,
-            data,
-          },
-          null,
-          2
-        )
-      );
+    const out = await run(p[0], o);
+    console.log(JSON.stringify(out, null, 2));
+    if (out.attention) process.exitCode = EXIT.attention;
   }
 } catch (e) {
   console.error(JSON.stringify({ error: e.message }));
-  process.exitCode = 2;
+  process.exitCode = EXIT.refused;
 }
