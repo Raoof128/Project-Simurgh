@@ -148,8 +148,8 @@ a caller has to use the repaired classes.
 [19z](docs/research/provenance-phase-19z/README.md) gives the attacker what the labs' 2026
 incident reports describe: write access to the controls themselves. The gate keeps its grants,
 stop state and approvals in files and believes what it reads there, so with nothing else in
-place 13 of 52 attempts that write those files, 31 of them the author's own and 21 one
-agent's, make the undelegated action land, and 4 let an
+place 13 of 52 attempts that write those files make the undelegated action land (31 of the
+52 are the author's own and 21 one agent's), and 4 let an
 approved action go ahead on a script rewritten after approval. With a digest of those files
 held in the host's memory, none does: the gate latched on each of the 36 attempts that changed
 a file and on no other. The price is that a writer of the files can stop all work, and one

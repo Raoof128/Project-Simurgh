@@ -37,6 +37,10 @@ one machine's local agent configuration:
 - **Verification:** handoff tests 51 of 51, one written first; explorer unit tests 65 of 65,
   the two tightened ones seen to fail with their fix removed; `prettier`, `ruff` and the
   quick gate.
+- **Round 6, the acceptance read:** no page disagrees with another, and five facts picked
+  at random each traced to a committed file. Two things were found and fixed: the newest row
+  of the author page's method table lacked its record cell, and one README clause about lane
+  19z's attempts read ambiguously.
 - **Not done:** a date inside an unclosed code fence or an inline code span in a heading
   still counts for a document's date; no committed document has one.
 
