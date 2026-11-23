@@ -2904,6 +2904,16 @@ captured), and no other pack changes. This declaration authorises, and nothing e
 Not authorised: any edit to a pack, a capture module, a workflow or a frozen file. No money.
 This declaration commit must be a strict ancestor of every commit that acts on it.
 
+**P19-AUDIT02, amendment 1 (24 Nov 2026, declared before any commit that acts on it).** Found
+while the tests of the declaration were being written: since lane 19ag joined, the census
+test `test_every_member_was_read` fails on Python 3.12.0 to 3.12.2. Two of that lane's seat
+files nest bodies about 1,486 levels deep, which the JSON reader of those versions cannot
+read from inside a test runner, so the census lists the two files as unread. They hold
+attempts and no model id, and the page is the same either way. The test passes on Python
+3.12.3 and later, which the hosted suite runs. This amendment authorises one more thing: that
+test accepts exactly those two files of lane 19ag as unread on Python 3.12.0 to 3.12.2, and
+nothing else unread on any version. The tool's reading does not change.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
