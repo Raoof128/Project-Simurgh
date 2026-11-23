@@ -2880,6 +2880,30 @@ Not authorised: any change to a phase's host, time, expected kind or fields, to 
 comparator checks, to an operator's receipt, or to a frozen file or a lane's pinned source or
 pack. This declaration commit must be a strict ancestor of every commit that acts on it.
 
+**P19-AUDIT02 (bounded authority to let the served-model census read a pack that names its
+models as the keys of an object; declared 24 Nov 2026 before any commit that acts on it).**
+The census of P19-AUDIT01 counts a model id only where a pack holds it as a string under the
+key `model` or `api_model`. Lane 19af's pack names its two local models as the keys of the
+`models` object in `capture.json` and nowhere under those two keys, so the census leaves the
+lane out: its page says 16 packs name a model where 17 do. The root README has listed this
+under open work since 23 November. Measured before this was written, with the rule below
+applied to every committed pack: lane 19af gains its two ids, lane 19m gains two ids its pack
+names and the census missed (one model stopped by rule after its authorised cases, one not
+captured), and no other pack changes. This declaration authorises, and nothing else:
+
+1. `tools/assurance-provenance/served19.py`: a pack also names a model where it holds an
+   object under the key `models` whose values are all objects; each key of that object is a
+   named id. The rule for an id the provider returned does not change. The page's opening
+   lines name this declaration and say that naming a model is not running it. Tests first.
+2. The generated page `docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md`, written again
+   by the tool.
+3. The root README: the count in the sentence that cites the census, and the removal of the
+   open-work entry this closes.
+4. Both logs and the ruling.
+
+Not authorised: any edit to a pack, a capture module, a workflow or a frozen file. No money.
+This declaration commit must be a strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
