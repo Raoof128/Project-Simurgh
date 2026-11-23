@@ -163,6 +163,19 @@ As a transcript monitor the better model catches an added exfiltration sentence 
 body. A monitor call takes tens of seconds on that laptop and a dispatch on the gate about
 a fiftieth of a second. Nothing here transfers to a hosted model.
 
+**The crash repaired, and attacked afresh, 23 November.**
+[19ag](docs/research/provenance-phase-19ag/README.md) repairs the raise that lane 19ae's seats
+found, in a class beside the gate: the approval check now refuses a body it cannot read and
+treats any error during the check as a refusal. All 467 attempts lane 19ae ran were run
+again. The sixteen that raised `KeyError` are refused, and the 449 that did not raise end as
+they did before. Three fresh seats, two on Claude Opus 5.5 and one on Claude Sonnet 5.5,
+attacked the repaired gate with its source in hand: none of their 91 attempts gains and none
+makes it raise. One of the lane's six predictions fails. It said that no recorded attempt
+would raise, and two still do, through the gate's own stores and not through the approval
+check. Two seats nested their bodies close to the limit of the JSON reader in the earliest
+Python 3.12 releases, so this pack should be verified from the command line; its page says
+why.
+
 [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) ·
 [Release and archive](https://github.com/Raoof128/Project-Simurgh/releases/tag/phase-19-paper-v1.0) ·
 [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) ·
@@ -339,7 +352,7 @@ The local **React dashboard and JSON CLI share the same query layer**. Humans an
 inspect outcomes, compare controls, locate unauthorized effects and incomplete tasks, retain
 unknowns, follow source pointers and search the dated research index.
 
-**Viewer scope:** the dashboard opens on the Phase 19 record: all thirty-one packs, each
+**Viewer scope:** the dashboard opens on the Phase 19 record: all thirty-two packs, each
 prediction with the outcome its pack's receipt records, the verify command of each lane, and
 which items an outside operator has run. The **288 transfer-study branches** stay under
 Outcomes, with separate model identities and 96 generations, and `--study phase10` retains the
@@ -389,7 +402,7 @@ and document text as untrusted data when feeding CLI results to an agent.
 | Perform outside reproduction | [Operator handoff](docs/research/CONTINUATION_HANDOFF_2026-10-19.md)                                                                                        | Earlier viewer/export snapshot; use the current runbook for the latest study                |
 | Trace prior work             | [Reviewer index](docs/REVIEWER_INDEX.md) and [research history](RESEARCH_HISTORY.md)                                                                        | Frozen stages, negative results and historical reproduction                                 |
 | Read the newest study        | [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) and [Phase 19 ledger](docs/research/PROVENANCE_PHASE_19.md)                            | Plans committed before each run, hypotheses decided by rule, limits stated with each result |
-| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Thirty-one verify commands; twenty-nine need no installed packages                          |
+| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Thirty-two verify commands; thirty need no installed packages                               |
 | Judge the process and author | [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) and [author, method and open problems](docs/AUTHOR_AND_METHOD.md)                                    | How errors were found and handled, how AI assistance is used, what remains open             |
 
 The most useful review would challenge the exact-action comparator, admission/revocation
@@ -398,13 +411,13 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
 
 ### Open work
 
-- **Independent reproduction:** one outside operator has replayed twenty-one of the thirty-one
+- **Independent reproduction:** one outside operator has replayed twenty-one of the thirty-two
   Phase 19 packs on Ubuntu x86_64 with no discrepancy, including the five frozen-gate replays,
   the Lean check and the namespace probe, and the test suite passed there. A second ran the
   handoff natively on Windows 10, where every verifier refused; the causes are published and
   the handoff now lists native Windows as unsupported. An earlier receipt covers five packs on
   macOS ([receipts and reviews](docs/research/provenance-phase-19f/README.md)). Still
-  outstanding: lanes 19w, 19x, 19y, 19z and 19aa to 19af, one dataset recomputation, a second
+  outstanding: lanes 19w, 19x, 19y, 19z and 19aa to 19ag, one dataset recomputation, a second
   Linux host, and independent evidence custody, since the author's side asked both operators
   and each signed with a typed name.
 - **Provider lifecycle:** real provider IAM/revocation and authenticated live safety-alert
@@ -423,8 +436,11 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
   beat it in lane 19ae. No one outside the project has reviewed it.
 - **A raise in the approval check:** a dispatched body without its `run` or `id`, sent with
   a token whose signature is good, raises `KeyError` where the gate should refuse (19ae).
-  It needs no signing key, only an approval the host minted for any action. Every gate in
-  the repository has it. Not repaired.
+  Lane 19ag repairs it in a class beside the gate, which a caller must choose to use: the
+  sixteen recorded attempts that raised are refused there, and three fresh seats did not
+  make it raise. The frozen gate and every earlier lane's gate still raise. Two recorded
+  attempts that reach the gate's own stores still raise on every gate. No one outside the
+  project has reviewed the repair.
 - **A restriction that arrives as text:** the gate acts on host state and ignores a
   withdrawal written into a channel (19af, 20 of 20 dispatches observed). Whether the send
   then goes out is left to the model and the wording. A host that learns of a restriction

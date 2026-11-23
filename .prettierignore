@@ -463,3 +463,10 @@ docs/research/provenance-phase-19ae/receipt.json
 docs/research/provenance-phase-19af/protocol.json
 docs/research/provenance-phase-19af/report.json
 docs/research/provenance-phase-19af/receipt.json
+
+# P19-FORMAT34: Phase 19ag seats' files as received and source-bound machine evidence
+# (P19-GUARD01); bytes are bound by the pack root and must not be reformatted.
+docs/research/provenance-phase-19ag/submissions/*.json
+docs/research/provenance-phase-19ag/protocol.json
+docs/research/provenance-phase-19ag/report.json
+docs/research/provenance-phase-19ag/receipt.json

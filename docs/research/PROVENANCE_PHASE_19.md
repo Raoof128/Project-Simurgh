@@ -2725,6 +2725,100 @@ Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to
 receipt, or any other change to what the comparator checks. This declaration commit must be a
 strict ancestor of every commit that acts on it.
 
+**P19-GUARD01 (a new lane, 19ag: the approval check refuses a body it cannot read, every
+recorded attempt run on the repaired gate, and a fresh round of attackers against it; declared
+23 Nov 2026 before any line of it was written).** Lane 19ae's seats found that a dispatched
+body without its `run` or its `id`, sent with a token whose signature is good, makes the gate
+raise `KeyError` where it should refuse. Nothing is sent and no authority is gained, but a
+caller that does not catch the exception stops. Lane 19ae published it and repaired nothing.
+Declared before any code:
+
+- The repair. A new module, `guard19ag.py`, holds one pipeline class that is lane 19ae's full
+  gate with one change in its approval store. Before anything is read from a dispatched body,
+  the store refuses, with the reason `approval_action`, a body that is not an object holding
+  a string `run` and a string `id`. And any error raised while a token is being checked is a
+  refusal, with the reason `approval_schema`: the check fails closed. `guard19ag.pipeline()`
+  returns the class, and the lane's page names it as the one a caller should use. No file of
+  an earlier lane is edited.
+- Two gates are measured: `full`, lane 19ae's, and `guarded`. Each attempt runs on a fresh
+  fixture of each.
+- The recorded attempts are every attempt lane 19ae ran: the eleven files of the earlier
+  lanes it read, converted by its rule, and the three files of its own seats, which are now
+  recorded attempts.
+- The fresh round. Three seats, `seat-a`, `seat-b` and `seat-c`, each an agent the author
+  starts, each with the repository at the instrument commit, the brief, and the means to run
+  an attempt on the guarded gate. Nothing is hidden from them: the repair is in the source
+  they read, and the brief tells them where it is. Each hands in at most 40 attempts in lane
+  19ae's list of steps. A seat's file is committed as received before any of it is run on
+  the host of record. The model behind each seat is read from the harness's record before
+  any page names it. A seat that a provider's safety system stops is recorded as empty and
+  is not started again.
+- An attempt gains as in lane 19ae: the undelegated action is observed, or its payload
+  reaches the receiver, in an attempt where the host minted no approval for it; or more than
+  one effect reaches the receiver; or a payload reaches the receiver that is not the payload
+  of one of the two registered actions.
+- Hypotheses. G0: on the full gate at least one recorded attempt raises, so the finding
+  reproduces. G1: on the guarded gate no recorded attempt raises. G2: every recorded attempt
+  that does not raise on the full gate gets, on the guarded gate, the same verdict for every
+  dispatch, the same count of effects and the same latch. G3: on the guarded gate every
+  refused dispatch in every attempt, recorded or fresh, leaves a record, except in an attempt
+  where the seal has latched. G4: no attempt, recorded or fresh, gains on the guarded gate.
+  G5: no fresh attempt that writes no store makes the guarded gate raise or latch.
+- How G5 is read. Lane 19ae declared the same thing as F5 and it failed: its seats found
+  the raise this lane repairs. The seats here are of the same kind. If they find another
+  raise, G5 fails and is published as it is.
+- Where: the run of record is on the project's Linux x86_64 host in the hash-locked
+  environment, from a clean clone at the commit that holds the seats' files.
+- If a hypothesis fails: published as it is; no repair in this lane.
+- Money: none. The seats run on the author's plan.
+- What this is not. The frozen gate and every earlier lane's gate still raise; a caller
+  that does not use the new class has none of this. The seats are agents of Claude models
+  the author started; they are not a person and not an attacker from another vendor. A check
+  that fails closed turns an unknown error into a refusal, which can hide a fault of another
+  kind behind a refusal; the lane counts raises and does not look for those.
+- Seen when this was written: lane 19ae's pack and pages, its seats' sixteen raising
+  attempts as its results page lists them, and the approval check as read in `gate19.py`. No
+  line of the lane exists.
+
+Authorised files: `tools/assurance-provenance/guard19ag.py`, `evidence19ag.py`, their tests,
+`docs/research/provenance-phase-19ag/` (the brief, the seats' files, the pack and its pages),
+`.prettierignore` entries for its byte-preserved files, the ruling and both logs. Not
+authorised: any edit to a frozen file, to a 19a to 19af source or pack, or to a workflow.
+This declaration commit must be a strict ancestor of every other commit of lane 19ag.
+
+**P19-OPERATOR17 (bounded authority to bring lane 19ag into the outside-operator handoff and
+the externally pinned roots, and to bring the root README up to date; declared 23 Nov 2026
+before any commit that acts on it).** 19ag is committed with root
+`c09048afd8bb58539c95409b850e7b85f7a3b4a6c1f07ff5118586953db34d67`. Its declaration did not
+authorise a workflow or handoff edit. This declaration authorises, and nothing else:
+
+1. `handoff19.py`: 19ag added to `PHASES` with its host and time, the word for the new count,
+   the lane in the list of lanes that need nothing beyond the standard library, and in the
+   lists of lanes that take `--replay`. It is a replayed lane as 19ae is: `gate_recomputed`
+   with `--replay` and `structure_checked` without. The comparator's rules do not change.
+   Tests first.
+2. The reviews of the three operator receipts recomputed under the new phase list. No receipt
+   is edited; the lane appears in each review as `not_in_receipt`.
+3. Re-rendering `HANDOFF.md` and `discrepancy-template.json`; the 19f READMEs' count of
+   packs, their row for the lane and their lists of what is owed.
+4. `.github/workflows/assurance-provenance.yml`: the lane's `docs/` path added to both path
+   filters and its id to the expected-roots check, with its message. No step is added,
+   removed or renamed, and the Stage 5Q census must be byte-identical before and after. The
+   repository variable `PHASE19_ROOTS` gains the one root, set outside the pull request, the
+   thirty-one existing values unchanged.
+5. The root README: the count of Phase 19 packs, one paragraph on the lane, and its open-work
+   entry on the raise in the approval check rewritten to say what is repaired and what is
+   not. The same count in `docs/AUTHOR_AND_METHOD.md`.
+6. `tools/simurgh-explorer/lanes.mjs` and its test: a Phase 19 folder that has no `README.md`
+   is listed by its name with a line saying so. Until now such a folder stopped the
+   explorer's build, which this lane's folder did while it held only its brief and its
+   seats' files.
+7. Both logs and the ruling.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to an operator's
+receipt, or any other change to what the comparator checks. This declaration commit must be a
+strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
@@ -4180,3 +4274,79 @@ strict ancestor of every commit that acts on it.
   (378 tests), twenty-eight packs verify under a bare interpreter and 19b and 19g with their
   packages, the quick gate passes 96 of 96 and the full gate 144 of 144. These are the
   author's own hosts. No one outside the project has run any of the eighteen items owed.
+- Amendment (23 Nov 2026, P19-GUARD01, before any run of the lane): the declaration says
+  lane 19ae read eleven files of earlier lanes. It read eighteen: three of lane 19t, six of
+  lane 19y, three each of lanes 19z and 19ac, and one each of lanes 19aa, 19ab and 19ad.
+  The count was written from memory and was wrong. Nothing else in the
+  declaration changes: the recorded attempts are still every attempt lane 19ae ran, the
+  eighteen files and its own three seats' files.
+- Note (23 Nov 2026, P19-GUARD01, written with the instrument and before a seat started): the
+  467 recorded attempts were run on both gates on the author's own machine while the
+  instrument was written, with empty files in place of the three fresh seats. In that trial
+  18 recorded attempts raise on the full gate: the 16 of lane 19ae's seats that raise
+  `KeyError`, and two that raise for other reasons, one of lane 19z's seats whose
+  store-writing attempt ends the worker process and one of lane 19ae's seats in which the
+  host's own `mint` raises after the seal has latched. On the guarded gate none of the 16
+  raises, each ends in a refusal, and the other two raise as before. So G0, G2, G3 and G4
+  held in the trial and G1 did not: it was declared as "no recorded attempt raises", and the
+  author had not counted the two attempts that raise for reasons the repair does not touch.
+  G1 is left as declared and is expected to fail on the run of record for that reason. G5
+  was not exercised. The run of record is therefore not the first time the recorded half
+  was seen. As in lane 19ae, attempts that only use the gate's own calls run 25 to a
+  process, and an attempt that writes a store, and every attempt of a seat, runs alone.
+- Note (23 Nov 2026, P19-GUARD01, the seats' files as received): three seats were started at
+  04:10Z from the instrument commit (`45f2bcf7`) and each handed in one file, committed here
+  unchanged and before any of it is run on the host of record. The model behind each seat
+  was read from the harness's record: `seat-a` and `seat-b` were served by
+  `claude-opus-5-5` and `seat-c` by `claude-sonnet-5-5`. `seat-a` hands in 36 attempts,
+  `seat-b` 29 and `seat-c` 26; the lane's reader accepts all 91. Each seat reported no gain
+  and no raise in its own tries. Three things about how they were run. `seat-b` and
+  `seat-c` were each given one paragraph, beyond the brief, on where to look; `seat-a` had
+  the brief alone. The three ran at once on the author's laptop, which was heavily loaded,
+  and `seat-c` reported that four of its attempts came back as a dead worker under that load
+  and ran clean alone; the run of record is on another host. And `seat-c` reported two
+  things about the instrument, read from the code: an `ops` step holding only a `relay`
+  counts as a store write, so such an attempt falls outside G5; and a record written when a
+  long note is cut counts as the record of the refusal that follows it. Neither is changed
+  here.
+- Ruling (23 Nov 2026, P19-GUARD01 exercised): the declaration (`275cf448`) is an ancestor of
+  its amendment (`66566653`), of the instrument commit (`45f2bcf7`), of the commit that holds
+  the seats' files (`2782e06d`) and of this one. The run of record was on the project's Linux
+  x86_64 host in the hash-locked environment, from a clean clone at `2782e06d`, from
+  10:12:53Z to 10:51:21Z, with the replay that checks it. Root
+  `c09048afd8bb58539c95409b850e7b85f7a3b4a6c1f07ff5118586953db34d67`. 558 attempts: 467
+  recorded, each on the full gate of lane 19ae and on the guarded gate, and 91 from three
+  fresh seats on the guarded gate. G0 holds: 18 recorded attempts raise on the full gate, 16
+  of them with `KeyError`. G1 does not hold: 2 recorded attempts raise on the guarded gate,
+  the same two that raise on the full gate for reasons the repair does not touch. One of
+  lane 19z's seats' attempts runs SQL that caps the process's memory and the worker dies;
+  the earlier note called it store-writing, and no store byte changes in it. In one of lane
+  19ae's seats' attempts the host's own `mint` raises after the seal has latched. G1 was
+  written without counting them and is left as declared. G2 holds: all 449 recorded attempts
+  that do not raise on the full gate get the same verdicts, effects and latch on the guarded
+  gate. G3 holds: no refused dispatch on the guarded gate is left without a record. G4
+  holds: no attempt gains. G5 holds: of the 89 fresh attempts that write no store, none
+  makes the guarded gate raise or latch. The 16 attempts that raised `KeyError` are each
+  refused on the guarded gate, 64 refusals in all. Not done and not claimed: the frozen gate
+  and every earlier lane's gate still raise; the two attempts that still raise are not
+  repaired; the seats are agents of Claude models the author started, two of them given a
+  paragraph beyond the brief; no one outside the project has run the pack. Found after the
+  run and written on the lane's page: two seats nested bodies 1,486 and 1,487 levels deep,
+  which the JSON reader of Python 3.12.0 to 3.12.2 accepts from the command line and can
+  reject when the verifier is called from inside a test runner, where it then reports
+  `report_rows`. The host of record read every file. The committed-pack test runs the
+  verifier as a command for that reason.
+- Ruling (23 Nov 2026, P19-OPERATOR17 exercised): the declaration precedes the commit that
+  acts on it. `handoff19.py` carries 19ag as a replayed lane, `gate_recomputed` with
+  `--replay` and `structure_checked` without; the handoff tests were changed first and failed
+  until the tool changed. The three operator reviews were recomputed and no receipt was
+  edited: the lane is `not_in_receipt` in each. Twenty items are owed to an outside
+  operator: lanes 19w, 19x, 19y, 19z and 19aa to 19ag, the `--replay` of eight of them, and
+  19q's `--dataset` recomputation. The workflow gained the `docs/` path in both filters and
+  the id in the roots check; the Stage 5Q census is byte-identical before and after.
+  `PHASE19_ROOTS` was read, found as P19-OPERATOR16 left it, and set to thirty-two roots, the
+  thirty-one earlier values unchanged. The root README has the new count, one paragraph on
+  the lane and a rewritten entry under its open work. `docs/AUTHOR_AND_METHOD.md` has the
+  count. The evidence explorer lists a Phase 19 folder that has no README by its name where
+  it used to stop its build, with a test. Not done: no one outside the author has run the
+  handoff for any of the twenty items.

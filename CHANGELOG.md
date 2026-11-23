@@ -1,5 +1,46 @@
 ## Change Log
 
+## [phase-19f-operator17-2026-11-23] — 2026-11-23 — Lane 19ag in the operator handoff; thirty-two pinned roots
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR17, the handoff tool, its rendered files, the hosted
+  roots check, the root README, one fix in the evidence explorer.
+- **Summary:** thirty-two packs in the handoff and in the hosted roots check. The README says
+  what lane 19ag repaired and what still raises. The explorer lists a Phase 19 folder
+  without a README instead of stopping.
+- **Verification:** handoff tests; Stage 5Q census identical; explorer tests; quick gate.
+
+## [phase-19ag-pack-2026-11-23] — 2026-11-23 — Lane 19ag: the approval check refuses a body it cannot read
+
+**Raouf:**
+
+- **Scope:** the 19ag pack, its pages, a committed-pack test, the ruling.
+- **Summary:** a class beside the gate refuses the bodies that made lane 19ae's gate raise.
+  558 attempts on the Linux host: the 16 `KeyError` raises are gone, nothing else about a
+  recorded attempt changes, and 91 fresh attempts from three seats do not gain or raise.
+  Five of six predictions hold. Root `c09048af…`.
+- **Verification:** run of record with replay; bare-interpreter `verify`; committed-pack
+  tests; quick gate.
+
+## [phase-19ag-seats-2026-11-23] — 2026-11-23 — Lane 19ag: three seats' files as received
+
+**Raouf:**
+
+- **Scope:** the three seats' files and a ledger note.
+- **Summary:** 91 attempts against the repaired approval check, from two seats on Claude
+  Opus 5.5 and one on Claude Sonnet 5.5, committed before any is run on the host of record.
+- **Verification:** the lane's reader accepts all of them; quick gate.
+
+## [phase-19ag-instrument-2026-11-23] — 2026-11-23 — Lane 19ag instrument: a repaired approval check
+
+**Raouf:**
+
+- **Scope:** `guard19ag.py`, `evidence19ag.py`, their tests, the seats' brief, the ledger.
+- **Summary:** a class beside the gate whose approval check refuses a body without a string
+  `run` and a string `id`, and fails closed on any error. Lane 19ae's seats found the raise
+  this repairs. No pack yet.
+- **Verification:** 21 tests with the hash-locked set; quick gate.
 ## [explorer-phase19-2026-11-23] — 2026-11-23 — The evidence explorer shows all thirty-one Phase 19 packs
 
 **Raouf:**

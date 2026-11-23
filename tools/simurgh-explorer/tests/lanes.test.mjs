@@ -465,3 +465,28 @@ test("the provider-returned model record of each lane is the census tool's own",
   }
   assert.ok(named > 0);
 });
+
+test("a Phase 19 folder without a README is listed by name and does not stop the build", () => {
+  const missing = b.other[0];
+  const reader = (root, path) => {
+    if (path === missing.page) {
+      const error = new Error(`ENOENT: no such file or directory, lstat '${path}'`);
+      error.code = "ENOENT";
+      throw error;
+    }
+    return readBound(root, path);
+  };
+  const loaded = loadLanes(REPO, reader, readHandoff(REPO));
+  const entry = loaded.other.find((o) => o.id === missing.id);
+  assert.match(entry.summary, /no README/);
+  assert.equal(entry.title, `Folder ${missing.id}`);
+  assert.ok(!loaded.documents.some((d) => d.id === entry.page));
+  assert.equal(loaded.other.length, b.other.length);
+  assert.equal(loaded.lanes.length, b.lanes.length);
+  // Any other failure to read still stops the build.
+  const broken = (root, path) => {
+    if (path === missing.page) throw new Error("Source exceeds 32 MiB");
+    return readBound(root, path);
+  };
+  assert.throws(() => loadLanes(REPO, broken, readHandoff(REPO)), /32 MiB/);
+});

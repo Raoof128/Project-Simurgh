@@ -14,6 +14,97 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-23 (Australia/Sydney) — Lane 19ag in the operator handoff; thirty-two pinned roots; the README's open work brought up to date
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR17 in the ledger (before the change), the handoff
+  tool and its tests, the rendered handoff, the hosted roots check, the root README,
+  `docs/AUTHOR_AND_METHOD.md`, and one fix in the evidence explorer.
+- **Summary:** 19ag joins the handoff as a replayed lane. The three operator reviews were
+  recomputed (the lane is `not_in_receipt` in each; the receipts are byte-identical). Twenty
+  items are owed to an outside operator. `PHASE19_ROOTS` was extended outside the pull
+  request from thirty-one roots to thirty-two. The root README has a paragraph on the lane,
+  and its open-work entry on the raise now says what is repaired and what is not. The
+  explorer no longer stops its build on a Phase 19 folder without a README; it lists the
+  folder by name. The dashboard picks the new lane up from the handoff with no other change.
+- **Files changed:** `tools/assurance-provenance/handoff19.py`, `tests/test_handoff19.py`,
+  `docs/research/provenance-phase-19f/HANDOFF.md`, `discrepancy-template.json`, the three
+  reviews, the two 19f READMEs, `.github/workflows/assurance-provenance.yml`, `README.md`,
+  `docs/AUTHOR_AND_METHOD.md`, `tools/simurgh-explorer/lanes.mjs` and its test, the ledger,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the handoff tests, failing before the tool changed; the Stage 5Q census
+  is byte-identical before and after the workflow edit; the explorer's unit tests and its
+  browser test with thirty-two lanes; thirty-one of the thirty-two packs verify on macOS,
+  twenty-nine with a bare interpreter (19d verifies only on Linux, as before); `prettier`,
+  `ruff` and the quick gate pass.
+- **Not done:** no outside operator has run any of the twenty items.
+
+### 2026-11-23 (Australia/Sydney) — Lane 19ag pack: the crash in the approval check is repaired beside the gate; one prediction fails
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19ag/` (the pack, README and results), the
+  committed-pack test, the ruling, both logs. `main` was merged into the lane branch first
+  and both logs kept every entry.
+- **Summary:** on the project's Linux host the 16 recorded attempts that raised `KeyError`
+  on lane 19ae's gate are each refused on the repaired gate, and the other 449 recorded
+  attempts that did not raise end the same on both gates. Three fresh seats' 91 attempts do
+  not gain and do not make the gate raise. Five of six predictions hold. G1 fails: two
+  recorded attempts still raise for reasons the repair does not touch, which the author had
+  not counted when writing it.
+- **Files changed:** the pack's five files, `README.md` and `RESULTS.md` beside them,
+  `tools/assurance-provenance/tests/test_evidence19ag_committed.py`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** the run of record with its replay on the Linux host; `verify` with a
+  bare Python 3.12 interpreter on macOS; 8 committed-pack tests; `prettier`, `ruff` and the
+  quick gate pass.
+- **Not done:** the lane is not in the operator handoff yet. The frozen gate still raises.
+  The two attempts that still raise are not repaired. An earlier note called one of them
+  store-writing; the ruling corrects that. Two seats nested bodies about 1,486 levels deep,
+  at the edge of what the JSON reader of Python 3.12.0 to 3.12.2 accepts: on 3.12.2 the
+  verifier passes as a command and failed inside the test runner, so the committed-pack test
+  runs it as a command and the lane's page says so.
+
+### 2026-11-23 (Australia/Sydney) — Lane 19ag: the three seats' files as received
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19ag/submissions/` (three files, unchanged), a
+  note in the ledger, both logs. No code changes.
+- **Summary:** three agent seats attacked the repaired gate with the source in hand and
+  handed in 91 attempts, all in the lane's format. Two were served by Claude Opus 5.5 and
+  one by Claude Sonnet 5.5, read from the harness's record. None reported a gain or a raise.
+  The files are committed before any of them is run on the host of record.
+- **Files changed:** the three submissions, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the lane's reader accepts all 91 attempts; a scan of the three files
+  for local paths and private data finds none; `prettier` and the quick gate pass.
+- **Not done:** no attempt of a seat has been run by the author. Two seats were given a
+  paragraph beyond the brief on where to look. One seat left a script running after it
+  handed in, which loaded the author's machine until it was stopped by hand.
+
+### 2026-11-23 (Australia/Sydney) — Lane 19ag instrument: the approval check refuses a body it cannot read
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/guard19ag.py`, `evidence19ag.py`, their two test
+  files, the seats' brief under `docs/research/provenance-phase-19ag/`, `.prettierignore`,
+  an amendment and a note in the ledger. No earlier lane's file changes.
+- **Summary:** lane 19ae's seats found that a body without its `run` or `id`, sent with a
+  validly signed token, makes the gate raise. `guard19ag.pipeline()` is lane 19ae's gate
+  with an approval store that refuses such a body and treats any error raised during the
+  check as a refusal. The lane reuses lane 19ae's attempts, steps and flags and adds lane
+  19ae's own seats' files as recorded attempts.
+- **Files changed:** the two modules, `tests/test_guard19ag.py`, `tests/test_evidence19ag.py`,
+  `docs/research/provenance-phase-19ag/BRIEF.md`, `.prettierignore`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** 21 tests pass with the hash-locked set, 13 of them on the rules and the
+  real gate and 8 on the pack with a stand-in gate; `ruff`, `prettier` and the quick gate
+  pass. A trial of the 467 recorded attempts on the author's machine is in the ledger.
+- **Not done:** no seat has started and no pack exists. The declaration miscounted lane
+  19ae's files and was amended in its own commit. One declared prediction, G1, is expected
+  to fail: two recorded attempts raise for reasons the repair does not touch. It is left as
+  declared.
 ### 2026-11-23 (Australia/Sydney) — Audit of the evidence explorer; all thirty-one Phase 19 packs shown
 
 **Raouf:**
