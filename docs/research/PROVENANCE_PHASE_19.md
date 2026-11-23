@@ -4468,3 +4468,15 @@ nothing else unread on any version. The tool's reading does not change.
   one too. The test was written first and failed until the generator changed. `HANDOFF.md`
   is rendered again; the discrepancy template and the three reviews are byte-identical. No
   phase's host, time, expected kind or fields changed.
+- Ruling (24 Nov 2026, P19-AUDIT02 and its amendment exercised): the declaration (`da19e2fe`)
+  and the amendment (`03339380`) precede the commit that acts on them. The census also names
+  a model where a pack holds an object under the key `models` whose values are all objects.
+  Lane 19af is now in the census with its two local models, lane 19m with the two ids its
+  pack names and the census missed, and no other pack changed, as measured before the
+  declaration. The page says 17 packs name a model and one holds an id the provider
+  returned; it also says that naming a model is not running it. Two tests were written
+  first and failed until the tool changed. The census test accepts lane 19ag's two deeply
+  nested seat files as unread on Python 3.12.0 to 3.12.2 and nothing else on any version;
+  it had failed on those versions since that lane joined, which nothing had noticed because
+  the hosted suite runs a later Python. The root README has the new count and no longer
+  lists the census under its open work.

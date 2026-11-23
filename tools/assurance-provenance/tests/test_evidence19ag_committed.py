@@ -191,6 +191,28 @@ class CommittedPackTests(unittest.TestCase):
                 z.read("report.json"), (ev.DOCS / "report.json").read_bytes()
             )
 
+    def test_the_committed_report_holds_exactly_the_declared_fields(self):
+        # Without --replay the verifier does not compare these with the lane's module, so a
+        # repacked copy could change them under another root. This holds the committed pack.
+        self.assertEqual(
+            sorted(self.report),
+            [
+                "arm",
+                "attempt_files",
+                "hypotheses",
+                "model_inference",
+                "non_claims",
+                "protocol_sha256",
+                "rows",
+                "schema",
+                "summary",
+            ],
+        )
+        self.assertEqual(self.report["arm"], ev.ARM)
+        self.assertEqual(self.report["schema"], ev.SCHEMA)
+        self.assertIs(self.report["model_inference"], False)
+        self.assertEqual(self.report["non_claims"], list(ev.NON_CLAIMS))
+
     def test_replay_on_the_host_of_record(self):
         if os.environ.get("SIMURGH_REPLAY_19AG") != "1" or not ev.host_can_replay():
             self.skipTest("set SIMURGH_REPLAY_19AG=1 on Linux x86_64 to replay")

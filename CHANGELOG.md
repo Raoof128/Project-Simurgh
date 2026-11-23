@@ -1,5 +1,16 @@
 ## Change Log
 
+## [phase-19-audit02-2026-11-24] — 2026-11-24 — The served-model census reads lane 19af
+
+**Raouf:**
+
+- **Scope:** the census tool (P19-AUDIT02), its page and test, the root README, one test for
+  lane 19ag.
+- **Summary:** 17 packs name a model, not 16: the census now reads a pack that names its
+  models as the keys of an object. The README's open-work entry on it is closed. The census
+  test no longer fails on Python 3.12.0 to 3.12.2.
+- **Verification:** census tests on two interpreters; explorer unit tests; quick gate.
+
 ## [readiness-round-5-2026-11-23] — 2026-11-23 — The operator's path: two replay caveats in the handoff; three tests tightened
 
 **Raouf:**
