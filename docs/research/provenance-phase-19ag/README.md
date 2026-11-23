@@ -124,8 +124,9 @@ give `--expected-root`.
 
 (Added 24 Nov 2026: for the committed pack, a test holds those fields to the lane's module.
 `tools/assurance-provenance/strict19ag.py` takes the same pack and root, runs the verifier
-unchanged and then compares those fields too; it refuses each such copy, and a report
-whose bytes are not the lane's canonical form, such as one with a key written twice.)
+unchanged and then compares those fields too; it refuses each such copy, and a report or
+sidecar whose bytes are not the lane's canonical form, such as one with a key written
+twice.)
 
 (Added 24 Nov 2026: what neither tool checks without `--replay`. The verifier runs no gate
 then. It checks each row's identity against the seats' files, that each recorded outcome

@@ -50,6 +50,13 @@ elif change == "spaced":
 files["report.json"] = raw
 for name, project in ev.SIDECARS.items():
     files[name] = wire(project(report))
+if change == "sidecar":
+    # a sidecar with its first key written twice, the first time with another value
+    name = "hypotheses.json"
+    text = files[name].decode()
+    first = text[1 : text.index(":")]
+    files[name] = ("{" + first + ':"something_else",' + text[1:]).encode()
+    assert json.loads(files[name]) == loads(wire(ev.SIDECARS[name](report)))
 print(write_pack(out, files))
 """
 
@@ -123,6 +130,8 @@ class StrictTests(unittest.TestCase):
             # the same report in bytes that are not the lane's canonical form
             ("twice", "report_bytes"),
             ("spaced", "report_bytes"),
+            # and a sidecar in such bytes (amendment 2)
+            ("sidecar", "sidecar_bytes:hypotheses.json"),
         ):
             pack, root = self.repacked(change)
             self.assertNotEqual(root, self.root, change)

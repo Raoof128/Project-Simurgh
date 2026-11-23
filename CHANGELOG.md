@@ -1,5 +1,17 @@
 ## Change Log
 
+## [readiness-round-10-2026-11-24] — 2026-11-24 — Three sentences reworded to what the packs show; sidecars held to canonical bytes
+
+**Raouf:**
+
+- **Scope:** the root README, `SECURITY.md`, the record of corrections, the pages of lanes
+  19ad and 19ag, `strict19ag.py` (P19-GUARD02 amendment 2).
+- **Summary:** a recount of twenty absence claims from the raw packs found seventeen exact
+  and three worded more strongly than measured (lanes 19t, 19ad and 19ae); they now say what
+  was measured. The stricter check for lane 19ag also refuses a sidecar in non-canonical
+  bytes. No number changed.
+- **Verification:** strict-check tests on two interpreters; quick gate.
+
 ## [phase-19-audit03-2026-11-24] — 2026-11-24 — The served-model census corrected: two packs hold a returned id
 
 **Raouf:**

@@ -15,6 +15,12 @@ the same verdicts and effects from both. The repair has not been attacked afresh
 (Added 23 Nov 2026: [lane 19ae](../provenance-phase-19ae/README.md) attacked the repair with three
 fresh seats. None of their 36 attempts gains.)
 
+(Added 24 Nov 2026: "carry no forged token" in the sentence above says more than was
+measured. The 57 are the sequences in which the gate as it was admitted no forged token for
+the undelegated action, which is D2 in the table below. 26 of them hand the gate text that
+holds a signed token the host did not mint, and both gates refuse it. Found by a read-only
+audit round that recounted the pack.)
+
 Verify the structure (any host with Python 3.12; standard library only):
 
 ```sh

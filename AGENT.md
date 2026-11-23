@@ -14,6 +14,33 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-24 (Australia/Sydney) — Round 10: the corrected census checked; three sentences said more than the packs show
+
+**Raouf:**
+
+- **Scope:** `strict19ag.py` and its test (P19-GUARD02 amendment 2), the root README,
+  `SECURITY.md`, the record of corrections, the pages of lanes 19ad and 19ag, the ledger,
+  both logs.
+- **Summary:** two read-only helpers ran after the census correction. One attacked the
+  correction with its own scan of all 32 packs and found the new census right; it found
+  that the stricter check for lane 19ag held the report to canonical bytes and not the two
+  sidecars, which is now refused too. The other took twenty sentences that claim an absence
+  or a universal and recounted each from the raw packs. Seventeen hold. Three said more than
+  was measured and are reworded: lane 19ad's 57 sequences are those in which the old gate
+  admitted no forged token, and 26 of them do hand it one that both gates refuse; lane
+  19ae's gate leaves no refusal without a record unless its seal has latched, which the
+  security page had dropped; and in lane 19t no verdict changed in the 82 attempts that
+  completed, while 10 raised and have no verdict. No number on any page changed.
+- **Files changed:** `tools/assurance-provenance/strict19ag.py`,
+  `tools/assurance-provenance/tests/test_strict19ag.py`, `README.md`, `SECURITY.md`,
+  `docs/RECORD_OF_CORRECTIONS.md`, `docs/research/provenance-phase-19ad/README.md`,
+  `docs/research/provenance-phase-19ag/README.md`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the sidecar test written first and seen to fail, then to fail again with
+  the check removed; the 26 of 57 recounted from lane 19ad's pack with separate code;
+  `prettier`, `ruff` and the quick gate.
+- **Not done:** lane 19ad's sentence keeps its words and a dated note corrects it. The
+  census still does not read a model named under `not_available` in lane 19u's pack.
+
 ### 2026-11-24 (Australia/Sydney) — The served-model census was wrong about returned ids; corrected (P19-AUDIT03)
 
 **Raouf:**
@@ -39,7 +66,9 @@ one machine's local agent configuration:
   `docs/RECORD_OF_CORRECTIONS.md`, `docs/research/provenance-phase-19ag/README.md`, the
   ledger, `AGENT.md`, `CHANGELOG.md`.
 - **Verification:** the census tests (17) and the strict check's tests (3) on two
-  interpreters, written first; each new rule removed in turn and a test seen to fail; the
+  interpreters. They were written first, except one census test added after the tool
+  changed, when a removal check found a branch no test guarded. Each new rule was removed
+  in turn and a test seen to fail. Also the
   explorer's unit tests, which read the census page; `prettier`, `ruff` and the quick gate.
 - **Not done:** the rulings of P19-AUDIT01 and P19-AUDIT02 keep their words and a later
   ruling corrects them. Dated log entries that give the old counts are left as written. No

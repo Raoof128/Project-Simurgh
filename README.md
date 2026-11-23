@@ -85,8 +85,9 @@ refused, while a credential check alone let 369 through.
 against what was declared come first. [19t](docs/research/provenance-phase-19t/README.md) gave
 two coding agents the gate's source and committed what each submitted before it was run: 49 of
 92 attempts changed the gate's output, against the declared prediction, through two faults that
-lane 19y has since repaired beside the gate. None made the undelegated action land or changed a
-verdict.
+lane 19y has since repaired beside the gate. None made the undelegated action land. In the 82
+attempts whose dispatch completed no verdict changed; in the other 10 a dispatch raised and
+there is no verdict to compare.
 [19q](docs/research/provenance-phase-19q/README.md) scored a destination rule on a public
 monitor benchmark: it flagged 7 of 43 attack sessions and 6 of 43 benign ones, and two of its
 three hypotheses did not hold. The same rules run on one transcript of your own with
@@ -183,9 +184,10 @@ the other action. Six of the seats' 25 attempts do it. It needs the signing key,
 fixture is a constant in the repository.
 [19ad](docs/research/provenance-phase-19ad/README.md) repairs it beside the gate: the store
 remembers a digest of what it minted and refuses a token that differs. Of 67 recorded
-sequences, 8 beat the gate as it was and none beats the repaired one, and the 57 others that
-carry no forged token end the same way on both. Every earlier lane ran the gate with the
-fault.
+sequences, 8 beat the gate as it was and none beats the repaired one. In 57 others the gate
+as it was admitted no forged token for the undelegated action, and they end the same way
+on both; 26 of those hand the gate a forged token that both refuse. Every earlier lane ran
+the gate with the fault.
 
 **One gate with every repair, attacked afresh, 22 November.**
 [19ae](docs/research/provenance-phase-19ae/README.md) puts every repair in one class,

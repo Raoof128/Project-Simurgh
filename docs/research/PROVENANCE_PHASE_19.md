@@ -4621,3 +4621,18 @@ does not authorise.
   with recorded outcomes rewritten consistently passes both under its own root, and the
   committed root or `--replay` refuses it. No pinned file, pack, brief or handoff command
   changed.
+- Ruling (24 Nov 2026, P19-GUARD02 amendment 2 exercised; a tenth round on the commit above):
+  the amendment (`6571410c`) precedes the commit that acts on it. `strict19ag.py` refuses, as
+  `sidecar_bytes` with the member's name, a sidecar whose bytes are not the canonical form of
+  what they parse to. The test, written first, repacks the committed pack with a second `G1`
+  entry at the head of `hypotheses.json`: the pinned verifier accepts the copy under its own
+  root and the new check refuses it, and the test fails with the check removed. The same
+  round read every committed pack with its own code and found the corrected census right:
+  only lanes 19o and 19u hold a provider's response body, 18 packs name a model, and lanes
+  19w and 19x hold the requested name only. Three things it noted are recorded here and not
+  changed. Lane 19u's pack also names `claude-mythos-5-2`, under `not_available`, which the
+  census's rule does not read. Lane 19w's row lists a model its pack marks as not run. And
+  of the census tests, nine were written before the tool changed and one after, when a
+  removal check found a branch no test guarded. The commit that exercised P19-AUDIT03 also
+  edited lane 19ag's page; that edit belongs to amendment 1 of P19-GUARD02, which authorises
+  it, and not to P19-AUDIT03, which authorises no lane's page.
