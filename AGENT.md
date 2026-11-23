@@ -14,6 +14,32 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-23 (Australia/Sydney) — Readiness round 5: the operator's path; no bug found in the code; three tests tightened
+
+**Raouf:**
+
+- **Scope:** the rendered handoff (P19-OPERATOR18, declared first), the 19f and 19ag pages,
+  the root README, the explorer's README and three of its tests, the ledger, both logs.
+- **Summary:** two more read-only checks. The page check found no wrong number and seven
+  small gaps. The code check found no bug: it could not break round 4's fixes, and of 41
+  fixes reverted one at a time in a copy of the tree, 38 were caught by their tests. The
+  three that were not now are: an impossible day in a heading, tool arguments that are not
+  an object, and the `check` command's message. The handoff now tells an operator that a
+  `report_mismatch` from the replay of 19y or 19z is a result to send back, and names the
+  stop an early Python 3.12 can make on 19ag; the template and the three reviews are
+  byte-identical. Lane 19ag's page has the replay caveat lane 19ae's has. The explorer's
+  README states the refusals the rounds added.
+- **Files changed:** `tools/assurance-provenance/handoff19.py`, `tests/test_handoff19.py`,
+  `docs/research/provenance-phase-19f/HANDOFF.md` and `README.md`, the READMEs of lane 19ag
+  and of the explorer, `docs/research/explorer-phase-18/AUDIT_2026-11-23.md`, `README.md`,
+  `tools/simurgh-explorer/tests/agent.test.mjs` and `lanes.test.mjs`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** handoff tests 51 of 51, one written first; explorer unit tests 65 of 65,
+  the two tightened ones seen to fail with their fix removed; `prettier`, `ruff` and the
+  quick gate.
+- **Not done:** a date inside an unclosed code fence or an inline code span in a heading
+  still counts for a document's date; no committed document has one.
+
 ### 2026-11-23 (Australia/Sydney) — Readiness round 4: every lane named in the README; the review and the pack check hardened again
 
 **Raouf:**

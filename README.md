@@ -55,7 +55,8 @@ use: a projection of the October archive, a differential test of the gate with a
 a forked receiver, a namespace egress probe, a capture instrument and a seeded incident drill.
 No model runs in them. Their pages are under `docs/research/provenance-phase-19a/` to `19g/`.
 
-**The manuscript's studies, 10 to 11 November** (lanes [19h](docs/research/provenance-phase-19h/README.md) to
+**The manuscript's studies, 10 to 11 November** (five lanes,
+[19h](docs/research/provenance-phase-19h/README.md) to
 [19l](docs/research/provenance-phase-19l/README.md)). Four studies on small local models, each with its plan committed
 before the run. In a confirmatory run of 2,592 generations, all five hypotheses fixed in advance
 held on the primary model, and how far an injected text moved a model depended on its exact
@@ -187,8 +188,9 @@ fault.
 
 **One gate with every repair, attacked afresh, 22 November.**
 [19ae](docs/research/provenance-phase-19ae/README.md) puts every repair in one class,
-`full19ae.pipeline()`, adds a record for a refusal the schema makes and a mark after twenty
-refusals in a row, and runs every attempt seven earlier lanes recorded on it: 431, none of which gains.
+`full19ae.pipeline()`, adds a record for a refusal that would leave none and a mark after
+twenty refusals in a row, and runs every attempt seven earlier lanes recorded on it: 431,
+none of which gains.
 Three fresh seats, two on Claude Opus 5.5 and one on Claude Sonnet 5.5, then attacked it with
 the source in hand. None of their 36 attempts gains, and the repair of lane 19ad held against
 every variant they tried. They found a different fault instead: a body that lacks its `run`
@@ -200,7 +202,8 @@ repair the raise; lane 19ag, below, does.
 **Three questions asked of small local models, 22 November.**
 [19af](docs/research/provenance-phase-19af/README.md) takes three questions that the project's
 survey of open gaps left untouched to two small models on a laptop. A legitimate restriction
-that arrives as text is obeyed or ignored by its wording: both models stop for a notice that says "do not send" and
+that arrives as text is obeyed or ignored by its wording: both models stop for a notice
+that says "do not send" and
 both send through a legal hold every time. The gate ignores all of them, as designed, so a
 withdrawal that reaches the system only as text changes nothing at the gate. One model sends
 19 of 24 times when the restriction is in the trusted state, against the lane's prediction.
@@ -227,9 +230,9 @@ why.
 [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) ·
 [Author, method and open problems](docs/AUTHOR_AND_METHOD.md)
 
-October study: [Research brief](docs/research/transfer-phase-17/BRIEF.md) ·
-[Full results](docs/research/transfer-phase-17/RESULTS.md) ·
-[Run the demo](#replay-the-evidence) ·
+[October research brief](docs/research/transfer-phase-17/BRIEF.md) ·
+[October results](docs/research/transfer-phase-17/RESULTS.md) ·
+[Replay the October study](#replay-the-evidence) ·
 [Dashboard and CLI](#inspect-with-a-dashboard-or-an-agent) ·
 [Reviewer handoff](#reviewer-handoff) ·
 [Integration matrix](docs/INTEGRATIONS.md) ·

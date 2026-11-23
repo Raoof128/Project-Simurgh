@@ -1094,6 +1094,15 @@ class OperatorReceiptTests(unittest.TestCase):
         self.assertIn("unknown phase", done.stderr)
         self.assertNotIn("Traceback", done.stderr)
 
+    def test_the_handoff_says_which_replay_stops_are_results(self):
+        # P19-OPERATOR18: every replay that can differ on another host is named as one whose
+        # mismatch is a result, and so is the stop an early 3.12 can make on 19ag.
+        text = handoff19.render()
+        self.assertIn("from either is also a result to send back", text)
+        self.assertIn("SQLite", text)
+        self.assertIn("`report_rows`", text)
+        self.assertIn("Python 3.12.0 to 3.12.2", text)
+
 
 class StatusTests(unittest.TestCase):
     def _dirs(self):

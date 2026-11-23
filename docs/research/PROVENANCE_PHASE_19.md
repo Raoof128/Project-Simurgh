@@ -4427,3 +4427,10 @@ pack. This declaration commit must be a strict ancestor of every commit that act
   written first and failed until the tool changed. The three committed reviews again
   recompute byte-identical and the rendered handoff is unchanged. Found by an attempt to
   break the first repair, not by a receipt.
+- Ruling (23 Nov 2026, P19-OPERATOR18 exercised): the declaration (`561a099b`) precedes the
+  commit that acts on it. The handoff's replay paragraph now says that a `report_mismatch`
+  from the replay of 19y or 19z on another host is a result to send back, with the reason
+  for each, and that a `report_rows` stop from 19ag's verifier on Python 3.12.0 to 3.12.2 is
+  one too. The test was written first and failed until the generator changed. `HANDOFF.md`
+  is rendered again; the discrepancy template and the three reviews are byte-identical. No
+  phase's host, time, expected kind or fields changed.

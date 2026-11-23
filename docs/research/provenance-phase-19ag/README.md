@@ -24,7 +24,9 @@ python -B tools/assurance-provenance/evidence19ag.py verify \
 
 On Linux x86_64 inside the hash-locked environment, add `--replay` to run every attempt again
 on real fixtures and compare the whole report. That takes about twenty minutes on a two-core
-server.
+server. Rows inherited from lanes 19y and 19ac depend on how deep the host's JSON parser
+goes, and one attempt of lane 19z ends its worker process, so a `--replay` on another host
+may stop with `report_mismatch`. That is a result to send back.
 
 ## The repair
 

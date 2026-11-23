@@ -548,6 +548,10 @@ test("a model a receipt marks as not run is not listed among the lane's models",
 
 test("a heading's date counts only when it is a real day that has come, outside code", () => {
   assert.equal(datedBy("# T\n\n## Added 23 November 2026\n"), "2026-11-23");
+  // With today fixed, a day that does not exist is dropped by the real-day rule alone.
+  for (const impossible of ["99 October 2026", "0 November 2026", "31 November 2026"])
+    assert.equal(datedBy(`# T\n\n## ${impossible}\n`, "2026-12-31"), "2026-10-19", impossible);
+  assert.equal(datedBy("# T\n\n## 30 November 2026\n", "2026-12-31"), "2026-11-30");
   assert.equal(datedBy("# T\n\n## Planned for 31 February 2027\n"), "2026-10-19");
   assert.equal(datedBy("# T\n\n## Due 1 January 2099\n"), "2026-10-19");
   assert.equal(datedBy("# T\n\n```\n## 5 November 2026\n```\n"), "2026-10-19");

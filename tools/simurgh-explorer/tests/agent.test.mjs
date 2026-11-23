@@ -232,6 +232,8 @@ test("a command that needs --id says so, and the README lists every command", ()
     assert.match(refused.err, /--id/, `${name} names the missing option`);
     assert.doesNotMatch(refused.err, /not found/, name);
   }
+  // check takes one lane or all of them, and says both.
+  assert.match(call("check").err, /--all/);
   assert.match(call("lane", "--id", "no-such-lane").err, /not found/);
   const page = readFileSync(new URL("../README.md", import.meta.url), "utf8");
   for (const c of COMMANDS)
@@ -270,6 +272,13 @@ test("a tool call with an argument of the wrong type or outside its list is refu
     /limit must be a whole number/
   );
   assert.equal((await call("simurgh_library", { collection: "phase19" })).isError, false);
+  // Arguments that are not an object are refused, not read as no arguments.
+  for (const bad of [5, [], true, "text"])
+    assert.match(
+      (await call("simurgh_record", bad)).error,
+      /arguments must be an object/,
+      JSON.stringify(bad)
+    );
   // The command line refuses the same unknown value.
   await assert.rejects(run("library", { collection: "nope" }), /collection must be one of/);
 });
