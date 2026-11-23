@@ -6,6 +6,7 @@ import { Outcomes } from "./Outcomes.jsx";
 import { Empty } from "./ui.jsx";
 import { fetchPack, runCheck } from "./PackCheck.jsx";
 import mark from "./simurgh-mark.png";
+import { readChosen } from "../packcheck.mjs";
 
 const NAMES = {
   record: "Record",
@@ -211,8 +212,18 @@ export function App({ initial }) {
       return check;
     },
     check: (lane) => checking.one(lane, null, "the copy in this checkout's build"),
-    file: async (lane, chosen) =>
-      checking.one(lane, new Uint8Array(await chosen.arrayBuffer()), `the file ${chosen.name}`),
+    file: async (lane, chosen) => {
+      const source = `the file ${chosen.name}`;
+      let bytes;
+      try {
+        bytes = await readChosen(chosen);
+      } catch (e) {
+        const check = { state: "failed", source, message: e.message };
+        setChecks((c) => ({ ...c, [lane.id]: check }));
+        return check;
+      }
+      return checking.one(lane, bytes, source);
+    },
     async all() {
       // A sweep keeps the verdicts and lets the bytes go; one lane's check keeps its bytes.
       for (const lane of bundle.lanes)

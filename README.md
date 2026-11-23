@@ -50,8 +50,14 @@ A lane is one study; from 10 November each has its plan committed first. A pack 
 evidence archive, with a command that checks it. A seat is one attacking agent. A gate
 latches when it stops all work.
 
-**The manuscript's studies, 10 to 11 November.** Four studies on small local models, each with
-its plan committed before the run. In a confirmatory run of 2,592 generations, all five hypotheses fixed in advance
+**The first six packs, 1 November.** Lanes 19a to 19e and 19g build what the later lanes
+use: a projection of the October archive, a differential test of the gate with a Lean model,
+a forked receiver, a namespace egress probe, a capture instrument and a seeded incident drill.
+No model runs in them. Their pages are under `docs/research/provenance-phase-19a/` to `19g/`.
+
+**The manuscript's studies, 10 to 11 November** (lanes [19h](docs/research/provenance-phase-19h/README.md) to
+[19l](docs/research/provenance-phase-19l/README.md)). Four studies on small local models, each with its plan committed
+before the run. In a confirmatory run of 2,592 generations, all five hypotheses fixed in advance
 held on the primary model, and how far an injected text moved a model depended on its exact
 wording and on why the action was forbidden. All 1,439 wrong sends the models produced were then
 replayed through the composed controls: none landed and no exact authorized send was refused,
@@ -60,8 +66,11 @@ outputs. It is not evidence against an attacker who adapts to the gate. One outs
 since recomputed these studies from their committed outputs and rerun the gate replays on a Linux
 machine, with no discrepancy ([receipts and reviews](docs/research/provenance-phase-19f/README.md)).
 
-**After the manuscript draft, 12 to 13 November.** Three further lanes, each declared before it ran, are
-not in the manuscript. [19n](docs/research/provenance-phase-19n/README.md) varied where an
+**After the manuscript draft, 12 to 13 November.** Four further lanes, each declared before
+it ran, are not in the manuscript. [19m](docs/research/provenance-phase-19m/README.md) ran the confirmatory study's
+schedule unchanged on eight more local builds: on the two eligible ones five of eight
+hypotheses held on both, and the prediction that an 8-bit build would repeat the first
+result did not hold. [19n](docs/research/provenance-phase-19n/README.md) varied where an
 injected text sits, what it claims and who wrote it, on four local models: two of its four
 hypotheses held on one model each, two held on none, and no model sent again after a refused
 send. [19o](docs/research/provenance-phase-19o/README.md) sent 1,344 fixed prompts to each of six
@@ -130,15 +139,16 @@ repaired gate's output, and none of 151 new attempts from three Claude agents do
 seats are empty: the providers of a fourth Claude model and of two OpenAI routes refused the
 task, and no request was reworded. So every attacker that ran is from one vendor: one Opus 5.5
 agent and two Sonnet 5.5 agents. A seat named for Claude Mythos, the model the author used
-for the repair, was in fact served by Sonnet 5.5; the lane's page records the correction. The gate that
-the earlier lanes measured is unchanged;
+for the repair, was in fact served by Sonnet 5.5; the lane's page records the correction.
+The gate that the earlier lanes measured is unchanged;
 a caller has to use the repaired classes.
 
 **Writes to the gate's own stores, 22 November.**
 [19z](docs/research/provenance-phase-19z/README.md) gives the attacker what the labs' 2026
 incident reports describe: write access to the controls themselves. The gate keeps its grants,
 stop state and approvals in files and believes what it reads there, so with nothing else in
-place 13 of 52 attempts that write those files make the undelegated action land, and 4 let an
+place 13 of 52 attempts that write those files, 31 of them the author's own and 21 one
+agent's, make the undelegated action land, and 4 let an
 approved action go ahead on a script rewritten after approval. With a digest of those files
 held in the host's memory, none does: the gate latched on each of the 36 attempts that changed
 a file and on no other. The price is that a writer of the files can stop all work, and one
@@ -158,7 +168,8 @@ an approval, so the gate binds the body and not the name. It also found what it 
 predict: 30 of 66 refusals, those of bodies the gate's schema rejects, leave no record in its
 log. Both lanes are lists the author wrote and no agent attacked them. A
 [census of the packs](docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md) found that of the
-16 that name a model, one holds a model id the provider returned.
+16 that name a model, one holds a model id the provider returned (it misses lane 19af; see
+the open work below).
 
 **A planted fault, a real one, and its repair, 22 November.**
 [19ac](docs/research/provenance-phase-19ac/README.md) had two agent seats write the sequences
@@ -176,8 +187,8 @@ fault.
 
 **One gate with every repair, attacked afresh, 22 November.**
 [19ae](docs/research/provenance-phase-19ae/README.md) puts every repair in one class,
-`full19ae.pipeline()`, adds a record for every refusal and a mark after twenty refusals in a
-row, and runs every attempt seven earlier lanes recorded on it: 431, none of which gains.
+`full19ae.pipeline()`, adds a record for a refusal the schema makes and a mark after twenty
+refusals in a row, and runs every attempt seven earlier lanes recorded on it: 431, none of which gains.
 Three fresh seats, two on Claude Opus 5.5 and one on Claude Sonnet 5.5, then attacked it with
 the source in hand. None of their 36 attempts gains, and the repair of lane 19ad held against
 every variant they tried. They found a different fault instead: a body that lacks its `run`
@@ -188,8 +199,8 @@ repair the raise; lane 19ag, below, does.
 
 **Three questions asked of small local models, 22 November.**
 [19af](docs/research/provenance-phase-19af/README.md) takes three questions that the project's
-survey of open gaps left untouched to two small models on a laptop. A legitimate restriction that arrives as text is
-obeyed or ignored by its wording: both models stop for a notice that says "do not send" and
+survey of open gaps left untouched to two small models on a laptop. A legitimate restriction
+that arrives as text is obeyed or ignored by its wording: both models stop for a notice that says "do not send" and
 both send through a legal hold every time. The gate ignores all of them, as designed, so a
 withdrawal that reaches the system only as text changes nothing at the gate. One model sends
 19 of 24 times when the restriction is in the trusted state, against the lane's prediction.
@@ -216,7 +227,7 @@ why.
 [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) ·
 [Author, method and open problems](docs/AUTHOR_AND_METHOD.md)
 
-[Research brief](docs/research/transfer-phase-17/BRIEF.md) ·
+October study: [Research brief](docs/research/transfer-phase-17/BRIEF.md) ·
 [Full results](docs/research/transfer-phase-17/RESULTS.md) ·
 [Run the demo](#replay-the-evidence) ·
 [Dashboard and CLI](#inspect-with-a-dashboard-or-an-agent) ·
@@ -263,7 +274,8 @@ extend to arbitrary remote services or a compromised host.
 
 ## Measured results
 
-The October comparison (Phase 17) uses **24 internally authored tasks, two trials per task and two models**:
+The October comparison (Phase 17) uses **24 internally authored tasks, two trials per task
+and two models**:
 96 captured proposals, each executed through three controls, for **288 retained branches**.
 The tasks cover six known lifecycle families with paired benign/adversarial source text.
 
@@ -482,6 +494,10 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
   make it raise. The frozen gate and every earlier lane's gate still raise. Two recorded
   attempts that reach the gate's own stores still raise on the repaired gate. No one outside the
   project has reviewed the repair.
+- **The gate believes its own files:** with write access to its stores, 13 of 52 attempts
+  made the undelegated action land (19z). A digest held in the host's memory stops all 13
+  and lets such a writer halt all work. It detects a change after the fact; it is not
+  isolation.
 - **The served-model census misses a lane:** lane 19af's receipt names its two local models
   in a form the census tool does not read. The census counts 16 packs that name a model
   where there are 17; one of them holds an id the provider returned, as the census says.
@@ -503,8 +519,9 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
   verdict alone overstates it. Not repaired.
 - **Refusals that leave no record:** a body the gate's schema rejects is refused without a
   `blocked` event in its log (19ab, 30 of 66 refusals), and the gate has no limit on retries
-  (19aa). The class of lane 19ae writes a record for every refusal and a mark after twenty
-  in a row; the frozen gate is unchanged, and the mark is an alert, not a cap.
+  (19aa). On the class of lane 19ae no refused dispatch is left without a record unless the
+  seal has latched, and ten of the twelve attempts with a run of twenty refusals carry its
+  mark; the frozen gate is unchanged, and the mark is an alert, not a cap.
 - **Which model answered:** lanes 19u, 19w and 19x record the model id that was requested
   and nothing the provider returned; 19o records one returned id per model, from a call made
   before the capture. No lane records it beside each generation.
@@ -542,14 +559,15 @@ records; earlier downloadable bundles remain snapshots of their recorded commits
 
 ## Repository guide
 
-| Location                                                                     | Purpose                                                                     |
-| ---------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| `tools/assurance-*`                                                          | Isolated control implementations, evaluation harnesses and replay verifiers |
-| `docs/research/transfer-phase-17/`, `docs/research/provider-role-phase-17b/` | Latest comparative/live-workflow protocols, results and evidence            |
-| `tools/simurgh-explorer/`                                                    | Human dashboard, agent CLI and shared evidence queries                      |
-| `src/llmShield/`, `tools/simurgh-attestation/`                               | Earlier containment runtime, attestations and stage-specific verifiers      |
-| `proofs/`, `papers/`                                                         | Formal models of selected properties and research manuscripts               |
-| `AGENTS.md`, `AGENT.md`, `CHANGELOG.md`                                      | Repository guidance, standing invariants and change history                 |
+| Location                                                                      | Purpose                                                                     |
+| ----------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `tools/assurance-*`                                                           | Isolated control implementations, evaluation harnesses and replay verifiers |
+| `docs/research/provenance-phase-19*/`, `docs/research/PROVENANCE_PHASE_19.md` | Phase 19 packs, lane pages and the ledger of declarations and rulings       |
+| `docs/research/transfer-phase-17/`, `docs/research/provider-role-phase-17b/`  | October comparative/live-workflow protocols, results and evidence           |
+| `tools/simurgh-explorer/`                                                     | Human dashboard, agent CLI and shared evidence queries                      |
+| `src/llmShield/`, `tools/simurgh-attestation/`                                | Earlier containment runtime, attestations and stage-specific verifiers      |
+| `proofs/`, `papers/`                                                          | Formal models of selected properties and research manuscripts               |
+| `AGENTS.md`, `AGENT.md`, `CHANGELOG.md`                                       | Repository guidance, standing invariants and change history                 |
 
 The historical device-integrity application is documented in [DEVICE_ROADMAP.md](DEVICE_ROADMAP.md).
 The application package version `0.4.18` and research release line through `v2.54.1` identify

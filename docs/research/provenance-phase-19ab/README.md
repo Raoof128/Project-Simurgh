@@ -90,8 +90,8 @@ the log as refused. A monitor that counts `blocked` events would have missed 30 
 refusals in this lane. This was not a declared hypothesis. It is reported as found, and no
 repair was made, as the declaration says.
 
-(Added 23 Nov 2026: the gate of [lane 19ae](../provenance-phase-19ae/README.md) leaves a record for every refused
-dispatch.)
+(Added 23 Nov 2026: on the gate of [lane 19ae](../provenance-phase-19ae/README.md) no refused
+dispatch is left without a record in the recorded attempts, unless the seal has latched.)
 
 ## Where it ran
 

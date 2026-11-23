@@ -114,6 +114,12 @@ committed as received and are not altered to avoid it.
 The lane's unit tests also leave their temporary directories behind. The test file is pinned
 by the pack, so it is left as it is.
 
+Without `--replay`, the verifier does not bind every field of the report. A repacked copy
+with its `arm` changed, its list of non-claims emptied or an unknown key added still checks
+as `structure_checked`. Such a copy has a different root, so the committed `ROOT.sha256` and
+the hosted roots check refuse it, and `--replay` stops on it with `report_mismatch`. Always
+give `--expected-root`.
+
 ## What this does not show
 
 - The frozen gate and every earlier lane's gate still raise. A caller that does not use the

@@ -1036,6 +1036,45 @@ class OperatorReceiptTests(unittest.TestCase):
         r = handoff19.review(json.dumps(receipt).encode())
         self.assertIs(r["phases"]["19c"]["operator_comparator_matches"], False)
 
+    def test_a_file_that_cannot_be_read_is_reviewed_and_never_raises(self):
+        # P19-REPAIR10, amendment 1: not JSON at all, nested too deep to read, or holding a
+        # constant JSON does not define.
+        everything = sorted(handoff19.outside_items())
+        deep = "[" * 100000 + "]" * 100000
+        for raw in (b"not json", b"", b"\xff\xfe", deep.encode(), b'{"phases": NaN}'):
+            r = handoff19.review(raw)
+            self.assertEqual(r["not_exercised"], everything, raw[:20])
+        good = handoff19.committed_receipt("19c")
+        for text in (
+            json.dumps(deep),
+            json.dumps(json.dumps(good).replace("true", "NaN", 1)),
+            json.dumps(json.dumps(dict(good, extra=1)).replace("1}", "Infinity}")),
+        ):
+            raw = ('{"phases": {"19c": {"verifier_output": %s}}}' % text).encode()
+            r = handoff19.review(raw)
+            self.assertEqual(r["phases"]["19c"]["result"], "refused", text[:30])
+            self.assertIn("19c", r["not_exercised"])
+
+    def test_a_review_that_cannot_be_recomputed_is_no_review(self):
+        import shutil
+
+        tmp = Path(tempfile.mkdtemp())
+        saved = handoff19.RECEIPTS_DIR, handoff19.REVIEWS_DIR
+        try:
+            handoff19.RECEIPTS_DIR, handoff19.REVIEWS_DIR = tmp / "r", tmp / "v"
+            handoff19.RECEIPTS_DIR.mkdir()
+            handoff19.REVIEWS_DIR.mkdir()
+            receipt = handoff19.RECEIPTS_DIR / "all-Someone-2026-11-23.json"
+            receipt.write_text("[" * 100000 + "]" * 100000)
+            handoff19.review_path(receipt).write_text("[" * 100000 + "]" * 100000)
+            self.assertIsNone(handoff19._committed_review(receipt))
+            self.assertEqual(
+                handoff19.status()["status"], "receipt_received_not_yet_reviewed"
+            )
+        finally:
+            handoff19.RECEIPTS_DIR, handoff19.REVIEWS_DIR = saved
+            shutil.rmtree(tmp, ignore_errors=True)
+
     def test_the_check_command_names_an_unknown_phase(self):
         import subprocess
 

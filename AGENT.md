@@ -14,6 +14,37 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-23 (Australia/Sydney) — Readiness round 4: every lane named in the README; the review and the pack check hardened again
+
+**Raouf:**
+
+- **Scope:** the root README, `PRIVACY.md`, three lane READMEs, `handoff19.py` and its tests
+  (P19-REPAIR10 amendment 1, declared first), the evidence explorer, the ledger, both logs.
+- **Summary:** two more read-only checks, a whole read of the README and an attempt to break
+  round 3's fixes. Every lane paragraph's numbers match its lane, and round 3's fixes held
+  apart from the two gaps below. The README never named thirteen of the thirty-two lanes;
+  it now has a paragraph for the six packs of 1 November, names the manuscript's lanes and
+  describes 19m. Its open work gains the retained limit the security page lists (the gate
+  believes its own files). Two sentences that said "a record for every refusal" are
+  narrowed to what lane 19ae's page says. In the handoff tool, a returned file that is not
+  JSON, is nested too deep to read or holds `NaN` is reviewed as refused where the review
+  command ended in a traceback. In the explorer: a stored archive member whose directory
+  entry lies about its size is refused (300 names pointing at one megabyte passed the total
+  cap); an imported file's verify command must be the repository's own form, since the page
+  offers it for copying; a chosen file is refused on its size before it is read; a model
+  whose run was not captured is not listed (lane 19m showed eight, seven ran); a heading's
+  date counts only when it is a real day that has come.
+- **Files changed:** `README.md`, `PRIVACY.md`, the READMEs of lanes 19b, 19ab and 19ag,
+  `tools/assurance-provenance/handoff19.py`, `tests/test_handoff19.py`,
+  `tools/simurgh-explorer/` (`core.mjs`, `index.mjs`, `lanes.mjs`, `packcheck.mjs`,
+  `src/App.jsx`, three test files), the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** handoff tests 50 of 50, two written first; the three committed reviews
+  recompute byte-identical; explorer unit tests 65 of 65, each new one seen to fail first,
+  and the browser test; the frozen Stage 5P census; `prettier`, `ruff` and the quick gate.
+- **Not done:** lane 19ag's verifier does not bind every field of its report without
+  `--replay`; the file is pinned, so the lane's page now says so. The served-model census
+  still has no successor.
+
 ### 2026-11-23 (Australia/Sydney) — Readiness rounds 1 to 3: the public pages and the explorer brought up to date after nine read-only audits
 
 **Raouf:**

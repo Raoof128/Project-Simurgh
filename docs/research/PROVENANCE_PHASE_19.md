@@ -4398,3 +4398,10 @@ authorise stays unauthorised.
   byte-identical and the rendered handoff is unchanged, as the declaration required. Found
   by a read of the tool on 23 November, not by a receipt: no returned receipt has met either
   fault.
+- Ruling (23 Nov 2026, P19-REPAIR10 amendment 1 exercised): the amendment (`b7408189`)
+  precedes the commit that acts on it. A returned file that is not JSON, a `verifier_output`
+  nested too deep to read, and one that holds `NaN` or `Infinity` are each reviewed as
+  refused, and a review that cannot be recomputed counts as no review. Two tests were
+  written first and failed until the tool changed. The three committed reviews again
+  recompute byte-identical and the rendered handoff is unchanged. Found by an attempt to
+  break the first repair, not by a receipt.

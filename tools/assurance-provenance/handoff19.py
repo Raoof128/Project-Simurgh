@@ -506,14 +506,22 @@ def outside_items():
     )
 
 
+def _undefined_constant(name):
+    raise ValueError(f"JSON does not define {name}")
+
+
+def _read_json(text):
+    """What someone else's JSON text holds, or None when it cannot be read: not JSON, nested
+    too deep for the reader, or holding NaN or Infinity (P19-REPAIR10, amendment 1)."""
+    try:
+        return json.loads(text, parse_constant=_undefined_constant)
+    except (ValueError, RecursionError):
+        return None
+
+
 def _json_text(value):
     """What a field that should hold JSON text holds, or None when it is not such text."""
-    if type(value) is not str:
-        return None
-    try:
-        return json.loads(value)
-    except ValueError:
-        return None
+    return _read_json(value) if type(value) is str else None
 
 
 def review(raw):
@@ -524,9 +532,10 @@ def review(raw):
     this receipt leaves unreplayed: a phase it does not contain, a refused or discrepant phase, a
     frozen replay that was not run, 19b's Lean closure. The review establishes what the returned
     outputs say, never who produced them."""
-    receipt = json.loads(raw)
+    receipt = _read_json(raw)
     if type(receipt) is not dict:
-        # someone else's bytes: a file that is not an object holds no phases (P19-REPAIR10)
+        # someone else's bytes: a file that cannot be read, or is not an object, holds no
+        # phases (P19-REPAIR10)
         receipt = {}
     phases, missing = {}, []
     returned = receipt.get("phases") if type(receipt.get("phases")) is dict else {}
@@ -593,7 +602,7 @@ def _committed_review(path):
     try:
         saved = json.loads(review_path(path).read_text())
         return saved if saved == review(path.read_bytes()) else None
-    except (OSError, ValueError):
+    except (OSError, ValueError, RecursionError):
         return None
 
 

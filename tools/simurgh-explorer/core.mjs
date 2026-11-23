@@ -141,6 +141,15 @@ function validateLanes(b) {
     ensure(!ids.has(l.id), "Invalid lane inventory: duplicate lane ID");
     ids.add(l.id);
     for (const k of ["title", "summary", "verify", "host", "time"]) string(l[k], `lane ${k}`);
+    // The page offers this command for copying, so only the repository's own form is accepted.
+    ensure(
+      ["evidence", `evidence${l.id}`].some(
+        (module) =>
+          l.verify ===
+          `python -B tools/assurance-provenance/${module}.py verify docs/research/provenance-phase-${l.id}/evidence.zip --expected-root "$(cat docs/research/provenance-phase-${l.id}/ROOT.sha256)"`
+      ),
+      "Invalid lane verify command"
+    );
     ensure(typeof l.root === "string" && /^[0-9a-f]{64}$/.test(l.root), "Invalid lane root");
     ensure(l.date === null || /^\d{4}(-\d{2}-\d{2})?$/.test(l.date), "Invalid lane date");
     ensure(l.unit === null || /^P19-[A-Z]+\d+$/.test(l.unit), "Invalid lane declaration");

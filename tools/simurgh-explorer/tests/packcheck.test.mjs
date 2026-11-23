@@ -6,7 +6,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildIndex } from "../index.mjs";
-import { checkPack, readZip, sha256, verdict } from "../packcheck.mjs";
+import { checkPack, readChosen, readZip, sha256, verdict } from "../packcheck.mjs";
 
 const REPO = fileURLToPath(new URL("../../../", import.meta.url));
 const cli = fileURLToPath(new URL("../cli.mjs", import.meta.url));
@@ -159,4 +159,50 @@ test("an archive that inflates past 256 MiB in all is refused", async () => {
   rmSync(dir, { recursive: true, force: true });
   assert.ok(bytes.length < 4 * 1024 * 1024, "the archive itself is small");
   await assert.rejects(checkPack(bytes), /inflates to more than 256 MiB/);
+});
+
+test("a stored member whose directory entry lies about its size is refused", async () => {
+  // The total is counted from declared sizes, so a stored member must be as long as it says.
+  // Without this, many names pointing at one stored megabyte, each declaring nothing, pass the
+  // cap and are hashed one by one.
+  const dir = mkdtempSync(join(tmpdir(), "simurgh-explorer-stored-"));
+  const out = join(dir, "stored.zip");
+  execFileSync("python3", [
+    "-I",
+    "-c",
+    [
+      "import sys, zipfile",
+      "with zipfile.ZipFile(sys.argv[1], 'w', zipfile.ZIP_STORED) as z:",
+      "    z.writestr('manifest.json', '{\"files\": {}}')",
+      "    z.writestr('big.bin', bytes(1024 * 1024))",
+    ].join("\n"),
+    out,
+  ]);
+  const bytes = bytesOf(out);
+  rmSync(dir, { recursive: true, force: true });
+  assert.equal((await readZip(bytes)).get("big.bin").length, 1024 * 1024, "the honest copy reads");
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  let patched = 0;
+  for (let i = 0; i + 46 < bytes.length; i++)
+    if (view.getUint32(i, true) === 0x02014b50 && view.getUint32(i + 24, true) === 1024 * 1024) {
+      view.setUint32(i + 24, 0, true); // the directory now says the member is empty
+      patched += 1;
+    }
+  assert.equal(patched, 1);
+  await assert.rejects(readZip(bytes), /stored member whose length is not the one it declares/);
+});
+
+test("a chosen file is refused on its size before any of it is read", async () => {
+  const huge = {
+    name: "huge.zip",
+    size: 300 * 1024 * 1024,
+    arrayBuffer: () => assert.fail("the file was read"),
+  };
+  await assert.rejects(readChosen(huge), /larger than 256 MiB/);
+  const small = {
+    name: "s.zip",
+    size: 3,
+    arrayBuffer: async () => new Uint8Array([1, 2, 3]).buffer,
+  };
+  assert.deepEqual([...(await readChosen(small))], [1, 2, 3]);
 });
