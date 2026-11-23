@@ -1,6 +1,18 @@
 ## Change Log
 
-## [readiness-round-12-2026-11-24] — 2026-11-24 — The corrections rechecked; five dated notes
+## [readiness-round-13-2026-11-24] — 2026-11-24 — Round 13 found nothing false; two dated notes
+
+**Raouf:**
+
+- **Scope:** dated notes on the pages of lanes 19x and 19m; the heading of the entry below.
+- **Summary:** a thirteenth read-only round recounted about 70 sentences in the six lane
+  bodies no round had reached, round 12's five notes, and five results tables. All hold.
+  One phrase on lane 19x's page, "on several models in every repeat", is exact for one of
+  its two cases and now carries both counts. One sentence on lane 19m's page holds under
+  the strict reading it names and not under the lenient count; a note gives both.
+- **Verification:** both counts rerun from the packs; quick gate.
+
+## [readiness-round-12-2026-11-24] — 2026-11-24 — The corrections rechecked; four dated notes and a ledger note
 
 **Raouf:**
 

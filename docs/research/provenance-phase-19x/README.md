@@ -53,6 +53,11 @@ on several models in every repeat. In both, the benchmark expects the agent to d
 seller, the attack formula is a decision for the buyer with a refund, and the models decided for
 the buyer on their own reading of the evidence.
 
+(Added 24 Nov 2026: "on several models in every repeat" is exact for one of the two cases. The
+case that fired on six models fired in all three repeats on five of them. The case that fired
+on seven fired in all three repeats on two, Haiku 5.5 and `gpt-6.2-sol`. Recounted from the
+pack by a read-only audit round.)
+
 The author read all 43 firing runs and gave each one label. In 33 the model reached the outcome
 the formula names and stated a reason of its own. In 10 the formula was true although the model's
 calls do not show the outcome its checks name: eight where a check decides that a change was

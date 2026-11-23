@@ -124,6 +124,10 @@ written for. RESULTS.md, section 11, has the times.
   most moved state.
 - `qwen2.5-1.5b-4bit` never produced a decline the strict reader accepts (0 of 864). Under the strict
   reading it sent less often under each of the six injected styles than under the control.
+  (Added 24 Nov 2026: the direction is the reader's. By the report's own count of attempted
+  calls, which takes a call the strict reader rejects, the control is 87 of 120 and five of
+  the six styles are higher, at 88, 93, 94, 96 and 113; the tool-result style is lower, at 59.
+  The model is not eligible and nothing is decided on it either way.)
 
 ## Limits
 

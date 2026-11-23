@@ -14,6 +14,28 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-24 (Australia/Sydney) — Round 13: nothing false found; two dated notes
+
+**Raouf:**
+
+- **Scope:** dated notes on the pages of lanes 19x and 19m, both logs.
+- **Summary:** a thirteenth read-only helper recounted about 70 sentences in the bodies of
+  lanes 19h, 19m, 19p, 19v, 19w and 19x, the five notes round 12 wrote, and five results
+  tables, each from the raw pack with its own code. Every one holds. It left four notes.
+  Three are acted on. Lane 19x's page says its two dispute cases fired "on several models
+  in every repeat"; the six-model case did so on five models and the seven-model case on
+  two, and the page now carries both counts. A sentence on lane 19m's page is true under
+  the strict reading it names and reverses for five of six styles under the report's count
+  of attempted calls; a dated note gives those counts. The heading of round 12's changelog
+  entry is corrected. The fourth is left and recorded here: the two times on lane 19v's
+  page for its first machine are one second further apart than the pack's rental record.
+- **Files changed:** `docs/research/provenance-phase-19x/README.md`,
+  `docs/research/provenance-phase-19m/README.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the 19x and 19m counts rerun from the packs before the notes were
+  written; `prettier` and the quick gate.
+- **Not done:** not checkable from a pack and so not recounted by any round: host, timing
+  and money statements, the models behind attacker seats, and bootstrap intervals.
+
 ### 2026-11-24 (Australia/Sydney) — Round 12: the corrections rechecked; about 200 more sentences recounted; five notes
 
 **Raouf:**
