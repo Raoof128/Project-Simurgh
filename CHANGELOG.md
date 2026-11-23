@@ -1,5 +1,28 @@
 ## Change Log
 
+## [readiness-round-5-2026-11-23] — 2026-11-23 — The operator's path: two replay caveats in the handoff; three tests tightened
+
+**Raouf:**
+
+- **Scope:** the rendered handoff (P19-OPERATOR18), the 19f and 19ag pages, the explorer's
+  README and tests.
+- **Summary:** the handoff says which replay stops on another host are results to send back.
+  A fifth round of checks found no bug in the code; three tests that did not isolate their
+  fix now do.
+- **Verification:** handoff tests; explorer unit tests; quick gate.
+
+## [readiness-round-4-2026-11-23] — 2026-11-23 — Every lane named in the README; the review and the pack check hardened again
+
+**Raouf:**
+
+- **Scope:** README, privacy page, three lane pages, the handoff tool (P19-REPAIR10
+  amendment 1), the evidence explorer.
+- **Summary:** the README names all thirty-two lanes and lists the gate's trust in its own
+  files under open work. A returned receipt that cannot be read is reviewed as refused. The
+  explorer refuses a stored archive member that lies about its size and an imported verify
+  command that is not the repository's own form.
+- **Verification:** handoff tests; explorer unit and browser tests; quick gate.
+
 ## [readiness-round-1-2026-11-23] — 2026-11-23 — Public pages brought up to date after four read-only audits
 
 **Raouf:**

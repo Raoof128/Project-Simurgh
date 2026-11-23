@@ -16,6 +16,7 @@ const MONTHS = Object.fromEntries(
     .split(" ")
     .map((name, i) => [name, String(i + 1).padStart(2, "0")])
 );
+const NOT_MEASURED = ["not_run", "not_captured"];
 const requireThat = (ok, message) => {
   if (!ok) throw new Error(`Lane ${message}`);
 };
@@ -224,11 +225,14 @@ const idsOf = (models) =>
 // reduced to the model the protocol declares, and each model is listed once.
 function modelsOf(receipt, protocol) {
   const declared = idsOf(protocol.models);
-  // A receipt may keep an entry for a model that was declared and never run.
+  // A receipt may keep an entry for a model that was declared and never run, or whose run was
+  // not captured.
   const given = receipt.models ?? protocol.models;
   const ran =
     given && !Array.isArray(given)
-      ? Object.fromEntries(Object.entries(given).filter(([, v]) => v?.status !== "not_run"))
+      ? Object.fromEntries(
+          Object.entries(given).filter(([, v]) => !NOT_MEASURED.includes(v?.status))
+        )
       : given;
   const named = idsOf(ran).map((key) => declared.find((id) => key.endsWith(`/${id}`)) ?? key);
   return [...new Set(named)];

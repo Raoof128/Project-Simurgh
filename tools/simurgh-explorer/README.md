@@ -154,6 +154,9 @@ any one the reader picks, as text. Each prediction in a lane's view also names t
 the receipt that records its outcome, such as `receipt.json` `/hypotheses/F2`, and a lane that
 names a model says whether its pack holds a model id the provider returned.
 
+An archive over 256 MiB, one that would inflate past that, an encrypted or ZIP64 archive, and
+a stored member whose length is not the one it declares are refused before anything is hashed.
+
 ## Imports and exports
 
 Load evidence takes a `simurgh.explorer.v1` bundle or the Phase 14 public export, up to
@@ -174,6 +177,9 @@ node tools/simurgh-explorer/index.mjs --detail --output /tmp/simurgh-detail.json
 
 This includes captured model output with a source pointer. It still omits prompts, tokens,
 complete events and raw databases. Review the file before sharing it.
+
+A lane in an imported file must name its source files and carry the repository's own verify
+command, since the page offers that command for copying; any other file is refused.
 
 ## Look
 
@@ -197,7 +203,8 @@ system setting.
 - Every pack in the repository records `independent_custody: false`.
 - Search is a local index built at build time. It is not a web search.
 - The research index of October holds 14 project documents and 34 sources reviewed on 16 and
-  19 October. A date in the library is a review or ruling date, not a publication date.
+  19 October. A date in the library is a review or ruling date, not a publication date. A project
+  document that has since gained a dated section carries that section's date.
 
 ## Checks
 

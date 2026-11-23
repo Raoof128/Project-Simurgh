@@ -38,7 +38,9 @@ filtered downloads are new copies under the recipient's control. The server serv
 and exposes no upload, provider or command-execution endpoint. Opening a remote source link
 contacts that source, and dependency installation contacts package services.
 
-The Phase 19 packs hold synthetic prompts and what local and hosted models answered.
+The Phase 19 packs hold prompts the project wrote, what local and hosted models answered,
+the runs of one published benchmark on eight hosted models, and the attempts attacker
+agents handed in.
 Verifying a pack makes no model request. The explorer opens on those packs and serves a
 copy of each from its build folder.
 

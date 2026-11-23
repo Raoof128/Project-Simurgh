@@ -53,14 +53,19 @@ const MONTH_NAMES =
   "January February March April May June July August September October November December".split(
     " "
   );
-function datedBy(text) {
+export function datedBy(text, today = new Date().toISOString().slice(0, 10)) {
   let latest = REVIEWED;
-  for (const [, heading] of text.matchAll(/^#{1,6}\s+(.+)$/gm))
+  const prose = text.replace(/^(```|~~~)[\s\S]*?^\1[^\n]*$/gm, "");
+  for (const [, heading] of prose.matchAll(/^#{1,6}\s+(.+)$/gm))
     for (const [, day, month, year] of heading.matchAll(
       new RegExp(`\\b(\\d{1,2}) (${MONTH_NAMES.join("|")}) (\\d{4})\\b`, "g")
     )) {
       const date = `${year}-${String(MONTH_NAMES.indexOf(month) + 1).padStart(2, "0")}-${day.padStart(2, "0")}`;
-      if (date > latest) latest = date;
+      // A real day that has come: 31 February is not one, and a plan for next year is not a
+      // date the page was written.
+      const real = new Date(`${date}T00:00:00Z`);
+      if (Number.isNaN(real.getTime()) || real.toISOString().slice(0, 10) !== date) continue;
+      if (date > latest && date <= today) latest = date;
     }
   return latest;
 }

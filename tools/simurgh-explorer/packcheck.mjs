@@ -33,6 +33,12 @@ async function inflate(bytes, expected) {
   return out;
 }
 
+// The bytes of a file a person chose, refused on its size before any of it is read.
+export async function readChosen(file) {
+  if (file.size > 4 * LIMIT) refuse("is larger than 256 MiB");
+  return new Uint8Array(await file.arrayBuffer());
+}
+
 // The members of a ZIP, read from its central directory. Encrypted, split and ZIP64 archives
 // are refused, as is any member over 64 MiB and any archive that inflates past 256 MiB in all:
 // a pack has none of these, and a small file must not be able to ask the tab for gigabytes.
@@ -77,8 +83,11 @@ export async function readZip(bytes) {
     const start = local + 30 + view.getUint16(local + 26, true) + view.getUint16(local + 28, true);
     if (start + packed > bytes.length) refuse("has a member that runs past its end");
     const data = bytes.subarray(start, start + packed);
-    if (method === 0) members.set(name, data);
-    else if (method === 8) members.set(name, await inflate(data, size));
+    if (method === 0) {
+      // The total above is counted from declared sizes, so a stored member must be that long.
+      if (size !== packed) refuse("has a stored member whose length is not the one it declares");
+      members.set(name, data);
+    } else if (method === 8) members.set(name, await inflate(data, size));
     else refuse("uses a compression this check does not read");
     at += 46 + nameLength + skip;
   }

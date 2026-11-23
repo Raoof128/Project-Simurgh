@@ -56,6 +56,11 @@ If anything in this document does not match what you see, that mismatch is the r
   that has every repair; it holds the same host-dependent rows.
   19ag runs those attempts again, and three more seats' fresh ones, on that gate with a repaired
   approval check; it holds the same host-dependent rows.
+  Three of 19y's rows nest JSON thousands of levels deep and depend on the host's parser,
+  and 19z's attempts run SQL, which differs a little between SQLite versions: a
+  `report_mismatch` from either is also a result to send back. Two of 19ag's seat files nest
+  bodies about 1,486 levels deep, close to the limit of the JSON reader in Python 3.12.0 to 3.12.2:
+  if `verify` stops there with `report_rows`, send that back too.
 - 19q with `--dataset` recomputes every row from the benchmark it measures, which is not in this
   repository. Clone `https://github.com/safety-research/sleight-bench`, check out the commit that
   `docs/research/provenance-phase-19q/protocol.json` names, install the `cryptography` package

@@ -2846,6 +2846,40 @@ Not authorised: any edit to an operator's receipt, any change to what `check` co
 change to the rendered handoff, or any edit to a frozen file or to a lane's pinned source or
 pack. This declaration commit must be a strict ancestor of every commit that acts on it.
 
+**P19-REPAIR10, amendment 1 (23 Nov 2026, declared before any commit that acts on it).** A
+second read of `review()` after the repair found three more kinds of returned file on which
+it raises: a file that is not JSON at all, a `verifier_output` nested too deep for the JSON
+reader, and one that holds `NaN` or `Infinity`. `status` and `render` survive each, because
+no review can exist beside such a receipt, but the `review` command ends in a traceback. This
+amendment authorises, and nothing else: in `handoff19.py`, a returned file that cannot be
+read as JSON is reviewed as holding no phases; a `verifier_output` or `discrepancies` that
+cannot be read, or that holds a constant JSON does not define, is treated as absent; and
+`_committed_review` treats a review it cannot recompute as no review. Tests first. The three
+committed reviews must again recompute byte-identical. Everything the declaration does not
+authorise stays unauthorised.
+
+**P19-OPERATOR18 (bounded authority to add two replay caveats to the rendered handoff;
+declared 23 Nov 2026 before any commit that acts on it).** The handoff tells an operator
+that a `report_mismatch` from the replay of 19ac or 19ad on another host is a result to send
+back, and that 19ae and 19ag hold the same host-dependent rows. It says nothing of the kind
+for 19y or 19z, though lane 19y's page says three of its rows depend on how deep the host's
+JSON parser goes and lane 19z's page says its attempts run SQL that differs between SQLite
+versions. It also does not mention that two of lane 19ag's seat files nest bodies close to
+the limit of the JSON reader in Python 3.12.0 to 3.12.2, which the lane's page states. This
+declaration authorises, and nothing else:
+
+1. `handoff19.py`, the replay paragraph of `render()`: one sentence saying that a
+   `report_mismatch` from the replay of 19y or 19z is also a result to send back, with the
+   reason for each, and one saying that a `report_rows` stop from 19ag's verifier on Python
+   3.12.0 to 3.12.2 is a result to send back. The test first.
+2. `HANDOFF.md` rendered again. `discrepancy-template.json` and the three reviews do not
+   change; if one does, the work stops and the difference is reported.
+3. Both logs and the ruling.
+
+Not authorised: any change to a phase's host, time, expected kind or fields, to what the
+comparator checks, to an operator's receipt, or to a frozen file or a lane's pinned source or
+pack. This declaration commit must be a strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
@@ -4386,3 +4420,17 @@ pack. This declaration commit must be a strict ancestor of every commit that act
   byte-identical and the rendered handoff is unchanged, as the declaration required. Found
   by a read of the tool on 23 November, not by a receipt: no returned receipt has met either
   fault.
+- Ruling (23 Nov 2026, P19-REPAIR10 amendment 1 exercised): the amendment (`b7408189`)
+  precedes the commit that acts on it. A returned file that is not JSON, a `verifier_output`
+  nested too deep to read, and one that holds `NaN` or `Infinity` are each reviewed as
+  refused, and a review that cannot be recomputed counts as no review. Two tests were
+  written first and failed until the tool changed. The three committed reviews again
+  recompute byte-identical and the rendered handoff is unchanged. Found by an attempt to
+  break the first repair, not by a receipt.
+- Ruling (23 Nov 2026, P19-OPERATOR18 exercised): the declaration (`561a099b`) precedes the
+  commit that acts on it. The handoff's replay paragraph now says that a `report_mismatch`
+  from the replay of 19y or 19z on another host is a result to send back, with the reason
+  for each, and that a `report_rows` stop from 19ag's verifier on Python 3.12.0 to 3.12.2 is
+  one too. The test was written first and failed until the generator changed. `HANDOFF.md`
+  is rendered again; the discrepancy template and the three reviews are byte-identical. No
+  phase's host, time, expected kind or fields changed.
