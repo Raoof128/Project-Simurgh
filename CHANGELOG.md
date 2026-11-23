@@ -1,5 +1,27 @@
 ## Change Log
 
+## [explorer-phase19-2026-11-23] — 2026-11-23 — The evidence explorer shows all thirty-one Phase 19 packs
+
+**Raouf:**
+
+- **Scope:** `tools/simurgh-explorer/**`, an audit record, a declaration on the Phase 18
+  page and three navigation pages.
+- **Summary:** the dashboard and its command line now read every Phase 19 pack from
+  committed files and show each prediction with its outcome, the predictions that failed,
+  each lane's limits and verify command, what an outside operator still owes, and the
+  README's open work. The interface is redrawn with a dark scheme and a narrow layout.
+  Nothing about a lane is typed into the tool, and it still verifies nothing.
+  A test drives the built app in a real browser through every lane; it found and fixed two
+  defects. The header carries the bird of the project's logo and the palette is sampled from
+  the logo file.
+  The page can recompute a pack's root and member hashes in the reader's browser, scores
+  the predictions by whether the lane ran a model, and names the place in a receipt that
+  records each outcome.
+  The command line has a command for each view, a `watch` command for an automated watcher,
+  and the same commands as read-only tools over standard input and output.
+- **Verification:** 52 explorer tests; 11 parts of the browser test; production build;
+  Lighthouse accessibility 100; quick gate.
+
 ## [phase-19-e2e-2026-11-22] — 2026-11-22 — End-to-end check of the day's lanes after they merged
 
 **Raouf:**
