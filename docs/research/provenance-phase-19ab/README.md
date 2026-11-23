@@ -93,6 +93,11 @@ repair was made, as the declaration says.
 (Added 23 Nov 2026: on the gate of [lane 19ae](../provenance-phase-19ae/README.md) no refused
 dispatch is left without a record in the recorded attempts, unless the seal has latched.)
 
+(Added 24 Nov 2026: "not in the log as refused" is about the gate's log. Six of the 30,
+all on the second route, do leave a reason in the pipeline's own record in this pack,
+`approval_denied:approval_digest`; the other 24 leave none anywhere. Lane 19ae's page
+says the same. Found by a read-only audit round that recounted the pack.)
+
 ## Where it ran
 
 On the project's second host, a 2-vCPU Ubuntu 24.04 x86_64 server operated by the author, from

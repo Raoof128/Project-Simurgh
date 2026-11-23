@@ -14,6 +14,34 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-24 (Australia/Sydney) — Round 12: the corrections rechecked; about 200 more sentences recounted; five notes
+
+**Raouf:**
+
+- **Scope:** the root README, dated notes on the pages of lanes 19r, 19t, 19ab and 19ad, a
+  note at the ledger's end, both logs.
+- **Summary:** two read-only helpers. One recounted the 45 or so sentences that rounds 10 and
+  11 had written or reworded, and about 30 statements on the author, roadmap, privacy and
+  explorer pages; all hold but one. Round 10 had written that 26 of lane 19ad's sequences
+  hand the gate a forged token "that both refuse". Both refuse it in 24; in two the gate as
+  it was admitted it for the action it already delegates, and no verdict or effect differs.
+  The other recounted about 170 sentences in the body of twenty lane pages. Every number
+  holds. Four sentences say more than the rows show and now carry a dated note:
+  - Lane 19r: the Llama build's 59 invalid outputs are all `send_report` calls with one
+    malformed argument, so its ineligibility rests on the reader's strictness about that
+    argument.
+  - Lane 19ab: six of the 30 refusals with no `blocked` event do leave a reason in the
+    pipeline's record.
+  - Lane 19ad: the two sequences above, which the page's body did not except.
+  - Lane 19t: 12 of the 14 attempts said to sign with the fixture's key carry a signed
+    token; two carry an unsigned claim.
+- **Files changed:** `README.md`, `docs/research/provenance-phase-19r/README.md`, the same
+  file for lanes 19t, 19ab and 19ad, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** each finding recounted from the pack before it was written down;
+  `prettier` and the quick gate.
+- **Not done:** the helper did not reach the bodies of lanes 19h, 19m, 19p, 19v, 19w and
+  19x. No pack, pinned module or declaration text changed.
+
 ### 2026-11-24 (Australia/Sydney) — Round 11: about 155 stated numbers recounted from the raw packs; wording corrected in nine places
 
 **Raouf:**
@@ -22,9 +50,9 @@ one machine's local agent configuration:
   pages of lanes 19h, 19m, 19n, 19t, 19v and 19z, a note at the ledger's end, both logs.
 - **Summary:** two read-only helpers recounted every count, absence and universal they
   could find on the README, the security page's Phase 19 section, the corrections page and
-  the 32 lane pages, each from the raw pack with its own code. Every number is exact. Nine
-  sentences said more than the rows show, and one label inside a pinned pack misnames its
-  rule:
+  the Phase 19 lane pages, each from the raw pack with its own code. Every number is exact.
+  Nine sentences said more than the rows show, and one label inside a pinned pack misnames
+  its rule:
   - Lane 19n's page said none of 192 answers after a refusal names `send_report`. Twelve
     contain the string, inside the reason of a decline. None is a send.
   - Lane 19v's page and its declaration said earlier local models were at most 7B. Lane 19m
@@ -61,7 +89,9 @@ one machine's local agent configuration:
   sidecars, which is now refused too. The other took twenty sentences that claim an absence
   or a universal and recounted each from the raw packs. Seventeen hold. Three said more than
   was measured and are reworded: lane 19ad's 57 sequences are those in which the old gate
-  admitted no forged token, and 26 of them do hand it one that both gates refuse; lane
+  admitted no forged token for the undelegated action, and 26 of them do hand it one
+  (both gates refuse it in 24; round 12 found that in two the old gate admitted it for
+  the delegated action, with no verdict changed); lane
   19ae's gate leaves no refusal without a record unless its seal has latched, which the
   security page had dropped; and in lane 19t no verdict changed in the 82 attempts that
   completed, while 10 raised and have no verdict. No number on any page changed.

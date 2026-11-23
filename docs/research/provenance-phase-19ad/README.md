@@ -18,8 +18,13 @@ fresh seats. None of their 36 attempts gains.)
 (Added 24 Nov 2026: "carry no forged token" in the sentence above says more than was
 measured. The 57 are the sequences in which the gate as it was admitted no forged token for
 the undelegated action, which is D2 in the table below. 26 of them hand the gate text that
-holds a signed token the host did not mint, and both gates refuse it. Found by a read-only
-audit round that recounted the pack.)
+holds a signed token the host did not mint. Both gates refuse it in 24. In two (seat A's
+attempt 2 and the author's 8) the gate as it was admitted it for the delegated action and
+the repaired gate refuses it; no verdict or effect differs. Where the page below says the
+gate before "admits no token the host did not mint" in these sequences, or that the other
+sequences are unchanged, read it with that exception: unchanged in verdicts and effects,
+which is what the instrument compares. Found by read-only audit rounds that recounted the
+pack.)
 
 Verify the structure (any host with Python 3.12; standard library only):
 

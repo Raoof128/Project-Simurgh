@@ -69,6 +69,9 @@ server). Root `0096b482e9a4ce62230ee7c4466eb57b7a0094b569a5f9d96899963166611a46`
 - **What the same key could not do.** 14 further attempts sign with the fixture's key and
   change nothing. A correctly formed token for either action ends at `approval_replay`, because
   no approval was ever minted in the fixture, and the ordinary grant check then decides.
+  (Added 24 Nov 2026: 12 of the 14 carry a signed token. The other two, one attacker's
+  attempts 25 and 38, are approval claims with no signature whose note carries the same
+  opening phrase about the key. They change nothing either.)
 - **Three raises are the fixture's, not the gate's.** A text holding half of a surrogate pair
   cannot be written to a file channel; the fixture's write raises `UnicodeEncodeError` before
   the gate runs. They are counted against T1 as the rule says.

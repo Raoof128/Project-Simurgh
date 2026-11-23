@@ -1,5 +1,15 @@
 ## Change Log
 
+## [readiness-round-12-2026-11-24] — 2026-11-24 — The corrections rechecked; five dated notes
+
+**Raouf:**
+
+- **Scope:** the root README; dated notes on the pages of lanes 19r, 19t, 19ab and 19ad.
+- **Summary:** one of round 10's own corrections was loose for two of 26 sequences and is
+  now exact. About 200 more sentences were recounted from the raw packs; every number holds
+  and four sentences gained a dated note saying what the rows show.
+- **Verification:** each finding recounted before the fix; quick gate.
+
 ## [readiness-round-11-2026-11-24] — 2026-11-24 — A recount of about 155 stated numbers; nine sentences corrected
 
 **Raouf:**

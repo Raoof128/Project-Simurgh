@@ -4644,3 +4644,6 @@ does not authorise.
   dated note. Found by an eleventh read-only round, which recounted about 155 stated numbers
   from the raw packs with separate code and found every number exact; what it found were
   sentences that say more than the rows show, each now reworded or noted on its page.
+- Note (24 Nov 2026, on the ruling of P19-GUARD02 amendment 2 above): the test writes the
+  first key of `hypotheses.json` twice, and that key is `G0`, not `G1`. The amendment's `G1`
+  describes the copy the round built; the check and its refusal are the same for either.
