@@ -372,7 +372,20 @@ export function loadLanes(root, readBound, handoff = readHandoff(root)) {
     .filter((path) => !listed.has(path))
     .sort()
     .map((path) => {
-      const doc = readBound(root, `${path}/README.md`);
+      const id = path.slice(`${RESEARCH}/`.length).replace(/^provenance-phase-/, "");
+      let doc;
+      try {
+        doc = readBound(root, `${path}/README.md`);
+      } catch (error) {
+        // A lane being built has a folder before it has a page. It is listed, not fatal.
+        if (error.code !== "ENOENT") throw error;
+        return {
+          id,
+          title: `Folder ${id}`,
+          summary: "This folder has no README yet.",
+          page: `${path}/README.md`,
+        };
+      }
       const heading = doc.text.match(/^#\s+(.+)/m)?.[1] ?? path;
       documents.push({
         id: `${path}/README.md`,
@@ -385,7 +398,7 @@ export function loadLanes(root, readBound, handoff = readHandoff(root)) {
         kind: "phase19",
       });
       return {
-        id: path.slice(`${RESEARCH}/`.length).replace(/^provenance-phase-/, ""),
+        id,
         title: plain(heading),
         summary: summaryOf(doc.text),
         page: `${path}/README.md`,

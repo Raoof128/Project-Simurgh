@@ -1,5 +1,16 @@
 ## Change Log
 
+## [phase-19f-operator17-2026-11-23] — 2026-11-23 — Lane 19ag in the operator handoff; thirty-two pinned roots
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR17, the handoff tool, its rendered files, the hosted
+  roots check, the root README, one fix in the evidence explorer.
+- **Summary:** thirty-two packs in the handoff and in the hosted roots check. The README says
+  what lane 19ag repaired and what still raises. The explorer lists a Phase 19 folder
+  without a README instead of stopping.
+- **Verification:** handoff tests; Stage 5Q census identical; explorer tests; quick gate.
+
 ## [phase-19ag-pack-2026-11-23] — 2026-11-23 — Lane 19ag: the approval check refuses a body it cannot read
 
 **Raouf:**

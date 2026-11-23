@@ -4336,3 +4336,17 @@ strict ancestor of every commit that acts on it.
   reject when the verifier is called from inside a test runner, where it then reports
   `report_rows`. The host of record read every file. The committed-pack test runs the
   verifier as a command for that reason.
+- Ruling (23 Nov 2026, P19-OPERATOR17 exercised): the declaration precedes the commit that
+  acts on it. `handoff19.py` carries 19ag as a replayed lane, `gate_recomputed` with
+  `--replay` and `structure_checked` without; the handoff tests were changed first and failed
+  until the tool changed. The three operator reviews were recomputed and no receipt was
+  edited: the lane is `not_in_receipt` in each. Twenty items are owed to an outside
+  operator: lanes 19w, 19x, 19y, 19z and 19aa to 19ag, the `--replay` of eight of them, and
+  19q's `--dataset` recomputation. The workflow gained the `docs/` path in both filters and
+  the id in the roots check; the Stage 5Q census is byte-identical before and after.
+  `PHASE19_ROOTS` was read, found as P19-OPERATOR16 left it, and set to thirty-two roots, the
+  thirty-one earlier values unchanged. The root README has the new count, one paragraph on
+  the lane and a rewritten entry under its open work. `docs/AUTHOR_AND_METHOD.md` has the
+  count. The evidence explorer lists a Phase 19 folder that has no README by its name where
+  it used to stop its build, with a test. Not done: no one outside the author has run the
+  handoff for any of the twenty items.

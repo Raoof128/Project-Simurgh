@@ -14,6 +14,32 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-23 (Australia/Sydney) — Lane 19ag in the operator handoff; thirty-two pinned roots; the README's open work brought up to date
+
+**Raouf:**
+
+- **Scope:** the declaration P19-OPERATOR17 in the ledger (before the change), the handoff
+  tool and its tests, the rendered handoff, the hosted roots check, the root README,
+  `docs/AUTHOR_AND_METHOD.md`, and one fix in the evidence explorer.
+- **Summary:** 19ag joins the handoff as a replayed lane. The three operator reviews were
+  recomputed (the lane is `not_in_receipt` in each; the receipts are byte-identical). Twenty
+  items are owed to an outside operator. `PHASE19_ROOTS` was extended outside the pull
+  request from thirty-one roots to thirty-two. The root README has a paragraph on the lane,
+  and its open-work entry on the raise now says what is repaired and what is not. The
+  explorer no longer stops its build on a Phase 19 folder without a README; it lists the
+  folder by name. The dashboard picks the new lane up from the handoff with no other change.
+- **Files changed:** `tools/assurance-provenance/handoff19.py`, `tests/test_handoff19.py`,
+  `docs/research/provenance-phase-19f/HANDOFF.md`, `discrepancy-template.json`, the three
+  reviews, the two 19f READMEs, `.github/workflows/assurance-provenance.yml`, `README.md`,
+  `docs/AUTHOR_AND_METHOD.md`, `tools/simurgh-explorer/lanes.mjs` and its test, the ledger,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the handoff tests, failing before the tool changed; the Stage 5Q census
+  is byte-identical before and after the workflow edit; the explorer's unit tests and its
+  browser test with thirty-two lanes; thirty-one of the thirty-two packs verify on macOS,
+  twenty-nine with a bare interpreter (19d verifies only on Linux, as before); `prettier`,
+  `ruff` and the quick gate pass.
+- **Not done:** no outside operator has run any of the twenty items.
+
 ### 2026-11-23 (Australia/Sydney) — Lane 19ag pack: the crash in the approval check is repaired beside the gate; one prediction fails
 
 **Raouf:**
