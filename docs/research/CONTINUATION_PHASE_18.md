@@ -53,3 +53,59 @@ only where allowed; report managed-browser limitations rather than inventing a s
 - maintenance_behaviour: version changes require compatibility tests and recorded scope.
 - sunset_or_migration_condition: successor keeps original archives independently replayable.
 - anti_vacuity_condition: nonempty exact inventory, negative controls, no unverified-to-verified promotion.
+
+## Phase 19 coverage, declared 23 November 2026
+
+Declared under the owner's request of 23 November for a full audit of the dashboard, which
+shows none of the thirty-one Phase 19 packs. This section is committed before the change it
+covers.
+
+**Design.** Add Phase 19 lanes to the same index, query layer, dashboard and command line.
+A lane is read from committed files only: the lane table and status of the operator handoff
+tool, each pack's receipt, report and protocol, the lane's two pages, the ledger's dated
+rulings and the README's list of open work. No figure, outcome or wording about a lane is
+typed into the tool. At build time the explorer opens no Phase 19 archive and verifies none;
+it compares a lane's root file with the root its receipt names and refuses the lane on a
+mismatch. Lanes
+are an optional, validated part of the `simurgh.explorer.v1` bundle, so a file written before
+them still loads. The interface is redrawn around the lanes; the transfer-study view, the
+imports, the exports and the server's limits keep their behaviour.
+
+**Additive write authority.**
+
+- Change `tools/simurgh-explorer/**`: new modules for lanes and views, the shared query
+  layer, the command line, the stylesheet, the tests and the README. Add one image,
+  `src/simurgh-mark.png`, cut from `docs/Project-Simurgh-Logo.png` by a script kept beside it,
+  and one more served file type, PNG, so that the server can send it. Add a check that
+  recomputes a pack's root and member hashes in the reader's browser: the build copies the
+  packs beside the index, the server gains the ZIP file type to send them, and the page
+  reports a match or what differs, and can list a pack's members and show one as text. It
+  never reports a pack as verified, and it replays nothing. Give the command line a command for each view of the dashboard, a `watch` command
+  that compares with a saved snapshot and signals by exit code, and the same commands as
+  read-only tools over standard input and output. A tool takes no file path, and nothing
+  opens a network connection.
+- Add `docs/research/explorer-phase-18/AUDIT_2026-11-23.md`.
+- Update current navigation only: `README.md`, `ROADMAP.md`, `DOCUMENTATION.md`.
+- Append `AGENT.md` and `CHANGELOG.md`, and this section.
+
+No pack, receipt, lane page, ledger entry, frozen file or handoff text changes. No root
+dependency changes and no new gate or hosted job. The explorer's own dependencies stay as
+they are.
+
+**Acceptance.** Every pack in the repository is a lane and nothing else is. Each outcome
+equals the pack's receipt. Wording is found on the lane's own page. Each verify command is
+the one the rendered handoff prints. The outside status equals the handoff tool's own. A
+mismatched root is refused. A bundle without lanes loads. Hostile text in a lane stays inert.
+The command line and the browser layer agree. A lane the tool has never seen appears from
+its files alone, and the tool's source holds no lane id, declaration id, root or model name.
+A test drives the built app in a real browser through every lane, at several widths and in
+both colour schemes, and what was not checked is said.
+
+- active_phase: human and agent exploration of retained research evidence, Phase 19 included.
+- protected_surface: source fidelity, explicit provenance, no execution of evidence.
+- next_phase_behaviour: a new pack appears when the handoff table names it; a pack whose
+  receipt has a new shape shows its predictions as none declared until a reader is added.
+- maintenance_behaviour: a change to the bundle stays additive and keeps the older-file test.
+- sunset_or_migration_condition: a successor keeps the packs independently verifiable.
+- anti_vacuity_condition: the lane inventory is compared with the repository in both
+  directions, and a test requires at least one failed prediction to be shown.
