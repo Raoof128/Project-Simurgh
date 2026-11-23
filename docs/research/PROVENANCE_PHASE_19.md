@@ -3005,6 +3005,19 @@ with its date that says what neither tool checks without a replay, and the same 
 the sentences added to that page on 24 November; both logs and the ruling. Not authorised:
 what P19-GUARD02 does not authorise.
 
+**P19-GUARD02, amendment 2 (24 Nov 2026, declared before any commit that acts on it).** A
+tenth read-only round, on the commit that exercised amendment 1, found that the canonical
+form is asked of `report.json` and not of the pack's two sidecars. A copy whose
+`hypotheses.json` opens with a second, different `G1` entry passes both tools under the
+copy's own root, because the pinned verifier compares parsed values. The committed sidecars
+are in canonical form, checked before this was written. The round also found that the
+sentence re-marked on the lane's page under amendment 1 gained a clause about canonical
+bytes that the amendment did not list. This amendment authorises, and nothing else:
+`strict19ag.py` refuses, as `sidecar_bytes` with the member's name, a sidecar whose bytes are
+not the canonical form of what they parse to, with its test; that clause on the lane's page,
+which may name the sidecars too; both logs and the ruling. Not authorised: what P19-GUARD02
+does not authorise.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
