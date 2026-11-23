@@ -80,10 +80,26 @@ function isMainModule(moduleUrl) {
 }
 
 if (isMainModule(import.meta.url)) {
+  // A person started this from a shell: a reason it cannot start is one line, not a trace.
+  const stop = (line) => {
+    console.error(line);
+    process.exit(1);
+  };
   const port = Number(process.env.SIMURGH_EXPLORER_PORT || 4173);
   if (!Number.isInteger(port) || port < 1024 || port > 65535)
-    throw new Error("Invalid SIMURGH_EXPLORER_PORT");
-  createExplorerServer().listen(port, "127.0.0.1", () =>
-    console.log(`Simurgh explorer: http://127.0.0.1:${port}`)
-  );
+    stop("Invalid SIMURGH_EXPLORER_PORT: use a whole number from 1024 to 65535.");
+  let server;
+  try {
+    server = createExplorerServer();
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+    stop("The explorer is not built yet: run `npm run build` in tools/simurgh-explorer first.");
+  }
+  server.on("error", (error) => {
+    if (error.code !== "EADDRINUSE") throw error;
+    stop(
+      `Port ${port} on 127.0.0.1 is already in use: stop what holds it, or set SIMURGH_EXPLORER_PORT to another port.`
+    );
+  });
+  server.listen(port, "127.0.0.1", () => console.log(`Simurgh explorer: http://127.0.0.1:${port}`));
 }

@@ -173,7 +173,22 @@ test("totals are sums over the lanes, and filters return what they name", () => 
 
 test("open work is the README's own list, and lane pages join the library", () => {
   const readme = readFileSync(join(REPO, "README.md"), "utf8");
-  assert.deepEqual(b.open_work, openWork(readme));
+  const known = b.lanes.map((l) => l.id);
+  assert.deepEqual(b.open_work, openWork(readme, known));
+  // A range such as "19aa to 19ac" names every lane in it, in the handoff's order.
+  assert.deepEqual(
+    openWork(
+      "### Open work\n\n- **One:** lanes 19aa to 19ac and 19f, then 19zz to 19f.\n\n## Next\n",
+      ["19f", "19aa", "19ab", "19ac"]
+    )[0].lanes,
+    ["19aa", "19ab", "19ac", "19f", "19zz"]
+  );
+  for (const w of b.open_work)
+    for (const [, from, to] of w.text.matchAll(/\b(19[a-z]{1,2}) to (19[a-z]{1,2})\b/g)) {
+      const [i, j] = [known.indexOf(from), known.indexOf(to)];
+      if (i < 0 || j < i) continue;
+      for (const id of known.slice(i, j + 1)) assert.ok(w.lanes.includes(id), `${w.id} ${id}`);
+    }
   assert.ok(b.open_work.length >= 10);
   for (const w of b.open_work) assert.ok(readme.includes(`**${w.title}:**`), w.title);
   for (const l of b.lanes)
@@ -194,6 +209,13 @@ test("small parsers: summaries, tables and ruling dates", () => {
     summaryOf("# T\n\n**Declared as P19-X01** before.\n\n## The question\n\nWhy [here](u)?\n\nNo."),
     "Why here?"
   );
+  // A paragraph that introduces a list ends on a colon; a summary is a sentence.
+  assert.equal(
+    summaryOf("# T\n\nThis folder holds two things:\n\n- one\n- two\n"),
+    "This folder holds two things."
+  );
+  for (const entry of [...b.lanes, ...b.other])
+    assert.doesNotMatch(entry.summary, /[:;,]$/, `${entry.id} summary ends as a sentence`);
   assert.deepEqual(tables("| a | b |\n| --- | --- |\n| `X1` | **yes** |\n\ntext\n"), [
     { header: ["a", "b"], rows: [["`X1`", "yes"]] },
   ]);

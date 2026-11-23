@@ -68,11 +68,12 @@ function Legend() {
 }
 
 // Where the author's predictions were right and wrong, by what the lane measured.
+const TRACK_COLUMNS = ["Lanes", "Decided once", "Did not hold", "Decided model by model"];
 function TrackRecord({ bundle }) {
   const t = trackRecord(bundle);
   const rows = [
-    ["Lanes that ran a model", t.model],
-    ["Lanes that ran no model", t.no_model],
+    ["Lanes that measured a model", t.model],
+    ["Lanes that measured none", t.no_model],
   ].filter(([, r]) => r.lanes > 0);
   if (!rows.length) return null;
   return (
@@ -80,18 +81,20 @@ function TrackRecord({ bundle }) {
       <div className="panel-head">
         <h2 id="track-title">How the predictions fared, by what was measured</h2>
         <p>
-          Each prediction was written down before its lane ran. The split is whether the lane ran a
-          model: where it did, the prediction is about something the author does not control.
+          Each prediction was written down before its lane ran. The split is whether a model was
+          what the lane measured: where it was, the prediction is about something the author does
+          not control. Agents used as attackers are not counted as measured models.
         </p>
       </div>
       <div className="table-scroll">
         <table className="track-table">
           <thead>
             <tr>
-              <th scope="col">Lanes</th>
-              <th scope="col">Decided once</th>
-              <th scope="col">Did not hold</th>
-              <th scope="col">Decided model by model</th>
+              {TRACK_COLUMNS.map((name) => (
+                <th scope="col" key={name}>
+                  {name}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
@@ -103,12 +106,12 @@ function TrackRecord({ bundle }) {
                     {name}
                     <small>{r.lanes} with predictions</small>
                   </th>
-                  <td>
+                  <td data-label={TRACK_COLUMNS[1]}>
                     {once ? `${r.held} of ${once} held` : "None"}
                     {r.undecided > 0 && <small>{r.undecided} not decided</small>}
                   </td>
-                  <td>{once ? `${r.failed} of ${once}` : "None"}</td>
-                  <td>
+                  <td data-label={TRACK_COLUMNS[2]}>{once ? `${r.failed} of ${once}` : "None"}</td>
+                  <td data-label={TRACK_COLUMNS[3]}>
                     {r.model_of ? `Held in ${r.model_held} of ${r.model_of} cases` : "None"}
                     {r.model_of > 0 && <small>a case is one prediction on one model</small>}
                   </td>
@@ -207,7 +210,7 @@ export function Record({ bundle, openLane, go }) {
           <dd className="note">shown as models held on, of models that qualified</dd>
         </div>
         <div>
-          <dt>Packs that ran a model</dt>
+          <dt>Packs that measured a model</dt>
           <dd>
             {s.with_model} of {s.packs}
           </dd>
@@ -326,7 +329,7 @@ function LaneInspector({ lane, bundle, readPage, notify, checking }) {
           <dd>{formatDate(lane.date)}</dd>
         </div>
         <div>
-          <dt>Ran a model</dt>
+          <dt>Measured a model</dt>
           <dd>{lane.model_inference ? "Yes" : "No"}</dd>
         </div>
         <div>
@@ -350,7 +353,7 @@ function LaneInspector({ lane, bundle, readPage, notify, checking }) {
       </dl>
       {lane.models.length > 0 && (
         <p className="models">
-          <span className="label">{lane.model_inference ? "Models run" : "Models named"}</span>{" "}
+          <span className="label">{lane.model_inference ? "Models measured" : "Models named"}</span>{" "}
           {lane.models.map((m) => (
             <code key={m}>{m}</code>
           ))}
@@ -485,7 +488,7 @@ export function Lanes({ bundle, selected, openLane, readPage, notify, checking }
           />
         </label>
         <label className="select">
-          Ran
+          Measured
           <select
             aria-label="Filter by model use"
             value={ran}
@@ -571,8 +574,8 @@ export function Lanes({ bundle, selected, openLane, readPage, notify, checking }
                         <small>
                           {formatDate(l.date)},{" "}
                           {l.model_inference
-                            ? `${l.models.length} ${l.models.length === 1 ? "model" : "models"} run`
-                            : "no model run"}
+                            ? `${l.models.length} ${l.models.length === 1 ? "model" : "models"} measured`
+                            : "no model measured"}
                         </small>
                       </button>
                     </td>
@@ -643,7 +646,9 @@ function PackSweep({ bundle, checking }) {
   const [running, setRunning] = useState(false);
   const done = bundle.lanes.map((l) => checking.checks[l.id]).filter((c) => c?.state === "done"),
     failed = bundle.lanes.filter((l) => checking.checks[l.id]?.state === "failed").length,
-    matching = done.filter((c) => c.match).length;
+    matching = done.filter((c) => c.match).length,
+    checked = done.length + failed,
+    bad = checked - matching;
   return (
     <section className="panel" aria-labelledby="sweep-title">
       <div className="panel-head">
@@ -672,15 +677,21 @@ function PackSweep({ bundle, checking }) {
           check a copy from a file in the lane's own view.
         </p>
       )}
-      {done.length + failed > 0 && (
+      {checked > 0 && checked < bundle.lanes.length && (
+        // One pack checked from its lane is not a verdict on the rest.
         <p className="sweep-result" role="status">
-          <State state={matching === bundle.lanes.length ? "checked" : running ? "plain" : "alert"}>
+          <State state={bad ? "alert" : "plain"}>
+            {checked} checked so far, of {bundle.lanes.length}: {matching}{" "}
+            {matching === 1 ? "hashes" : "hash"} to the committed root with every member matching
+            {bad ? `; ${bad} ${bad === 1 ? "does" : "do"} not or could not be read` : ""}.
+          </State>
+        </p>
+      )}
+      {checked > 0 && checked === bundle.lanes.length && (
+        <p className="sweep-result" role="status">
+          <State state={bad ? "alert" : "checked"}>
             {matching} of {bundle.lanes.length} packs hash to their committed root with every member
-            matching
-            {done.length - matching + failed > 0
-              ? `; ${done.length - matching + failed} do not or could not be read`
-              : ""}
-            .
+            matching{bad ? `; ${bad} do not or could not be read` : ""}.
           </State>
         </p>
       )}

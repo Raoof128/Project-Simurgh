@@ -437,6 +437,15 @@ test(
     });
 
     await t.test("the page recomputes every pack's root, and reports a wrong file", async () => {
+      // One pack checked from its lane is one pack checked: the tally of all of them waits
+      // until all of them have been read.
+      await open(`#lanes/${b.lanes[0].id}`);
+      await evaluate("(t.click('Check this pack in your browser'), t.settle())");
+      await waitFor("t.count('.inspector .members li') > 0", "one pack to be checked");
+      await go("#replicate");
+      const partial = await evaluate("t.text('.sweep-result')");
+      assert.match(partial, /^1 checked so far/);
+      assert.ok(!partial.includes(`of ${b.lanes.length} packs hash`), partial);
       await open("#replicate");
       await evaluate("(t.click('Check all packs'), t.settle())");
       await waitFor(
@@ -589,23 +598,69 @@ test(
       assert.equal(await evaluate("t.count('nav button')"), VIEWS.length);
     });
 
-    await t.test("on a touch screen every control is at least 44 pixels tall", async () => {
-      await page("Emulation.setEmulatedMedia", { features: [] });
-      await page("Emulation.setDeviceMetricsOverride", {
-        width: WIDTHS[0],
-        height: 800,
-        deviceScaleFactor: 2,
-        mobile: true,
-      });
-      await page("Emulation.setTouchEmulationEnabled", { enabled: true });
-      await open("#record");
-      assert.equal(await evaluate("matchMedia('(pointer: coarse)').matches"), true);
-      for (const view of VIEWS) {
-        await go(`#${view}`);
-        assert.deepEqual(await evaluate("t.smallTargets()"), [], `targets in ${view}`);
+    await t.test(
+      "on a phone: controls a finger can hit, a link that lands on its lane, a table that fits",
+      async () => {
+        await page("Emulation.setEmulatedMedia", { features: [] });
+        await page("Emulation.setDeviceMetricsOverride", {
+          width: WIDTHS[0],
+          height: 800,
+          deviceScaleFactor: 2,
+          mobile: true,
+        });
+        await page("Emulation.setTouchEmulationEnabled", { enabled: true });
+        await open("#record");
+        assert.equal(await evaluate("matchMedia('(pointer: coarse)').matches"), true);
+        for (const view of VIEWS) {
+          await go(`#${view}`);
+          assert.deepEqual(await evaluate("t.smallTargets()"), [], `targets in ${view}`);
+        }
+        // The links of the October register sit in a closed section: open it and measure them.
+        await go("#open");
+        const links = await evaluate(
+          "(document.querySelector('details.archive').open = true, t.settle().then(() => t.all('.gap-sources a').map((a) => a.getBoundingClientRect().height)))"
+        );
+        assert.ok(links.length > 0, "the register has links to measure");
+        assert.deepEqual(
+          links.filter((height) => height < 43.5),
+          [],
+          "register links are tall enough for a finger"
+        );
+
+        // A pasted link to a lane lands on the lane's panel, which sits below the list here.
+        const within =
+          "(() => { const r = document.getElementById('lane-inspector')?.getBoundingClientRect(); return Boolean(r) && r.top > -2 && r.top < innerHeight / 2; })()";
+        await page("Page.navigate", { url: "about:blank" });
+        await page("Page.navigate", { url: `${origin}/#lanes/${b.lanes.at(-1).id}` });
+        await waitFor("document.querySelector('main h1')", "the app to render");
+        await evaluate(IN_PAGE);
+        await waitFor(within, "a loaded link to bring the lane's panel into view");
+        await evaluate("(scrollTo(0, 0), t.settle())");
+        await go(`#lanes/${b.lanes[0].id}`);
+        await waitFor(within, "a changed address to bring the lane's panel into view");
+        assert.ok(
+          (await evaluate("t.text('.inspector .kicker')")).startsWith(`Lane ${b.lanes[0].id}`)
+        );
+
+        // The predictions table fits the screen: no column is cut and it does not scroll sideways.
+        await go("#record");
+        const fit = await evaluate(`(() => {
+        const box = document.querySelector(".track-table").closest(".table-scroll");
+        const cells = t.all(".track-table tbody th, .track-table tbody td");
+        return {
+          scrolls: box.scrollWidth - box.clientWidth,
+          cells: cells.length,
+          cut: cells.filter((c) => c.getBoundingClientRect().right > innerWidth + 0.5).length,
+          labelled: cells
+            .filter((c) => c.tagName === "TD")
+            .every((c) => c.dataset.label && getComputedStyle(c, "::before").content !== "none"),
+        };
+      })()`);
+        assert.ok(fit.cells > 0 && fit.scrolls <= 0 && fit.cut === 0, JSON.stringify(fit));
+        assert.ok(fit.labelled, "each stacked cell shows the name of its column");
+        await page("Emulation.setTouchEmulationEnabled", { enabled: false });
       }
-      await page("Emulation.setTouchEmulationEnabled", { enabled: false });
-    });
+    );
 
     await t.test("the server stays read only and local", async () => {
       const home = await fetch(`${origin}/`);

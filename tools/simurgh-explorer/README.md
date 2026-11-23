@@ -38,14 +38,16 @@ are needed; no npm installation. Every command prints JSON on standard output, i
 envelope that names the command and carries the same notices each time. A refusal prints a
 JSON error on standard error.
 
-| View of the dashboard | Command                      | What comes back                                         |
-| --------------------- | ---------------------------- | ------------------------------------------------------- |
-| Record                | `record`                     | totals, the track record, every prediction, the failed  |
-| Lanes                 | `lanes`, `lane --id`         | the lanes a filter keeps; one lane in full              |
-| Replicate             | `replicate`, `check`         | verify commands and what is owed; a pack's root, hashed |
-| Outcomes              | `outcomes`, `inspect --id`   | outcome records; one in full                            |
-| Library               | `library`, `doc --id`        | documents that match; one document's text, in parts     |
-| Open work             | `open-work`, `gaps`, `other` | the README's list; the October register; other folders  |
+| View of the dashboard | Command                      | What comes back                                          |
+| --------------------- | ---------------------------- | -------------------------------------------------------- |
+| Record                | `record`                     | totals, the track record, every prediction, the failed   |
+| Lanes                 | `lanes`, `lane --id`         | the lanes a filter keeps; one lane in full               |
+| Replicate             | `replicate`, `check`         | verify commands and what is owed; a pack's root, hashed  |
+| Outcomes              | `outcomes`, `inspect --id`   | outcome records; one in full                             |
+| Library               | `library`, `doc --id`        | documents that match; one document's text, in parts      |
+| Open work             | `open-work`, `gaps`, `other` | the README's list; the October register; other folders   |
+| No view of its own    | `handoff`, `summary`         | what an outside operator still owes; counts of the index |
+| Older names, kept     | `records`, `search`          | the same as `outcomes`; documents with their full text   |
 
 `commands` lists every command with its arguments, so an agent need not read this page. A
 test fails if a view of the dashboard has no command.

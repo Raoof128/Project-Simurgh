@@ -88,6 +88,25 @@ test("the record opens first and shows every lane and every prediction", async (
       "the logo is in the header"
     );
     assert.equal(ui.all(".track-table tbody tr").length, 2);
+    // The split is by whether a model was the thing measured, and the page says so.
+    assert.deepEqual(
+      ui.all(".track-table tbody th").map((th) => th.firstChild.textContent),
+      ["Lanes that measured a model", "Lanes that measured none"]
+    );
+    assert.match(
+      document.querySelector("#track-title").closest("section").textContent,
+      /attackers are not counted/
+    );
+    assert.ok(
+      document.querySelector(".ledger").textContent.includes("Packs that measured a model")
+    );
+    // Each cell names its column, so the table can stack on a narrow screen.
+    const heads = ui.all(".track-table thead th").map((th) => th.textContent);
+    for (const row of ui.all(".track-table tbody tr"))
+      assert.deepEqual(
+        [...row.querySelectorAll("td")].map((td) => td.getAttribute("data-label")),
+        heads.slice(1)
+      );
     assert.equal(document.querySelector(".wordmark").textContent, "ProjectSimurgh");
     // Every mark says what it is in words, so no outcome rests on colour.
     assert.ok(
@@ -117,6 +136,19 @@ test("lanes: filters, the inspector, the lane's own page and the verify commands
       linked.title.replaceAll("`", "")
     );
     assert.equal(ui.all(".lanes-table tbody tr").length, bundle.lanes.length);
+    assert.ok(
+      ui.all(".inspector .facts dt").some((dt) => dt.textContent === "Measured a model"),
+      "the lane says whether a model was measured"
+    );
+    assert.ok(
+      ui.all(".lanes-table .row-button small").every((x) => /measured$/.test(x.textContent)),
+      "each row says how many models were measured"
+    );
+    assert.equal(
+      document.querySelector('[aria-label="Filter by model use"]').closest("label").firstChild
+        .textContent,
+      "Measured"
+    );
     await ui.choose("Filter by prediction outcome", "failed");
     assert.equal(
       ui.all(".lanes-table tbody tr").length,
@@ -299,6 +331,16 @@ test("current study UI separates model filters and matched controls", async () =
     assert.equal(ui.all("tbody tr").length, 0);
     await ui.choose("Filter model", "llama");
     assert.equal(ui.all("tbody tr").length, 3);
+  } finally {
+    await ui.close();
+  }
+});
+
+test("an address that says open-work opens the open work", async () => {
+  const ui = await mount(buildIndex(), "http://localhost:4173/#open-work");
+  try {
+    assert.equal(document.querySelector("h1").textContent, "Open work");
+    assert.equal(globalThis.location.hash, "#open");
   } finally {
     await ui.close();
   }

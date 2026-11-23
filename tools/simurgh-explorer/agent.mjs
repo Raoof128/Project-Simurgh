@@ -31,7 +31,8 @@ const ARGS = {
   ran: {
     type: "string",
     enum: ["all", "model", "no_model"],
-    description: "Whether the lane ran a model",
+    description:
+      "Whether a model was what the lane measured; an agent used as an attacker is not counted",
   },
   outcome: {
     type: "string",
@@ -90,6 +91,8 @@ const ARGS = {
 
 const collectionOf = (d) => (d.kind === "phase19" ? "phase19" : d.url ? "primary" : "project");
 const find = (list, id, what) => {
+  if (id === undefined || id === "")
+    throw new Error(`Missing --id: name one ${what.toLowerCase()} by its id`);
   const hit = list.find((x) => x.id === id);
   if (!hit) throw new Error(`${what} not found; list them first`);
   return hit;
@@ -265,6 +268,7 @@ export const COMMANDS = [
     summary: "Recompute a pack's root and member hashes from its bytes, for one lane or for all",
     args: ["id", "all"],
     async run(b, o, ctx) {
+      if (!o.all && !o.id) throw new Error("Missing --id or --all: name one lane, or check all");
       const lanes = o.all ? b.lanes : [find(b.lanes, o.id, "Lane")];
       const results = [];
       for (const lane of lanes) results.push(await checkLane(lane, ctx));

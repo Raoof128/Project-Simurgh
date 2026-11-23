@@ -385,7 +385,8 @@ export function queryLanes(b, { q = "", ran = "all", outcome = "all", outside = 
     );
   });
 }
-// How the predictions fared, split by whether the lane ran a model. A prediction decided on
+// How the predictions fared, split by whether a model was what the lane measured (the
+// receipt's `model_inference`; an agent used as an attacker is not counted). A prediction decided on
 // each model counts once for every model it was decided on, where the receipt says how many.
 export function trackRecord(b) {
   const row = () => ({ lanes: 0, held: 0, failed: 0, undecided: 0, model_held: 0, model_of: 0 });

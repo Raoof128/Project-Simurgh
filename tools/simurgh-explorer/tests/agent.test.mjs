@@ -215,3 +215,16 @@ test("the same commands answer as tools over standard input and output", () => {
   assert.equal(by(6).error.code, -32601);
   assert.equal(replies.find((m) => m.id === null).error.code, -32700);
 });
+
+test("a command that needs --id says so, and the README lists every command", () => {
+  for (const name of ["lane", "inspect", "doc", "check"]) {
+    const refused = call(name);
+    assert.equal(refused.status, EXIT.refused, name);
+    assert.match(refused.err, /--id/, `${name} names the missing option`);
+    assert.doesNotMatch(refused.err, /not found/, name);
+  }
+  assert.match(call("lane", "--id", "no-such-lane").err, /not found/);
+  const page = readFileSync(new URL("../README.md", import.meta.url), "utf8");
+  for (const c of COMMANDS)
+    assert.match(page, new RegExp("`" + c.name + "[` ]"), `the README names ${c.name}`);
+});
