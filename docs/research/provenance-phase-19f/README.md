@@ -1,4 +1,4 @@
-# Phase 19f: outside-operator replay (paid in part)
+# Phase 19f: outside-operator replay (done in part)
 
 `IOU-19-OPERATOR`: three receipts have come back and each is reviewed here. One outside operator
 replayed twenty-one of the thirty-two packs on Linux x86_64 with no discrepancy, among them
@@ -137,7 +137,7 @@ lists the zip, and the third receipt's note says its copy of `HANDOFF.md` was by
 the repository's. Both operators say every pack and all code came from their own clone. The
 handoff now tells an operator what to do with such a copy.
 
-## What is paid and what stays owed
+## What is done and what stays owed
 
 The reviews, with every discrepancy published, pay the IOU for what the receipts exercised.
 After the second receipt that is every lane the handoff listed at `c24b47ce`, with the five

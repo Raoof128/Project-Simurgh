@@ -14,7 +14,7 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
-### 2026-11-23 (Australia/Sydney) — Readiness round 1: the public pages brought up to date after four read-only audits
+### 2026-11-23 (Australia/Sydney) — Readiness rounds 1 and 2: the public pages brought up to date after seven read-only audits
 
 **Raouf:**
 
@@ -38,6 +38,17 @@ one machine's local agent configuration:
   when all packs are read, answers a taken port or a missing build with one line, and fits
   its predictions table on a phone; a Mythos 5.2 agent made those nine fixes in its own
   worktree, tests first.
+- **Round 2, same day:** three more read-only checks (the pages one click from the README,
+  the code as a reviewing engineer reads it, and an attempt to disprove each headline number
+  from the packs). Every number survived. Three sentences did not and are narrowed: the plan
+  was committed before the run for the 26 lanes from 10 November, not for the six packs of
+  1 November; two attempts still raise "on the repaired gate", not "on every gate"; and the
+  security page's list includes what the author's own lists found. Two bugs in the explorer
+  are fixed, tests first: a pack member named like an inherited property (`toString`) passed
+  as listed, and a line holding `null` stopped the tool server. The results page of lane
+  19ag now has its generator in the repository and a test that compares the whole page.
+  Dated notes on lanes 19j, 19l, 19t and 19ad say what later lanes did. The 19f page says
+  "done" where "paid" read as money.
 - **Removed:** `docs/Raouf_Portfolio_Resume.docx`, on the owner's instruction. It is not
   project evidence.
 - **Files changed:** `README.md`, `ROADMAP.md`, `SECURITY.md`, `.gitignore`,
@@ -45,7 +56,9 @@ one machine's local agent configuration:
   `docs/research/provenance-phase-19ac/README.md`,
   `docs/research/provenance-phase-19ae/README.md`,
   `docs/research/explorer-phase-18/AUDIT_2026-11-23.md`, `tools/simurgh-explorer/`,
-  `AGENT.md`, `CHANGELOG.md`.
+  `DOCUMENTATION.md`, the READMEs of lanes 19f, 19j, 19l, 19t, 19ad, 19ag and of the
+  manuscript folder, `tools/assurance-provenance/results19ag.py` (new) and
+  `tests/test_evidence19ag_committed.py`, `AGENT.md`, `CHANGELOG.md`.
 - **Verification:** `prettier`; a link check over the changed pages; the explorer's unit and
   browser tests; the quick gate.
 - **Not done:** the served-model census tool has no successor yet. The two compiled files

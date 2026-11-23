@@ -31,6 +31,8 @@ function altered(lane, change) {
       "    m = json.loads(members['manifest.json']); m['note'] = 'changed'",
       "    members['manifest.json'] = json.dumps(m).encode()",
       "if change == 'extra': members['unlisted.txt'] = b'not in the manifest'",
+      "if change == 'inherited':",
+      "    for name in ('toString', 'constructor', 'hasOwnProperty'): members[name] = b'x'",
       "if change == 'missing': del members[first]",
       "with zipfile.ZipFile(dst, 'w', zipfile.ZIP_DEFLATED) as out:",
       "    [out.writestr(n, data) for n, data in members.items()]",
@@ -74,6 +76,11 @@ test("a changed member, manifest, extra member or missing member is reported, ne
   const extra = await checkPack(altered(lane, "extra"));
   assert.deepEqual(extra.unlisted, ["unlisted.txt"]);
   assert.equal(verdict(extra, lane.root).match, false);
+
+  // A member named like something every object inherits is still not in the manifest.
+  const inherited = await checkPack(altered(lane, "inherited"));
+  assert.deepEqual([...inherited.unlisted].sort(), ["constructor", "hasOwnProperty", "toString"]);
+  assert.equal(verdict(inherited, lane.root).match, false);
 
   const missing = await checkPack(altered(lane, "missing"));
   assert.equal(missing.missing.length, 1);

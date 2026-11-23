@@ -7,7 +7,16 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildIndex } from "../index.mjs";
 import { VIEWS, lanesSummary, queryLanes, trackRecord } from "../core.mjs";
-import { COMMANDS, EXIT, NOTICE, WATCH_SCHEMA, commandForView, compare } from "../agent.mjs";
+import {
+  COMMANDS,
+  EXIT,
+  NOTICE,
+  WATCH_SCHEMA,
+  answer,
+  commandForView,
+  compare,
+  run,
+} from "../agent.mjs";
 
 const cli = fileURLToPath(new URL("../cli.mjs", import.meta.url));
 const b = buildIndex();
@@ -227,4 +236,40 @@ test("a command that needs --id says so, and the README lists every command", ()
   const page = readFileSync(new URL("../README.md", import.meta.url), "utf8");
   for (const c of COMMANDS)
     assert.match(page, new RegExp("`" + c.name + "[` ]"), `the README names ${c.name}`);
+});
+
+test("the tool server answers a line that is not a request, and goes on", async () => {
+  for (const bad of [null, 5, "text", [], {}])
+    assert.equal((await answer(bad, "0")).error.code, -32600, JSON.stringify(bad));
+  const r = spawnSync(process.execPath, [cli, "mcp"], {
+    input: 'null\n5\n[]\n{"jsonrpc":"2.0","id":1,"method":"ping"}\n',
+    encoding: "utf8",
+  });
+  const replies = r.stdout
+    .trim()
+    .split("\n")
+    .map((line) => JSON.parse(line));
+  assert.equal(replies.length, 4);
+  assert.deepEqual(replies.at(-1), { jsonrpc: "2.0", id: 1, result: {} });
+  assert.equal(r.status, 0);
+});
+
+test("a tool call with an argument of the wrong type or outside its list is refused", async () => {
+  const call = (name, args) =>
+    answer(
+      { jsonrpc: "2.0", id: 1, method: "tools/call", params: { name, arguments: args } },
+      "0"
+    ).then((m) => ({ isError: m.result.isError, ...JSON.parse(m.result.content[0].text) }));
+  assert.match((await call("simurgh_library", { q: 5 })).error, /q must be a string/);
+  assert.match(
+    (await call("simurgh_library", { collection: "nope" })).error,
+    /collection must be one of/
+  );
+  assert.match(
+    (await call("simurgh_doc", { id: "x", limit: "ten" })).error,
+    /limit must be a whole number/
+  );
+  assert.equal((await call("simurgh_library", { collection: "phase19" })).isError, false);
+  // The command line refuses the same unknown value.
+  await assert.rejects(run("library", { collection: "nope" }), /collection must be one of/);
 });

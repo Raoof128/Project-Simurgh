@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // The explorer for an agent: every view of the dashboard as a command that returns JSON, a
 // watch command for an automated watcher, and the same commands as tools over a local stdio
-// server. Read only. It runs nothing from the evidence and opens no network connection.
+// server. It reads the repository and writes one thing, the snapshot file that
+// `watch --write-baseline` is given. It runs nothing from the evidence and opens no network
+// connection.
 import { readFileSync, statSync, writeFileSync } from "node:fs";
 import { createInterface } from "node:readline";
 import { buildIndex, readBytes, ROOT } from "./index.mjs";
@@ -427,6 +429,11 @@ export function load(o) {
 export async function run(name, o = {}) {
   const command = COMMANDS.find((c) => c.name === name);
   if (!command) throw new Error("Unknown command; use commands to list them");
+  for (const a of command.args) {
+    const value = o[a] ?? o[a.replaceAll("-", "_")];
+    if (value !== undefined && ARGS[a].enum && !ARGS[a].enum.includes(value))
+      throw new Error(`${a} must be one of ${ARGS[a].enum.join(", ")}`);
+  }
   const { bundle: b, imported } = load(o);
   const out = await command.run(b, o, { imported });
   const wrapped = out && typeof out === "object" && "attention" in out && "data" in out;
@@ -473,9 +480,10 @@ export async function answer(message, version) {
   const reply = (result) => ({ jsonrpc: "2.0", id: message.id, result });
   const fail = (code, text) => ({
     jsonrpc: "2.0",
-    id: message.id ?? null,
+    id: message?.id ?? null,
     error: { code, message: text },
   });
+  // A line can hold any JSON value; only an object that names a method is a request.
   if (message?.jsonrpc !== "2.0" || typeof message.method !== "string")
     return fail(-32600, "Invalid request");
   if (message.id === undefined) return null; // a notification is not answered
@@ -503,6 +511,13 @@ export async function answer(message, version) {
         );
         for (const key of Object.keys(given))
           if (!allowed.has(key)) throw new Error(`Unknown argument ${key}`);
+        for (const a of command.args) {
+          const value = given[a.replaceAll("-", "_")];
+          if (value === undefined) continue;
+          const kind = ARGS[a].type;
+          if (kind === "integer" ? !Number.isSafeInteger(value) : typeof value !== kind)
+            throw new Error(`${a} must be ${kind === "integer" ? "a whole number" : `a ${kind}`}`);
+        }
         return text(await run(command.name, given), false);
       } catch (e) {
         return text({ error: e.message, notice: NOTICE }, true);

@@ -65,5 +65,7 @@ side, which 19j did not report as its own count.
   from the pack through the command above. The hosted test suite checks this pack's structure only,
   because the full replay does not fit its time budget; set `SIMURGH_REPLAY_19L=1` on a host that
   can replay to run it as a test. It has not been replayed outside the author's custody.
+  (Added 23 Nov 2026: an outside operator replayed this lane on 15 November with no discrepancy;
+  see [the receipts](../provenance-phase-19f/README.md).)
 - Off Linux, `verify` cannot tell whether a dispatched row's result is what the pipeline returns;
   a test shows a consistently edited row passing the structure check and failing the replay.

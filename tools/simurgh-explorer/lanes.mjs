@@ -11,7 +11,11 @@ const RESEARCH = "docs/research";
 const FOLDER = "provenance-phase-19";
 const LEDGER = "docs/research/PROVENANCE_PHASE_19.md";
 const SERVED = "docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md";
-const MONTHS = { Oct: "10", Nov: "11", Dec: "12" };
+const MONTHS = Object.fromEntries(
+  "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"
+    .split(" ")
+    .map((name, i) => [name, String(i + 1).padStart(2, "0")])
+);
 const requireThat = (ok, message) => {
   if (!ok) throw new Error(`Lane ${message}`);
 };

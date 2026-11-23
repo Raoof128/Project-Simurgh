@@ -229,6 +229,18 @@ test("small parsers: summaries, tables and ruling dates", () => {
       ["P19-B02", "2026-11-12"],
     ]
   );
+  // Every month is read, so a ruling of next year keeps its date.
+  assert.deepEqual(
+    [
+      ...rulingDates(
+        "- Ruling (5 Jan 2027, P19-C03 exercised): x\n- Ruling (9 Sep 2027, P19-D04): y"
+      ),
+    ],
+    [
+      ["P19-C03", "2027-01-05"],
+      ["P19-D04", "2027-09-09"],
+    ]
+  );
   assert.deepEqual(hypothesesOf({ hypotheses: { X1: false } }, {}, {}, "| | D | H |\n|-|-|-|\n"), [
     { id: "X1", outcome: "failed", source: "receipt", pointer: "/hypotheses/X1", columns: [] },
   ]);

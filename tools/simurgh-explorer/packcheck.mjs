@@ -106,7 +106,9 @@ export async function checkPack(bytes, { keep = false } = {}) {
     if (!data) missing.push(name);
     else if ((await sha256(data)) !== digestOf(files[name])) differing.push(name);
   }
-  const unlisted = [...members.keys()].filter((n) => n !== "manifest.json" && !(n in files));
+  const unlisted = [...members.keys()].filter(
+    (n) => n !== "manifest.json" && !Object.hasOwn(files, n)
+  );
   const wrong = new Set([...differing, ...unlisted]);
   return {
     members: [...members].map(([name, data]) => ({

@@ -11,6 +11,10 @@ from them unnoticed.
 Status:
 
 - A draft. It has not been submitted anywhere and has not been peer reviewed.
+- Written on 11 and 12 November and not updated since. An outside operator replayed its
+  studies on 15 November, and later lanes ran attackers with the gate's source and hosted
+  models. Where the draft says those have not happened, the
+  [root README](../../../README.md) is current.
 - The author line and the section "Use of AI assistance" carry bracketed notes for the author to
   complete. The engineering and the first draft were produced by an AI coding agent under the
   author's direction; the section says so and the author must confirm its wording.
