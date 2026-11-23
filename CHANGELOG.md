@@ -1,5 +1,19 @@
 ## Change Log
 
+## [phase-19-audit03-2026-11-24] — 2026-11-24 — The served-model census corrected: two packs hold a returned id
+
+**Raouf:**
+
+- **Scope:** the census tool (P19-AUDIT03), its page and tests; `strict19ag.py` (P19-GUARD02
+  amendment 1); the root README; the record of corrections; lane 19ag's page.
+- **Summary:** the census said one pack holds a model id the provider returned. Two do:
+  lanes 19o and 19u store the provider's response for every generation, which the tool had
+  read as a named id. 18 packs name a model, not 17. The stricter check for lane 19ag also
+  refuses a report whose bytes are not canonical, and its page says what no check covers
+  without a replay.
+- **Verification:** census and strict-check tests on two interpreters; explorer unit tests;
+  quick gate.
+
 ## [affiliation-2026-11-24] — 2026-11-24 — The author's affiliation corrected on the disclaimer page
 
 **Raouf:**

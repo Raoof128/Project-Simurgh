@@ -120,9 +120,21 @@ Without `--replay`, the verifier does not bind every field of the report. A repa
 with its `arm` changed, its list of non-claims emptied or an unknown key added still checks
 as `structure_checked`. Such a copy has a different root, so the committed `ROOT.sha256` and
 the hosted roots check refuse it, and `--replay` stops on it with `report_mismatch`. Always
-give `--expected-root`. For the committed pack, a test holds those fields to the lane's
-module. `tools/assurance-provenance/strict19ag.py` takes the same pack and root, runs the
-verifier unchanged and then compares those fields too; it refuses each such copy.
+give `--expected-root`.
+
+(Added 24 Nov 2026: for the committed pack, a test holds those fields to the lane's module.
+`tools/assurance-provenance/strict19ag.py` takes the same pack and root, runs the verifier
+unchanged and then compares those fields too; it refuses each such copy, and a report
+whose bytes are not the lane's canonical form, such as one with a key written twice.)
+
+(Added 24 Nov 2026: what neither tool checks without `--replay`. The verifier runs no gate
+then. It checks each row's identity against the seats' files, that each recorded outcome
+has the declared shape and agrees with its own flags, and that the summary and the
+hypotheses follow from the rows. It does not compare a recorded outcome with what the gate
+does. A copy in which the two outcomes that raise are rewritten as not raising, with the
+rest recomputed, reads G1 as held and passes both tools under the copy's own root. The
+committed root refuses that copy and `--replay` stops on it. A receipt of kind
+`structure_checked` means this much and no more.)
 
 ## What this does not show
 

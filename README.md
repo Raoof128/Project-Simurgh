@@ -168,8 +168,10 @@ the gate 64 changed bodies in place of an action it allows. None is observed, wi
 an approval, so the gate binds the body and not the name. It also found what it did not
 predict: 30 of 66 refusals, those of bodies the gate's schema rejects, leave no record in its
 log. Both lanes are lists the author wrote and no agent attacked them. A
-[census of the packs](docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md) found that of the
-17 that name a model, one holds a model id the provider returned.
+[census of the packs](docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md) counts 18 that
+name a model and two that hold a model id the provider returned: lanes 19o and 19u keep
+the provider's response beside every generation. Until 24 November the census counted one
+and missed those responses; a read-only audit round found the error.
 
 **A planted fault, a real one, and its repair, 22 November.**
 [19ac](docs/research/provenance-phase-19ac/README.md) had two agent seats write the sequences
@@ -520,9 +522,12 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
   (19aa). On the class of lane 19ae no refused dispatch is left without a record unless the
   seal has latched, and ten of the twelve attempts with a run of twenty refusals carry its
   mark; the frozen gate is unchanged, and the mark is an alert, not a cap.
-- **Which model answered:** lanes 19u, 19w and 19x record the model id that was requested
-  and nothing the provider returned; 19o records one returned id per model, from a call made
-  before the capture. No lane records it beside each generation.
+- **Which model answered:** lanes 19o and 19u keep the provider's response beside every
+  generation (8,064 and 2,700 responses), and each names the model that was asked for.
+  Lanes 19w and 19x record the model id that was requested and nothing the provider
+  returned. A returned id is what the provider reported; it does not say which weights
+  ran. Until 24 November this entry said that no lane kept a returned id beside each
+  generation, which was wrong.
 - **Operational assurance:** sustained deployment load, interactive desktop capture and
   real-data privacy validation remain separate work.
 - **Security review:** the [19 October local Phase 8 review](docs/research/PHASE_8_REVIEW_2026-10-19.md)

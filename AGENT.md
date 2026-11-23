@@ -14,6 +14,37 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-24 (Australia/Sydney) — The served-model census was wrong about returned ids; corrected (P19-AUDIT03)
+
+**Raouf:**
+
+- **Scope:** the census tool, its page and tests; `strict19ag.py` and its test (P19-GUARD02
+  amendment 1); the root README, the record of corrections, lane 19ag's page, the ledger,
+  both logs.
+- **Summary:** a ninth read-only round, on the two merges no round had read, found a wrong
+  claim in the census and in the README. The census said one pack holds a model id the
+  provider returned and that no lane keeps one beside each generation. Lanes 19o and 19u
+  store the provider's response body for every generation, 8,064 and 2,700 of them. The tool
+  counted only a `served_model` field and took the `model` in a stored response for a named
+  id. Under P19-AUDIT03, declared first, it counts that string as returned, and reads a list
+  of entries with an `id` as named ids: 18 packs name a model and two hold a returned id.
+  The same round found that the stricter check for lane 19ag had one comparison no test
+  guarded, accepted a report with a key written twice, and described the pinned verifier as
+  recomputing rows, which it does not do without a replay. All three are fixed.
+- **Files changed:** `tools/assurance-provenance/served19.py`,
+  `tools/assurance-provenance/tests/test_served19.py`,
+  `docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md`,
+  `tools/assurance-provenance/strict19ag.py`,
+  `tools/assurance-provenance/tests/test_strict19ag.py`, `README.md`,
+  `docs/RECORD_OF_CORRECTIONS.md`, `docs/research/provenance-phase-19ag/README.md`, the
+  ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the census tests (17) and the strict check's tests (3) on two
+  interpreters, written first; each new rule removed in turn and a test seen to fail; the
+  explorer's unit tests, which read the census page; `prettier`, `ruff` and the quick gate.
+- **Not done:** the rulings of P19-AUDIT01 and P19-AUDIT02 keep their words and a later
+  ruling corrects them. Dated log entries that give the old counts are left as written. No
+  pack, capture module or pinned file changed.
+
 ### 2026-11-24 (Australia/Sydney) — The author's affiliation corrected on the disclaimer page
 
 **Raouf:**

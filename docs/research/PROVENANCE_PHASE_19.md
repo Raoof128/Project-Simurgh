@@ -4580,3 +4580,31 @@ what P19-GUARD02 does not authorise.
   with a reason, and that the committed root refuses each in both. On the committed pack
   the new check prints the verifier's receipt with one more field. No pinned file, pack,
   brief or handoff command changed.
+- Ruling (24 Nov 2026, P19-AUDIT03 exercised; this corrects two rulings above): the
+  declaration (`82bd0a33`) precedes the commit that acts on it. The rulings of P19-AUDIT01 and
+  P19-AUDIT02 say that one pack, lane 19o's, holds an id the provider returned, that lanes
+  19u, 19w and 19x hold the requested id only, and that no lane records the returned id beside
+  each generation. That was wrong for lanes 19o and 19u, and their text above is left as
+  written. Both lanes store the provider's response body beside every generation, 8,064 and
+  2,700 of them, one for each transcript row, and each names the model of the file it is in.
+  The census counted only a `served_model` field and read the `model` in a stored response as
+  an id the pack names. It now counts that string as returned and not as named, and reads a
+  list of entries with an `id` as named ids. The page says 18 packs name a model and two hold
+  a returned id; lane 19e joined with three ids, and lane 19w gained two its pack lists as not
+  run. Lanes 19w and 19x still hold nothing the provider returned. The page says what it
+  counted before. The tests were written first and nine failed until the tool changed; one
+  had pinned the wrong answer by name. Each new rule was then taken out in turn and a test
+  failed each time. The error was found by a read-only audit round on the two newest merges,
+  not by the author. Nothing in a pack, a capture module or a lane's page changed. The root
+  README and the record of corrections carry the correction.
+- Ruling (24 Nov 2026, P19-GUARD02 amendment 1 exercised): the amendment (`82bd0a33`)
+  precedes the commit that acts on it. `strict19ag.py` also refuses, as `report_bytes`, a
+  report whose bytes are not the canonical form of what they parse to: a copy with a key
+  written twice and a pretty-printed copy, both accepted by the pinned verifier under their
+  own root, are refused. A copy with the `model_inference` flag alone changed is now a test
+  case, and the test fails when that comparison is removed. The tool's opening lines no
+  longer say the verifier recomputes a report's rows. The lane's page says, in a paragraph
+  marked with its date, what neither tool checks without a replay: no gate runs, so a copy
+  with recorded outcomes rewritten consistently passes both under its own root, and the
+  committed root or `--replay` refuses it. No pinned file, pack, brief or handoff command
+  changed.
