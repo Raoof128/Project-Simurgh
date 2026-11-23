@@ -2858,6 +2858,28 @@ cannot be read, or that holds a constant JSON does not define, is treated as abs
 committed reviews must again recompute byte-identical. Everything the declaration does not
 authorise stays unauthorised.
 
+**P19-OPERATOR18 (bounded authority to add two replay caveats to the rendered handoff;
+declared 23 Nov 2026 before any commit that acts on it).** The handoff tells an operator
+that a `report_mismatch` from the replay of 19ac or 19ad on another host is a result to send
+back, and that 19ae and 19ag hold the same host-dependent rows. It says nothing of the kind
+for 19y or 19z, though lane 19y's page says three of its rows depend on how deep the host's
+JSON parser goes and lane 19z's page says its attempts run SQL that differs between SQLite
+versions. It also does not mention that two of lane 19ag's seat files nest bodies close to
+the limit of the JSON reader in Python 3.12.0 to 3.12.2, which the lane's page states. This
+declaration authorises, and nothing else:
+
+1. `handoff19.py`, the replay paragraph of `render()`: one sentence saying that a
+   `report_mismatch` from the replay of 19y or 19z is also a result to send back, with the
+   reason for each, and one saying that a `report_rows` stop from 19ag's verifier on Python
+   3.12.0 to 3.12.2 is a result to send back. The test first.
+2. `HANDOFF.md` rendered again. `discrepancy-template.json` and the three reviews do not
+   change; if one does, the work stops and the difference is reported.
+3. Both logs and the ruling.
+
+Not authorised: any change to a phase's host, time, expected kind or fields, to what the
+comparator checks, to an operator's receipt, or to a frozen file or a lane's pinned source or
+pack. This declaration commit must be a strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
