@@ -14,6 +14,70 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-23 (Australia/Sydney) — Readiness rounds 1 to 3: the public pages and the explorer brought up to date after nine read-only audits
+
+**Raouf:**
+
+- **Scope:** the root README, `docs/RECORD_OF_CORRECTIONS.md`, two limits and one table on
+  `docs/AUTHOR_AND_METHOD.md`, `ROADMAP.md`, `SECURITY.md`, `docs/REVIEWER_INDEX.md`, two
+  dated notes on lane pages, `.gitignore`, the evidence explorer, and the removal of one
+  file on the owner's instruction.
+- **Summary:** four read-only audits of the branch (a cold start from a fresh clone, the
+  dashboard from a fresh clone, a consistency check and a first read) found stale and
+  contradictory statements in the public pages and nothing broken in the evidence: 29 of 32
+  verify commands pass with a bare interpreter, the other three as documented, and 253
+  links resolve. The README now opens with what Phase 19 found and one verify command, and
+  its logo no longer fills the first screen. The record of corrections lists the 17
+  predictions that failed after 11 November, generated from the committed files, the four
+  faults attacker agents found, and four corrections to the record, one of them to that
+  page's own "still open" list. The author page's limits on attackers and on stronger
+  models say what has since been run; the author line and the AI-use statement are
+  untouched. The roadmap, security page and reviewer guide name Phase 19. The README's open
+  work gains one entry: the served-model census does not read lane 19af.
+  The explorer says "Measured a model" where it said "Ran a model", counts a pack sweep only
+  when all packs are read, answers a taken port or a missing build with one line, and fits
+  its predictions table on a phone; a Mythos 5.2 agent made those nine fixes in its own
+  worktree, tests first.
+- **Round 2, same day:** three more read-only checks (the pages one click from the README,
+  the code as a reviewing engineer reads it, and an attempt to disprove each headline number
+  from the packs). Every number survived. Three sentences did not and are narrowed: the plan
+  was committed before the run for the 26 lanes from 10 November, not for the six packs of
+  1 November; two attempts still raise "on the repaired gate", not "on every gate"; and the
+  security page's list includes what the author's own lists found. Two bugs in the explorer
+  are fixed, tests first: a pack member named like an inherited property (`toString`) passed
+  as listed, and a line holding `null` stopped the tool server. The results page of lane
+  19ag now has its generator in the repository and a test that compares the whole page.
+  Dated notes on lanes 19j, 19l, 19t and 19ad say what later lanes did. The 19f page says
+  "done" where "paid" read as money.
+- **Round 3, same day:** two more read-only checks (the lane and policy pages no round had
+  read, and the rest of the code with an attempt to break round 2's fixes, which held).
+  Under P19-REPAIR10, declared first, `handoff19.review()` no longer credits a discrepant
+  phase with its replay or dataset item and no longer raises on a malformed receipt; the
+  three committed reviews recompute byte-identical. In the explorer: a model a receipt
+  marks `not_run` is no longer listed (lane 19w showed three models where one ran); an
+  imported file without a lane's `sources` is refused where it blanked the page; an archive
+  that inflates past 256 MiB is refused; a failed prediction shows its result whatever its
+  column is called; a document's date follows its own headings. A test holds each lane's
+  loose `report.json` to the copy in its pack. Dated notes on lanes 19b, 19h, 19i, 19m, 19n,
+  19p, 19v, 19w, 19aa and 19ab; the README's reviewer table labels its October rows.
+- **Removed:** `docs/Raouf_Portfolio_Resume.docx`, on the owner's instruction. It is not
+  project evidence.
+- **Files changed:** `README.md`, `ROADMAP.md`, `SECURITY.md`, `.gitignore`,
+  `docs/RECORD_OF_CORRECTIONS.md`, `docs/AUTHOR_AND_METHOD.md`, `docs/REVIEWER_INDEX.md`,
+  `docs/research/provenance-phase-19ac/README.md`,
+  `docs/research/provenance-phase-19ae/README.md`,
+  `docs/research/explorer-phase-18/AUDIT_2026-11-23.md`, `tools/simurgh-explorer/`,
+  `DOCUMENTATION.md`, the READMEs of lanes 19f, 19j, 19l, 19t, 19ad, 19ag and of the
+  manuscript folder, `tools/assurance-provenance/results19ag.py` (new) and
+  `tests/test_evidence19ag_committed.py`, `handoff19.py` and `tests/test_handoff19.py`,
+  `PRIVACY.md`, `docs/INTEGRATIONS.md`, ten more lane READMEs, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** `prettier`; a link check over the changed pages; the explorer's unit and
+  browser tests; the quick gate.
+- **Not done:** the served-model census tool has no successor yet. The two compiled files
+  with a local path, and the full name on the first operator receipt, stay as they are on
+  the owner's word. No Phase 19 pack, receipt, brief or pinned module is changed.
+
 ### 2026-11-23 (Australia/Sydney) — Lane 19ag in the operator handoff; thirty-two pinned roots; the README's open work brought up to date
 
 **Raouf:**

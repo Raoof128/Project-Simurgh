@@ -72,6 +72,8 @@ The prediction is not established.
 - Reading an output: 19h's decoder with one tightening, declared before the run. On the Qwen wire a
   call must be exactly one `<tool_call>` block. No output in this lane or in 19h depended on it.
 - Not the capture `IOU-19-SPEND` declares; the hosted models and the informed-attacker arm stay owed.
+  (Added 23 Nov 2026: attackers given the gate's source ran from [lane 19t](../provenance-phase-19t/README.md) on, and
+  hosted models from [lane 19o](../provenance-phase-19o/README.md). `IOU-19-SPEND` itself is unchanged.)
 
 ## Reproduce the capture (Apple Silicon)
 

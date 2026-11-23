@@ -111,6 +111,9 @@ record runs Python 3.12.3 and read every file. Run the verifier as a command, an
 `report_rows` on an early 3.12 as this limit and not as a changed pack. The seats' files are
 committed as received and are not altered to avoid it.
 
+The lane's unit tests also leave their temporary directories behind. The test file is pinned
+by the pack, so it is left as it is.
+
 ## What this does not show
 
 - The frozen gate and every earlier lane's gate still raise. A caller that does not use the
@@ -130,4 +133,5 @@ committed as received and are not altered to avoid it.
 - `evidence.zip`, `protocol.json`, `report.json`, `receipt.json`, `ROOT.sha256`: the pack.
 - `BRIEF.md`: what each seat was given. It is pinned by the pack.
 - `submissions/`: the three seats' files as received.
-- `RESULTS.md`: every table, generated from `report.json`.
+- `RESULTS.md`: every table, generated from `report.json` by
+  `tools/assurance-provenance/results19ag.py`. A test holds the page to that output.

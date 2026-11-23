@@ -18,7 +18,7 @@ try {
   if (o.help || !p.length) {
     console.log(
       [
-        `Simurgh evidence explorer ${version}: a read-only JSON interface`,
+        `Simurgh evidence explorer ${version}: a JSON interface that changes nothing in the repository`,
         "",
         ...COMMANDS.map((c) => `  ${c.name.padEnd(11)} ${c.summary}`),
         "  export      The index with the outcome records a filter keeps, as a bundle",

@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // The explorer for an agent: every view of the dashboard as a command that returns JSON, a
 // watch command for an automated watcher, and the same commands as tools over a local stdio
-// server. Read only. It runs nothing from the evidence and opens no network connection.
+// server. It reads the repository and writes one thing, the snapshot file that
+// `watch --write-baseline` is given. It runs nothing from the evidence and opens no network
+// connection.
 import { readFileSync, statSync, writeFileSync } from "node:fs";
 import { createInterface } from "node:readline";
 import { buildIndex, readBytes, ROOT } from "./index.mjs";
@@ -31,7 +33,8 @@ const ARGS = {
   ran: {
     type: "string",
     enum: ["all", "model", "no_model"],
-    description: "Whether the lane ran a model",
+    description:
+      "Whether a model was what the lane measured; an agent used as an attacker is not counted",
   },
   outcome: {
     type: "string",
@@ -90,6 +93,8 @@ const ARGS = {
 
 const collectionOf = (d) => (d.kind === "phase19" ? "phase19" : d.url ? "primary" : "project");
 const find = (list, id, what) => {
+  if (id === undefined || id === "")
+    throw new Error(`Missing --id: name one ${what.toLowerCase()} by its id`);
   const hit = list.find((x) => x.id === id);
   if (!hit) throw new Error(`${what} not found; list them first`);
   return hit;
@@ -265,6 +270,7 @@ export const COMMANDS = [
     summary: "Recompute a pack's root and member hashes from its bytes, for one lane or for all",
     args: ["id", "all"],
     async run(b, o, ctx) {
+      if (!o.all && !o.id) throw new Error("Missing --id or --all: name one lane, or check all");
       const lanes = o.all ? b.lanes : [find(b.lanes, o.id, "Lane")];
       const results = [];
       for (const lane of lanes) results.push(await checkLane(lane, ctx));
@@ -423,6 +429,11 @@ export function load(o) {
 export async function run(name, o = {}) {
   const command = COMMANDS.find((c) => c.name === name);
   if (!command) throw new Error("Unknown command; use commands to list them");
+  for (const a of command.args) {
+    const value = o[a] ?? o[a.replaceAll("-", "_")];
+    if (value !== undefined && ARGS[a].enum && !ARGS[a].enum.includes(value))
+      throw new Error(`${a} must be one of ${ARGS[a].enum.join(", ")}`);
+  }
   const { bundle: b, imported } = load(o);
   const out = await command.run(b, o, { imported });
   const wrapped = out && typeof out === "object" && "attention" in out && "data" in out;
@@ -469,9 +480,10 @@ export async function answer(message, version) {
   const reply = (result) => ({ jsonrpc: "2.0", id: message.id, result });
   const fail = (code, text) => ({
     jsonrpc: "2.0",
-    id: message.id ?? null,
+    id: message?.id ?? null,
     error: { code, message: text },
   });
+  // A line can hold any JSON value; only an object that names a method is a request.
   if (message?.jsonrpc !== "2.0" || typeof message.method !== "string")
     return fail(-32600, "Invalid request");
   if (message.id === undefined) return null; // a notification is not answered
@@ -494,11 +506,20 @@ export async function answer(message, version) {
       if (!command) return text({ error: "Unknown tool; list the tools first" }, true);
       try {
         const given = message.params.arguments ?? {};
+        if (typeof given !== "object" || Array.isArray(given))
+          throw new Error("arguments must be an object");
         const allowed = new Set(
           command.args.filter((a) => !ARGS[a].path).map((a) => a.replaceAll("-", "_"))
         );
         for (const key of Object.keys(given))
           if (!allowed.has(key)) throw new Error(`Unknown argument ${key}`);
+        for (const a of command.args) {
+          const value = given[a.replaceAll("-", "_")];
+          if (value === undefined) continue;
+          const kind = ARGS[a].type;
+          if (kind === "integer" ? !Number.isSafeInteger(value) : typeof value !== kind)
+            throw new Error(`${a} must be ${kind === "integer" ? "a whole number" : `a ${kind}`}`);
+        }
         return text(await run(command.name, given), false);
       } catch (e) {
         return text({ error: e.message, notice: NOTICE }, true);

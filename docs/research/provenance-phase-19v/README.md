@@ -167,6 +167,8 @@ secure cloud at 2.09 USD an hour. Times are UTC on 14 November 2026.
   author's job logs and not in the pack.
 - The models ran on machines rented by the hour. The pack holds what they recorded and cannot
   show what the machines were. No one outside the author has replayed this pack.
+  (Added 23 Nov 2026: an outside operator verified this pack on 15 November with no discrepancy;
+  see [the receipts](../provenance-phase-19f/README.md).)
 
 ## Reproduce
 

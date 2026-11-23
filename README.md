@@ -1,21 +1,56 @@
 <p align="center">
-  <img src="docs/Project-Simurgh-Logo.png" alt="Project Simurgh: Knowledge, Verification, Guidance" width="100%" />
+  <img src="docs/Project-Simurgh-Logo.png" alt="Project Simurgh: Knowledge, Verification, Guidance" width="240" />
 </p>
 
 # Project Simurgh
 
 **Inspectable authorization for AI agents. Replay the proposal, enforce the boundary, verify the effect.**
 
-Simurgh is a research prototype for controlling what an AI agent can do when its authority
-changes. It combines host-controlled delegation, safety stops, monitoring leases and
-credential checks, then preserves the receiver state needed to examine what happened.
+Simurgh is a research prototype for one question: what can an AI agent still do after its
+authority has changed? It puts a gate outside the model that checks each proposed action
+against the host's current state, and keeps the receiver's records so anyone can replay them.
 
-**In a bounded Llama evaluation, composed controls reduced restricted-state trials with new
-effects from 17/24 to 0/24 while preserving 23/24 active completions.** The same comparison
-with OpenAI `gpt-6-luna` completed 24/24 active trials, but its credential-only baseline already
-produced zero restricted effects. That result establishes no incremental protection for Luna.
+**Start here.** Phase 19 (November 2026) has 32 evidence packs, and one command checks each.
+For the 26 lanes from 10 November on, the plan was committed before the run. The six packs of
+1 November were built under one design committed the same day. Of 67 predictions decided as a
+whole, 49 held, 17 did not and one is undecided. A further 33 were decided model by model and
+held in 35 of 138 cases.
 
-**Latest study, November 2026.** The newest work is four studies on small local models, each with
+- Replayed through the gate, none of 1,439 recorded wrong sends landed, and a credential check
+  alone let 1,188 through. This checks recorded outputs, not an attacker who adapts.
+- Agents given the gate's source found four real faults (lanes 19t, 19ac and 19ae). Each is
+  repaired beside the gate and was attacked again. Every one of those agents is a Claude
+  model the author started.
+- A published benchmark's attack check was true with nothing planted in 43 of 1,980 runs, on
+  seven of eight models (lane 19x).
+- One outside operator replayed 21 of the 32 packs on their own Linux machine and found no
+  discrepancy.
+
+Check one pack with plain Python 3.12 and no installed packages:
+
+```sh
+python3 -B tools/assurance-provenance/evidence19x.py verify \
+  docs/research/provenance-phase-19x/evidence.zip \
+  --expected-root "$(cat docs/research/provenance-phase-19x/ROOT.sha256)"
+```
+
+It prints one line of JSON with `"verified": true`. The
+[dashboard](#inspect-with-a-dashboard-or-an-agent) shows every pack and prediction, and the
+[record of corrections](docs/RECORD_OF_CORRECTIONS.md) lists what the project got wrong.
+
+**The October comparison (Phase 17).** In a bounded Llama evaluation, composed controls reduced
+restricted-state trials with new effects from 17/24 to 0/24 while preserving 23/24 active
+completions. The same comparison with OpenAI `gpt-6-luna` completed 24/24 active trials, but
+its credential-only baseline already produced zero restricted effects. That result establishes
+no incremental protection for Luna.
+
+## Phase 19 in date order
+
+A lane is one study; from 10 November each has its plan committed first. A pack is its
+evidence archive, with a command that checks it. A seat is one attacking agent. A gate
+latches when it stops all work.
+
+**The manuscript's studies, 10 to 11 November.** Four studies on small local models, each with
 its plan committed before the run. In a confirmatory run of 2,592 generations, all five hypotheses fixed in advance
 held on the primary model, and how far an injected text moved a model depended on its exact
 wording and on why the action was forbidden. All 1,439 wrong sends the models produced were then
@@ -25,7 +60,7 @@ outputs. It is not evidence against an attacker who adapts to the gate. One outs
 since recomputed these studies from their committed outputs and rerun the gate replays on a Linux
 machine, with no discrepancy ([receipts and reviews](docs/research/provenance-phase-19f/README.md)).
 
-**Since that draft, 12 to 13 November.** Three further lanes, each declared before it ran, are
+**After the manuscript draft, 12 to 13 November.** Three further lanes, each declared before it ran, are
 not in the manuscript. [19n](docs/research/provenance-phase-19n/README.md) varied where an
 injected text sits, what it claims and who wrote it, on four local models: two of its four
 hypotheses held on one model each, two held on none, and no model sent again after a refused
@@ -94,8 +129,8 @@ whose files were committed before the host of record ran them. None of the 92 ch
 repaired gate's output, and none of 151 new attempts from three Claude agents does. Three other
 seats are empty: the providers of a fourth Claude model and of two OpenAI routes refused the
 task, and no request was reworded. So every attacker that ran is from one vendor: one Opus 5.5
-agent and two Sonnet 5.5 agents. A seat named for Claude Mythos, the model that wrote the
-repair, was in fact served by Sonnet 5.5; the lane's page records the correction. The gate that
+agent and two Sonnet 5.5 agents. A seat named for Claude Mythos, the model the author used
+for the repair, was in fact served by Sonnet 5.5; the lane's page records the correction. The gate that
 the earlier lanes measured is unchanged;
 a caller has to use the repaired classes.
 
@@ -148,12 +183,12 @@ the source in hand. None of their 36 attempts gains, and the repair of lane 19ad
 every variant they tried. They found a different fault instead: a body that lacks its `run`
 or `id`, sent with any validly signed token, makes the gate raise where it should refuse.
 Sixteen attempts do it. Nothing is sent and no authority is gained, but a caller that does
-not catch the exception stops. Two of the lane's six predictions fail, and the raise is not
-repaired.
+not catch the exception stops. Two of the lane's six predictions fail. That lane does not
+repair the raise; lane 19ag, below, does.
 
 **Three questions asked of small local models, 22 November.**
-[19af](docs/research/provenance-phase-19af/README.md) takes three pains the gap hunt left
-untouched to two small models on a laptop. A legitimate restriction that arrives as text is
+[19af](docs/research/provenance-phase-19af/README.md) takes three questions that the project's
+survey of open gaps left untouched to two small models on a laptop. A legitimate restriction that arrives as text is
 obeyed or ignored by its wording: both models stop for a notice that says "do not send" and
 both send through a legal hold every time. The gate ignores all of them, as designed, so a
 withdrawal that reaches the system only as text changes nothing at the gate. One model sends
@@ -228,7 +263,7 @@ extend to arbitrary remote services or a compromised host.
 
 ## Measured results
 
-The latest comparison uses **24 internally authored tasks, two trials per task and two models**:
+The October comparison (Phase 17) uses **24 internally authored tasks, two trials per task and two models**:
 96 captured proposals, each executed through three controls, for **288 retained branches**.
 The tasks cover six known lifecycle families with paired benign/adversarial source text.
 
@@ -297,6 +332,9 @@ the completed **919-document content review**, 141 dated findings and
 These documentation checks do not refresh implementation test receipts or establish standards compliance.
 
 ## Replay the evidence
+
+This section replays the October studies (Phase 17). For Phase 19, use the command at the top
+of this page or the [operator handoff](docs/research/provenance-phase-19f/HANDOFF.md).
 
 **No API key, model download or paid inference is needed.** Use a full Git checkout and
 Python 3.12 on **Linux x86_64** with local process and loopback networking support.
@@ -370,12 +408,16 @@ node tools/simurgh-explorer/cli.mjs summary
 node tools/simurgh-explorer/cli.mjs lanes --outcome failed
 node tools/simurgh-explorer/cli.mjs lane --id 19ae
 node tools/simurgh-explorer/cli.mjs check --all
+node tools/simurgh-explorer/cli.mjs watch --write-baseline /tmp/simurgh-watch.json
 node tools/simurgh-explorer/cli.mjs watch --baseline /tmp/simurgh-watch.json
 node tools/simurgh-explorer/cli.mjs records --kind unauthorized --control credential_only
 node tools/simurgh-explorer/cli.mjs records --kind unauthorized --model llama
 node tools/simurgh-explorer/cli.mjs inspect --id 'p17:llama:g1:composed' --detail
 node tools/simurgh-explorer/cli.mjs search --q monitoring --year 2026
 ```
+
+Each prints JSON, and `search`, `lanes` and `check --all` print a lot of it: send the
+output to a file or to `jq`.
 
 For the dashboard:
 
@@ -392,18 +434,17 @@ and document text as untrusted data when feeding CLI results to an agent.
 
 ## Reviewer handoff
 
-| Review goal                  | Start here                                                                                                                                                  | What to examine                                                                             |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Understand the contribution  | [One-page brief](docs/research/transfer-phase-17/BRIEF.md)                                                                                                  | The control benefit, retained utility and negative result                                   |
-| Assess the experiment        | [Results](docs/research/transfer-phase-17/RESULTS.md) and [corpus](docs/research/transfer-phase-17/CORPUS.md)                                               | Denominators, matched controls, interface confounds and uncertainty                         |
-| Verify reported behavior     | [Runbook](docs/research/transfer-phase-17/RUNBOOK.md) and [receipts](docs/research/transfer-phase-17/VALIDATION.md)                                         | Source bindings, raw receiver state and fresh replay                                        |
-| Review the implementation    | [Composed gate](tools/assurance-composed/composition.py), [transfer study](tools/assurance-transfer/) and [role correction](tools/assurance-provider-role/) | Authority transitions, unknown outcomes and adapter trust                                   |
-| Inspect current outcomes     | [Dashboard/CLI guide](tools/simurgh-explorer/README.md)                                                                                                     | Failure classification, matched controls and source provenance                              |
-| Perform outside reproduction | [Operator handoff](docs/research/CONTINUATION_HANDOFF_2026-10-19.md)                                                                                        | Earlier viewer/export snapshot; use the current runbook for the latest study                |
-| Trace prior work             | [Reviewer index](docs/REVIEWER_INDEX.md) and [research history](RESEARCH_HISTORY.md)                                                                        | Frozen stages, negative results and historical reproduction                                 |
-| Read the newest study        | [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) and [Phase 19 ledger](docs/research/PROVENANCE_PHASE_19.md)                            | Plans committed before each run, hypotheses decided by rule, limits stated with each result |
-| Recompute the newest study   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                  | Thirty-two verify commands; thirty need no installed packages                               |
-| Judge the process and author | [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) and [author, method and open problems](docs/AUTHOR_AND_METHOD.md)                                    | How errors were found and handled, how AI assistance is used, what remains open             |
+| Review goal                                    | Start here                                                                                                                                                                                                                                                                                   | What to examine                                                                                                           |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Understand the October contribution (Phase 17) | [One-page brief](docs/research/transfer-phase-17/BRIEF.md)                                                                                                                                                                                                                                   | The control benefit, retained utility and negative result                                                                 |
+| Assess the October experiment                  | [Results](docs/research/transfer-phase-17/RESULTS.md) and [corpus](docs/research/transfer-phase-17/CORPUS.md)                                                                                                                                                                                | Denominators, matched controls, interface confounds and uncertainty                                                       |
+| Verify the October behavior                    | [Runbook](docs/research/transfer-phase-17/RUNBOOK.md) and [receipts](docs/research/transfer-phase-17/VALIDATION.md)                                                                                                                                                                          | Source bindings, raw receiver state and fresh replay                                                                      |
+| Review the implementation                      | [Composed gate](tools/assurance-composed/composition.py), [transfer study](tools/assurance-transfer/) and [role correction](tools/assurance-provider-role/); for Phase 19, the [gate](tools/assurance-provenance/gate19.py) and [its newest repair](tools/assurance-provenance/guard19ag.py) | Authority transitions, unknown outcomes and adapter trust                                                                 |
+| Inspect current outcomes                       | [Dashboard/CLI guide](tools/simurgh-explorer/README.md)                                                                                                                                                                                                                                      | Failure classification, matched controls and source provenance                                                            |
+| Perform outside reproduction                   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                                                                                                                                                                   | Thirty-two verify commands; thirty need no installed packages                                                             |
+| Trace prior work                               | [Reviewer index](docs/REVIEWER_INDEX.md) and [the README of August 2026, kept byte for byte](RESEARCH_HISTORY.md)                                                                                                                                                                            | Frozen stages, negative results and historical reproduction; the archive's claims and scores are of its date, not current |
+| Read the manuscript draft                      | [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) and [Phase 19 ledger](docs/research/PROVENANCE_PHASE_19.md)                                                                                                                                                             | Plans committed before each run, hypotheses decided by rule, limits stated with each result                               |
+| Judge the process and author                   | [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) and [author, method and open problems](docs/AUTHOR_AND_METHOD.md)                                                                                                                                                                     | How errors were found and handled, how AI assistance is used, what remains open                                           |
 
 The most useful review would challenge the exact-action comparator, admission/revocation
 ordering, unknown-outcome handling and the completeness of the evidence inventory, then test
@@ -418,7 +459,7 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
   the handoff now lists native Windows as unsupported. An earlier receipt covers five packs on
   macOS ([receipts and reviews](docs/research/provenance-phase-19f/README.md)). Still
   outstanding: lanes 19w, 19x, 19y, 19z and 19aa to 19ag, one dataset recomputation, a second
-  Linux host, and independent evidence custody, since the author's side asked both operators
+  Linux host, and independent evidence custody, since the author's side asked every operator
   and each signed with a typed name.
 - **Provider lifecycle:** real provider IAM/revocation and authenticated live safety-alert
   delivery have not been validated by the owned-service experiments.
@@ -439,8 +480,12 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
   Lane 19ag repairs it in a class beside the gate, which a caller must choose to use: the
   sixteen recorded attempts that raised are refused there, and three fresh seats did not
   make it raise. The frozen gate and every earlier lane's gate still raise. Two recorded
-  attempts that reach the gate's own stores still raise on every gate. No one outside the
+  attempts that reach the gate's own stores still raise on the repaired gate. No one outside the
   project has reviewed the repair.
+- **The served-model census misses a lane:** lane 19af's receipt names its two local models
+  in a form the census tool does not read. The census counts 16 packs that name a model
+  where there are 17; one of them holds an id the provider returned, as the census says.
+  The tool is pinned, and a successor that reads the lane is owed.
 - **A restriction that arrives as text:** the gate acts on host state and ignores a
   withdrawal written into a channel (19af, 20 of 20 dispatches observed). Whether the send
   then goes out is left to the model and the wording. A host that learns of a restriction

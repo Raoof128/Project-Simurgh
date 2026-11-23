@@ -33,6 +33,9 @@ anyway.
 Stages two (`claude-sonnet-5-5`) and three (`claude-sonnet-4-5-20250929`, one of the paper's five
 models) are declared and not authorised. They have not run.
 
+(Added 23 Nov 2026: [lane 19x](../provenance-phase-19x/README.md) asked the same question of eight models, both of
+these among them.)
+
 ## What was found
 
 On Haiku 5.5, with no injection, the attack formula was true in **3 of 90 runs**, in three

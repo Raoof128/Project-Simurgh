@@ -54,6 +54,9 @@ outputs, 28 of them drawn by injected text, where Phase 19 had only scripted one
   informed-attacker arm is not run and stays owed, with the hosted capture, under `IOU-19-SPEND`.
 - The replay ran on the project's own droplet (twice, the second time from the committed path) and
   runs again in the hosted test suite. It has not been replayed outside the author's custody.
+  (Added 23 Nov 2026: an outside operator replayed this lane on 15 November with no discrepancy;
+  see [the receipts](../provenance-phase-19f/README.md). Attackers given the gate's source
+  ran from lane 19t on, and hosted models from lane 19o.)
 - Off Linux, `verify` cannot tell whether a dispatched row's result is what the pipeline returns;
   a test shows a consistently edited row passing the structure check and failing the replay.
 - The protocol pins the two frozen files this lane calls and the roots of the two capture packs.

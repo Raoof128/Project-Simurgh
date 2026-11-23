@@ -105,8 +105,8 @@ export function CheckResult({ check, members = false }) {
       {members && <Members result={r} />}
       <p className="muted">
         Computed in this browser from {check.source}. It is the first step of the lane's verifier
-        and no more: nothing is replayed, and the committed root it is compared with comes from the
-        same checkout as this page.
+        and no more: nothing is replayed, and the root it is compared with comes from the same
+        evidence this page is showing.
       </p>
     </div>
   );

@@ -6,25 +6,24 @@ Start with [README](README.md) for the research question and runnable demonstrat
 
 ## Choose the right record
 
-| Need                                           | Document                                                                                                                                   |
-| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| Reproduce current evidence without an API key  | [README replay](README.md#replay-the-evidence)                                                                                             |
-| Inspect failures as a person or an agent       | [Dashboard and CLI](tools/simurgh-explorer/README.md)                                                                                      |
-| See what passed, failed or was excluded        | [Full smoke validation](docs/research/smoke-validation-2026-10-19/RESULTS.md)                                                              |
-| Arrange independent reproduction               | [Handoff](docs/research/CONTINUATION_HANDOFF_2026-10-19.md)                                                                                |
-| Read the newest study (November 2026)          | [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md), [Phase 19 ledger](docs/research/PROVENANCE_PHASE_19.md)              |
-| Recompute or replay Phase 19                   | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                 |
-| See how errors were found and handled          | [Record of corrections](docs/RECORD_OF_CORRECTIONS.md)                                                                                     |
-| Judge the author, method and open problems     | [Author, working method and open problems](docs/AUTHOR_AND_METHOD.md)                                                                      |
-| Understand unfinished work                     | [Roadmap](ROADMAP.md)                                                                                                                      |
-| Make a reproducible contribution               | [Contributing](CONTRIBUTING.md), [repository rules](AGENTS.md)                                                                             |
-| Review security, privacy or ethical boundaries | [Security](SECURITY.md), [privacy](PRIVACY.md), [ethics](docs/ETHICS.md)                                                                   |
-| Check authoritative guidance reviewed in 2026  | [Source applicability map](docs/documentation-audit-2026-10-19/SOURCES.md)                                                                 |
-| Find a document's audit scope or correction    | [Audit report and per-file ledger](docs/documentation-audit-2026-10-19/README.md), [errata](docs/documentation-audit-2026-10-19/ERRATA.md) |
-| See what the November fact check found         | [12 November check](docs/documentation-audit-2026-11-12/README.md), [open findings](docs/documentation-audit-2026-11-12/FINDINGS.md)       |
-| Compare with NIST's agent identity tenets      | [Tenet by tenet](docs/NIST_AGENT_IDENTITY_TENETS.md)                                                                                       |
-| Reproduce a historical stage                   | [Historical replay guide](docs/HISTORICAL_REPLAY.md)                                                                                       |
-| Read old research or device plans              | [Exact research archive](RESEARCH_HISTORY.md), [exact device roadmap](DEVICE_ROADMAP.md)                                                   |
+| Need                                                     | Document                                                                                                                                   |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Reproduce the October evidence without an API key        | [README replay](README.md#replay-the-evidence)                                                                                             |
+| Inspect failures as a person or an agent                 | [Dashboard and CLI](tools/simurgh-explorer/README.md)                                                                                      |
+| See what passed, failed or was excluded                  | [Full smoke validation](docs/research/smoke-validation-2026-10-19/RESULTS.md)                                                              |
+| Arrange independent reproduction                         | [Phase 19 operator handoff](docs/research/provenance-phase-19f/HANDOFF.md)                                                                 |
+| Read the manuscript draft (studies of 10 to 11 November) | [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md), [Phase 19 ledger](docs/research/PROVENANCE_PHASE_19.md)              |
+| See how errors were found and handled                    | [Record of corrections](docs/RECORD_OF_CORRECTIONS.md)                                                                                     |
+| Judge the author, method and open problems               | [Author, working method and open problems](docs/AUTHOR_AND_METHOD.md)                                                                      |
+| Understand unfinished work                               | [Roadmap](ROADMAP.md)                                                                                                                      |
+| Make a reproducible contribution                         | [Contributing](CONTRIBUTING.md), [repository rules](AGENTS.md)                                                                             |
+| Review security, privacy or ethical boundaries           | [Security](SECURITY.md), [privacy](PRIVACY.md), [ethics](docs/ETHICS.md)                                                                   |
+| Check authoritative guidance reviewed in 2026            | [Source applicability map](docs/documentation-audit-2026-10-19/SOURCES.md)                                                                 |
+| Find a document's audit scope or correction              | [Audit report and per-file ledger](docs/documentation-audit-2026-10-19/README.md), [errata](docs/documentation-audit-2026-10-19/ERRATA.md) |
+| See what the November fact check found                   | [12 November check](docs/documentation-audit-2026-11-12/README.md), [open findings](docs/documentation-audit-2026-11-12/FINDINGS.md)       |
+| Compare with NIST's agent identity tenets                | [Tenet by tenet](docs/NIST_AGENT_IDENTITY_TENETS.md)                                                                                       |
+| Reproduce a historical stage                             | [Historical replay guide](docs/HISTORICAL_REPLAY.md)                                                                                       |
+| Read old research or device plans                        | [Exact research archive](RESEARCH_HISTORY.md), [exact device roadmap](DEVICE_ROADMAP.md)                                                   |
 
 The [manual review continuation](docs/documentation-audit-2026-10-19/MANUAL_REVIEW.md)
 records the completed 919-candidate content review and 141 dated findings. Its

@@ -46,6 +46,25 @@ const DOCS = [
   "docs/research/CONTINUATION_PHASE_18.md",
   "docs/research/explorer-phase-18/RESEARCH.md",
 ];
+// These documents were reviewed on 19 October 2026. One that has since gained a dated section
+// carries the latest date its own headings give.
+const REVIEWED = "2026-10-19";
+const MONTH_NAMES =
+  "January February March April May June July August September October November December".split(
+    " "
+  );
+function datedBy(text) {
+  let latest = REVIEWED;
+  for (const [, heading] of text.matchAll(/^#{1,6}\s+(.+)$/gm))
+    for (const [, day, month, year] of heading.matchAll(
+      new RegExp(`\\b(\\d{1,2}) (${MONTH_NAMES.join("|")}) (\\d{4})\\b`, "g")
+    )) {
+      const date = `${year}-${String(MONTH_NAMES.indexOf(month) + 1).padStart(2, "0")}-${day.padStart(2, "0")}`;
+      if (date > latest) latest = date;
+    }
+  return latest;
+}
+
 export function buildIndex({ root = ROOT, detail = false, study = "phase17" } = {}) {
   if (!["phase10", "phase17"].includes(study)) throw new Error("Unknown study");
   const path = "docs/research/export-phase-14/public.json";
@@ -63,7 +82,7 @@ export function buildIndex({ root = ROOT, detail = false, study = "phase17" } = 
       path,
       title: doc.text.match(/^#\s+(.+)/m)?.[1] || path,
       text: doc.text,
-      reviewed: "2026-10-19",
+      reviewed: datedBy(doc.text),
       sha256: doc.sha256,
       url: null,
     };

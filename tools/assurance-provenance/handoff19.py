@@ -506,6 +506,16 @@ def outside_items():
     )
 
 
+def _json_text(value):
+    """What a field that should hold JSON text holds, or None when it is not such text."""
+    if type(value) is not str:
+        return None
+    try:
+        return json.loads(value)
+    except ValueError:
+        return None
+
+
 def review(raw):
     """The author's review of a returned receipt, recomputed from its bytes alone.
 
@@ -515,6 +525,9 @@ def review(raw):
     frozen replay that was not run, 19b's Lean closure. The review establishes what the returned
     outputs say, never who produced them."""
     receipt = json.loads(raw)
+    if type(receipt) is not dict:
+        # someone else's bytes: a file that is not an object holds no phases (P19-REPAIR10)
+        receipt = {}
     phases, missing = {}, []
     returned = receipt.get("phases") if type(receipt.get("phases")) is dict else {}
     for p in PHASES:
@@ -526,10 +539,7 @@ def review(raw):
             missing += deeper_items(pid)
             continue
         entry = returned.get(pid) if type(returned.get(pid)) is dict else {}
-        try:
-            out = json.loads(entry.get("verifier_output") or "")
-        except ValueError:
-            out = None
+        out = _json_text(entry.get("verifier_output"))
         if type(out) is not dict:
             phases[pid] = {"result": "refused", "refused": entry.get("refused", "")}
             missing.append(pid)
@@ -539,10 +549,7 @@ def review(raw):
             "discrepancies": check(pid, out),
             "not_compared": not_compared(pid, out),
         }
-        try:
-            theirs = json.loads(entry.get("discrepancies") or "")
-        except ValueError:
-            theirs = None
+        theirs = _json_text(entry.get("discrepancies"))
         ok = out.get("verified") is True and not mine["discrepancies"]
         phases[pid] = {
             "result": "verified" if ok else "discrepant",
@@ -554,9 +561,10 @@ def review(raw):
         }
         if not ok:
             missing.append(pid)
-        if pid in REPLAY_CHAINED_KIND and not _replayed(out):
+        # a phase that did not verify pays neither itself nor its deeper item (P19-REPAIR10)
+        if pid in REPLAY_CHAINED_KIND and (not ok or not _replayed(out)):
             missing.append(replay_item(pid))
-        if pid in RECOMPUTED_KIND and not _recomputed(out):
+        if pid in RECOMPUTED_KIND and (not ok or not _recomputed(out)):
             missing.append(dataset_item(pid))
         if pid == "19b" and (not ok or _lean_absent(out)):
             missing.append(LEAN_ITEM)
@@ -879,6 +887,8 @@ def main():
     elif args.command == "review":
         print(json.dumps(review(args.receipt.read_bytes()), indent=2, sort_keys=True))
     else:
+        if args.phase not in {p["id"] for p in PHASES}:
+            parser.error(f"unknown phase {args.phase}")
         receipt = load_receipt(args.receipt)
         print(
             json.dumps(

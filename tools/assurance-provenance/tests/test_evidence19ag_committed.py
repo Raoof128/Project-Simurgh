@@ -19,6 +19,7 @@ sys.path.insert(0, str(HERE))
 
 import evidence19ag as ev  # noqa: E402
 import guard19ag as m  # noqa: E402
+import results19ag as results  # noqa: E402
 from retry19aa import sha  # noqa: E402
 
 
@@ -160,9 +161,15 @@ class CommittedPackTests(unittest.TestCase):
 
     def test_the_results_page_is_generated_from_the_report(self):
         page = (ev.DOCS / "RESULTS.md").read_text()
+        made = results.render(ev.DOCS)
+        # The committed page is the generator's output after the Markdown formatter.
+        self.assertEqual(results.unformatted(made), results.unformatted(page))
         self.assertIn(self.root, page)
         self.assertIn("same in 449 of 449", page)
         self.assertIn("89 such attempts: latched 0, raised 0", page)
+        # The comparison can fail: one changed number on the page is seen.
+        changed = page.replace("same in 449 of 449", "same in 448 of 449")
+        self.assertNotEqual(results.unformatted(made), results.unformatted(changed))
 
     def test_the_seats_files_in_the_pack_are_the_committed_ones(self):
         import zipfile
@@ -174,6 +181,15 @@ class CommittedPackTests(unittest.TestCase):
                     (ev.DOCS / "submissions" / f"{seat}.json").read_bytes(),
                     seat,
                 )
+
+    def test_the_loose_report_is_the_packs_report(self):
+        # The pages and the results generator read the loose file; the verifier reads the pack.
+        import zipfile
+
+        with zipfile.ZipFile(ev.DOCS / "evidence.zip") as z:
+            self.assertEqual(
+                z.read("report.json"), (ev.DOCS / "report.json").read_bytes()
+            )
 
     def test_replay_on_the_host_of_record(self):
         if os.environ.get("SIMURGH_REPLAY_19AG") != "1" or not ev.host_can_replay():

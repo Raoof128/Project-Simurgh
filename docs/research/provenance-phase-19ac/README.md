@@ -133,6 +133,8 @@ to check the seat's report of a gain.
 ## Limits
 
 - The real fault is reported and not repaired. Every lane that uses this gate has it.
+  (Added 23 Nov 2026: [lane 19ad](../provenance-phase-19ad/README.md) repairs it in a class
+  beside the gate.)
 - It needs the operator's signing key. Nothing here measures how an agent would come to hold
   one.
 - One planted fault, chosen by the author and easy to find. A seat that finds it is not

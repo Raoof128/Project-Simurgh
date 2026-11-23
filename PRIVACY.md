@@ -38,6 +38,10 @@ filtered downloads are new copies under the recipient's control. The server serv
 and exposes no upload, provider or command-execution endpoint. Opening a remote source link
 contacts that source, and dependency installation contacts package services.
 
+The Phase 19 packs hold synthetic prompts and what local and hosted models answered.
+Verifying a pack makes no model request. The explorer opens on those packs and serves a
+copy of each from its build folder.
+
 The explicit detail option exposes selected **synthetic** model output and action details and
 does not apply the public projection when exported. Review detail files before sharing. Ordinal
 IDs, hashes and repeated patterns can remain linkable even when direct content is omitted.

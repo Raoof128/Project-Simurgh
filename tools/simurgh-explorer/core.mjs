@@ -148,6 +148,12 @@ function validateLanes(b) {
       ensure(l[k] === null || typeof l[k] === "string", `Invalid lane ${k}`);
     for (const k of ["model_inference", "independent_custody"])
       ensure(typeof l[k] === "boolean", `Invalid lane ${k}`);
+    // The page names the file a prediction is recorded in, so that file must be named.
+    for (const k of ["receipt", "report", "protocol"])
+      ensure(
+        typeof l.sources?.[k]?.path === "string" && /^[0-9a-f]{64}$/.test(l.sources[k].sha256),
+        "Invalid lane sources"
+      );
     ensure(
       l.spend_usd === null || (Number.isFinite(l.spend_usd) && l.spend_usd >= 0),
       "Invalid lane spend"
@@ -385,7 +391,8 @@ export function queryLanes(b, { q = "", ran = "all", outcome = "all", outside = 
     );
   });
 }
-// How the predictions fared, split by whether the lane ran a model. A prediction decided on
+// How the predictions fared, split by whether a model was what the lane measured (the
+// receipt's `model_inference`; an agent used as an attacker is not counted). A prediction decided on
 // each model counts once for every model it was decided on, where the receipt says how many.
 export function trackRecord(b) {
   const row = () => ({ lanes: 0, held: 0, failed: 0, undecided: 0, model_held: 0, model_of: 0 });

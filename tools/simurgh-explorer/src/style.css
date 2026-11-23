@@ -1405,6 +1405,41 @@ details summary {
   .lanes-table td:nth-child(2) {
     padding-left: 46px;
   }
+  /* The predictions table stacks the same way: each cell under the name of its column. */
+  .track-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .track-table,
+  .track-table tbody,
+  .track-table tr,
+  .track-table th[scope="row"],
+  .track-table td {
+    display: block;
+    width: auto;
+  }
+  .track-table tr {
+    padding: 12px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .track-table th[scope="row"],
+  .track-table td {
+    padding: 0;
+    border: 0;
+    white-space: normal;
+  }
+  .track-table td {
+    margin-top: 8px;
+  }
+  .track-table td::before {
+    content: attr(data-label);
+    display: block;
+    color: var(--ink-2);
+    font-size: 13.5px;
+  }
 }
 /* Fingers need a larger target than a pointer does. */
 @media (pointer: coarse) {
@@ -1421,6 +1456,12 @@ details summary {
     align-content: center;
   }
   .chip {
+    min-width: 44px;
+  }
+  .gap-sources a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
     min-width: 44px;
   }
 }

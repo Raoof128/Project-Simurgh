@@ -24,8 +24,11 @@ const COLLECTIONS = [
 ];
 const collectionOf = (d) => (d.kind === "phase19" ? "phase19" : d.url ? "primary" : "project");
 
+// The command line calls the open work `open-work`; an address that says so opens it too.
+const ALIASES = { "open-work": "open" };
 function fromHash() {
-  const [page, id] = (globalThis.location?.hash || "").replace(/^#/, "").split("/");
+  const [named, id] = (globalThis.location?.hash || "").replace(/^#/, "").split("/");
+  const page = ALIASES[named] ?? named;
   return PAGES.some(([p]) => p === page) ? { page, id: id || null } : { page: "record", id: null };
 }
 
@@ -141,7 +144,8 @@ export function App({ initial }) {
     [error, setError] = useState(""),
     [notice, setNotice] = useState(""),
     [imported, setImported] = useState(null),
-    [checks, setChecks] = useState({});
+    [checks, setChecks] = useState({}),
+    [linked, setLinked] = useState(start.page === "lanes" && start.id ? 1 : 0);
   const file = useRef(null),
     s = lanesSummary(bundle);
   // Moving to another view is a step the Back button undoes. Choosing a lane inside the
@@ -153,12 +157,22 @@ export function App({ initial }) {
     const sameView = now.replace(/^#/, "").split("/")[0] === page;
     globalThis.history[now && !sameView ? "pushState" : "replaceState"](null, "", next);
   }, [page, laneId]);
+  // An address that names a lane, loaded or pasted, lands on that lane's panel. On a narrow
+  // screen the panel sits below the whole list; where it is already in view nothing moves.
+  // The jump is instant, so it asks nothing of a reader who has turned motion down.
+  useEffect(() => {
+    if (!linked) return;
+    const inspector = globalThis.document?.getElementById("lane-inspector");
+    if (inspector?.getBoundingClientRect?.().top > (globalThis.innerHeight ?? Infinity))
+      inspector.scrollIntoView?.({ block: "start", behavior: "instant" });
+  }, [linked]);
   // A pasted link or the back button changes the hash without loading the page again.
   useEffect(() => {
     const onHash = () => {
       const next = fromHash();
       setPage(next.page);
       if (next.page === "lanes") setLaneId(next.id);
+      if (next.page === "lanes" && next.id) setLinked((n) => n + 1);
     };
     const target = globalThis.window ?? globalThis;
     for (const event of ["hashchange", "popstate"]) target.addEventListener?.(event, onHash);

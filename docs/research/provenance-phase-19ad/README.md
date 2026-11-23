@@ -12,6 +12,9 @@ gate as it was and on the repaired one. No model is a target and no agent was st
 does on the repaired gate. The other sequences that carry no forged token, 57 of them, get
 the same verdicts and effects from both. The repair has not been attacked afresh.**
 
+(Added 23 Nov 2026: [lane 19ae](../provenance-phase-19ae/README.md) attacked the repair with three
+fresh seats. None of their 36 attempts gains.)
+
 Verify the structure (any host with Python 3.12; standard library only):
 
 ```sh

@@ -6,7 +6,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildIndex } from "../index.mjs";
-import { checkPack, readZip, verdict } from "../packcheck.mjs";
+import { checkPack, readZip, sha256, verdict } from "../packcheck.mjs";
 
 const REPO = fileURLToPath(new URL("../../../", import.meta.url));
 const cli = fileURLToPath(new URL("../cli.mjs", import.meta.url));
@@ -31,6 +31,8 @@ function altered(lane, change) {
       "    m = json.loads(members['manifest.json']); m['note'] = 'changed'",
       "    members['manifest.json'] = json.dumps(m).encode()",
       "if change == 'extra': members['unlisted.txt'] = b'not in the manifest'",
+      "if change == 'inherited':",
+      "    for name in ('toString', 'constructor', 'hasOwnProperty'): members[name] = b'x'",
       "if change == 'missing': del members[first]",
       "with zipfile.ZipFile(dst, 'w', zipfile.ZIP_DEFLATED) as out:",
       "    [out.writestr(n, data) for n, data in members.items()]",
@@ -75,6 +77,11 @@ test("a changed member, manifest, extra member or missing member is reported, ne
   assert.deepEqual(extra.unlisted, ["unlisted.txt"]);
   assert.equal(verdict(extra, lane.root).match, false);
 
+  // A member named like something every object inherits is still not in the manifest.
+  const inherited = await checkPack(altered(lane, "inherited"));
+  assert.deepEqual([...inherited.unlisted].sort(), ["constructor", "hasOwnProperty", "toString"]);
+  assert.equal(verdict(inherited, lane.root).match, false);
+
   const missing = await checkPack(altered(lane, "missing"));
   assert.equal(missing.missing.length, 1);
   assert.equal(verdict(missing, lane.root).match, false);
@@ -117,4 +124,39 @@ test("the command line runs the same check", () => {
   assert.throws(() =>
     execFileSync(process.execPath, [cli, "check", "--id", "no-such-lane"], { stdio: "pipe" })
   );
+});
+
+test("the loose report beside each pack is the pack's own report", async () => {
+  // The pages, the explorer and the results generators read the loose file; the verifier
+  // reads the archive. This holds the two together.
+  let compared = 0;
+  for (const lane of b.lanes) {
+    const members = await readZip(bytesOf(join(REPO, lane.pack)));
+    if (!members.has("report.json")) continue;
+    const loose = bytesOf(join(REPO, lane.sources.report.path));
+    assert.equal(await sha256(loose), await sha256(members.get("report.json")), lane.id);
+    compared += 1;
+  }
+  assert.ok(compared > 20, `compared ${compared} lanes`);
+});
+
+test("an archive that inflates past 256 MiB in all is refused", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "simurgh-explorer-bomb-"));
+  const out = join(dir, "big.zip");
+  execFileSync("python3", [
+    "-I",
+    "-c",
+    [
+      "import sys, zipfile",
+      "block = bytes(60 * 1024 * 1024)",
+      "with zipfile.ZipFile(sys.argv[1], 'w', zipfile.ZIP_DEFLATED) as z:",
+      "    z.writestr('manifest.json', '{\"files\": {}}')",
+      "    [z.writestr(f'zeros-{i}.bin', block) for i in range(5)]",
+    ].join("\n"),
+    out,
+  ]);
+  const bytes = bytesOf(out);
+  rmSync(dir, { recursive: true, force: true });
+  assert.ok(bytes.length < 4 * 1024 * 1024, "the archive itself is small");
+  await assert.rejects(checkPack(bytes), /inflates to more than 256 MiB/);
 });

@@ -4,6 +4,11 @@
 boundary prevent new unauthorized effects while retaining useful work, and can the recorded
 outcomes be checked against receiver state?
 
+> **Phase 19 (November 2026) is newer than this guide.** For it, start with the
+> [README](../README.md), the [operator handoff](research/provenance-phase-19f/HANDOFF.md)
+> and the [record of corrections](RECORD_OF_CORRECTIONS.md). This guide covers the work up
+> to 19 October.
+
 ## A short review
 
 1. Read the [README](../README.md), [transfer results](research/transfer-phase-17/RESULTS.md)

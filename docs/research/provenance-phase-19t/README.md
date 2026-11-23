@@ -137,6 +137,8 @@ custody.
   deployed system.
 - Neither fault is repaired here. A repair is owed under its own declaration, and no attempt of
   this lane is rerun after it.
+  (Added 23 Nov 2026: [lane 19y](../provenance-phase-19y/README.md) repairs both beside the gate
+  and runs all 92 attempts again; none changes the repaired gate.)
 - The attackers' notes and reports are their own words. Where a note says why something
   happens inside the gate, that explanation was checked by the author only for the two findings
   above.

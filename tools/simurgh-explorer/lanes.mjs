@@ -11,7 +11,11 @@ const RESEARCH = "docs/research";
 const FOLDER = "provenance-phase-19";
 const LEDGER = "docs/research/PROVENANCE_PHASE_19.md";
 const SERVED = "docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md";
-const MONTHS = { Oct: "10", Nov: "11", Dec: "12" };
+const MONTHS = Object.fromEntries(
+  "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"
+    .split(" ")
+    .map((name, i) => [name, String(i + 1).padStart(2, "0")])
+);
 const requireThat = (ok, message) => {
   if (!ok) throw new Error(`Lane ${message}`);
 };
@@ -39,9 +43,11 @@ export function summaryOf(markdown) {
   const first = question ? question[1] : paragraphs(markdown).find(isProse);
   requireThat(first, "page has no opening paragraph");
   // The pointer to the lane's other pages is navigation, not a description of the lane.
+  // A paragraph that introduces a list ends on a colon; the summary stands without the list.
   return plain(first)
     .replace(/\s*See RESULTS\.md(?:[^.]|\.md)*?\.(?=\s|$)/, "")
-    .trim();
+    .trim()
+    .replace(/[:;,]$/, ".");
 }
 
 export function titleOf(heading, summary) {
@@ -218,9 +224,13 @@ const idsOf = (models) =>
 // reduced to the model the protocol declares, and each model is listed once.
 function modelsOf(receipt, protocol) {
   const declared = idsOf(protocol.models);
-  const named = idsOf(receipt.models ?? protocol.models).map(
-    (key) => declared.find((id) => key.endsWith(`/${id}`)) ?? key
-  );
+  // A receipt may keep an entry for a model that was declared and never run.
+  const given = receipt.models ?? protocol.models;
+  const ran =
+    given && !Array.isArray(given)
+      ? Object.fromEntries(Object.entries(given).filter(([, v]) => v?.status !== "not_run"))
+      : given;
+  const named = idsOf(ran).map((key) => declared.find((id) => key.endsWith(`/${id}`)) ?? key);
   return [...new Set(named)];
 }
 
@@ -238,7 +248,19 @@ export function rulingDates(ledger) {
   return dates;
 }
 
-export function openWork(readme) {
+// The lanes a text names. A range, one lane "to" another, names every lane from the first to the
+// last in the order the handoff lists them; where that order does not hold both ends, the
+// two ends are all that is known.
+function lanesNamed(text, known) {
+  const named = [];
+  for (const [, from, to] of text.matchAll(/\b(19[a-z]{1,2})\b(?:\s+to\s+(19[a-z]{1,2})\b)?/g)) {
+    const [i, j] = [known.indexOf(from), known.indexOf(to)];
+    named.push(...(to && i >= 0 && j > i ? known.slice(i, j + 1) : [from, to].filter(Boolean)));
+  }
+  return [...new Set(named)];
+}
+
+export function openWork(readme, known = []) {
   const section = readme.match(/^### Open work\s*\n([\s\S]*?)(?=^#{1,3} )/m);
   requireThat(section, "open work section missing from the README");
   return section[1]
@@ -249,7 +271,7 @@ export function openWork(readme) {
       id: `W${String(i + 1).padStart(2, "0")}`,
       title: m[1].trim(),
       text: plain(m[2]),
-      lanes: [...new Set(plain(m[2]).match(/\b19[a-z]{1,2}\b/g) ?? [])],
+      lanes: lanesNamed(plain(m[2]), known),
     }));
 }
 
@@ -416,7 +438,10 @@ export function loadLanes(root, readBound, handoff = readHandoff(root)) {
       guide: handoff.guide,
       source: "tools/assurance-provenance/handoff19.py status",
     },
-    open_work: openWork(readBound(root, "README.md").text),
+    open_work: openWork(
+      readBound(root, "README.md").text,
+      lanes.map((l) => l.id)
+    ),
     documents,
   };
 }

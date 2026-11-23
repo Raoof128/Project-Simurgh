@@ -2819,6 +2819,33 @@ Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to
 receipt, or any other change to what the comparator checks. This declaration commit must be a
 strict ancestor of every commit that acts on it.
 
+**P19-REPAIR10 (bounded authority to harden the author's review of a returned receipt;
+declared 23 Nov 2026 before any commit that acts on it).** A read of `handoff19.py` on
+23 November found two faults in `review()`. No committed review meets either.
+
+- A phase whose output is discrepant can still be credited with its `--replay` or `--dataset`
+  item. Those two lines ask only whether the output says the replay ran, where the Lean item
+  beside them also asks that the phase verified.
+- A returned receipt that is not a JSON object, or whose `verifier_output` or `discrepancies`
+  is not a string, raises where it should be reviewed as refused. That stops `status`,
+  `render` and the evidence explorer's build.
+
+This declaration authorises, and nothing else:
+
+1. `handoff19.py`, `review()`: the replay item and the dataset item of a phase stay
+   unexercised unless the phase verified with no discrepancy; a receipt that is not an object
+   is reviewed as holding no phases; a `verifier_output` or `discrepancies` that is not a
+   string is treated as absent. The `check` command names an unknown phase where it raised.
+   Tests first.
+2. The three committed reviews recomputed. They must come out byte-identical, since no
+   committed receipt has a discrepant phase or a malformed field. If one does not, the work
+   stops and the difference is reported.
+3. Both logs and the ruling.
+
+Not authorised: any edit to an operator's receipt, any change to what `check` compares, any
+change to the rendered handoff, or any edit to a frozen file or to a lane's pinned source or
+pack. This declaration commit must be a strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
@@ -4350,3 +4377,12 @@ strict ancestor of every commit that acts on it.
   count. The evidence explorer lists a Phase 19 folder that has no README by its name where
   it used to stop its build, with a test. Not done: no one outside the author has run the
   handoff for any of the twenty items.
+- Ruling (23 Nov 2026, P19-REPAIR10 exercised): the declaration (`c902bdb6`) precedes the
+  commit that acts on it. `handoff19.review()` now leaves a phase's `--replay` or `--dataset`
+  item unexercised unless the phase verified with no discrepancy, reviews a receipt that is
+  not an object as holding no phases, and treats a `verifier_output` or `discrepancies` that
+  is not a string as absent. The `check` command names an unknown phase. Three tests were
+  written first and failed until the tool changed. The three committed reviews recompute
+  byte-identical and the rendered handoff is unchanged, as the declaration required. Found
+  by a read of the tool on 23 November, not by a receipt: no returned receipt has met either
+  fault.

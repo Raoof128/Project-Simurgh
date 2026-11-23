@@ -82,6 +82,7 @@ custody.
   against an attacker who adapts to the gate: no model was shown the gate or asked to defeat it.
   The attacker in 19n was the target's own small model and attacked the model, not the gate. The
   informed-attacker arm is not run and stays owed under `IOU-19-SPEND`.
+  (Added 23 Nov 2026: attackers given the gate's source ran from [lane 19t](../provenance-phase-19t/README.md) on.)
 - The proposals come from four small local builds of one family. Nothing transfers to a larger
   or a hosted model. Lane 19o's hosted models proposed no restricted-state send, so there was
   nothing of theirs to replay.

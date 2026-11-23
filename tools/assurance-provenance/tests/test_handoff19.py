@@ -986,6 +986,75 @@ class OperatorReceiptTests(unittest.TestCase):
         self.assertEqual(r["phases"]["19q"]["result"], "verified")
         self.assertNotIn("19q --dataset", r["not_exercised"])
 
+    def test_a_discrepant_phase_does_not_pay_its_replay_or_dataset_item(self):
+        # P19-REPAIR10: the replay ran and the output differs from the committed receipt. The
+        # phase is discrepant, so neither it nor its deeper item counts as exercised.
+        receipt = json.loads((handoff19.RECEIPTS_DIR / FIRST).read_text())
+        replayed = dict(
+            handoff19.committed_receipt("19j"),
+            kind="frozen_replay_recomputed",
+            replay={"result": "verified"},
+            tree_state=receipt["commit"],
+        )
+        replayed["hypotheses"] = {"changed": True}
+        receipt["phases"]["19j"] = {"verifier_output": json.dumps(replayed)}
+        r = handoff19.review(json.dumps(receipt).encode())
+        self.assertEqual(r["phases"]["19j"]["result"], "discrepant")
+        self.assertIn("19j", r["not_exercised"])
+        self.assertIn("19j --replay", r["not_exercised"])
+        recomputed = dict(
+            handoff19.committed_receipt("19q"),
+            kind="dataset_recomputed",
+            recompute={"result": "verified"},
+            tree_state=receipt["commit"],
+        )
+        recomputed["manifest_sha256"] = "0" * 64
+        receipt["phases"]["19q"] = {"verifier_output": json.dumps(recomputed)}
+        r = handoff19.review(json.dumps(receipt).encode())
+        self.assertEqual(r["phases"]["19q"]["result"], "discrepant")
+        self.assertIn("19q --dataset", r["not_exercised"])
+
+    def test_a_malformed_receipt_is_reviewed_and_never_raises(self):
+        # P19-REPAIR10: a returned file is someone else's bytes. Whatever it holds, the review
+        # says what is missing; it does not stop status, render or the explorer's build.
+        everything = sorted(handoff19.outside_items())
+        for raw in (b"[]", b"null", b"5", b'"text"', b"{}", b'{"phases": []}'):
+            r = handoff19.review(raw)
+            self.assertEqual(r["not_exercised"], everything, raw)
+            self.assertTrue(
+                all(p == {"result": "not_in_receipt"} for p in r["phases"].values()),
+                raw,
+            )
+        for bad in (5, None, [], {}, True):
+            receipt = {
+                "phases": {"19c": {"verifier_output": bad, "discrepancies": bad}}
+            }
+            r = handoff19.review(json.dumps(receipt).encode())
+            self.assertEqual(r["phases"]["19c"]["result"], "refused", bad)
+        good = json.dumps(handoff19.committed_receipt("19c"))
+        receipt = {"phases": {"19c": {"verifier_output": good, "discrepancies": 5}}}
+        r = handoff19.review(json.dumps(receipt).encode())
+        self.assertIs(r["phases"]["19c"]["operator_comparator_matches"], False)
+
+    def test_the_check_command_names_an_unknown_phase(self):
+        import subprocess
+
+        done = subprocess.run(
+            [
+                sys.executable,
+                "-B",
+                str(HERE / "handoff19.py"),
+                "check",
+                "19zz",
+                str(handoff19.RECEIPTS_DIR / FIRST),
+            ],
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(done.returncode, 2)
+        self.assertIn("unknown phase", done.stderr)
+        self.assertNotIn("Traceback", done.stderr)
+
 
 class StatusTests(unittest.TestCase):
     def _dirs(self):
