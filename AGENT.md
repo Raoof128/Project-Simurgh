@@ -32,15 +32,18 @@ one machine's local agent configuration:
 - **Files changed:** `tools/assurance-provenance/handoff19.py`, `tests/test_handoff19.py`,
   `docs/research/provenance-phase-19f/HANDOFF.md` and `README.md`, the READMEs of lane 19ag
   and of the explorer, `docs/research/explorer-phase-18/AUDIT_2026-11-23.md`, `README.md`,
-  `tools/simurgh-explorer/tests/agent.test.mjs` and `lanes.test.mjs`, the ledger, `AGENT.md`,
-  `CHANGELOG.md`.
+  `docs/AUTHOR_AND_METHOD.md`, `tools/simurgh-explorer/tests/agent.test.mjs` and
+  `lanes.test.mjs`, the ledger, `AGENT.md`, `CHANGELOG.md`.
 - **Verification:** handoff tests 51 of 51, one written first; explorer unit tests 65 of 65,
   the two tightened ones seen to fail with their fix removed; `prettier`, `ruff` and the
   quick gate.
 - **Round 6, the acceptance read:** no page disagrees with another, and five facts picked
   at random each traced to a committed file. Two things were found and fixed: the newest row
   of the author page's method table lacked its record cell, and one README clause about lane
-  19z's attempts read ambiguously.
+  19z's attempts read ambiguously. A fresh clone of the branch was clean.
+- **Round 7, the confirmation:** the pages, the notes of 23 November and a private-data sweep
+  of the 75 changed files were clean. Three slips in these log entries were corrected: a
+  count of test files and two lists of changed files.
 - **Not done:** a date inside an unclosed code fence or an inline code span in a heading
   still counts for a document's date; no committed document has one.
 
@@ -67,7 +70,7 @@ one machine's local agent configuration:
 - **Files changed:** `README.md`, `PRIVACY.md`, the READMEs of lanes 19b, 19ab and 19ag,
   `tools/assurance-provenance/handoff19.py`, `tests/test_handoff19.py`,
   `tools/simurgh-explorer/` (`core.mjs`, `index.mjs`, `lanes.mjs`, `packcheck.mjs`,
-  `src/App.jsx`, three test files), the ledger, `AGENT.md`, `CHANGELOG.md`.
+  `src/App.jsx`, two test files), the ledger, `AGENT.md`, `CHANGELOG.md`.
 - **Verification:** handoff tests 50 of 50, two written first; the three committed reviews
   recompute byte-identical; explorer unit tests 65 of 65, each new one seen to fail first,
   and the browser test; the frozen Stage 5P census; `prettier`, `ruff` and the quick gate.
@@ -125,6 +128,7 @@ one machine's local agent configuration:
   project evidence.
 - **Files changed:** `README.md`, `ROADMAP.md`, `SECURITY.md`, `.gitignore`,
   `docs/RECORD_OF_CORRECTIONS.md`, `docs/AUTHOR_AND_METHOD.md`, `docs/REVIEWER_INDEX.md`,
+  `docs/documentation-audit-2026-10-19/FILES.md`,
   `docs/research/provenance-phase-19ac/README.md`,
   `docs/research/provenance-phase-19ae/README.md`,
   `docs/research/explorer-phase-18/AUDIT_2026-11-23.md`, `tools/simurgh-explorer/`,
