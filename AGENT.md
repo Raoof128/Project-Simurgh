@@ -42,8 +42,12 @@ one machine's local agent configuration:
   of the author page's method table lacked its record cell, and one README clause about lane
   19z's attempts read ambiguously. A fresh clone of the branch was clean.
 - **Round 7, the confirmation:** the pages, the notes of 23 November and a private-data sweep
-  of the 75 changed files were clean. Three slips in these log entries were corrected: a
+  of every changed text file were clean. Three slips in these log entries were corrected: a
   count of test files and two lists of changed files.
+- **Round 8, on `main` after both merges:** a fresh clone, the thirty-two verify commands,
+  the handoff and the page GitHub shows were clean. One more slip in this entry was
+  corrected: the sweep's file count, which had gone stale; the line above no longer gives
+  one.
 - **Not done:** a date inside an unclosed code fence or an inline code span in a heading
   still counts for a document's date; no committed document has one.
 
