@@ -4647,3 +4647,6 @@ does not authorise.
 - Note (24 Nov 2026, on the ruling of P19-GUARD02 amendment 2 above): the test writes the
   first key of `hypotheses.json` twice, and that key is `G0`, not `G1`. The amendment's `G1`
   describes the copy the round built; the check and its refusal are the same for either.
+- Note (24 Nov 2026, on commit `f5c45905`): besides what amendment 2 of P19-GUARD02 lists, that
+  commit reworded two lines at the head of `strict19ag.py` so that they name the sidecars. No
+  behaviour rests on those lines. Found by the acceptance read of the same day.

@@ -14,6 +14,29 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-24 (Australia/Sydney) — Round 14, the acceptance read: one missing record, added
+
+**Raouf:**
+
+- **Scope:** `docs/RECORD_OF_CORRECTIONS.md`, two README sentences, the notes on the pages of
+  lanes 19ad and 19v, a note at the ledger's end, both logs.
+- **Summary:** a fourteenth read-only helper read rounds 9 to 13 in a fresh clone, as a
+  reviewer opening the repository cold. It found no page that contradicts another, no count
+  stated two ways, nothing stale outside dated entries, the ledger in order, every changed
+  pack verifying and no private data added. It found one thing to fix: the record of
+  corrections asks to be read before the numbers are trusted, and had no row for the
+  recount. It has one now. Four notes are also acted on: two README sentences still said
+  lane 19y repaired "the two faults" where it repaired three; lane 19ad's note now says
+  which sentence it corrects; lane 19v's note names the pinned module that repeats the
+  wrong figure; and the ledger records two lines of `strict19ag.py` that a commit reworded
+  beyond what its amendment lists.
+- **Files changed:** `docs/RECORD_OF_CORRECTIONS.md`, `README.md`,
+  `docs/research/provenance-phase-19ad/README.md`,
+  `docs/research/provenance-phase-19v/README.md`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** lane 19y's page read for what it repaired; `prettier` and the quick gate.
+- **Not done:** lane 19z's results page repeats "37 of 52" without the breakdown its lane
+  page now gives; that page is generated and left as it is.
+
 ### 2026-11-24 (Australia/Sydney) — Round 13: nothing false found; two dated notes
 
 **Raouf:**

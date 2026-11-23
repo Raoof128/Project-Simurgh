@@ -1,5 +1,15 @@
 ## Change Log
 
+## [readiness-round-14-2026-11-24] — 2026-11-24 — The acceptance read: the recount recorded on the corrections page
+
+**Raouf:**
+
+- **Scope:** `docs/RECORD_OF_CORRECTIONS.md`, two README sentences, two lane notes.
+- **Summary:** a cold read of rounds 9 to 13 in a fresh clone found no contradiction, no
+  stale count and no private data. The record of corrections gained the row it lacked for
+  the 24 November recount, and the README says lane 19y repaired three faults, not two.
+- **Verification:** quick gate.
+
 ## [readiness-round-13-2026-11-24] — 2026-11-24 — Round 13 found nothing false; two dated notes
 
 **Raouf:**

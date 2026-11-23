@@ -134,9 +134,10 @@ these outcomes make up. The author's disk filled during the run and stopped it f
 an hour, and two of six things said beforehand did not hold. Both are in the record.
 
 **The repair of 19t's faults, 22 November.**
-[19y](docs/research/provenance-phase-19y/README.md) repaired the two faults in new classes
-beside the gate, ran 19t's 92 attempts again and gave the repaired source to new attackers,
-whose files were committed before the host of record ran them. None of the 92 changes the
+[19y](docs/research/provenance-phase-19y/README.md) repaired the three faults (two in the gate
+and one in its fixture) in new classes beside the gate, ran 19t's 92 attempts again and gave
+the repaired source to new attackers, whose files were committed before the host of record
+ran them. None of the 92 changes the
 repaired gate's output, and none of 151 new attempts from three Claude agents does. Three other
 seats are empty: the providers of a fourth Claude model and of two OpenAI routes refused the
 task, and no request was reworded. So every attacker that ran is from one vendor: one Opus 5.5
@@ -486,7 +487,7 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
   untested; the corrected OpenAI workflow retains one unresolved active refusal. The six hosted
   models of lane 19o and the four of lane 19u were given static injected texts only; an
   attacker that adapts to a model has not been run. The attackers of lanes 19t and 19y adapted
-  to the gate, not to a model. The two faults they found are repaired in classes beside the
+  to the gate, not to a model. The faults they found are repaired in classes beside the
   gate, which the earlier lanes did not use, and every attacker that ran is a Claude model.
 - **A fault in the approval check:** the seats of lane 19ac found that a token signed with
   the operator's key is admitted on the nonce of an approval minted for another action. The
