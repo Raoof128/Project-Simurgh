@@ -14,6 +14,23 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-23 (Australia/Sydney) — Lane 19ag: the three seats' files as received
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19ag/submissions/` (three files, unchanged), a
+  note in the ledger, both logs. No code changes.
+- **Summary:** three agent seats attacked the repaired gate with the source in hand and
+  handed in 91 attempts, all in the lane's format. Two were served by Claude Opus 5.5 and
+  one by Claude Sonnet 5.5, read from the harness's record. None reported a gain or a raise.
+  The files are committed before any of them is run on the host of record.
+- **Files changed:** the three submissions, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the lane's reader accepts all 91 attempts; a scan of the three files
+  for local paths and private data finds none; `prettier` and the quick gate pass.
+- **Not done:** no attempt of a seat has been run by the author. Two seats were given a
+  paragraph beyond the brief on where to look. One seat left a script running after it
+  handed in, which loaded the author's machine until it was stopped by hand.
+
 ### 2026-11-23 (Australia/Sydney) — Lane 19ag instrument: the approval check refuses a body it cannot read
 
 **Raouf:**

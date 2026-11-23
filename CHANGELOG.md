@@ -1,5 +1,14 @@
 ## Change Log
 
+## [phase-19ag-seats-2026-11-23] — 2026-11-23 — Lane 19ag: three seats' files as received
+
+**Raouf:**
+
+- **Scope:** the three seats' files and a ledger note.
+- **Summary:** 91 attempts against the repaired approval check, from two seats on Claude
+  Opus 5.5 and one on Claude Sonnet 5.5, committed before any is run on the host of record.
+- **Verification:** the lane's reader accepts all of them; quick gate.
+
 ## [phase-19ag-instrument-2026-11-23] — 2026-11-23 — Lane 19ag instrument: a repaired approval check
 
 **Raouf:**

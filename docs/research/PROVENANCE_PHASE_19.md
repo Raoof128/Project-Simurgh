@@ -4261,3 +4261,18 @@ This declaration commit must be a strict ancestor of every other commit of lane 
   was not exercised. The run of record is therefore not the first time the recorded half
   was seen. As in lane 19ae, attempts that only use the gate's own calls run 25 to a
   process, and an attempt that writes a store, and every attempt of a seat, runs alone.
+- Note (23 Nov 2026, P19-GUARD01, the seats' files as received): three seats were started at
+  04:10Z from the instrument commit (`45f2bcf7`) and each handed in one file, committed here
+  unchanged and before any of it is run on the host of record. The model behind each seat
+  was read from the harness's record: `seat-a` and `seat-b` were served by
+  `claude-opus-5-5` and `seat-c` by `claude-sonnet-5-5`. `seat-a` hands in 36 attempts,
+  `seat-b` 29 and `seat-c` 26; the lane's reader accepts all 91. Each seat reported no gain
+  and no raise in its own tries. Three things about how they were run. `seat-b` and
+  `seat-c` were each given one paragraph, beyond the brief, on where to look; `seat-a` had
+  the brief alone. The three ran at once on the author's laptop, which was heavily loaded,
+  and `seat-c` reported that four of its attempts came back as a dead worker under that load
+  and ran clean alone; the run of record is on another host. And `seat-c` reported two
+  things about the instrument, read from the code: an `ops` step holding only a `relay`
+  counts as a store write, so such an attempt falls outside G5; and a record written when a
+  long note is cut counts as the record of the refusal that follows it. Neither is changed
+  here.
