@@ -14,6 +14,23 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-24 (Australia/Sydney) — A stricter check beside lane 19ag's pinned verifier (P19-GUARD02)
+
+**Raouf:**
+
+- **Scope:** one new tool and its test, one sentence on lane 19ag's page, the ledger, both
+  logs.
+- **Summary:** lane 19ag's verifier is pinned by its pack and, without `--replay`, does not
+  compare four parts of a report with the lane's module. `strict19ag.py` runs that verifier
+  unchanged and then compares them. Three repacked copies that the verifier accepts under
+  their own root are refused by it. The lane's verify command and the handoff are unchanged.
+- **Files changed:** `tools/assurance-provenance/strict19ag.py` (new),
+  `tools/assurance-provenance/tests/test_strict19ag.py` (new),
+  `docs/research/provenance-phase-19ag/README.md`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the three new tests on Python 3.12.2 and 3.12.4, written first; the
+  committed pack through both tools; `prettier`, `ruff` and the quick gate.
+- **Not done:** the pinned verifier itself is unchanged, by design.
+
 ### 2026-11-24 (Australia/Sydney) — The served-model census reads lane 19af (P19-AUDIT02); one open-work entry closed
 
 **Raouf:**

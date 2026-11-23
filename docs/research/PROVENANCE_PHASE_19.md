@@ -4502,3 +4502,12 @@ declaration commit must be a strict ancestor of every commit that acts on it.
   it had failed on those versions since that lane joined, which nothing had noticed because
   the hosted suite runs a later Python. The root README has the new count and no longer
   lists the census under its open work.
+- Ruling (24 Nov 2026, P19-GUARD02 exercised): the declaration (`61856834`) precedes the
+  commit that acts on it. `strict19ag.py` runs lane 19ag's pinned verifier unchanged and
+  then compares the report's arm, `model_inference` flag, non-claims and field names with
+  the lane's module. Its tests were written first. They repack the committed pack three
+  ways (non-claims emptied; arm and flag changed; a field added) and show that the pinned
+  verifier accepts each copy under the copy's own root, that the new check refuses each
+  with a reason, and that the committed root refuses each in both. On the committed pack
+  the new check prints the verifier's receipt with one more field. No pinned file, pack,
+  brief or handoff command changed.
