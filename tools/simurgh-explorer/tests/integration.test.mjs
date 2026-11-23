@@ -50,6 +50,8 @@ test("filtered JSON round-trips and retains selection denominator", () => {
     [cli.pathname, "export", "--study", "phase10", "--kind", "unknown"],
     {
       encoding: "utf8",
+      // An export carries the indexed documents, lane pages included: more than the 1 MiB default.
+      maxBuffer: 16 * 1024 * 1024,
     }
   );
   const b = parseBundle(text);

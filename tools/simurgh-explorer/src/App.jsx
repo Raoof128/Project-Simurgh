@@ -1,82 +1,213 @@
-import React, { useRef, useState } from "react";
-import { LIMIT, parseBundle, queryRecords, searchDocuments, summary, safeUrl } from "../core.mjs";
-const labels = {
-  invalid: "Malformed proposal",
-  unauthorized: "Unauthorized effect",
-  active_incomplete: "Active task incomplete",
-  unknown: "Unknown acknowledgment",
-  error: "Execution error",
-  blocked: "Blocked",
+// SPDX-License-Identifier: AGPL-3.0-or-later
+import React, { useEffect, useRef, useState } from "react";
+import { LIMIT, VIEWS, lanesSummary, parseBundle, searchDocuments, safeUrl } from "../core.mjs";
+import { Lanes, OpenWork, Record, Replicate } from "./Phase19.jsx";
+import { Outcomes } from "./Outcomes.jsx";
+import { Empty } from "./ui.jsx";
+import { fetchPack, runCheck } from "./PackCheck.jsx";
+import mark from "./simurgh-mark.png";
+
+const NAMES = {
+  record: "Record",
+  lanes: "Lanes",
+  replicate: "Replicate",
+  outcomes: "Outcomes",
+  library: "Library",
+  open: "Open work",
 };
-const explanations = {
-  invalid:
-    "The captured proposal did not meet the tool-call contract. It remains in the denominator.",
-  unauthorized:
-    "The source reports a new effect outside the approved scope. This is an observed boundary failure in this fixture.",
-  active_incomplete:
-    "The active task has no acknowledged completion. This can reflect the control or workflow, including the deny-all baseline; it is not automatically a model error.",
-  unknown:
-    "An initial, leaf or final acknowledgment is unknown. Do not treat it as proof that no effect occurred.",
-  error:
-    "The source records an execution error. Inspect the original record before attributing the cause.",
-  blocked:
-    "The control blocked the action. A block can be the intended outcome for a stopped task.",
-};
-const nav = [
-  ["overview", "◈", "Overview"],
-  ["failures", "↳", "Failure explorer"],
-  ["research", "⌕", "Research library"],
-  ["gaps", "◌", "Open gaps"],
+const PAGES = VIEWS.map((id) => [id, NAMES[id]]);
+const COLLECTIONS = [
+  ["all", "All sources"],
+  ["phase19", "Phase 19 pages"],
+  ["project", "Earlier project documents"],
+  ["primary", "Primary sources"],
 ];
-function Badge({ children, tone = "" }) {
-  return <span className={`badge ${tone}`}>{children}</span>;
+const collectionOf = (d) => (d.kind === "phase19" ? "phase19" : d.url ? "primary" : "project");
+
+function fromHash() {
+  const [page, id] = (globalThis.location?.hash || "").replace(/^#/, "").split("/");
+  return PAGES.some(([p]) => p === page) ? { page, id: id || null } : { page: "record", id: null };
 }
-function Source({ source }) {
+
+function Library({ bundle, imported, docId, setDocId }) {
+  const [q, setQ] = useState(""),
+    [collection, setCollection] = useState("all");
+  const docs = searchDocuments(bundle, q, "").filter(
+      (d) => collection === "all" || collectionOf(d) === collection
+    ),
+    doc = bundle.documents.find((d) => d.id === docId);
   return (
-    <div className="source">
-      <span className="eyebrow">SOURCE RECORD</span>
-      <code>
-        {source.path}
-        {source.pointer}
-      </code>
-      {source.sha256 && <small>SHA-256 · {source.sha256}</small>}
-    </div>
+    <>
+      <div className="toolbar">
+        <label className="search">
+          <span>Search</span>
+          <input
+            type="search"
+            aria-label="Search the library"
+            value={q}
+            onChange={(e) => {
+              setQ(e.target.value);
+              setDocId(null);
+            }}
+            placeholder="Search lane pages, the ledger and cited sources"
+          />
+        </label>
+        <label className="select">
+          Collection
+          <select
+            aria-label="Filter collection"
+            value={collection}
+            onChange={(e) => setCollection(e.target.value)}
+          >
+            {COLLECTIONS.map(([id, name]) => (
+              <option key={id} value={id}>
+                {name}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+      <p className="count-line">
+        <span role="status">{docs.length} documents</span>
+        <span className="muted">
+          Search runs over the text indexed at build time. A date is when the page was ruled on or
+          reviewed, not when a source was published.
+        </span>
+      </p>
+      <div className="split library">
+        <section className="results" aria-label="Documents">
+          {docs.map((d) => (
+            <button
+              key={d.id}
+              className={`result ${doc?.id === d.id ? "selected" : ""}`}
+              aria-pressed={doc?.id === d.id}
+              onClick={() => setDocId(d.id)}
+            >
+              <span className="kicker">
+                {imported
+                  ? "Imported document"
+                  : { phase19: "Phase 19", primary: "Primary source", project: "Project document" }[
+                      collectionOf(d)
+                    ]}
+                , {d.reviewed}
+              </span>
+              <strong>{d.title}</strong>
+              <span className="snippet">{d.snippet}</span>
+            </button>
+          ))}
+          {!docs.length && (
+            <Empty title="No document matches">
+              <p>Try fewer words. An imported file may carry no documents.</p>
+            </Empty>
+          )}
+        </section>
+        <aside className="inspector reader" aria-label="Selected document">
+          {doc ? (
+            <>
+              <p className="kicker">
+                <code>{doc.path}</code>
+              </p>
+              <h2>{doc.title}</h2>
+              {safeUrl(doc.url) && (
+                <a href={safeUrl(doc.url)} target="_blank" rel="noopener noreferrer">
+                  Open the primary source in a new tab
+                </a>
+              )}
+              <p className="muted">
+                Dated {doc.reviewed}.{" "}
+                {doc.published ? `Published ${doc.published}.` : "Publication date not asserted."}
+              </p>
+              <pre className="document-text" tabIndex="0">
+                {doc.text}
+              </pre>
+            </>
+          ) : (
+            <Empty title="Select a document">
+              <p>Its indexed text, date and path appear here.</p>
+            </Empty>
+          )}
+        </aside>
+      </div>
+    </>
   );
 }
-function saveJson(value) {
-  const url = URL.createObjectURL(
-    new Blob([JSON.stringify(value, null, 2) + "\n"], { type: "application/json" })
-  );
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "simurgh-evidence-selection.json";
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
+
 export function App({ initial }) {
+  const start = fromHash();
   const [bundle, setBundle] = useState(initial),
-    [page, setPage] = useState("failures"),
-    [q, setQ] = useState(""),
-    [kind, setKind] = useState("all"),
-    [control, setControl] = useState("all"),
-    [model, setModel] = useState("all"),
-    [selected, setSelected] = useState(null),
+    [page, setPage] = useState(start.page),
+    [laneId, setLaneId] = useState(start.page === "lanes" ? start.id : null),
     [docId, setDocId] = useState(null),
-    [year, setYear] = useState("2026"),
     [error, setError] = useState(""),
     [notice, setNotice] = useState(""),
     [imported, setImported] = useState(null),
-    [raw, setRaw] = useState(false);
+    [checks, setChecks] = useState({});
   const file = useRef(null),
-    stats = summary(bundle),
-    rows = queryRecords(bundle, { q: page === "failures" ? q : "", kind, control, model });
-  const chosen = rows.find((r) => r.id === selected) || rows[0];
-  const docs = searchDocuments(bundle, page === "research" ? q : "", year),
-    doc = docs.find((d) => d.id === docId);
+    s = lanesSummary(bundle);
+  // Moving to another view is a step the Back button undoes. Choosing a lane inside the
+  // lanes view rewrites the address in place, so Back does not walk through every lane.
+  useEffect(() => {
+    const next = `#${page}${page === "lanes" && laneId ? `/${laneId}` : ""}`,
+      now = globalThis.location?.hash || "";
+    if (!globalThis.history?.pushState || now === next) return;
+    const sameView = now.replace(/^#/, "").split("/")[0] === page;
+    globalThis.history[now && !sameView ? "pushState" : "replaceState"](null, "", next);
+  }, [page, laneId]);
+  // A pasted link or the back button changes the hash without loading the page again.
+  useEffect(() => {
+    const onHash = () => {
+      const next = fromHash();
+      setPage(next.page);
+      if (next.page === "lanes") setLaneId(next.id);
+    };
+    const target = globalThis.window ?? globalThis;
+    for (const event of ["hashchange", "popstate"]) target.addEventListener?.(event, onHash);
+    return () => {
+      for (const event of ["hashchange", "popstate"]) target.removeEventListener?.(event, onHash);
+    };
+  }, []);
   function go(next) {
     setPage(next);
-    setQ("");
-    setRaw(false);
+    setNotice("");
+  }
+  function openLane(id, stay = false) {
+    setLaneId(id);
+    setPage("lanes");
+    setNotice("");
+    // On a narrow screen the inspector sits below the list: bring it into view. Where it is
+    // already on screen, as beside the table on a wide one, the page stays where it is.
+    const inspector = stay && globalThis.document?.getElementById("lane-inspector");
+    if (inspector?.getBoundingClientRect?.().top > (globalThis.innerHeight ?? Infinity))
+      inspector.scrollIntoView?.({ block: "start" });
+  }
+  // A pack is checked in this browser, from this build's copy or from a file the reader
+  // chooses. The page fetches a pack only for the repository's own lanes.
+  const checking = {
+    checks,
+    canFetch: bundle === initial,
+    async one(lane, bytes, source, keep = true) {
+      setChecks((c) => ({ ...c, [lane.id]: { state: "running" } }));
+      let check;
+      try {
+        check = await runCheck(lane, bytes ?? (await fetchPack(lane)), source, keep);
+      } catch (e) {
+        check = { state: "failed", source, message: e.message };
+      }
+      setChecks((c) => ({ ...c, [lane.id]: check }));
+      return check;
+    },
+    check: (lane) => checking.one(lane, null, "the copy in this checkout's build"),
+    file: async (lane, chosen) =>
+      checking.one(lane, new Uint8Array(await chosen.arrayBuffer()), `the file ${chosen.name}`),
+    async all() {
+      // A sweep keeps the verdicts and lets the bytes go; one lane's check keeps its bytes.
+      for (const lane of bundle.lanes)
+        await checking.one(lane, null, "the copy in this checkout's build", false);
+    },
+  };
+  function readPage(id) {
+    setDocId(id);
+    setPage("library");
     setNotice("");
   }
   async function load(event) {
@@ -86,15 +217,13 @@ export function App({ initial }) {
       if (input.size > LIMIT) throw new Error("File exceeds 12 MiB. Use a scoped explorer export.");
       const next = parseBundle(await input.text());
       setBundle(next);
+      setChecks({});
       setImported(input.name);
-      setSelected(null);
-      setKind("all");
-      setControl("all");
-      setModel("all");
-      setQ("");
+      setLaneId(null);
+      setDocId(null);
       setError("");
       setNotice(
-        `Loaded ${next.records.length} records from ${input.name}. Source verification has not been run.`
+        `Loaded ${next.records.length} records and ${next.lanes.length} lanes from ${input.name}. Source verification has not been run.`
       );
     } catch (e) {
       setError(`Could not load evidence: ${e.message}`);
@@ -103,101 +232,82 @@ export function App({ initial }) {
   }
   function reset() {
     setBundle(initial);
+    setChecks({});
     setImported(null);
-    setSelected(null);
-    setKind("all");
-    setControl("all");
-    setModel("all");
-    setQ("");
+    setLaneId(null);
+    setDocId(null);
     setError("");
     setNotice("Repository evidence restored.");
   }
-  async function copyCommand() {
-    const fileOption =
-      bundle !== initial
-        ? " --file '/path/to/loaded-bundle.json'"
-        : ` --study ${bundle.study || "phase10"}`;
-    const command = `node tools/simurgh-explorer/cli.mjs inspect --id '${chosen.id}'${fileOption}`;
-    try {
-      await navigator.clipboard.writeText(command);
-      setNotice(
-        bundle !== initial
-          ? "CLI command copied. Replace the file placeholder with the loaded bundle path."
-          : "CLI command copied."
-      );
-    } catch {
-      setNotice(`Run: ${command}`);
-    }
-  }
+  const sourceLink = (id) => {
+    const d = bundle.documents.find((x) => x.id === id);
+    return d && safeUrl(d.url) ? (
+      <a key={id} href={safeUrl(d.url)} target="_blank" rel="noopener noreferrer">
+        {id}
+      </a>
+    ) : (
+      <span key={id}>{id}</span>
+    );
+  };
   const heading = {
-    overview: [
-      "RESEARCH WORKSPACE",
-      "A clear view of the evidence.",
-      "One record, shared by humans and agents.",
+    record: [
+      "The Phase 19 record",
+      `${s.packs} evidence packs, what each predicted before it ran, and what happened.`,
     ],
-    failures: [
-      `FAILURE EXPLORER / ${bundle.title}`,
-      "Understand where it broke.",
-      "Trace an outcome back to its control, effect and source.",
+    lanes: ["Lanes", "One lane is one question, one pack and one verify command."],
+    replicate: [
+      "Replicate",
+      "The command that verifies each pack, and which ones an outside operator has run.",
     ],
-    research: [
-      "RESEARCH LIBRARY / REVIEWED IN 2026",
-      "Follow the evidence.",
-      "Search scoped project documents and cited primary sources.",
+    outcomes: [
+      "Outcomes",
+      `${bundle.title}: every recorded outcome, with its control, its effects and its source.`,
     ],
-    gaps: [
-      "RESEARCH AGENDA",
-      "Know what remains open.",
-      "Separate implemented mechanisms from the evidence still needed.",
-    ],
+    library: ["Library", "Lane pages, the ledger, earlier project documents and cited sources."],
+    open: ["Open work", "What is not done, not repaired or not yet checked by anyone else."],
   }[page];
   return (
     <div className="workspace">
       <a className="skip" href="#content">
         Skip to content
       </a>
-      <aside className="sidebar">
+      <header className="rail">
         <div className="brand">
-          <span className="feather" aria-hidden="true">
-            ❧
-          </span>
-          <strong>SIMURGH</strong>
-          <span>Evidence workspace</span>
+          <img src={mark} alt="" width="52" height="52" />
+          <p className="wordmark">
+            <span>Project</span>
+            <strong>Simurgh</strong>
+          </p>
+          <p className="product">Evidence explorer</p>
         </div>
-        <nav aria-label="Workspace">
-          {nav.map(([id, icon, name]) => (
+        <nav aria-label="Views">
+          {PAGES.map(([id, name]) => (
             <button key={id} aria-current={page === id ? "page" : undefined} onClick={() => go(id)}>
-              <span aria-hidden="true">{icon}</span>
               {name}
+              {id === "lanes" && s.packs > 0 && <span className="nav-count">{s.packs}</span>}
+              {id === "replicate" && s.owed_items > 0 && (
+                <span className="nav-count">{s.owed_items} owed</span>
+              )}
+              {id === "open" && s.open_work > 0 && <span className="nav-count">{s.open_work}</span>}
             </button>
           ))}
         </nav>
-        <div className="side-bottom">
-          <span className="local-dot" /> LOCAL · READ ONLY
-          <small>
-            Preserved failures.
-            <br />
-            Traceable sources.
-          </small>
-        </div>
-      </aside>
+        <p className="rail-foot">
+          Local and read only. It can recompute a pack's root here. Replaying a lane stays with the
+          lane's own command.
+        </p>
+      </header>
       <div className="shell">
-        <header className="topbar">
-          <div>
-            <span>Workspace</span>
-            <b>/</b>
-            <span>
-              {imported
-                ? "Imported evidence"
-                : bundle.mode === "local_detail"
-                  ? "Local detail"
-                  : "Public evidence"}
-            </span>
-          </div>
+        <div className="topbar">
+          <span className="data-source" data-testid="data-source">
+            {imported
+              ? "Imported evidence"
+              : bundle.mode === "local_detail"
+                ? "Repository evidence, with local detail"
+                : "Repository evidence"}
+          </span>
           <div className="actions">
-            <button onClick={() => file.current.click()}>
-              ↥ <span>Load evidence</span>
-            </button>
+            <button onClick={() => file.current.click()}>Load evidence</button>
             <input
               aria-label="Load evidence JSON"
               ref={file}
@@ -206,32 +316,21 @@ export function App({ initial }) {
               onChange={load}
               hidden
             />
-            <button
-              className="primary"
-              disabled={!rows.length}
-              onClick={() =>
-                saveJson({
-                  ...bundle,
-                  records: rows,
-                  selection: { total: bundle.records.length, retained: rows.length },
-                })
-              }
-            >
-              ↓ <span>Export {rows.length} records</span>
+            <button onClick={reset} disabled={bundle === initial}>
+              Restore repository data
             </button>
           </div>
-        </header>
+        </div>
         <main id="content">
           <div className="title">
-            <p className="eyebrow">{heading[0]}</p>
-            <h1>{heading[1]}</h1>
-            <p className="subtitle">{heading[2]}</p>
+            <h1>{heading[0]}</h1>
+            <p>{heading[1]}</p>
           </div>
           {error && (
             <div className="message error" role="alert">
               {error}
-              <button onClick={() => setError("")} aria-label="Dismiss error">
-                ×
+              <button className="quiet" onClick={() => setError("")} aria-label="Dismiss error">
+                Dismiss
               </button>
             </div>
           )}
@@ -243,445 +342,43 @@ export function App({ initial }) {
           {imported && (
             <div className="message imported" role="note" data-testid="imported-banner">
               Imported from {imported}: {String(bundle.verification).replaceAll("_", " ")}. The
-              title, provenance and document labels below come from the file, not from this
-              repository.
+              titles, outcomes, provenance and document labels below come from the file, not from
+              this repository.
             </div>
           )}
-          <div className="metrics" aria-label="Evidence inventory">
-            <div>
-              <strong>{stats.records}</strong>
-              <span>RETAINED OUTCOMES</span>
-            </div>
-            <div>
-              <strong>{stats.controls}</strong>
-              <span>EVALUATION CONTROLS</span>
-            </div>
-            <div>
-              <strong>{stats.generations}</strong>
-              <span>MODEL GENERATIONS</span>
-            </div>
-            <div>
-              <strong>{stats.open_gaps}</strong>
-              <span>OPEN RESEARCH GAPS</span>
-            </div>
+          {page === "record" && <Record bundle={bundle} openLane={openLane} go={go} />}
+          {page === "lanes" && (
+            <Lanes
+              bundle={bundle}
+              selected={laneId}
+              openLane={openLane}
+              readPage={readPage}
+              notify={setNotice}
+              checking={checking}
+            />
+          )}
+          {page === "replicate" && (
+            <Replicate bundle={bundle} openLane={openLane} notify={setNotice} checking={checking} />
+          )}
+          {page === "outcomes" && (
+            <Outcomes
+              key={imported || "repository"}
+              bundle={bundle}
+              isRepository={bundle === initial}
+              notify={setNotice}
+            />
+          )}
+          {page === "library" && (
+            <Library bundle={bundle} imported={imported} docId={docId} setDocId={setDocId} />
+          )}
+          {page === "open" && (
+            <OpenWork bundle={bundle} openLane={openLane} sourceLink={sourceLink} />
+          )}
+          <div className="diamond-rule" aria-hidden="true">
+            <span />
           </div>
-          <div className="scope">
-            <span aria-hidden="true">ⓘ</span>
-            <span>
-              Research evidence · Viewing and hash references do not verify the source archive.
-            </span>
-            <button onClick={reset}>Restore repository data</button>
-          </div>
-          {page === "failures" && (
-            <>
-              <div className="toolbar">
-                <label className="search">
-                  <span aria-hidden="true">⌕</span>
-                  <input
-                    aria-label="Search outcomes"
-                    value={q}
-                    onChange={(e) => setQ(e.target.value)}
-                    placeholder="Search task, control or outcome…"
-                  />
-                </label>
-                <label className="select">
-                  Model
-                  <select
-                    aria-label="Filter model"
-                    value={model}
-                    onChange={(e) => setModel(e.target.value)}
-                  >
-                    <option value="all">All models</option>
-                    {[...new Set(bundle.records.map((r) => r.model))].map((m) => (
-                      <option key={m} value={m}>
-                        {m}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label className="select">
-                  Control
-                  <select
-                    aria-label="Filter control"
-                    value={control}
-                    onChange={(e) => setControl(e.target.value)}
-                  >
-                    <option value="all">All controls</option>
-                    <option value="composed">Composed</option>
-                    <option value="credential_only">Credential only</option>
-                    <option value="deny_all">Deny all</option>
-                  </select>
-                </label>
-              </div>
-              <div className="filters" role="group" aria-label="Outcome filters">
-                {[
-                  ["all", "All"],
-                  ["failure", "Failures"],
-                  ["unauthorized", "Unauthorized"],
-                  ["active_incomplete", "Incomplete"],
-                  ["blocked", "Blocked"],
-                  ["unknown", "Unknown"],
-                  ["invalid", "Malformed"],
-                ].map(([id, name]) => (
-                  <button key={id} aria-pressed={kind === id} onClick={() => setKind(id)}>
-                    {name}
-                  </button>
-                ))}
-                <span>{rows.length} matching records</span>
-              </div>
-              <div className="explorer">
-                <section className="table-panel" aria-label="Outcome records">
-                  <div className="table-scroll">
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>Task / generation</th>
-                          <th>Control</th>
-                          <th>Recorded status</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {rows.map((r) => (
-                          <tr key={r.id} className={chosen?.id === r.id ? "selected" : ""}>
-                            <td>
-                              <button
-                                className="row-button"
-                                aria-pressed={chosen?.id === r.id}
-                                onClick={() => {
-                                  setSelected(r.id);
-                                  setRaw(false);
-                                }}
-                              >
-                                {r.title}
-                                <small>
-                                  {r.model} · g{r.outcome.generation_index} · trial{" "}
-                                  {r.outcome.trial}
-                                </small>
-                              </button>
-                            </td>
-                            <td>{r.outcome.control.replaceAll("_", " ")}</td>
-                            <td>
-                              <Badge
-                                tone={
-                                  r.flags.includes("unauthorized") ? "danger" : r.outcome.status
-                                }
-                              >
-                                {r.outcome.status}
-                              </Badge>
-                              {r.flags.includes("unauthorized") && (
-                                <small className="danger-text">Unauthorized effect</small>
-                              )}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                    {!rows.length && (
-                      <div className="empty">
-                        <h2>No matching records</h2>
-                        <p>Try a different search or reset the filters.</p>
-                        <button
-                          onClick={() => {
-                            setQ("");
-                            setKind("all");
-                            setControl("all");
-                            setModel("all");
-                          }}
-                        >
-                          Reset filters
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </section>
-                <aside className="detail" aria-label="Selected outcome">
-                  {chosen ? (
-                    <>
-                      <p className="eyebrow">OUTCOME INSPECTOR</p>
-                      <h2>{chosen.title}</h2>
-                      <p className="muted mono">
-                        {chosen.outcome.control} · {chosen.outcome.state}
-                      </p>
-                      <div className="tags">
-                        {chosen.flags.map((f) => (
-                          <Badge key={f} tone={f === "unauthorized" ? "danger" : ""}>
-                            {labels[f]}
-                          </Badge>
-                        ))}
-                      </div>
-                      <ol className="trace">
-                        <li>
-                          <h3>Model proposal</h3>
-                          <p>{chosen.outcome.proposal}</p>
-                          {chosen.detail ? (
-                            <pre>{chosen.detail.model_output}</pre>
-                          ) : (
-                            <small>Original model output omitted from this public view.</small>
-                          )}
-                        </li>
-                        <li>
-                          <h3>Recorded decision</h3>
-                          <p>
-                            {chosen.outcome.status} · acknowledgment{" "}
-                            {chosen.outcome.acknowledged_completion ? "received" : "not received"}
-                          </p>
-                          <small>
-                            Initial: {chosen.outcome.initial_status || "not recorded"} · leaves:{" "}
-                            {chosen.outcome.leaf_status.a || "—"} /{" "}
-                            {chosen.outcome.leaf_status.b || "—"}
-                          </small>
-                        </li>
-                        <li>
-                          <h3>Receiver effects</h3>
-                          <p>
-                            <b>{chosen.outcome.new_effects}</b> new ·{" "}
-                            <b>{chosen.outcome.prior_effects}</b> prior
-                          </p>
-                          <small>
-                            {chosen.outcome.authorized_new_effects} authorized /{" "}
-                            {chosen.outcome.unauthorized_new_effects} unauthorized new effects
-                          </small>
-                        </li>
-                      </ol>
-                      {chosen.flags.map((f) => (
-                        <p className="explanation" key={f}>
-                          {explanations[f]}
-                        </p>
-                      ))}
-                      <Source source={chosen.source} />
-                      {chosen.detail && <Source source={chosen.detail.source} />}
-                      <details className="compare">
-                        <summary>Compare matched controls</summary>
-                        {bundle.records
-                          .filter(
-                            (r) =>
-                              r.study === chosen.study &&
-                              r.model === chosen.model &&
-                              r.outcome.generation_index === chosen.outcome.generation_index
-                          )
-                          .map((r) => (
-                            <div key={r.id}>
-                              <span>{r.outcome.control}</span>
-                              <b>{r.outcome.status}</b>
-                              <small>
-                                {r.outcome.unauthorized_new_effects} unauthorized effects
-                              </small>
-                            </div>
-                          ))}
-                      </details>
-                      <div className="actions detail-actions">
-                        <button
-                          className="primary"
-                          aria-expanded={raw}
-                          onClick={() => setRaw(!raw)}
-                        >
-                          {raw ? "Hide" : "View"} source record
-                        </button>
-                        <button onClick={copyCommand}>Copy CLI</button>
-                      </div>
-                      {raw && (
-                        <pre className="raw" tabIndex="0">
-                          {JSON.stringify(chosen, null, 2)}
-                        </pre>
-                      )}
-                    </>
-                  ) : (
-                    <p className="muted">Select a matching record to inspect its source.</p>
-                  )}
-                </aside>
-              </div>
-              <p className="footnote">
-                Failure flags include unauthorized effects, active-task incompletion and execution
-                errors. Unknowns remain separate; a blocked action can be correct.
-              </p>
-            </>
-          )}
-          {page === "overview" && (
-            <div className="overview-grid">
-              <section className="paper">
-                <p className="eyebrow">OBSERVATIONS, NOT A SAFETY SCORE</p>
-                <h2>Keep the distinctions visible.</h2>
-                <div className="stat-line">
-                  <span>Records with unauthorized new effects</span>
-                  <strong>{stats.unauthorized}</strong>
-                </div>
-                <div className="stat-line">
-                  <span>Active tasks without acknowledged completion</span>
-                  <strong>{stats.active_incomplete}</strong>
-                </div>
-                <div className="stat-line">
-                  <span>Records retaining an unknown acknowledgment</span>
-                  <strong>{stats.unknown}</strong>
-                </div>
-                <p>
-                  Counts span all controls, including deny-all. Compare matched controls in the
-                  failure explorer before attributing an outcome to a model or safeguard.
-                </p>
-                <button className="primary" onClick={() => go("failures")}>
-                  Inspect the outcomes →
-                </button>
-              </section>
-              <section className="paper">
-                <p className="eyebrow">EVIDENCE BOUNDARY</p>
-                <h2>What this view leaves out</h2>
-                <ul>
-                  {bundle.omissions.map((x) => (
-                    <li key={x}>{x.replaceAll("_", " ")}</li>
-                  ))}
-                </ul>
-                <p>
-                  Loaded evidence is data. The explorer cannot establish source completeness,
-                  independent custody or inference origin.
-                </p>
-                <details>
-                  <summary>
-                    {imported
-                      ? "Source bindings (producer-supplied, not checked by the explorer)"
-                      : "Source bindings"}
-                  </summary>
-                  <pre className="raw">{JSON.stringify(bundle.provenance, null, 2)}</pre>
-                </details>
-              </section>
-            </div>
-          )}
-          {page === "research" && (
-            <>
-              <div className="toolbar">
-                <label className="search">
-                  <span aria-hidden="true">⌕</span>
-                  <input
-                    aria-label="Search research"
-                    value={q}
-                    onChange={(e) => {
-                      setQ(e.target.value);
-                      setDocId(null);
-                    }}
-                    placeholder="Search monitoring, authorization, evaluation…"
-                  />
-                </label>
-                <label className="select">
-                  Reviewed
-                  <select
-                    aria-label="Review year"
-                    value={year}
-                    onChange={(e) => setYear(e.target.value)}
-                  >
-                    <option value="2026">2026</option>
-                    <option value="">All years</option>
-                  </select>
-                </label>
-              </div>
-              <p className="footnote">
-                {docs.length} results · Local indexed search. Review date is not publication date.
-                Open source links for current upstream documentation.
-              </p>
-              <div className="research-layout">
-                <section className="results">
-                  {docs.map((d) => (
-                    <button
-                      key={d.id}
-                      className={`research-result ${doc?.id === d.id ? "selected" : ""}`}
-                      onClick={() => setDocId(d.id)}
-                    >
-                      <span className="eyebrow">
-                        {imported
-                          ? "IMPORTED DOCUMENT"
-                          : d.url
-                            ? "PRIMARY SOURCE"
-                            : "PROJECT DOCUMENT"}{" "}
-                        · {d.reviewed}
-                      </span>
-                      <h2>{d.title}</h2>
-                      <p>{d.snippet}</p>
-                      <span className="link-text">Read indexed source →</span>
-                    </button>
-                  ))}
-                  {!docs.length && (
-                    <div className="empty">
-                      <h2>No indexed sources found</h2>
-                      <p>
-                        Try fewer words. Imported public-only data may contain no research
-                        documents.
-                      </p>
-                    </div>
-                  )}
-                </section>
-                <aside className="paper document">
-                  {doc ? (
-                    <>
-                      <p className="eyebrow">{doc.id}</p>
-                      <h2>{doc.title}</h2>
-                      {safeUrl(doc.url) && (
-                        <a
-                          className="source-link"
-                          href={safeUrl(doc.url)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Open primary source ↗
-                        </a>
-                      )}
-                      <p className="muted">
-                        Reviewed {doc.reviewed} ·{" "}
-                        {doc.published
-                          ? `Published ${doc.published}`
-                          : "Publication date not asserted"}
-                      </p>
-                      <pre className="document-text">{doc.text}</pre>
-                      <code>{doc.path}</code>
-                    </>
-                  ) : (
-                    <div className="empty">
-                      <span className="large-symbol">⌕</span>
-                      <h2>Select a source</h2>
-                      <p>Read its indexed text, review date and original citation here.</p>
-                    </div>
-                  )}
-                </aside>
-              </div>
-            </>
-          )}
-          {page === "gaps" && (
-            <div className="gap-list">
-              {bundle.gaps.map((g) => (
-                <article className="gap" key={g.id}>
-                  <div className="gap-heading">
-                    <span className="eyebrow">{g.id}</span>
-                    <Badge tone={g.status === "open" ? "blocked" : "observed"}>
-                      {g.status.replaceAll("_", " ")}
-                    </Badge>
-                  </div>
-                  <h2>{g.title}</h2>
-                  <dl>
-                    <dt>Evidence now</dt>
-                    <dd>{g.evidence}</dd>
-                    <dt>Still missing</dt>
-                    <dd>{g.remaining}</dd>
-                    <dt>Next evidence</dt>
-                    <dd>{g.next}</dd>
-                  </dl>
-                  <div className="gap-sources">
-                    {g.sources.map((id) => {
-                      const d = bundle.documents.find((x) => x.id === id);
-                      return d && safeUrl(d.url) ? (
-                        <a key={id} href={safeUrl(d.url)} target="_blank" rel="noopener noreferrer">
-                          {id} ↗
-                        </a>
-                      ) : (
-                        <span key={id}>{id}</span>
-                      );
-                    })}
-                  </div>
-                </article>
-              ))}
-              {!bundle.gaps.length && (
-                <div className="empty">No gap register included in this imported evidence.</div>
-              )}
-            </div>
-          )}
           <footer>
-            <span>Preserved failures. Explicit limits. Traceable sources.</span>
-            <span>SIMURGH / LOCAL ANALYSIS</span>
+            Hash references identify the bytes this page read. They do not show who produced them.
           </footer>
         </main>
       </div>

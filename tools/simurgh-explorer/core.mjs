@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Shared, browser-safe interpretation. No I/O, inference, HTML or code execution.
 export const SCHEMA = "simurgh.explorer.v1";
+// The views of the dashboard. The command line has a command for each, and a test says so.
+export const VIEWS = ["record", "lanes", "replicate", "outcomes", "library", "open"];
 export const LIMIT = 12 * 1024 * 1024;
 const statuses = ["observed", "blocked", "denied", "declined", "unknown", "error", "invalid"];
 const controls = ["credential_only", "composed", "deny_all"];
@@ -115,6 +117,94 @@ export function adaptPublic(pub) {
     gaps: [],
   });
 }
+// Phase 19 lanes are optional: a file written before they existed still loads, with none.
+const OUTCOMES = ["held", "failed", "undecided", "by_model"];
+const STATES = ["owed", "checked"];
+const strings = (v, name, max = 500) => {
+  ensure(Array.isArray(v) && v.length <= max, `Invalid ${name}`);
+  for (const x of v) string(x, name);
+};
+const count = (v, name) => ensure(Number.isSafeInteger(v) && v >= 0, `Invalid ${name}`);
+function validateLanes(b) {
+  b.lanes ??= [];
+  b.handoff ??= null;
+  b.open_work ??= [];
+  b.other ??= [];
+  ensure(Array.isArray(b.other) && b.other.length <= 500, "Invalid Phase 19 folders");
+  for (const o of b.other)
+    for (const k of ["id", "title", "summary", "page"]) string(o?.[k], `Phase 19 folder ${k}`);
+  ensure(Array.isArray(b.lanes) && b.lanes.length <= 500, "Invalid lane inventory");
+  const ids = new Set();
+  for (const l of b.lanes) {
+    ensure(l && typeof l === "object", "Invalid lane");
+    ensure(typeof l.id === "string" && /^19[a-z]{1,2}$/.test(l.id), "Invalid lane ID");
+    ensure(!ids.has(l.id), "Invalid lane inventory: duplicate lane ID");
+    ids.add(l.id);
+    for (const k of ["title", "summary", "verify", "host", "time"]) string(l[k], `lane ${k}`);
+    ensure(typeof l.root === "string" && /^[0-9a-f]{64}$/.test(l.root), "Invalid lane root");
+    ensure(l.date === null || /^\d{4}(-\d{2}-\d{2})?$/.test(l.date), "Invalid lane date");
+    ensure(l.unit === null || /^P19-[A-Z]+\d+$/.test(l.unit), "Invalid lane declaration");
+    for (const k of ["arm", "receipt_kind"])
+      ensure(l[k] === null || typeof l[k] === "string", `Invalid lane ${k}`);
+    for (const k of ["model_inference", "independent_custody"])
+      ensure(typeof l[k] === "boolean", `Invalid lane ${k}`);
+    ensure(
+      l.spend_usd === null || (Number.isFinite(l.spend_usd) && l.spend_usd >= 0),
+      "Invalid lane spend"
+    );
+    strings(l.models, "lane models");
+    ensure(new Set(l.models).size === l.models.length, "Invalid lane models: duplicate");
+    strings(l.limits, "lane limits");
+    ensure(Array.isArray(l.hypotheses) && l.hypotheses.length <= 200, "Invalid lane hypotheses");
+    for (const h of l.hypotheses) {
+      string(h?.id, "hypothesis ID");
+      ensure(OUTCOMES.includes(h.outcome), "Invalid hypothesis outcome");
+      ensure(["receipt", "results_page"].includes(h.source), "Invalid hypothesis source");
+      h.pointer ??= null;
+      ensure(h.pointer === null || typeof h.pointer === "string", "Invalid hypothesis pointer");
+      if (h.outcome === "by_model") {
+        count(h.held_on, "hypothesis model count");
+        if (h.of !== null) {
+          count(h.of, "hypothesis model count");
+          ensure(h.held_on <= h.of, "Invalid hypothesis model count");
+        }
+      }
+      ensure(Array.isArray(h.columns) && h.columns.length <= 20, "Invalid hypothesis wording");
+      for (const c of h.columns) {
+        string(c?.label, "hypothesis wording");
+        string(c.text, "hypothesis wording");
+      }
+    }
+    ensure(l.outside && STATES.includes(l.outside.verify), "Invalid lane outside state");
+    ensure(Array.isArray(l.outside.deeper) && l.outside.deeper.length <= 20, "Invalid lane items");
+    for (const d of l.outside.deeper) {
+      string(d?.item, "lane item");
+      ensure(STATES.includes(d.state), "Invalid lane outside state");
+    }
+    ensure(l.pages && typeof l.pages === "object", "Invalid lane pages");
+    for (const k of ["readme", "results"]) string(l.pages[k], `lane ${k} page`);
+    l.served ??= null;
+    if (l.served !== null) {
+      ensure(typeof l.served === "object", "Invalid lane served-model record");
+      count(l.served.named, "lane served-model record");
+      count(l.served.returned, "lane served-model record");
+    }
+    l.pack ??= null;
+    ensure(l.pack === null || typeof l.pack === "string", "Invalid lane pack path");
+  }
+  if (b.handoff !== null) {
+    ensure(typeof b.handoff === "object", "Invalid handoff");
+    for (const k of ["status", "note", "guide"]) string(b.handoff[k], `handoff ${k}`);
+    count(b.handoff.receipts, "handoff receipts");
+    count(b.handoff.items, "handoff items");
+    strings(b.handoff.owed, "handoff owed items");
+  }
+  ensure(Array.isArray(b.open_work) && b.open_work.length <= 500, "Invalid open work");
+  for (const w of b.open_work) {
+    for (const k of ["id", "title", "text"]) string(w?.[k], `open work ${k}`);
+    strings(w.lanes, "open work lanes");
+  }
+}
 export function validateBundle(b) {
   ensure(b?.schema === SCHEMA, "Unsupported explorer schema");
   ensure(
@@ -188,6 +278,10 @@ export function validateBundle(b) {
   }
   for (const key of ["documents", "gaps", "omissions"])
     ensure(Array.isArray(b[key]) && b[key].length <= 10000, `Invalid ${key}`);
+  ensure(
+    new Set(b.documents.map((d) => d?.id)).size === b.documents.length,
+    "Invalid documents: duplicate ID"
+  );
   for (const d of b.documents) {
     for (const k of ["id", "title", "text", "path", "reviewed"]) string(d[k], `document ${k}`);
     d.url = safeUrl(d.url);
@@ -203,6 +297,7 @@ export function validateBundle(b) {
   for (const o of b.omissions) string(o, "omission");
   string(b.title, "bundle title");
   ensure(["public", "local_detail"].includes(b.mode), "Invalid bundle mode");
+  validateLanes(b);
   // An imported producer's claim is never promoted to a verifier result.
   return { ...b, verification: "not_verified_by_explorer" };
 }
@@ -267,8 +362,68 @@ export function searchDocuments(b, q = "", year = "") {
       return { ...d, snippet: d.text.slice(Math.max(0, i - 80), Math.max(0, i - 80) + 350) };
     });
 }
+export function tally(lane) {
+  const t = { held: 0, failed: 0, undecided: 0, by_model: 0 };
+  for (const h of lane.hypotheses) t[h.outcome] += 1;
+  return t;
+}
+export function queryLanes(b, { q = "", ran = "all", outcome = "all", outside = "all" } = {}) {
+  ensure(["all", "model", "no_model"].includes(ran), "Unknown lane filter");
+  ensure(["all", "failed", "all_held", "none"].includes(outcome), "Unknown outcome filter");
+  ensure(["all", "owed", "checked"].includes(outside), "Unknown outside filter");
+  return b.lanes.filter((l) => {
+    const t = tally(l),
+      owed = l.outside.verify === "owed" || l.outside.deeper.some((d) => d.state === "owed");
+    return (
+      (ran === "all" || (ran === "model") === l.model_inference) &&
+      (outcome === "all" ||
+        (outcome === "failed" && t.failed > 0) ||
+        (outcome === "all_held" && t.held > 0 && t.held === l.hypotheses.length) ||
+        (outcome === "none" && l.hypotheses.length === 0)) &&
+      (outside === "all" || (outside === "owed") === owed) &&
+      matches(JSON.stringify(l), q)
+    );
+  });
+}
+// How the predictions fared, split by whether the lane ran a model. A prediction decided on
+// each model counts once for every model it was decided on, where the receipt says how many.
+export function trackRecord(b) {
+  const row = () => ({ lanes: 0, held: 0, failed: 0, undecided: 0, model_held: 0, model_of: 0 });
+  const out = { model: row(), no_model: row() };
+  for (const l of b.lanes) {
+    if (!l.hypotheses.length) continue;
+    const r = out[l.model_inference ? "model" : "no_model"];
+    r.lanes += 1;
+    for (const h of l.hypotheses)
+      if (h.outcome !== "by_model") r[h.outcome] += 1;
+      else if (h.of !== null) {
+        r.model_held += h.held_on;
+        r.model_of += h.of;
+      }
+  }
+  return out;
+}
+// Counts only. A tally of predictions is a record of what was said and what happened, not a score.
+export function lanesSummary(b) {
+  const t = { held: 0, failed: 0, undecided: 0, by_model: 0 };
+  for (const l of b.lanes) for (const [k, n] of Object.entries(tally(l))) t[k] += n;
+  return {
+    packs: b.lanes.length,
+    with_model: b.lanes.filter((l) => l.model_inference).length,
+    with_hypotheses: b.lanes.filter((l) => l.hypotheses.length).length,
+    lanes_with_failed: b.lanes.filter((l) => tally(l).failed > 0).length,
+    ...t,
+    spend_usd: Math.round(b.lanes.reduce((n, l) => n + (l.spend_usd ?? 0), 0) * 100) / 100,
+    independent_custody: b.lanes.filter((l) => l.independent_custody).length,
+    outside_items: b.handoff?.items ?? 0,
+    owed_items: b.handoff?.owed.length ?? 0,
+    receipts: b.handoff?.receipts ?? 0,
+    open_work: b.open_work.length,
+  };
+}
 export function summary(b) {
   return {
+    phase19: lanesSummary(b),
     records: b.records.length,
     controls: [...new Set(b.records.map((r) => r.outcome.control))].length,
     generations: new Set(

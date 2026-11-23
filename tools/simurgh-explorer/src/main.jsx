@@ -4,7 +4,7 @@ import { App } from "./App.jsx";
 import { parseBundle } from "../core.mjs";
 import "./style.css";
 const root = createRoot(document.getElementById("root"));
-root.render(<div className="boot">Opening the evidence workspace…</div>);
+root.render(<div className="boot">Reading the evidence index.</div>);
 fetch("./evidence.json")
   .then((r) => {
     if (!r.ok) throw new Error("Evidence index unavailable. Run npm run build.");
