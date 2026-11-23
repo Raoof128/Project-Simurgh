@@ -4241,3 +4241,9 @@ This declaration commit must be a strict ancestor of every other commit of lane 
   (378 tests), twenty-eight packs verify under a bare interpreter and 19b and 19g with their
   packages, the quick gate passes 96 of 96 and the full gate 144 of 144. These are the
   author's own hosts. No one outside the project has run any of the eighteen items owed.
+- Amendment (23 Nov 2026, P19-GUARD01, before any run of the lane): the declaration says
+  lane 19ae read eleven files of earlier lanes. It read eighteen: three of lane 19t, six of
+  lane 19y, three each of lanes 19z and 19ac, and one each of lanes 19aa, 19ab and 19ad.
+  The count was written from memory and was wrong. Nothing else in the
+  declaration changes: the recorded attempts are still every attempt lane 19ae ran, the
+  eighteen files and its own three seats' files.
