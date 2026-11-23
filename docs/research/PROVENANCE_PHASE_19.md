@@ -2914,6 +2914,28 @@ attempts and no model id, and the page is the same either way. The test passes o
 test accepts exactly those two files of lane 19ag as unread on Python 3.12.0 to 3.12.2, and
 nothing else unread on any version. The tool's reading does not change.
 
+**P19-GUARD02 (bounded authority to add a stricter check beside lane 19ag's pinned verifier;
+declared 24 Nov 2026 before any commit that acts on it).** Lane 19ag's verifier,
+`evidence19ag.py`, is pinned by the lane's own pack. Without `--replay` it compares a
+report's rows, summary, hypotheses and file hashes with what it recomputes, and it does not
+compare four other parts of `report.json` with the lane's module: the arm, the
+`model_inference` flag, the list of non-claims, and the set of field names. A repacked copy
+with one of those changed checks as `structure_checked` under its own, different root. The
+committed root refuses such a copy, and `--replay` stops on it, so no committed claim rests
+on this; the lane's page has said so since 23 November. This declaration authorises, and
+nothing else:
+
+1. A new file, `tools/assurance-provenance/strict19ag.py`, which runs the pinned verifier
+   unchanged and then compares those four parts of the report with the lane's module. It
+   takes a pack and an expected root, as the verifier does. Tests first, among them three
+   repacked copies that the pinned verifier accepts under their own root and this refuses.
+2. One sentence on the lane's page naming the tool.
+3. Both logs and the ruling.
+
+Not authorised: any edit to `evidence19ag.py`, `guard19ag.py`, the lane's pack, brief or
+seats' files, the handoff or the command it gives for the lane, or any frozen file. This
+declaration commit must be a strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
@@ -4480,3 +4502,12 @@ nothing else unread on any version. The tool's reading does not change.
   it had failed on those versions since that lane joined, which nothing had noticed because
   the hosted suite runs a later Python. The root README has the new count and no longer
   lists the census under its open work.
+- Ruling (24 Nov 2026, P19-GUARD02 exercised): the declaration (`61856834`) precedes the
+  commit that acts on it. `strict19ag.py` runs lane 19ag's pinned verifier unchanged and
+  then compares the report's arm, `model_inference` flag, non-claims and field names with
+  the lane's module. Its tests were written first. They repack the committed pack three
+  ways (non-claims emptied; arm and flag changed; a field added) and show that the pinned
+  verifier accepts each copy under the copy's own root, that the new check refuses each
+  with a reason, and that the committed root refuses each in both. On the committed pack
+  the new check prints the verifier's receipt with one more field. No pinned file, pack,
+  brief or handoff command changed.

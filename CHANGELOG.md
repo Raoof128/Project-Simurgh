@@ -1,5 +1,25 @@
 ## Change Log
 
+## [affiliation-2026-11-24] — 2026-11-24 — The author's affiliation corrected on the disclaimer page
+
+**Raouf:**
+
+- **Scope:** `docs/DISCLAIMER.md`.
+- **Summary:** the citation line and the contact block say Macquarie University, on the
+  owner's instruction.
+- **Verification:** quick gate.
+
+## [phase-19-guard02-2026-11-24] — 2026-11-24 — A stricter check beside lane 19ag's pinned verifier
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/strict19ag.py` (P19-GUARD02), its test, one sentence
+  on the lane's page.
+- **Summary:** the new tool runs the lane's pinned verifier and then compares the four parts
+  of the report that verifier does not compare without a replay. It refuses three repacked
+  copies the verifier accepts under their own root.
+- **Verification:** new tests on two interpreters; quick gate.
+
 ## [phase-19-audit02-2026-11-24] — 2026-11-24 — The served-model census reads lane 19af
 
 **Raouf:**

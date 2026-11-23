@@ -121,7 +121,8 @@ with its `arm` changed, its list of non-claims emptied or an unknown key added s
 as `structure_checked`. Such a copy has a different root, so the committed `ROOT.sha256` and
 the hosted roots check refuse it, and `--replay` stops on it with `report_mismatch`. Always
 give `--expected-root`. For the committed pack, a test holds those fields to the lane's
-module.
+module. `tools/assurance-provenance/strict19ag.py` takes the same pack and root, runs the
+verifier unchanged and then compares those fields too; it refuses each such copy.
 
 ## What this does not show
 
