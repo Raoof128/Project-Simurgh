@@ -27,7 +27,7 @@ for study-specific denominators.
 Version numbers above identify the committed experimental environment, not a recommendation to
 upgrade or a claim that they are the latest available versions. Reproduce first; evaluate upgrades
 as separate changes. The root application package (`0.4.18`), research tags (through `v2.54.1`)
-and explorer package (`0.1.0`) are distinct version lines.
+and explorer package (`0.2.0`) are distinct version lines.
 
 ## Device, browser and historical surfaces
 
@@ -51,6 +51,7 @@ merely because documentation now links a newer receipt.
 Use the [owner/classmate handoff](research/CONTINUATION_HANDOFF_2026-10-19.md) for independent
 reproduction. It separates current-branch replay from old downloadable bundles. Supply public
 commit/root identifiers through a trusted channel; never put credentials in a review receipt.
+For Phase 19, use the [operator handoff](research/provenance-phase-19f/HANDOFF.md).
 Keep unknown effects, failures and unsupported capabilities explicit. A stop prevents admission
 under the tested contract; it cannot reverse an already completed effect.
 

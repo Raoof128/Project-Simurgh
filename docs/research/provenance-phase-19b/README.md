@@ -6,6 +6,9 @@ pipeline. See [RESULTS.md](RESULTS.md) and [the declaration](../PROVENANCE_PHASE
 Reproduce (Python 3.12, this checkout; no key, no model; the lanes re-execute: about twelve minutes
 on the authoring Mac, under three on the hosted runner; `lean` 4.15 on the path for the differential):
 
+It needs the packages in `tools/assurance-provenance/requirements-verify.lock`, as
+[the handoff](../provenance-phase-19f/HANDOFF.md) describes; plain Python stops on a missing module.
+
 ```sh
 python -B tools/assurance-provenance/evidence19b.py verify \
   docs/research/provenance-phase-19b/evidence.zip \

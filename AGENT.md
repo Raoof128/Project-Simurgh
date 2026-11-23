@@ -14,7 +14,7 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
-### 2026-11-23 (Australia/Sydney) — Readiness rounds 1 and 2: the public pages brought up to date after seven read-only audits
+### 2026-11-23 (Australia/Sydney) — Readiness rounds 1 to 3: the public pages and the explorer brought up to date after nine read-only audits
 
 **Raouf:**
 
@@ -49,6 +49,17 @@ one machine's local agent configuration:
   19ag now has its generator in the repository and a test that compares the whole page.
   Dated notes on lanes 19j, 19l, 19t and 19ad say what later lanes did. The 19f page says
   "done" where "paid" read as money.
+- **Round 3, same day:** two more read-only checks (the lane and policy pages no round had
+  read, and the rest of the code with an attempt to break round 2's fixes, which held).
+  Under P19-REPAIR10, declared first, `handoff19.review()` no longer credits a discrepant
+  phase with its replay or dataset item and no longer raises on a malformed receipt; the
+  three committed reviews recompute byte-identical. In the explorer: a model a receipt
+  marks `not_run` is no longer listed (lane 19w showed three models where one ran); an
+  imported file without a lane's `sources` is refused where it blanked the page; an archive
+  that inflates past 256 MiB is refused; a failed prediction shows its result whatever its
+  column is called; a document's date follows its own headings. A test holds each lane's
+  loose `report.json` to the copy in its pack. Dated notes on lanes 19b, 19h, 19i, 19m, 19n,
+  19p, 19v, 19w, 19aa and 19ab; the README's reviewer table labels its October rows.
 - **Removed:** `docs/Raouf_Portfolio_Resume.docx`, on the owner's instruction. It is not
   project evidence.
 - **Files changed:** `README.md`, `ROADMAP.md`, `SECURITY.md`, `.gitignore`,
@@ -58,7 +69,9 @@ one machine's local agent configuration:
   `docs/research/explorer-phase-18/AUDIT_2026-11-23.md`, `tools/simurgh-explorer/`,
   `DOCUMENTATION.md`, the READMEs of lanes 19f, 19j, 19l, 19t, 19ad, 19ag and of the
   manuscript folder, `tools/assurance-provenance/results19ag.py` (new) and
-  `tests/test_evidence19ag_committed.py`, `AGENT.md`, `CHANGELOG.md`.
+  `tests/test_evidence19ag_committed.py`, `handoff19.py` and `tests/test_handoff19.py`,
+  `PRIVACY.md`, `docs/INTEGRATIONS.md`, ten more lane READMEs, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
 - **Verification:** `prettier`; a link check over the changed pages; the explorer's unit and
   browser tests; the quick gate.
 - **Not done:** the served-model census tool has no successor yet. The two compiled files

@@ -268,6 +268,9 @@ test("imports: lanes are validated, older files without lanes still load", () =>
     (x) =>
       (x.lanes[0].hypotheses = [{ id: "X", outcome: "proved", columns: [], source: "receipt" }]),
     (x) => (x.lanes[0].outside.verify = "verified"),
+    (x) => delete x.lanes[0].sources,
+    (x) => (x.lanes[0].sources = {}),
+    (x) => (x.lanes[0].sources.receipt.path = 5),
     (x) => (x.lanes[0].spend_usd = -1),
     (x) => (x.handoff.owed = "none"),
     (x) => (x.open_work = [{ id: "W01" }]),
@@ -523,4 +526,24 @@ test("a Phase 19 folder without a README is listed by name and does not stop the
     return readBound(root, path);
   };
   assert.throws(() => loadLanes(REPO, broken, readHandoff(REPO)), /32 MiB/);
+});
+
+test("a model a receipt marks as not run is not listed among the lane's models", () => {
+  let marked = 0;
+  for (const lane of b.lanes) {
+    const receipt = JSON.parse(readFileSync(join(REPO, lane.sources.receipt.path), "utf8"));
+    if (!receipt.models || Array.isArray(receipt.models)) continue;
+    for (const [id, entry] of Object.entries(receipt.models)) {
+      if (entry?.status !== "not_run") continue;
+      marked += 1;
+      assert.ok(!lane.models.includes(id), `${lane.id} lists ${id}, which did not run`);
+    }
+  }
+  assert.ok(marked > 0, "at least one committed receipt marks a model as not run");
+});
+
+test("a document's date is the latest one its own headings give, never earlier than the review", () => {
+  const dated = (id) => b.documents.find((d) => d.id === id).reviewed;
+  assert.equal(dated("docs/research/CONTINUATION_PHASE_18.md"), "2026-11-23");
+  assert.equal(dated("docs/research/CONTINUATION_PHASE_16.md"), "2026-10-19");
 });

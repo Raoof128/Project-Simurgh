@@ -13,8 +13,11 @@
   `docs/Raouf_Portfolio_Resume.docx` is removed on the owner's instruction. A second round
   narrowed three sentences that said more than the packs show and fixed two bugs in the
   explorer: an unlisted pack member named like an inherited property passed as listed, and
-  a `null` line stopped the tool server.
-- **Verification:** link check; explorer unit and browser tests; quick gate.
+  a `null` line stopped the tool server. A third round hardened the review of a returned
+  receipt (P19-REPAIR10: a discrepant phase no longer pays its replay item; a malformed
+  receipt no longer raises) and fixed four more explorer faults, among them a model listed
+  for a lane where it never ran.
+- **Verification:** link check; explorer unit and browser tests; handoff tests; quick gate.
 
 ## [phase-19f-operator17-2026-11-23] — 2026-11-23 — Lane 19ag in the operator handoff; thirty-two pinned roots
 

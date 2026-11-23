@@ -182,6 +182,15 @@ class CommittedPackTests(unittest.TestCase):
                     seat,
                 )
 
+    def test_the_loose_report_is_the_packs_report(self):
+        # The pages and the results generator read the loose file; the verifier reads the pack.
+        import zipfile
+
+        with zipfile.ZipFile(ev.DOCS / "evidence.zip") as z:
+            self.assertEqual(
+                z.read("report.json"), (ev.DOCS / "report.json").read_bytes()
+            )
+
     def test_replay_on_the_host_of_record(self):
         if os.environ.get("SIMURGH_REPLAY_19AG") != "1" or not ev.host_can_replay():
             self.skipTest("set SIMURGH_REPLAY_19AG=1 on Linux x86_64 to replay")

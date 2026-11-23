@@ -34,7 +34,8 @@ async function inflate(bytes, expected) {
 }
 
 // The members of a ZIP, read from its central directory. Encrypted, split and ZIP64 archives
-// are refused, as is any member over 64 MiB: a pack has none of these.
+// are refused, as is any member over 64 MiB and any archive that inflates past 256 MiB in all:
+// a pack has none of these, and a small file must not be able to ask the tab for gigabytes.
 export async function readZip(bytes) {
   if (!(bytes instanceof Uint8Array)) refuse("must be given as bytes");
   if (bytes.length > 4 * LIMIT) refuse("is larger than 256 MiB");
@@ -51,7 +52,8 @@ export async function readZip(bytes) {
   if (count > MEMBERS || count === 0xffff || directory === 0xffffffff)
     refuse("has too many members or is a ZIP64 archive");
   const members = new Map();
-  let at = directory;
+  let at = directory,
+    total = 0;
   for (let i = 0; i < count; i++) {
     if (at + 46 > bytes.length || view.getUint32(at, true) !== 0x02014b50)
       refuse("has a damaged directory");
@@ -67,6 +69,8 @@ export async function readZip(bytes) {
     );
     if (flags & 1) refuse("is encrypted");
     if (size > LIMIT) refuse("has a member over 64 MiB");
+    total += size;
+    if (total > 4 * LIMIT) refuse("inflates to more than 256 MiB");
     if (members.has(name)) refuse(`names ${name} twice`);
     if (local + 30 > bytes.length || view.getUint32(local, true) !== 0x04034b50)
       refuse("has a damaged member");

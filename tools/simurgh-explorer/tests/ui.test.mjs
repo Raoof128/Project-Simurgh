@@ -77,6 +77,12 @@ test("the record opens first and shows every lane and every prediction", async (
     const failed = bundle.lanes.flatMap((l) => l.hypotheses).filter((h) => h.outcome === "failed");
     assert.equal(ui.all(".failed-list li").length, failed.length);
     assert.equal(ui.all(".strip .mark-failed").length, failed.length);
+    // Each failed prediction with a result column says what happened, whatever the lane's
+    // page calls that column.
+    assert.equal(
+      ui.all(".failed-list .observed").length,
+      failed.filter((h) => h.columns.length > 1).length
+    );
     const s = lanesSummary(bundle);
     assert.ok(
       document

@@ -224,9 +224,13 @@ const idsOf = (models) =>
 // reduced to the model the protocol declares, and each model is listed once.
 function modelsOf(receipt, protocol) {
   const declared = idsOf(protocol.models);
-  const named = idsOf(receipt.models ?? protocol.models).map(
-    (key) => declared.find((id) => key.endsWith(`/${id}`)) ?? key
-  );
+  // A receipt may keep an entry for a model that was declared and never run.
+  const given = receipt.models ?? protocol.models;
+  const ran =
+    given && !Array.isArray(given)
+      ? Object.fromEntries(Object.entries(given).filter(([, v]) => v?.status !== "not_run"))
+      : given;
+  const named = idsOf(ran).map((key) => declared.find((id) => key.endsWith(`/${id}`)) ?? key);
   return [...new Set(named)];
 }
 

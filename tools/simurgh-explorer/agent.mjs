@@ -506,6 +506,8 @@ export async function answer(message, version) {
       if (!command) return text({ error: "Unknown tool; list the tools first" }, true);
       try {
         const given = message.params.arguments ?? {};
+        if (typeof given !== "object" || Array.isArray(given))
+          throw new Error("arguments must be an object");
         const allowed = new Set(
           command.args.filter((a) => !ARGS[a].path).map((a) => a.replaceAll("-", "_"))
         );

@@ -148,6 +148,12 @@ function validateLanes(b) {
       ensure(l[k] === null || typeof l[k] === "string", `Invalid lane ${k}`);
     for (const k of ["model_inference", "independent_custody"])
       ensure(typeof l[k] === "boolean", `Invalid lane ${k}`);
+    // The page names the file a prediction is recorded in, so that file must be named.
+    for (const k of ["receipt", "report", "protocol"])
+      ensure(
+        typeof l.sources?.[k]?.path === "string" && /^[0-9a-f]{64}$/.test(l.sources[k].sha256),
+        "Invalid lane sources"
+      );
     ensure(
       l.spend_usd === null || (Number.isFinite(l.spend_usd) && l.spend_usd >= 0),
       "Invalid lane spend"

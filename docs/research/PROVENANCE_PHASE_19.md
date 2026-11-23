@@ -4377,3 +4377,12 @@ pack. This declaration commit must be a strict ancestor of every commit that act
   count. The evidence explorer lists a Phase 19 folder that has no README by its name where
   it used to stop its build, with a test. Not done: no one outside the author has run the
   handoff for any of the twenty items.
+- Ruling (23 Nov 2026, P19-REPAIR10 exercised): the declaration (`c902bdb6`) precedes the
+  commit that acts on it. `handoff19.review()` now leaves a phase's `--replay` or `--dataset`
+  item unexercised unless the phase verified with no discrepancy, reviews a receipt that is
+  not an object as holding no phases, and treats a `verifier_output` or `discrepancies` that
+  is not a string as absent. The `check` command names an unknown phase. Three tests were
+  written first and failed until the tool changed. The three committed reviews recompute
+  byte-identical and the rendered handoff is unchanged, as the declaration required. Found
+  by a read of the tool on 23 November, not by a receipt: no returned receipt has met either
+  fault.

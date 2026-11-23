@@ -17,9 +17,11 @@ import {
   sentence,
 } from "./ui.jsx";
 
-// What a results page reports against a prediction, when one of its columns says so.
+// What a results page reports against a prediction: the column that says so by name, or else
+// the last column, since a page words its own headings.
 const observedOf = (h) =>
-  h.columns.find((c) => /^(Observed|What happened|Outcome|Eligible models)/.test(c.label));
+  h.columns.find((c) => /^(Observed|What happened|Outcome|Eligible models)/.test(c.label)) ??
+  (h.columns.length > 1 ? h.columns.at(-1) : undefined);
 
 function predictionLine(lane) {
   const t = tally(lane),
@@ -230,7 +232,11 @@ export function Record({ bundle, openLane, go }) {
           <dd>
             {s.independent_custody} of {s.packs}
           </dd>
-          <dd className="note">every pack was produced and is held by the author</dd>
+          <dd className="note">
+            {s.independent_custody
+              ? "the rest were produced and are held by the author"
+              : "every pack was produced and is held by the author"}
+          </dd>
         </div>
       </dl>
 

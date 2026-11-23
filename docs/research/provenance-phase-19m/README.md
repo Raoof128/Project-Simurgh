@@ -137,6 +137,8 @@ written for. RESULTS.md, section 11, has the times.
 - The lenient reading is for sensitivity only and decides nothing.
 - Not the capture `IOU-19-SPEND` declares; the hosted models and the informed-attacker arm stay
   owed.
+  (Added 23 Nov 2026: attackers given the gate's source ran from [lane 19t](../provenance-phase-19t/README.md) on, and
+  hosted models from [lane 19o](../provenance-phase-19o/README.md). `IOU-19-SPEND` itself is unchanged.)
 
 ## Reproduce the capture (Apple Silicon)
 
