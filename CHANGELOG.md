@@ -1,5 +1,14 @@
 ## Change Log
 
+## [affiliation-2026-11-24] — 2026-11-24 — The author's affiliation corrected on the disclaimer page
+
+**Raouf:**
+
+- **Scope:** `docs/DISCLAIMER.md`.
+- **Summary:** the citation line and the contact block say Macquarie University, on the
+  owner's instruction.
+- **Verification:** quick gate.
+
 ## [phase-19-guard02-2026-11-24] — 2026-11-24 — A stricter check beside lane 19ag's pinned verifier
 
 **Raouf:**

@@ -52,7 +52,7 @@ See [PRIVACY.md](../PRIVACY.md), [SECURITY.md](../SECURITY.md) and the
 
 The threat model underlying this project is described in:
 
-> Abedini, R. (2026). _The Invisible Window: A Taxonomy of Display-Fidelity Violations and Proposed Mitigations_. Western Sydney University.
+> Abedini, R. (2026). _The Invisible Window: A Taxonomy of Display-Fidelity Violations and Proposed Mitigations_. Macquarie University.
 
 The paper is provided for research and educational purposes. Reproduction of the attack techniques described therein for malicious purposes is prohibited.
 
@@ -61,4 +61,4 @@ The paper is provided for research and educational purposes. Reproduction of the
 ## Contact
 
 **Raouf Abedini** — raoof.r12@gmail.com  
-Western Sydney University
+Macquarie University

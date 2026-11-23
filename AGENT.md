@@ -14,6 +14,20 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-24 (Australia/Sydney) — The author's affiliation corrected on the disclaimer page
+
+**Raouf:**
+
+- **Scope:** `docs/DISCLAIMER.md`, both logs.
+- **Summary:** the page named the wrong university in its citation line and its contact
+  block. On the owner's instruction both now say Macquarie University. The owner also
+  decided two other questions the readiness audits had left for them: the two sentences
+  that say code was written by an AI model (the manuscript folder's README and lane 19u's
+  limits) stay as written, and the repository's history is not rewritten.
+- **Files changed:** `docs/DISCLAIMER.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `prettier` and the quick gate.
+- **Not done:** nothing else on that page is changed.
+
 ### 2026-11-24 (Australia/Sydney) — A stricter check beside lane 19ag's pinned verifier (P19-GUARD02)
 
 **Raouf:**
