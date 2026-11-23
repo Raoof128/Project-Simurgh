@@ -1,5 +1,17 @@
 ## Change Log
 
+## [phase-19ag-pack-2026-11-23] — 2026-11-23 — Lane 19ag: the approval check refuses a body it cannot read
+
+**Raouf:**
+
+- **Scope:** the 19ag pack, its pages, a committed-pack test, the ruling.
+- **Summary:** a class beside the gate refuses the bodies that made lane 19ae's gate raise.
+  558 attempts on the Linux host: the 16 `KeyError` raises are gone, nothing else about a
+  recorded attempt changes, and 91 fresh attempts from three seats do not gain or raise.
+  Five of six predictions hold. Root `c09048af…`.
+- **Verification:** run of record with replay; bare-interpreter `verify`; committed-pack
+  tests; quick gate.
+
 ## [phase-19ag-seats-2026-11-23] — 2026-11-23 — Lane 19ag: three seats' files as received
 
 **Raouf:**

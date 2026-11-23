@@ -4276,3 +4276,30 @@ This declaration commit must be a strict ancestor of every other commit of lane 
   counts as a store write, so such an attempt falls outside G5; and a record written when a
   long note is cut counts as the record of the refusal that follows it. Neither is changed
   here.
+- Ruling (23 Nov 2026, P19-GUARD01 exercised): the declaration (`275cf448`) is an ancestor of
+  its amendment (`66566653`), of the instrument commit (`45f2bcf7`), of the commit that holds
+  the seats' files (`2782e06d`) and of this one. The run of record was on the project's Linux
+  x86_64 host in the hash-locked environment, from a clean clone at `2782e06d`, from
+  10:12:53Z to 10:51:21Z, with the replay that checks it. Root
+  `c09048afd8bb58539c95409b850e7b85f7a3b4a6c1f07ff5118586953db34d67`. 558 attempts: 467
+  recorded, each on the full gate of lane 19ae and on the guarded gate, and 91 from three
+  fresh seats on the guarded gate. G0 holds: 18 recorded attempts raise on the full gate, 16
+  of them with `KeyError`. G1 does not hold: 2 recorded attempts raise on the guarded gate,
+  the same two that raise on the full gate for reasons the repair does not touch. One of
+  lane 19z's seats' attempts runs SQL that caps the process's memory and the worker dies;
+  the earlier note called it store-writing, and no store byte changes in it. In one of lane
+  19ae's seats' attempts the host's own `mint` raises after the seal has latched. G1 was
+  written without counting them and is left as declared. G2 holds: all 449 recorded attempts
+  that do not raise on the full gate get the same verdicts, effects and latch on the guarded
+  gate. G3 holds: no refused dispatch on the guarded gate is left without a record. G4
+  holds: no attempt gains. G5 holds: of the 89 fresh attempts that write no store, none
+  makes the guarded gate raise or latch. The 16 attempts that raised `KeyError` are each
+  refused on the guarded gate, 64 refusals in all. Not done and not claimed: the frozen gate
+  and every earlier lane's gate still raise; the two attempts that still raise are not
+  repaired; the seats are agents of Claude models the author started, two of them given a
+  paragraph beyond the brief; no one outside the project has run the pack. Found after the
+  run and written on the lane's page: two seats nested bodies 1,486 and 1,487 levels deep,
+  which the JSON reader of Python 3.12.0 to 3.12.2 accepts from the command line and can
+  reject when the verifier is called from inside a test runner, where it then reports
+  `report_rows`. The host of record read every file. The committed-pack test runs the
+  verifier as a command for that reason.

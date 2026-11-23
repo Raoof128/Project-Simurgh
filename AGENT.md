@@ -14,6 +14,32 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-23 (Australia/Sydney) — Lane 19ag pack: the crash in the approval check is repaired beside the gate; one prediction fails
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19ag/` (the pack, README and results), the
+  committed-pack test, the ruling, both logs. `main` was merged into the lane branch first
+  and both logs kept every entry.
+- **Summary:** on the project's Linux host the 16 recorded attempts that raised `KeyError`
+  on lane 19ae's gate are each refused on the repaired gate, and the other 449 recorded
+  attempts that did not raise end the same on both gates. Three fresh seats' 91 attempts do
+  not gain and do not make the gate raise. Five of six predictions hold. G1 fails: two
+  recorded attempts still raise for reasons the repair does not touch, which the author had
+  not counted when writing it.
+- **Files changed:** the pack's five files, `README.md` and `RESULTS.md` beside them,
+  `tools/assurance-provenance/tests/test_evidence19ag_committed.py`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** the run of record with its replay on the Linux host; `verify` with a
+  bare Python 3.12 interpreter on macOS; 8 committed-pack tests; `prettier`, `ruff` and the
+  quick gate pass.
+- **Not done:** the lane is not in the operator handoff yet. The frozen gate still raises.
+  The two attempts that still raise are not repaired. An earlier note called one of them
+  store-writing; the ruling corrects that. Two seats nested bodies about 1,486 levels deep,
+  at the edge of what the JSON reader of Python 3.12.0 to 3.12.2 accepts: on 3.12.2 the
+  verifier passes as a command and failed inside the test runner, so the committed-pack test
+  runs it as a command and the lane's page says so.
+
 ### 2026-11-23 (Australia/Sydney) — Lane 19ag: the three seats' files as received
 
 **Raouf:**
