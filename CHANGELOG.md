@@ -1,5 +1,15 @@
 ## Change Log
 
+## [phase-19ag-instrument-2026-11-23] — 2026-11-23 — Lane 19ag instrument: a repaired approval check
+
+**Raouf:**
+
+- **Scope:** `guard19ag.py`, `evidence19ag.py`, their tests, the seats' brief, the ledger.
+- **Summary:** a class beside the gate whose approval check refuses a body without a string
+  `run` and a string `id`, and fails closed on any error. Lane 19ae's seats found the raise
+  this repairs. No pack yet.
+- **Verification:** 21 tests with the hash-locked set; quick gate.
+
 ## [phase-19-e2e-2026-11-22] — 2026-11-22 — End-to-end check of the day's lanes after they merged
 
 **Raouf:**

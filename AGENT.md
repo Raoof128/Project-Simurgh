@@ -14,6 +14,29 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-23 (Australia/Sydney) — Lane 19ag instrument: the approval check refuses a body it cannot read
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/guard19ag.py`, `evidence19ag.py`, their two test
+  files, the seats' brief under `docs/research/provenance-phase-19ag/`, `.prettierignore`,
+  an amendment and a note in the ledger. No earlier lane's file changes.
+- **Summary:** lane 19ae's seats found that a body without its `run` or `id`, sent with a
+  validly signed token, makes the gate raise. `guard19ag.pipeline()` is lane 19ae's gate
+  with an approval store that refuses such a body and treats any error raised during the
+  check as a refusal. The lane reuses lane 19ae's attempts, steps and flags and adds lane
+  19ae's own seats' files as recorded attempts.
+- **Files changed:** the two modules, `tests/test_guard19ag.py`, `tests/test_evidence19ag.py`,
+  `docs/research/provenance-phase-19ag/BRIEF.md`, `.prettierignore`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** 21 tests pass with the hash-locked set, 13 of them on the rules and the
+  real gate and 8 on the pack with a stand-in gate; `ruff`, `prettier` and the quick gate
+  pass. A trial of the 467 recorded attempts on the author's machine is in the ledger.
+- **Not done:** no seat has started and no pack exists. The declaration miscounted lane
+  19ae's files and was amended in its own commit. One declared prediction, G1, is expected
+  to fail: two recorded attempts raise for reasons the repair does not touch. It is left as
+  declared.
+
 ### 2026-11-22 (Australia/Sydney) — End-to-end check of the day's lanes after they merged
 
 **Raouf:**

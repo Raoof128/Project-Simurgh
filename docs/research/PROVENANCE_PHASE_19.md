@@ -4247,3 +4247,17 @@ This declaration commit must be a strict ancestor of every other commit of lane 
   The count was written from memory and was wrong. Nothing else in the
   declaration changes: the recorded attempts are still every attempt lane 19ae ran, the
   eighteen files and its own three seats' files.
+- Note (23 Nov 2026, P19-GUARD01, written with the instrument and before a seat started): the
+  467 recorded attempts were run on both gates on the author's own machine while the
+  instrument was written, with empty files in place of the three fresh seats. In that trial
+  18 recorded attempts raise on the full gate: the 16 of lane 19ae's seats that raise
+  `KeyError`, and two that raise for other reasons, one of lane 19z's seats whose
+  store-writing attempt ends the worker process and one of lane 19ae's seats in which the
+  host's own `mint` raises after the seal has latched. On the guarded gate none of the 16
+  raises, each ends in a refusal, and the other two raise as before. So G0, G2, G3 and G4
+  held in the trial and G1 did not: it was declared as "no recorded attempt raises", and the
+  author had not counted the two attempts that raise for reasons the repair does not touch.
+  G1 is left as declared and is expected to fail on the run of record for that reason. G5
+  was not exercised. The run of record is therefore not the first time the recorded half
+  was seen. As in lane 19ae, attempts that only use the gate's own calls run 25 to a
+  process, and an attempt that writes a store, and every attempt of a seat, runs alone.
