@@ -1,5 +1,16 @@
 ## Change Log
 
+## [readiness-round-11-2026-11-24] — 2026-11-24 — A recount of about 155 stated numbers; nine sentences corrected
+
+**Raouf:**
+
+- **Scope:** the root README, `SECURITY.md`, the record of corrections, dated notes on six
+  lane pages (19h, 19m, 19n, 19t, 19v, 19z).
+- **Summary:** every number recounted from the raw packs is exact. Nine sentences said more
+  than the rows show and are reworded or carry a dated note. One label in lane 19h's pinned
+  pack misnames its rule; the page says so and the result stands.
+- **Verification:** each finding recounted before the fix; six lane verifiers; quick gate.
+
 ## [readiness-round-10-2026-11-24] — 2026-11-24 — Three sentences reworded to what the packs show; sidecars held to canonical bytes
 
 **Raouf:**

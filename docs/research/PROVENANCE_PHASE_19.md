@@ -4636,3 +4636,11 @@ does not authorise.
   removal check found a branch no test guarded. The commit that exercised P19-AUDIT03 also
   edited lane 19ag's page; that edit belongs to amendment 1 of P19-GUARD02, which authorises
   it, and not to P19-AUDIT03, which authorises no lane's page.
+- Note (24 Nov 2026, on the declaration P19-OPENWEIGHT01 above, whose text is left as
+  written): it says every local model of lanes 19h to 19n was a build of at most 7B
+  parameters and that lane 19m could not finish an 8B model. Lane 19m's pack holds one 4-bit
+  build of an 8B model captured in full (`llama-3.1-8b-4bit`, 864 generations) and 409
+  generations of another (`qwen3-8b-4bit`) that was interrupted. Lane 19v's page carries a
+  dated note. Found by an eleventh read-only round, which recounted about 155 stated numbers
+  from the raw packs with separate code and found every number exact; what it found were
+  sentences that say more than the rows show, each now reworded or noted on its page.

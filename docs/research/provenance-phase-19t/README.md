@@ -15,6 +15,10 @@ attacker was given, [the submissions](submissions/) as received, and
 output. None of them makes the undelegated action land, changes a verdict or changes the
 authority hash.**
 
+(Added 24 Nov 2026: "changes a verdict" is about the 82 attempts whose dispatch completed.
+In the other 10 a dispatch raised and no verdict exists, as "What stayed the same in all
+92" below says.)
+
 Verify the structure (any host with Python 3.12; standard library only):
 
 ```sh

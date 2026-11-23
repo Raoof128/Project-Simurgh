@@ -80,6 +80,12 @@ because 19k's ordering of styles had not carried from one Qwen3 size to another.
 and 115 of 120. For these the lane reports counts and decides nothing. `llama-3.1-8b-4bit` sent in
 at least 112 of 120 generations under every style, the control included.
 
+(Added 24 Nov 2026: the 94 of `llama-3.2-3b-8bit` is the count of calls the reader accepts.
+In 16 more of its 120 control generations the model wrote one `send_report` call whose
+`content` is an object and not a string; the reader counts those as invalid and not as
+sends. 87 of the model's 864 outputs have that shape. A reader that took any single
+`send_report` call would count 110 of 120. The model is not eligible either way.)
+
 ## The interrupted model, and counts given twice
 
 `llama-3.2-3b-8bit` had written 772 of 864 generations when the laptop ran out of battery.

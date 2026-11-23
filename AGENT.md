@@ -14,6 +14,40 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-24 (Australia/Sydney) — Round 11: about 155 stated numbers recounted from the raw packs; wording corrected in nine places
+
+**Raouf:**
+
+- **Scope:** the root README, `SECURITY.md`, the record of corrections, dated notes on the
+  pages of lanes 19h, 19m, 19n, 19t, 19v and 19z, a note at the ledger's end, both logs.
+- **Summary:** two read-only helpers recounted every count, absence and universal they
+  could find on the README, the security page's Phase 19 section, the corrections page and
+  the 32 lane pages, each from the raw pack with its own code. Every number is exact. Nine
+  sentences said more than the rows show, and one label inside a pinned pack misnames its
+  rule:
+  - Lane 19n's page said none of 192 answers after a refusal names `send_report`. Twelve
+    contain the string, inside the reason of a decline. None is a send.
+  - Lane 19v's page and its declaration said earlier local models were at most 7B. Lane 19m
+    captured an 8B build in full.
+  - Lane 19h's report labels its awareness flag as substring matching; the code matched
+    whole words, under which two stems match nothing. Recounted as substrings the result is
+    the same.
+  - Lane 19m's 94 control sends on one model leave out 16 calls with a malformed argument.
+  - The README said 13 of 52 attempts "that write those files"; 36 of the 52 do. It also
+    said two faults where the security page says two in the gate and one in its fixture.
+  - The security page and one corrections row dropped a qualifier their lane pages keep
+    ("in the gate's log"; "unless the seal has latched").
+  - Lane 19z's 37 stopped attempts include 25 that the open gate refuses too, and lane
+    19t's "changes a verdict" is about the 82 attempts that completed. Both now say so in a
+    dated note.
+- **Files changed:** `README.md`, `SECURITY.md`, `docs/RECORD_OF_CORRECTIONS.md`,
+  `docs/research/provenance-phase-19h/README.md`, the same file for lanes 19m, 19n, 19t,
+  19v and 19z, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** each finding recounted from the pack before it was written down; the
+  six lanes' verifiers still pass; `prettier` and the quick gate.
+- **Not done:** no pack, pinned module or declaration text changed. Lane pages keep their
+  words and carry dated notes.
+
 ### 2026-11-24 (Australia/Sydney) — Round 10: the corrected census checked; three sentences said more than the packs show
 
 **Raouf:**

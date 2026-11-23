@@ -84,8 +84,8 @@ refused, while a credential check alone let 369 through.
 **Upgrade set, 13 November.** Five more lanes, each declared before it ran. The two that went
 against what was declared come first. [19t](docs/research/provenance-phase-19t/README.md) gave
 two coding agents the gate's source and committed what each submitted before it was run: 49 of
-92 attempts changed the gate's output, against the declared prediction, through two faults that
-lane 19y has since repaired beside the gate. None made the undelegated action land. In the 82
+92 attempts changed the gate's output, against the declared prediction, through two faults in
+the gate and one in its fixture, which lane 19y has since repaired beside the gate. None made the undelegated action land. In the 82
 attempts whose dispatch completed no verdict changed; in the other 10 a dispatch raised and
 there is no verdict to compare.
 [19q](docs/research/provenance-phase-19q/README.md) scored a destination rule on a public
@@ -149,9 +149,9 @@ a caller has to use the repaired classes.
 [19z](docs/research/provenance-phase-19z/README.md) gives the attacker what the labs' 2026
 incident reports describe: write access to the controls themselves. The gate keeps its grants,
 stop state and approvals in files and believes what it reads there, so with nothing else in
-place 13 of 52 attempts that write those files make the undelegated action land (31 of the
-52 are the author's own and 21 one agent's), and 4 let an
-approved action go ahead on a script rewritten after approval. With a digest of those files
+place 13 of 52 attempts make the undelegated action land, and 4 let an approved action go
+ahead on a script rewritten after approval (36 of the 52 change one of those files or the
+script; 31 are the author's own and 21 one agent's). With a digest of those files
 held in the host's memory, none does: the gate latched on each of the 36 attempts that changed
 a file and on no other. The price is that a writer of the files can stop all work, and one
 attempt stopped the sealed gate without touching a file at all. This is detection after the
