@@ -84,3 +84,7 @@ stage5p-independent-verification.tar.gz
 
 # Lean installer the CI quality gate downloads into the checkout root
 /elan-init
+
+# Environments the Phase 19 operator handoff tells an operator to create
+/.venv/
+/.venv-verify/

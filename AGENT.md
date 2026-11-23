@@ -14,6 +14,44 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-23 (Australia/Sydney) — Readiness round 1: the public pages brought up to date after four read-only audits
+
+**Raouf:**
+
+- **Scope:** the root README, `docs/RECORD_OF_CORRECTIONS.md`, two limits and one table on
+  `docs/AUTHOR_AND_METHOD.md`, `ROADMAP.md`, `SECURITY.md`, `docs/REVIEWER_INDEX.md`, two
+  dated notes on lane pages, `.gitignore`, the evidence explorer, and the removal of one
+  file on the owner's instruction.
+- **Summary:** four read-only audits of the branch (a cold start from a fresh clone, the
+  dashboard from a fresh clone, a consistency check and a first read) found stale and
+  contradictory statements in the public pages and nothing broken in the evidence: 29 of 32
+  verify commands pass with a bare interpreter, the other three as documented, and 253
+  links resolve. The README now opens with what Phase 19 found and one verify command, and
+  its logo no longer fills the first screen. The record of corrections lists the 17
+  predictions that failed after 11 November, generated from the committed files, the four
+  faults attacker agents found, and four corrections to the record, one of them to that
+  page's own "still open" list. The author page's limits on attackers and on stronger
+  models say what has since been run; the author line and the AI-use statement are
+  untouched. The roadmap, security page and reviewer guide name Phase 19. The README's open
+  work gains one entry: the served-model census does not read lane 19af.
+  The explorer says "Measured a model" where it said "Ran a model", counts a pack sweep only
+  when all packs are read, answers a taken port or a missing build with one line, and fits
+  its predictions table on a phone; a Mythos 5.2 agent made those nine fixes in its own
+  worktree, tests first.
+- **Removed:** `docs/Raouf_Portfolio_Resume.docx`, on the owner's instruction. It is not
+  project evidence.
+- **Files changed:** `README.md`, `ROADMAP.md`, `SECURITY.md`, `.gitignore`,
+  `docs/RECORD_OF_CORRECTIONS.md`, `docs/AUTHOR_AND_METHOD.md`, `docs/REVIEWER_INDEX.md`,
+  `docs/research/provenance-phase-19ac/README.md`,
+  `docs/research/provenance-phase-19ae/README.md`,
+  `docs/research/explorer-phase-18/AUDIT_2026-11-23.md`, `tools/simurgh-explorer/`,
+  `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `prettier`; a link check over the changed pages; the explorer's unit and
+  browser tests; the quick gate.
+- **Not done:** the served-model census tool has no successor yet. The two compiled files
+  with a local path, and the full name on the first operator receipt, stay as they are on
+  the owner's word. No Phase 19 pack, receipt, brief or pinned module is changed.
+
 ### 2026-11-23 (Australia/Sydney) — Lane 19ag in the operator handoff; thirty-two pinned roots; the README's open work brought up to date
 
 **Raouf:**

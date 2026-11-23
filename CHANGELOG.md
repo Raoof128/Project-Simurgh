@@ -1,5 +1,18 @@
 ## Change Log
 
+## [readiness-round-1-2026-11-23] — 2026-11-23 — Public pages brought up to date after four read-only audits
+
+**Raouf:**
+
+- **Scope:** README first screen, record of corrections, roadmap, security page, reviewer
+  guide, two limits on the author page, the evidence explorer, one file removed.
+- **Summary:** the README opens with Phase 19's results and one verify command. The record
+  of corrections lists every failed prediction since 12 November and the faults attacker
+  agents found, and no longer says that no attacker with the source has run. The dashboard
+  no longer reads as if attacker lanes ran no model or as if 31 packs failed a hash check.
+  `docs/Raouf_Portfolio_Resume.docx` is removed on the owner's instruction.
+- **Verification:** link check; explorer unit and browser tests; quick gate.
+
 ## [phase-19f-operator17-2026-11-23] — 2026-11-23 — Lane 19ag in the operator handoff; thirty-two pinned roots
 
 **Raouf:**

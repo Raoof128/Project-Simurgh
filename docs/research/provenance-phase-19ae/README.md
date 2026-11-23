@@ -140,6 +140,8 @@ worker process, so a `--replay` on another host may stop with `report_mismatch`.
 ## Limits
 
 - The raise is reported and not repaired. Every gate in this repository has it.
+  (Added 23 Nov 2026: [lane 19ag](../provenance-phase-19ag/README.md) repairs it in a class
+  beside the gate. This lane's gate and every earlier one still raise.)
 - The seats are agents of two Claude models, started by the author. They are not a person
   and not an attacker from another vendor. There was no planted fault in this round, so
   their zero carries only the weight that seats of this kind found the last fault.

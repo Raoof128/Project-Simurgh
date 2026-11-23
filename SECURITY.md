@@ -364,6 +364,36 @@ assignments, bearer strings), policy markers compared on a letters-only collapse
 output. It can only withhold more than the frozen firewall, never less, so the frozen firewall's
 nine-of-twelve false blocks on benign code help remain. The scan never returns the matched text.
 
+## Phase 19 gate: faults found by attacker agents (November 2026)
+
+The Phase 19 gate is a research fixture under `tools/assurance-provenance/`. Agents given its
+source found the faults below. Each repair is a class beside the gate that a caller must
+choose to use. The frozen gate and the gate of each earlier lane keep the fault.
+
+- **Attacker text changed the gate's output (repaired beside the gate).** 49 of 92 attempts
+  changed it, through two faults in the gate and one in its fixture
+  ([19t](docs/research/provenance-phase-19t/README.md)). None made the undelegated action
+  land. [19y](docs/research/provenance-phase-19y/README.md) repairs them.
+- **Refusals with no record (repaired beside the gate).** 30 of 66 refusals left no record
+  ([19ab](docs/research/provenance-phase-19ab/README.md)). The gate of
+  [19ae](docs/research/provenance-phase-19ae/README.md) records every refusal.
+- **An approval admitted on another approval's nonce (repaired beside the gate).** A token
+  signed with the operator's key was accepted on the nonce of an approval minted for another
+  action ([19ac](docs/research/provenance-phase-19ac/README.md)).
+  [19ad](docs/research/provenance-phase-19ad/README.md) repairs it.
+- **A raise where the gate should refuse (repaired beside the gate).** A body without its
+  `run` or `id`, sent with a validly signed token, raised `KeyError`
+  ([19ae](docs/research/provenance-phase-19ae/README.md)).
+  [19ag](docs/research/provenance-phase-19ag/README.md) refuses it. Two recorded attempts
+  that reach the gate's own stores still raise on every gate.
+- **The gate believes its own files (retained).** With write access to the gate's stores, 13
+  of 52 attempts made the undelegated action land
+  ([19z](docs/research/provenance-phase-19z/README.md)). A digest held in memory stops all 13
+  and lets such an attacker halt all work.
+
+Every attacker was a Claude agent the author started. No one outside the project has assessed
+the gate.
+
 ## Reporting a Vulnerability
 
 **Do not open a public GitHub issue for security vulnerabilities.**
