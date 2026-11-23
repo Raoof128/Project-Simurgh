@@ -2880,6 +2880,40 @@ Not authorised: any change to a phase's host, time, expected kind or fields, to 
 comparator checks, to an operator's receipt, or to a frozen file or a lane's pinned source or
 pack. This declaration commit must be a strict ancestor of every commit that acts on it.
 
+**P19-AUDIT02 (bounded authority to let the served-model census read a pack that names its
+models as the keys of an object; declared 24 Nov 2026 before any commit that acts on it).**
+The census of P19-AUDIT01 counts a model id only where a pack holds it as a string under the
+key `model` or `api_model`. Lane 19af's pack names its two local models as the keys of the
+`models` object in `capture.json` and nowhere under those two keys, so the census leaves the
+lane out: its page says 16 packs name a model where 17 do. The root README has listed this
+under open work since 23 November. Measured before this was written, with the rule below
+applied to every committed pack: lane 19af gains its two ids, lane 19m gains two ids its pack
+names and the census missed (one model stopped by rule after its authorised cases, one not
+captured), and no other pack changes. This declaration authorises, and nothing else:
+
+1. `tools/assurance-provenance/served19.py`: a pack also names a model where it holds an
+   object under the key `models` whose values are all objects; each key of that object is a
+   named id. The rule for an id the provider returned does not change. The page's opening
+   lines name this declaration and say that naming a model is not running it. Tests first.
+2. The generated page `docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md`, written again
+   by the tool.
+3. The root README: the count in the sentence that cites the census, and the removal of the
+   open-work entry this closes.
+4. Both logs and the ruling.
+
+Not authorised: any edit to a pack, a capture module, a workflow or a frozen file. No money.
+This declaration commit must be a strict ancestor of every commit that acts on it.
+
+**P19-AUDIT02, amendment 1 (24 Nov 2026, declared before any commit that acts on it).** Found
+while the tests of the declaration were being written: since lane 19ag joined, the census
+test `test_every_member_was_read` fails on Python 3.12.0 to 3.12.2. Two of that lane's seat
+files nest bodies about 1,486 levels deep, which the JSON reader of those versions cannot
+read from inside a test runner, so the census lists the two files as unread. They hold
+attempts and no model id, and the page is the same either way. The test passes on Python
+3.12.3 and later, which the hosted suite runs. This amendment authorises one more thing: that
+test accepts exactly those two files of lane 19ag as unread on Python 3.12.0 to 3.12.2, and
+nothing else unread on any version. The tool's reading does not change.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
@@ -4434,3 +4468,15 @@ pack. This declaration commit must be a strict ancestor of every commit that act
   one too. The test was written first and failed until the generator changed. `HANDOFF.md`
   is rendered again; the discrepancy template and the three reviews are byte-identical. No
   phase's host, time, expected kind or fields changed.
+- Ruling (24 Nov 2026, P19-AUDIT02 and its amendment exercised): the declaration (`da19e2fe`)
+  and the amendment (`03339380`) precede the commit that acts on them. The census also names
+  a model where a pack holds an object under the key `models` whose values are all objects.
+  Lane 19af is now in the census with its two local models, lane 19m with the two ids its
+  pack names and the census missed, and no other pack changed, as measured before the
+  declaration. The page says 17 packs name a model and one holds an id the provider
+  returned; it also says that naming a model is not running it. Two tests were written
+  first and failed until the tool changed. The census test accepts lane 19ag's two deeply
+  nested seat files as unread on Python 3.12.0 to 3.12.2 and nothing else on any version;
+  it had failed on those versions since that lane joined, which nothing had noticed because
+  the hosted suite runs a later Python. The root README has the new count and no longer
+  lists the census under its open work.

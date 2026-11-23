@@ -14,6 +14,32 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-24 (Australia/Sydney) — The served-model census reads lane 19af (P19-AUDIT02); one open-work entry closed
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/served19.py` and its test, the generated census
+  page, the root README, one test and one sentence for lane 19ag, the ledger, both logs.
+- **Summary:** the census named a model only where a pack held it under the key `model` or
+  `api_model`, so it left out lane 19af, whose pack names its two models as the keys of an
+  object. Under P19-AUDIT02, declared first, it reads that form too: 17 packs name a model
+  and one holds an id the provider returned. Lane 19m's row gains two ids its pack names.
+  The README's open-work entry on the census is removed. Found on the way and fixed under
+  an amendment: the census test had failed on Python 3.12.0 to 3.12.2 since lane 19ag
+  joined, because two of that lane's seat files nest too deep for that reader. For lane
+  19ag, a test now holds the committed report's fields that its verifier does not compare
+  without `--replay`.
+- **Files changed:** `tools/assurance-provenance/served19.py`, `tests/test_served19.py`,
+  `tests/test_evidence19ag_committed.py`,
+  `docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md`,
+  `docs/research/provenance-phase-19ag/README.md`, `README.md`, the ledger, `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** census tests on Python 3.12.2 and 3.12.4, two written first; the page is
+  the tool's output; lane 19ag's tests; the explorer's unit tests; `prettier`, `ruff` and
+  the quick gate.
+- **Not done:** nothing here changes a pack. Lane 19ag's verifier itself is pinned and still
+  does not compare those report fields without `--replay`.
+
 ### 2026-11-23 (Australia/Sydney) — Readiness round 5: the operator's path; no bug found in the code; three tests tightened
 
 **Raouf:**

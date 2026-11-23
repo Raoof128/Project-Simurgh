@@ -64,6 +64,30 @@ class ReadingTests(unittest.TestCase):
             ],
         )
 
+    def test_the_keys_of_a_models_object_are_named_ids(self):
+        # P19-AUDIT02: a pack may name its models as the keys of an object, as lane 19af's does.
+        got = s.read_pack(
+            pack(
+                {
+                    "capture.json": json.dumps(
+                        {
+                            "models": {"m1": {"files": {}}, "m2": {}},
+                            "x": {"model": "m3"},
+                        }
+                    ),
+                    "deep.json": json.dumps(
+                        {"a": [{"b": {"models": {"m4": {"n": 1}}}}]}
+                    ),
+                    # not such an object: values that are not all objects, a list, an empty one
+                    "no1.json": json.dumps({"models": {"count": 2, "m9": {}}}),
+                    "no2.json": json.dumps({"models": ["m8"]}),
+                    "no3.json": json.dumps({"models": {}}),
+                }
+            )
+        )
+        self.assertEqual(got["named"], ["m1", "m2", "m3", "m4"])
+        self.assertEqual(got["served"], [])
+
     def test_json_lines_members_are_read_line_by_line(self):
         lines = "\n".join(json.dumps({"model": m}) for m in ("m1", "m2")) + "\n\n"
         self.assertEqual(s.read_pack(pack({"t.jsonl": lines}))["named"], ["m1", "m2"])
@@ -103,9 +127,32 @@ class CommittedPageTests(unittest.TestCase):
         self.assertEqual(s.PAGE.read_text(), s.render(self.data))
 
     def test_every_member_was_read(self):
+        unread = {k: v["unread"] for k, v in self.data.items() if v["unread"]}
+        # Two of lane 19ag's seat files nest bodies about 1,486 levels deep. The JSON reader
+        # of Python 3.12.0 to 3.12.2 cannot read them from inside a test runner; they hold
+        # attempts and no model id (P19-AUDIT02, amendment 1). Nothing else may be unread.
+        if sys.version_info[:3] <= (3, 12, 2):
+            deep = ["attempts-seat-a.json", "attempts-seat-b.json"]
+            if unread.get("19ag") in (deep, deep[:1], deep[1:]):
+                del unread["19ag"]
+        self.assertEqual(unread, {})
+
+    def test_every_lane_that_ran_a_model_names_one(self):
+        # The gap P19-AUDIT02 closes: lane 19af ran two models and the census named none.
+        for directory in sorted(s.RESEARCH.glob(s.PREFIX + "19*")):
+            receipt = directory / "receipt.json"
+            lane = directory.name[len(s.PREFIX) :]
+            if lane not in self.data or not receipt.is_file():
+                continue
+            if json.loads(receipt.read_text()).get("model_inference") is True:
+                self.assertTrue(self.data[lane]["named"], lane)
         self.assertEqual(
-            {k: v["unread"] for k, v in self.data.items() if v["unread"]}, {}
+            self.data["19af"]["named"], ["llama-3.2-3b-4bit", "qwen3-4b-4bit"]
         )
+        self.assertEqual(sum(bool(v["named"]) for v in self.data.values()), 17)
+        page = s.PAGE.read_text()
+        self.assertIn("Packs that name a model: 17.", page)
+        self.assertIn("P19-AUDIT02", page)
 
     def test_one_hosted_lane_holds_a_returned_id_and_three_do_not(self):
         holding = sorted(k for k, v in self.data.items() if v["served"])

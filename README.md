@@ -169,8 +169,7 @@ an approval, so the gate binds the body and not the name. It also found what it 
 predict: 30 of 66 refusals, those of bodies the gate's schema rejects, leave no record in its
 log. Both lanes are lists the author wrote and no agent attacked them. A
 [census of the packs](docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md) found that of the
-16 that name a model, one holds a model id the provider returned (it misses lane 19af; see
-the open work below).
+17 that name a model, one holds a model id the provider returned.
 
 **A planted fault, a real one, and its repair, 22 November.**
 [19ac](docs/research/provenance-phase-19ac/README.md) had two agent seats write the sequences
@@ -501,10 +500,6 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
   made the undelegated action land (19z). A digest held in the host's memory stops all 13
   and lets such a writer halt all work. It detects a change after the fact; it is not
   isolation.
-- **The served-model census misses a lane:** lane 19af's receipt names its two local models
-  in a form the census tool does not read. The census counts 16 packs that name a model
-  where there are 17; one of them holds an id the provider returned, as the census says.
-  The tool is pinned, and a successor that reads the lane is owed.
 - **A restriction that arrives as text:** the gate acts on host state and ignores a
   withdrawal written into a channel (19af, 20 of 20 dispatches observed). Whether the send
   then goes out is left to the model and the wording. A host that learns of a restriction
