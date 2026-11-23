@@ -2786,6 +2786,39 @@ Authorised files: `tools/assurance-provenance/guard19ag.py`, `evidence19ag.py`, 
 authorised: any edit to a frozen file, to a 19a to 19af source or pack, or to a workflow.
 This declaration commit must be a strict ancestor of every other commit of lane 19ag.
 
+**P19-OPERATOR17 (bounded authority to bring lane 19ag into the outside-operator handoff and
+the externally pinned roots, and to bring the root README up to date; declared 23 Nov 2026
+before any commit that acts on it).** 19ag is committed with root
+`c09048afd8bb58539c95409b850e7b85f7a3b4a6c1f07ff5118586953db34d67`. Its declaration did not
+authorise a workflow or handoff edit. This declaration authorises, and nothing else:
+
+1. `handoff19.py`: 19ag added to `PHASES` with its host and time, the word for the new count,
+   the lane in the list of lanes that need nothing beyond the standard library, and in the
+   lists of lanes that take `--replay`. It is a replayed lane as 19ae is: `gate_recomputed`
+   with `--replay` and `structure_checked` without. The comparator's rules do not change.
+   Tests first.
+2. The reviews of the three operator receipts recomputed under the new phase list. No receipt
+   is edited; the lane appears in each review as `not_in_receipt`.
+3. Re-rendering `HANDOFF.md` and `discrepancy-template.json`; the 19f READMEs' count of
+   packs, their row for the lane and their lists of what is owed.
+4. `.github/workflows/assurance-provenance.yml`: the lane's `docs/` path added to both path
+   filters and its id to the expected-roots check, with its message. No step is added,
+   removed or renamed, and the Stage 5Q census must be byte-identical before and after. The
+   repository variable `PHASE19_ROOTS` gains the one root, set outside the pull request, the
+   thirty-one existing values unchanged.
+5. The root README: the count of Phase 19 packs, one paragraph on the lane, and its open-work
+   entry on the raise in the approval check rewritten to say what is repaired and what is
+   not. The same count in `docs/AUTHOR_AND_METHOD.md`.
+6. `tools/simurgh-explorer/lanes.mjs` and its test: a Phase 19 folder that has no `README.md`
+   is listed by its name with a line saying so. Until now such a folder stopped the
+   explorer's build, which this lane's folder did while it held only its brief and its
+   seats' files.
+7. Both logs and the ruling.
+
+Not authorised: any edit to a frozen file, to a lane's pinned source or pack, to an operator's
+receipt, or any other change to what the comparator checks. This declaration commit must be a
+strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
