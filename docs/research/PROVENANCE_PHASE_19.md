@@ -2846,6 +2846,18 @@ Not authorised: any edit to an operator's receipt, any change to what `check` co
 change to the rendered handoff, or any edit to a frozen file or to a lane's pinned source or
 pack. This declaration commit must be a strict ancestor of every commit that acts on it.
 
+**P19-REPAIR10, amendment 1 (23 Nov 2026, declared before any commit that acts on it).** A
+second read of `review()` after the repair found three more kinds of returned file on which
+it raises: a file that is not JSON at all, a `verifier_output` nested too deep for the JSON
+reader, and one that holds `NaN` or `Infinity`. `status` and `render` survive each, because
+no review can exist beside such a receipt, but the `review` command ends in a traceback. This
+amendment authorises, and nothing else: in `handoff19.py`, a returned file that cannot be
+read as JSON is reviewed as holding no phases; a `verifier_output` or `discrepancies` that
+cannot be read, or that holds a constant JSON does not define, is treated as absent; and
+`_committed_review` treats a review it cannot recompute as no review. Tests first. The three
+committed reviews must again recompute byte-identical. Everything the declaration does not
+authorise stays unauthorised.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
