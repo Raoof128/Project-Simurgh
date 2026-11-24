@@ -19,8 +19,8 @@ one machine's local agent configuration:
 **Raouf:**
 
 - **Scope:** the census tool, its page and tests (P19-AUDIT04, declared first); the method
-  page, one README sentence, the manuscript folder's page, a note on lane 19v's page, two
-  lines of this log, the ledger, both logs.
+  page, two README sentences, the manuscript folder's page, notes on lane 19v's page and
+  lane 19z's results page, two lines of this log, the ledger, both logs.
 - **Summary:** a fifteenth round ran on merged `main`. One helper read the repository cold,
   as a reviewer in a first hour: every link on ten pages resolves, the printed commands
   run, the counts agree across pages and with the handoff tool, and nothing is false, stale
@@ -37,13 +37,15 @@ one machine's local agent configuration:
   - A heading and a wrapped line in two entries of this log are corrected.
   - The README's "Start here" block says which verify commands need more than a bare
     Python: from a fresh clone on macOS 29 of 32 packs verified with no installed
-    packages, lanes 19b and 19g need one package to import, and lane 19d needs Linux.
+    packages, lanes 19b and 19g import a package that the handoff's locked set provides,
+    and lane 19d needs Linux.
 - **Files changed:** `tools/assurance-provenance/served19.py`,
   `tools/assurance-provenance/tests/test_served19.py`,
   `docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md`, `docs/AUTHOR_AND_METHOD.md`,
   `README.md`, `docs/research/provenance-phase-19-paper/README.md`,
-  `docs/research/provenance-phase-19v/README.md`, the ledger, `AGENT.md`, `CHANGELOG.md`.
-- **Verification:** two census tests written first and seen to fail, a third changed; the
+  `docs/research/provenance-phase-19v/README.md`,
+  `docs/research/provenance-phase-19z/RESULTS.md`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** one census test added and two changed, all three seen to fail first; the
   new rule removed and a test seen to fail; the explorer's unit tests, which read the
   census page; lane 19v's verifier; `prettier`, `ruff` and the quick gate. The round's
   fresh clone ran the Phase 19 suite on Python 3.12.4 with nothing installed: 1,058 tests

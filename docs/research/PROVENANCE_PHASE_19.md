@@ -4685,3 +4685,6 @@ every commit that acts on it.
   allow a named id with no returned one for that model alone. This closes the note recorded
   in the ruling of P19-GUARD02's second amendment. The fifteenth read-only round, on merged
   `main`, found nothing false, stale or broken.
+- Note (24 Nov 2026, on the ruling of P19-AUDIT04 above): of its three tests one is new and
+  two were changed, and all three failed until the tool changed. A sixteenth read-only
+  round, on that change alone, found nothing to fix in the tool, its tests or its page.
