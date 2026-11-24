@@ -34,7 +34,10 @@ python3 -B tools/assurance-provenance/evidence19x.py verify \
   --expected-root "$(cat docs/research/provenance-phase-19x/ROOT.sha256)"
 ```
 
-It prints one line of JSON with `"verified": true`. The
+It prints one line of JSON with `"verified": true`. Thirty of the 32 verify commands need no
+installed packages; the two for lanes 19b and 19g need one package to import. One of the
+thirty, lane 19d's, needs a Linux host. The
+[handoff](docs/research/provenance-phase-19f/HANDOFF.md) gives every command. The
 [dashboard](#inspect-with-a-dashboard-or-an-agent) shows every pack and prediction, and the
 [record of corrections](docs/RECORD_OF_CORRECTIONS.md) lists what the project got wrong.
 

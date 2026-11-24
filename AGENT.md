@@ -35,6 +35,9 @@ one machine's local agent configuration:
   - Lane 19v's note names the pinned module, and records that two times on the page are
     one second further apart than the pack's rental record.
   - A heading and a wrapped line in two entries of this log are corrected.
+  - The README's "Start here" block says which verify commands need more than a bare
+    Python: from a fresh clone on macOS 29 of 32 packs verified with no installed
+    packages, lanes 19b and 19g need one package to import, and lane 19d needs Linux.
 - **Files changed:** `tools/assurance-provenance/served19.py`,
   `tools/assurance-provenance/tests/test_served19.py`,
   `docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md`, `docs/AUTHOR_AND_METHOD.md`,
@@ -42,7 +45,10 @@ one machine's local agent configuration:
   `docs/research/provenance-phase-19v/README.md`, the ledger, `AGENT.md`, `CHANGELOG.md`.
 - **Verification:** two census tests written first and seen to fail, a third changed; the
   new rule removed and a test seen to fail; the explorer's unit tests, which read the
-  census page; lane 19v's verifier; `prettier`, `ruff` and the quick gate.
+  census page; lane 19v's verifier; `prettier`, `ruff` and the quick gate. The round's
+  fresh clone ran the Phase 19 suite on Python 3.12.4 with nothing installed: 1,058 tests
+  passed, none failed, 26 were skipped and 21 modules did not load for want of that one
+  package; 492 relative links on 42 pages resolved.
 - **Not done:** lane 19z's generated results page still gives "37 of 52" without the
   breakdown its lane page gives.
 
