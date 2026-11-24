@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this repository or its evidence packs, please cite it as below."
+type: software
+title: "Project Simurgh: inspectable authorization for AI agents"
+abstract: >-
+  A research prototype for one question: what can an AI agent still do after its authority
+  has changed? It puts a gate outside the model that checks each proposed action against the
+  host's current state, and keeps the receiver's records so anyone can replay them. Phase 19
+  holds 32 evidence packs, each with one command that checks it.
+authors:
+  - family-names: Abedini
+    given-names: Mohammad Raouf
+    orcid: "https://orcid.org/0009-0000-6214-258X"
+    affiliation: Macquarie University
+repository-code: "https://github.com/Raoof128/Project-Simurgh"
+url: "https://github.com/Raoof128/Project-Simurgh/releases/tag/phase-19-evidence-v2.0"
+license: AGPL-3.0-or-later
+version: phase-19-evidence-v2.0
+date-released: "2026-11-25"
+keywords:
+  - AI agents
+  - authorization
+  - AI control
+  - prompt injection
+  - reproducible research

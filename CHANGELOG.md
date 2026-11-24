@@ -1,5 +1,16 @@
 ## Change Log
 
+## [phase-19-evidence-release-pointers-2026-11-25] — 2026-11-25 — The README links the evidence release; a citation file is added
+
+**Raouf:**
+
+- **Scope:** `README.md`, a new `CITATION.cff`, both logs.
+- **Summary:** the tag `phase-19-evidence-v2.0` marks `8ca663a9`, the commit at which all 32
+  Phase 19 packs were on `main` and each had been replayed by one outside operator. The
+  README now links that release beside the earlier manuscript release, and `CITATION.cff`
+  says how to cite the repository. Nothing else changes.
+- **Verification:** the quick gate.
+
 ## [phase-19f-how-the-fourth-record-was-run-2026-11-25] — 2026-11-25 — The owner's account of how the fourth outside record was run
 
 **Raouf:**

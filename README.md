@@ -41,6 +41,11 @@ dependency set provides. One of the thirty, lane 19d's, needs a Linux host. The
 [dashboard](#inspect-with-a-dashboard-or-an-agent) shows every pack and prediction, and the
 [record of corrections](docs/RECORD_OF_CORRECTIONS.md) lists what the project got wrong.
 
+The state described here is released as
+[`phase-19-evidence-v2.0`](https://github.com/Raoof128/Project-Simurgh/releases/tag/phase-19-evidence-v2.0).
+Its notes list every pack root and what was checked before the tag was made. To cite the
+repository, use [`CITATION.cff`](CITATION.cff).
+
 **The October comparison (Phase 17).** In a bounded Llama evaluation, composed controls reduced
 restricted-state trials with new effects from 17/24 to 0/24 while preserving 23/24 active
 completions. The same comparison with OpenAI `gpt-6-luna` completed 24/24 active trials, but
@@ -235,7 +240,8 @@ Python 3.12 releases, so this pack should be verified from the command line; its
 why.
 
 [Manuscript draft](docs/research/provenance-phase-19-paper/PAPER.md) ·
-[Release and archive](https://github.com/Raoof128/Project-Simurgh/releases/tag/phase-19-paper-v1.0) ·
+[Evidence release](https://github.com/Raoof128/Project-Simurgh/releases/tag/phase-19-evidence-v2.0) ·
+[Manuscript release and archive](https://github.com/Raoof128/Project-Simurgh/releases/tag/phase-19-paper-v1.0) ·
 [Record of corrections](docs/RECORD_OF_CORRECTIONS.md) ·
 [Author, method and open problems](docs/AUTHOR_AND_METHOD.md)
 
