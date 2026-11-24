@@ -66,6 +66,7 @@ on trust.
 | 15 Nov 2026       | Two more outside runs of the handoff at one commit: one on Ubuntu x86_64 that replayed twenty-one packs with the frozen-gate replays and the Lean check, one natively on Windows 10 where every verifier refused.                                                                                                                                    | For twenty-one packs, that the results reproduce on a machine outside the author's custody, and on which host the verifiers do not run. | [Operator receipts and reviews](research/provenance-phase-19f/README.md)                           |
 | 13 to 23 Nov 2026 | Attacker seats: agents given the gate's source, their files committed as received before the host of record runs them, and each fault they find repaired in a class beside the gate and attacked again.                                                                                                                                              | That the gate was tried by attackers who had read its source, and that each repair was tried again.                                     | [19t](research/provenance-phase-19t/README.md) to [19ag](research/provenance-phase-19ag/README.md) |
 | 24 Nov 2026       | Rounds of read-only audits of the published pages. From the tenth round on, about 500 stated counts and claims of absence were recounted from the raw packs with code that shares nothing with the lanes' verifiers. A claim that a tool had generated was false, and about twenty sentences said more than their data, two of them false as worded. | That a number or a "none" on a page was checked against the raw evidence by something other than the tool that produced it.             | [Record of corrections](RECORD_OF_CORRECTIONS.md)                                                  |
+| 24 Nov 2026       | A second pass by the outside operator of 15 November, on the same machine: the eleven later packs, eight gate replays and one dataset recomputation, with no discrepancy. The record came back in a form the review could not read in full, and the rule for reading it was declared before the tool changed.                                        |
 
 ## Problems the author cannot settle alone
 
@@ -93,11 +94,11 @@ below. Each item names what already exists to build on.
 4. **Cost on real tasks.** The gate refused no exact authorised send in 217, on fixtures where the
    authorised action is unambiguous. Phase 19 did not measure its cost on a task benchmark, where
    legitimate work is messier.
-5. **Reproduction and review by others.** One outside operator has replayed twenty-one of the
-   thirty-two packs on a Linux machine, the manuscript's studies among them, with no
-   discrepancy. That is one machine, and the owner asked the operator. Lanes 19w, 19x, 19y,
-   19z and 19aa to 19ag and one dataset recomputation have not been replayed outside the
-   author's custody, and no researcher outside the project has read the manuscript.
+5. **Reproduction and review by others.** One outside operator has replayed all thirty-two
+   packs on a Linux machine, the manuscript's studies among them, with no discrepancy. That
+   is one operator on one machine, in two passes, and the owner asked the operator. No second
+   Linux machine outside the author's custody has run a pack, and no researcher outside the
+   project has read the manuscript.
 
 ## Where to press
 

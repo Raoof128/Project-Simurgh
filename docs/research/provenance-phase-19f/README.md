@@ -1,11 +1,12 @@
 # Phase 19f: outside-operator replay (done in part)
 
-`IOU-19-OPERATOR`: three receipts have come back and each is reviewed here. One outside operator
-replayed twenty-one of the thirty-two packs on Linux x86_64 with no discrepancy, among them
-the five frozen-gate replays, 19b's Lean closure and 19d's namespace probe. Twenty items
-are still owed: lanes 19w, 19x, 19y, 19z and 19aa to 19ag, which joined the handoff after
-those receipts, the `--replay` of 19y, 19z, 19aa to 19ae and 19ag, and 19q's `--dataset`
-recomputation.
+`IOU-19-OPERATOR`: four files have come back and each is reviewed here. One outside operator
+has replayed all thirty-two packs on one Linux x86_64 machine with no discrepancy, in two
+passes: twenty-one packs on 15 November and the other eleven on 24 November. The two passes
+include thirteen `--replay` runs, 19b's Lean closure, 19d's namespace probe and 19q's
+`--dataset` recomputation, and `handoff19.py status` lists nothing as still owed. Not done: no
+second Linux machine outside the author's custody has run any of it, the test suite has not
+been run outside since the first of those passes, and the WSL2 route is untried.
 This directory holds the package that makes the replay a run of named commands against named
 expectations, the receipts that came back and the author's review of each:
 
@@ -24,11 +25,12 @@ python -B tools/assurance-provenance/handoff19.py review \
   docs/research/provenance-phase-19f/operator-receipts/all-Jacob-2026-11-15.json
 ```
 
-| Receipt | Operator's host                                   | What the review found              | Left unexercised                             |
-| ------- | ------------------------------------------------- | ---------------------------------- | -------------------------------------------- |
-| First   | macOS 13 x86_64, Python 3.12, no Lean             | 5 lanes verified, 19d refused      | everything else                              |
-| Second  | Ubuntu 26.04 x86_64, CPython 3.12.16, Lean 4.15.0 | 21 lanes verified, no discrepancy  | 19w to 19z, 19aa to 19ag and `19q --dataset` |
-| Third   | Windows 10 run natively, Python 3.12.10, no Lean  | 21 lanes refused, nothing verified | everything                                   |
+| Receipt | Operator's host                                        | What the review found                                              | Left unexercised                                   |
+| ------- | ------------------------------------------------------ | ------------------------------------------------------------------ | -------------------------------------------------- |
+| First   | macOS 13 x86_64, Python 3.12, no Lean                  | 5 lanes verified, 19d refused                                      | everything else                                    |
+| Second  | Ubuntu 26.04 x86_64, CPython 3.12.16, Lean 4.15.0      | 21 lanes verified, no discrepancy                                  | 19w to 19z, 19aa to 19ag and `19q --dataset`       |
+| Third   | Windows 10 run natively, Python 3.12.10, no Lean       | 21 lanes refused, nothing verified                                 | everything                                         |
+| Fourth  | Ubuntu 26.04 x86_64, the machine of the second receipt | 11 lanes, 8 replays and 19q's dataset run verified, no discrepancy | the 21 lanes of the second receipt; the test suite |
 
 ## The first receipt (10 Nov 2026, commit `c7d7ceec`)
 
@@ -128,6 +130,49 @@ committed file has sha256 `c3ddbce786d622d258e3d3a46041a2cd423eaccec78cfb2239c83
 the review is recomputed from the committed file. A reader can check the committed bytes and
 cannot check that the substitution is the only difference.
 
+## The fourth file (24 Nov 2026, commit `5c57ed2e`)
+
+Returned by Jacob, the operator of the second receipt. Its machine block is the second
+receipt's, word for word: Ubuntu 26.04.1 x86_64 with CPython 3.12.16 and Lean 4.15.0. It
+records a second pass over what the first could not hold: the eleven lanes that joined the
+handoff after the first pass was run, the `--replay` of the eight that have one, and 19q's
+`--dataset` recomputation.
+
+The file is not in the handoff's receipt form. The handoff asks for one verifier output for
+each lane. This file holds a lane's plain output where a receipt does, the output of its
+`--replay` run beside that, and 19q's dataset run under a separate `optional` key. The review
+read one output for a lane, so it would have counted the eleven plain verifies and none of the
+nine deeper runs. P19-OPERATOR19 declared how the review reads a nested output before the tool
+changed. The same comparator checks it, and a deeper item counts only if its own output
+verifies with no discrepancy and says that the replay or the recomputation ran. The author had
+already run the unchanged comparator on all nine nested outputs and seen them pass when that
+declaration was written, and the declaration says so.
+
+What the review found:
+
+- All eleven lanes verify with an empty discrepancy list. Every manifest root equals the
+  committed `ROOT.sha256`, every `tree_state` equals the commit, and the operator's own
+  comparator output equals the author's for every lane.
+- 19y, 19z, 19aa, 19ab, 19ac, 19ad, 19ae and 19ag were also run with `--replay`. Each nested
+  output says `kind: gate_recomputed` and `replay.result: verified`, with the same root and no
+  discrepancy: the gate ran every recorded attempt again on the operator's machine and the
+  reports came out the same. The record's times for the eight add up to 26 minutes 6 seconds.
+- 19q's `--dataset` run says `kind: dataset_recomputed` and `recompute.result: verified`, with
+  the same root and no discrepancy. It counts for the dataset item only: 19q's plain verify
+  was in the second receipt.
+- 19w, 19x and 19af have no deeper run.
+
+What this pass did not do: it did not run the test suite. The last outside run of the suite is
+the one of 15 November, at `c24b47ce`, before the eleven later lanes and their tests existed.
+
+Two files that came back with the record are kept unchanged in
+[its attachments folder](operator-receipts/19w-to-19ag-Jacob-2026-11-24.attachments/): the
+eleven verifier lines, which a test holds equal to the record's plain outputs, and the
+operator's summary in Markdown. The same archive held a PDF report, a cover note and copies
+of the second receipt's files. Those are not committed and the author holds them; the copies
+are byte for byte the second receipt and its attachment as committed here. The PDF has sha256
+`b186bfcf23fc56a46d166618bded03e13ac67df86e277fa8deaab57b2d5f6811`.
+
 ## How the handoff reached these two operators
 
 The handoff says an operator receives no file from the author other than the repository. That was
@@ -137,29 +182,28 @@ lists the zip, and the third receipt's note says its copy of `HANDOFF.md` was by
 the repository's. Both operators say every pack and all code came from their own clone. The
 handoff now tells an operator what to do with such a copy.
 
+For the pass of 24 November the owner again passed the request to the second receipt's
+operator and the returned archive to the author. The archive's cover note lists three files
+as inputs: a message, a note whose name says it was not for sending, and the handoff zip. The
+PDF report in the same archive names only the zip as received from the author. The two do not
+agree, the record itself says nothing on the point, and both are reported here as they came.
+
 ## What is done and what stays owed
 
-The reviews, with every discrepancy published, pay the IOU for what the receipts exercised.
-After the second receipt that is every lane the handoff listed at `c24b47ce`, with the five
-frozen-gate replays, 19b's Lean closure and 19d's namespace probe, on one Linux x86_64 machine
-outside the author's custody. The test suite has passed outside once, on that machine, with the
-full hash-locked set.
+The reviews, with every discrepancy published, pay the IOU for what the files exercised. After
+the fourth file that is every item the handoff lists: all thirty-two lanes, the thirteen
+`--replay` runs, 19b's Lean closure, 19d's namespace probe and 19q's dataset recomputation,
+each on one Linux x86_64 machine outside the author's custody. `handoff19.py status` returns an
+empty list.
 
-Still owed:
+That is one operator on one machine, asked by the owner. Not on the handoff's list, and not
+done:
 
-- Lane 19w, which joined on 15 Nov 2026 after both receipts were run.
-- Lane 19x, which joined on 21 Nov 2026.
-- Lane 19y and its `--replay`, which joined on 22 Nov 2026.
-- Lane 19z and its `--replay`, which joined on 22 Nov 2026.
-- Lanes 19aa and 19ab and the `--replay` of each, which joined on 22 Nov 2026.
-- Lanes 19ac and 19ad and the `--replay` of each, which joined on 22 Nov 2026.
-- Lane 19ae and its `--replay`, which joined on 22 Nov 2026.
-- Lane 19af, which joined on 22 Nov 2026. It has no `--replay`.
-- Lane 19ag and its `--replay`, which joined on 23 Nov 2026.
-- 19q's `--dataset` recomputation, which no receipt ran to completion.
-
-Not on that list, and also not done: the WSL2 route has not been tried, and no second Linux host
-has run the replays.
+- No second Linux host outside the author's custody has run a verify or a replay.
+- The test suite has passed outside once, on 15 November at `c24b47ce`, with the full
+  hash-locked set. Nobody outside has run it at a later commit.
+- The WSL2 route has not been tried.
+- A lane that joins the handoff after 24 November is owed until a receipt holds it.
 
 While reviewing the third receipt the author found a fault in the review rule itself. A receipt
 whose 19b was refused or absent did not list 19b's Lean closure as unexercised, so two receipts
@@ -169,7 +213,7 @@ the second receipt ran Lean. The rule is fixed and a test holds it.
 ## Lanes that joined after the first receipt
 
 Each is `not_in_receipt` in the review of the first receipt. The second and third receipts hold
-all of them except 19w, 19x, 19y, 19z and 19aa to 19ag.
+all of them except 19w, 19x, 19y, 19z and 19aa to 19ag, which the fourth file holds.
 
 | Lanes                   | Joined       | Declaration    | What verifying does                                                                                                           |
 | ----------------------- | ------------ | -------------- | ----------------------------------------------------------------------------------------------------------------------------- |
@@ -203,6 +247,16 @@ operator ran the commands personally; the second says nothing about how its comm
 Both operators were asked by the owner, who passed the handoff to them and the returned files to
 the author, and both are named by first name with their consent. Neither was chosen by a third
 party, and the second receipt comes from one machine.
+
+The fourth file carries no signature and no note. It does not say how its commands were typed
+or what its operator received. It names the operator of the second receipt and gives the same
+machine block, so it adds lanes and replays and does not add a second witness. That the two
+passes ran on one machine is what the record and the report say; these pages count it so,
+which is the cautious reading, and a review cannot establish it. The PDF report that
+came with it, which is not committed, ends with a typed signature dated 24 November and
+repeats the second receipt's statement of what was received from the author. One command in
+the record names a folder called `opencode`, which is also the name of an AI coding tool; the
+record does not say whether one was used.
 
 A review establishes what the returned outputs say. It cannot establish who produced them or on
 which machine.

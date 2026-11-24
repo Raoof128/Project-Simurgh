@@ -1,5 +1,21 @@
 ## Change Log
 
+## [phase-19f-fourth-record-2026-11-24] — 2026-11-24 — An outside operator replayed the eleven later packs
+
+**Raouf:**
+
+- **Scope:** the outside-operator handoff (`handoff19.py`, its tests, the 19f pages), the
+  pages that state what has been replayed outside, the ledger (P19-OPERATOR19).
+- **Summary:** the outside operator of 15 November ran a second pass on the same machine:
+  the eleven later packs, eight gate replays and one dataset recomputation, with no
+  discrepancy. With it, one outside operator has replayed all thirty-two packs, and the
+  handoff lists nothing as owed. The record nests its replay outputs in a form the review
+  could not read, so the rule for reading them was declared before the tool changed. Not
+  done: a second Linux machine, and an outside run of the test suite since the first pass.
+- **Verification:** tests first; a removal check of each part of the rule; the earlier
+  reviews unchanged; the Phase 19 suite; the quick gate. A read-only audit before the merge
+  found one gap in the rule and several loose sentences, each corrected under amendment 1.
+
 ## [readiness-round-20-2026-11-24] — 2026-11-24 — The author page names the author's university
 
 **Raouf:**

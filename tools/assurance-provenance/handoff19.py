@@ -524,6 +524,37 @@ def _json_text(value):
     return _read_json(value) if type(value) is str else None
 
 
+def _stated(value):
+    """What an operator states their own comparison found: JSON text, or an object as it is
+    (P19-OPERATOR19)."""
+    return value if type(value) is dict else _json_text(value)
+
+
+def _nested_output(holder):
+    """A verifier output that a record nests under ``verifier_output``, or None."""
+    if type(holder) is not dict:
+        return None
+    out = _json_text(holder.get("verifier_output"))
+    return out if type(out) is dict else None
+
+
+def _nested_review(pid, out, holder, commit):
+    """The same comparison as a lane's own, on an output nested beside it (P19-OPERATOR19)."""
+    mine = {
+        "discrepancies": check(pid, out),
+        "not_compared": not_compared(pid, out),
+    }
+    ok = out.get("verified") is True and not mine["discrepancies"]
+    return {
+        "result": "verified" if ok else "discrepant",
+        "discrepancies": mine["discrepancies"],
+        "not_compared": mine["not_compared"],
+        "operator_comparator_matches": _stated(holder.get("discrepancies")) == mine,
+        "root_matches": out.get("manifest_sha256") == committed_root(pid),
+        "tree_state_is_commit": out.get("tree_state") == commit,
+    }
+
+
 def review(raw):
     """The author's review of a returned receipt, recomputed from its bytes alone.
 
@@ -558,7 +589,7 @@ def review(raw):
             "discrepancies": check(pid, out),
             "not_compared": not_compared(pid, out),
         }
-        theirs = _json_text(entry.get("discrepancies"))
+        theirs = _stated(entry.get("discrepancies"))
         ok = out.get("verified") is True and not mine["discrepancies"]
         phases[pid] = {
             "result": "verified" if ok else "discrepant",
@@ -570,14 +601,37 @@ def review(raw):
         }
         if not ok:
             missing.append(pid)
+        # a replay output nested beside the plain one is checked on its own (P19-OPERATOR19)
+        replayed = _replayed(out)
+        nested = _nested_output(entry.get("replay"))
+        if pid in REPLAY_CHAINED_KIND and nested is not None:
+            mine = _nested_review(pid, nested, entry["replay"], receipt.get("commit"))
+            mine["replayed"] = _replayed(nested)
+            phases[pid]["replay"] = mine
+            replayed = mine["result"] == "verified" and mine["replayed"]
         # a phase that did not verify pays neither itself nor its deeper item (P19-REPAIR10)
-        if pid in REPLAY_CHAINED_KIND and (not ok or not _replayed(out)):
+        if pid in REPLAY_CHAINED_KIND and (not ok or not replayed):
             missing.append(replay_item(pid))
         if pid in RECOMPUTED_KIND and (not ok or not _recomputed(out)):
             missing.append(dataset_item(pid))
         if pid == "19b" and (not ok or _lean_absent(out)):
             missing.append(LEAN_ITEM)
-    return {
+    # a dataset run filed under `optional` pays its own item and nothing else (P19-OPERATOR19)
+    optional = {}
+    filed = receipt.get("optional") if type(receipt.get("optional")) is dict else {}
+    for pid in RECOMPUTED_KIND:
+        holder = filed.get(pid + "_dataset")
+        nested = _nested_output(holder)
+        if nested is None:
+            continue
+        mine = _nested_review(pid, nested, holder, receipt.get("commit"))
+        mine["recomputed"] = _recomputed(nested)
+        optional[dataset_item(pid)] = mine
+        # not beside an entry for the lane that failed in this same record (amendment 1)
+        failed = phases[pid]["result"] in ("discrepant", "refused")
+        if mine["result"] == "verified" and mine["recomputed"] and not failed:
+            missing = [item for item in missing if item != dataset_item(pid)]
+    reviewed = {
         "schema": REVIEW_SCHEMA,
         "receipt_sha256": hashlib.sha256(raw).hexdigest(),
         "operator": receipt.get("operator"),
@@ -587,6 +641,9 @@ def review(raw):
         "not_exercised": sorted(missing),
         "custody": "as the operator states it in the receipt's note; not established by this review",
     }
+    if optional:
+        reviewed["optional"] = optional
+    return reviewed
 
 
 def _receipts():

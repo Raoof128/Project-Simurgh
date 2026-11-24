@@ -149,7 +149,9 @@ committed root refuses that copy and `--replay` stops on it. A receipt of kind
   same kind of seat found the last two faults, and no more.
 - The two attempts that still raise are not repaired. One needs the means to run SQL
   against the gate's own stores and the other to write them.
-- No one outside the project has run this pack.
+- No one outside the project has run this pack. (Added 24 Nov 2026: an outside operator has
+  since verified this pack and run its `--replay` on their own Linux machine, with no
+  discrepancy. [The 19f page](../provenance-phase-19f/README.md) has the review.)
 
 ## Files
 

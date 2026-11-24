@@ -23,8 +23,8 @@ held in 35 of 138 cases.
   model the author started.
 - A published benchmark's attack check was true with nothing planted in 43 of 1,980 runs, on
   seven of eight models (lane 19x).
-- One outside operator replayed 21 of the 32 packs on their own Linux machine and found no
-  discrepancy.
+- One outside operator replayed all 32 packs on their own Linux machine, in two passes, and
+  found no discrepancy. That is one operator on one machine.
 
 Check one pack with plain Python 3.12 and no installed packages:
 
@@ -476,15 +476,16 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
 
 ### Open work
 
-- **Independent reproduction:** one outside operator has replayed twenty-one of the thirty-two
-  Phase 19 packs on Ubuntu x86_64 with no discrepancy, including the five frozen-gate replays,
-  the Lean check and the namespace probe, and the test suite passed there. A second ran the
-  handoff natively on Windows 10, where every verifier refused; the causes are published and
-  the handoff now lists native Windows as unsupported. An earlier receipt covers five packs on
-  macOS ([receipts and reviews](docs/research/provenance-phase-19f/README.md)). Still
-  outstanding: lanes 19w, 19x, 19y, 19z and 19aa to 19ag, one dataset recomputation, a second
-  Linux host, and independent evidence custody, since the author's side asked every operator
-  and each signed with a typed name.
+- **Independent reproduction:** one outside operator has replayed all thirty-two Phase 19
+  packs on Ubuntu x86_64 with no discrepancy, in two passes on one machine, on 15 and on 24
+  November. The passes include thirteen replays that run the gate again, the Lean check, the
+  namespace probe and one dataset recomputation. The test suite passed there in the first
+  pass and has not been run outside since. A second operator ran the handoff natively on
+  Windows 10, where every verifier refused; the causes are published and the handoff now
+  lists native Windows as unsupported. An earlier receipt covers five packs on macOS
+  ([receipts and reviews](docs/research/provenance-phase-19f/README.md)). Still outstanding:
+  a second outside Linux host, and independent evidence custody, since the author's side
+  asked every operator and no receipt carries more than a typed name.
 - **Provider lifecycle:** real provider IAM/revocation and authenticated live safety-alert
   delivery have not been validated by the owned-service experiments.
 - **Model transfer:** broader externally held tasks and adaptive multi-step behavior remain
