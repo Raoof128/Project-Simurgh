@@ -3043,6 +3043,67 @@ Not authorised: any edit to a pack, a capture module, a lane's page, a workflow 
 file. No provider is called. No money. This declaration commit must be a strict ancestor of
 every commit that acts on it.
 
+**P19-OPERATOR19 (bounded authority to file the fourth outside record and to let the review
+read the outputs it nests; declared 24 Nov 2026 before any commit that acts on it).** On 24
+November the operator of the second receipt returned a record of a second pass on the same
+machine, at commit `5c57ed2e`. It covers the eleven lanes added after their first pass (19w to
+19z and 19aa to 19ag), eight of them run again with `--replay`, and 19q run with `--dataset`.
+The file is not in the handoff's receipt form. Its `schema` reads
+`simurgh-phase19w-ag-results-v1`. It holds each lane's plain verifier output under
+`phases.<lane>.verifier_output`, as a receipt does. It holds the output of a `--replay` run
+beside that, under `phases.<lane>.replay.verifier_output`, and the output of 19q's `--dataset`
+run under `optional.19q_dataset.verifier_output`. Its `discrepancies` fields are objects where
+a receipt holds JSON text. `review()` reads one output for a lane, so as it stands it would
+count the eleven plain verifies and none of the nine deeper runs.
+
+This rule is written with the result in view. Before writing it the author ran the unchanged
+`review()` on the file and the unchanged `check()` on each of the nine nested outputs. The
+eleven lanes read `verified`. Each nested output says `verified: true`, has an empty
+discrepancy list, holds the committed root and names the record's commit as its `tree_state`;
+the eight replays say `replay.result: verified` and 19q says `recompute.result: verified`. What
+the rule can change is whether those nine items are counted. It cannot change what the
+comparator compares. This declaration authorises, and nothing else:
+
+1. The file, committed with its bytes unchanged as
+   `operator-receipts/19w-to-19ag-Jacob-2026-11-24.json`, with a test that pins its sha256
+   (`0dce4a1177709ea81b0043b3f1f76aab4607705c6c2d6273bbc1bd120c26f3f5`). Two files returned
+   beside it are kept unchanged in the matching `.attachments/` folder: the eleven verifier
+   lines and the operator's Markdown summary. The operator's PDF report, the cover note and
+   the copies of the second receipt's files that came in the same archive are not committed;
+   the 19f page gives the sha256 of the PDF.
+2. `handoff19.py`, `review()` and nothing else in the tool, tests first:
+   - Where a lane's entry holds an object under `replay` with JSON text under
+     `verifier_output`, the same comparator checks that output and the review reports it
+     under the lane as `replay`. The lane's `--replay` item is paid only if the lane's plain
+     output verifies with no discrepancy and the nested output says `verified: true`, has no
+     discrepancy and says `replay.result: verified`.
+   - Where the record holds an object under `optional` with an entry named `<lane>_dataset`
+     for a lane that has a dataset item, and that entry holds JSON text under
+     `verifier_output`, the same comparator checks that output and the review reports it
+     under `optional`. The lane's `--dataset` item is paid only if that output says
+     `verified: true`, has no discrepancy and says `recompute.result: verified`. It does not
+     pay the lane's plain verify.
+   - A `discrepancies` field that is an object is compared as it is. One that is JSON text
+     is read as before.
+   - A nested output that is absent, is not JSON text or is not an object pays nothing and
+     raises nothing. The review of a receipt that nests no output must be what it was: the
+     three committed reviews do not change, and if one does, the work stops and the
+     difference is reported.
+3. The review of the new file, committed beside the other three, and `HANDOFF.md` rendered
+   again. Only its status lines may differ. `discrepancy-template.json` does not change; if it
+   does, or if any other line of the handoff does, the work stops.
+4. The pages that say what is owed or what has been replayed outside: the 19f page, the
+   receipts page, the root README, `docs/AUTHOR_AND_METHOD.md` and
+   `docs/RECORD_OF_CORRECTIONS.md`, and a dated note on a lane page that says no one outside
+   the project has run its pack. Both logs and the ruling.
+
+Not authorised: any edit to the returned file; any change to what `check()` compares, to
+`status()`, to a phase's host, time, expected kind or fields, to another operator's receipt or
+review, or to a lane, verifier, pack, root, frozen file or pinned source; treating the record
+as proof of who ran it. The ruling must say what the record covers and what it does not, and
+what stays owed under `IOU-19-OPERATOR`. This declaration commit must be a strict ancestor of
+every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
