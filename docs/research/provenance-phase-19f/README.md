@@ -5,8 +5,8 @@ has replayed all thirty-two packs on one Linux x86_64 machine with no discrepanc
 passes: twenty-one packs on 15 November and the other eleven on 24 November. The two passes
 include thirteen `--replay` runs, 19b's Lean closure, 19d's namespace probe and 19q's
 `--dataset` recomputation, and `handoff19.py status` lists nothing as still owed. Not done: no
-second Linux machine has run any of it, the test suite has not been run outside since the
-first of those passes, and the WSL2 route is untried.
+second Linux machine outside the author's custody has run any of it, the test suite has not
+been run outside since the first of those passes, and the WSL2 route is untried.
 This directory holds the package that makes the replay a run of named commands against named
 expectations, the receipts that came back and the author's review of each:
 
@@ -132,10 +132,11 @@ cannot check that the substitution is the only difference.
 
 ## The fourth file (24 Nov 2026, commit `5c57ed2e`)
 
-Returned by Jacob, the operator of the second receipt, from the same machine: Ubuntu 26.04.1
-x86_64 with CPython 3.12.16 and Lean 4.15.0. It records a second pass over what the first
-could not hold: the eleven lanes that joined the handoff after 15 November, the `--replay`
-of the eight that have one, and 19q's `--dataset` recomputation.
+Returned by Jacob, the operator of the second receipt. Its machine block is the second
+receipt's, word for word: Ubuntu 26.04.1 x86_64 with CPython 3.12.16 and Lean 4.15.0. It
+records a second pass over what the first could not hold: the eleven lanes that joined the
+handoff after the first pass was run, the `--replay` of the eight that have one, and 19q's
+`--dataset` recomputation.
 
 The file is not in the handoff's receipt form. The handoff asks for one verifier output for
 each lane. This file holds a lane's plain output where a receipt does, the output of its
@@ -182,9 +183,10 @@ the repository's. Both operators say every pack and all code came from their own
 handoff now tells an operator what to do with such a copy.
 
 For the pass of 24 November the owner again passed the request to the second receipt's
-operator and the returned archive to the author. The archive's cover note names three files
-the operator had from the owner: a message, a note marked as not for sending, and the handoff
-zip.
+operator and the returned archive to the author. The archive's cover note lists three files
+as inputs: a message, a note whose name says it was not for sending, and the handoff zip. The
+PDF report in the same archive names only the zip as received from the author. The two do not
+agree, the record itself says nothing on the point, and both are reported here as they came.
 
 ## What is done and what stays owed
 
@@ -197,7 +199,7 @@ empty list.
 That is one operator on one machine, asked by the owner. Not on the handoff's list, and not
 done:
 
-- No second Linux host has run a verify or a replay.
+- No second Linux host outside the author's custody has run a verify or a replay.
 - The test suite has passed outside once, on 15 November at `c24b47ce`, with the full
   hash-locked set. Nobody outside has run it at a later commit.
 - The WSL2 route has not been tried.
@@ -247,8 +249,10 @@ the author, and both are named by first name with their consent. Neither was cho
 party, and the second receipt comes from one machine.
 
 The fourth file carries no signature and no note. It does not say how its commands were typed
-or what its operator received, and it comes from the operator and the machine of the second
-receipt, so it adds lanes and replays and does not add a second witness. The PDF report that
+or what its operator received. It names the operator of the second receipt and gives the same
+machine block, so it adds lanes and replays and does not add a second witness. That the two
+passes ran on one machine is what the record and the report say; these pages count it so,
+which is the cautious reading, and a review cannot establish it. The PDF report that
 came with it, which is not committed, ends with a typed signature dated 24 November and
 repeats the second receipt's statement of what was received from the author. One command in
 the record names a folder called `opencode`, which is also the name of an AI coding tool; the

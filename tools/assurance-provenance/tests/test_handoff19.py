@@ -683,8 +683,9 @@ THIRD_SHA256 = "c3ddbce786d622d258e3d3a46041a2cd423eaccec78cfb2239c830766c65a7f4
 THIRD_RETURNED_SHA256 = (
     "e4f22c47edb7d7472e21d5e0ad5b959273d16e8f4b17b20968c442617bf710a4"
 )
-# What no reviewed receipt has exercised (P19-OPERATOR09 to 11): the second receipt predates
-# 19w, 19x and 19y and did not run 19q's recomputation.
+# What the second receipt leaves unexercised: it predates the eleven later lanes and did not
+# run 19q's recomputation (P19-OPERATOR09 to 17). The first and third receipts pay none of
+# it, and the fourth file pays all of it (P19-OPERATOR19).
 OWED_AFTER_THREE = [
     "19aa",
     "19aa --replay",
@@ -1259,6 +1260,63 @@ class NestedRecordTests(unittest.TestCase):
         record = self._record()
         record["optional"]["19y_dataset"] = record["optional"]["19q_dataset"]
         self.assertEqual(list(self._review(record)["optional"]), ["19q --dataset"])
+
+    def test_a_dataset_output_does_not_pay_beside_a_lane_entry_that_fails(self):
+        # amendment 1: a phase that did not verify pays neither itself nor its deeper item
+        # (P19-REPAIR10), wherever in the record the deeper output is filed
+        commit = self._record()["commit"]
+        plain = dict(
+            handoff19.committed_receipt("19q"),
+            kind="structure_checked",
+            recompute={"result": "not_run", "reason": "no_dataset"},
+            tree_state=commit,
+        )
+        record = self._record()
+        record["phases"]["19q"] = {"verifier_output": json.dumps(plain)}
+        r = self._review(record)
+        self.assertEqual(r["phases"]["19q"]["result"], "verified")
+        self.assertNotIn("19q", r["not_exercised"])
+        self.assertNotIn("19q --dataset", r["not_exercised"])
+        record = self._record()
+        differing = dict(plain, manifest_sha256="0" * 64)
+        record["phases"]["19q"] = {"verifier_output": json.dumps(differing)}
+        r = self._review(record)
+        self.assertEqual(r["phases"]["19q"]["result"], "discrepant")
+        self.assertEqual(r["optional"]["19q --dataset"]["result"], "verified")
+        self.assertIn("19q", r["not_exercised"])
+        self.assertIn("19q --dataset", r["not_exercised"])
+        record = self._record()
+        record["phases"]["19q"] = {
+            "refused": "ValueError: something",
+            "verifier_output": "",
+        }
+        r = self._review(record)
+        self.assertEqual(r["phases"]["19q"]["result"], "refused")
+        self.assertIn("19q --dataset", r["not_exercised"])
+
+    def test_a_nested_replay_is_read_only_where_a_lane_has_one_and_its_output_reads(
+        self,
+    ):
+        # amendment 1: the narrower reading, held as the tool has it
+        record = self._record()
+        record["phases"]["19w"]["replay"] = record["phases"]["19y"]["replay"]
+        r = self._review(record)
+        self.assertNotIn("replay", r["phases"]["19w"])
+        self.assertEqual(r["phases"]["19w"]["result"], "verified")
+        self.assertNotIn("19w --replay", handoff19.outside_items())
+        record = self._record()
+        record["phases"]["19y"]["verifier_output"] = (
+            "Traceback (most recent call last):"
+        )
+        r = self._review(record)
+        self.assertEqual(r["phases"]["19y"]["result"], "refused")
+        self.assertNotIn("replay", r["phases"]["19y"])
+        self.assertIn("19y", r["not_exercised"])
+        self.assertIn("19y --replay", r["not_exercised"])
+        record = self._record()
+        del record["phases"]["19y"]["verifier_output"]
+        r = self._review(record)
+        self.assertIn("19y --replay", r["not_exercised"])
 
     def test_a_nested_output_that_is_not_json_text_pays_nothing_and_never_raises(self):
         deep = "[" * 100000 + "]" * 100000

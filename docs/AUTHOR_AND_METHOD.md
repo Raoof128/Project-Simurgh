@@ -97,8 +97,8 @@ below. Each item names what already exists to build on.
 5. **Reproduction and review by others.** One outside operator has replayed all thirty-two
    packs on a Linux machine, the manuscript's studies among them, with no discrepancy. That
    is one operator on one machine, in two passes, and the owner asked the operator. No second
-   Linux machine has run a pack, and no researcher outside the project has read the
-   manuscript.
+   Linux machine outside the author's custody has run a pack, and no researcher outside the
+   project has read the manuscript.
 
 ## Where to press
 

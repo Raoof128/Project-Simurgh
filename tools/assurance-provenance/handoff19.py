@@ -627,7 +627,9 @@ def review(raw):
         mine = _nested_review(pid, nested, holder, receipt.get("commit"))
         mine["recomputed"] = _recomputed(nested)
         optional[dataset_item(pid)] = mine
-        if mine["result"] == "verified" and mine["recomputed"]:
+        # not beside an entry for the lane that failed in this same record (amendment 1)
+        failed = phases[pid]["result"] in ("discrepant", "refused")
+        if mine["result"] == "verified" and mine["recomputed"] and not failed:
             missing = [item for item in missing if item != dataset_item(pid)]
     reviewed = {
         "schema": REVIEW_SCHEMA,

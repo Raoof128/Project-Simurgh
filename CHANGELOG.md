@@ -13,7 +13,8 @@
   could not read, so the rule for reading them was declared before the tool changed. Not
   done: a second Linux machine, and an outside run of the test suite since the first pass.
 - **Verification:** tests first; a removal check of each part of the rule; the earlier
-  reviews unchanged; the Phase 19 suite; the quick gate.
+  reviews unchanged; the Phase 19 suite; the quick gate. A read-only audit before the merge
+  found one gap in the rule and several loose sentences, each corrected under amendment 1.
 
 ## [readiness-round-20-2026-11-24] — 2026-11-24 — The author page names the author's university
 

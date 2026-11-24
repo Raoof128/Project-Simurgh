@@ -4805,3 +4805,25 @@ work stops. This amendment commit must be a strict ancestor of every commit that
   corrected in the same commit. Two tests of the explorer took it that some item is owed
   and failed once none was; each now follows an owed item while the handoff lists one and a
   checked one when it does not. The explorer itself is unchanged.
+- Note (24 Nov 2026, on the ruling of P19-OPERATOR19 above, and amendment 1 exercised): a
+  read-only audit of the branch, made before the merge, found the ruling's test counts wrong
+  and several sentences loose. The counts as they are now: fourteen new tests and one
+  changed. Against the tool as it was on `main`, seven of the fourteen fail: the five
+  written before the change, the one added after the first removal check, and the one
+  written for amendment 1 before its change. Seven pass on it: four that hold refusals, the
+  test of the returned bytes, which failed at first only because no page yet named the
+  file, the test of the kept lines, and the test of the narrower reading of a nested
+  replay. Each of twelve removals of a part of the rule now makes a test fail.
+  Amendment 1 (`2730c6b6`) precedes the commit that acts on it. A dataset output under
+  `optional` no longer pays its item beside an entry for the same lane that is discrepant or
+  refused in the same record; the committed review of the fourth file did not change.
+  Pages corrected in the same commit: the README said that no second machine had run the
+  packs, where a first outside receipt verified five on macOS and the owner's own hosts ran
+  replays; four sentences about a second Linux host now say outside the author's custody;
+  the 19f page said the eleven lanes joined after 15 November, where 19w joined on that
+  day, and now says after the first pass; it now gives the same machine as what the record
+  and the report say; and it now reports that the cover note and the PDF differ on what the
+  operator received. A stale comment in the test file is corrected.
+  What the audit noted and this does not change: an output's `tree_state` does not gate
+  whether it counts, for a nested output as for a plain one since P19-OPERATOR01; the
+  review reports whether it equals the record's commit.

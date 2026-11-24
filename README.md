@@ -24,7 +24,7 @@ held in 35 of 138 cases.
 - A published benchmark's attack check was true with nothing planted in 43 of 1,980 runs, on
   seven of eight models (lane 19x).
 - One outside operator replayed all 32 packs on their own Linux machine, in two passes, and
-  found no discrepancy. No second machine has run them.
+  found no discrepancy. That is one operator on one machine.
 
 Check one pack with plain Python 3.12 and no installed packages:
 
@@ -484,8 +484,8 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
   Windows 10, where every verifier refused; the causes are published and the handoff now
   lists native Windows as unsupported. An earlier receipt covers five packs on macOS
   ([receipts and reviews](docs/research/provenance-phase-19f/README.md)). Still outstanding:
-  a second Linux host, and independent evidence custody, since the author's side asked every
-  operator and no receipt carries more than a typed name.
+  a second outside Linux host, and independent evidence custody, since the author's side
+  asked every operator and no receipt carries more than a typed name.
 - **Provider lifecycle:** real provider IAM/revocation and authenticated live safety-alert
   delivery have not been validated by the owned-service experiments.
 - **Model transfer:** broader externally held tasks and adaptive multi-step behavior remain

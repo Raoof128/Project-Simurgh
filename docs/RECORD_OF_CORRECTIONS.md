@@ -112,7 +112,7 @@ establish who produced them.
 The project knows about these and has not repaired them.
 
 - Every attacker that knew the gate is a Claude agent the author started (lanes 19t, 19y, 19z, 19ac, 19ae and 19ag). No attacker from outside the project has been run.
-- One outside operator has replayed all thirty-two packs, in two passes on one Linux machine. No second Linux host has run any of them, and the test suite has not been run outside since 15 November.
+- One outside operator has replayed all thirty-two packs, in two passes on one Linux machine. No second outside Linux host has run any of them, and the test suite has not been run outside since 15 November.
 - The frozen gate and the gates of lanes before 19ag still raise on a body without its `run` or `id`. Two recorded attempts that reach the gate's own stores still raise on the repaired gate, as they did on lane 19ae's.
 - Several findings of the October documentation audit remain open; the [final validation](documentation-audit-2026-10-19/FINAL_VALIDATION.md) points to the manual register for open runtime gaps.
 - No researcher outside the project has reviewed the manuscript.
