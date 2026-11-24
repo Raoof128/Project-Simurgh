@@ -4675,3 +4675,13 @@ every commit that acts on it.
 - Note (24 Nov 2026, on commit `f5c45905`): besides what amendment 2 of P19-GUARD02 lists, that
   commit reworded two lines at the head of `strict19ag.py` so that they name the sidecars. No
   behaviour rests on those lines. Found by the acceptance read of the same day.
+- Ruling (24 Nov 2026, P19-AUDIT04 exercised): the declaration (`edb74801`) precedes the
+  commit that acts on it. The census reads the keys of an object under `not_available`
+  whose values are all strings as named ids. Lane 19u's row gains `claude-mythos-5-2`, which
+  that lane's key could not reach and to which nothing was sent; no other row changed, and
+  the page still says 18 packs name a model and two hold a returned id. The page's sentence
+  about a row with none recorded now says that the pack holds no id from the provider. Two
+  tests were written first and failed until the tool changed, and a third was changed to
+  allow a named id with no returned one for that model alone. This closes the note recorded
+  in the ruling of P19-GUARD02's second amendment. The fifteenth read-only round, on merged
+  `main`, found nothing false, stale or broken.

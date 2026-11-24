@@ -14,6 +14,38 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-24 (Australia/Sydney) — Round 15 found nothing false; the census reads a model named as not available (P19-AUDIT04)
+
+**Raouf:**
+
+- **Scope:** the census tool, its page and tests (P19-AUDIT04, declared first); the method
+  page, one README sentence, the manuscript folder's page, a note on lane 19v's page, two
+  lines of this log, the ledger, both logs.
+- **Summary:** a fifteenth round ran on merged `main`. One helper read the repository cold,
+  as a reviewer in a first hour: every link on ten pages resolves, the printed commands
+  run, the counts agree across pages and with the handoff tool, and nothing is false, stale
+  or broken. The other ran the mechanics from a fresh clone. What the round asked for is
+  done here, and so are the notes earlier rounds had left:
+  - The method page has a row for the 24 November recount, and the README's mention of an
+    audit round links to the record of corrections.
+  - The census names a model that a pack lists as not available. Lane 19u's row gains one
+    id that its key could not reach; no count changes. The page no longer says that a row
+    with none recorded "holds the id that was requested".
+  - The manuscript folder's page said four lanes and names five.
+  - Lane 19v's note names the pinned module, and records that two times on the page are
+    one second further apart than the pack's rental record.
+  - A heading and a wrapped line in two entries of this log are corrected.
+- **Files changed:** `tools/assurance-provenance/served19.py`,
+  `tools/assurance-provenance/tests/test_served19.py`,
+  `docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md`, `docs/AUTHOR_AND_METHOD.md`,
+  `README.md`, `docs/research/provenance-phase-19-paper/README.md`,
+  `docs/research/provenance-phase-19v/README.md`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** two census tests written first and seen to fail, a third changed; the
+  new rule removed and a test seen to fail; the explorer's unit tests, which read the
+  census page; lane 19v's verifier; `prettier`, `ruff` and the quick gate.
+- **Not done:** lane 19z's generated results page still gives "37 of 52" without the
+  breakdown its lane page gives.
+
 ### 2026-11-24 (Australia/Sydney) — Round 14, the acceptance read: one missing record, added
 
 **Raouf:**
@@ -59,7 +91,7 @@ one machine's local agent configuration:
 - **Not done:** not checkable from a pack and so not recounted by any round: host, timing
   and money statements, the models behind attacker seats, and bootstrap intervals.
 
-### 2026-11-24 (Australia/Sydney) — Round 12: the corrections rechecked; about 200 more sentences recounted; five notes
+### 2026-11-24 (Australia/Sydney) — Round 12: the corrections rechecked; about 200 more sentences recounted; four dated notes and a ledger note
 
 **Raouf:**
 
@@ -136,10 +168,10 @@ one machine's local agent configuration:
   was measured and are reworded: lane 19ad's 57 sequences are those in which the old gate
   admitted no forged token for the undelegated action, and 26 of them do hand it one
   (both gates refuse it in 24; round 12 found that in two the old gate admitted it for
-  the delegated action, with no verdict changed); lane
-  19ae's gate leaves no refusal without a record unless its seal has latched, which the
-  security page had dropped; and in lane 19t no verdict changed in the 82 attempts that
-  completed, while 10 raised and have no verdict. No number on any page changed.
+  the delegated action, with no verdict changed); lane 19ae's gate leaves no refusal
+  without a record unless its seal has latched, which the security page had dropped; and in
+  lane 19t no verdict changed in the 82 attempts that completed, while 10 raised and have no
+  verdict. No number on any page changed.
 - **Files changed:** `tools/assurance-provenance/strict19ag.py`,
   `tools/assurance-provenance/tests/test_strict19ag.py`, `README.md`, `SECURITY.md`,
   `docs/RECORD_OF_CORRECTIONS.md`, `docs/research/provenance-phase-19ad/README.md`,

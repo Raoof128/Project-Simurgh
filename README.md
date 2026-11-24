@@ -173,7 +173,8 @@ log. Both lanes are lists the author wrote and no agent attacked them. A
 [census of the packs](docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md) counts 18 that
 name a model and two that hold a model id the provider returned: lanes 19o and 19u keep
 the provider's response beside every generation. Until 24 November the census counted one
-and missed those responses; a read-only audit round found the error.
+and missed those responses; a read-only audit round found the error (see the
+[record of corrections](docs/RECORD_OF_CORRECTIONS.md)).
 
 **A planted fault, a real one, and its repair, 22 November.**
 [19ac](docs/research/provenance-phase-19ac/README.md) had two agent seats write the sequences

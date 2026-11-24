@@ -1,5 +1,17 @@
 ## Change Log
 
+## [phase-19-audit04-2026-11-24] — 2026-11-24 — Round 15 found nothing false; the census reads a model named as not available
+
+**Raouf:**
+
+- **Scope:** the census tool (P19-AUDIT04), its page and tests; the method page; one README
+  sentence; the manuscript folder's page; a note on lane 19v's page.
+- **Summary:** a cold read and a fresh-clone run of merged `main` found nothing false, stale
+  or broken. The method page gains a row for the 24 November recount. The census lists a
+  model that lane 19u's pack names as not available; no count changes. Small notes left by
+  earlier rounds are closed.
+- **Verification:** census tests on two interpreters; explorer unit tests; quick gate.
+
 ## [readiness-round-14-2026-11-24] — 2026-11-24 — The acceptance read: the recount recorded on the corrections page
 
 **Raouf:**
