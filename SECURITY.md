@@ -376,10 +376,11 @@ the gate of each earlier lane keep the fault.
   ([19t](docs/research/provenance-phase-19t/README.md)). None made the undelegated action
   land. [19y](docs/research/provenance-phase-19y/README.md) repairs them.
 - **Refusals with no record (repaired beside the gate).** 30 of 66 refusals left no record
-  ([19ab](docs/research/provenance-phase-19ab/README.md)). On the gate of
+  in the gate's log ([19ab](docs/research/provenance-phase-19ab/README.md)). On the gate of
   [19ae](docs/research/provenance-phase-19ae/README.md) no refused dispatch is left without a
-  record in any recorded attempt. A dispatch that raised left none; lane 19ag refuses and
-  records those.
+  record in any recorded attempt, unless the seal has latched: after a latch the gate
+  writes nothing, so a refusal then has no record. A dispatch that raised left none; lane
+  19ag refuses and records those.
 - **An approval admitted on another approval's nonce (repaired beside the gate).** A token
   signed with the operator's key was accepted on the nonce of an approval minted for another
   action ([19ac](docs/research/provenance-phase-19ac/README.md)).

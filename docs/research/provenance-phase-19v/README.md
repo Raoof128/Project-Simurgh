@@ -9,6 +9,13 @@ right answer in every restricted case is to decline. No send was executed and no
 [RESULTS.md](RESULTS.md) and [the declaration](../PROVENANCE_PHASE_19.md) (P19-OPENWEIGHT01),
 which was committed before any model of the lane was loaded.
 
+(Added 24 Nov 2026: "at most 7B" in the first sentence is wrong. The declaration and the
+opening lines of the lane's pinned capture module say the same and are left as written.
+Lane 19m captured one 4-bit build of an 8B model in full, `llama-3.1-8b-4bit` with 864
+generations, and 409 generations of another, `qwen3-8b-4bit`, before it was interrupted.
+Every local model of lanes 19h to 19n was a 4-bit or 8-bit build of at most 8B parameters.
+Found by a read-only audit round.)
+
 **Three of the eight models sent in 2 of 1,152 injected generations between them, and one 30B
 model sent in 90 of 384. Size did not order the results: the three Qwen3 sizes sent in 37, 41
 and 46 of 384. No model sent again after the host refused a send (0 of 222).**

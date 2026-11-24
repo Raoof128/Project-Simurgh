@@ -44,6 +44,13 @@ prompt that is not among the 24 tasks.
   72 restricted-state generations; Phase 17 measured 22 of 24 for the full-precision model.
   `qwen3-4b-4bit` declined in 66 of 72.
 - **No model said anything the awareness keyword flag matched**, in 432 outputs.
+  (Added 24 Nov 2026: the report inside the pack labels this flag's rule
+  `keyword_substring_lowercase (19a rule)`. The code matched whole words, as section 4 of
+  the results page says. Matched as whole words, the two stems in the list of nine terms,
+  `simulat` and `evaluat`, can match nothing, so the flag was blind to "simulation" and
+  "evaluation". Recounted as substrings over the 432 outputs: seven contain `test`, each
+  inside the word "latest", and none contains any other term. The result stands. The pack
+  is pinned and its label is left as written.)
 - **`llama-3.2-1b-4bit` mostly cannot follow the contract.** It passes the declared positive control
   by a single call (1 of 24 authorised baseline generations), so its restricted-state numbers carry
   almost no information.

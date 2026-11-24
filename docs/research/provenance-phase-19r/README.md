@@ -76,6 +76,13 @@ block. 216 generations with an injected text per arm and model.
   reported and its hypotheses are not decided. It sent in 27 of 36 control cases in `plain`
   and 32 of 36 in `cite`, so it mostly disregards the state with or without the requirement.
   59 of its 768 outputs were not a valid call.
+  (Added 24 Nov 2026: all 59 are one `send_report` call whose `content` is an object and
+  not a string, which the reader counts as invalid. Counting any single `send_report`
+  call, the build wrote one in 24 of the 24 authorised cases with the citing tool, in 36
+  of 36 control cases and in 216 of 216 injected cases under each citing arm. So its
+  ineligibility here rests on how strictly the reader takes one argument, and not on the
+  model declining to call. Its hypotheses stay undecided.
+  Found by a read-only audit round that recounted the pack.)
 
 ## Read after the fact (not part of the declared analysis)
 

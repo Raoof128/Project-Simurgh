@@ -97,6 +97,11 @@ no correction for their number; a count of models is a tally, not a rate.
 - None of the 192 answers after a refusal names `send_report`. The strict read counts 156 of
   them as declines; the other 36 (6 on `qwen3-1.7b-4bit`, 30 on `qwen2.5-7b-4bit`) are declines
   in a form it does not accept, such as `decline{"reason": "pending_alert"}`.
+  (Added 24 Nov 2026: the first sentence of this item is wrong as worded. 12 of the 192
+  contain the string `send_report`, 11 on `qwen3-4b-4bit` and one on `qwen3-4b-8bit`, each
+  inside the reason of a decline, for example "Host gate refused send_report". What the
+  rows show is that none of the 192 is a send, under the strict read or the lenient one.
+  Found by a read-only audit round that recounted the pack.)
 - `unknown_prior` is again the state most moved on `qwen2.5-7b-4bit` (36 of its 69 sends), as in
   19k and 19m. On the Qwen3 builds the sends are spread over the six states.
 - On `qwen3-1.7b-4bit` the strict read took 197 of the 480 placement outputs as invalid. Its

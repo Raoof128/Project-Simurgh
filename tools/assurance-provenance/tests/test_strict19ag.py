@@ -34,11 +34,29 @@ if change == "non_claims":
 elif change == "arm":
     report["arm"] = "something_else"
     report["model_inference"] = True
+elif change == "flag":
+    report["model_inference"] = True
 elif change == "extra":
     report["added_later"] = "a field the lane never declared"
-files["report.json"] = wire(report)
+raw = wire(report)
+if change == "twice":
+    # the same value, with its first key written twice: a reader keeps the last
+    text = raw.decode()
+    assert text.startswith('{"arm":"' + ev.ARM + '",')
+    raw = ('{"arm":"something_else",' + text[1:]).encode()
+    assert json.loads(raw) == report
+elif change == "spaced":
+    raw = json.dumps(report, indent=2).encode()
+files["report.json"] = raw
 for name, project in ev.SIDECARS.items():
     files[name] = wire(project(report))
+if change == "sidecar":
+    # a sidecar with its first key written twice, the first time with another value
+    name = "hypotheses.json"
+    text = files[name].decode()
+    first = text[1 : text.index(":")]
+    files[name] = ("{" + first + ':"something_else",' + text[1:]).encode()
+    assert json.loads(files[name]) == loads(wire(ev.SIDECARS[name](report)))
 print(write_pack(out, files))
 """
 
@@ -106,7 +124,14 @@ class StrictTests(unittest.TestCase):
         for change, reason in (
             ("non_claims", "report_field:non_claims"),
             ("arm", "report_field:arm"),
+            # the flag alone (P19-GUARD02, amendment 1): the copy above changes it with the arm
+            ("flag", "report_field:model_inference"),
             ("extra", "report_fields"),
+            # the same report in bytes that are not the lane's canonical form
+            ("twice", "report_bytes"),
+            ("spaced", "report_bytes"),
+            # and a sidecar in such bytes (amendment 2)
+            ("sidecar", "sidecar_bytes:hypotheses.json"),
         ):
             pack, root = self.repacked(change)
             self.assertNotEqual(root, self.root, change)

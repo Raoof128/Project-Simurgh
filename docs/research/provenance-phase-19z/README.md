@@ -14,6 +14,9 @@ model is a target. See [RESULTS.md](RESULTS.md), [the brief](BRIEF.md),
 does. The seal's price is that 37 of the 52 stop the delegated action
 too.**
 
+(Added 24 Nov 2026: of those 37, 25 end with the delegated action refused on the open gate
+as well, as "The price of the latch" below says. The seal adds 12.)
+
 Verify the structure (any host with Python 3.12; standard library only):
 
 ```sh

@@ -14,6 +14,175 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-24 (Australia/Sydney) — Round 14, the acceptance read: one missing record, added
+
+**Raouf:**
+
+- **Scope:** `docs/RECORD_OF_CORRECTIONS.md`, two README sentences, the notes on the pages of
+  lanes 19ad and 19v, a note at the ledger's end, both logs.
+- **Summary:** a fourteenth read-only helper read rounds 9 to 13 in a fresh clone, as a
+  reviewer opening the repository cold. It found no page that contradicts another, no count
+  stated two ways, nothing stale outside dated entries, the ledger in order, every changed
+  pack verifying and no private data added. It found one thing to fix: the record of
+  corrections asks to be read before the numbers are trusted, and had no row for the
+  recount. It has one now. Four notes are also acted on: two README sentences still said
+  lane 19y repaired "the two faults" where it repaired three; lane 19ad's note now says
+  which sentence it corrects; lane 19v's note names the pinned module that repeats the
+  wrong figure; and the ledger records two lines of `strict19ag.py` that a commit reworded
+  beyond what its amendment lists.
+- **Files changed:** `docs/RECORD_OF_CORRECTIONS.md`, `README.md`,
+  `docs/research/provenance-phase-19ad/README.md`,
+  `docs/research/provenance-phase-19v/README.md`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** lane 19y's page read for what it repaired; `prettier` and the quick gate.
+- **Not done:** lane 19z's results page repeats "37 of 52" without the breakdown its lane
+  page now gives; that page is generated and left as it is.
+
+### 2026-11-24 (Australia/Sydney) — Round 13: nothing false found; two dated notes
+
+**Raouf:**
+
+- **Scope:** dated notes on the pages of lanes 19x and 19m, both logs.
+- **Summary:** a thirteenth read-only helper recounted about 70 sentences in the bodies of
+  lanes 19h, 19m, 19p, 19v, 19w and 19x, the five notes round 12 wrote, and five results
+  tables, each from the raw pack with its own code. Every one holds. It left four notes.
+  Three are acted on. Lane 19x's page says its two dispute cases fired "on several models
+  in every repeat"; the six-model case did so on five models and the seven-model case on
+  two, and the page now carries both counts. A sentence on lane 19m's page is true under
+  the strict reading it names and reverses for five of six styles under the report's count
+  of attempted calls; a dated note gives those counts. The heading of round 12's changelog
+  entry is corrected. The fourth is left and recorded here: the two times on lane 19v's
+  page for its first machine are one second further apart than the pack's rental record.
+- **Files changed:** `docs/research/provenance-phase-19x/README.md`,
+  `docs/research/provenance-phase-19m/README.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the 19x and 19m counts rerun from the packs before the notes were
+  written; `prettier` and the quick gate.
+- **Not done:** not checkable from a pack and so not recounted by any round: host, timing
+  and money statements, the models behind attacker seats, and bootstrap intervals.
+
+### 2026-11-24 (Australia/Sydney) — Round 12: the corrections rechecked; about 200 more sentences recounted; five notes
+
+**Raouf:**
+
+- **Scope:** the root README, dated notes on the pages of lanes 19r, 19t, 19ab and 19ad, a
+  note at the ledger's end, both logs.
+- **Summary:** two read-only helpers. One recounted the 45 or so sentences that rounds 10 and
+  11 had written or reworded, and about 30 statements on the author, roadmap, privacy and
+  explorer pages; all hold but one. Round 10 had written that 26 of lane 19ad's sequences
+  hand the gate a forged token "that both refuse". Both refuse it in 24; in two the gate as
+  it was admitted it for the action it already delegates, and no verdict or effect differs.
+  The other recounted about 170 sentences in the body of twenty lane pages. Every number
+  holds. Four sentences say more than the rows show and now carry a dated note:
+  - Lane 19r: the Llama build's 59 invalid outputs are all `send_report` calls with one
+    malformed argument, so its ineligibility rests on the reader's strictness about that
+    argument.
+  - Lane 19ab: six of the 30 refusals with no `blocked` event do leave a reason in the
+    pipeline's record.
+  - Lane 19ad: the two sequences above, which the page's body did not except.
+  - Lane 19t: 12 of the 14 attempts said to sign with the fixture's key carry a signed
+    token; two carry an unsigned claim.
+- **Files changed:** `README.md`, `docs/research/provenance-phase-19r/README.md`, the same
+  file for lanes 19t, 19ab and 19ad, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** each finding recounted from the pack before it was written down;
+  `prettier` and the quick gate.
+- **Not done:** the helper did not reach the bodies of lanes 19h, 19m, 19p, 19v, 19w and
+  19x. No pack, pinned module or declaration text changed.
+
+### 2026-11-24 (Australia/Sydney) — Round 11: about 155 stated numbers recounted from the raw packs; wording corrected in nine places
+
+**Raouf:**
+
+- **Scope:** the root README, `SECURITY.md`, the record of corrections, dated notes on the
+  pages of lanes 19h, 19m, 19n, 19t, 19v and 19z, a note at the ledger's end, both logs.
+- **Summary:** two read-only helpers recounted every count, absence and universal they
+  could find on the README, the security page's Phase 19 section, the corrections page and
+  the Phase 19 lane pages, each from the raw pack with its own code. Every number is exact.
+  Nine sentences said more than the rows show, and one label inside a pinned pack misnames
+  its rule:
+  - Lane 19n's page said none of 192 answers after a refusal names `send_report`. Twelve
+    contain the string, inside the reason of a decline. None is a send.
+  - Lane 19v's page and its declaration said earlier local models were at most 7B. Lane 19m
+    captured an 8B build in full.
+  - Lane 19h's report labels its awareness flag as substring matching; the code matched
+    whole words, under which two stems match nothing. Recounted as substrings the result is
+    the same.
+  - Lane 19m's 94 control sends on one model leave out 16 calls with a malformed argument.
+  - The README said 13 of 52 attempts "that write those files"; 36 of the 52 do. It also
+    said two faults where the security page says two in the gate and one in its fixture.
+  - The security page and one corrections row dropped a qualifier their lane pages keep
+    ("in the gate's log"; "unless the seal has latched").
+  - Lane 19z's 37 stopped attempts include 25 that the open gate refuses too, and lane
+    19t's "changes a verdict" is about the 82 attempts that completed. Both now say so in a
+    dated note.
+- **Files changed:** `README.md`, `SECURITY.md`, `docs/RECORD_OF_CORRECTIONS.md`,
+  `docs/research/provenance-phase-19h/README.md`, the same file for lanes 19m, 19n, 19t,
+  19v and 19z, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** each finding recounted from the pack before it was written down; the
+  six lanes' verifiers still pass; `prettier` and the quick gate.
+- **Not done:** no pack, pinned module or declaration text changed. Lane pages keep their
+  words and carry dated notes.
+
+### 2026-11-24 (Australia/Sydney) — Round 10: the corrected census checked; three sentences said more than the packs show
+
+**Raouf:**
+
+- **Scope:** `strict19ag.py` and its test (P19-GUARD02 amendment 2), the root README,
+  `SECURITY.md`, the record of corrections, the pages of lanes 19ad and 19ag, the ledger,
+  both logs.
+- **Summary:** two read-only helpers ran after the census correction. One attacked the
+  correction with its own scan of all 32 packs and found the new census right; it found
+  that the stricter check for lane 19ag held the report to canonical bytes and not the two
+  sidecars, which is now refused too. The other took twenty sentences that claim an absence
+  or a universal and recounted each from the raw packs. Seventeen hold. Three said more than
+  was measured and are reworded: lane 19ad's 57 sequences are those in which the old gate
+  admitted no forged token for the undelegated action, and 26 of them do hand it one
+  (both gates refuse it in 24; round 12 found that in two the old gate admitted it for
+  the delegated action, with no verdict changed); lane
+  19ae's gate leaves no refusal without a record unless its seal has latched, which the
+  security page had dropped; and in lane 19t no verdict changed in the 82 attempts that
+  completed, while 10 raised and have no verdict. No number on any page changed.
+- **Files changed:** `tools/assurance-provenance/strict19ag.py`,
+  `tools/assurance-provenance/tests/test_strict19ag.py`, `README.md`, `SECURITY.md`,
+  `docs/RECORD_OF_CORRECTIONS.md`, `docs/research/provenance-phase-19ad/README.md`,
+  `docs/research/provenance-phase-19ag/README.md`, the ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the sidecar test written first and seen to fail, then to fail again with
+  the check removed; the 26 of 57 recounted from lane 19ad's pack with separate code;
+  `prettier`, `ruff` and the quick gate.
+- **Not done:** lane 19ad's sentence keeps its words and a dated note corrects it. The
+  census still does not read a model named under `not_available` in lane 19u's pack.
+
+### 2026-11-24 (Australia/Sydney) — The served-model census was wrong about returned ids; corrected (P19-AUDIT03)
+
+**Raouf:**
+
+- **Scope:** the census tool, its page and tests; `strict19ag.py` and its test (P19-GUARD02
+  amendment 1); the root README, the record of corrections, lane 19ag's page, the ledger,
+  both logs.
+- **Summary:** a ninth read-only round, on the two merges no round had read, found a wrong
+  claim in the census and in the README. The census said one pack holds a model id the
+  provider returned and that no lane keeps one beside each generation. Lanes 19o and 19u
+  store the provider's response body for every generation, 8,064 and 2,700 of them. The tool
+  counted only a `served_model` field and took the `model` in a stored response for a named
+  id. Under P19-AUDIT03, declared first, it counts that string as returned, and reads a list
+  of entries with an `id` as named ids: 18 packs name a model and two hold a returned id.
+  The same round found that the stricter check for lane 19ag had one comparison no test
+  guarded, accepted a report with a key written twice, and described the pinned verifier as
+  recomputing rows, which it does not do without a replay. All three are fixed.
+- **Files changed:** `tools/assurance-provenance/served19.py`,
+  `tools/assurance-provenance/tests/test_served19.py`,
+  `docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md`,
+  `tools/assurance-provenance/strict19ag.py`,
+  `tools/assurance-provenance/tests/test_strict19ag.py`, `README.md`,
+  `docs/RECORD_OF_CORRECTIONS.md`, `docs/research/provenance-phase-19ag/README.md`, the
+  ledger, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the census tests (17) and the strict check's tests (3) on two
+  interpreters. They were written first, except one census test added after the tool
+  changed, when a removal check found a branch no test guarded. Each new rule was removed
+  in turn and a test seen to fail. Also the
+  explorer's unit tests, which read the census page; `prettier`, `ruff` and the quick gate.
+- **Not done:** the rulings of P19-AUDIT01 and P19-AUDIT02 keep their words and a later
+  ruling corrects them. Dated log entries that give the old counts are left as written. No
+  pack, capture module or pinned file changed.
+
 ### 2026-11-24 (Australia/Sydney) — The author's affiliation corrected on the disclaimer page
 
 **Raouf:**

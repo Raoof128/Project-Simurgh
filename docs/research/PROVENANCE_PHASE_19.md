@@ -2936,6 +2936,88 @@ Not authorised: any edit to `evidence19ag.py`, `guard19ag.py`, the lane's pack, 
 seats' files, the handoff or the command it gives for the lane, or any frozen file. This
 declaration commit must be a strict ancestor of every commit that acts on it.
 
+**P19-AUDIT03 (bounded authority to correct what the served-model census counts as an id the
+provider returned; declared 24 Nov 2026 before any commit that acts on it).** A read-only
+round on 24 November found the census wrong. Under P19-AUDIT01 it counts an id the provider
+returned only where a pack holds a string under the key `served_model`. Lanes 19o and 19u
+store the provider's response body beside every generation, under the key `response`, and
+each body carries the `model` the provider wrote in it. The census read that string as an id
+the pack names and never as one the provider returned. So its page, the rulings of
+P19-AUDIT01 and P19-AUDIT02 and the root README say that one pack holds a returned id, that
+lane 19u holds nothing the provider returned, and that no lane records a returned id beside
+each generation. The pages of lanes 19o and 19u have said otherwise since those lanes were
+ruled. Measured before this was written, with the rules below applied to every committed
+pack:
+
+- Lane 19o holds 8,064 stored responses and lane 19u holds 2,700, one for each row of their
+  transcripts. Each names the model of the transcript file it is in.
+- No other pack holds a stored response with a `model` in it. Two packs hold a returned id,
+  not one.
+- The same round found that a pack may name its models as a list of entries that each carry
+  an `id`. Read that way, lane 19e names three models and joins the census, lane 19w gains
+  two ids its pack lists as not run, and 18 packs name a model, not 17. No other pack's named
+  ids change.
+
+This declaration authorises, and nothing else:
+
+1. `tools/assurance-provenance/served19.py`: a string under `model` directly inside an
+   object held under the key `response` is an id the provider returned and is not a named
+   id. A list under `models` whose entries are all objects with a string `id` names those
+   ids. The census gives one entry for each returned id in a pack, with the number of stored
+   responses and of `served_model` records that carry it, and says whether each returned id
+   is one the pack names. The page says what it counted before and that it was wrong. Tests
+   first.
+2. The generated page `docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md`, written again
+   by the tool.
+3. The root README: the sentence that cites the census, and the open-work entry on which
+   model answered. `docs/RECORD_OF_CORRECTIONS.md`: one row.
+4. Both logs and the ruling, which states the correction to the two earlier rulings. Their
+   text is left as written.
+
+Not authorised: any edit to a pack, a capture module, a lane's page, a workflow or a frozen
+file. No provider is called. No money. This declaration commit must be a strict ancestor of
+every commit that acts on it.
+
+**P19-GUARD02, amendment 1 (24 Nov 2026, declared before any commit that acts on it).** The
+same round found three things about `strict19ag.py` and one about its declaration.
+
+- The tool's opening lines, and the declaration above, say that without `--replay` the
+  pinned verifier compares a report's rows with what it recomputes. It does less. It checks
+  each row's identity against the seats' files, that each recorded outcome has the declared
+  shape and agrees with its own flags, and that the summary and the hypotheses follow from
+  the rows. It runs no gate. Measured: a copy in which the two outcomes that raise are
+  rewritten as not raising, with flags, summary and hypotheses recomputed, reads G1 as held
+  and is accepted by both tools under the copy's own root. The committed root refuses it,
+  and so does `--replay`.
+- No test fails when the comparison of the `model_inference` flag is taken out, because the
+  test changes the arm and the flag together.
+- A report with a key written twice, or pretty-printed, is accepted by both tools under its
+  own root. The committed report is in the lane's canonical form, checked before this was
+  written.
+- Commit `8755eae8`, made under P19-AUDIT02, also carried a test of lane 19ag's committed
+  report fields and one sentence on that lane's page. That declaration does not list them.
+  They belong to this unit's subject and are left in place.
+
+This amendment authorises, and nothing else: the wording of the tool's opening lines; a test
+that changes the flag alone; a refusal, `report_bytes`, of a report whose bytes are not the
+canonical form of what they parse to, with its test; on the lane's page, a paragraph marked
+with its date that says what neither tool checks without a replay, and the same date mark on
+the sentences added to that page on 24 November; both logs and the ruling. Not authorised:
+what P19-GUARD02 does not authorise.
+
+**P19-GUARD02, amendment 2 (24 Nov 2026, declared before any commit that acts on it).** A
+tenth read-only round, on the commit that exercised amendment 1, found that the canonical
+form is asked of `report.json` and not of the pack's two sidecars. A copy whose
+`hypotheses.json` opens with a second, different `G1` entry passes both tools under the
+copy's own root, because the pinned verifier compares parsed values. The committed sidecars
+are in canonical form, checked before this was written. The round also found that the
+sentence re-marked on the lane's page under amendment 1 gained a clause about canonical
+bytes that the amendment did not list. This amendment authorises, and nothing else:
+`strict19ag.py` refuses, as `sidecar_bytes` with the member's name, a sidecar whose bytes are
+not the canonical form of what they parse to, with its test; that clause on the lane's page,
+which may name the sidecars too; both logs and the ruling. Not authorised: what P19-GUARD02
+does not authorise.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
@@ -4511,3 +4593,60 @@ declaration commit must be a strict ancestor of every commit that acts on it.
   with a reason, and that the committed root refuses each in both. On the committed pack
   the new check prints the verifier's receipt with one more field. No pinned file, pack,
   brief or handoff command changed.
+- Ruling (24 Nov 2026, P19-AUDIT03 exercised; this corrects two rulings above): the
+  declaration (`82bd0a33`) precedes the commit that acts on it. The rulings of P19-AUDIT01 and
+  P19-AUDIT02 say that one pack, lane 19o's, holds an id the provider returned, that lanes
+  19u, 19w and 19x hold the requested id only, and that no lane records the returned id beside
+  each generation. That was wrong for lanes 19o and 19u, and their text above is left as
+  written. Both lanes store the provider's response body beside every generation, 8,064 and
+  2,700 of them, one for each transcript row, and each names the model of the file it is in.
+  The census counted only a `served_model` field and read the `model` in a stored response as
+  an id the pack names. It now counts that string as returned and not as named, and reads a
+  list of entries with an `id` as named ids. The page says 18 packs name a model and two hold
+  a returned id; lane 19e joined with three ids, and lane 19w gained two its pack lists as not
+  run. Lanes 19w and 19x still hold nothing the provider returned. The page says what it
+  counted before. The tests were written first and nine failed until the tool changed; one
+  had pinned the wrong answer by name. Each new rule was then taken out in turn and a test
+  failed each time. The error was found by a read-only audit round on the two newest merges,
+  not by the author. Nothing in a pack, a capture module or a lane's page changed. The root
+  README and the record of corrections carry the correction.
+- Ruling (24 Nov 2026, P19-GUARD02 amendment 1 exercised): the amendment (`82bd0a33`)
+  precedes the commit that acts on it. `strict19ag.py` also refuses, as `report_bytes`, a
+  report whose bytes are not the canonical form of what they parse to: a copy with a key
+  written twice and a pretty-printed copy, both accepted by the pinned verifier under their
+  own root, are refused. A copy with the `model_inference` flag alone changed is now a test
+  case, and the test fails when that comparison is removed. The tool's opening lines no
+  longer say the verifier recomputes a report's rows. The lane's page says, in a paragraph
+  marked with its date, what neither tool checks without a replay: no gate runs, so a copy
+  with recorded outcomes rewritten consistently passes both under its own root, and the
+  committed root or `--replay` refuses it. No pinned file, pack, brief or handoff command
+  changed.
+- Ruling (24 Nov 2026, P19-GUARD02 amendment 2 exercised; a tenth round on the commit above):
+  the amendment (`6571410c`) precedes the commit that acts on it. `strict19ag.py` refuses, as
+  `sidecar_bytes` with the member's name, a sidecar whose bytes are not the canonical form of
+  what they parse to. The test, written first, repacks the committed pack with a second `G1`
+  entry at the head of `hypotheses.json`: the pinned verifier accepts the copy under its own
+  root and the new check refuses it, and the test fails with the check removed. The same
+  round read every committed pack with its own code and found the corrected census right:
+  only lanes 19o and 19u hold a provider's response body, 18 packs name a model, and lanes
+  19w and 19x hold the requested name only. Three things it noted are recorded here and not
+  changed. Lane 19u's pack also names `claude-mythos-5-2`, under `not_available`, which the
+  census's rule does not read. Lane 19w's row lists a model its pack marks as not run. And
+  of the census tests, nine were written before the tool changed and one after, when a
+  removal check found a branch no test guarded. The commit that exercised P19-AUDIT03 also
+  edited lane 19ag's page; that edit belongs to amendment 1 of P19-GUARD02, which authorises
+  it, and not to P19-AUDIT03, which authorises no lane's page.
+- Note (24 Nov 2026, on the declaration P19-OPENWEIGHT01 above, whose text is left as
+  written): it says every local model of lanes 19h to 19n was a build of at most 7B
+  parameters and that lane 19m could not finish an 8B model. Lane 19m's pack holds one 4-bit
+  build of an 8B model captured in full (`llama-3.1-8b-4bit`, 864 generations) and 409
+  generations of another (`qwen3-8b-4bit`) that was interrupted. Lane 19v's page carries a
+  dated note. Found by an eleventh read-only round, which recounted about 155 stated numbers
+  from the raw packs with separate code and found every number exact; what it found were
+  sentences that say more than the rows show, each now reworded or noted on its page.
+- Note (24 Nov 2026, on the ruling of P19-GUARD02 amendment 2 above): the test writes the
+  first key of `hypotheses.json` twice, and that key is `G0`, not `G1`. The amendment's `G1`
+  describes the copy the round built; the check and its refusal are the same for either.
+- Note (24 Nov 2026, on commit `f5c45905`): besides what amendment 2 of P19-GUARD02 lists, that
+  commit reworded two lines at the head of `strict19ag.py` so that they name the sidecars. No
+  behaviour rests on those lines. Found by the acceptance read of the same day.

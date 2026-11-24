@@ -1,5 +1,74 @@
 ## Change Log
 
+## [readiness-round-14-2026-11-24] — 2026-11-24 — The acceptance read: the recount recorded on the corrections page
+
+**Raouf:**
+
+- **Scope:** `docs/RECORD_OF_CORRECTIONS.md`, two README sentences, two lane notes.
+- **Summary:** a cold read of rounds 9 to 13 in a fresh clone found no contradiction, no
+  stale count and no private data. The record of corrections gained the row it lacked for
+  the 24 November recount, and the README says lane 19y repaired three faults, not two.
+- **Verification:** quick gate.
+
+## [readiness-round-13-2026-11-24] — 2026-11-24 — Round 13 found nothing false; two dated notes
+
+**Raouf:**
+
+- **Scope:** dated notes on the pages of lanes 19x and 19m; the heading of the entry below.
+- **Summary:** a thirteenth read-only round recounted about 70 sentences in the six lane
+  bodies no round had reached, round 12's five notes, and five results tables. All hold.
+  One phrase on lane 19x's page, "on several models in every repeat", is exact for one of
+  its two cases and now carries both counts. One sentence on lane 19m's page holds under
+  the strict reading it names and not under the lenient count; a note gives both.
+- **Verification:** both counts rerun from the packs; quick gate.
+
+## [readiness-round-12-2026-11-24] — 2026-11-24 — The corrections rechecked; four dated notes and a ledger note
+
+**Raouf:**
+
+- **Scope:** the root README; dated notes on the pages of lanes 19r, 19t, 19ab and 19ad.
+- **Summary:** one of round 10's own corrections was loose for two of 26 sequences and is
+  now exact. About 200 more sentences were recounted from the raw packs; every number holds
+  and four sentences gained a dated note saying what the rows show.
+- **Verification:** each finding recounted before the fix; quick gate.
+
+## [readiness-round-11-2026-11-24] — 2026-11-24 — A recount of about 155 stated numbers; nine sentences corrected
+
+**Raouf:**
+
+- **Scope:** the root README, `SECURITY.md`, the record of corrections, dated notes on six
+  lane pages (19h, 19m, 19n, 19t, 19v, 19z).
+- **Summary:** every number recounted from the raw packs is exact. Nine sentences said more
+  than the rows show and are reworded or carry a dated note. One label in lane 19h's pinned
+  pack misnames its rule; the page says so and the result stands.
+- **Verification:** each finding recounted before the fix; six lane verifiers; quick gate.
+
+## [readiness-round-10-2026-11-24] — 2026-11-24 — Three sentences reworded to what the packs show; sidecars held to canonical bytes
+
+**Raouf:**
+
+- **Scope:** the root README, `SECURITY.md`, the record of corrections, the pages of lanes
+  19ad and 19ag, `strict19ag.py` (P19-GUARD02 amendment 2).
+- **Summary:** a recount of twenty absence claims from the raw packs found seventeen exact
+  and three worded more strongly than measured (lanes 19t, 19ad and 19ae); they now say what
+  was measured. The stricter check for lane 19ag also refuses a sidecar in non-canonical
+  bytes. No number changed.
+- **Verification:** strict-check tests on two interpreters; quick gate.
+
+## [phase-19-audit03-2026-11-24] — 2026-11-24 — The served-model census corrected: two packs hold a returned id
+
+**Raouf:**
+
+- **Scope:** the census tool (P19-AUDIT03), its page and tests; `strict19ag.py` (P19-GUARD02
+  amendment 1); the root README; the record of corrections; lane 19ag's page.
+- **Summary:** the census said one pack holds a model id the provider returned. Two do:
+  lanes 19o and 19u store the provider's response for every generation, which the tool had
+  read as a named id. 18 packs name a model, not 17. The stricter check for lane 19ag also
+  refuses a report whose bytes are not canonical, and its page says what no check covers
+  without a replay.
+- **Verification:** census and strict-check tests on two interpreters; explorer unit tests;
+  quick gate.
+
 ## [affiliation-2026-11-24] — 2026-11-24 — The author's affiliation corrected on the disclaimer page
 
 **Raouf:**

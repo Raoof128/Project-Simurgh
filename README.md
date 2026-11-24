@@ -84,9 +84,10 @@ refused, while a credential check alone let 369 through.
 **Upgrade set, 13 November.** Five more lanes, each declared before it ran. The two that went
 against what was declared come first. [19t](docs/research/provenance-phase-19t/README.md) gave
 two coding agents the gate's source and committed what each submitted before it was run: 49 of
-92 attempts changed the gate's output, against the declared prediction, through two faults that
-lane 19y has since repaired beside the gate. None made the undelegated action land or changed a
-verdict.
+92 attempts changed the gate's output, against the declared prediction, through two faults in
+the gate and one in its fixture, which lane 19y has since repaired beside the gate. None made
+the undelegated action land. In the 82 attempts whose dispatch completed no verdict changed;
+in the other 10 a dispatch raised and there is no verdict to compare.
 [19q](docs/research/provenance-phase-19q/README.md) scored a destination rule on a public
 monitor benchmark: it flagged 7 of 43 attack sessions and 6 of 43 benign ones, and two of its
 three hypotheses did not hold. The same rules run on one transcript of your own with
@@ -133,9 +134,10 @@ these outcomes make up. The author's disk filled during the run and stopped it f
 an hour, and two of six things said beforehand did not hold. Both are in the record.
 
 **The repair of 19t's faults, 22 November.**
-[19y](docs/research/provenance-phase-19y/README.md) repaired the two faults in new classes
-beside the gate, ran 19t's 92 attempts again and gave the repaired source to new attackers,
-whose files were committed before the host of record ran them. None of the 92 changes the
+[19y](docs/research/provenance-phase-19y/README.md) repaired the three faults (two in the gate
+and one in its fixture) in new classes beside the gate, ran 19t's 92 attempts again and gave
+the repaired source to new attackers, whose files were committed before the host of record
+ran them. None of the 92 changes the
 repaired gate's output, and none of 151 new attempts from three Claude agents does. Three other
 seats are empty: the providers of a fourth Claude model and of two OpenAI routes refused the
 task, and no request was reworded. So every attacker that ran is from one vendor: one Opus 5.5
@@ -148,9 +150,9 @@ a caller has to use the repaired classes.
 [19z](docs/research/provenance-phase-19z/README.md) gives the attacker what the labs' 2026
 incident reports describe: write access to the controls themselves. The gate keeps its grants,
 stop state and approvals in files and believes what it reads there, so with nothing else in
-place 13 of 52 attempts that write those files make the undelegated action land (31 of the
-52 are the author's own and 21 one agent's), and 4 let an
-approved action go ahead on a script rewritten after approval. With a digest of those files
+place 13 of 52 attempts make the undelegated action land, and 4 let an approved action go
+ahead on a script rewritten after approval (36 of the 52 change one of those files or the
+script; 31 are the author's own and 21 one agent's). With a digest of those files
 held in the host's memory, none does: the gate latched on each of the 36 attempts that changed
 a file and on no other. The price is that a writer of the files can stop all work, and one
 attempt stopped the sealed gate without touching a file at all. This is detection after the
@@ -168,8 +170,10 @@ the gate 64 changed bodies in place of an action it allows. None is observed, wi
 an approval, so the gate binds the body and not the name. It also found what it did not
 predict: 30 of 66 refusals, those of bodies the gate's schema rejects, leave no record in its
 log. Both lanes are lists the author wrote and no agent attacked them. A
-[census of the packs](docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md) found that of the
-17 that name a model, one holds a model id the provider returned.
+[census of the packs](docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md) counts 18 that
+name a model and two that hold a model id the provider returned: lanes 19o and 19u keep
+the provider's response beside every generation. Until 24 November the census counted one
+and missed those responses; a read-only audit round found the error.
 
 **A planted fault, a real one, and its repair, 22 November.**
 [19ac](docs/research/provenance-phase-19ac/README.md) had two agent seats write the sequences
@@ -181,9 +185,11 @@ the other action. Six of the seats' 25 attempts do it. It needs the signing key,
 fixture is a constant in the repository.
 [19ad](docs/research/provenance-phase-19ad/README.md) repairs it beside the gate: the store
 remembers a digest of what it minted and refuses a token that differs. Of 67 recorded
-sequences, 8 beat the gate as it was and none beats the repaired one, and the 57 others that
-carry no forged token end the same way on both. Every earlier lane ran the gate with the
-fault.
+sequences, 8 beat the gate as it was and none beats the repaired one. In 57 others the gate
+as it was admitted no forged token for the undelegated action, and they end the same way
+on both. 26 of those hand the gate a forged token: both gates refuse it in 24, and in two
+the gate as it was admitted one for the action it already delegates, which changed no
+verdict or effect. Every earlier lane ran the gate with the fault.
 
 **One gate with every repair, attacked afresh, 22 November.**
 [19ae](docs/research/provenance-phase-19ae/README.md) puts every repair in one class,
@@ -481,7 +487,7 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
   untested; the corrected OpenAI workflow retains one unresolved active refusal. The six hosted
   models of lane 19o and the four of lane 19u were given static injected texts only; an
   attacker that adapts to a model has not been run. The attackers of lanes 19t and 19y adapted
-  to the gate, not to a model. The two faults they found are repaired in classes beside the
+  to the gate, not to a model. The faults they found are repaired in classes beside the
   gate, which the earlier lanes did not use, and every attacker that ran is a Claude model.
 - **A fault in the approval check:** the seats of lane 19ac found that a token signed with
   the operator's key is admitted on the nonce of an approval minted for another action. The
@@ -520,9 +526,12 @@ whether the benefit survives tasks and receiver infrastructure controlled by an 
   (19aa). On the class of lane 19ae no refused dispatch is left without a record unless the
   seal has latched, and ten of the twelve attempts with a run of twenty refusals carry its
   mark; the frozen gate is unchanged, and the mark is an alert, not a cap.
-- **Which model answered:** lanes 19u, 19w and 19x record the model id that was requested
-  and nothing the provider returned; 19o records one returned id per model, from a call made
-  before the capture. No lane records it beside each generation.
+- **Which model answered:** lanes 19o and 19u keep the provider's response beside every
+  generation (8,064 and 2,700 responses), and each names the model that was asked for.
+  Lanes 19w and 19x record the model id that was requested and nothing the provider
+  returned. A returned id is what the provider reported; it does not say which weights
+  ran. Until 24 November this entry said that no lane kept a returned id beside each
+  generation, which was wrong.
 - **Operational assurance:** sustained deployment load, interactive desktop capture and
   real-data privacy validation remain separate work.
 - **Security review:** the [19 October local Phase 8 review](docs/research/PHASE_8_REVIEW_2026-10-19.md)
