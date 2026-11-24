@@ -14,6 +14,20 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-24 (Australia/Sydney) — Round 20: the author page and the disclaimer describe the author the same way
+
+**Raouf:**
+
+- **Scope:** `docs/AUTHOR_AND_METHOD.md`, both logs.
+- **Summary:** a twentieth round reviewed the whole repository at `06e88b60`. One helper
+  ran the mechanics from a fresh clone and reported zero findings. The other read the
+  public pages whole and found one thing: the author page said "an independent researcher"
+  where the disclaimer page gives Macquarie University. The owner chose the wording, and
+  the author page now says "an independent researcher and a student at Macquarie
+  University".
+- **Files changed:** `docs/AUTHOR_AND_METHOD.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `prettier` and the quick gate.
+
 ### 2026-11-24 (Australia/Sydney) — Round 18: one sentence of the entry below corrected
 
 **Raouf:**

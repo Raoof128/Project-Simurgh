@@ -6,7 +6,8 @@ well as its results. Every dated statement links to the record that supports it.
 ## Who is accountable
 
 Project Simurgh is the work of one person, Mohammad Raouf Abedini
-([ORCID 0009-0000-6214-258X](https://orcid.org/0009-0000-6214-258X)), an independent researcher.
+([ORCID 0009-0000-6214-258X](https://orcid.org/0009-0000-6214-258X)), an independent researcher
+and a student at Macquarie University.
 The author decides what is studied, authorises every run and every spend, decides what is
 published, and answers for every claim in the repository.
 

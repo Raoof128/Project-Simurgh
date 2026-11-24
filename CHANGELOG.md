@@ -1,5 +1,14 @@
 ## Change Log
 
+## [readiness-round-20-2026-11-24] — 2026-11-24 — The author page names the author's university
+
+**Raouf:**
+
+- **Scope:** `docs/AUTHOR_AND_METHOD.md`.
+- **Summary:** the author page says "an independent researcher and a student at Macquarie
+  University", in the owner's chosen wording, so that it agrees with the disclaimer page.
+- **Verification:** quick gate.
+
 ## [readiness-round-18-2026-11-24] — 2026-11-24 — One sentence of the agent log corrected
 
 **Raouf:**
