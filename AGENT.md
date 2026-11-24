@@ -49,8 +49,9 @@ one machine's local agent configuration:
   fresh clone ran the Phase 19 suite on Python 3.12.4 with nothing installed: 1,058 tests
   passed, none failed, 26 were skipped and 21 modules did not load for want of that one
   package; 492 relative links on 42 pages resolved.
-- **Not done:** lane 19z's generated results page still gives "37 of 52" without the
-  breakdown its lane page gives.
+- **Not done:** nothing that this round or an earlier one noted is left open in the pages.
+  Lane 19z's results page, which gave "37 of 52" without the breakdown its lane page gives,
+  carries a dated note with it.
 
 ### 2026-11-24 (Australia/Sydney) — Round 14, the acceptance read: one missing record, added
 
