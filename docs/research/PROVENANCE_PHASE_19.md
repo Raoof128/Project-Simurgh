@@ -4827,3 +4827,15 @@ work stops. This amendment commit must be a strict ancestor of every commit that
   What the audit noted and this does not change: an output's `tree_state` does not gate
   whether it counts, for a nested output as for a plain one since P19-OPERATOR01; the
   review reports whether it equals the record's commit.
+- Note (24 Nov 2026, on the note above): a second read-only audit, of the corrections alone
+  and on merged `main` (`5b20db18`), recomputed every count in that note and found nothing
+  that must be fixed. It found three things said loosely. The sentences about a second
+  Linux host that were corrected are five, and three of them say outside the author's
+  custody while two say outside. Of the seven new tests that pass on the earlier tool, two
+  hold refusals, one holds that the reviews of the earlier receipts are unchanged and one
+  holds that twenty items are owed without the fourth file; the other three are as the note
+  says. And the 19f page said the eleven lanes joined the handoff after the first pass was
+  run, which nothing establishes: lane 19w was declared on 15 November, the day the second
+  receipt is signed, and the receipt gives no time. What the record does show is that the
+  first pass ran at `c24b47ce`, which predates all eleven. The page now says that, and the
+  declaration's "after their first pass" is to be read the same way.

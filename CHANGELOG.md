@@ -1,5 +1,16 @@
 ## Change Log
 
+## [phase-19f-fourth-record-notes-2026-11-24] — 2026-11-24 — One sentence of the outside-operator page corrected
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19f/README.md`, the ledger (a note), both logs.
+- **Summary:** a second read-only audit, of the corrections alone, found nothing that must
+  be fixed. The 19f page said the eleven lanes joined the handoff after the first pass was
+  run, which the record does not establish; it now says after the commit the first pass ran
+  at. A ledger note corrects two loose counts.
+- **Verification:** the handoff tests; the quick gate.
+
 ## [phase-19f-fourth-record-2026-11-24] — 2026-11-24 — An outside operator replayed the eleven later packs
 
 **Raouf:**
