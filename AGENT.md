@@ -14,6 +14,20 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-24 (Australia/Sydney) — Round 18: one sentence of the entry below corrected
+
+**Raouf:**
+
+- **Scope:** `AGENT.md`, `CHANGELOG.md`.
+- **Summary:** an eighteenth read-only helper checked the last change. The counts, the file
+  lists, the round and pull request numbers and the mechanics hold. One sentence in the
+  entry below said that three remaining items are listed in the README's open work. One of
+  them is; the other two are in the record of corrections. The sentence is corrected in
+  place.
+- **Files changed:** `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** the README and the record of corrections read for where each item is
+  listed; the quick gate.
+
 ### 2026-11-24 (Australia/Sydney) — Round 17 on merged main: one changelog line, nothing else
 
 **Raouf:**
@@ -29,9 +43,10 @@ one machine's local agent configuration:
   That line is corrected.
 - **Files changed:** `CHANGELOG.md`, `AGENT.md`.
 - **Verification:** `prettier` and the quick gate.
-- **Not done:** nothing is left open in the pages by any round. What remains is listed in
-  the README's open work and needs other people: twenty outside-operator checks, an
-  attacker from outside the project, and review of the manuscript.
+- **Not done:** nothing is left open in the pages by any round. What remains needs other
+  people. The twenty outside-operator checks are listed in the README's open work. An
+  attacker from outside the project and review of the manuscript are listed in the record
+  of corrections, under what is still open.
 
 ### 2026-11-24 (Australia/Sydney) — Round 15 found nothing false; the census reads a model named as not available (P19-AUDIT04)
 

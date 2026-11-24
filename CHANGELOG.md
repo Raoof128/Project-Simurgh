@@ -1,5 +1,14 @@
 ## Change Log
 
+## [readiness-round-18-2026-11-24] — 2026-11-24 — One sentence of the agent log corrected
+
+**Raouf:**
+
+- **Scope:** `AGENT.md`.
+- **Summary:** a log sentence said that three remaining items are listed in the README's
+  open work. One is; two are in the record of corrections. The sentence says which is where.
+- **Verification:** quick gate.
+
 ## [phase-19-audit04-2026-11-24] — 2026-11-24 — Round 15 found nothing false; the census reads a model named as not available
 
 **Raouf:**
