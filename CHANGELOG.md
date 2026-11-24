@@ -4,12 +4,15 @@
 
 **Raouf:**
 
-- **Scope:** the census tool (P19-AUDIT04), its page and tests; the method page; one README
-  sentence; the manuscript folder's page; a note on lane 19v's page.
+- **Scope:** the census tool (P19-AUDIT04), its page and tests; the method page; two README
+  sentences; the manuscript folder's page; notes on lane 19v's page and lane 19z's results
+  page.
 - **Summary:** a cold read and a fresh-clone run of merged `main` found nothing false, stale
   or broken. The method page gains a row for the 24 November recount. The census lists a
-  model that lane 19u's pack names as not available; no count changes. Small notes left by
-  earlier rounds are closed.
+  model that lane 19u's pack names as not available; no count changes. The README says
+  which verify commands need more than a bare Python. Small notes left by earlier rounds
+  are closed. Rounds 16 and 17 then checked this change and the merged pages: round 17
+  found the scope line above short of two items, corrected here, and nothing else.
 - **Verification:** census tests on two interpreters; explorer unit tests; quick gate.
 
 ## [readiness-round-14-2026-11-24] — 2026-11-24 — The acceptance read: the recount recorded on the corrections page
