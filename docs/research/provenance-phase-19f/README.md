@@ -135,8 +135,8 @@ cannot check that the substitution is the only difference.
 Returned by Jacob, the operator of the second receipt. Its machine block is the second
 receipt's, word for word: Ubuntu 26.04.1 x86_64 with CPython 3.12.16 and Lean 4.15.0. It
 records a second pass over what the first could not hold: the eleven lanes that joined the
-handoff after the first pass was run, the `--replay` of the eight that have one, and 19q's
-`--dataset` recomputation.
+handoff after `c24b47ce`, the commit the first pass ran at, the `--replay` of the eight that
+have one, and 19q's `--dataset` recomputation.
 
 The file is not in the handoff's receipt form. The handoff asks for one verifier output for
 each lane. This file holds a lane's plain output where a receipt does, the output of its

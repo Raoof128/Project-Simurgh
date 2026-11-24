@@ -14,6 +14,22 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-24 (Australia/Sydney) — A read of the corrections on merged main: one sentence, two counts
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19f/README.md`, the ledger (a note), both logs.
+- **Summary:** a second read-only helper read only what changed after the first audit, on
+  merged `main` at `5b20db18`. It recomputed every count in the note on the ruling, repeated
+  the twelve removals on a copy and built records against amendment 1. Nothing must be
+  fixed. One sentence said more than the record shows: the 19f page had the eleven lanes
+  joining the handoff after the first pass was run, where lane 19w was declared on the day
+  that receipt is signed and the receipt gives no time. The page now says after `c24b47ce`,
+  the commit the first pass ran at. A note in the ledger also corrects two loose counts in
+  the note above it, and the entry below is corrected in place for the same two points.
+- **Files changed:** see Scope.
+- **Verification:** the handoff tests; the quick gate.
+
 ### 2026-11-24 (Australia/Sydney) — A fourth outside record: the eleven later packs, eight replays and one dataset run
 
 **Raouf:**
@@ -27,7 +43,7 @@ one machine's local agent configuration:
   commit first); both logs.
 - **Summary:** the outside operator of 15 November ran a second pass on the same machine at
   `5c57ed2e` and returned a record of it. The eleven lanes that joined the handoff after the
-  first pass verify with no discrepancy. Eight of them were run again with `--replay` and
+  commit of the first pass verify with no discrepancy. Eight of them were run again with `--replay` and
   19q with `--dataset`, and each of those nine outputs verifies too. The record is not in
   the handoff's receipt form: it nests the deeper outputs beside the plain ones. The review
   read one output for a lane and would have counted none of the nine, so the declaration
@@ -42,9 +58,9 @@ one machine's local agent configuration:
   rule does not allow: a dataset output paid its item beside an entry for the same lane
   that failed in the same record. Amendment 1 of the declaration, committed alone first,
   closes it. It also found the README saying that no second machine had run the packs,
-  which is false, four sentences that needed "outside the author's custody", a wrong date
-  on the 19f page, and test counts in the ruling that did not add up. Each is corrected and
-  a note on the ruling says so.
+  which is false, five sentences about a second Linux host that needed "outside", a wrong
+  date on the 19f page, and test counts in the ruling that did not add up. Each is corrected
+  and a note on the ruling says so.
 - **Verification:** fourteen new tests and one changed. Seven of the fourteen fail on the
   tool as it was and seven pass on it, since an output that is not read pays nothing. A
   first removal check found two parts of the rule that no test held; a test was added, and
