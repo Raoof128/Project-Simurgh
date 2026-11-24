@@ -1,6 +1,6 @@
 # Phase 19 manuscript (draft)
 
-[PAPER.md](PAPER.md) is a workshop-length write-up of four Phase 19 lanes: the framing capture
+[PAPER.md](PAPER.md) is a workshop-length write-up of five Phase 19 lanes: the framing capture
 (19h), the two injection-style studies (19i exploratory, 19k confirmatory) and the two gate replays
 (19j, 19l). It adds no evidence. Every number it reports for those lanes comes from a committed pack's
 `report.json` or `receipt.json`; figures quoted from cited papers and from earlier phases are

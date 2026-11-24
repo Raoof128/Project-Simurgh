@@ -34,7 +34,10 @@ python3 -B tools/assurance-provenance/evidence19x.py verify \
   --expected-root "$(cat docs/research/provenance-phase-19x/ROOT.sha256)"
 ```
 
-It prints one line of JSON with `"verified": true`. The
+It prints one line of JSON with `"verified": true`. Thirty of the 32 verify commands need no
+installed packages; the two for lanes 19b and 19g import a package that the handoff's locked
+dependency set provides. One of the thirty, lane 19d's, needs a Linux host. The
+[handoff](docs/research/provenance-phase-19f/HANDOFF.md) gives every command. The
 [dashboard](#inspect-with-a-dashboard-or-an-agent) shows every pack and prediction, and the
 [record of corrections](docs/RECORD_OF_CORRECTIONS.md) lists what the project got wrong.
 
@@ -173,7 +176,8 @@ log. Both lanes are lists the author wrote and no agent attacked them. A
 [census of the packs](docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md) counts 18 that
 name a model and two that hold a model id the provider returned: lanes 19o and 19u keep
 the provider's response beside every generation. Until 24 November the census counted one
-and missed those responses; a read-only audit round found the error.
+and missed those responses; a read-only audit round found the error (see the
+[record of corrections](docs/RECORD_OF_CORRECTIONS.md)).
 
 **A planted fault, a real one, and its repair, 22 November.**
 [19ac](docs/research/provenance-phase-19ac/README.md) had two agent seats write the sequences

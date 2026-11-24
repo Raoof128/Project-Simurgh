@@ -23,6 +23,8 @@ Gains authority: the undelegated action `b` is observed, or more than one effect
 
 On the sealed gate 37 of 52 attempts end with the delegated action refused. That is the cost of a latch: a writer of the stores can stop work.
 
+(Added 24 Nov 2026: 25 of those 37 end with the delegated action refused on the open gate as well, so the seal adds 12. The lane's page gives both figures.)
+
 ## 3. Every attempt of the author's list
 
 The note is the attempt's own, as submitted. The operations are in the file in the pack.

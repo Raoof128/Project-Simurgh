@@ -180,6 +180,24 @@ class ReadingTests(unittest.TestCase):
         self.assertEqual(got["named"], ["m1", "m2", "m3", "m4"])
         self.assertEqual(got["served"], [])
 
+    def test_a_model_named_as_not_available_is_a_named_id(self):
+        # P19-AUDIT04: lane 19u records a model its key could not reach this way.
+        got = s.read_pack(
+            pack(
+                {
+                    "capture.json": json.dumps(
+                        {"not_available": {"m1": "not_found_error", "m2": "refused"}}
+                    ),
+                    # not such an object: a value that is no string, a list, an empty one
+                    "no1.json": json.dumps({"not_available": {"m7": {"x": 1}}}),
+                    "no2.json": json.dumps({"not_available": ["m8"]}),
+                    "no3.json": json.dumps({"not_available": {}}),
+                }
+            )
+        )
+        self.assertEqual(got["named"], ["m1", "m2"])
+        self.assertEqual(got["served"], [])
+
     def test_json_lines_members_are_read_line_by_line(self):
         lines = "\n".join(json.dumps({"model": m}) for m in ("m1", "m2")) + "\n\n"
         self.assertEqual(s.read_pack(pack({"t.jsonl": lines}))["named"], ["m1", "m2"])
@@ -304,8 +322,13 @@ class CommittedPageTests(unittest.TestCase):
             ("19u", 2700, {342, 672, 1344}),
         ):
             got = self.data[lane]["served"]
-            # every returned id is one the pack names, and every named id has one
-            self.assertEqual([x["served"] for x in got], self.data[lane]["named"])
+            # every returned id is one the pack names
+            named = self.data[lane]["named"]
+            self.assertLessEqual({x["served"] for x in got}, set(named))
+            # and every named id has one, but for a model lane 19u names as not available
+            # (P19-AUDIT04): the provider's key did not hold it and nothing was sent to it
+            missing = sorted(set(named) - {x["served"] for x in got})
+            self.assertEqual(missing, ["claude-mythos-5-2"] if lane == "19u" else [])
             self.assertEqual(sum(x["responses"] for x in got), total)
             self.assertEqual({x["responses"] for x in got}, per)
         # lane 19o also copied the id out of two calls per model before its capture
@@ -338,6 +361,11 @@ class CommittedPageTests(unittest.TestCase):
         page = s.PAGE.read_text()
         self.assertIn("Until 24 November 2026 this page counted only", page)
         self.assertIn("returned: 2.", page)
+        # P19-AUDIT04: a row with none recorded is not said to hold a requested id
+        self.assertIn("the pack holds no id from the provider", page)
+        self.assertNotIn("the pack holds the id that was requested", page)
+        self.assertIn("`claude-mythos-5-2`", page)
+        self.assertIn("P19-AUDIT04", page)
 
 
 if __name__ == "__main__":
