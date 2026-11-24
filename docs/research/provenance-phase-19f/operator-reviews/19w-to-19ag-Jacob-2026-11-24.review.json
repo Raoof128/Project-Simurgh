@@ -1,0 +1,278 @@
+{
+  "commit": "5c57ed2ed1e888ded65c6fc53d418173c226a2ae",
+  "custody": "as the operator states it in the receipt's note; not established by this review",
+  "machine": {
+    "arch": "x86_64",
+    "lean": "Lean 4.15.0 (x86_64-unknown-linux-gnu, commit 11651562caae)",
+    "os": "Ubuntu 26.04.1 LTS (Resolute Raccoon), Linux 7.0.0-43-generic",
+    "python": "CPython 3.12.16 (uv-managed standalone build)"
+  },
+  "not_exercised": [
+    "19a",
+    "19a --replay",
+    "19b",
+    "19b Lean closure",
+    "19c",
+    "19d",
+    "19e",
+    "19g",
+    "19h",
+    "19i",
+    "19j",
+    "19j --replay",
+    "19k",
+    "19l",
+    "19l --replay",
+    "19m",
+    "19n",
+    "19o",
+    "19p",
+    "19p --replay",
+    "19q",
+    "19r",
+    "19s",
+    "19t",
+    "19t --replay",
+    "19u",
+    "19v"
+  ],
+  "operator": "Jacob",
+  "optional": {
+    "19q --dataset": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "recomputed": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    }
+  },
+  "phases": {
+    "19a": {
+      "result": "not_in_receipt"
+    },
+    "19aa": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "replay": {
+        "discrepancies": [],
+        "not_compared": {},
+        "operator_comparator_matches": true,
+        "replayed": true,
+        "result": "verified",
+        "root_matches": true,
+        "tree_state_is_commit": true
+      },
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19ab": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "replay": {
+        "discrepancies": [],
+        "not_compared": {},
+        "operator_comparator_matches": true,
+        "replayed": true,
+        "result": "verified",
+        "root_matches": true,
+        "tree_state_is_commit": true
+      },
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19ac": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "replay": {
+        "discrepancies": [],
+        "not_compared": {},
+        "operator_comparator_matches": true,
+        "replayed": true,
+        "result": "verified",
+        "root_matches": true,
+        "tree_state_is_commit": true
+      },
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19ad": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "replay": {
+        "discrepancies": [],
+        "not_compared": {},
+        "operator_comparator_matches": true,
+        "replayed": true,
+        "result": "verified",
+        "root_matches": true,
+        "tree_state_is_commit": true
+      },
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19ae": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "replay": {
+        "discrepancies": [],
+        "not_compared": {},
+        "operator_comparator_matches": true,
+        "replayed": true,
+        "result": "verified",
+        "root_matches": true,
+        "tree_state_is_commit": true
+      },
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19af": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19ag": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "replay": {
+        "discrepancies": [],
+        "not_compared": {},
+        "operator_comparator_matches": true,
+        "replayed": true,
+        "result": "verified",
+        "root_matches": true,
+        "tree_state_is_commit": true
+      },
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19b": {
+      "result": "not_in_receipt"
+    },
+    "19c": {
+      "result": "not_in_receipt"
+    },
+    "19d": {
+      "result": "not_in_receipt"
+    },
+    "19e": {
+      "result": "not_in_receipt"
+    },
+    "19g": {
+      "result": "not_in_receipt"
+    },
+    "19h": {
+      "result": "not_in_receipt"
+    },
+    "19i": {
+      "result": "not_in_receipt"
+    },
+    "19j": {
+      "result": "not_in_receipt"
+    },
+    "19k": {
+      "result": "not_in_receipt"
+    },
+    "19l": {
+      "result": "not_in_receipt"
+    },
+    "19m": {
+      "result": "not_in_receipt"
+    },
+    "19n": {
+      "result": "not_in_receipt"
+    },
+    "19o": {
+      "result": "not_in_receipt"
+    },
+    "19p": {
+      "result": "not_in_receipt"
+    },
+    "19q": {
+      "result": "not_in_receipt"
+    },
+    "19r": {
+      "result": "not_in_receipt"
+    },
+    "19s": {
+      "result": "not_in_receipt"
+    },
+    "19t": {
+      "result": "not_in_receipt"
+    },
+    "19u": {
+      "result": "not_in_receipt"
+    },
+    "19v": {
+      "result": "not_in_receipt"
+    },
+    "19w": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19x": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19y": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "replay": {
+        "discrepancies": [],
+        "not_compared": {},
+        "operator_comparator_matches": true,
+        "replayed": true,
+        "result": "verified",
+        "root_matches": true,
+        "tree_state_is_commit": true
+      },
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    },
+    "19z": {
+      "discrepancies": [],
+      "not_compared": {},
+      "operator_comparator_matches": true,
+      "replay": {
+        "discrepancies": [],
+        "not_compared": {},
+        "operator_comparator_matches": true,
+        "replayed": true,
+        "result": "verified",
+        "root_matches": true,
+        "tree_state_is_commit": true
+      },
+      "result": "verified",
+      "root_matches": true,
+      "tree_state_is_commit": true
+    }
+  },
+  "receipt_sha256": "0dce4a1177709ea81b0043b3f1f76aab4607705c6c2d6273bbc1bd120c26f3f5",
+  "schema": "simurgh-outside-operator-review-v1"
+}

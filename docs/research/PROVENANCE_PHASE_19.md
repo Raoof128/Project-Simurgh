@@ -4749,3 +4749,32 @@ every commit that acts on it.
 - Note (24 Nov 2026, on the ruling of P19-AUDIT04 above): of its three tests one is new and
   two were changed, and all three failed until the tool changed. A sixteenth read-only
   round, on that change alone, found nothing to fix in the tool, its tests or its page.
+- Ruling (24 Nov 2026, P19-OPERATOR19 exercised): the declaration (`06be63c0`) precedes the
+  commit that acts on it. The returned file is committed with its bytes unchanged as
+  `operator-receipts/19w-to-19ag-Jacob-2026-11-24.json` (sha256
+  `0dce4a1177709ea81b0043b3f1f76aab4607705c6c2d6273bbc1bd120c26f3f5`, pinned by a test), with
+  the review recomputed from it. `review()` reads an output nested under a lane's `replay`
+  and a dataset output filed under `optional`; `check()` and `status()` are untouched. Of
+  twelve new tests, five failed until the tool changed, and the changed status test failed
+  until the tool, the review and the rendered handoff were in place. Four pass on the
+  unchanged tool, because an output that is not read pays nothing. Two were written after
+  the tool: one holds the kept verifier lines equal to the record's plain outputs, and one
+  was added when a removal check showed two parts of the rule that no test held, the
+  requirement that a nested output say its replay or its recomputation ran. With that test,
+  each of eight removals makes a test fail. The three earlier reviews recompute to the
+  committed bytes. `HANDOFF.md` was rendered again and two lines differ, both in its status;
+  `discrepancy-template.json` did not change.
+  What the record covers: the eleven lanes 19w to 19z and 19aa to 19ag, each verified with
+  no discrepancy, the committed root and the record's commit; the `--replay` of 19y, 19z,
+  19aa to 19ae and 19ag, each `gate_recomputed` and verified; and 19q's `--dataset` run,
+  `dataset_recomputed` and verified. What it does not cover: the test suite, which nobody
+  outside has run since 15 November; a second operator or machine, since it comes from the
+  operator and the machine of the second receipt; and how its commands were typed, since
+  the record holds no note and no signature.
+  `handoff19.py status` lists four files and nothing still owed under `IOU-19-OPERATOR`. Not
+  on the handoff's list and not done: a second Linux host, an outside run of the test suite
+  at a later commit, and the WSL2 route.
+  Beyond what the declaration lists: `ROADMAP.md` held the same count in one row and is
+  corrected in the same commit. Two tests of the explorer took it that some item is owed
+  and failed once none was; each now follows an owed item while the handoff lists one and a
+  checked one when it does not. The explorer itself is unchanged.

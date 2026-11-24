@@ -766,6 +766,14 @@ STILL_OWED = [
     "19z --replay",
 ]
 
+# The fourth file (P19-OPERATOR19) is a record of a second pass by the second receipt's
+# operator. It is not in the handoff's receipt form: a replay output sits beside the plain one
+# under `phases.<lane>.replay`, and 19q's dataset output under `optional.19q_dataset`.
+FOURTH = "19w-to-19ag-Jacob-2026-11-24.json"
+FOURTH_SHA256 = "0dce4a1177709ea81b0043b3f1f76aab4607705c6c2d6273bbc1bd120c26f3f5"
+FOURTH_REPLAYS = ("19y", "19z", "19aa", "19ab", "19ac", "19ad", "19ae", "19ag")
+NESTED_FLAGS = ("operator_comparator_matches", "root_matches", "tree_state_is_commit")
+
 
 class OperatorReceiptTests(unittest.TestCase):
     def test_the_first_receipt_is_the_bytes_the_operator_returned(self):
@@ -1104,6 +1112,194 @@ class OperatorReceiptTests(unittest.TestCase):
         self.assertIn("Python 3.12.0 to 3.12.2", text)
 
 
+class NestedRecordTests(unittest.TestCase):
+    """P19-OPERATOR19: outputs a record nests are checked by the same comparator."""
+
+    def _record(self):
+        return json.loads((handoff19.RECEIPTS_DIR / FOURTH).read_text())
+
+    def _review(self, record):
+        return handoff19.review(json.dumps(record).encode())
+
+    def test_the_fourth_record_is_the_bytes_the_operator_returned(self):
+        raw = (handoff19.RECEIPTS_DIR / FOURTH).read_bytes()
+        self.assertEqual(hashlib.sha256(raw).hexdigest(), FOURTH_SHA256)
+        notes = (handoff19.DOCS / "README.md").read_text()
+        notes += (handoff19.RECEIPTS_DIR / "README.md").read_text()
+        self.assertIn(FOURTH, notes)
+
+    def test_the_lines_kept_beside_the_fourth_record_are_its_plain_outputs(self):
+        record = self._record()
+        kept = handoff19.RECEIPTS_DIR / (Path(FOURTH).stem + ".attachments")
+        lines = (kept / "Jacob-Phase19w-ag-lines.txt").read_text().splitlines()
+        self.assertEqual(list(record["phases"]), list(LATER_LANES))
+        self.assertEqual(
+            [line for line in lines if line.strip()],
+            [record["phases"][pid]["verifier_output"].strip() for pid in LATER_LANES],
+        )
+
+    def test_review_of_the_fourth_record(self):
+        r = handoff19.review((handoff19.RECEIPTS_DIR / FOURTH).read_bytes())
+        self.assertEqual(r["receipt_sha256"], FOURTH_SHA256)
+        self.assertEqual(r["commit"], "5c57ed2ed1e888ded65c6fc53d418173c226a2ae")
+        for p in handoff19.PHASES:
+            pid = p["id"]
+            if pid not in LATER_LANES:
+                self.assertEqual(r["phases"][pid], {"result": "not_in_receipt"}, pid)
+                continue
+            phase = r["phases"][pid]
+            self.assertEqual(phase["result"], "verified", pid)
+            self.assertEqual(phase["discrepancies"], [], pid)
+            for flag in NESTED_FLAGS:
+                self.assertIs(phase[flag], True, (pid, flag))
+            self.assertEqual("replay" in phase, pid in FOURTH_REPLAYS, pid)
+        for pid in FOURTH_REPLAYS:
+            nested = r["phases"][pid]["replay"]
+            self.assertEqual(nested["result"], "verified", pid)
+            self.assertEqual(nested["discrepancies"], [], pid)
+            self.assertIs(nested["replayed"], True, pid)
+            for flag in NESTED_FLAGS:
+                self.assertIs(nested[flag], True, (pid, flag))
+        self.assertEqual(list(r["optional"]), ["19q --dataset"])
+        dataset = r["optional"]["19q --dataset"]
+        self.assertEqual(dataset["result"], "verified")
+        self.assertEqual(dataset["discrepancies"], [])
+        self.assertIs(dataset["recomputed"], True)
+        for flag in NESTED_FLAGS:
+            self.assertIs(dataset[flag], True, flag)
+        # what this record leaves unexercised is exactly what the second receipt exercised,
+        # 19q's dataset run aside
+        owed = set(r["not_exercised"])
+        for pid in LATER_LANES:
+            self.assertNotIn(pid, owed)
+        for pid in FOURTH_REPLAYS:
+            self.assertNotIn(pid + " --replay", owed)
+        self.assertNotIn("19q --dataset", owed)
+        self.assertIn("19q", owed)
+        self.assertIn("19a", owed)
+
+    def test_a_nested_replay_that_differs_from_the_committed_receipt_pays_nothing(self):
+        record = self._record()
+        out = json.loads(record["phases"]["19y"]["replay"]["verifier_output"])
+        out["manifest_sha256"] = "0" * 64
+        record["phases"]["19y"]["replay"]["verifier_output"] = json.dumps(out)
+        r = self._review(record)
+        self.assertEqual(r["phases"]["19y"]["result"], "verified")
+        self.assertEqual(r["phases"]["19y"]["replay"]["result"], "discrepant")
+        self.assertIs(r["phases"]["19y"]["replay"]["root_matches"], False)
+        self.assertNotIn("19y", r["not_exercised"])
+        self.assertIn("19y --replay", r["not_exercised"])
+        self.assertNotIn("19z --replay", r["not_exercised"])
+
+    def test_a_nested_replay_that_did_not_run_or_did_not_verify_pays_nothing(self):
+        for change in (
+            {"replay": {"result": "not_run", "reason": "not_requested"}},
+            {"replay": {"result": "report_mismatch"}},
+            {"verified": False},
+        ):
+            record = self._record()
+            out = json.loads(record["phases"]["19z"]["replay"]["verifier_output"])
+            out.update(change)
+            record["phases"]["19z"]["replay"]["verifier_output"] = json.dumps(out)
+            r = self._review(record)
+            self.assertIn("19z --replay", r["not_exercised"], change)
+            self.assertNotIn("19z", r["not_exercised"], change)
+
+    def test_a_nested_output_that_verifies_without_the_deeper_run_pays_nothing(self):
+        # the plain output filed again where the replay output belongs: it verifies, and it
+        # says the replay did not run, so the replay item stays owed
+        record = self._record()
+        plain = record["phases"]["19z"]["verifier_output"]
+        record["phases"]["19z"]["replay"]["verifier_output"] = plain
+        r = self._review(record)
+        self.assertEqual(r["phases"]["19z"]["replay"]["result"], "verified")
+        self.assertIs(r["phases"]["19z"]["replay"]["replayed"], False)
+        self.assertIn("19z --replay", r["not_exercised"])
+        # the same for 19q: a verify without the dataset is not a recomputation
+        structure = dict(
+            handoff19.committed_receipt("19q"),
+            kind="structure_checked",
+            recompute={"result": "not_run", "reason": "no_dataset"},
+            tree_state=record["commit"],
+        )
+        record["optional"]["19q_dataset"]["verifier_output"] = json.dumps(structure)
+        r = self._review(record)
+        self.assertEqual(r["optional"]["19q --dataset"]["result"], "verified")
+        self.assertIs(r["optional"]["19q --dataset"]["recomputed"], False)
+        self.assertIn("19q --dataset", r["not_exercised"])
+
+    def test_a_nested_replay_under_a_lane_that_does_not_verify_pays_nothing(self):
+        record = self._record()
+        plain = json.loads(record["phases"]["19aa"]["verifier_output"])
+        plain["hypotheses"] = {"changed": True}
+        record["phases"]["19aa"]["verifier_output"] = json.dumps(plain)
+        r = self._review(record)
+        self.assertEqual(r["phases"]["19aa"]["result"], "discrepant")
+        self.assertEqual(r["phases"]["19aa"]["replay"]["result"], "verified")
+        self.assertIn("19aa", r["not_exercised"])
+        self.assertIn("19aa --replay", r["not_exercised"])
+
+    def test_a_nested_dataset_output_pays_only_when_it_verifies_and_recomputed(self):
+        for change in (
+            {"manifest_sha256": "0" * 64},
+            {"recompute": {"result": "not_run", "reason": "no_dataset"}},
+            {"verified": False},
+        ):
+            record = self._record()
+            out = json.loads(record["optional"]["19q_dataset"]["verifier_output"])
+            out.update(change)
+            record["optional"]["19q_dataset"]["verifier_output"] = json.dumps(out)
+            r = self._review(record)
+            self.assertIn("19q --dataset", r["not_exercised"], change)
+        # it never pays the lane's plain verify, which this record does not hold
+        r = self._review(self._record())
+        self.assertEqual(r["phases"]["19q"], {"result": "not_in_receipt"})
+        self.assertIn("19q", r["not_exercised"])
+        # and an entry for a lane with no dataset item is not read
+        record = self._record()
+        record["optional"]["19y_dataset"] = record["optional"]["19q_dataset"]
+        self.assertEqual(list(self._review(record)["optional"]), ["19q --dataset"])
+
+    def test_a_nested_output_that_is_not_json_text_pays_nothing_and_never_raises(self):
+        deep = "[" * 100000 + "]" * 100000
+        for bad in (None, 5, [], {}, True, "{", "[]", "5", deep, {"verified": True}):
+            record = self._record()
+            record["phases"]["19y"]["replay"] = {"verifier_output": bad}
+            record["optional"]["19q_dataset"] = {"verifier_output": bad}
+            r = self._review(record)
+            self.assertIn("19y --replay", r["not_exercised"], str(bad)[:20])
+            self.assertIn("19q --dataset", r["not_exercised"], str(bad)[:20])
+            self.assertNotIn("19y", r["not_exercised"], str(bad)[:20])
+        for bad in (None, 5, [], "text", True):
+            record = self._record()
+            record["phases"]["19y"]["replay"] = bad
+            record["optional"] = bad
+            r = self._review(record)
+            self.assertNotIn("replay", r["phases"]["19y"], bad)
+            self.assertNotIn("optional", r, bad)
+            self.assertIn("19y --replay", r["not_exercised"], bad)
+            self.assertIn("19q --dataset", r["not_exercised"], bad)
+
+    def test_a_receipt_that_nests_nothing_is_reviewed_as_before(self):
+        for name in (FIRST, SECOND, THIRD):
+            r = handoff19.review((handoff19.RECEIPTS_DIR / name).read_bytes())
+            self.assertNotIn("optional", r, name)
+            for pid, phase in r["phases"].items():
+                self.assertNotIn("replay", phase, (name, pid))
+
+    def test_an_object_under_discrepancies_is_compared_as_it_is(self):
+        record = self._record()
+        r = self._review(record)
+        self.assertIs(r["phases"]["19w"]["operator_comparator_matches"], True)
+        record["phases"]["19w"]["discrepancies"] = {
+            "discrepancies": [{"field": "x", "kind": "differs"}],
+            "not_compared": {},
+        }
+        r = self._review(record)
+        self.assertIs(r["phases"]["19w"]["operator_comparator_matches"], False)
+        self.assertEqual(r["phases"]["19w"]["result"], "verified")
+
+
 class StatusTests(unittest.TestCase):
     def _dirs(self):
         tmp = Path(tempfile.mkdtemp())
@@ -1149,17 +1345,42 @@ class StatusTests(unittest.TestCase):
         s = handoff19.status()
         self.assertEqual(s["iou"], "IOU-19-OPERATOR")
         self.assertEqual(s["status"], "reviewed_discrepancies_published")
-        self.assertEqual(s["operator_receipts"], [SECOND, FIRST, THIRD])
-        self.assertEqual(s["not_yet_replayed_outside"], OWED_AFTER_THREE)
+        self.assertEqual(s["operator_receipts"], [FOURTH, SECOND, FIRST, THIRD])
+        # P19-OPERATOR19: the fourth file exercises every item the first three left
+        self.assertEqual(s["not_yet_replayed_outside"], [])
         text = handoff19.render()
-        self.assertIn("3 outside receipt(s) reviewed", text)
+        self.assertIn("4 outside receipt(s) reviewed", text)
         self.assertIn(
-            "`IOU-19-OPERATOR`:\n19aa, 19aa --replay, 19ab, 19ab --replay, 19ac, 19ac --replay, 19ad, 19ad --replay, 19ae, 19ae --replay, 19af, 19ag, 19ag --replay, 19q --dataset, 19w, 19x, 19y, "
-            "19y --replay, 19z, 19z --replay.",
+            "`IOU-19-OPERATOR`:\nnothing; every item has been exercised by a reviewed receipt.",
             text,
         )
-        self.assertIn("still owed under `IOU-19-OPERATOR`", text)
         self.assertNotIn("owed until a receipt is reviewed", text)
+
+    def test_without_the_fourth_file_twenty_items_are_owed(self):
+        # what the first three leave, so that the fourth is seen to be what pays them
+        tmp = Path(tempfile.mkdtemp())
+        saved = handoff19.RECEIPTS_DIR, handoff19.REVIEWS_DIR
+        self.addCleanup(lambda: setattr(handoff19, "RECEIPTS_DIR", saved[0]))
+        self.addCleanup(lambda: setattr(handoff19, "REVIEWS_DIR", saved[1]))
+        handoff19.RECEIPTS_DIR, handoff19.REVIEWS_DIR = tmp / "r", tmp / "v"
+        handoff19.RECEIPTS_DIR.mkdir()
+        handoff19.REVIEWS_DIR.mkdir()
+        for name in (FIRST, SECOND, THIRD):
+            raw = (saved[0] / name).read_bytes()
+            (handoff19.RECEIPTS_DIR / name).write_bytes(raw)
+            handoff19.review_path(handoff19.RECEIPTS_DIR / name).write_text(
+                json.dumps(handoff19.review(raw))
+            )
+        owed = handoff19.status()["not_yet_replayed_outside"]
+        self.assertEqual(len(owed), 20)
+        self.assertEqual(
+            owed,
+            sorted(
+                list(LATER_LANES)
+                + [pid + " --replay" for pid in FOURTH_REPLAYS]
+                + ["19q --dataset"]
+            ),
+        )
 
 
 if __name__ == "__main__":

@@ -14,6 +14,35 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-24 (Australia/Sydney) — A fourth outside record: the eleven later packs, eight replays and one dataset run
+
+**Raouf:**
+
+- **Scope:** `tools/assurance-provenance/handoff19.py` (`review()` only) and its tests; the
+  record, its review and two attachments under `docs/research/provenance-phase-19f/`; the
+  rendered handoff; the 19f page, the receipts page, the root README, the method page, the
+  record of corrections, the roadmap and a dated note on lane 19ag's page; two tests of the
+  explorer that assumed some item is owed; the ledger (P19-OPERATOR19, declared in its own
+  commit first); both logs.
+- **Summary:** the outside operator of 15 November ran a second pass on the same machine at
+  `5c57ed2e` and returned a record of it. The eleven lanes that joined the handoff after the
+  first pass verify with no discrepancy. Eight of them were run again with `--replay` and
+  19q with `--dataset`, and each of those nine outputs verifies too. The record is not in
+  the handoff's receipt form: it nests the deeper outputs beside the plain ones. The review
+  read one output for a lane and would have counted none of the nine, so the declaration
+  says how a nested output is read, with the comparator unchanged, and says that the rule
+  was written after the author had seen the nine pass. `handoff19.py status` now lists
+  nothing as owed. The pages say what that is and is not: one operator on one machine in
+  two passes, no second Linux host, and no outside run of the test suite since the first
+  pass. The record has no note and no signature, and the 19f page says so.
+- **Files changed:** see Scope. The record's bytes are unchanged and a test pins them.
+- **Verification:** five new tests failed before the tool changed and four pass on the
+  unchanged tool, since an output that is not read pays nothing. A first removal check found
+  two parts of the rule that no test held; one more test was written, and each of eight
+  removals now makes a test fail. The three earlier reviews recompute to the committed
+  bytes; only the two status lines of the handoff differ; the handoff tests and the whole
+  Phase 19 suite on Python 3.12; the explorer's unit tests; the quick gate.
+
 ### 2026-11-24 (Australia/Sydney) — Round 20: the author page and the disclaimer describe the author the same way
 
 **Raouf:**

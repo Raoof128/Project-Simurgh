@@ -161,7 +161,15 @@ test("lanes: filters, the inspector, the lane's own page and the verify commands
       queryLanes(bundle, { outcome: "failed" }).length
     );
     await ui.choose("Filter by outside check", "owed");
-    const expected = queryLanes(bundle, { outcome: "failed", outside: "owed" });
+    const owed = queryLanes(bundle, { outcome: "failed", outside: "owed" });
+    assert.equal(ui.all(".lanes-table tbody tr").length, owed.length);
+    assert.ok(document.body.textContent.includes(`${owed.length} of ${bundle.lanes.length} lanes`));
+    // Since the fourth outside record no lane is owed, so the rest of this test follows a
+    // lane that has been checked outside; it follows an owed one whenever the handoff lists one.
+    const outside = owed.length ? "owed" : "checked";
+    await ui.choose("Filter by outside check", outside);
+    const expected = queryLanes(bundle, { outcome: "failed", outside });
+    assert.ok(expected.length, "a lane with a failed prediction to follow");
     assert.equal(ui.all(".lanes-table tbody tr").length, expected.length);
     assert.ok(
       document.body.textContent.includes(`${expected.length} of ${bundle.lanes.length} lanes`)

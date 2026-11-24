@@ -113,7 +113,9 @@ test("check and watch tell a watcher when to look, by exit code", (t) => {
   assert.equal(again.status, EXIT.ok, "nothing changed, so nothing to look at");
   assert.deepEqual(again.out.data.changes, []);
 
-  // A baseline that remembers a different past: one root, one outcome, one lane, one owed item.
+  // A baseline that remembers a different past: one root, one outcome, one lane, and an item
+  // that was owed then and is not now. Since the fourth outside record nothing is owed, so
+  // an item owed now and not then is checked only while the handoff lists one.
   const past = structuredClone(saved);
   const ids = Object.keys(past.lanes);
   const withOutcome = ids.find((id) => Object.keys(past.lanes[id].outcomes).length);
@@ -122,7 +124,7 @@ test("check and watch tell a watcher when to look, by exit code", (t) => {
   past.lanes[withOutcome].outcomes[key] = "something else";
   delete past.lanes[ids.at(-1)];
   past.lanes["gone"] = { root: "1".repeat(64), pack: "match", outcomes: {}, outside: [] };
-  past.owed = past.owed.slice(1);
+  past.owed = [...past.owed.slice(1), "19zz --replay"];
   writeFileSync(baseline, JSON.stringify(past));
   const changed = call("watch", "--baseline", baseline);
   assert.equal(changed.status, EXIT.attention);
@@ -133,19 +135,20 @@ test("check and watch tell a watcher when to look, by exit code", (t) => {
     `outcome_changed:${withOutcome}`,
     `lane_added:${ids.at(-1)}`,
     "lane_removed:gone",
-    `owed_added:${saved.owed[0]}`,
+    "owed_removed:19zz --replay",
+    ...(saved.owed.length ? [`owed_added:${saved.owed[0]}`] : []),
   ])
     assert.ok(kinds.includes(expected), expected);
 
   // News alone is reported and is not an alarm.
   const news = structuredClone(saved);
-  news.owed = news.owed.slice(1);
+  news.owed = [...news.owed, "19zz --replay"];
   writeFileSync(baseline, JSON.stringify(news));
   const quiet = call("watch", "--baseline", baseline);
   assert.equal(quiet.status, EXIT.ok);
   assert.deepEqual(
     quiet.out.data.changes.map((c) => c.kind),
-    ["owed_added"]
+    ["owed_removed"]
   );
 
   writeFileSync(baseline, JSON.stringify({ schema: "something else" }));

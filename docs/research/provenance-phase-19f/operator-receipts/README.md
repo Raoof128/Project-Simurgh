@@ -7,11 +7,12 @@ file by `python -B tools/assurance-provenance/handoff19.py review <receipt>`, is
 [`../operator-reviews/`](../operator-reviews/) as `<same-name>.review.json`; a test asserts the
 committed review equals the recomputation.
 
-| Receipt                                                    | Host                                              | Verified                                                           | Not exercised                             |
-| ---------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------ | ----------------------------------------- |
-| [all-Michael-2026-11-10.json](all-Michael-2026-11-10.json) | macOS 13 x86_64, Python 3.12, no Lean             | 19a (projection), 19b, 19c, 19e, 19g                               | 19d, 19a `--replay`, 19b Lean closure     |
-| [all-Jacob-2026-11-15.json](all-Jacob-2026-11-15.json)     | Ubuntu 26.04 x86_64, CPython 3.12.16, Lean 4.15.0 | 19a to 19v (twenty-one lanes), five with `--replay`, 19b with Lean | 19w to 19z, 19aa to 19ag, 19q `--dataset` |
-| [all-Mona-2026-11-15.json](all-Mona-2026-11-15.json)       | Windows 10 run natively, Python 3.12.10, no Lean  | none: every verifier refused                                       | everything                                |
+| Receipt                                                                | Host                                              | Verified                                                                                                     | Not exercised                                              |
+| ---------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------- |
+| [all-Michael-2026-11-10.json](all-Michael-2026-11-10.json)             | macOS 13 x86_64, Python 3.12, no Lean             | 19a (projection), 19b, 19c, 19e, 19g                                                                         | 19d, 19a `--replay`, 19b Lean closure                      |
+| [all-Jacob-2026-11-15.json](all-Jacob-2026-11-15.json)                 | Ubuntu 26.04 x86_64, CPython 3.12.16, Lean 4.15.0 | 19a to 19v (twenty-one lanes), five with `--replay`, 19b with Lean                                           | 19w to 19z, 19aa to 19ag, 19q `--dataset`                  |
+| [all-Mona-2026-11-15.json](all-Mona-2026-11-15.json)                   | Windows 10 run natively, Python 3.12.10, no Lean  | none: every verifier refused                                                                                 | everything                                                 |
+| [19w-to-19ag-Jacob-2026-11-24.json](19w-to-19ag-Jacob-2026-11-24.json) | Ubuntu 26.04 x86_64, CPython 3.12.16, Lean 4.15.0 | 19w to 19z and 19aa to 19ag (eleven lanes), eight with a nested `--replay` output, and 19q's `--dataset` run | 19a to 19v, which the second receipt holds; the test suite |
 
 The files are stored under this directory's naming rule. The second came back as
 `Jacob-Phase19-receipt.json` and the third as `Phase19-Windows-results-2026-11-15.json`. The
@@ -20,3 +21,8 @@ second's bytes are unchanged. In the third, the operator's Windows user folder n
 `e4f22c47edb7d7472e21d5e0ad5b959273d16e8f4b17b20968c442617bf710a4`. A test pins the sha256 of
 each committed file. A file an operator returned beside a receipt is kept
 unchanged in `<receipt-name>.attachments/`.
+
+The fourth file came back as `Jacob-Phase19w-ag-results.json` and its bytes are unchanged. It
+is a record in its own form and not the handoff's receipt form: it nests the output of a
+`--replay` run beside a lane's plain output, and 19q's dataset run under `optional`.
+[The 19f page](../README.md) says how the review reads those (P19-OPERATOR19).
