@@ -3104,6 +3104,33 @@ as proof of who ran it. The ruling must say what the record covers and what it d
 what stays owed under `IOU-19-OPERATOR`. This declaration commit must be a strict ancestor of
 every commit that acts on it.
 
+**P19-OPERATOR19, amendment 1 (declared 24 Nov 2026 before any commit that acts on it).** A
+read-only audit of the branch, made before the merge, ran about thirty built records against
+the new rule. None raised, and none made an item count across lanes. It found one case that
+the declaration's words allow and that an older rule does not. A dataset output under
+`optional` pays 19q's dataset item even when the same record holds an entry for 19q under
+`phases` that is discrepant or refused, and under P19-REPAIR10 a phase that did not verify
+pays neither itself nor its deeper item. The audit also found the tool narrower than item 2
+says in one respect: a nested replay output is read only for a lane that has a replay item
+and whose plain output is an object, and is ignored anywhere else. And item 2 says "`review()`
+and nothing else in the tool", where the commit added three helpers that only `review()`
+calls. This amendment authorises, and nothing else:
+
+1. `review()`: a dataset output under `optional` does not pay the lane's dataset item when
+   the same record holds an entry for that lane under `phases` whose result is discrepant
+   or refused. Where the record holds no entry for the lane, or one that verifies, the rule
+   is as declared. The test first.
+2. Tests that hold the narrower reading of a nested replay output as the tool has it: none
+   is reported for a lane with no replay item, or for a lane whose plain output cannot be
+   read, and neither pays anything. The tool does not change for this.
+3. Item 2 of the declaration is to be read with those two points, and with the helpers
+   `_stated`, `_nested_output` and `_nested_review`, which nothing but `review()` calls. A
+   note on the ruling, the pages the audit found loose, and both logs.
+
+Not authorised: what the declaration does not authorise. The committed review of the fourth
+file must not change, since its record holds no entry for 19q under `phases`; if it does, the
+work stops. This amendment commit must be a strict ancestor of every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
