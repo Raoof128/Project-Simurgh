@@ -4839,3 +4839,10 @@ work stops. This amendment commit must be a strict ancestor of every commit that
   receipt is signed, and the receipt gives no time. What the record does show is that the
   first pass ran at `c24b47ce`, which predates all eleven. The page now says that, and the
   declaration's "after their first pass" is to be read the same way.
+- Note (25 Nov 2026, on the ruling of P19-OPERATOR19 above): the ruling says the fourth
+  record does not show how its commands were typed. The owner has since told the author
+  that, as the owner understands it, the operator worked through OpenCode, an AI coding
+  tool, on no account or subscription of the owner's, and was the person behind the run.
+  The 19f page now reports that as the owner's account. It is not a statement by the
+  operator, the record is unchanged, and a review still cannot establish who produced an
+  output.
