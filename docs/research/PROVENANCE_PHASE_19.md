@@ -3018,6 +3018,31 @@ not the canonical form of what they parse to, with its test; that clause on the 
 which may name the sidecars too; both logs and the ruling. Not authorised: what P19-GUARD02
 does not authorise.
 
+**P19-AUDIT04 (bounded authority to let the served-model census read a model a pack names as
+not available; declared 24 Nov 2026 before any commit that acts on it).** The tenth
+read-only round noted, and the ruling of P19-GUARD02's second amendment recorded, that lane
+19u's pack names `claude-mythos-5-2` as the key of an object under `not_available`, and that
+the census does not read that form. The page's own text says that naming a model is not
+running it, so a model that a pack names as unavailable belongs in the list. A fifteenth
+round also found one sentence of the page loose: where the last column says none recorded,
+the page says the pack "holds the id that was requested", which is not true of an id a pack
+names and never requested. Measured before this was written, over every committed pack: an
+object under `not_available` occurs only in lane 19u's pack, in five places, each with that
+one key and a string value. Lane 19u's row gains that id; no other row and no count changes
+(18 packs name a model and two hold a returned id). This declaration authorises, and nothing
+else:
+
+1. `tools/assurance-provenance/served19.py`: the keys of an object under `not_available`
+   whose values are all strings are named ids. The page's sentence about a row with none
+   recorded is reworded to say that the pack holds no id from the provider. Tests first.
+2. The generated page `docs/research/PROVENANCE_PHASE_19_SERVED_MODELS.md`, written again
+   by the tool.
+3. Both logs and the ruling.
+
+Not authorised: any edit to a pack, a capture module, a lane's page, a workflow or a frozen
+file. No provider is called. No money. This declaration commit must be a strict ancestor of
+every commit that acts on it.
+
 ## Execution ledger
 
 - Ruling: design approved only after a four-review gauntlet; v1 failed (41 findings), v2.1 holds with
