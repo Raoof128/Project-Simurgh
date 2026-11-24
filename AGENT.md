@@ -24,11 +24,15 @@ one machine's local agent configuration:
   verified all 32 packs on the project's own Linux host and 31 of 32 on macOS, where lane
   19d refuses as it should off Linux; that is the author's side checking its own work and
   not an outside replay. The README's link row pointed only at the release of 11 November,
-  which marks the manuscript's commit. It now names both releases, and the opening section
-  says which release holds the state it describes. `CITATION.cff` is new: it gives the
-  author's name, ORCID and university as the author page already publishes them, the
-  repository's licence as `package.json` states it, and the release as the version to cite.
-  It makes no claim about the manuscript, which stays a draft with no venue.
+  which marks the manuscript's commit. It now names an evidence release and the manuscript
+  release, and the opening section says which release holds the state it describes.
+  `CITATION.cff` is new: it gives the author's name, ORCID and university as the author
+  page already publishes them, the repository's licence as `package.json` states it, and
+  the release to cite. It makes no claim about the manuscript, which stays a draft with no
+  venue. The owner asked for a tag and release after this change as well, so both files
+  name `phase-19-evidence-v2.0.1`: the tag to be made on the commit that merges this
+  change, with the same 32 packs and roots as `phase-19-evidence-v2.0` and these files
+  added.
 - **Files changed:** see Scope. No tool, test, pack, receipt, review or ledger entry changes.
 - **Verification:** the quick gate.
 

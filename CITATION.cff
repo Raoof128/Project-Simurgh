@@ -13,9 +13,9 @@ authors:
     orcid: "https://orcid.org/0009-0000-6214-258X"
     affiliation: Macquarie University
 repository-code: "https://github.com/Raoof128/Project-Simurgh"
-url: "https://github.com/Raoof128/Project-Simurgh/releases/tag/phase-19-evidence-v2.0"
+url: "https://github.com/Raoof128/Project-Simurgh/releases/tag/phase-19-evidence-v2.0.1"
 license: AGPL-3.0-or-later
-version: phase-19-evidence-v2.0
+version: phase-19-evidence-v2.0.1
 date-released: "2026-11-25"
 keywords:
   - AI agents
