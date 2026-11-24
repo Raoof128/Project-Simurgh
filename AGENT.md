@@ -14,6 +14,25 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-24 (Australia/Sydney) — Round 17 on merged main: one changelog line, nothing else
+
+**Raouf:**
+
+- **Scope:** `CHANGELOG.md`, `AGENT.md`.
+- **Summary:** a seventeenth read-only helper read merged `main` at `d4e747ba`: the last
+  commit no round had read, seven pages against the handoff tool and the census tool, and
+  the mechanics. Every count agrees (32 packs, 26 lanes, 67 predictions with 49, 17 and 1,
+  33 by model and 35 of 138, three receipts, 21 of 32 replayed, twenty owed, census 18 and
+  2, four faults, thirty of 32 commands), no "current" statement is untrue, and the tests,
+  the formatter and the links pass. It found one thing: the newest changelog entry's scope
+  line named one README sentence and one lane note where the merge changed two of each.
+  That line is corrected.
+- **Files changed:** `CHANGELOG.md`, `AGENT.md`.
+- **Verification:** `prettier` and the quick gate.
+- **Not done:** nothing is left open in the pages by any round. What remains is listed in
+  the README's open work and needs other people: twenty outside-operator checks, an
+  attacker from outside the project, and review of the manuscript.
+
 ### 2026-11-24 (Australia/Sydney) — Round 15 found nothing false; the census reads a model named as not available (P19-AUDIT04)
 
 **Raouf:**
