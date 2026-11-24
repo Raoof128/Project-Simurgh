@@ -14,6 +14,21 @@ one machine's local agent configuration:
 
 ## Agent Change Log
 
+### 2026-11-25 (Australia/Sydney) — The outside-operator page reports the owner's account of how the fourth record was run
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19f/README.md`, the ledger (a note), both logs.
+- **Summary:** the fourth outside record holds no note on how its commands were typed, and
+  the page said only that one command names a folder called `opencode`. The owner has since
+  said that, as the owner understands it, the operator worked through OpenCode, an AI coding
+  tool, on no account or subscription of the owner's, and was the person behind the run. The
+  page now reports that, as the owner's account
+  and not as a statement by the operator. It does not say that no AI tool was used, because
+  the same account says one was.
+- **Files changed:** see Scope.
+- **Verification:** the quick gate.
+
 ### 2026-11-24 (Australia/Sydney) — A read of the corrections on merged main: one sentence, two counts
 
 **Raouf:**

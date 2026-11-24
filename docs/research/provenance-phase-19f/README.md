@@ -255,8 +255,12 @@ passes ran on one machine is what the record and the report say; these pages cou
 which is the cautious reading, and a review cannot establish it. The PDF report that
 came with it, which is not committed, ends with a typed signature dated 24 November and
 repeats the second receipt's statement of what was received from the author. One command in
-the record names a folder called `opencode`, which is also the name of an AI coding tool; the
-record does not say whether one was used.
+the record names a folder called `opencode`, which is also the name of an AI coding tool. The
+owner's account, given to the author on 25 November, is that the operator worked through that
+tool, on no account or subscription of the owner's, and was the person behind the run. That
+differs from the first receipt, whose operator says the commands ran on a subscription
+registered to the author. It is the owner's understanding and not a statement by the
+operator, and the record itself says nothing on the point.
 
 A review establishes what the returned outputs say. It cannot establish who produced them or on
 which machine.

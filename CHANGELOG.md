@@ -1,5 +1,16 @@
 ## Change Log
 
+## [phase-19f-how-the-fourth-record-was-run-2026-11-25] — 2026-11-25 — The owner's account of how the fourth outside record was run
+
+**Raouf:**
+
+- **Scope:** `docs/research/provenance-phase-19f/README.md`, the ledger (a note), both logs.
+- **Summary:** the page now reports the owner's account that the outside operator worked
+  through OpenCode, an AI coding tool, on no account of the owner's, and was the person
+  behind the run. It is given as the
+  owner's understanding and not as a statement by the operator; the record is unchanged.
+- **Verification:** the quick gate.
+
 ## [phase-19f-fourth-record-notes-2026-11-24] — 2026-11-24 — One sentence of the outside-operator page corrected
 
 **Raouf:**
